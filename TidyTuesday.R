@@ -1,0 +1,114 @@
+library(tidyverse)
+library(forcats)
+library(lubridate)
+library(stats)
+library(cowplot)
+library(dygraphs)
+library(gghighlight)
+library(ggrepel)
+library(stringr)
+library(viridis)
+library(ggiraph)
+
+tuesdata <- tidytuesdayR::tt_load("2019-11-26")
+
+loans <- tuesdata$loans
+
+loans<- loans %>%
+   mutate(report_dt = yq(paste0("20",year,"-", quarter))) %>%
+   select(-year, -quarter) %>%
+   mutate(consolidation_pct = round(consolidation/total,2),
+         rehabilitation_pct = round(rehabilitation/total,2),
+         voluntary_pct = round(voluntary_payments/total,2),
+         garnishments_pct = round(wage_garnishments/total,2))
+
+#impute the loan collections agency names
+loans<-loans %>%
+  mutate(agency_name = as_factor( case_when(
+         agency_name == "Account Control Technology, Inc." ~ "ACT",
+         agency_name == "Action Financial Services*" ~ "Action Financial Services",
+         agency_name == "Central Research*" ~ "Central Research",
+         agency_name == "Coast Professional, Inc." ~ "Coast Professional",
+         agency_name == "Credit Adjustments, Inc." ~ "Credit Adjustments",
+         agency_name == "FMS Investment Corp" ~ "FMS",
+         agency_name == "GC Services LP" ~ "GC Services",
+         agency_name == "National Recoveries, Inc." ~ "National Recoveries, Inc",
+         agency_name == "Pioneer Credit Recovery, Inc" ~ "Pioneer",
+         agency_name == "Windham Professionals, Inc." ~ "Windham",
+         TRUE ~ agency_name)))
+
+loans %>%
+  group_by(report_dt) %>%
+  summarize(Consolidation = sum(consolidation, na.rm = TRUE),
+            Rehabilitation = sum(rehabilitation, na.rm = TRUE),
+            Voluntary = sum(voluntary_payments, na.rm = TRUE),
+            Garnishments = sum(wage_garnishments, na.rm = TRUE)) %>%
+  pivot_longer(cols = Consolidation:Garnishments, names_to = "Type", values_to = "Totals") %>%
+  ggplot()+
+  geom_area(aes(x=report_dt, y=Totals/1000000000, fill= Type)) +
+  scale_fill_viridis(discrete = T)+
+  cowplot::theme_minimal_hgrid(16)+
+  scale_x_date() +
+  labs(
+    title = "Student Loan Default Recoveries",
+    subtitle = "By Quarter : 2015-2018",
+    x = "",
+    y = "USD (billion)",
+    caption = "Plot: @jim_gruman. Data: US Dept. of Education",
+    fill = "Recovery Method"
+  ) +
+  scale_y_continuous(breaks = seq(0,3,0.5))+
+  theme(legend.position = "top")
+
+loans %>%
+  group_by(report_dt, agency_name) %>%
+  summarize(Recoveries = sum(total, na.rm = TRUE),
+            Consolidation = 100*round(sum(consolidation, na.rm = TRUE)/Recoveries,2),
+            Rehabilitation = 100*round(sum(rehabilitation, na.rm = TRUE)/Recoveries,2),
+            Voluntary = 100*round(sum(voluntary_payments, na.rm = TRUE)/Recoveries,2),
+            Garnishments = 100*round(sum(wage_garnishments, na.rm = TRUE)/Recoveries,2)) %>%
+  pivot_longer(cols = Consolidation:Garnishments, names_to = "Type", values_to = "Percentage") %>%
+  ggplot()+
+  geom_area(aes(x=report_dt, y = Percentage, fill = Type)) +
+  scale_fill_viridis(discrete = T) +
+  cowplot::theme_minimal_hgrid(16) +
+  scale_x_date()+
+  scale_y_continuous()+
+  facet_wrap(~ agency_name)+
+  theme(legend.position = "top")+
+  labs(
+    title = "Student Loan Default Recovery Type",
+    subtitle = "By Quarter : 2015-2018",
+    x = "",
+    y = "% Recovered",
+    caption = "Plot: @jim_gruman. Data: US Dept. of Education",
+    fill = "Recovery Method"
+  ) 
+  
+loans %>%
+  filter(agency_name %in% c("ACT", "ConServe","GC Services", "FMS", "Windham")) %>%
+  ggplot()+
+  geom_line(aes(x=report_dt, y = starting, color = agency_name)) +
+  scale_fill_viridis(discrete = T) +
+  cowplot::theme_minimal_hgrid(16) +
+  scale_x_date()+
+  scale_y_continuous()+
+  facet_grid(agency_name ~.)+
+  theme(legend.position = "none")
+
+
+loans %>%
+  group_by(report_dt) %>%
+  summarize(Consolidation = sum(consolidation, na.rm = TRUE),
+            Rehabilitation = sum(rehabilitation, na.rm = TRUE),
+            Voluntary = sum(voluntary_payments, na.rm = TRUE),
+            Garnishments = sum(wage_garnishments, na.rm = TRUE))%>%
+  as.ts() %>%
+  dygraph(main = "Student Loan Repayments") %>%
+  dySeries("Consolidation", drawPoints = TRUE, pointSize = 5, color = "red") %>%
+  dySeries("Rehabilitation", drawPoints = TRUE, pointSize = 5, color = "green") %>%
+  dySeries("Voluntary", drawPoints = TRUE, pointSize = 5, color = "orange") %>%
+  dySeries("Garnishments", drawPoints = TRUE, pointSize = 5, color = "black") %>%
+  dyLegend(width = 800)
+
+
