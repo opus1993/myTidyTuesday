@@ -1,7 +1,7 @@
 NFL attendance
 ================
 Jim Gruman
-2020-03-02
+2020-03-03
 
 Let’s build a very simple model for [NFL attendance from the
 \#tidytuesday data of 4
@@ -138,7 +138,7 @@ retaining similar playoff outcomes in both.
 library(tidymodels)
 ```
 
-    ## -- Attaching packages ------------------ tidymodels 0.1.0 --
+    ## -- Attaching packages -------------------------------------------------- tidymodels 0.1.0 --
 
     ## v broom     0.5.4     v rsample   0.0.5
     ## v dials     0.0.4     v tune      0.0.1
@@ -146,7 +146,7 @@ library(tidymodels)
     ## v parsnip   0.0.5     v yardstick 0.0.5
     ## v recipes   0.1.9
 
-    ## -- Conflicts --------------------- tidymodels_conflicts() --
+    ## -- Conflicts ----------------------------------------------------- tidymodels_conflicts() --
     ## x scales::discard()   masks purrr::discard()
     ## x dplyr::filter()     masks stats::filter()
     ## x recipes::fixed()    masks stringr::fixed()
@@ -180,16 +180,16 @@ tidy(lm_fit) %>% arrange(-estimate)
     ## # A tibble: 37 x 5
     ##    term              estimate std.error statistic  p.value
     ##    <chr>                <dbl>     <dbl>     <dbl>    <dbl>
-    ##  1 team_nameCowboys     6971.      754.     9.25  2.98e-20
-    ##  2 team_nameRedskins    6917.      754.     9.17  5.81e-20
-    ##  3 team_nameGiants      6222.      750.     8.29  1.30e-16
-    ##  4 team_nameJets        4541.      756.     6.00  2.02e- 9
-    ##  5 team_nameBroncos     2947.      762.     3.87  1.11e- 4
-    ##  6 team_nameChiefs      2002.      756.     2.65  8.07e- 3
-    ##  7 team_nameEagles      1730.      759.     2.28  2.27e- 2
-    ##  8 team_namePanthers    1359.      755.     1.80  7.21e- 2
-    ##  9 team_namePackers     1202.      767.     1.57  1.17e- 1
-    ## 10 team_nameDolphins     512.      753.     0.680 4.97e- 1
+    ##  1 team_nameRedskins    6864.      768.     8.94  4.84e-19
+    ##  2 team_nameCowboys     6552.      759.     8.63  7.22e-18
+    ##  3 team_nameGiants      6311.      762.     8.28  1.44e-16
+    ##  4 team_nameJets        4563.      756.     6.04  1.63e- 9
+    ##  5 team_nameBroncos     3290.      771.     4.27  1.99e- 5
+    ##  6 team_nameChiefs      1915.      768.     2.49  1.27e- 2
+    ##  7 team_nameEagles      1521.      783.     1.94  5.20e- 2
+    ##  8 team_namePackers     1484.      771.     1.92  5.43e- 2
+    ##  9 team_namePanthers    1457.      763.     1.91  5.61e- 2
+    ## 10 team_nameSaints       573.      762.     0.752 4.52e- 1
     ## # ... with 27 more rows
 
 A comparable random forest regression is specified and fit here:
@@ -207,16 +207,16 @@ tidy(lm_fit) %>% arrange(-estimate)
     ## # A tibble: 37 x 5
     ##    term              estimate std.error statistic  p.value
     ##    <chr>                <dbl>     <dbl>     <dbl>    <dbl>
-    ##  1 team_nameCowboys     6971.      754.     9.25  2.98e-20
-    ##  2 team_nameRedskins    6917.      754.     9.17  5.81e-20
-    ##  3 team_nameGiants      6222.      750.     8.29  1.30e-16
-    ##  4 team_nameJets        4541.      756.     6.00  2.02e- 9
-    ##  5 team_nameBroncos     2947.      762.     3.87  1.11e- 4
-    ##  6 team_nameChiefs      2002.      756.     2.65  8.07e- 3
-    ##  7 team_nameEagles      1730.      759.     2.28  2.27e- 2
-    ##  8 team_namePanthers    1359.      755.     1.80  7.21e- 2
-    ##  9 team_namePackers     1202.      767.     1.57  1.17e- 1
-    ## 10 team_nameDolphins     512.      753.     0.680 4.97e- 1
+    ##  1 team_nameRedskins    6864.      768.     8.94  4.84e-19
+    ##  2 team_nameCowboys     6552.      759.     8.63  7.22e-18
+    ##  3 team_nameGiants      6311.      762.     8.28  1.44e-16
+    ##  4 team_nameJets        4563.      756.     6.04  1.63e- 9
+    ##  5 team_nameBroncos     3290.      771.     4.27  1.99e- 5
+    ##  6 team_nameChiefs      1915.      768.     2.49  1.27e- 2
+    ##  7 team_nameEagles      1521.      783.     1.94  5.20e- 2
+    ##  8 team_namePackers     1484.      771.     1.92  5.43e- 2
+    ##  9 team_namePanthers    1457.      763.     1.91  5.61e- 2
+    ## 10 team_nameSaints       573.      762.     0.752 4.52e- 1
     ## # ... with 27 more rows
 
 ## Evaluate Models
@@ -250,8 +250,8 @@ results_train %>%
     ## # A tibble: 2 x 4
     ##   model .metric .estimator .estimate
     ##   <chr> <chr>   <chr>          <dbl>
-    ## 1 lm    rmse    standard       8271.
-    ## 2 rf    rmse    standard       6057.
+    ## 1 lm    rmse    standard       8333.
+    ## 2 rf    rmse    standard       6090.
 
 ``` r
 results_test %>%
@@ -262,8 +262,8 @@ results_test %>%
     ## # A tibble: 2 x 4
     ##   model .metric .estimator .estimate
     ##   <chr> <chr>   <chr>          <dbl>
-    ## 1 lm    rmse    standard       8459.
-    ## 2 rf    rmse    standard       8762.
+    ## 1 lm    rmse    standard       8268.
+    ## 2 rf    rmse    standard       8581.
 
 The random forest model here appears to overfit the training data set,
 with disappointing results on new data.
@@ -306,8 +306,8 @@ rf_res %>%
     ## # A tibble: 2 x 5
     ##   .metric .estimator     mean     n  std_err
     ##   <chr>   <chr>         <dbl> <int>    <dbl>
-    ## 1 rmse    standard   8209.       10 109.    
-    ## 2 rsq     standard      0.165    10   0.0100
+    ## 1 rmse    standard   8265.       10 143.    
+    ## 2 rsq     standard      0.162    10   0.0104
 
 ``` r
 rf_res %>%
