@@ -6,3 +6,5 @@ Public Dataviz submissions
 As hosted by the R4DS community
 
 [NFL Attendance](https://github.com/opus1993/myTidyTuesday/blob/master/NFLattendance/NFL-attendance.md)
+
+![tt](https://github.com/opus1993/myTidyTuesday/blob/master/NFLattendance/NFL-attendance_files/figure-gfm/unnamed-chunk-2-1.png)
