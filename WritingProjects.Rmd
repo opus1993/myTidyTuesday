@@ -1,0 +1,63 @@
+---
+title: "WritingProjects"
+author: "Jim Gruman"
+date: '`r format(Sys.Date())`'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Any new VM -----
+
+R setup for any new Virtual Machine
+
+
+```{r}
+## at a command line, as sudo
+## Install the  https://r-spatial.github.io/sf/  libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
+
+library(tidyverse)
+
+library(tidymodels)
+
+library(tinytex)
+tinytex::install_tinytex()
+
+library(blogdown)
+blogdown::install_hugo()
+
+library(sf)
+library(mapview)
+library(leaflet)
+```
+
+# Topics that I'd like to write articles about ----
+
+Learning Resources for more advanced R 
+Learning Resources for machine learning
+Platform Learning (Latest from Azure)
+
+Favorite Blogs and Podcasts
+
+
+
+# TidyTuesday opportunities -----
+
+AmesHousing with GLMNet Lasso, from the Chicago R Users Group
+
+Geospatial -- USDA
+Geospatial -- weather
+Geospatial -- observations / descriptions
+Geospatial -- time series / predictive /     often to display an area of predicted interest (due to temp/climate/water factors)
+
+Football stadium attendance regression
+
+GetOutTheVote did this person vote?
+
+
+
+
+
+
