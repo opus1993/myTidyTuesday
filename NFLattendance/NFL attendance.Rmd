@@ -79,7 +79,7 @@ attendance_joined %>%
 
 ```
 
-To build models for illustratign the prediction of weekly attendance, we will select on the team_name, the year, the week of the game, and the margin of victory.
+To build models for the prediction of weekly attendance, we will select for features arbitrarily on the team_name, the year, the week of the game, and the margin of victory.
 
 ```{r}
 attendance_df<-attendance_joined  %>%
@@ -91,7 +91,7 @@ attendance_df<-attendance_joined  %>%
 
 ## Train a Model
 
-First, the data are split into training and testing sets at about 75/25, retaining similar playoff outcomes in both.
+First, the data are split into training and testing sets at about 75/25, stratifying for similar playoff outcomes in both.
 
 ```{r}
 library(tidymodels)
@@ -116,7 +116,11 @@ lm_fit<-lm_spec %>%
 
 tidy(lm_fit) %>% arrange(-estimate)
 
+tidy(lm_fit) %>% arrange(-p.value) %>% filter(p.value < 0.05)
+
 ```
+
+
 
 A comparable random forest regression is specified and fit here:
 
@@ -132,8 +136,6 @@ tidy(lm_fit) %>% arrange(-estimate)
 ```
 
 ## Evaluate Models
-
-
 
 ```{r}
 results_train<-lm_fit %>%
@@ -216,6 +218,8 @@ rf_res %>%
      theme_minimal()
 
 ```
+
+After resampling, the root mean squared error of the random forest model on test data is improved marginally, compared to the conventional linear model.
 
 Credits:
   Julia Silge, RStudio
