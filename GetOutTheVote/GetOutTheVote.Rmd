@@ -12,10 +12,7 @@ library(skimr)
 library(viridis)
 library(broom)
 library(tidymodels)
-library(doParallel)
 library(janitor)
-cores<-parallel::detectCores()
-doParallel::registerDoParallel(cores)
 theme_set(theme_light())
 ```
 
