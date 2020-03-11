@@ -262,7 +262,7 @@ knn_fit
 
     ## parsnip model object
     ## 
-    ## Fit time:  10ms 
+    ## Fit time:  20ms 
     ## 
     ## Call:
     ## kknn::train.kknn(formula = formula, data = data, ks = 5)
@@ -288,7 +288,7 @@ tree_fit
 
     ## parsnip model object
     ## 
-    ## Fit time:  11ms 
+    ## Fit time:  21ms 
     ## n= 480 
     ## 
     ## node), split, n, loss, yval, (yprob)
@@ -430,8 +430,32 @@ glm_fit %>%
     ##   <chr>   <chr>          <dbl>
     ## 1 roc_auc binary         0.772
 
+``` r
+glm_fit %>%
+  predict(new_data = bake(uni_rec, new_data = uni_test),
+          type = "class") %>%
+  mutate(truth = uni_test$diversity) %>%
+  conf_mat(truth, .pred_class)%>%
+  pluck(1) %>%
+  as_tibble() %>%
+  ggplot(aes(Prediction, Truth, alpha = n)) +
+  geom_tile(show.legend = FALSE) +
+  geom_text(aes(label = n), colour = "white", alpha = 1, size = 8) +
+  theme(panel.grid.major = element_blank(),
+        plot.title.position = "plot") +
+  labs(
+    y = "Actual",
+    x = "Predicted",
+    fill = NULL,
+    title = "Confusion Matrix",
+    subtitle = "GLM Model Only"
+  )
+```
+
+![](CollegeTuitionandDiversity_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
 Acknowledgements:
 
-[Julia Silge’s blog at](https://juliasilge.com/blog/tuition-resampling/)
+[Julia Silge’s blog](https://juliasilge.com/blog/tuition-resampling/)
 
-[Meghan Hall’s blog at](https://meghan.rbind.io/post/tidymodels-intro/)
+[Meghan Hall’s blog](https://meghan.rbind.io/post/tidymodels-intro/)
