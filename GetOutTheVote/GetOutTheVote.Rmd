@@ -26,9 +26,9 @@ The Data Source is the [Democracy Fund Voter Survey ](https://www.voterstudygrou
 
 ![Democracy Fund](https://www.voterstudygroup.org/assets/build/img/main-logo.svg)
 
-```{r Download, eval=FALSE, include=FALSE}
+```{r Download, message=FALSE, warning=FALSE, include=FALSE}
 
-url<-"https://www.voterstudygroup.org/download?lv=ISF17V%252Fsb6OLPogCy%252Be6vm0tp%252F1AEpeRqVfSlwcUnpjQrkJDj4Dypbf%252F5s7ZpHSo6p%252Blhk7VAE7zizmvIPAMo7UyGeF6VZ6D0gEhmWKuD6GYilvVbWuUMFBORZcoSkKVyR0UymC%252BNoYPDroyK1cFyjrJJbbKZo7hJBBIsi86pvucEAmrA1PEaSdVs7c1vYJo3f2NsuF1hT50SQFvyeCpUM%252BJAdUkaIFCYWodawzFqsCdClIfjeOX2PDe8enAF1t3XOZh7apP6tLxqRg3bIneO9Dgc3DqUvxn0IuqwoDAJx8%253D"
+url<-"https://www.voterstudygroup.org/download?lv=xQ%252Fn%252FcP9yYLkNIyfm3hTNqbuYR%252BbJKplmR4kObnW5b9Qeh7rVivbHwCZLkuk2ceXKUCjqRTLwdFNwIYLAH7uYfTE%252B1dH7Xw%252FZh4Va%252Bme3J%252B7ak7fwiYryH7fWfSOwPmBSMxoLD9W02xhJMNfYMaSMwB9xw%252BIP63HhG6UzDxwLpazUHCuruvUykpJP3D2x0Jig9LbKMZ50h0SvWNGf3KEAg6YqLZP%252Fnvlg48HiTJRKCggIcxCYz%252B6udwwev4vaZ4MxyfgZZP79MoHb4T4lYY7r1mJMCSYYJhyTSqjieXnPsyGe16YRn5edhihsUEPl4yA"
 
 download.file(url = url,
               destfile = "./dfvsg_2016_VOTER_Survey-csv.zip",
@@ -38,7 +38,7 @@ unzip("dfvsg_2016_VOTER_Survey-csv.zip", files = "VOTER_Survey_December16_Releas
 
 cols<-c(12,62:79,95:180)
 
-voters<-read_csv("./VOTER_Survey_December16_Release1.csv") %>% clean_names()
+voters<-read_csv("./VOTER_Survey_December16_Release1.csv", guess_max = 4000) %>% clean_names()
 
 voters<-voters[,cols]
 
@@ -49,6 +49,8 @@ voters<-voters %>%
   mutate(turnout16_2016 = fct_recode(as_factor(turnout16_2016),
                                        "Did.not.vote"="2",
                                        "Voted"="1"))
+```
+```{r}
 voters %>%
   count(turnout16_2016)
 ```
@@ -123,15 +125,19 @@ voters_rec <- recipe(turnout16_2016 ~ .,
               step_knnimpute(all_predictors(), neighbors = 3) %>%
               step_center(all_predictors()) %>% 
               step_scale(all_predictors()) %>%
-              prep(training = voters_tr, retain = TRUE) 
+              check_missing(all_predictors()) %>%
+              prep() 
 
-train_data <- bake(voters_rec,new_data= voters_tr)
+# the steps taken
+voters_rec
+
+# what the data looks like after pre-processing
+juice(voters_rec) 
+
 x_train<- voters_rec %>% juice(all_predictors())
 y_train<- voters_rec %>% juice(all_outcomes())
 
 test_data<- bake(voters_rec, new_data=voters_te)
-
-Amelia::missmap(train_data[,-1])
 
 ```
 
@@ -185,11 +191,13 @@ results_test %>%
 
 ```
 
+
+
 Let's look for improvement with hyperparameter tuning on the random forest models.
 
 ```{r}
 vote_boot <- bake(voters_rec, voters) %>%
-        bootstraps(times = 30)
+        bootstraps(times = 10)
 
 rf_spec <- rand_forest(
   mode = "classification",
@@ -200,10 +208,9 @@ rf_spec <- rand_forest(
   set_engine("ranger")
 
 rf_grid <- tune_grid(
-  turnout16_2016 ~ ., 
-  model = rf_spec,
-  resamples = vote_boot
-)
+  rf_spec, 
+  turnout16_2016 ~ .,
+  resamples = vote_boot)
 
 rf_grid %>%
   collect_metrics()
@@ -213,8 +220,25 @@ rf_grid %>%
 
 ```
 
+So, choosing the random forest model with parameters `mtry = 5` and `min_n = 18` and assessing performance on testing data:
 
+```{r}
+rf_spec<-rand_forest(mode = "classification",
+                     mtry = 5,
+                     trees = 500,
+                     min_n = 18) %>%
+         set_engine("ranger")
 
+rf_fit<- rf_spec %>%
+          fit(turnout16_2016 ~ ., data = train_data)
+
+rf_fit %>% predict(new_data = train_data) %>%
+            mutate(truth = train_data$turnout16_2016,
+                   model = "rf")%>%
+  group_by(model)  %>%
+  metrics(truth = truth, .pred_class)
+
+```
 
 
 
