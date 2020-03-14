@@ -1,0 +1,60 @@
+---
+title: "Summarize by Time"
+output: flexdashboard::flex_dashboard
+runtime: shiny
+---
+
+```{r global, include=FALSE}
+library(tidyquant)
+library(tidyverse)
+library(shiny)
+library(shinyWidgets)
+library(plotly)
+
+plot_series <- function(data, x, y, color, ncol = 1, scales = "fixed") {
+    data %>%
+        ggplot(aes(!! enquo(x), !! enquo(y), color = !! enquo(color))) +
+        geom_line() +
+        scale_color_tq() +
+        theme_tq() +
+        facet_wrap(facets = vars(!! enquo(color)), ncol = ncol, scales = scales) +
+        theme(legend.position = "none")
+}
+```
+
+
+
+MAIN
+-----------------------------------------------------------------------
+
+### Volume By Time
+
+```{r}
+shinyWidgets::radioGroupButtons(
+    inputId   = "time_selection",
+    choices   = c("Day", "Week", "Month", "Quarter", "Year"), 
+    selected  = "Day", 
+    direction = "horizontal", 
+    justified = TRUE
+)
+
+renderPlotly({
+    
+    req(input$time_selection)
+    
+    g <- FANG %>%
+        group_by(symbol) %>%
+        summarize_by_time(
+            .date_var = date, 
+            .by       = str_to_lower(input$time_selection),
+            total_volume = SUM(volume)
+        ) %>%
+        plot_series(date, total_volume, symbol, scales = "free_y", ncol = 2) +
+        labs(x = "", y = "")
+    
+    ggplotly(g)
+    
+})
+
+
+```
