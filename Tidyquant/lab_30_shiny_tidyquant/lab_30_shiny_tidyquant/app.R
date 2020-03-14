@@ -12,9 +12,10 @@ library(plotly)
 
 
 # Setup Data & Params ----
-stock_index    <- tq_index("SP600")
+stock_index    <- tq_index("SP500")
 stock_symbols  <- stock_index %>% pull(symbol)
-initial_stocks <- c("CAT")
+initial_stocks <- c("FB", "AMZN", "NFLX", "GOOG",
+                    "ADBE", "MSFT", "NVDA", "CRM")
 modification_variables <- "date"
 
 function_choices_modify_variables <- c("DAY()", "WEEK()", "MONTH()", "QUARTER()", "YEAR()",

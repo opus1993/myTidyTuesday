@@ -1,0 +1,52 @@
+.well-primary {
+    background-color: #2c3e50;
+}
+
+.character {
+    color: #3498db;
+}
+
+.factor {
+    color: #3498db;
+}
+
+.date {
+    color: #f39c12;
+}
+
+.numeric {
+    color: #18bc9c;
+}
+
+.integer {
+    color: #18bc9c;
+}
+
+.navbar-logo {
+    height: 90%;
+    -webkit-filter: drop-shadow(2px 2px 2px #222);
+}
+.navbar-header {
+    height: 60px;
+}
+
+#section-controls {
+    background-color: #f3f3f3;
+}
+
+.text-primary h1, h2, h3, h4, h5 {
+    color: #2c3e50;
+}
+
+.item-text {
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.item-text:hover {
+    background-color: aliceblue;
+}
+
+.nav-tabs>li>a, .nav-tabs>li>a:focus {
+    color: #666666;
+}
