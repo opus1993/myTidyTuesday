@@ -83,7 +83,7 @@ office_ratings %>%
 
 ```
 
-To merge the datasets on episode, we have to clean the ratings file field by removing punctuation, digits, the words "part" and "parts", and make all text lower case. Even after cleaning, three episode titles have to be manually imputed with a case_when statement to succefully join every episode rating with the text of the episode.
+To merge the datasets on episode, we have to clean the ratings file field by removing punctuation, digits, the words "part" and "parts", and make all text lower case. Even after cleaning, three episode titles have to be manually imputed with a case_when statement to successfully join every episode rating with the text of the episode.
 
 ```{r}
 remove_regex <- "[:punct:]|[:digit:]|parts |part |the |and"
@@ -98,10 +98,10 @@ office_ratings <- office_ratings %>%
 
 office_ratings <- office_ratings %>%
   mutate(episode_name = case_when(
-      episode_name == "email surveillance" ~ "email surveilance",
-      episode_name == "coverup" ~ "cover",
-      episode_name == "sex ed" ~ "sx ed",
-      TRUE ~ episode_name))
+    episode_name == "email surveillance" ~ "email surveilance",
+    episode_name == "coverup" ~ "cover",
+    episode_name == "sex ed" ~ "sx ed",
+    TRUE ~ episode_name))
 
 office_info <- schrute::theoffice %>%
   mutate(
@@ -162,7 +162,7 @@ character_tf_idf %>%
   labs(title = "Dwight's Lines in The Office",
        subtitle = "Highest Tf-IDF words", 
        caption = paste0("Jim Gruman ", Sys.Date()))+
-    theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot")
 
 character_tf_idf %>%
   filter(character == "Jim") %>%
@@ -174,7 +174,7 @@ character_tf_idf %>%
   labs(title = "Jim's Lines in The Office",
        subtitle = "Highest Tf-IDF words", 
        caption = paste0("Jim Gruman ", Sys.Date()))+
-    theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot")
 
 
 character_tf_idf %>%
@@ -192,7 +192,7 @@ character_tf_idf %>%
        subtitle = "Words most specific to a character", 
        caption = paste0("Jim Gruman ", Sys.Date()),
        x="", y="TF-IDF of character-word pairs")+
-    theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot")
 ```
 
 We are going to use several different kinds of features for modeling. Let’s find out how many times characters speak per episode.
@@ -240,7 +240,7 @@ office <- office_info %>%
   inner_join(characters) %>%
   inner_join(creators) %>%
   inner_join(office_ratings %>%
-    select(episode_name, imdb_rating)) %>%
+               select(episode_name, imdb_rating)) %>%
   janitor::clean_names()
 
 office
@@ -257,7 +257,7 @@ office %>%
        subtitle = "IMDB, by episode, across all seasons", 
        caption = paste0("Jim Gruman ", Sys.Date()),
        x="", y="IMDB Rating")+
-    theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot")
 
 ```
 

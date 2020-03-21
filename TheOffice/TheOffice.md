@@ -127,7 +127,7 @@ office_ratings %>%
 To merge the datasets on episode, we have to clean the ratings file
 field by removing punctuation, digits, the words “part” and “parts”, and
 make all text lower case. Even after cleaning, three episode titles have
-to be manually imputed with a case\_when statement to succefully join
+to be manually imputed with a case\_when statement to successfully join
 every episode rating with the text of the episode.
 
 ``` r
@@ -143,10 +143,10 @@ office_ratings <- office_ratings %>%
 
 office_ratings <- office_ratings %>%
   mutate(episode_name = case_when(
-      episode_name == "email surveillance" ~ "email surveilance",
-      episode_name == "coverup" ~ "cover",
-      episode_name == "sex ed" ~ "sx ed",
-      TRUE ~ episode_name))
+    episode_name == "email surveillance" ~ "email surveilance",
+    episode_name == "coverup" ~ "cover",
+    episode_name == "sex ed" ~ "sx ed",
+    TRUE ~ episode_name))
 
 office_info <- schrute::theoffice %>%
   mutate(
@@ -247,7 +247,7 @@ character_tf_idf %>%
   labs(title = "Dwight's Lines in The Office",
        subtitle = "Highest Tf-IDF words", 
        caption = paste0("Jim Gruman ", Sys.Date()))+
-    theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot")
 ```
 
 ![](TheOffice_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
@@ -263,7 +263,7 @@ character_tf_idf %>%
   labs(title = "Jim's Lines in The Office",
        subtitle = "Highest Tf-IDF words", 
        caption = paste0("Jim Gruman ", Sys.Date()))+
-    theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot")
 ```
 
 ![](TheOffice_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
@@ -284,7 +284,7 @@ character_tf_idf %>%
        subtitle = "Words most specific to a character", 
        caption = paste0("Jim Gruman ", Sys.Date()),
        x="", y="TF-IDF of character-word pairs")+
-    theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot")
 ```
 
 ![](TheOffice_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
@@ -372,7 +372,7 @@ office <- office_info %>%
   inner_join(characters) %>%
   inner_join(creators) %>%
   inner_join(office_ratings %>%
-    select(episode_name, imdb_rating)) %>%
+               select(episode_name, imdb_rating)) %>%
   janitor::clean_names()
 ```
 
@@ -418,7 +418,7 @@ office %>%
        subtitle = "IMDB, by episode, across all seasons", 
        caption = paste0("Jim Gruman ", Sys.Date()),
        x="", y="IMDB Rating")+
-    theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot")
 ```
 
 ![](TheOffice_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
@@ -487,20 +487,20 @@ lasso_fit %>%
   tidy()
 ```
 
-    ## # A tibble: 1,112 x 5
+    ## # A tibble: 1,246 x 5
     ##    term         step estimate lambda dev.ratio
     ##    <chr>       <dbl>    <dbl>  <dbl>     <dbl>
-    ##  1 (Intercept)     1   8.46    0.207    0     
-    ##  2 (Intercept)     2   8.46    0.189    0.0317
-    ##  3 michael         2   0.0185  0.189    0.0317
-    ##  4 (Intercept)     3   8.46    0.172    0.0581
-    ##  5 michael         3   0.0355  0.172    0.0581
-    ##  6 (Intercept)     4   8.46    0.157    0.0957
-    ##  7 michael         4   0.0505  0.157    0.0957
-    ##  8 phyllis         4   0.0115  0.157    0.0957
-    ##  9 (Intercept)     5   8.46    0.143    0.140 
-    ## 10 michael         5   0.0640  0.143    0.140 
-    ## # ... with 1,102 more rows
+    ##  1 (Intercept)     1   8.44    0.212    0     
+    ##  2 (Intercept)     2   8.44    0.193    0.0374
+    ##  3 michael         2   0.0190  0.193    0.0374
+    ##  4 (Intercept)     3   8.44    0.176    0.0685
+    ##  5 michael         3   0.0363  0.176    0.0685
+    ##  6 (Intercept)     4   8.44    0.160    0.0943
+    ##  7 michael         4   0.0520  0.160    0.0943
+    ##  8 (Intercept)     5   8.44    0.146    0.116 
+    ##  9 michael         5   0.0664  0.146    0.116 
+    ## 10 (Intercept)     6   8.44    0.133    0.133 
+    ## # ... with 1,236 more rows
 
 If you have used `glmnet` before, this is the familiar output where we
 can see (here, for the most regularized examples) the features that
@@ -553,16 +553,16 @@ lasso_grid %>%
     ## # A tibble: 80 x 6
     ##     penalty .metric .estimator  mean     n std_err
     ##       <dbl> <chr>   <chr>      <dbl> <int>   <dbl>
-    ##  1 1.00e-10 rmse    standard   0.571    25  0.0264
-    ##  2 1.00e-10 rsq     standard   0.210    25  0.0269
-    ##  3 1.80e-10 rmse    standard   0.571    25  0.0264
-    ##  4 1.80e-10 rsq     standard   0.210    25  0.0269
-    ##  5 3.26e-10 rmse    standard   0.571    25  0.0264
-    ##  6 3.26e-10 rsq     standard   0.210    25  0.0269
-    ##  7 5.88e-10 rmse    standard   0.571    25  0.0264
-    ##  8 5.88e-10 rsq     standard   0.210    25  0.0269
-    ##  9 1.06e- 9 rmse    standard   0.571    25  0.0264
-    ## 10 1.06e- 9 rsq     standard   0.210    25  0.0269
+    ##  1 1.00e-10 rmse    standard   0.535    25  0.0188
+    ##  2 1.00e-10 rsq     standard   0.113    25  0.0198
+    ##  3 1.80e-10 rmse    standard   0.535    25  0.0188
+    ##  4 1.80e-10 rsq     standard   0.113    25  0.0198
+    ##  5 3.26e-10 rmse    standard   0.535    25  0.0188
+    ##  6 3.26e-10 rsq     standard   0.113    25  0.0198
+    ##  7 5.88e-10 rmse    standard   0.535    25  0.0188
+    ##  8 5.88e-10 rsq     standard   0.113    25  0.0198
+    ##  9 1.06e- 9 rmse    standard   0.535    25  0.0188
+    ## 10 1.06e- 9 rsq     standard   0.113    25  0.0198
     ## # ... with 70 more rows
 
 That’s nice, but I would rather see a visualization of performance with
@@ -584,7 +584,7 @@ lasso_grid %>%
   theme(legend.position = "none")
 ```
 
-    ## Warning: Removed 2 row(s) containing missing values (geom_path).
+    ## Warning: Removed 3 row(s) containing missing values (geom_path).
 
 ![](TheOffice_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
@@ -620,7 +620,7 @@ final_lasso
     ## Linear Regression Model Specification (regression)
     ## 
     ## Main Arguments:
-    ##   penalty = 0.0522334507426683
+    ##   penalty = 0.0942668455117885
     ##   mixture = 1
     ## 
     ## Computational engine: glmnet
@@ -669,5 +669,5 @@ last_fit(
     ## # A tibble: 2 x 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard       0.426
-    ## 2 rsq     standard       0.306
+    ## 1 rmse    standard      0.546 
+    ## 2 rsq     standard      0.0542
