@@ -5,7 +5,7 @@ Public Dataviz submissions
 
 As hosted by the R4DS community
 
-[TheOffice](https://github.com/opus1993/myTidyTuesday/blob/master/TheOffice/TheOffice/TheOffice.md)
+[TheOffice](https://github.com/opus1993/myTidyTuesday/blob/master/TheOffice/TheOffice.md)
 
 [NFL Attendance](https://github.com/opus1993/myTidyTuesday/blob/master/NFLattendance/NFL-attendance.md)
 
