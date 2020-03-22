@@ -378,7 +378,7 @@ final_lasso <- finalize_workflow(
 final_lasso
 ```
 
-The optimal penalty is shown here as 0.0522
+The optimal penalty is shown here as 0.0289
 
 We can then fit this finalized workflow on our training data. While we’re at it, let’s see what the most important variables are using the `vip` package.
 
