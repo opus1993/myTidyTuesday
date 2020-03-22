@@ -1,7 +1,7 @@
 The Office for Tidy Tuesday
 ================
 Jim Gruman
-2020-03-20
+2020-03-21
 
 # Lasso Regression using Tidymodels Workflows and The Office TidyTuesday DataSet
 
@@ -86,13 +86,15 @@ office_ratings %>%
 
 ``` r
 office_ratings %>%
-  mutate(title = fct_inorder(title),
+  mutate(top_title = ifelse(imdb_rating >= 9.2 | imdb_rating <= 7,
+                            title, ""),
+         title = fct_inorder(title),
          episode_number = row_number()) %>%
   ggplot(aes(episode_number, imdb_rating))+
   geom_line()+
   geom_smooth(alpha = 0.3)+
   geom_point(aes(color = factor(season), size = total_votes))+
-  geom_text(aes(label = title), check_overlap = TRUE, hjust = 1)+
+  geom_text(aes(label = top_title), check_overlap = TRUE, hjust = 0.5)+
   expand_limits(x = -15)+
   labs(title = "Popularity of The Office episodes",
        subtitle = "IMDB Rating, Color by Season, Size by # of Ratings",
@@ -487,20 +489,20 @@ lasso_fit %>%
   tidy()
 ```
 
-    ## # A tibble: 1,246 x 5
-    ##    term         step estimate lambda dev.ratio
-    ##    <chr>       <dbl>    <dbl>  <dbl>     <dbl>
-    ##  1 (Intercept)     1   8.44    0.212    0     
-    ##  2 (Intercept)     2   8.44    0.193    0.0374
-    ##  3 michael         2   0.0190  0.193    0.0374
-    ##  4 (Intercept)     3   8.44    0.176    0.0685
-    ##  5 michael         3   0.0363  0.176    0.0685
-    ##  6 (Intercept)     4   8.44    0.160    0.0943
-    ##  7 michael         4   0.0520  0.160    0.0943
-    ##  8 (Intercept)     5   8.44    0.146    0.116 
-    ##  9 michael         5   0.0664  0.146    0.116 
-    ## 10 (Intercept)     6   8.44    0.133    0.133 
-    ## # ... with 1,236 more rows
+    ## # A tibble: 1,315 x 5
+    ##    term          step estimate lambda dev.ratio
+    ##    <chr>        <dbl>    <dbl>  <dbl>     <dbl>
+    ##  1 (Intercept)      1  8.46     0.198    0     
+    ##  2 (Intercept)      2  8.46     0.181    0.0300
+    ##  3 michael          2  0.0177   0.181    0.0300
+    ##  4 (Intercept)      3  8.46     0.165    0.0654
+    ##  5 michael          3  0.0337   0.165    0.0654
+    ##  6 greg_daniels     3  0.00705  0.165    0.0654
+    ##  7 (Intercept)      4  8.46     0.150    0.107 
+    ##  8 kevin            4  0.00120  0.150    0.107 
+    ##  9 michael          4  0.0478   0.150    0.107 
+    ## 10 greg_daniels     4  0.0212   0.150    0.107 
+    ## # ... with 1,305 more rows
 
 If you have used `glmnet` before, this is the familiar output where we
 can see (here, for the most regularized examples) the features that
@@ -553,16 +555,16 @@ lasso_grid %>%
     ## # A tibble: 80 x 6
     ##     penalty .metric .estimator  mean     n std_err
     ##       <dbl> <chr>   <chr>      <dbl> <int>   <dbl>
-    ##  1 1.00e-10 rmse    standard   0.535    25  0.0188
-    ##  2 1.00e-10 rsq     standard   0.113    25  0.0198
-    ##  3 1.80e-10 rmse    standard   0.535    25  0.0188
-    ##  4 1.80e-10 rsq     standard   0.113    25  0.0198
-    ##  5 3.26e-10 rmse    standard   0.535    25  0.0188
-    ##  6 3.26e-10 rsq     standard   0.113    25  0.0198
-    ##  7 5.88e-10 rmse    standard   0.535    25  0.0188
-    ##  8 5.88e-10 rsq     standard   0.113    25  0.0198
-    ##  9 1.06e- 9 rmse    standard   0.535    25  0.0188
-    ## 10 1.06e- 9 rsq     standard   0.113    25  0.0198
+    ##  1 1.00e-10 rmse    standard   0.552    25  0.0179
+    ##  2 1.00e-10 rsq     standard   0.180    25  0.0240
+    ##  3 1.80e-10 rmse    standard   0.552    25  0.0179
+    ##  4 1.80e-10 rsq     standard   0.180    25  0.0240
+    ##  5 3.26e-10 rmse    standard   0.552    25  0.0179
+    ##  6 3.26e-10 rsq     standard   0.180    25  0.0240
+    ##  7 5.88e-10 rmse    standard   0.552    25  0.0179
+    ##  8 5.88e-10 rsq     standard   0.180    25  0.0240
+    ##  9 1.06e- 9 rmse    standard   0.552    25  0.0179
+    ## 10 1.06e- 9 rsq     standard   0.180    25  0.0240
     ## # ... with 70 more rows
 
 That’s nice, but I would rather see a visualization of performance with
@@ -584,7 +586,7 @@ lasso_grid %>%
   theme(legend.position = "none")
 ```
 
-    ## Warning: Removed 3 row(s) containing missing values (geom_path).
+    ## Warning: Removed 2 row(s) containing missing values (geom_path).
 
 ![](TheOffice_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
@@ -620,7 +622,7 @@ final_lasso
     ## Linear Regression Model Specification (regression)
     ## 
     ## Main Arguments:
-    ##   penalty = 0.0942668455117885
+    ##   penalty = 0.0289426612471674
     ##   mixture = 1
     ## 
     ## Computational engine: glmnet
@@ -669,5 +671,5 @@ last_fit(
     ## # A tibble: 2 x 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard      0.546 
-    ## 2 rsq     standard      0.0542
+    ## 1 rmse    standard       0.458
+    ## 2 rsq     standard       0.219

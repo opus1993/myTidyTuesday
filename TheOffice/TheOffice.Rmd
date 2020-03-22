@@ -49,13 +49,15 @@ office_ratings %>%
   theme(plot.title.position = "plot")
 
 office_ratings %>%
-  mutate(title = fct_inorder(title),
+  mutate(top_title = ifelse(imdb_rating >= 9.2 | imdb_rating <= 7,
+                            title, ""),
+         title = fct_inorder(title),
          episode_number = row_number()) %>%
   ggplot(aes(episode_number, imdb_rating))+
   geom_line()+
   geom_smooth(alpha = 0.3)+
   geom_point(aes(color = factor(season), size = total_votes))+
-  geom_text(aes(label = title), check_overlap = TRUE, hjust = 1)+
+  geom_text(aes(label = top_title), check_overlap = TRUE, hjust = 0.5)+
   expand_limits(x = -15)+
   labs(title = "Popularity of The Office episodes",
        subtitle = "IMDB Rating, Color by Season, Size by # of Ratings",
