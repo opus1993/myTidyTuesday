@@ -1,7 +1,7 @@
 The Office for Tidy Tuesday
 ================
 Jim Gruman
-2020-03-21
+2020-03-22
 
 # Lasso Regression using Tidymodels Workflows and The Office TidyTuesday DataSet
 
@@ -489,20 +489,20 @@ lasso_fit %>%
   tidy()
 ```
 
-    ## # A tibble: 1,315 x 5
-    ##    term          step estimate lambda dev.ratio
-    ##    <chr>        <dbl>    <dbl>  <dbl>     <dbl>
-    ##  1 (Intercept)      1  8.46     0.198    0     
-    ##  2 (Intercept)      2  8.46     0.181    0.0300
-    ##  3 michael          2  0.0177   0.181    0.0300
-    ##  4 (Intercept)      3  8.46     0.165    0.0654
-    ##  5 michael          3  0.0337   0.165    0.0654
-    ##  6 greg_daniels     3  0.00705  0.165    0.0654
-    ##  7 (Intercept)      4  8.46     0.150    0.107 
-    ##  8 kevin            4  0.00120  0.150    0.107 
-    ##  9 michael          4  0.0478   0.150    0.107 
-    ## 10 greg_daniels     4  0.0212   0.150    0.107 
-    ## # ... with 1,305 more rows
+    ## # A tibble: 1,348 x 5
+    ##    term         step estimate lambda dev.ratio
+    ##    <chr>       <dbl>    <dbl>  <dbl>     <dbl>
+    ##  1 (Intercept)     1  8.41     0.207    0     
+    ##  2 (Intercept)     2  8.41     0.188    0.0342
+    ##  3 jim             2  0.0185   0.188    0.0342
+    ##  4 (Intercept)     3  8.41     0.172    0.0663
+    ##  5 jim             3  0.0347   0.172    0.0663
+    ##  6 michael         3  0.00295  0.172    0.0663
+    ##  7 (Intercept)     4  8.41     0.156    0.105 
+    ##  8 jim             4  0.0473   0.156    0.105 
+    ##  9 michael         4  0.0155   0.156    0.105 
+    ## 10 (Intercept)     5  8.41     0.142    0.137 
+    ## # ... with 1,338 more rows
 
 If you have used `glmnet` before, this is the familiar output where we
 can see (here, for the most regularized examples) the features that
@@ -555,16 +555,16 @@ lasso_grid %>%
     ## # A tibble: 80 x 6
     ##     penalty .metric .estimator  mean     n std_err
     ##       <dbl> <chr>   <chr>      <dbl> <int>   <dbl>
-    ##  1 1.00e-10 rmse    standard   0.552    25  0.0179
-    ##  2 1.00e-10 rsq     standard   0.180    25  0.0240
-    ##  3 1.80e-10 rmse    standard   0.552    25  0.0179
-    ##  4 1.80e-10 rsq     standard   0.180    25  0.0240
-    ##  5 3.26e-10 rmse    standard   0.552    25  0.0179
-    ##  6 3.26e-10 rsq     standard   0.180    25  0.0240
-    ##  7 5.88e-10 rmse    standard   0.552    25  0.0179
-    ##  8 5.88e-10 rsq     standard   0.180    25  0.0240
-    ##  9 1.06e- 9 rmse    standard   0.552    25  0.0179
-    ## 10 1.06e- 9 rsq     standard   0.180    25  0.0240
+    ##  1 1.00e-10 rmse    standard   0.520    25  0.0185
+    ##  2 1.00e-10 rsq     standard   0.199    25  0.0277
+    ##  3 1.80e-10 rmse    standard   0.520    25  0.0185
+    ##  4 1.80e-10 rsq     standard   0.199    25  0.0277
+    ##  5 3.26e-10 rmse    standard   0.520    25  0.0185
+    ##  6 3.26e-10 rsq     standard   0.199    25  0.0277
+    ##  7 5.88e-10 rmse    standard   0.520    25  0.0185
+    ##  8 5.88e-10 rsq     standard   0.199    25  0.0277
+    ##  9 1.06e- 9 rmse    standard   0.520    25  0.0185
+    ## 10 1.06e- 9 rsq     standard   0.199    25  0.0277
     ## # ... with 70 more rows
 
 That’s nice, but I would rather see a visualization of performance with
@@ -608,17 +608,17 @@ final_lasso <- finalize_workflow(
 final_lasso
 ```
 
-    ## == Workflow =====================================================================
+    ## == Workflow ======================================================
     ## Preprocessor: Recipe
     ## Model: linear_reg()
     ## 
-    ## -- Preprocessor -----------------------------------------------------------------
+    ## -- Preprocessor --------------------------------------------------
     ## 2 Recipe Steps
     ## 
     ## * step_zv()
     ## * step_normalize()
     ## 
-    ## -- Model ------------------------------------------------------------------------
+    ## -- Model ---------------------------------------------------------
     ## Linear Regression Model Specification (regression)
     ## 
     ## Main Arguments:
@@ -671,5 +671,5 @@ last_fit(
     ## # A tibble: 2 x 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard       0.458
-    ## 2 rsq     standard       0.219
+    ## 1 rmse    standard       0.480
+    ## 2 rsq     standard       0.185
