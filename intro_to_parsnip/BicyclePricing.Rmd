@@ -1,0 +1,174 @@
+---
+title: "BicyclePricing"
+author: "Jim Gruman"
+date: "3/22/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+theme_set(theme_minimal())
+```
+
+Insipired by Matt Dancho's [Lab 5: Hands-On Codign with the NEW parsnip package](https://university.business-science.io/courses/541207/lectures/9846389)
+
+## Load bicycle pricing and feature data
+
+As a first step, I scrape data from a neighborhood bike shop. This dataset includes a wide variety of bicycles, from kids sizes and BMX up through carbon fibre time trial and electric bikes.
+
+```{r}
+library(rvest)
+library(janitor)
+library(tidyverse)
+# Modeling packages
+library(tidymodels)
+#library(parsnip)
+library(rsample)
+library(yardstick)
+library(broom)
+# Connector packages
+library(rpart)
+library(rpart.plot)
+library(xgboost)
+
+top_url <- "https://www.bicyclesetc-il.com"
+pl_url<- "/product-list/bikes-1000/"
+
+# build a product list
+startrow <- as.character(seq(from = 0, to = 480, by =60))
+fun<-function(x)(paste0(top_url, pl_url, "?maxItems=60&startrow=", x))
+productlist_urls<- map(startrow, fun)
+
+productlist<-map(productlist_urls, read_html) 
+
+products<-productlist %>%
+map(~html_nodes(., ".seItemName")) %>%
+map(html_text) %>%
+unlist()
+
+pricelist<-productlist %>%
+map(~html_nodes(., ".seRegularPrice, .seSpecialPrice")) %>%
+map(html_text) %>%
+map(~str_sub(., start = 2L)) %>%
+map(~parse_number(.)) %>%
+  unlist()
+
+brandlist<-productlist %>%
+map(~html_nodes(., ".seBrandName")) %>%
+map(html_text) %>%
+unlist()
+
+pagelist<-productlist %>%
+map(~html_nodes(., ".seProductAnchor")) %>%
+map(~html_attr(., "href")) %>%
+map(~paste0(top_url, .)) %>%
+unlist()
+
+#length(products)
+#length(pricelist)
+#length(brandlist)
+#length(pagelist)
+
+bikes<-tibble(product = products, price = pricelist, brand = brandlist)
+
+bikes$ID <- seq.int(length(bikes$product))
+
+# read detailed product specification pages
+
+productdetail<-map(pagelist, read_html)
+
+productdetail[[1]] %>%
+    map(~html_nodes(., ".seProductBreadcrumb")) 
+
+
+detail<-productdetail %>%
+    map(~html_nodes(., "table.table.seProductSpecTable")) %>%
+    map(~html_table(., fill = TRUE)) 
+
+names(detail) <-seq.int(length(detail))
+
+detail<-detail %>%
+    map_dfr(1, .id = "ID")
+
+detail$ID = as.integer(detail$ID)
+
+bikes_df<-detail %>%
+  left_join(bikes, by = "ID") %>% 
+  select(product, price, brand, X1, X2) %>%
+  pivot_wider(names_from = X1, values_from = X2, values_fn = list(X2 = max)) %>%
+  clean_names() %>%
+  mutate(rims_wheels = case_when(!is.na(rims_wheels) ~ rims_wheels,
+                      !is.na(wheels_rims) ~ wheels_rims,
+                      !is.na(rims) ~ rims,
+                      TRUE ~ "unknown")) %>%
+  select(-wheels_rims, -rims) %>%
+  mutate(frame_spec = case_when(str_detect(tolower(frame), "carbon") ~ "carbon fiber",
+       str_detect(tolower(frame), "smartform c1") ~ "smartform c1",
+       str_detect(tolower(frame), "smartform c2") ~ "smartform c2",
+       str_detect(tolower(frame), "smartform c3") ~ "smartform c3",
+       str_detect(tolower(frame), "6061|6000|aluminum|superlight") ~ "aluminum",
+       TRUE ~ "steel")) %>%
+  mutate(brake_spec = case_when(str_detect(tolower(brakes), "coaster") ~ "coaster",
+         str_detect(tolower(brakes), "caliper|linear|v-brake|u-brake") ~ "caliper",
+         str_detect(tolower(brakes), "promax") ~ "Promax",
+         str_detect(tolower(brakes), "mechanical disc") ~ "mechanical disc",
+         str_detect(tolower(brakes), "rt900") ~ "RT900",
+         str_detect(tolower(brakes), "rt800") ~ "RT800",
+         str_detect(tolower(brakes), "sram level ultimate") ~ "SRAM Level Ultimate",
+         str_detect(tolower(brakes), "sram force 1") ~ "SRAM Force 1",
+         str_detect(tolower(brakes), "sram force etap") ~ "SRAM Force eTap",
+         str_detect(tolower(brakes), "sram red etap") ~ "SRAM RED eTap",
+         str_detect(tolower(brakes), "shimano xtr") ~ "shimano XTR",
+         str_detect(tolower(brakes), "sram code rsc") ~ "SRAM Code RSC",
+         str_detect(tolower(brakes), "sram level tlm") ~ "SRAM Level TLM",  
+         str_detect(tolower(brakes), "sram apex") ~ "SRAM Apex",
+         str_detect(tolower(brakes), "aero") ~ "Aero Integrated",
+         str_detect(tolower(brakes), "mechanical disc|trp spyre") ~ "mechanical disc",
+         str_detect(tolower(brakes), "hyd|shimano|hayes|tektro") ~ "hydraulic disc",
+         TRUE ~ "other")) %>%
+  select(product, price, brand, frame_spec, brake_spec, drive_system, display, motor)
+
+```
+
+## Exploration
+
+A quick exploratory peek at the range of prices for each frame specification:
+
+```{r}
+ggplot(bikes_df, aes(frame_spec, price))+
+  geom_boxplot()+
+  labs(title = "Bicycle Pricing by Frame Specification",
+       subtitle = "For a Neighborhood Bike Shop",
+       caption = paste0("Jim Gruman ", Sys.Date()))+
+  theme(plot.title.position = "plot",
+        panel.grid.major.x = element_blank(),
+        legend.position = "none") +
+  scale_y_continuous(labels=scales::dollar_format())+
+  xlab("")+ylab("Price")
+```
+
+## Modeling
+
+The model we are going to build predicts price as a function of the features. The first step, as always, is to split the data.
+
+```{r}
+set.seed(42)
+split_obj <- rsample::initial_split(bikes_df, 
+                                    prop   = 0.8)
+
+train_tbl <- split_obj %>% training() 
+test_tbl  <- split_obj %>% testing() 
+```
+
+The `tidymodels` meta package provides a consistent access point to several machine learning algorithms 
+
+# - Cross Validation & Grid Search:
+
+# 4.1 Linear Regression (No Engineered Features) ----
+`?linear_reg`     # Step 1: Pick a parsnip algorithm, & Set key parameters
+`?set_engine`     # Step 2: Set an engine, Returns a model spec
+`?fit.model_spec` # Step 3: Fit model specification to data
+
+
+
+
