@@ -5,6 +5,8 @@ Public Dataviz submissions
 
 As hosted by the R4DS community
 
+[Brain Injuries](https://github.com/opus1993/myTidyTuesday/blob/master/BrainInjury/BrainInjury.md)
+
 [TheOffice](https://github.com/opus1993/myTidyTuesday/blob/master/TheOffice/TheOffice.md)
 
 [NFL Attendance](https://github.com/opus1993/myTidyTuesday/blob/master/NFLattendance/NFL-attendance.md)
