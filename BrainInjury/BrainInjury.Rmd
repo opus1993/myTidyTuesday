@@ -5,7 +5,7 @@ date: '`r format(Sys.Date())`'
 output: github_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidymodels)
 library(tidyverse)
@@ -15,7 +15,7 @@ theme_set(theme_minimal())
 
 ## R Markdown
 
-```{r}
+```{r, message=FALSE}
 # Get the Data
 
 tbi_age <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv')
