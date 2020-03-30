@@ -1,7 +1,15 @@
 Brain Injury
 ================
 Jim Gruman
-2020-03-24
+2020-03-29
+
+``` r
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(tidymodels)
+library(tidyverse)
+library(vip)
+theme_set(theme_minimal())
+```
 
 ## R Markdown
 
@@ -9,42 +17,9 @@ Jim Gruman
 # Get the Data
 
 tbi_age <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv')
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   age_group = col_character(),
-    ##   type = col_character(),
-    ##   injury_mechanism = col_character(),
-    ##   number_est = col_double(),
-    ##   rate_est = col_double()
-    ## )
-
-``` r
 tbi_year <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_year.csv')
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   injury_mechanism = col_character(),
-    ##   type = col_character(),
-    ##   year = col_double(),
-    ##   rate_est = col_double(),
-    ##   number_est = col_double()
-    ## )
-
-``` r
 tbi_military <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_military.csv')
 ```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   service = col_character(),
-    ##   component = col_character(),
-    ##   severity = col_character(),
-    ##   diagnosed = col_double(),
-    ##   year = col_double()
-    ## )
 
 # Data Exploration
 
@@ -85,18 +60,7 @@ library(gganimate)
 library(gifski)
 library(png)
 library(viridis)
-```
 
-    ## Loading required package: viridisLite
-
-    ## 
-    ## Attaching package: 'viridis'
-
-    ## The following object is masked from 'package:scales':
-    ## 
-    ##     viridis_pal
-
-``` r
 p <- tbi_year %>% 
   filter(injury_mechanism != "Total") %>% 
   ggplot(aes(x = injury_mechanism,y = number_est, fill = type )) +
