@@ -50,7 +50,7 @@ created above.
 The solution to the problem is to edit your local `.Renviron` file. In
 the console, type
 
-`usethis::edit_r_environ`
+`usethis::edit_r_environ()`
 
 Find the **TWITTER\_PAT** parameter and change every back slash `\` and
 forward slash `/` to double backslashes `\\` to the rds file address. It
