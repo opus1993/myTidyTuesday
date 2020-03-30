@@ -1,0 +1,287 @@
+---
+title: "rtweet"
+author: "Jim Gruman"
+output: github_document
+date: '2020-03-29'
+---
+
+I set out to work with `rtweet` on some work-related Twitter handles and ended up discovering a bug and a workaround for windows users. 
+
+```{r setup, include=TRUE, message=FALSE}
+knitr::opts_chunk$set(include = TRUE)
+library(lubridate)
+library(tidyverse)
+library(rtweet)
+theme_set(theme_light())
+token<-rtweet::get_token()
+```
+
+The `rtweet` [Obtaining and using access tokens](http://rtweet.info/articles/auth.html) vignette provides instructions for creating tokens and writing them to `.Renviron`, one-time only, as:
+
+```{r eval=FALSE, include=TRUE}
+api_key <- "onthetwitterdeveloperpage"
+api_secret_key <- "onthetwitterdeveloperpage"
+access_token <- "onthetwitterdeveloperpage"
+access_token_secret <- "onthetwitterdeveloperpage"
+
+## authenticate via web browser
+token <- create_token(
+  app = "mytwitterapp_NDMSBA",
+  consumer_key = api_key,
+  consumer_secret = api_secret_key,
+  access_token = access_token,
+  access_secret = access_token_secret)
+```
+
+Unfortunately, the process currently works properly only in linux environments, and not in Windows. Closely inspect the token created as follows:
+
+```{r eval=FALSE}
+token<-rtweet::get_token()
+token
+```
+
+You have found the bug when the token returned does not match the keys created above.
+
+The solution to the problem is to edit your local `.Renviron` file. In the console, type
+
+`usethis::edit_r_environ`
+
+Find the **TWITTER_PAT** parameter and change every back slash `\` and forward slash `/` to double backslashes `\\` to the rds file address.  It will resemble
+
+`"C:\\Users\\<youruser>\\Documents\\.rtweet_token.rds"`
+
+Save the `.Renviron` file.  Then Restart R (Ctrl+Shift+F10). Closely inspect the token again:
+
+```{r eval=FALSE}
+token<-rtweet::get_token()
+token
+```
+
+----
+
+# CaseIH Twitter handle timeline
+
+@Case_IH is the global twitter handle of one of the agriculture brand handles for CNHIndustrial. Their most recent 3200 tweets can be pulled from the API as
+
+```{r}
+case_ih_timeline <- get_timeline("case_ih", n=3200, token = token) %>%
+    mutate(week = as.Date(floor_date(created_at, "week", week_start = 1)))
+```
+Plots describing some measures of @Case_IH activity:
+
+```{r}
+case_ih_timeline %>%
+   mutate(hour=hour(with_tz(created_at, tz="America/Chicago")))  %>%
+   group_by(hour) %>%
+   summarize(n=n()) %>%
+   mutate(frequency=n/sum(n)) %>%
+   ggplot()+
+   geom_col(aes(x=hour, y=frequency), 
+             fill='red', alpha=0.5)+
+   labs(title = "@CaseIH Tweet Activity by Time of Day",
+     subtitle = "source: Twitter API",             
+     x = "Hour, CST", y = "Frequency",
+     caption = str_c("Jim Gruman, ", Sys.Date()))+
+     theme(plot.title.position = "plot")  
+
+week_summary<- case_ih_timeline %>%
+  group_by(week) %>%
+  summarize(tweets = n(),
+            avg_retweets =  exp(mean(log(retweet_count + 1))) -1)
+# remove last week from summary calc
+
+week_summary<- week_summary[-(nrow(week_summary)),]
+
+week_summary %>%
+  ggplot(aes(week, tweets))+
+  geom_line()+
+  expand_limits(y = 0)+
+  labs(title = "@Case_IH Tweet Activity by Week",
+       subtitle = "source: Twitter API",       
+       x = "Date",
+       y = "@Case_IH Tweets",
+       caption = str_c("Jim Gruman, ", Sys.Date())) +
+    theme(plot.title.position = "plot") 
+
+week_summary %>%
+  ggplot(aes(week, avg_retweets))+
+  geom_line()+
+  expand_limits(y = 0)+
+  labs(title = "@Case_IH Tweet Popularity in Retweets by Week",
+       subtitle = "source: Twitter API",
+       x = "Date",
+       y = "@Case_IH Average (Geometric Mean) Retweets",
+       caption = str_c("Jim Gruman, ", Sys.Date())) +
+  theme(plot.title.position = "plot") 
+```
+
+Which tweets get the most retweets, and thus the widest audience?
+
+```{r}
+case_ih_timeline%>%
+  select(screen_name, retweet_screen_name, retweet_count, status_id)%>%
+  arrange(desc(retweet_count)) %>%
+  head() 
+```
+
+<https://twitter.com/Case_IH/status/918453719418667008>
+
+```{r}
+case_ih_timeline%>%
+  select(retweet_screen_name, retweet_count, favorite_count, status_id)%>%
+  mutate(ratio = (favorite_count + 1) / (retweet_count + 1)) %>%
+  arrange(ratio) %>%
+  head()
+
+```
+
+!<https://twitter.com/Case_IH/status/1106313301275955201>
+
+Another approach to showing the most popular tweet of this year in a browser:
+
+```{r}
+show_most_popular_tweet <- function(user){
+  get_timeline(user, n=3200) %>%
+    mutate(year = year(created_at)) %>%
+    filter(year == year(Sys.Date())) %>%
+    arrange(-favorite_count) %>%
+    slice(1) %>%
+    pull(status_id) %>%
+    paste0('http://twitter.com/', user, '/status/', .) %>%
+    browseURL()
+}
+
+show_most_popular_tweet('case_ih')
+```
+
+Some measures of tweet word content:
+
+```{r message=FALSE}
+library(tidytext)
+tweet_words<-case_ih_timeline %>%
+  select(screen_name, text, retweet_count, favorite_count, created_at, week, status_id) %>%
+  unnest_tokens(word, text, token = "tweets") %>%
+  anti_join(stop_words, by = "word") %>%
+  filter(!word %in% c("#caseih", "@caseih", "37pm", "youll", "rt", "amp", "blog", "mt"),
+         str_detect(word, "[a-z]"),
+         !str_detect(word, "http")) 
+
+tweet_words %>%
+  count(word, sort = TRUE)%>%
+  head(16)%>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n))+
+  geom_col() +
+  coord_flip() +
+  theme(plot.title.position = "plot") +
+  labs(title = "Most Common Words in @Case_IH Tweets", subtitle = "source: Twitter API",
+       y = "Frequency of Words", caption = paste0("Jim Gruman ", Sys.Date()))
+```
+
+```{r}
+word_summary<-tweet_words %>%
+  group_by(word)%>%
+  summarize(n = n(),
+            avg_retweets =   exp(mean(log(retweet_count + 1))) -1,
+            avg_favorites = exp(mean(log(favorite_count+ 1)))-1) %>%
+  filter(n >= 30) %>%
+  arrange(desc(avg_retweets))
+
+word_summary
+
+```
+
+# What topics are each week most about?
+
+```{r}
+library(tidytext)
+top_word<-tweet_words %>%
+  count(word, week) %>%
+  bind_tf_idf(word, week, n) %>%
+  filter(n>=2)%>%
+  arrange(desc(tf_idf)) %>%
+  distinct(week, .keep_all = TRUE)
+
+week_summary %>%
+  inner_join(top_word, by = c("week")) %>%
+  arrange(desc(avg_retweets))
+```
+
+
+```{r}
+week_summary %>%
+  inner_join(top_word, by = c("week")) %>%
+  ggplot(aes(week, tweets))+
+  geom_line(color = "lightblue", size = 1)+
+  geom_text(aes(label = word), check_overlap = TRUE,
+            vjust = 1,
+            hjust = 1) +
+  expand_limits(y = 0)+
+  labs(title = "@Case_IH's Tweets and Topics by Week",x = "Date",
+       y = "@Case_IH Tweets", subtitle = "Word is each week's most specific by TF-IDF",
+       caption = str_c("Jim Gruman, ", Sys.Date()))+
+    theme(plot.title.position = "plot") 
+
+
+week_summary %>%
+  inner_join(top_word, by = c("week")) %>%
+  ggplot(aes(week, avg_retweets))+
+  geom_line(color = "lightblue", size = 1)+
+  geom_text(aes(label = word), check_overlap = TRUE,
+            vjust = 1,
+            hjust = 1) +
+  expand_limits(y = 0)+
+  labs(title = "@Case_IH Twitter Popularity and Topics by Week",x = "Date",
+       y = "@Case_IH Retweets",subtitle = "Word is each week's most specific by TF-IDF",
+       caption = str_c("Jim Gruman, ", Sys.Date()))+
+    theme(plot.title.position = "plot") 
+
+```
+
+And some measures of the interactions between the global Case_IH twitter handle and some of the most active Case_IH dealer stores:
+
+```{r message=FALSE}
+library(UpSetR)
+
+rstaters<- c("Case_IH", "Birkeys", "HooberInc", "StoltzSales","ScottSupply", "hragripower",
+             "JennerCompanies", "TitanAg", "RMEHQ")
+followers_upset <- map_df(rstaters, ~ get_followers(
+  .x, retryonratelimit = TRUE, token = token) %>% mutate(account = .x))
+aRdent_followers <- unique(followers_upset$user_id)
+binaries <- rstaters %>%
+  map_dfc(~ ifelse(aRdent_followers %in% filter(
+    followers_upset, account == .x)$user_id, 1, 0) %>% as.data.frame)
+
+names(binaries) <- rstaters
+
+upset(binaries,
+      nsets = 9,
+      main.bar.color = "SteelBlue",
+     sets.bar.color = "DarkCyan",
+      sets.x.label = "Follower Count",
+      text.scale = c(rep(1.4, 5), 1),
+      order.by = "freq")
+```
+Finally, a map of recent #CaseIH hashtag activity in the US:
+
+```{r}
+searches<-search_tweets(
+  "#caseih", geocode = lookup_coords("usa"), n = 10000)
+searches<- lat_lng(searches) %>% select(lng, lat) %>% filter(!is.na(lat))
+
+library(usmap)
+p <- plot_usmap( regions = "state") 
+p + geom_point(data = searches, aes(x = lng, y = lat, size = 5), color = "red")+
+  labs(title = "US #caseih Tweet locations",
+       subtitle = "from the Twitter API",
+       caption = str_c("Jim Gruman, ", Sys.Date()))+
+    theme(plot.title.position = "plot",
+          legend.position = "") 
+```
+
+----
+
+Inspired by:
+[Dave Robinson R tutorial](https://www.youtube.com/watch?v=KE9ItC3doEU&t=80s)
+
+It turns out that [Jon Harmon has also made a report of the issue at the package repo](https://github.com/ropensci/rtweet/issues/380)
