@@ -1,22 +1,31 @@
 ---
 title: "CoronaByCounty"
 author: "Jim Gruman"
-date: '`r format(Sys.Date())`'
-output: html_document
+date: "`r format(Sys.Date())`"
+output:
+  html_document: default
+  github_document: default
 ---
 
-```{r setup, include=FALSE}
-# New York Times Dataset
-
+```{r setup, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(plotly)
+library(rjson)
+theme_set(theme_minimal())
+```
+# New York Times COVID19 Dataset
+
+```{r }
 
 url<-"https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
 download.file(url = url, destfile = "counties.csv", method = "curl")
-counties<-read_csv("./counties.csv")
+NYT<-read_csv("./counties.csv")
+file.remove("./counties.csv")
 
-library(plotly)
-
-df<-counties %>% 
+df<-NYT%>% 
   mutate(re = stringr::str_c(stringr::str_to_lower(county),
                              " ", 
                              stringr::str_to_lower(state)))
@@ -30,7 +39,6 @@ county_df<-map_data("county") %>%
 corona_df<-inner_join(df, county_df, by = "re") %>%
   select(cases, deaths, lat, long, county, state, fips)
 
-library(rjson)
 url = 'https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json'
 counties <- rjson::fromJSON(file=url)
 
@@ -59,5 +67,46 @@ fig <- fig %>% layout(
 )
 
 fig
+```
+
+
+
+
+```{r}
+NYT %>%
+  group_by(state) %>%
+  summarize(total_deaths = max(deaths)) %>%
+  arrange(desc(total_deaths))
+
+sum(.Last.value$total_deaths)
+
+# Latest data from:
+
+max(NYT$date)
+
+NYT.local<-
+  NYT %>%
+  filter(state %in% c("Illinois", "Iowa", "Indiana")) %>%
+  mutate(county = factor(county))
+
+NYT.local%>%
+  ggplot(aes(x = date, y = cases, group = county, col = county)) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~ state) +
+  scale_y_log10() +
+  scale_color_brewer(palette = "Set1")+
+  theme(legend.position = "") +
+  labs(title = "COVID19 Cases",
+        caption = paste0("Jim Gruman ", Sys.Date()))
+
+NYT.local%>%
+  ggplot(aes(x = date, y = deaths, group = county, col = county)) +
+  geom_line() +
+  geom_point() +
+  scale_color_brewer(palette = "Set1")+
+  theme(legend.position = "") +
+  labs(title = "COVID19 Deaths",
+        caption = paste0("Jim Gruman ", Sys.Date()))
 ```
 
