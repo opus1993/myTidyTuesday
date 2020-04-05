@@ -5,6 +5,8 @@ Public Dataviz submissions
 
 As hosted by the R4DS community
 
+[BeerProduction](https://github.com/opus1993/myTidyTuesday/blob/master/BeerProduction/BeerProduction.md)
+
 [rtweet](https://github.com/opus1993/myTidyTuesday/blob/master/rtweet/rtweet.md)
 
 [Brain Injuries](https://github.com/opus1993/myTidyTuesday/blob/master/BrainInjury/BrainInjury.md)
