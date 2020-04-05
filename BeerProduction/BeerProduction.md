@@ -1,7 +1,7 @@
 BeerProduction
 ================
 Jim Gruman
-`Sys.Date`
+2020-04-04
 
 ``` r
 library(tidyverse)   
@@ -515,7 +515,7 @@ states
 
 ![](BeerProduction_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
-## An animamated map. Because it’s TidyTuesday
+## An animated map. Because it’s TidyTuesday
 
 ``` r
 library(gganimate)
@@ -672,7 +672,7 @@ int_pctl(beer_models, coef_info)
     ## # A tibble: 1 x 6
     ##   term                   .lower .estimate .upper .alpha .method   
     ##   <chr>                   <dbl>     <dbl>  <dbl>  <dbl> <chr>     
-    ## 1 malt_and_malt_products  0.200     0.206  0.213   0.05 percentile
+    ## 1 malt_and_malt_products  0.199     0.206  0.212   0.05 percentile
 
 ``` r
 beer_aug<-beer_models %>%

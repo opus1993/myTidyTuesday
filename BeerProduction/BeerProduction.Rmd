@@ -1,7 +1,7 @@
 ---
 title: "BeerProduction"
 author: "Jim Gruman"
-date: "`Sys.Date`"
+date: '`r format(Sys.Date())`'
 output: github_document
 name: beer_production
 owner: jim_gruman
@@ -344,7 +344,7 @@ states
    
 ```
 
-## An animamated map.  Because it's TidyTuesday
+## An animated map.  Because it's TidyTuesday
 
 ```{r}
 library(gganimate)
