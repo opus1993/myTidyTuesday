@@ -1,7 +1,7 @@
 BeerProduction
 ================
 Jim Gruman
-2020-04-04
+05\. April 2020
 
 ``` r
 library(tidyverse)   
@@ -130,7 +130,8 @@ Tidymetrics
 ``` r
 brewing_summarized <-brewing_materials %>%
   rename(material = type) %>%
-  filter(!str_detect(material_type, "Total"), year < 2016) %>%
+  filter(!str_detect(material_type, "Total"), year < 2016,
+         !(month == 12 & year %in% 2014:2015)) %>%
   cross_by_dimensions(material_type, material) %>%  # duplicates the data to summarize it
   cross_by_periods(c("month","quarter","year")) %>%
   summarize(total_pounds = sum(month_current)) %>%
