@@ -316,6 +316,80 @@ nytcovcounty %>%
 
 ![](CoronaByCounty_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
+### Draw a log-linear graph of cumulative Iowa cases by county
+
+``` r
+## Counties to highlight
+focus_ct <- c("Johnson", "Dallas", "Linn", "Polk", "Scott", "Tama", "Washington")
+
+## Colors
+cgroup_cols <- c(clr_darken(paletteer_d("ggsci::category20_d3"), 0.2)[1:length(focus_cn)], "gray70")
+
+nytcovcounty %>%
+  filter(state == "Iowa") %>%
+  group_by(county) %>%
+  mutate(core = case_when(county %nin% focus_ct ~ "",
+                          TRUE ~ county),
+         end_label = ifelse(date == max(date), core, NA), 
+         days_elapsed = date - min(date)) %>%
+  ggplot(aes(x = days_elapsed, y = cases, group = county, color = core, label = end_label)) +
+  geom_line(size = 0.25) +
+  geom_text_repel(nudge_x = 0.75,
+                  segment.color = NA) +
+  guides(color = FALSE) +
+  scale_color_manual(values = cgroup_cols) +
+  scale_y_log10(labels = scales::label_number_si()) +
+  guides(color = FALSE) +
+  labs(title = "Iowa COVID-19 Cumulative Recorded Cases by County",
+       subtitle = paste("Data as of", format(max(nytcovcounty$date), "%A, %B %e, %Y")),
+       x = "Days since first case", y = "Count of Cases (log 10 scale)",
+       caption = "@jim_gruman | Data: The New York Times")+
+  theme(plot.title.position = "plot")
+```
+
+    ## Warning: Removed 1061 rows containing missing values (geom_text_repel).
+
+![](CoronaByCounty_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+### Draw a log-linear graph of cumulative Iowa deaths by county
+
+``` r
+## Counties to highlight
+focus_ct <- c("Johnson", "Dallas", "Linn", "Polk", "Scott", "Tama", "Washington")
+
+## Colors
+cgroup_cols <- c(clr_darken(paletteer_d("ggsci::category20_d3"), 0.2)[1:length(focus_cn)], "gray70")
+
+nytcovcounty %>%
+  filter(state == "Iowa") %>%
+  group_by(county) %>%
+  mutate(core = case_when(county %nin% focus_ct ~ "",
+                          TRUE ~ county),
+         end_label = ifelse(date == max(date), core, NA), 
+         days_elapsed = date - min(date)) %>%
+  ggplot(aes(x = days_elapsed, y = deaths, group = county, color = core, label = end_label)) +
+  geom_line(size = 0.25) +
+  geom_text_repel(nudge_x = 0.75,
+                  segment.color = NA) +
+  guides(color = FALSE) +
+  scale_color_manual(values = cgroup_cols) +
+  scale_y_log10(labels = scales::label_number_si()) +
+  guides(color = FALSE) +
+  labs(title = "Iowa COVID-19 Cumulative Recorded Deaths by County",
+       subtitle = paste("Data as of", format(max(nytcovcounty$date), "%A, %B %e, %Y")),
+       x = "Days since first case", y = "Count of Deaths (log 10 scale)",
+       caption = "@jim_gruman | Data: The New York Times")+
+  theme(plot.title.position = "plot")
+```
+
+    ## Warning: Transformation introduced infinite values in continuous y-axis
+    
+    ## Warning: Transformation introduced infinite values in continuous y-axis
+
+    ## Warning: Removed 1061 rows containing missing values (geom_text_repel).
+
+![](CoronaByCounty_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
 ## US CDC Surveillance Network Data
 
 This US Centers for Disase Control surveillance network conducts
@@ -453,7 +527,7 @@ cdc_hospitalizations %>%
   theme(plot.title.position = "plot")
 ```
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 Citations:
 
