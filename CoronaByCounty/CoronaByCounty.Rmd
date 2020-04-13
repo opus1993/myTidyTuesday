@@ -25,7 +25,7 @@ library(prismatic)
 theme_set(theme_minimal())
 ```
 
-> Inspired by Kieran Healy's R package `covdata` at [](https://github.com/kjhealy/covdata/)
+> Inspired by Kieran Healy's R package `covdata` 
 
 <center>
 ![](https://github.com/kjhealy/covdata/raw/master/man/figures/hex-covdata.png)
@@ -51,7 +51,8 @@ covnat %>%
     columns = vars(`New Cases`, `New Deaths`, `Cumulative Cases`, `Cumulative Deaths`),
     decimals = 0,
     suffixing = TRUE
-  )
+  ) %>%
+  gtsave(filename = "ECDC_byCountry.png", expand = 10)
   
 ```
 
@@ -122,7 +123,8 @@ covus %>%
    tab_header(
      title = "State Level Data from COVID Tracking Project",
      subtitle = glue::glue("Snapshot of Illinois As of {end_date}")
-   ) 
+   ) %>%
+  gtsave(filename = "CovidTrackingProject.png", expand = 10)
 
 ```
 
