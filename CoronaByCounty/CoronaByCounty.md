@@ -106,7 +106,7 @@ covnat %>%
 
     ## Warning: Removed 3018 rows containing missing values (geom_text_repel).
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/CasesByCountry-1.png)<!-- -->
 
 ## State-Level Data from the COVID Tracking Project
 
@@ -125,7 +125,7 @@ covus %>%
   gtsave(filename = "CovidTrackingProject.png", expand = 10)
 ```
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/StateLevelCovidTracking-1.png)<!-- -->
 
 ### Draw a log-linear graph of cumulative reported US cases
 
@@ -177,7 +177,7 @@ covus %>%
 
     ## Warning: Removed 1762 rows containing missing values (geom_text_repel).
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/CumulativeUSCovidStates-1.png)<!-- -->
 
 ## State-Level and County-Level (Cumulative) Data from the *New York Times*
 
@@ -240,7 +240,7 @@ nytcovcounty %>%
 
     ## Warning: Transformation introduced infinite values in continuous y-axis
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/CumulativeUSEveryStatebyCounty-1.png)<!-- -->
 
 ### Draw a log-linear graph of cumulative Illinois cases by county
 
@@ -275,7 +275,7 @@ nytcovcounty %>%
 
     ## Warning: Removed 1171 rows containing missing values (geom_text_repel).
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/IllinoisCasesByCounty-1.png)<!-- -->
 
 ### Draw a log-linear graph of cumulative Illinois deaths by county
 
@@ -314,7 +314,7 @@ nytcovcounty %>%
 
     ## Warning: Removed 1171 rows containing missing values (geom_text_repel).
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/IllinoisDeathsByCounty-1.png)<!-- -->
 
 ### Draw a log-linear graph of cumulative Iowa cases by county
 
@@ -349,7 +349,7 @@ nytcovcounty %>%
 
     ## Warning: Removed 1061 rows containing missing values (geom_text_repel).
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/IowaCasesByCounty-1.png)<!-- -->
 
 ### Draw a log-linear graph of cumulative Iowa deaths by county
 
@@ -388,7 +388,7 @@ nytcovcounty %>%
 
     ## Warning: Removed 1061 rows containing missing values (geom_text_repel).
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/IowaDeathsByCounty-1.png)<!-- -->
 
 ## US CDC Surveillance Network Data
 
@@ -527,7 +527,7 @@ cdc_hospitalizations %>%
   theme(plot.title.position = "plot")
 ```
 
-![](CoronaByCounty_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](CoronaByCounty_files/figure-gfm/CDCSurveillanceAgeDemographics-1.png)<!-- -->
 
 Citations:
 

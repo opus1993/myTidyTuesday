@@ -58,7 +58,7 @@ covnat %>%
 
 ### A log-linear graph of cumulative reported cases by country
 
-```{r}
+```{r CasesByCountry}
 ## Convenince "Not in" operator
 "%nin%" <- function(x, y) {
   return( !(x %in% y) )
@@ -111,7 +111,7 @@ covnat %>%
 
 ## State-Level Data from the COVID Tracking Project
 
-```{r fig.width= 6}
+```{r StateLevelCovidTracking, fig.width= 6}
 
 end_date <- max(covus$date)
 
@@ -130,7 +130,7 @@ covus %>%
 
 ### Draw a log-linear graph of cumulative reported US cases
 
-```{r}
+```{r CumulativeUSCovidStates}
 ## Which n states are leading the count of positive cases or deaths?
 top_n_states <- function(data, n = 8, measure = c("positive", "death")) {
   meas <- match.arg(measure)
@@ -173,7 +173,7 @@ covus %>%
 
 ## State-Level and County-Level (Cumulative) Data from the *New York Times*
 
-```{r}
+```{r NYTdatasets}
 nytcovstate
 
 nytcovcounty
@@ -182,7 +182,7 @@ nytcovcounty
 
 ### Draw a log-linear graph of cumulative US cases by county
 
-```{r fig.height= 18 }
+```{r CumulativeUSEveryStatebyCounty, fig.height= 18 }
 nytcovcounty %>%
   mutate(uniq_name = paste(county, state)) %>% # Can't use FIPS because of how the NYT bundled cities
   group_by(uniq_name) %>%
@@ -201,7 +201,7 @@ nytcovcounty %>%
 
 ### Draw a log-linear graph of cumulative Illinois cases by county
 
-```{r}
+```{r IllinoisCasesByCounty}
 ## Counties to highlight
 focus_ct <- c("Cook", "DuPage", "Lake", "Will", "Kane")
 
@@ -232,7 +232,7 @@ nytcovcounty %>%
 
 ### Draw a log-linear graph of cumulative Illinois deaths by county
 
-```{r}
+```{r IllinoisDeathsByCounty}
 ## Counties to highlight
 focus_ct <- c("Cook", "DuPage", "Lake", "Will", "Kane")
 
@@ -263,7 +263,7 @@ nytcovcounty %>%
 
 ### Draw a log-linear graph of cumulative Iowa cases by county
 
-```{r}
+```{r IowaCasesByCounty}
 ## Counties to highlight
 focus_ct <- c("Johnson", "Dallas", "Linn", "Polk", "Scott", "Tama", "Washington")
 
@@ -294,7 +294,7 @@ nytcovcounty %>%
 
 ### Draw a log-linear graph of cumulative Iowa deaths by county
 
-```{r}
+```{r IowaDeathsByCounty}
 ## Counties to highlight
 focus_ct <- c("Johnson", "Dallas", "Linn", "Polk", "Scott", "Tama", "Washington")
 
@@ -327,7 +327,7 @@ nytcovcounty %>%
 
 This US Centers for Disase Control surveillance network conducts population-based surveillance for laboratory-confirmed COVID-19-associated hospitalizations in children (persons younger than 18 years) and adults in the United States. The current network covers nearly 100 counties in the 10 Emerging Infections Program (EIP) states (CA, CO, CT, GA, MD, MN, NM, NY, OR, and TN) and four additional states through the Influenza Hospitalization Surveillance Project (IA, MI, OH, and UT). The network represents approximately 10% of US population (~32 million people). Cases are identified by reviewing hospital, laboratory, and admission databases and infection control logs for patients hospitalized with a documented positive SARS-CoV-2 test. Data gathered are used to estimate age-specific hospitalization rates on a weekly basis and describe characteristics of persons hospitalized with COVID-19. Laboratory confirmation is dependent on clinician-ordered SARS-CoV-2 testing. Therefore, the unadjusted rates provided are likely to be underestimated as COVID-19-associated hospitalizations can be missed due to test availability and provider or facility testing practices. COVID-NET hospitalization data are preliminary and subject to change as more data become available. All incidence rates are unadjusted. Please use the following citation when referencing these data: “COVID-NET: COVID-19-Associated Hospitalization Surveillance Network, Centers for Disease Control and Prevention. WEBSITE. Accessed on DATE”.
 
-```{r}
+```{r CDCSurveillance}
 cdc_hospitalizations
 
 cdc_catchments
@@ -337,7 +337,7 @@ cdc_deaths_by_state
 nssp_covid_er_reg
 ```
 
-```{r fig.height=7}
+```{r CDCSurveillanceAgeDemographics, fig.height=7}
 # install.packages("cdccovidview", repos = c("https://cinc.rud.is", "https://cloud.r-project.org/"))
 
 age_f <- c(
