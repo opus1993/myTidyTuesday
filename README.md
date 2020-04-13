@@ -1,7 +1,6 @@
-![tt](https://user-images.githubusercontent.com/40182015/75833965-4733de00-5d80-11ea-89d2-694b56ecaa2c.png)
-
 Public Dataviz submissions
-[Corona By County](https://github.com/opus1993/myTidyTuesday/blob/master/CoronaByCounty/CoronaByCounty.md)
+
+[Corona SARS COVID-19 By County](https://github.com/opus1993/myTidyTuesday/blob/master/CoronaByCounty/CoronaByCounty.md)
 
 ----
 # TidyTuesday
