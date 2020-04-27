@@ -19,5 +19,10 @@ rsample
 tune
 workflows
 yardstick
+rnaturalearth
+sf
+ggtext
+xml2
+rvest
 ggbeeswarm
 patchwork

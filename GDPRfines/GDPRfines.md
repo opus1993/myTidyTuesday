@@ -1,7 +1,7 @@
 GDPR Fines
 ================
 Jim Gruman
-27\. April 2020
+27 April 2020
 
 This week’s [`#TidyTuesday`
 dataset](https://github.com/rfordatascience/tidytuesday) is on EU GDPR
@@ -18549,14 +18549,16 @@ the personal data of data subjects, which they copied from the servers.
 How are the fines distributed?
 
 ``` r
-gdpr_raw_histogram<-gdpr_raw %>%
+gdpr_raw_histogram <- gdpr_raw %>%
   ggplot(aes(price + 1)) +
   geom_histogram(fill = "midnightblue", alpha = 0.7) +
   scale_x_log10(labels = scales::dollar_format(prefix = "€")) +
-  labs(title = "EU General Data Protection Regulation 2016/679 (GDPR)",
-       subtitle = "Scraped from https://www.privacyaffairs.com/gdpr-fines/",
-       x = "GDPR fine (EUR)", y = "Number of GDPR violations",
-       caption = '@Jim_Gruman | #TidyTuesday')+
+  labs(
+    title = "EU General Data Protection Regulation 2016/679 (GDPR)",
+    subtitle = "Scraped from https://www.privacyaffairs.com/gdpr-fines/",
+    x = "GDPR fine (EUR)", y = "Number of GDPR violations",
+    caption = "@Jim_Gruman | #TidyTuesday"
+  ) +
   theme(plot.title.position = "plot")
 gdpr_raw_histogram
 ```
@@ -30818,19 +30820,25 @@ How are the fines distributed by article?
 ``` r
 library(ggbeeswarm)
 
-gdpr_fines_levied<-gdpr_tidy %>%
-  mutate(articles = str_replace_all(articles, "Art. ", "Article "),
-         articles = fct_reorder(articles, price)) %>%
+gdpr_fines_levied <- gdpr_tidy %>%
+  mutate(
+    articles = str_replace_all(articles, "Art. ", "Article "),
+    articles = fct_reorder(articles, price)
+  ) %>%
   ggplot(aes(articles, price + 1, color = articles, fill = articles)) +
   geom_boxplot(alpha = 0.2, outlier.colour = NA) +
   geom_quasirandom() +
   scale_y_log10(labels = scales::dollar_format(prefix = "€")) +
-  labs(x = NULL, y = "GDPR fine (EUR)",
-       title = "GDPR Fines Levied, by Article",
-       subtitle = "For 250 violations in 25 countries",
-       caption = '@Jim_Gruman | #TidyTuesday')+
-  theme(legend.position = "none",
-        plot.title.position = "plot") 
+  labs(
+    x = NULL, y = "GDPR fine (EUR)",
+    title = "GDPR Fines Levied, by Article",
+    subtitle = "For 250 violations in 25 countries",
+    caption = "@Jim_Gruman | #TidyTuesday"
+  ) +
+  theme(
+    legend.position = "none",
+    plot.title.position = "plot"
+  )
 gdpr_fines_levied
 ```
 
@@ -43700,7 +43708,7 @@ straightforward Ordinary Least Squares linear regression).
 gdpr_wf <- workflow() %>%
   add_recipe(gdpr_rec) %>%
   add_model(linear_reg() %>%
-              set_engine("lm"))
+    set_engine("lm"))
 
 gdpr_wf
 ```
@@ -43732,7 +43740,7 @@ gdpr_fit <- gdpr_wf %>%
 # gdpr_fit %>%
 #  workflows::pull_workflow_fit() %>%
 #  tidy() %>%
-#  arrange(estimate) %>% 
+#  arrange(estimate) %>%
 #  kable()
 ```
 
@@ -47858,24 +47866,33 @@ what are the predicted GDPR fines for violations of each article type
 (violating only one article)?
 
 ``` r
-pred_fine<-gdpr_res %>% 
-    filter(total_articles == 1) %>%
-    pivot_longer(art_5:art_32) %>%
-    filter(value > 0) %>%
-    mutate(name = str_replace_all(name, "art_", "Article "),
-           name = fct_reorder(name, .pred)) %>%
-    ggplot(aes(name, 10 ^ .pred, color = name)) +
-    geom_point(size = 3.5) +
-    geom_errorbar(aes(ymin = 10 ^ .pred_lower, 
-                      ymax = 10 ^ .pred_upper),
-                  width = 0.2, alpha = 0.7) +
-    labs(x = NULL, y = "Increase in fine (EUR)",
-         title = "Predicted Fine for each Type of GDPR Article Violation",
-         subtitle = "Modeling based on 250 violations in 25 countries",
-         caption = '@Jim_Gruman | #TidyTuesday') +
-    scale_y_log10(labels = scales::dollar_format(prefix = "€", accuracy = 1)) +
-    theme(legend.position = "none",
-          plot.title.position = "plot") 
+pred_fine <- gdpr_res %>%
+  filter(total_articles == 1) %>%
+  pivot_longer(art_5:art_32) %>%
+  filter(value > 0) %>%
+  mutate(
+    name = str_replace_all(name, "art_", "Article "),
+    name = fct_reorder(name, .pred)
+  ) %>%
+  ggplot(aes(name, 10^.pred, color = name)) +
+  geom_point(size = 3.5) +
+  geom_errorbar(aes(
+    ymin = 10^.pred_lower,
+    ymax = 10^.pred_upper
+  ),
+  width = 0.2, alpha = 0.7
+  ) +
+  labs(
+    x = NULL, y = "Increase in fine (EUR)",
+    title = "Predicted Fine for each Type of GDPR Article Violation",
+    subtitle = "Modeling based on 250 violations in 25 countries",
+    caption = "@Jim_Gruman | #TidyTuesday"
+  ) +
+  scale_y_log10(labels = scales::dollar_format(prefix = "€", accuracy = 1)) +
+  theme(
+    legend.position = "none",
+    plot.title.position = "plot"
+  )
 pred_fine
 ```
 
@@ -47885,10 +47902,83 @@ We can see here that violations such as data breaches have higher fines
 on average than violations about rights of access.
 
 ``` r
-library(patchwork)
-png('GDPR.png',width = 8,height = 12,units='in',res=120)
+# Get countries in dataset as a vector
+gdpr_countries <- gdpr_raw %>%
+  distinct(name) %>%
+  pull()
 
-(pred_fine + gdpr_raw_histogram / gdpr_fines_levied ) + plot_layout(heights = c(1,3))
+# Get sf objects, filter by countries in dataset
+countries_sf <- rnaturalearth::ne_countries(country = c(gdpr_countries, "Czechia"), scale = "large", returnclass = "sf") %>%
+  select(name, geometry) %>%
+  mutate(name = replace(name, name == "Czechia", "Czech Republic"))
+
+# Group fines by country, merge with sf
+countries_map <- gdpr_raw %>%
+  mutate(name = stringr::str_to_title(name)) %>%
+  group_by(name) %>%
+  mutate(
+    price_sum = sum(price),
+    price_label = case_when(
+      round(price_sum / 1e6) > 0 ~ paste0(round(price_sum / 1e6), "M"),
+      round(price_sum / 1e5) > 0 ~ paste0(round(price_sum / 1e6, 1), "M"),
+      round(price_sum / 1e3) > 0 ~ paste0(round(price_sum / 1e3), "K"),
+      price_sum > 0 ~ paste0(round(price_sum / 1e3, 1), " K"),
+      TRUE ~ "0"
+    )
+  ) %>%
+  left_join(countries_sf) %>%
+  select(name, price_sum, price_label, geometry)
+
+# Copied from https://developers.google.com/public-data/docs/canonical/countries_csv
+centroids <- read_html("https://developers.google.com/public-data/docs/canonical/countries_csv") %>%
+  html_node("table") %>%
+  html_table()
+
+# Dataset for red "arrows" (to draw with geom_polygon)
+price_arrows <- countries_map %>%
+  select(name, price_sum, price_label) %>%
+  left_join(centroids) %>%
+  mutate(
+    arrow_x = list(c(longitude - 0.5, longitude, longitude + 0.5, longitude)),
+    arrow_y = list(c(latitude - 0.03, latitude, latitude - 0.03, latitude + price_sum / 1.5e6))
+  ) %>%
+  unnest(c(arrow_x, arrow_y))
+
+gdpr_map <- ggplot() +
+  # map
+  geom_sf(data = countries_map, aes(geometry = geometry), fill = "#EBE9E1", colour = "grey70", size = 0.25) +
+  # country name
+  geom_text(data = price_arrows, aes(x = longitude - 0.2, y = latitude - 0.4, label = name), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5) +
+  # red price, over 10M
+  geom_text(data = subset(price_arrows, price_sum > 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = "#BA4E35") +
+  # black price, under 10M
+  geom_text(data = subset(price_arrows, price_sum < 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = "black") +
+  # red arrows
+  geom_polygon(data = price_arrows, aes(x = arrow_x, y = arrow_y, group = name), fill = "#BA4E35", colour = NA, alpha = 0.8) +
+  # title and caption
+  annotate("richtext",
+    x = -26, y = 80, hjust = 0, vjust = 1,
+    label = "**Total of GDPR fines by country**<br><span style = 'font-size:12pt'>Rounded to nearest million or thousand euro</span><br><span style = 'font-size:8pt'>Source: Privacy Affairs | Graphic: @Jim_Gruman</span>",
+    family = "IBM Plex Serif", size = 8, lineheight = 1.1, fill = NA, label.color = NA
+  ) +
+  theme_void() +
+  theme(
+    #    plot.margin = margin(20, 20, 20, 20),
+    plot.title.position = "plot"
+  ) +
+  coord_sf(xlim = c(-27.5, 37.5), ylim = c(32.5, 82.5), expand = FALSE)
+
+gdpr_map +
+  ggsave("GDPRmap.png", dpi = 320, width = 14, height = 11)
+```
+
+![](GDPRfines_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+library(patchwork)
+png("GDPR.png", width = 8, height = 12, units = "in", res = 120)
+
+(pred_fine + gdpr_raw_histogram / gdpr_fines_levied) + plot_layout(heights = c(1, 3))
 
 dev.off()
 ```
