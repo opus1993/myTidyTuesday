@@ -6,6 +6,8 @@ Public Dataviz submissions
 # TidyTuesday
 As hosted by the R4DS community
 
+[GDPR Fines](https://github.com/opus1993/myTidyTuesday/blob/master/GDPRfines/GDPRfines.md)
+
 [Tour de France](https://github.com/opus1993/myTidyTuesday/blob/master/TourDeFrance/TourDeFrance.md)
 
 [BeerProduction](https://github.com/opus1993/myTidyTuesday/blob/master/BeerProduction/BeerProduction.md)
@@ -22,6 +24,7 @@ As hosted by the R4DS community
 
 [College Tuition and Diversity](https://github.com/opus1993/myTidyTuesday/blob/master/CollegeTuitionandDiversity/CollegeTuitionandDiversity.md)
 
+![](https://github.com/opus1993/myTidyTuesday/blob/master/GDPRfines/GDPR.png)
 ----
 ![](https://github.com/opus1993/myTidyTuesday/blob/master/CoronaByCounty/CoronaByCounty_files/figure-gfm/IllinoisCasesByCounty-1.png)
 ----
