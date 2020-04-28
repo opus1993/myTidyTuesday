@@ -50,6 +50,7 @@ Let's get started by looking at the data on violations.
 gdpr_raw <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-21/gdpr_violations.tsv')
 
 gdpr_raw %>%
+  head()%>%
   knitr::kable("html")%>%
   kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
                             full_width = F, fixed_thead = T)%>%
@@ -88,6 +89,7 @@ gdpr_tidy <- gdpr_raw %>%
   select(-n) 
 
 gdpr_tidy %>% 
+  head()%>%
   knitr::kable("html")%>%
   kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
                             full_width = F, fixed_thead = T)%>%
@@ -126,6 +128,7 @@ gdpr_violations <- gdpr_tidy %>%
   janitor::clean_names()
 
 gdpr_violations %>% 
+  head()%>%
   knitr::kable("html")%>%
   kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
                             full_width = F, fixed_thead = T)%>%
@@ -206,6 +209,7 @@ new_gdpr <- crossing(country = "Other",
            total_articles = art_5 + art_6 + art_13 + art_15 + art_32)
 
 new_gdpr %>%
+    head()%>%
     knitr::kable("html")%>%
     kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
                             full_width = F, fixed_thead = T)%>%
@@ -227,6 +231,7 @@ gdpr_res <- new_gdpr %>%
     bind_cols(conf_int_pred)
 
 gdpr_res %>%
+    head()%>%
     knitr::kable("html")%>%
     kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
                             full_width = F, fixed_thead = T)%>%
