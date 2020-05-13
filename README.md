@@ -20,6 +20,8 @@ Public Dataviz submissions
 
 [College Tuition and Diversity](https://github.com/opus1993/myTidyTuesday/blob/master/CollegeTuitionandDiversity/CollegeTuitionandDiversity.md)
 
+![](https://github.com/opus1993/myTidyTuesday/blob/master/AnimalCrossings/AnimalCrossing_files/figure-gfm/unnamed-chunk-10-1.png)
+----
 ![](https://github.com/opus1993/myTidyTuesday/blob/master/GDPRfines/GDPR.png)
 ----
 ![](https://github.com/opus1993/myTidyTuesday/blob/master/CoronaByCounty/CoronaByCounty_files/figure-gfm/IllinoisCasesByCounty-1.png)
