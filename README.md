@@ -1,10 +1,6 @@
 Public Dataviz submissions
 
-[Corona SARS COVID-19 By County](https://github.com/opus1993/myTidyTuesday/blob/master/CoronaByCounty/CoronaByCounty.md)
-
-----
-# TidyTuesday
-As hosted by the R4DS community
+[Animal Crossing Sentiment Analysis](https://github.com/opus1993/myTidyTuesday/blob/master/AnimalCrossings/AnimalCrossing.md)
 
 [GDPR Fines](https://github.com/opus1993/myTidyTuesday/blob/master/GDPRfines/GDPRfines.md)
 
