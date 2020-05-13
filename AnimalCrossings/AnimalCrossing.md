@@ -1,7 +1,7 @@
 Animal Crossing Sentiment Analysis
 ================
 Jim Gruman
-12 May 2020
+13 May 2020
 
 Our goal this week is to explore and predict ratings for [Animal
 Crossing user reviews in this week’s \#TidyTuesday
@@ -46,13 +46,29 @@ and create a new categorical rating variable.
 ``` r
 reviews_parsed <- user_reviews %>%
   mutate(text = str_remove(text, "Expand$")) %>%
-  mutate(rating = case_when(
+  mutate(rating = factor(case_when(
     grade > 7 ~ "good",
     TRUE ~ "bad"
-  )) 
+  )))
 ```
 
+What is the distribution of the new, dependent, category variable
+**rating**?
+
+There is a slight skew but we will soldier on and ignore it.
+
+``` r
+reviews_parsed  %>%
+  ggplot(aes(rating)) +
+  geom_bar()
+```
+
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
 What is the distribution of words per review?
+
+The graph suggests that something is driving a bimodal distribution,
+with a gap at about 100 words. It should be investigated further.
 
 ``` r
 library(tidytext)
@@ -64,19 +80,24 @@ reviews_parsed %>%
   ggplot(aes(total_words)) +
   geom_histogram(fill = "#2AA198", bins = 30)+
   scale_x_log10()+
-  labs(title = "Animal Crossing",
-       subtitle = paste0("User Review Word Length in Reviews from ",format(min(user_reviews$date),"%B %d, %Y")
+  labs(title = "Count of Words in Animal Crossing Reviews",
+       subtitle = paste0("Reviews from ",format(min(user_reviews$date),"%B %d, %Y")
                                         ," to ",
                          format(max(user_reviews$date),"%B %d, %Y")),
        caption = "Jim Gruman | #TidyTuesday" ,
-       x = "Number of Words in Review", y = "Number of Reviews")
+       x = "Number of Words in Review", y = "Number of Reviews")+
+  geom_vline(xintercept = 100, color = "firebrick") +
+  annotate("text", x = 105, y = 325, hjust = 0, color = "firebrick",
+           label = "Sharp cliff at 100 words") 
 ```
 
-![](AnimalCrossing_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 After a cursory inspection of the text of the reviews, there are some
 where the author pasted the same phrase into the field verbatim several
 times. We will filter out the repeats above 3x in the modeling dataset.
+
+### Review Grades over time
 
 Let’s take a look at how the reviews evolve over time:
 
@@ -101,7 +122,7 @@ by_week %>%
        caption = "Jim Gruman | #TidyTuesday" )
 ```
 
-![](AnimalCrossing_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 by_week %>% 
@@ -121,7 +142,50 @@ by_week %>%
        caption = "Jim Gruman | #TidyTuesday" )
 ```
 
-![](AnimalCrossing_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+
+Let’s take a look at how the reviews evolve by day of the week:
+
+``` r
+by_dow <-reviews_parsed %>%
+  group_by(dow = wday(date, label = TRUE, week_start = 1)) %>%
+  summarize(nb_reviews = n(),
+            avg_grade = mean(grade),
+            pct_zero = mean(grade == 0),
+            pct_ten = mean(grade ==10)) 
+
+by_dow %>% 
+  ggplot(aes(dow, avg_grade)) +
+  geom_point(aes(size = nb_reviews), color = "#2AA198")+
+  expand_limits(y = 0)+
+#  scale_x_date(date_labels = "%b %d", date_breaks = "1 week")+
+  labs(x = "Day", y = "Average Grade",
+       size = "# of Reviews",
+       title = "Animal Crossing User Review Grades",
+       subtitle = paste0("By Day of Week"),
+       caption = "Jim Gruman | #TidyTuesday" )
+```
+
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+by_dow %>% 
+  gather(type, value, contains("pct")) %>%
+  mutate(type = ifelse(type == "pct_zero", "Rated 0", "Rated 10")) %>%
+  ggplot(aes(dow, value, color = type)) +
+  geom_point(aes(size = nb_reviews))+
+  expand_limits(y = 0)+
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+#  scale_x_date(date_labels = "%b %d", date_breaks = "1 week")+
+  labs(x = "Day", y = "Portion of Reviews",
+       size = "# of Reviews",
+       title = "Most Polarizing Animal Crossing Reviews",
+       color = "Review Grade",
+       subtitle = paste0("By The Day of the Week"),
+       caption = "Jim Gruman | #TidyTuesday" )
+```
+
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
 For further topic modeling, we will remove the stop words and excessive
 copy-pasting within each review document.
@@ -157,7 +221,7 @@ by_word%>%
   scale_x_log10()
 ```
 
-![](AnimalCrossing_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 To make a nice chart, let’s zoom in on the 20 words associated with the
 lowest Review Grades:
@@ -176,7 +240,9 @@ by_word %>%
        caption = "Jim Gruman | #TidyTuesday" )
 ```
 
-![](AnimalCrossing_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+### Structural Topic Model
 
 The `stm` Structural Topic Model package offers unsupervised approaches
 to building clusters of topics, their relationships with documents, and
@@ -218,7 +284,7 @@ tidy(topic_model) %>%
         plot.margin = unit(c(c(1, 1, 1, 0.5)), units="cm"))
 ```
 
-![](AnimalCrossing_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 Is there a correlation between the document gamma and the grade that the
 reviewer gave? We will use the Spearman Correlation, which is sensitive
@@ -261,7 +327,7 @@ topic_model_gamma %>%
        caption = "@jim_gruman | #TidyTuesday")
 ```
 
-![](AnimalCrossing_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ## Build a Model
 
@@ -282,7 +348,10 @@ specialized steps from textrecipes, along with the general recipe steps.
 ``` r
 library(textrecipes)
 
-review_rec <- recipe(rating ~ text, data = review_train) %>%
+review_rec <- recipe(rating ~ text+date, data = review_train) %>%
+  step_mutate(date = as.numeric(difftime(date,min(date), units = "days"))) %>%
+  step_mutate(dow = wday(date, label = TRUE, week_start = 1)) %>%
+  step_dummy(dow) %>%
   step_tokenize(text) %>%
   step_stopwords(text) %>%
   step_tokenfilter(text, max_tokens = 500) %>%
@@ -300,17 +369,20 @@ review_prep
     ## 
     ##       role #variables
     ##    outcome          1
-    ##  predictor          1
+    ##  predictor          2
     ## 
     ## Training data contained 2250 data points and no missing data.
     ## 
     ## Operations:
     ## 
+    ## Variable mutation for date [trained]
+    ## Variable mutation for dow [trained]
+    ## Dummy variables from dow [trained]
     ## Tokenization for text [trained]
     ## Stop word removal for text [trained]
     ## Text filtering for text [trained]
     ## Term frequency-inverse document frequency with text [trained]
-    ## Centering and scaling for tfidf_text_0, tfidf_text_1, ... [trained]
+    ## Centering and scaling for date, dow_1, dow_2, dow_3, dow_4, dow_5, ... [trained]
 
 Let’s walk through the steps in this recipe, which are sensible defaults
 for a first attempt at training a text classification model such as a
@@ -364,20 +436,23 @@ lasso_wf <- workflow() %>%
 lasso_wf
 ```
 
-    ## == Workflow ==================================================================
+    ## == Workflow =====================================================================================================
     ## Preprocessor: Recipe
     ## Model: logistic_reg()
     ## 
-    ## -- Preprocessor --------------------------------------------------------------
-    ## 5 Recipe Steps
+    ## -- Preprocessor -------------------------------------------------------------------------------------------------
+    ## 8 Recipe Steps
     ## 
+    ## * step_mutate()
+    ## * step_mutate()
+    ## * step_dummy()
     ## * step_tokenize()
     ## * step_stopwords()
     ## * step_tokenfilter()
     ## * step_tfidf()
     ## * step_normalize()
     ## 
-    ## -- Model ---------------------------------------------------------------------
+    ## -- Model --------------------------------------------------------------------------------------------------------
     ## Logistic Regression Model Specification (classification)
     ## 
     ## Main Arguments:
@@ -407,16 +482,16 @@ review_folds
     ## # A tibble: 25 x 2
     ##    splits             id         
     ##    <named list>       <chr>      
-    ##  1 <split [2.2K/841]> Bootstrap01
-    ##  2 <split [2.2K/841]> Bootstrap02
-    ##  3 <split [2.2K/848]> Bootstrap03
-    ##  4 <split [2.2K/848]> Bootstrap04
-    ##  5 <split [2.2K/817]> Bootstrap05
+    ##  1 <split [2.2K/816]> Bootstrap01
+    ##  2 <split [2.2K/819]> Bootstrap02
+    ##  3 <split [2.2K/811]> Bootstrap03
+    ##  4 <split [2.2K/812]> Bootstrap04
+    ##  5 <split [2.2K/800]> Bootstrap05
     ##  6 <split [2.2K/827]> Bootstrap06
-    ##  7 <split [2.2K/846]> Bootstrap07
-    ##  8 <split [2.2K/810]> Bootstrap08
-    ##  9 <split [2.2K/797]> Bootstrap09
-    ## 10 <split [2.2K/835]> Bootstrap10
+    ##  7 <split [2.2K/836]> Bootstrap07
+    ##  8 <split [2.2K/834]> Bootstrap08
+    ##  9 <split [2.2K/849]> Bootstrap09
+    ## 10 <split [2.2K/817]> Bootstrap10
     ## # ... with 15 more rows
 
 Now we can put it all together and implement the tuning. We can set
@@ -443,16 +518,16 @@ lasso_grid %>%
     ## # A tibble: 120 x 6
     ##     penalty .metric .estimator  mean     n std_err
     ##       <dbl> <chr>   <chr>      <dbl> <int>   <dbl>
-    ##  1 1.00e-10 npv     binary     0.764    25 0.00396
-    ##  2 1.00e-10 ppv     binary     0.868    25 0.00238
-    ##  3 1.00e-10 roc_auc binary     0.888    25 0.00234
-    ##  4 1.80e-10 npv     binary     0.764    25 0.00396
-    ##  5 1.80e-10 ppv     binary     0.868    25 0.00238
-    ##  6 1.80e-10 roc_auc binary     0.888    25 0.00234
-    ##  7 3.26e-10 npv     binary     0.764    25 0.00396
-    ##  8 3.26e-10 ppv     binary     0.868    25 0.00238
-    ##  9 3.26e-10 roc_auc binary     0.888    25 0.00234
-    ## 10 5.88e-10 npv     binary     0.764    25 0.00396
+    ##  1 1.00e-10 npv     binary     0.742    25 0.00491
+    ##  2 1.00e-10 ppv     binary     0.863    25 0.00271
+    ##  3 1.00e-10 roc_auc binary     0.877    25 0.00245
+    ##  4 1.80e-10 npv     binary     0.742    25 0.00491
+    ##  5 1.80e-10 ppv     binary     0.863    25 0.00271
+    ##  6 1.80e-10 roc_auc binary     0.877    25 0.00245
+    ##  7 3.26e-10 npv     binary     0.742    25 0.00491
+    ##  8 3.26e-10 ppv     binary     0.863    25 0.00271
+    ##  9 3.26e-10 roc_auc binary     0.877    25 0.00245
+    ## 10 5.88e-10 npv     binary     0.742    25 0.00491
     ## # ... with 110 more rows
 
 Visualization is often more helpful to understand model performance.
@@ -469,7 +544,7 @@ lasso_grid %>%
     ## Error in get(S3[i, 1L], mode = "function", envir = parent.frame()) : 
     ##   invalid first argument
 
-![](AnimalCrossing_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 This shows us a lot. We see clearly that AUC and PPV have benefited from
 the regularization and we could identify the best value of penalty for
@@ -507,20 +582,23 @@ final_lasso <- finalize_workflow(lasso_wf, best_auc)
 final_lasso
 ```
 
-    ## == Workflow ==================================================================
+    ## == Workflow =====================================================================================================
     ## Preprocessor: Recipe
     ## Model: logistic_reg()
     ## 
-    ## -- Preprocessor --------------------------------------------------------------
-    ## 5 Recipe Steps
+    ## -- Preprocessor -------------------------------------------------------------------------------------------------
+    ## 8 Recipe Steps
     ## 
+    ## * step_mutate()
+    ## * step_mutate()
+    ## * step_dummy()
     ## * step_tokenize()
     ## * step_stopwords()
     ## * step_tokenfilter()
     ## * step_tfidf()
     ## * step_normalize()
     ## 
-    ## -- Model ---------------------------------------------------------------------
+    ## -- Model --------------------------------------------------------------------------------------------------------
     ## Logistic Regression Model Specification (classification)
     ## 
     ## Main Arguments:
@@ -560,7 +638,7 @@ final_lasso %>%
     ## Error in get(S3[i, 1L], mode = "function", envir = parent.frame()) : 
     ##   invalid first argument
 
-![](AnimalCrossing_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 People who are happy with Animal Crossing like to talk about how
 relaxing, fantastic, enjoyable, and great it is, and also talk in their
@@ -568,6 +646,39 @@ reviews about the “review bombing” of the negative reviews. Notice that
 many of the words from the negative reviews are specifically used to
 talk about the multiplayer experience. These users want a fix and they
 declare Nintendo greedy for the one-island-per-console play.
+
+``` r
+final_lasso %>%
+  fit(review_train) %>%
+  pull_workflow_fit() %>%
+  vi(lambda = best_auc$penalty) %>%
+  group_by(Sign) %>%
+  ungroup() %>%
+  mutate(id = row_number()) %>%
+  filter(str_detect(Variable, "dow")) %>%
+  mutate(
+    Importance = abs(Importance),
+    Variable = str_remove(Variable, "dow_"),
+    Variable = fct_reorder(Variable, Importance),
+  ) %>%
+  ggplot(aes(x = Importance, y = Variable, fill = Sign)) +
+  geom_col(show.legend = FALSE) +
+  geom_label(aes(label = id), x = 0.1, show.legend = FALSE) +
+  facet_wrap(~Sign, scales = "free_y") +
+  labs(y = NULL)+
+  labs(title = "Animal Crossing Review Day of Week Importance",
+       caption = "@jim_gruman | #TidyTuesday")
+```
+
+    ## Error in get(S3[i, 1L], mode = "function", envir = parent.frame()) : 
+    ##   invalid first argument
+
+![](AnimalCrossing_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+The Day of Week feature does not appear in the Top 20. In this model, a
+Review written on a Wednesday (day 3) is 88th in importance, after 87
+tokenized words. It has a positive influence. Thursday, day 4, is
+negative.
 
 Finally, let’s return to our test data. The `tune` package has a
 function `last_fit()` which is nice for situations when you have tuned
@@ -585,8 +696,8 @@ review_final %>%
     ## # A tibble: 2 x 3
     ##   .metric  .estimator .estimate
     ##   <chr>    <chr>          <dbl>
-    ## 1 accuracy binary         0.870
-    ## 2 roc_auc  binary         0.938
+    ## 1 accuracy binary         0.868
+    ## 2 roc_auc  binary         0.946
 
 We did not overfit during our tuning process, and the overall accuracy
 is not bad. Let’s create a confusion matrix for the testing data.
@@ -599,8 +710,8 @@ review_final %>%
 
     ##           Truth
     ## Prediction bad good
-    ##       bad  433   55
-    ##       good  42  219
+    ##       bad  431   55
+    ##       good  44  219
 
 Though our overall accuracy isn’t great, we discover here that it is
 easier to detect the negative reviews than the positive ones.
