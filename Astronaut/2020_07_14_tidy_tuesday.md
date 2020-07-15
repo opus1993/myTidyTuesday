@@ -1,21 +1,15 @@
-TidyTemplate
+Astronaut Missions
 ================
 2020-07-15
 
-# TidyTuesday
-
-Join the R4DS Online Learning Community in the weekly \#TidyTuesday
-event\! Every week we post a raw dataset, a chart or article related to
-that dataset, and ask you to explore the data. While the dataset will be
-“tamed”, it will not always be tidy\! As such you might need to apply
-various R for Data Science techniques to wrangle the data into a true
-tidy format. The goal of TidyTuesday is to apply your R skills, get
-feedback, explore other’s work, and connect with the greater \#RStats
-community\! As such we encourage everyone of all skills to participate\!
+This week’s R4DS Online Learning Community \#TidyTuesday event is
+Astronaut missions. The goal of TidyTuesday is to apply your R skills,
+get feedback, explore other’s work, and connect with the greater
+\#RStats community\!
 
 # Load the weekly Data
 
-Dowload the weekly data and make available in the `tt` object.
+Download the weekly data and make available in the `tt` object.
 
 ``` r
 tt <- tt_load("2020-07-14")
@@ -328,20 +322,20 @@ tree_rs
     ## Variable importance scores include:
     ## 
     ## # A tibble: 12 x 4
-    ##    term                       value std.error  used
-    ##    <chr>                      <dbl>     <dbl> <int>
-    ##  1 year_of_mission            869.      26.0     25
-    ##  2 in_orbit_Other             623.      57.1     25
-    ##  3 in_orbit_STS               357.      23.3     25
-    ##  4 occupation_flight.engineer 213.      21.5     25
-    ##  5 in_orbit_Mir               154.      18.5     25
-    ##  6 occupation_pilot           139.      19.8     25
-    ##  7 occupation_MSP              98.8     10.4     25
-    ##  8 in_orbit_Salyut             92.6      8.59    25
-    ##  9 occupation_Other            59.6      4.59    25
-    ## 10 occupation_PSP              48.8      9.52    25
-    ## 11 military_civilian_military  34.8      3.36    25
-    ## 12 in_orbit_Mir.EP             20.5      3.76    23
+    ##    term                        value std.error  used
+    ##    <chr>                       <dbl>     <dbl> <int>
+    ##  1 year_of_mission            810.       23.4     25
+    ##  2 in_orbit_Other             410.       43.8     25
+    ##  3 in_orbit_STS               245.       26.4     25
+    ##  4 in_orbit_Mir               234.       22.4     25
+    ##  5 occupation_flight.engineer 180.       28.9     25
+    ##  6 occupation_MSP              74.4       8.70    25
+    ##  7 occupation_pilot            72.4      15.6     25
+    ##  8 in_orbit_Salyut             68.3       5.58    25
+    ##  9 occupation_Other            59.0       3.92    25
+    ## 10 military_civilian_military  49.9       3.76    25
+    ## 11 occupation_PSP              31.7       5.25    25
+    ## 12 in_orbit_Mir.EP              9.21      2.25    24
 
 ``` r
 mars_rs <- astro_wf %>%
@@ -366,21 +360,19 @@ mars_rs
     ## 
     ## Variable importance scores include:
     ## 
-    ## # A tibble: 12 x 4
+    ## # A tibble: 10 x 4
     ##    term                         value std.error  used
     ##    <chr>                        <dbl>     <dbl> <int>
     ##  1 in_orbit_STS               100         0        25
-    ##  2 in_orbit_Other              93.1       1.74     25
-    ##  3 year_of_mission             67.0       4.64     25
-    ##  4 in_orbit_Mir.EP             29.8       1.60     25
-    ##  5 in_orbit_Salyut             27.3       2.09     24
-    ##  6 occupation_Other             7.01      1.46     15
-    ##  7 in_orbit_Mir                 4.22      0.830     9
-    ##  8 occupation_flight.engineer   3.00      7.31      3
-    ##  9 military_civilian_military   2.71      0.703    10
-    ## 10 occupation_PSP               0.755     1.82      2
-    ## 11 occupation_MSP               0.577     0.324     2
-    ## 12 occupation_pilot             0.207     0         1
+    ##  2 in_orbit_Other              96.6       1.39     25
+    ##  3 year_of_mission             79.5       3.58     25
+    ##  4 in_orbit_Salyut             31.7       1.97     24
+    ##  5 in_orbit_Mir.EP             30.5       1.92     25
+    ##  6 in_orbit_Mir                 3.68      1.92      8
+    ##  7 occupation_PSP               3.16      1.09      8
+    ##  8 military_civilian_military   2.24      0.617     9
+    ##  9 occupation_flight.engineer   0.469     0.349     2
+    ## 10 occupation_pilot             0.315     0.128     2
 
 The models return aggregated variable importance scores, and we can see
 that the spacecraft and year are importance in both models.
@@ -403,16 +395,16 @@ test_rs
     ## # A tibble: 316 x 9
     ##    name  mission_title hours_mission military_civili~ occupation year_of_mission
     ##    <chr> <chr>                 <dbl> <chr>            <chr>                <dbl>
-    ##  1 Glen~ STS-95                 5.36 military         PSP                   1998
-    ##  2 Schi~ Mercury-Atla~          2.22 military         pilot                 1962
-    ##  3 Coop~ Mercury-Atla~          3.54 military         pilot                 1963
-    ##  4 Koma~ Voskhod 1              3.19 military         commander             1964
-    ##  5 Yego~ Voskhod 1              3.19 civilian         MSP                   1964
-    ##  6 Borm~ Gemini 7               5.80 military         commander             1965
-    ##  7 Love~ Apollo 13              4.96 military         commander             1970
-    ##  8 Staf~ gemini 6A              3.25 military         pilot                 1965
-    ##  9 Staf~ Apollo 10              5.26 military         commander             1969
-    ## 10 Cern~ Apollo 10              5.26 military         pilot                 1969
+    ##  1 Glen~ MA-6                   1.61 military         pilot                 1962
+    ##  2 Niko~ Soyuz 9                6.05 military         pilot                 1970
+    ##  3 Popo~ Soyuz 14               5.93 military         commander             1974
+    ##  4 Schi~ Apollo 7               5.56 military         commander             1968
+    ##  5 Coop~ Mercury-Atla~          3.54 military         pilot                 1963
+    ##  6 Byko~ Soyuz 31/29            5.24 military         commander             1978
+    ##  7 Koma~ Voskhod 1              3.19 military         commander             1964
+    ##  8 Youn~ Gemini 3               1.58 military         pilot                 1965
+    ##  9 Youn~ STS-1                  4.00 military         commander             1981
+    ## 10 McDi~ Gemini 4               4.57 military         commander             1965
     ## # ... with 306 more rows, and 3 more variables: in_orbit <chr>,
     ## #   .pred_tree <dbl>, .pred_mars <dbl>
 
@@ -427,9 +419,9 @@ test_rs %>%
     ## # A tibble: 3 x 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard       0.653
-    ## 2 rsq     standard       0.762
-    ## 3 mae     standard       0.337
+    ## 1 rmse    standard       0.700
+    ## 2 rsq     standard       0.748
+    ## 3 mae     standard       0.368
 
 ``` r
 test_rs %>%
@@ -439,9 +431,9 @@ test_rs %>%
     ## # A tibble: 3 x 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard       0.616
-    ## 2 rsq     standard       0.786
-    ## 3 mae     standard       0.357
+    ## 1 rmse    standard       0.623
+    ## 2 rsq     standard       0.797
+    ## 3 mae     standard       0.358
 
 Both models performed pretty similarly.
 
