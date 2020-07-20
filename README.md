@@ -1,4 +1,6 @@
-Public Dataviz submissions
+[Astronaut](https://github.com/opus1993/myTidyTuesday/tree/master/Astronaut/2020_07_14_tidy_tuesday.md)
+
+[Coffee](https://github.com/opus1993/myTidyTuesday/tree/master/Coffee/Coffee.md)
 
 [Animal Crossing Sentiment Analysis](https://github.com/opus1993/myTidyTuesday/blob/master/AnimalCrossings/AnimalCrossing.md)
 
@@ -19,13 +21,3 @@ Public Dataviz submissions
 [Get Out The Vote](https://github.com/opus1993/myTidyTuesday/blob/master/GetOutTheVote/GetOutTheVote.md)
 
 [College Tuition and Diversity](https://github.com/opus1993/myTidyTuesday/blob/master/CollegeTuitionandDiversity/CollegeTuitionandDiversity.md)
-
-![](https://github.com/opus1993/myTidyTuesday/blob/master/AnimalCrossings/AnimalCrossing_files/figure-gfm/unnamed-chunk-10-1.png)
-----
-![](https://github.com/opus1993/myTidyTuesday/blob/master/GDPRfines/GDPR.png)
-----
-![](https://github.com/opus1993/myTidyTuesday/blob/master/CoronaByCounty/CoronaByCounty_files/figure-gfm/IllinoisCasesByCounty-1.png)
-----
-![](https://github.com/opus1993/myTidyTuesday/blob/master/BeerProduction/BeerProduction_files/figure-gfm/unnamed-chunk-16-1.gif)
-----
-![](https://github.com/opus1993/myTidyTuesday/blob/master/TourDeFrance/TourDeFrance_files/TourdeFrance-1.png)
