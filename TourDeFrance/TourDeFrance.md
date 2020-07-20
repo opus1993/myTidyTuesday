@@ -1,7 +1,7 @@
 TourDeFrance
 ================
 Jim Gruman
-09\. April 2020
+20\. July 2020
 
 ## Visualising Tour De France Data
 
@@ -28,13 +28,22 @@ Jim Gruman
 ``` r
 library(tidyverse)
 library(paletteer)
-#library(ggtext)
+library(ggtext)
 library(rvest)
-theme_set(theme_minimal())
+theme_set(hrbrthemes::theme_ipsum())
 library(lubridate)
 
-tuesdata <- tidytuesdayR::tt_load('2020-04-07')
+library(patchwork)
 
+tuesdata <- tidytuesdayR::tt_load('2020-04-07')
+```
+
+    ## 
+    ##  Downloading file 1 of 3: `stage_data.csv`
+    ##  Downloading file 2 of 3: `tdf_stages.csv`
+    ##  Downloading file 3 of 3: `tdf_winners.csv`
+
+``` r
 tdf_winners <- tuesdata$tdf_winners %>%
        mutate(year = ymd(year(start_date),truncated = 2L),
               speed = distance / time_overall)
@@ -44,62 +53,83 @@ tdf_stages <- tuesdata$tdf_stages %>%
   janitor::clean_names() %>%
   mutate(year = year(date))
 
-#flagadd1<-"<img src='"
-#flagadd2<-".png'  width='30' /><br>"
+showtext::showtext_auto()
 ```
 
-### Nationality of the Winners
+``` r
+library(rvest)
+
+cf_io <- read_html("https://www.countryflags.io/")
+
+country_ids <- cf_io %>% 
+  html_nodes(".item_country") %>% 
+  lapply(function(el){
+    
+    key <- el %>% 
+      html_text %>% 
+      str_split("\\n") %>% 
+      `[[`(1) %>% 
+      trimws() %>% 
+      {
+        .[nchar(.)>0]
+      }
+    
+    data.frame(
+      code = key[1],
+      nationality = key[2]
+    )
+  }) %>% 
+  bind_rows
+
+get_country_flag <- function(x){
+  
+  urls <- sapply(x, function(x){
+    code <- country_ids$code[which(country_ids$nationality == x)]
+    file.path("https://www.countryflags.io", code, "flat/64.png")
+  })
+  
+  paste0("<img src='",urls,"' width='30' />")
+  
+}
+```
+
+### Nationalities of the Winners
 
 ``` r
 tdf_nations<-tdf_winners %>%
   mutate(nationality = stringr::str_squish(nationality),
          nationality = case_when(
-    nationality == "Great Britain" ~ "United-Kingdom",
-    nationality == "United States" ~ "United-States-of-America",
+    nationality == "Great Britain" ~ "United Kingdom",
     TRUE ~ nationality
   )) %>%  
   count(nationality, sort = TRUE) %>%
   mutate(nationality = fct_reorder(nationality,n)) %>%
   top_n(8, n) 
 
-#map(tdf_nations$nationality, ~download.file(
-#  paste0("https://www.countries-ofthe-world.com/flags-normal/flag-of-",.,".png"),
-#                                           paste0(.,".png")))
-
-#labels<-map_chr(tdf_nations$nationality, ~paste0(flagadd1,.,flagadd2,.))
+flag_labels <- get_country_flag(tdf_nations$nationality)
 
 pal <- RColorBrewer::brewer.pal('Set1',n=8)
 
-
-nations<-tdf_nations %>%
+nations<- tdf_nations %>%
   ggplot(aes(n, nationality))+
-  geom_col(fill = "green")+
-  geom_text(aes(label = nationality), 
-            position = position_dodge(width = 0.3),
-            hjust = -0.4)+
-#  scale_y_discrete(            used with ggtext to add flag icons
-#    name = NULL,
-#    labels = labels
-#  ) +
-  expand_limits(x = c(0,45))+
-#  theme(axis.text.y = element_markdown(color = "black", size = 11)) +
-    hrbrthemes::theme_ft_rc() +
-    theme(axis.text.y = element_blank(),
-        plot.title.position = "plot")+
-  labs( y = "",
-        title = "Nations with the most Tour de France Wins",
-        caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
-  )
+  geom_bar(fill = "green", stat = "identity") +
+  scale_y_discrete(name = NULL, labels = flag_labels) +
+  scale_fill_discrete(guide=FALSE)+
+  theme(axis.text.y = ggtext::element_markdown(color = "black", size = 11),
+        axis.title.y = element_blank(),
+        plot.title.position = "plot") +
+  expand_limits(x = c(0,45)) +
+  labs( title = "National Wins",
+        caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())) 
 
 nations
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](TourDeFrance_files/figure-gfm/nations-1.png)<!-- -->
 
 ### Physical characteristics and race characteristics by decade
 
 ``` r
-library(lubridate)
 by_decade <-tdf_winners %>%
   group_by(decade = 10 * (year(year) %/% 10 )) %>%
   summarize(winner_age = mean(age, na.rm = TRUE),
@@ -118,11 +148,12 @@ by_decade %>%
     subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
     caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
   )+
-  theme(legend.position = "")+
+  theme(legend.position = "",
+        plot.title.position = "plot")+
   scale_color_paletteer_d("nord::aurora")
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](TourDeFrance_files/figure-gfm/averages-1.png)<!-- -->
 
 ``` r
 by_decade %>%  
@@ -130,14 +161,15 @@ by_decade %>%
   geom_line(color = "#5AA3DAFF", size = 3) +
   expand_limits(y = 0)+
   labs( y = "Hours",
-    title = "Average Margin of Victory of Tour de France Winners By Decade",
+    title = "Margin of Victory of Tour de France Winners By Decade",
     subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
     caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
   )+
-  theme(legend.position = "")
+  theme(legend.position = "",
+        plot.title.position = "plot")
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+![](TourDeFrance_files/figure-gfm/averages-2.png)<!-- -->
 
 ``` r
 by_decade %>%  
@@ -149,10 +181,11 @@ by_decade %>%
     subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
     caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
   )+
-  theme(legend.position = "")
+  theme(legend.position = "",
+        plot.title.position = "plot")
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+![](TourDeFrance_files/figure-gfm/averages-3.png)<!-- -->
 
 ``` r
 # average margin has been shrinking
@@ -176,7 +209,7 @@ surv_model %>%
   plot()
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](TourDeFrance_files/figure-gfm/survival-1.png)<!-- -->
 
 ``` r
 library(broom)
@@ -184,10 +217,11 @@ library(broom)
 glance(surv_model)
 ```
 
-    ## # A tibble: 1 x 9
+    ## # A tibble: 1 x 10
     ##   records n.max n.start events rmean rmean.std.error median conf.low conf.high
     ##     <dbl> <dbl>   <dbl>  <dbl> <dbl>           <dbl>  <dbl>    <dbl>     <dbl>
     ## 1      63    63      63     38  69.6            2.69     77       71        82
+    ## # ... with 1 more variable: nobs <int>
 
 Of the 63 Tour De France winners, 38 are still alive. After accounting
 for survival expectations for the living, the median life expectancy of
@@ -211,11 +245,11 @@ p1 +
     subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
     caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
   )+
-  theme(legend.position = "")+
-  scale_color_paletteer_d("nord::aurora")
+  theme(legend.position = "",
+        plot.title.position = "plot")
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](TourDeFrance_files/figure-gfm/stages-1.png)<!-- -->
 
 ``` r
 stages_joined<-stage_data  %>%
@@ -261,7 +295,7 @@ stages_joined %>%
   geom_histogram()
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](TourDeFrance_files/figure-gfm/stage_completion-1.png)<!-- -->
 
 ``` r
 # it appears that some racers are eliminated or drop out as stages are completed
@@ -287,16 +321,17 @@ stages_joined %>%
   filter(!is.na(first_stage_bin))%>%
   ggplot(aes(first_stage_bin, points_rank)) +
   geom_boxplot()+
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        plot.title.position = "plot")+
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Decile Perforance in the First Stage",
        y = "Overall Points Percentile",
-       title = "Relationship of TDF First Stage Finish with Overall Finish",
+       title = "Relationship of TDF First Stage Finish w/ Overall Finish",
        subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
        caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date()))
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](TourDeFrance_files/figure-gfm/first_predictive_final-1.png)<!-- -->
 
 ``` r
 library(gganimate)
@@ -306,7 +341,7 @@ top_10_2016<-total_points %>%
   filter(year == 2016)%>%
   top_n(10, total_points)
 
-stages_joined %>%
+p<-stages_joined %>%
   filter(year == 2016) %>%
   semi_join(top_10_2016, by = "rider")%>%
   mutate(stage = as.integer(stage),
@@ -324,9 +359,11 @@ stages_joined %>%
   labs(title = "The 2016 Tour de France Stage: {frame_time}",
        x = "Cumulative Points at Stage",
        y = "")
+
+animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer("./TourDeFrance/TourDeFrance_files/figure-gfm/animation-1.gif"))
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-8-1.gif)<!-- -->
+![](TourDeFrance_files/figure-gfm/animation-1.gif)<!-- -->
 
 # Lets explore the names and life durations of the Tour de France winners
 
@@ -347,7 +384,7 @@ winners<- tdf_winners %>%
   mutate(life_duration = as.numeric(as.duration(ymd(born) %--%ymd(died)),"years")) %>%
   filter(!is.na(life_duration))
 
-pal <- RColorBrewer::brewer.pal('Set1',n=8)
+pal <- RColorBrewer::brewer.pal('Set1',n=3)
 
 life_wins<-winners %>%
   ggplot()+
@@ -366,28 +403,85 @@ life_wins<-winners %>%
          breaks=c(19),
          guide = 'legend') +
   scale_colour_gradient2('Lifetime \n(years)',
-                         low = pal[1], high=pal[8], midpoint = 60) +
-  labs(title='Lifespans of Tour de France winners', 
-       subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
-       caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())) +
+                         low = pal[1], mid = pal[2], high=pal[3], midpoint = 60) +
+  labs(title='Lifespans', 
+       subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle')+
   guides(colour = guide_legend(order = 1),
          shape = guide_legend(order = 2)) +
-  hrbrthemes::theme_ft_rc() +
   theme(plot.title.position = "plot")
 
 life_wins
 ```
 
-![](TourDeFrance_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](TourDeFrance_files/figure-gfm/lifespans-1.png)<!-- -->
 
 ``` r
-library(patchwork)
-png('TourdeFrance.png',width = 8,height = 12,units='in',res=120)
-
-(life_wins / nations ) + plot_layout(heights = c(3,1))
-
-dev.off()
+(life_wins / nations ) +
+  plot_annotation("Tour de France Winners")
 ```
 
-    ## png 
-    ##   2
+![](TourDeFrance_files/figure-gfm/TourdeFrance-1.png)<!-- -->
+
+``` r
+Sys.time()
+```
+
+    ## [1] "2020-07-20 14:27:06 CDT"
+
+``` r
+git2r::repository()
+```
+
+    ## Local:    master D:/myTidyTuesday
+    ## Remote:   master @ origin (https://github.com/opus1993/myTidyTuesday.git)
+    ## Head:     [faf32b6] 2020-07-15: put the Astronaut dataviz in the right folder this time
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.0.0 (2020-04-24)
+    ## Platform: x86_64-w64-mingw32/x64 (64-bit)
+    ## Running under: Windows 10 x64 (build 18363)
+    ## 
+    ## Matrix products: default
+    ## 
+    ## locale:
+    ## [1] LC_COLLATE=English_United States.1252 
+    ## [2] LC_CTYPE=English_United States.1252   
+    ## [3] LC_MONETARY=English_United States.1252
+    ## [4] LC_NUMERIC=C                          
+    ## [5] LC_TIME=English_United States.1252    
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ##  [1] tidytext_0.2.5    gganimate_1.0.6   broom_0.7.0       survival_3.2-3   
+    ##  [5] patchwork_1.0.1   lubridate_1.7.9   rvest_0.3.5       xml2_1.3.2       
+    ##  [9] ggtext_0.1.0.9000 paletteer_1.2.0   forcats_0.5.0     stringr_1.4.0    
+    ## [13] dplyr_1.0.0       purrr_0.3.4       readr_1.3.1       tidyr_1.1.0      
+    ## [17] tibble_3.0.3      ggplot2_3.3.2     tidyverse_1.3.0  
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] bitops_1.0-6       fs_1.4.2           usethis_1.6.1      progress_1.2.2    
+    ##  [5] RColorBrewer_1.1-2 httr_1.4.1         SnowballC_0.7.0    tools_4.0.0       
+    ##  [9] backports_1.1.8    utf8_1.1.4         R6_2.4.1           DBI_1.1.0         
+    ## [13] colorspace_1.4-1   withr_2.2.0        prettyunits_1.1.1  tidyselect_1.1.0  
+    ## [17] git2r_0.27.1       curl_4.3           compiler_4.0.0     extrafontdb_1.0   
+    ## [21] cli_2.0.2          labeling_0.3       scales_1.1.1       systemfonts_0.2.3 
+    ## [25] digest_0.6.25      rmarkdown_2.3      tidytuesdayR_1.0.1 pkgconfig_2.0.3   
+    ## [29] htmltools_0.5.0    showtext_0.8-1     extrafont_0.17     dbplyr_1.4.4      
+    ## [33] rlang_0.4.7        readxl_1.3.1       rstudioapi_0.11    sysfonts_0.8.1    
+    ## [37] generics_0.0.2     farver_2.0.3       jsonlite_1.7.0     tokenizers_0.2.1  
+    ## [41] RCurl_1.98-1.2     magrittr_1.5       Matrix_1.2-18      Rcpp_1.0.5        
+    ## [45] munsell_0.5.0      fansi_0.4.1        gdtools_0.2.2      lifecycle_0.2.0   
+    ## [49] stringi_1.4.6      yaml_2.2.1         snakecase_0.11.0   plyr_1.8.6        
+    ## [53] grid_4.0.0         hrbrthemes_0.8.0   blob_1.2.1         crayon_1.3.4      
+    ## [57] lattice_0.20-41    haven_2.3.1        splines_4.0.0      gridtext_0.1.1    
+    ## [61] hms_0.5.3          knitr_1.29         pillar_1.4.6       markdown_1.1      
+    ## [65] reprex_0.3.0       glue_1.4.1         drat_0.1.8         evaluate_0.14     
+    ## [69] gifski_0.8.6       modelr_0.1.8       tweenr_1.0.1       vctrs_0.3.2       
+    ## [73] png_0.1-7          selectr_0.4-2      Rttf2pt1_1.3.8     cellranger_1.1.0  
+    ## [77] gtable_0.3.0       rematch2_2.1.2     assertthat_0.2.1   xfun_0.15         
+    ## [81] janitor_2.0.1      janeaustenr_0.1.5  showtextdb_3.0     ellipsis_0.3.1
