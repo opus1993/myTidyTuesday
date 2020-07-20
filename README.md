@@ -28,4 +28,4 @@ Public Dataviz submissions
 ----
 ![](https://github.com/opus1993/myTidyTuesday/blob/master/BeerProduction/BeerProduction_files/figure-gfm/unnamed-chunk-16-1.gif)
 ----
-![](https://github.com/opus1993/myTidyTuesday/blob/master/TourDeFrance/TourdeFrance.png)
+![](https://github.com/opus1993/myTidyTuesday/blob/master/TourDeFrance/TourDeFrance_files/TourdeFrance-1.png)
