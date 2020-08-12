@@ -9,12 +9,14 @@ output: github_document
 library(knitr)
 knitr::opts_chunk$set(cache = TRUE, warning = FALSE, message = FALSE, 
                       echo = TRUE, dpi = 300, cache.lazy = FALSE,
-                      tidy = "styler", fig.width = 8, fig.height = 5)
+                      tidy = "styler", fig.width = 8, fig.height = 5,
+                      device = cairo_pdf)
 options(cli.width = 70, width = 70)
 library(scales)
 library(tidyverse)
-showtext::showtext_auto()
 library(tvthemes)
+library(here)
+library(pdftools)
 theme_set(theme_avatar(title.font = "Slayer",
                        text.font = "Slayer",
                        title.size = 14))
@@ -58,6 +60,11 @@ avatar_raw %>%
                                  avatar_pal("EarthKingdom")(1),
                                  avatar_pal("FireNation")(1))) +
     labs(y = NULL)
+
+ggsave(here("LastAirbender","wordcount.pdf"), width = 8, height = 5, device = cairo_pdf)
+
+pdf_convert(pdf = here("LastAirbender","wordcount.pdf"), format = "png", dpi = 300, filenames = here("LastAirbender","wordcount.png"))
+
 ```
 
 Let's create a dataset for our modeling question, and look at a few example lines.
@@ -99,6 +106,11 @@ avatar_lo %>%
     scale_fill_avatar(palette = "AirNomads") +
     labs(y = NULL)
 
+ggsave(here("LastAirbender","logodds.pdf"), width = 8, height = 5, device = cairo_pdf)
+
+pdf_convert(pdf = here("LastAirbender","logodds.pdf"), format = "png", dpi = 300, filenames = here("LastAirbender","logodds.png"))
+
+
 ```
 
 These words make sense, but the counts are probably too low to build a good model with. Instead, let's try using [text features](https://textfeatures.mikewk.com/) like the number of punctuation characters, number of pronons, and so forth.
@@ -123,6 +135,11 @@ tf %>%
     facet_wrap(~text_feature, scales = "free", ncol = 6) +
     scale_fill_avatar("AirNomads") +
     labs(x = NULL, y = "Mean text features per spoken line")
+
+ggsave(here("LastAirbender","textfeatures.pdf"), width = 8, height = 5, device = cairo_pdf)
+
+pdf_convert(pdf = here("LastAirbender","textfeatures.pdf"), format = "png", dpi = 300, filenames = here("LastAirbender","textfeatures.png"))
+
 ```
 
 You can [read the definitions of these counts here](https://textfeatures.mikewk.com/reference/count_functions.html). The differences in these features are what we want to build a model to use in prediction.

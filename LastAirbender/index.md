@@ -79,6 +79,16 @@ avatar_raw %>%
 
 ![](index_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
+``` r
+ggsave(here("LastAirbender", "wordcount.pdf"), width = 8, height = 5, device = cairo_pdf)
+
+pdf_convert(pdf = here("LastAirbender", "wordcount.pdf"), format = "png", dpi = 300, filenames = here("LastAirbender", "wordcount.png"))
+```
+
+    ## Converting page 1 to D:/myTidyTuesday/LastAirbender/wordcount.png... done!
+
+    ## [1] "D:/myTidyTuesday/LastAirbender/wordcount.png"
+
 Let’s create a dataset for our modeling question, and look at a few
 example lines.
 
@@ -94,16 +104,16 @@ avatar %>%
   pull(text)
 ```
 
-    ##  [1] "I couldn't find any ginger root for the tea. But I found a map. There's an herbalist institute on top of that mountain. We could probably find a cure for Sokka there."
-    ##  [2] "I'm going after Appa."                                                                                                                                                 
-    ##  [3] "So, Toph thinks you give pretty good advice, and great tea!"                                                                                                           
-    ##  [4] "I laugh at gravity all the time.  Gravity."                                                                                                                            
-    ##  [5] "Why would I choose cosmic energy over Katara?  How could it be a bad thing that I feel an attachment to her? Three chakras ago that was a good thing!"                 
-    ##  [6] "Nope!  Wrong way!"                                                                                                                                                     
-    ##  [7] "The key, Sokka, is airbending."                                                                                                                                        
-    ##  [8] "Everyone expects me to take the Fire Lord's life,  but I just don't know if I can do that."                                                                            
-    ##  [9] "Katara, it's okay. I know I was upset about losing Appa before, but I just want to focus on getting to Ba Sing Se and telling the Earth King about the solar eclipse." 
-    ## [10] "Oh, okay."
+    ##  [1] "What's for dinner?"                                                  
+    ##  [2] "Well, if you guys are stuck, Appa and I can give you a lift."        
+    ##  [3] "Where is my bison<U+200C>?"                                          
+    ##  [4] "What?"                                                               
+    ##  [5] "The Southern Temple."                                                
+    ##  [6] "He's here. We're ready to trade."                                    
+    ##  [7] "Your turn, Katara. Where would you like to go on your mini-vacation?"
+    ##  [8] "We can't keep flying forever."                                       
+    ##  [9] "Ozai's defense is impeccable. I'll have to try a different approach."
+    ## [10] "I'm not gonna make it. I failed.  Roku?"
 
 This… may be a challenge.
 
@@ -132,6 +142,16 @@ avatar_lo %>%
 ```
 
 ![](index_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+ggsave(here("LastAirbender", "logodds.pdf"), width = 8, height = 5, device = cairo_pdf)
+
+pdf_convert(pdf = here("LastAirbender", "logodds.pdf"), format = "png", dpi = 300, filenames = here("LastAirbender", "logodds.png"))
+```
+
+    ## Converting page 1 to D:/myTidyTuesday/LastAirbender/logodds.png... done!
+
+    ## [1] "D:/myTidyTuesday/LastAirbender/logodds.png"
 
 These words make sense, but the counts are probably too low to build a
 good model with. Instead, let’s try using [text
@@ -162,6 +182,16 @@ tf %>%
 ```
 
 ![](index_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+``` r
+ggsave(here("LastAirbender", "textfeatures.pdf"), width = 8, height = 5, device = cairo_pdf)
+
+pdf_convert(pdf = here("LastAirbender", "textfeatures.pdf"), format = "png", dpi = 300, filenames = here("LastAirbender", "textfeatures.png"))
+```
+
+    ## Converting page 1 to D:/myTidyTuesday/LastAirbender/textfeatures.png... done!
+
+    ## [1] "D:/myTidyTuesday/LastAirbender/textfeatures.png"
 
 You can [read the definitions of these counts
 here](https://textfeatures.mikewk.com/reference/count_functions.html).
