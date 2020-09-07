@@ -8,4 +8,12 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+Welcome to my TidyTuesday website collection.
+
+Table of TT subjects, dates, graphic techniques
+
+May 5, 2020  [Animal Crossing](AnimalCrossing.html) {tidytext, stm, textrecipes, vip} topic modeling
+
+July 15, 2020 [Astronaut](Astronaut.html) Missions {tidymodels, baguette} 
+
+
