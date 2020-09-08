@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-07-07" />
+
+<title>Coffee</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Coffee</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">July 7, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-09-07
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree6a2f06a1ca8e84489d0c61d4ec3d22407eaa0161targetblank6a2f06aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/6a2f06a1ca8e84489d0c61d4ec3d22407eaa0161" target="_blank">6a2f06a</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree6a2f06a1ca8e84489d0c61d4ec3d22407eaa0161targetblank6a2f06aa" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/6a2f06a1ca8e84489d0c61d4ec3d22407eaa0161" target="_blank">6a2f06a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/Astronaut.Rmd
+    Untracked:  analysis/BeerProduction.Rmd
+    Untracked:  analysis/StudentDebt.Rmd
+    Untracked:  analysis/TheOffice.Rmd
+    Untracked:  code/BrainInjuryCleaningScript.R
+    Untracked:  code/caribou.R
+    Untracked:  code/studentdebt.R
+    Untracked:  figure/BrainInjury.Rmd/
+    Untracked:  figure/NFL attendance.Rmd/
+    Untracked:  figure/TourDeFrance.Rmd/
+
+Unstaged changes:
+    Modified:   analysis/GDPRfines.Rmd
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/Coffee.Rmd</code>) and HTML (<code>docs/Coffee.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/6a2f06a1ca8e84489d0c61d4ec3d22407eaa0161/analysis/Coffee.Rmd" target="_blank">6a2f06a</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-07
+</td>
+<td>
+wflow_publish(“analysis/Coffee.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(tidyverse)
+library(ggridges)
+
+library(widyr)
+library(ggraph)
+library(igraph)
+library(tidytext)
+
+theme_set(hrbrthemes::theme_ipsum())</code></pre>
+<pre class="r"><code>coffee &lt;- tidytuesdayR::tt_load(&quot;2020-07-07&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `coffee_ratings.csv`</code></pre>
+<pre class="r"><code>coffee_ratings &lt;- coffee$coffee_ratings %&gt;%
+  mutate(coffee_id = row_number(),
+         country_of_origin = case_when(stringr::str_detect(country_of_origin,&quot;Tanzania&quot;)~ &quot;Tanzania&quot;,
+          stringr::str_detect(country_of_origin,&quot;Hawaii&quot;)~ &quot;US Hawaii&quot;,                            TRUE ~ country_of_origin)) %&gt;%
+  filter(total_cup_points &gt; 0) </code></pre>
+<pre class="r"><code>coffee_ratings %&gt;%
+  count(species, sort = TRUE) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">species</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Arabica</td>
+<td align="right">1310</td>
+</tr>
+<tr class="even">
+<td align="left">Robusta</td>
+<td align="right">28</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>coffee_lumped &lt;- coffee_ratings %&gt;%
+  filter(!is.na(variety)) %&gt;%
+  mutate(variety = fct_lump(variety, 8), sort = TRUE)
+
+coffee_lumped %&gt;%
+  mutate(variety = fct_reorder(variety, total_cup_points)) %&gt;%
+  ggplot(aes(total_cup_points, variety)) +
+  geom_boxplot(color = &quot;#d95f0e&quot;)+
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Coffee Quality Ratings&quot;,
+       caption = &quot;https://github.com/jldbc/coffee-quality-database&quot;,
+       x = &quot;Total Cup Points&quot;,
+       y = &quot;Coffee Variety&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-2-1.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>coffee_lumped %&gt;%
+  ggplot(aes(total_cup_points, fill = variety)) +
+  geom_histogram(binwidth = 2) +
+  facet_wrap(~ variety, scale = &quot;free_y&quot;) +
+  theme(legend.position = &quot;none&quot;,
+        plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Coffee Quality Ratings&quot;,
+       caption = &quot;https://github.com/jldbc/coffee-quality-database&quot;,
+       x = &quot;Total Cup Points&quot;,
+       y = &quot;Number of Submissions&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-2-2.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>coffee_ratings %&gt;%
+  summarize(across(everything(), ~ mean(!is.na(.)))) %&gt;%
+  gather() %&gt;%
+  arrange(desc(value))%&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">key</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">total_cup_points</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">species</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">number_of_bags</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">bag_weight</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">in_country_partner</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">grading_date</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">aroma</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">flavor</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">aftertaste</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">acidity</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">body</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">balance</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">uniformity</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">clean_cup</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">sweetness</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">cupper_points</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">moisture</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">category_one_defects</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">category_two_defects</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">expiration</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">certification_body</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">certification_address</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">certification_contact</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">unit_of_measurement</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">coffee_id</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">country_of_origin</td>
+<td align="right">0.9992526</td>
+</tr>
+<tr class="odd">
+<td align="left">quakers</td>
+<td align="right">0.9992526</td>
+</tr>
+<tr class="even">
+<td align="left">owner</td>
+<td align="right">0.9947683</td>
+</tr>
+<tr class="odd">
+<td align="left">owner_1</td>
+<td align="right">0.9947683</td>
+</tr>
+<tr class="even">
+<td align="left">harvest_year</td>
+<td align="right">0.9648729</td>
+</tr>
+<tr class="odd">
+<td align="left">region</td>
+<td align="right">0.9559043</td>
+</tr>
+<tr class="even">
+<td align="left">ico_number</td>
+<td align="right">0.8871450</td>
+</tr>
+<tr class="odd">
+<td align="left">processing_method</td>
+<td align="right">0.8736921</td>
+</tr>
+<tr class="even">
+<td align="left">company</td>
+<td align="right">0.8437967</td>
+</tr>
+<tr class="odd">
+<td align="left">color</td>
+<td align="right">0.8370703</td>
+</tr>
+<tr class="even">
+<td align="left">altitude</td>
+<td align="right">0.8310912</td>
+</tr>
+<tr class="odd">
+<td align="left">variety</td>
+<td align="right">0.8310912</td>
+</tr>
+<tr class="even">
+<td align="left">altitude_low_meters</td>
+<td align="right">0.8281016</td>
+</tr>
+<tr class="odd">
+<td align="left">altitude_high_meters</td>
+<td align="right">0.8281016</td>
+</tr>
+<tr class="even">
+<td align="left">altitude_mean_meters</td>
+<td align="right">0.8281016</td>
+</tr>
+<tr class="odd">
+<td align="left">producer</td>
+<td align="right">0.8273543</td>
+</tr>
+<tr class="even">
+<td align="left">mill</td>
+<td align="right">0.7645740</td>
+</tr>
+<tr class="odd">
+<td align="left">farm_name</td>
+<td align="right">0.7316891</td>
+</tr>
+<tr class="even">
+<td align="left">lot_number</td>
+<td align="right">0.2055306</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>coffee_ratings %&gt;%
+  filter(!is.na(producer))%&gt;%
+  mutate(producer = fct_lump(producer, 20))%&gt;%
+  count(producer, sort = TRUE) %&gt;%
+  knitr::kable(caption = &quot;Count of Coffee Samples by&quot;)</code></pre>
+<table>
+<caption>Count of Coffee Samples by</caption>
+<thead>
+<tr class="header">
+<th align="left">producer</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="right">900</td>
+</tr>
+<tr class="even">
+<td align="left">La Plata</td>
+<td align="right">30</td>
+</tr>
+<tr class="odd">
+<td align="left">Ipanema Agrícola SA</td>
+<td align="right">22</td>
+</tr>
+<tr class="even">
+<td align="left">Doi Tung Development Project</td>
+<td align="right">17</td>
+</tr>
+<tr class="odd">
+<td align="left">Ipanema Agricola</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">VARIOS</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">Ipanema Agricola S.A</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">ROBERTO MONTERROSO</td>
+<td align="right">10</td>
+</tr>
+<tr class="odd">
+<td align="left">AMILCAR LAPOLA</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">LA PLATA</td>
+<td align="right">9</td>
+</tr>
+<tr class="odd">
+<td align="left">AGROPECUARIA QUIAGRAL</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">Martin Gutierrez</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">Reinerio Zepeda</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">JESUS RAMIREZ</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="left">Mzuzu Coffee Coop Union</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">varios</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="left">FINCA MEDINA</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">LUIS RODRIGUEZ</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">MANUEL HERRERA JUAREZ</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">Nishant Gurjer</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Omar Acosta</td>
+<td align="right">6</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>coffee_ratings %&gt;%
+  filter(!is.na(company))%&gt;% 
+  mutate(company = fct_lump(company, 20))%&gt;%
+  count(company, sort = TRUE)%&gt;%
+  knitr::kable(caption = &quot;Count of Coffee Samples by&quot;)</code></pre>
+<table>
+<caption>Count of Coffee Samples by</caption>
+<thead>
+<tr class="header">
+<th align="left">company</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="right">614</td>
+</tr>
+<tr class="even">
+<td align="left">unex guatemala, s.a.</td>
+<td align="right">86</td>
+</tr>
+<tr class="odd">
+<td align="left">ipanema coffees</td>
+<td align="right">50</td>
+</tr>
+<tr class="even">
+<td align="left">exportadora de cafe condor s.a</td>
+<td align="right">40</td>
+</tr>
+<tr class="odd">
+<td align="left">kona pacific farmers cooperative</td>
+<td align="right">40</td>
+</tr>
+<tr class="even">
+<td align="left">racafe &amp; cia s.c.a</td>
+<td align="right">40</td>
+</tr>
+<tr class="odd">
+<td align="left">blossom valley&lt;U+5BB8&gt;&lt;U+5DA7&gt;&lt;U+570B&gt;&lt;U+969B&gt;</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">carcafe ltda</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td align="left">nucoffee</td>
+<td align="right">24</td>
+</tr>
+<tr class="even">
+<td align="left">taiwan coffee laboratory</td>
+<td align="right">20</td>
+</tr>
+<tr class="odd">
+<td align="left">&lt;U+5BB8&gt;&lt;U+5DA7&gt;&lt;U+570B&gt;&lt;U+969B&gt;</td>
+<td align="right">19</td>
+</tr>
+<tr class="even">
+<td align="left">ecomtrading</td>
+<td align="right">19</td>
+</tr>
+<tr class="odd">
+<td align="left">the coffee source inc.</td>
+<td align="right">19</td>
+</tr>
+<tr class="even">
+<td align="left">bourbon specialty coffees</td>
+<td align="right">17</td>
+</tr>
+<tr class="odd">
+<td align="left">cadexsa</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">cigrah s.a de c.v</td>
+<td align="right">14</td>
+</tr>
+<tr class="odd">
+<td align="left">siembras vision, s.a.</td>
+<td align="right">14</td>
+</tr>
+<tr class="even">
+<td align="left">cafeorganico.mx</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">ecom cca sa</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">essence coffee</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">yunnan coffee exchange</td>
+<td align="right">12</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>coffee_ratings %&gt;%
+  filter(!is.na(color))%&gt;% 
+  count(color, sort = TRUE)%&gt;%
+  knitr::kable(caption = &quot;Count of Coffee Samples by&quot;)</code></pre>
+<table>
+<caption>Count of Coffee Samples by</caption>
+<thead>
+<tr class="header">
+<th align="left">color</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Green</td>
+<td align="right">869</td>
+</tr>
+<tr class="even">
+<td align="left">Bluish-Green</td>
+<td align="right">114</td>
+</tr>
+<tr class="odd">
+<td align="left">Blue-Green</td>
+<td align="right">85</td>
+</tr>
+<tr class="even">
+<td align="left">None</td>
+<td align="right">52</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>coffee_ratings %&gt;%
+  count(country = fct_lump(country_of_origin, 12), sort = TRUE) %&gt;%
+  filter(!is.na(country)) %&gt;%
+  mutate(country = fct_reorder(country, n)) %&gt;%
+  ggplot(aes(n, country)) +
+  geom_col(fill = &quot;#d95f0e&quot;)+
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Coffee Quality Ratings&quot;,
+       caption = &quot;https://github.com/jldbc/coffee-quality-database&quot;,
+       x = &quot;Number of Submissions&quot;,
+       y = &quot;&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-3-1.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>coffee_ratings %&gt;%
+  filter(!is.na(country_of_origin)) %&gt;%
+  mutate(country = fct_lump(country_of_origin, 12),
+         country = fct_reorder(country, total_cup_points)) %&gt;%
+  ggplot(aes(total_cup_points, country)) +
+  geom_boxplot(color = &quot;#d95f0e&quot;) +
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Coffee Quality Ratings&quot;,
+       caption = &quot;https://github.com/jldbc/coffee-quality-database&quot;,
+       x = &quot;Total Cup Points&quot;,
+       y = &quot;&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-3-2.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>coffee_metrics &lt;- coffee_ratings %&gt;%
+  dplyr::select(coffee_id, total_cup_points, variety, company,
+         country_of_origin,
+         altitude_mean_meters,
+         aroma:moisture) %&gt;%
+  pivot_longer(aroma:cupper_points, names_to = &quot;metric&quot;, values_to = &quot;value&quot;)
+
+coffee_metrics %&gt;%
+  mutate(metric = fct_reorder(metric, value)) %&gt;%
+  ggplot(aes(value, metric)) +
+  geom_density_ridges(fill = &quot;#d95f0e&quot;)+
+  scale_x_continuous(limits = c(5,10.2))+
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Coffee Quality Ratings&quot;,
+       caption = &quot;https://github.com/jldbc/coffee-quality-database&quot;,
+       x = &quot;Score&quot;,
+       y = &quot;&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-4-1.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>coffee_metrics %&gt;%
+  group_by(metric) %&gt;%
+  summarize(average = mean(value),
+            sd = sd(value)) %&gt;%
+  arrange(desc(average)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">metric</th>
+<th align="right">average</th>
+<th align="right">sd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">sweetness</td>
+<td align="right">9.864058</td>
+<td align="right">0.5542069</td>
+</tr>
+<tr class="even">
+<td align="left">clean_cup</td>
+<td align="right">9.842459</td>
+<td align="right">0.7152956</td>
+</tr>
+<tr class="odd">
+<td align="left">uniformity</td>
+<td align="right">9.842227</td>
+<td align="right">0.4851825</td>
+</tr>
+<tr class="even">
+<td align="left">aroma</td>
+<td align="right">7.572362</td>
+<td align="right">0.3159156</td>
+</tr>
+<tr class="odd">
+<td align="left">acidity</td>
+<td align="right">7.541338</td>
+<td align="right">0.3191726</td>
+</tr>
+<tr class="even">
+<td align="left">flavor</td>
+<td align="right">7.526046</td>
+<td align="right">0.3413824</td>
+</tr>
+<tr class="odd">
+<td align="left">balance</td>
+<td align="right">7.523632</td>
+<td align="right">0.3536297</td>
+</tr>
+<tr class="even">
+<td align="left">body</td>
+<td align="right">7.523117</td>
+<td align="right">0.3078146</td>
+</tr>
+<tr class="odd">
+<td align="left">cupper_points</td>
+<td align="right">7.508984</td>
+<td align="right">0.4268430</td>
+</tr>
+<tr class="even">
+<td align="left">aftertaste</td>
+<td align="right">7.406614</td>
+<td align="right">0.3503042</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>correlations &lt;- coffee_metrics %&gt;%
+  pairwise_cor(metric, coffee_id, value, sort = TRUE)
+
+correlations %&gt;%
+  head(50) %&gt;%
+  graph_from_data_frame() %&gt;%
+  ggraph() +
+  geom_edge_link(aes(edge_alpha = correlation),show.legend = FALSE ) +
+  geom_node_point() +
+  geom_node_text(aes(label = name), repel = TRUE)+
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Coffee Quality&quot;,
+       subtitle = &quot;Network Diagram of Attribute Correlation&quot;,
+       caption = &quot;https://github.com/jldbc/coffee-quality-database&quot;,
+       x = &quot;&quot;,
+       y = &quot;&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-5-1.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>coffee_metrics %&gt;%
+  filter(!metric %in% c(&quot;sweetness&quot;, &quot;clean_cup&quot;, &quot;uniformity&quot;)) %&gt;%
+  group_by(metric) %&gt;%
+  mutate(centered = value - mean(value)) %&gt;%
+  ungroup() %&gt;%
+  widely_svd(metric, coffee_id, value) %&gt;%
+  filter(between(dimension, 1, 6)) %&gt;%
+  mutate(metric = reorder_within(metric, value, dimension)) %&gt;%
+  ggplot(aes(value, metric)) +
+  geom_col( fill = &quot;#d95f0e&quot;) +
+  scale_y_reordered() +
+  facet_wrap(~ dimension, scales = &quot;free_y&quot;)+
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Coffee Quality&quot;,
+       subtitle = &quot;Principal Components of Attributes&quot;,
+       caption = &quot;https://github.com/jldbc/coffee-quality-database&quot;,
+       x = &quot;&quot;,
+       y = &quot;&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-5-2.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>coffee_ratings %&gt;%
+  filter(altitude_mean_meters &lt; 10000,
+         altitude != 1) %&gt;%
+  mutate(altitude_mean_meters = pmin(altitude_mean_meters, 3500)) %&gt;%
+  ggplot(aes(altitude_mean_meters, total_cup_points)) +
+  geom_point(color = &quot;#d95f0e&quot;, alpha = 0.3) +
+  geom_smooth(method = &quot;lm&quot;)+
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Coffee Quality&quot;,
+       caption = &quot;https://github.com/jldbc/coffee-quality-database&quot;,
+       x = &quot;Altitude (meters)&quot;,
+       y = &quot;Total Cup Points&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>coffee_metrics %&gt;%
+  filter(altitude_mean_meters &lt; 10000) %&gt;%
+  mutate(altitude_mean_meters = pmin(altitude_mean_meters, 3000)) %&gt;%
+  mutate(km = altitude_mean_meters / 1000) %&gt;%
+  group_by(metric) %&gt;%
+  summarize(correlation = cor(altitude_mean_meters, value),
+            model = list(lm(value ~ km))) %&gt;%
+  mutate(tidied = map(model, broom::tidy, conf.int = TRUE)) %&gt;%
+  unnest(tidied) %&gt;%
+  filter(term == &quot;km&quot;) %&gt;%
+  ungroup() %&gt;%
+  mutate(metric = fct_reorder(metric, estimate)) %&gt;%
+  ggplot(aes(estimate, metric, color = p.value &lt; .05)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = .1) +
+  theme(plot.title.position = &quot;plot&quot;,
+        legend.position = &quot;top&quot;,
+        legend.spacing.x = unit(6, &quot;mm&quot;),
+        panel.grid.major.y = element_blank())+
+  labs(title = &quot;Coffee Quality&quot;,
+       y = &quot;Evaluation of coffee&quot;,
+       x = &quot;Each kilometer of altitude contributes\n this much to score (95% confidence interval)&quot;,
+       caption = &quot;https://github.com/jldbc/coffee-quality-database&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-6-2.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>coffee_lumped%&gt;%
+  mutate(country_of_origin = fct_lump_lowfreq(country_of_origin, 8)) %&gt;%
+  group_by(country_of_origin, variety) %&gt;%
+  summarise(score = mean(total_cup_points)) %&gt;%
+  ungroup()%&gt;%
+  filter(!variety %in% c(&quot;Other&quot;, &quot;Yellow Bourbon&quot;)) %&gt;%
+  mutate(country_of_origin = reorder_within(country_of_origin, score, variety)) %&gt;%
+  ggplot()+
+  geom_col(aes(x=score, 
+              y=country_of_origin, 
+              fill = ggplot2::cut_width(score,2)), show.legend = FALSE)+
+  scale_fill_brewer(type = &quot;seq&quot;, palette = &quot;YlOrBr&quot;) +
+  scale_y_reordered() +
+#  scale_fill_brewer(type= &quot;seq&quot;, palette = &quot;YlOrBr&quot;)+
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Mean Coffee Quality Total Cup Points&quot;,
+       y = &quot;&quot;, x = &quot;Variety&quot;,
+       caption = &quot;#TidyTuesday 2020-07-07 @Jim_Gruman\n https://github.com/jldbc/coffee-quality-database&quot;)+
+  facet_wrap(~ variety,  scales = &quot;free_y&quot;)</code></pre>
+<p><img src="figure/Coffee.Rmd/unnamed-chunk-7-1.png" width="864" style="display: block; margin: auto;" /></p>
+<hr />
+<pre class="r"><code>Sys.time()</code></pre>
+<pre><code>[1] &quot;2020-09-07 21:01:22 CDT&quot;</code></pre>
+<pre class="r"><code>git2r::repository()</code></pre>
+<pre><code>Local:    master D:/myTidyTuesday
+Remote:   master @ origin (https://github.com/opus1993/myTidyTuesday.git)
+Head:     [6a2f06a] 2020-09-08: wflow_publish(&quot;analysis/Coffee.Rmd&quot;)</code></pre>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.0 (2020-04-24)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] tidytext_0.2.5  igraph_1.2.5    ggraph_2.0.3    widyr_0.1.3    
+ [5] ggridges_0.5.2  forcats_0.5.0   stringr_1.4.0   dplyr_1.0.2    
+ [9] purrr_0.3.4     readr_1.3.1     tidyr_1.1.2     tibble_3.0.3   
+[13] ggplot2_3.3.2   tidyverse_1.3.0 workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] colorspace_1.4-1   selectr_0.4-2      ellipsis_0.3.1     showtext_0.9      
+ [5] rprojroot_1.3-2    fs_1.5.0           rstudioapi_0.11    showtextdb_3.0    
+ [9] farver_2.0.3       graphlayouts_0.7.0 SnowballC_0.7.0    ggrepel_0.8.2     
+[13] fansi_0.4.1        lubridate_1.7.9    xml2_1.3.2         splines_4.0.0     
+[17] extrafont_0.17     knitr_1.29         polyclip_1.10-0    jsonlite_1.7.1    
+[21] broom_0.7.0        Rttf2pt1_1.3.8     dbplyr_1.4.4       ggforce_0.3.2     
+[25] compiler_4.0.0     httr_1.4.2         backports_1.1.9    assertthat_0.2.1  
+[29] Matrix_1.2-18      cli_2.0.2          later_1.1.0.1      tweenr_1.0.1      
+[33] hrbrthemes_0.8.0   htmltools_0.5.0    tools_4.0.0        gtable_0.3.0      
+[37] glue_1.4.2         reshape2_1.4.4     Rcpp_1.0.5         cellranger_1.1.0  
+[41] vctrs_0.3.4        nlme_3.1-149       extrafontdb_1.0    xfun_0.16         
+[45] rvest_0.3.6        lifecycle_0.2.0    MASS_7.3-52        scales_1.1.1      
+[49] tidygraph_1.2.0    hms_0.5.3          promises_1.1.1     RColorBrewer_1.1-2
+[53] yaml_2.2.1         curl_4.3           gridExtra_2.3      gdtools_0.2.2     
+[57] stringi_1.4.6      highr_0.8          tokenizers_0.2.1   cpp11_0.2.1       
+[61] rlang_0.4.7        pkgconfig_2.0.3    systemfonts_0.3.0  evaluate_0.14     
+[65] lattice_0.20-41    labeling_0.3       tidyselect_1.1.0   plyr_1.8.6        
+[69] magrittr_1.5       tidytuesdayR_1.0.1 R6_2.4.1           generics_0.0.2    
+[73] DBI_1.1.0          pillar_1.4.6       haven_2.3.1        whisker_0.4       
+[77] withr_2.2.0        mgcv_1.8-31        janeaustenr_0.1.5  modelr_0.1.8      
+[81] crayon_1.3.4       rmarkdown_2.3      viridis_0.5.1      sysfonts_0.8.1    
+[85] usethis_1.6.1      grid_4.0.0         readxl_1.3.1       blob_1.2.1        
+[89] git2r_0.27.1       reprex_0.3.0       digest_0.6.25      httpuv_1.5.4      
+[93] munsell_0.5.0      viridisLite_0.3.0 </code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.0 (2020-04-24)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] tidytext_0.2.5  igraph_1.2.5    ggraph_2.0.3    widyr_0.1.3    
+ [5] ggridges_0.5.2  forcats_0.5.0   stringr_1.4.0   dplyr_1.0.2    
+ [9] purrr_0.3.4     readr_1.3.1     tidyr_1.1.2     tibble_3.0.3   
+[13] ggplot2_3.3.2   tidyverse_1.3.0 workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] colorspace_1.4-1   selectr_0.4-2      ellipsis_0.3.1     showtext_0.9      
+ [5] rprojroot_1.3-2    fs_1.5.0           rstudioapi_0.11    showtextdb_3.0    
+ [9] farver_2.0.3       graphlayouts_0.7.0 SnowballC_0.7.0    ggrepel_0.8.2     
+[13] fansi_0.4.1        lubridate_1.7.9    xml2_1.3.2         splines_4.0.0     
+[17] extrafont_0.17     knitr_1.29         polyclip_1.10-0    jsonlite_1.7.1    
+[21] broom_0.7.0        Rttf2pt1_1.3.8     dbplyr_1.4.4       ggforce_0.3.2     
+[25] compiler_4.0.0     httr_1.4.2         backports_1.1.9    assertthat_0.2.1  
+[29] Matrix_1.2-18      cli_2.0.2          later_1.1.0.1      tweenr_1.0.1      
+[33] hrbrthemes_0.8.0   htmltools_0.5.0    tools_4.0.0        gtable_0.3.0      
+[37] glue_1.4.2         reshape2_1.4.4     Rcpp_1.0.5         cellranger_1.1.0  
+[41] vctrs_0.3.4        nlme_3.1-149       extrafontdb_1.0    xfun_0.16         
+[45] rvest_0.3.6        lifecycle_0.2.0    MASS_7.3-52        scales_1.1.1      
+[49] tidygraph_1.2.0    hms_0.5.3          promises_1.1.1     RColorBrewer_1.1-2
+[53] yaml_2.2.1         curl_4.3           gridExtra_2.3      gdtools_0.2.2     
+[57] stringi_1.4.6      highr_0.8          tokenizers_0.2.1   cpp11_0.2.1       
+[61] rlang_0.4.7        pkgconfig_2.0.3    systemfonts_0.3.0  evaluate_0.14     
+[65] lattice_0.20-41    labeling_0.3       tidyselect_1.1.0   plyr_1.8.6        
+[69] magrittr_1.5       tidytuesdayR_1.0.1 R6_2.4.1           generics_0.0.2    
+[73] DBI_1.1.0          pillar_1.4.6       haven_2.3.1        whisker_0.4       
+[77] withr_2.2.0        mgcv_1.8-31        janeaustenr_0.1.5  modelr_0.1.8      
+[81] crayon_1.3.4       rmarkdown_2.3      viridis_0.5.1      sysfonts_0.8.1    
+[85] usethis_1.6.1      grid_4.0.0         readxl_1.3.1       blob_1.2.1        
+[89] git2r_0.27.1       reprex_0.3.0       digest_0.6.25      httpuv_1.5.4      
+[93] munsell_0.5.0      viridisLite_0.3.0 </code></pre>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
