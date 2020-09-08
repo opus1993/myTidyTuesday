@@ -12,17 +12,19 @@ editor_options:
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
                       echo = TRUE, dpi = 300, cache.lazy = FALSE,
                       tidy = "styler", fig.width = 8, fig.height = 5)
+```
+
+
+```{r libraries}
 library(tidymodels)
 library(tidyverse)
 library(vip)
-theme_set(theme_minimal())
+theme_set(hrbrthemes::theme_ipsum_ps())
 ```
 
-## R Markdown
+## Get the Data
 
 ```{r}
-# Get the Data
-
 tbi_age <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv')
 tbi_year <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_year.csv')
 tbi_military <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_military.csv')
@@ -44,15 +46,15 @@ tbi_year %>%
   ggplot(aes(factor(year), number_est, fill = factor(injury_mechanism)))+
   geom_col()+
   labs(title = "Brain Injury Incidence",
-       subtitle = "US CDC",
-       caption = paste0("Jim Gruman ", Sys.Date()))+
-  theme(plot.title.position = "plot") +
-  scale_y_continuous(labels = scales::comma)+
-  xlab("Year")+ylab("Number")
+       subtitle = "US CDC", fill = "Injury", y = NULL, x = NULL,
+       caption = paste0("Jim Gruman ", "#TidyTuesday March 24,2020"))+
+  theme(plot.title.position = "plot",
+        panel.grid.major.x = element_blank()) +
+  scale_y_continuous(labels = scales::comma)
 ```
 
 
-```{r gganimqdodge1}
+```{r BrainInjurygganimqdodge1}
 library(tidyverse)
 library(gganimate)
 library(gifski)
@@ -73,10 +75,8 @@ p <- tbi_year %>%
   theme(plot.title.position = "plot") +  
   scale_y_log10(labels = scales::comma) 
 
+animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer("output/BrainInjurygganimqdodge1.gif"))
 
-# animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer("docs/figure/BrainInjury.Rmd/gganimqdodge1.gif"))
-
-animate(p,  width = 900, height = 750, end_pause = 50)
 ```
 
-
+![](output/BrainInjurygganimqdodge1.gif)
