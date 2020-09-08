@@ -9,12 +9,15 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE,
+                      fig.width = 9,
+                      fig.height = 6)
 ```
 
-## R Markdown
 
-```{r message=FALSE}
+```{r libraries, message=FALSE}
 library(tidyverse)
 library(forcats)
 library(lubridate)
@@ -28,7 +31,7 @@ library(viridis)
 library(ggiraph)
 ```
 
-```{r message=FALSE}
+```{r loadData, message=FALSE}
 tuesdata <- tidytuesdayR::tt_load("2019-11-26")
 
 loans <- tuesdata$loans
@@ -77,8 +80,12 @@ loans %>%
     fill = "Recovery Method"
   ) +
   scale_y_continuous(breaks = seq(0,3,0.5))+
-  theme(legend.position = "top")
+  theme(legend.position = "top",
+        plot.title.position = "plot")
+```
 
+
+```{r faceted_recovery_org, fig.height=15, fig.width=12}
 loans %>%
   group_by(report_dt, agency_name) %>%
   summarize(Recoveries = sum(total, na.rm = TRUE),
@@ -93,8 +100,9 @@ loans %>%
   cowplot::theme_minimal_hgrid(16) +
   scale_x_date()+
   scale_y_continuous()+
-  facet_wrap(~ agency_name)+
-  theme(legend.position = "top")+
+  facet_wrap(~ agency_name, ncol = 4)+
+  theme(legend.position = "top", 
+        plot.title.position = "plot")+
   labs(
     title = "Student Loan Default Recovery Type",
     subtitle = "By Quarter : 2015-2018",
@@ -103,19 +111,9 @@ loans %>%
     caption = "Plot: @jim_gruman. Data: US Dept. of Education",
     fill = "Recovery Method"
   ) 
-  
-loans %>%
-  filter(agency_name %in% c("ACT", "ConServe","GC Services", "FMS", "Windham")) %>%
-  ggplot()+
-  geom_line(aes(x=report_dt, y = starting, color = agency_name)) +
-  scale_fill_viridis(discrete = T) +
-  cowplot::theme_minimal_hgrid(16) +
-  scale_x_date()+
-  scale_y_continuous()+
-  facet_grid(agency_name ~.)+
-  theme(legend.position = "none")
+```
 
-
+```{r}
 loans %>%
   group_by(report_dt) %>%
   summarize(Consolidation = sum(consolidation, na.rm = TRUE),
