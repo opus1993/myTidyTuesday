@@ -12,7 +12,7 @@ Welcome to my TidyTuesday website collection.
 
 |   |   |   |    
 |---|---|---|
-|November 26, 2019 | [Student Debt](StudentDebt.html) | {cowplot, ggrepel, igraph}|
+|November 26, 2019 | [Student Debt](StudentDebt.html) | {cowplot, ggrepel, dygraphs}|
 |March 10, 2020 | [College Tuition](CollegeTuitionandDiversity.html) | {tidymodels}|  
 |March 24, 2020 | [Brain Injury](BrainInjury.html) | {gganimate, vip, tidymodels}|
 |March 31, 2020 |[Beer Production](BeerProduction.html) | {gghighlight, tidymetrics}|
