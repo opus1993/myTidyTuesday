@@ -329,7 +329,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-07
+<strong>Last updated:</strong> 2020-09-08
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -420,16 +420,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeef92ba37ea3d61664c533d0e7fe135e02039cbfatargetblankef92ba3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/ef92ba37ea3d61664c533d0e7fe135e02039cbfa" target="_blank">ef92ba3</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree18a7a77c4e9fd4545d76a2de0f2165ba0377cf00targetblank18a7a77a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/18a7a77c4e9fd4545d76a2de0f2165ba0377cf00" target="_blank">18a7a77</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeef92ba37ea3d61664c533d0e7fe135e02039cbfatargetblankef92ba3a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree18a7a77c4e9fd4545d76a2de0f2165ba0377cf00targetblank18a7a77a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/ef92ba37ea3d61664c533d0e7fe135e02039cbfa" target="_blank">ef92ba3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/18a7a77c4e9fd4545d76a2de0f2165ba0377cf00" target="_blank">18a7a77</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -440,13 +440,14 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  code/studentdebt.R
+    Untracked:  analysis/Friends.Rmd
     Untracked:  figure/BrainInjury.Rmd/
     Untracked:  figure/NFL attendance.Rmd/
     Untracked:  figure/TourDeFrance.Rmd/
+    Untracked:  output/BrainInjurygganimqdodge1.gif
 
 Unstaged changes:
-    Modified:   analysis/GDPRfines.Rmd
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -485,6 +486,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/18a7a77c4e9fd4545d76a2de0f2165ba0377cf00/analysis/BrainInjury.Rmd" target="_blank">18a7a77</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-08
+</td>
+<td>
+wflow_publish(“analysis/BrainInjury.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/1e82b3b51ae6f9238949043772a2f48fff97068a/docs/BrainInjury.html" target="_blank">1e82b3b</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -545,26 +580,14 @@ wflow_publish(“analysis/BrainInjury.Rmd”)
 </div>
 <pre class="r"><code>knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
                       echo = TRUE, dpi = 300, cache.lazy = FALSE,
-                      tidy = &quot;styler&quot;, fig.width = 8, fig.height = 5)
-library(tidymodels)</code></pre>
-<pre><code>Warning: package &#39;broom&#39; was built under R version 4.0.2</code></pre>
-<pre><code>Warning: package &#39;dials&#39; was built under R version 4.0.2</code></pre>
-<pre><code>Warning: package &#39;scales&#39; was built under R version 4.0.2</code></pre>
-<pre><code>Warning: package &#39;dplyr&#39; was built under R version 4.0.2</code></pre>
-<pre><code>Warning: package &#39;ggplot2&#39; was built under R version 4.0.2</code></pre>
-<pre><code>Warning: package &#39;modeldata&#39; was built under R version 4.0.2</code></pre>
-<pre><code>Warning: package &#39;tidyr&#39; was built under R version 4.0.2</code></pre>
-<pre><code>Warning: package &#39;tune&#39; was built under R version 4.0.2</code></pre>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>Warning: package &#39;stringr&#39; was built under R version 4.0.2</code></pre>
-<pre class="r"><code>library(vip)</code></pre>
-<pre><code>Warning: package &#39;vip&#39; was built under R version 4.0.2</code></pre>
-<pre class="r"><code>theme_set(theme_minimal())</code></pre>
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<pre class="r"><code># Get the Data
-
-tbi_age &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv&quot;)
+                      tidy = &quot;styler&quot;, fig.width = 8, fig.height = 5)</code></pre>
+<pre class="r"><code>library(tidymodels)
+library(tidyverse)
+library(vip)
+theme_set(hrbrthemes::theme_ipsum_ps())</code></pre>
+<div id="get-the-data" class="section level2">
+<h2>Get the Data</h2>
+<pre class="r"><code>tbi_age &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv&quot;)
 tbi_year &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_year.csv&quot;)
 tbi_military &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_military.csv&quot;)</code></pre>
 </div>
@@ -580,13 +603,14 @@ tbi_military &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rford
   geom_col() +
   labs(
     title = &quot;Brain Injury Incidence&quot;,
-    subtitle = &quot;US CDC&quot;,
-    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+    subtitle = &quot;US CDC&quot;, fill = &quot;Injury&quot;, y = NULL, x = NULL,
+    caption = paste0(&quot;Jim Gruman &quot;, &quot;#TidyTuesday March 24,2020&quot;)
   ) +
-  theme(plot.title.position = &quot;plot&quot;) +
-  scale_y_continuous(labels = scales::comma) +
-  xlab(&quot;Year&quot;) +
-  ylab(&quot;Number&quot;)</code></pre>
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    panel.grid.major.x = element_blank()
+  ) +
+  scale_y_continuous(labels = scales::comma)</code></pre>
 <p><img src="figure/BrainInjury.Rmd/unnamed-chunk-2-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>library(tidyverse)
 library(gganimate)
@@ -610,11 +634,9 @@ p &lt;- tbi_year %&gt;%
   theme(plot.title.position = &quot;plot&quot;) +
   scale_y_log10(labels = scales::comma)
 
-
-# animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer(&quot;docs/figure/BrainInjury.Rmd/gganimqdodge1.gif&quot;))
-
-animate(p, width = 900, height = 750, end_pause = 50)</code></pre>
-<p><img src="figure/BrainInjury.Rmd/gganimqdodge1-1.gif" style="display: block; margin: auto;" /></p>
+animate(p, width = 900, height = 750, end_pause = 50, renderer = gifski_renderer(&quot;output/BrainInjurygganimqdodge1.gif&quot;))</code></pre>
+<p><img src="figure/BrainInjury.Rmd/BrainInjurygganimqdodge1-1.gif" style="display: block; margin: auto;" /></p>
+<p><img src="output/BrainInjurygganimqdodge1.gif" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -653,26 +675,27 @@ loaded via a namespace (and not attached):
  [5] fs_1.5.0           rstudioapi_0.11    farver_2.0.3       listenv_0.8.0     
  [9] furrr_0.1.0        prodlim_2019.11.13 fansi_0.4.1        lubridate_1.7.9   
 [13] xml2_1.3.2         codetools_0.2-16   splines_4.0.0      R.methodsS3_1.8.1 
-[17] knitr_1.29         jsonlite_1.7.1     pROC_1.16.2        dbplyr_1.4.4      
-[21] R.oo_1.24.0        compiler_4.0.0     httr_1.4.2         backports_1.1.9   
-[25] assertthat_0.2.1   Matrix_1.2-18      cli_2.0.2          tweenr_1.0.1      
-[29] later_1.1.0.1      prettyunits_1.1.1  htmltools_0.5.0    tools_4.0.0       
-[33] gtable_0.3.0       glue_1.4.2         Rcpp_1.0.5         cellranger_1.1.0  
-[37] styler_1.3.2       DiceDesign_1.8-1   vctrs_0.3.4        iterators_1.0.12  
-[41] timeDate_3043.102  gower_0.2.2        xfun_0.16          globals_0.12.5    
-[45] rvest_0.3.6        lifecycle_0.2.0    future_1.18.0      MASS_7.3-52       
-[49] ipred_0.9-9        hms_0.5.3          promises_1.1.1     parallel_4.0.0    
-[53] rematch2_2.1.2     yaml_2.2.1         curl_4.3           gridExtra_2.3     
-[57] rpart_4.1-15       stringi_1.4.6      foreach_1.5.0      lhs_1.0.2         
-[61] lava_1.6.7         rlang_0.4.7        pkgconfig_2.0.3    evaluate_0.14     
-[65] lattice_0.20-41    labeling_0.3       tidyselect_1.1.0   plyr_1.8.6        
-[69] magrittr_1.5       R6_2.4.1           generics_0.0.2     DBI_1.1.0         
-[73] pillar_1.4.6       haven_2.3.1        whisker_0.4        withr_2.2.0       
-[77] survival_3.2-3     nnet_7.3-14        modelr_0.1.8       crayon_1.3.4      
-[81] rmarkdown_2.3      progress_1.2.2     grid_4.0.0         readxl_1.3.1      
-[85] blob_1.2.1         git2r_0.27.1       reprex_0.3.0       digest_0.6.25     
-[89] R.cache_0.14.0     httpuv_1.5.4       R.utils_2.10.1     GPfit_1.0-8       
-[93] munsell_0.5.0     </code></pre>
+[17] extrafont_0.17     knitr_1.29         jsonlite_1.7.1     pROC_1.16.2       
+[21] Rttf2pt1_1.3.8     dbplyr_1.4.4       R.oo_1.24.0        compiler_4.0.0    
+[25] httr_1.4.2         backports_1.1.9    assertthat_0.2.1   Matrix_1.2-18     
+[29] cli_2.0.2          tweenr_1.0.1       later_1.1.0.1      prettyunits_1.1.1 
+[33] hrbrthemes_0.8.0   htmltools_0.5.0    tools_4.0.0        gtable_0.3.0      
+[37] glue_1.4.2         Rcpp_1.0.5         cellranger_1.1.0   styler_1.3.2      
+[41] DiceDesign_1.8-1   vctrs_0.3.4        extrafontdb_1.0    iterators_1.0.12  
+[45] timeDate_3043.102  gower_0.2.2        xfun_0.16          globals_0.12.5    
+[49] rvest_0.3.6        lifecycle_0.2.0    future_1.18.0      MASS_7.3-52       
+[53] ipred_0.9-9        hms_0.5.3          promises_1.1.1     parallel_4.0.0    
+[57] curl_4.3           yaml_2.2.1         gridExtra_2.3      gdtools_0.2.2     
+[61] rpart_4.1-15       stringi_1.4.6      foreach_1.5.0      lhs_1.0.2         
+[65] cpp11_0.2.1        lava_1.6.7         systemfonts_0.3.0  rlang_0.4.7       
+[69] pkgconfig_2.0.3    evaluate_0.14      lattice_0.20-41    labeling_0.3      
+[73] tidyselect_1.1.0   plyr_1.8.6         magrittr_1.5       R6_2.4.1          
+[77] generics_0.0.2     DBI_1.1.0          pillar_1.4.6       haven_2.3.1       
+[81] whisker_0.4        withr_2.2.0        survival_3.2-3     nnet_7.3-14       
+[85] modelr_0.1.8       crayon_1.3.4       rmarkdown_2.3      progress_1.2.2    
+[89] grid_4.0.0         readxl_1.3.1       blob_1.2.1         git2r_0.27.1      
+[93] reprex_0.3.0       digest_0.6.25      R.cache_0.14.0     httpuv_1.5.4      
+[97] R.utils_2.10.1     GPfit_1.0-8        munsell_0.5.0     </code></pre>
 </div>
 </div>
 
