@@ -12,7 +12,7 @@ editor_options:
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
                       echo = TRUE, dpi = 300, cache.lazy = FALSE,
-                      tidy = "styler", fig.width = 8, fig.height = 5)
+                      tidy = "styler", fig.width = 8, fig.height = 5) 
 library(tidyverse)
 library(tidymodels)
 theme_set(hrbrthemes::theme_ft_rc())
