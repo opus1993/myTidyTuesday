@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+
+<title>TheLastAirbender</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">TheLastAirbender</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">8/11/2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-09-07
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+</p>
+</div>
+<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div class="panel-body">
+The following chunks had caches available:
+<ul>
+<li>
+session-info-chunk-inserted-by-workflowr
+</li>
+<li>
+unnamed-chunk-1
+</li>
+<li>
+unnamed-chunk-10
+</li>
+<li>
+unnamed-chunk-11
+</li>
+<li>
+unnamed-chunk-12
+</li>
+<li>
+unnamed-chunk-13
+</li>
+<li>
+unnamed-chunk-14
+</li>
+<li>
+unnamed-chunk-15
+</li>
+<li>
+unnamed-chunk-16
+</li>
+<li>
+unnamed-chunk-17
+</li>
+<li>
+unnamed-chunk-2
+</li>
+<li>
+unnamed-chunk-3
+</li>
+<li>
+unnamed-chunk-4
+</li>
+<li>
+unnamed-chunk-5
+</li>
+<li>
+unnamed-chunk-6
+</li>
+<li>
+unnamed-chunk-7
+</li>
+<li>
+unnamed-chunk-8
+</li>
+<li>
+unnamed-chunk-9
+</li>
+</ul>
+<p>To ensure reproducibility of the results, delete the cache directory <code>LastAirbender_cache</code> and re-run the analysis. To have workflowr automatically delete the cache directory prior to building the file, set <code>delete_cache = TRUE</code> when running <code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee7463969620613f961721657d8ae00a7128ba76btargetblanke746396a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/e7463969620613f961721657d8ae00a7128ba76b" target="_blank">e746396</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee7463969620613f961721657d8ae00a7128ba76btargetblanke746396a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/e7463969620613f961721657d8ae00a7128ba76b" target="_blank">e746396</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/Astronaut.Rmd
+    Untracked:  analysis/BeerProduction.Rmd
+    Untracked:  analysis/Coffee.Rmd
+    Untracked:  analysis/CollegeTuitionandDiversity.Rmd
+    Untracked:  analysis/GDPRfines_cache/
+    Untracked:  analysis/LastAirbender_cache/
+    Untracked:  analysis/StudentDebt.Rmd
+    Untracked:  analysis/TheOffice.Rmd
+    Untracked:  code/BrainInjuryCleaningScript.R
+    Untracked:  code/caribou.R
+    Untracked:  code/studentdebt.R
+    Untracked:  figure/BrainInjury.Rmd/
+    Untracked:  figure/NFL attendance.Rmd/
+    Untracked:  figure/TourDeFrance.Rmd/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/LastAirbender.Rmd</code>) and HTML (<code>docs/LastAirbender.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/e7463969620613f961721657d8ae00a7128ba76b/analysis/LastAirbender.Rmd" target="_blank">e746396</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-07
+</td>
+<td>
+wflow_publish(“analysis/LastAirbender.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>Lately Julia Silge has been publishing <a href="https://juliasilge.com/category/tidymodels/">screencasts</a> demonstrating how to use the <a href="https://www.tidymodels.org/">tidymodels</a> framework, from first steps in modeling to how to evaluate complex models. Today’s example admittedly does not result in the <em>best</em> performing model you’ll ever see, but it is really fun and uses this week’s <a href="https://github.com/rfordatascience/tidytuesday"><code>#TidyTuesday</code> dataset</a> on <em>Avatar: The Last Airbender</em>. 🔥 🌏 🌊 💨</p>
+<div id="explore-the-data" class="section level2">
+<h2>Explore the data</h2>
+<p>This week’s #TidyTuesday dataset is from <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-08-11/readme.md">episodes of <em>Avatar: The Last Airbender</em></a>. Our modeling goal is to predict the speaker of each line of dialogue.</p>
+<pre class="r"><code>library(tidyverse)
+
+avatar &lt;- tidytuesdayR::tt_load(&quot;2020-08-11&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 2: `avatar.csv`
+    Downloading file 2 of 2: `scene_description.csv`</code></pre>
+<pre class="r"><code>avatar_raw &lt;- avatar$avatar
+
+avatar_raw %&gt;%
+  count(character, sort = TRUE)</code></pre>
+<pre><code># A tibble: 374 x 2
+   character             n
+   &lt;chr&gt;             &lt;int&gt;
+ 1 Scene Description  3393
+ 2 Aang               1796
+ 3 Sokka              1639
+ 4 Katara             1437
+ 5 Zuko                776
+ 6 Toph                507
+ 7 Iroh                337
+ 8 Azula               211
+ 9 Jet                 134
+10 Suki                114
+# ... with 364 more rows</code></pre>
+<p>Rows with <code>Scene Description</code> are not dialogue; the main character Aang speaks the most lines overall. How does this change through the three “books” of the show?</p>
+<pre class="r"><code>library(tidytext)
+
+avatar_raw %&gt;%
+  filter(!is.na(character_words)) %&gt;%
+  mutate(
+    book = fct_inorder(book),
+    character = fct_lump_n(character, 10)
+  ) %&gt;%
+  count(book, character) %&gt;%
+  mutate(character = reorder_within(character, n, book)) %&gt;%
+  ggplot(aes(n, character, fill = book)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~book, scales = &quot;free&quot;) +
+  scale_y_reordered() +
+  scale_fill_manual(values = c(
+    avatar_pal(&quot;WaterTribe&quot;)(1),
+    avatar_pal(&quot;EarthKingdom&quot;)(1),
+    avatar_pal(&quot;FireNation&quot;)(1)
+  )) +
+  labs(y = NULL)</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-2-1.png" width="2400" style="display: block; margin: auto;" /></p>
+<p>Let’s create a dataset for our modeling question, and look at a few example lines.</p>
+<pre class="r"><code>avatar &lt;- avatar_raw %&gt;%
+  filter(!is.na(character_words)) %&gt;%
+  mutate(aang = if_else(character == &quot;Aang&quot;, &quot;Aang&quot;, &quot;Other&quot;)) %&gt;%
+  dplyr::select(aang, book, text = character_words)
+
+avatar %&gt;%
+  filter(aang == &quot;Aang&quot;) %&gt;%
+  sample_n(10) %&gt;%
+  pull(text)</code></pre>
+<pre><code> [1] &quot;Don&#39;t drink that!&quot;                                                                                                            
+ [2] &quot;Just what, Katara? What?&quot;                                                                                                     
+ [3] &quot;Roku? Roku!&quot;                                                                                                                  
+ [4] &quot;We&#39;ll be back soon. I promise.&quot;                                                                                               
+ [5] &quot;I&#39;m gonna throw them,  a secret dance party!&quot;                                                                                 
+ [6] &quot;Katara, you sound like Jet.&quot;                                                                                                  
+ [7] &quot;Fighting the Fire Lord is going to be the hardest thing we&#39;ve ever done together, but I wouldn&#39;t want to do it any other way.&quot;
+ [8] &quot;No, she&#39;s right. We are here!&quot;                                                                                                
+ [9] &quot;No problem, Sokka!&quot;                                                                                                           
+[10] &quot;I kind of have a confession to make. Remember when you two were sick and I got captured by Zhao?&quot;                             </code></pre>
+<p>This… may be a challenge.</p>
+<p>What are the highest log odds words from Aang and other speakers?</p>
+<pre class="r"><code>library(tidytext)
+library(tidylo)
+
+avatar_lo &lt;- avatar %&gt;%
+  unnest_tokens(word, text) %&gt;%
+  count(aang, word) %&gt;%
+  bind_log_odds(aang, word, n) %&gt;%
+  arrange(-log_odds_weighted)
+
+avatar_lo %&gt;%
+  group_by(aang) %&gt;%
+  top_n(15) %&gt;%
+  ungroup() %&gt;%
+  mutate(word = reorder(word, log_odds_weighted)) %&gt;%
+  ggplot(aes(log_odds_weighted, word, fill = aang)) +
+  geom_col(alpha = 0.8, show.legend = FALSE) +
+  facet_wrap(~aang, scales = &quot;free&quot;) +
+  scale_fill_avatar(palette = &quot;AirNomads&quot;) +
+  labs(y = NULL)</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-4-1.png" width="2400" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># ggsave(here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;logodds.pdf&quot;), width = 8, height = 5, device = cairo_pdf)
+
+# pdf_convert(pdf = here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;logodds.pdf&quot;), format = &quot;png&quot;, dpi = 300, filenames = here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;logodds.png&quot;))</code></pre>
+<p>These words make sense, but the counts are probably too low to build a good model with. Instead, let’s try using <a href="https://textfeatures.mikewk.com/">text features</a> like the number of punctuation characters, number of pronons, and so forth.</p>
+<pre class="r"><code>library(textfeatures)
+
+tf &lt;- textfeatures(
+  avatar,
+  sentiment = FALSE, word_dims = 0,
+  normalize = FALSE, verbose = FALSE
+)
+
+tf %&gt;%
+  bind_cols(avatar) %&gt;%
+  group_by(aang) %&gt;%
+  summarise(across(starts_with(&quot;n_&quot;), mean)) %&gt;%
+  pivot_longer(starts_with(&quot;n_&quot;), names_to = &quot;text_feature&quot;) %&gt;%
+  filter(value &gt; 0.01) %&gt;%
+  mutate(text_feature = fct_reorder(text_feature, -value)) %&gt;%
+  ggplot(aes(aang, value, fill = aang)) +
+  geom_col(position = &quot;dodge&quot;, alpha = 0.8, show.legend = FALSE) +
+  facet_wrap(~text_feature, scales = &quot;free&quot;, ncol = 6) +
+  scale_fill_avatar(&quot;AirNomads&quot;) +
+  labs(x = NULL, y = &quot;Mean text features per spoken line&quot;)</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-5-1.png" width="3000" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># ggsave(here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;textfeatures.pdf&quot;), width = 8, height = 5, device = cairo_pdf)
+
+# pdf_convert(pdf = here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;textfeatures.pdf&quot;), format = &quot;png&quot;, dpi = 300, filenames = here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;textfeatures.png&quot;))</code></pre>
+<p>You can <a href="https://textfeatures.mikewk.com/reference/count_functions.html">read the definitions of these counts here</a>. The differences in these features are what we want to build a model to use in prediction.</p>
+</div>
+<div id="build-a-model" class="section level2">
+<h2>Build a model</h2>
+<p>We can start by loading the tidymodels metapackage, and splitting our data into training and testing sets.</p>
+<pre class="r"><code>library(tidymodels)
+
+set.seed(123)
+avatar_split &lt;- initial_split(avatar, strata = aang)
+avatar_train &lt;- training(avatar_split)
+avatar_test &lt;- testing(avatar_split)</code></pre>
+<p>Next, let’s create cross-validation resamples of the training data, to evaluate our models.</p>
+<pre class="r"><code>set.seed(234)
+avatar_folds &lt;- vfold_cv(avatar_train, strata = aang)
+avatar_folds</code></pre>
+<pre><code>#  10-fold cross-validation using stratification 
+# A tibble: 10 x 2
+   splits             id    
+   &lt;list&gt;             &lt;chr&gt; 
+ 1 &lt;split [6.7K/750]&gt; Fold01
+ 2 &lt;split [6.7K/750]&gt; Fold02
+ 3 &lt;split [6.7K/750]&gt; Fold03
+ 4 &lt;split [6.7K/750]&gt; Fold04
+ 5 &lt;split [6.7K/750]&gt; Fold05
+ 6 &lt;split [6.7K/750]&gt; Fold06
+ 7 &lt;split [6.7K/750]&gt; Fold07
+ 8 &lt;split [6.7K/748]&gt; Fold08
+ 9 &lt;split [6.7K/748]&gt; Fold09
+10 &lt;split [6.7K/748]&gt; Fold10</code></pre>
+<p>Next, let’s <strong>preprocess</strong> our data to get it ready for modeling.</p>
+<pre class="r"><code>library(textrecipes)
+library(themis)
+
+avatar_rec &lt;- recipe(aang ~ text, data = avatar_train) %&gt;%
+  step_downsample(aang) %&gt;%
+  step_textfeature(text) %&gt;%
+  step_zv(all_predictors()) %&gt;%
+  step_normalize(all_predictors())
+
+avatar_prep &lt;- prep(avatar_rec)
+avatar_prep</code></pre>
+<pre><code>Data Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor          1
+
+Training data contained 7494 data points and no missing data.
+
+Operations:
+
+Down-sampling based on aang [trained]
+Text feature extraction for text [trained]
+Zero variance filter removed 15 items [trained]
+Centering and scaling for 12 items [trained]</code></pre>
+<pre class="r"><code>juice(avatar_prep)</code></pre>
+<pre><code># A tibble: 2,694 x 13
+   aang  textfeature_tex~ textfeature_tex~ textfeature_tex~
+   &lt;fct&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+ 1 Aang            -0.382           -0.375         -0.492  
+ 2 Aang            -0.676           -0.724         -0.608  
+ 3 Aang            -0.382           -0.375         -0.353  
+ 4 Aang            -0.676           -0.724         -0.655  
+ 5 Aang            -0.676           -0.724         -0.747  
+ 6 Aang            -0.284           -0.259         -0.307  
+ 7 Aang            -0.676           -0.724         -0.678  
+ 8 Aang             0.108            0.206          0.0879 
+ 9 Aang            -0.872           -0.957         -0.910  
+10 Aang            -0.186           -0.143         -0.00491
+# ... with 2,684 more rows, and 9 more variables:
+#   textfeature_text_n_uq_charS &lt;dbl&gt;,
+#   textfeature_text_n_commas &lt;dbl&gt;,
+#   textfeature_text_n_periods &lt;dbl&gt;,
+#   textfeature_text_n_exclaims &lt;dbl&gt;,
+#   textfeature_text_n_extraspaces &lt;dbl&gt;,
+#   textfeature_text_n_caps &lt;dbl&gt;, textfeature_text_n_lowers &lt;dbl&gt;,
+#   textfeature_text_n_nonasciis &lt;dbl&gt;,
+#   textfeature_text_n_puncts &lt;dbl&gt;</code></pre>
+<p>Let’s walk through the steps in this recipe.</p>
+<ul>
+<li>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what data we are using.</li>
+<li>Next, we downsample for our predictor, since there are many more lines spoken by characters other than Aang than by Aang.</li>
+<li>We create the text features using a step from the <a href="https://textrecipes.tidymodels.org/">textrecipes</a> package.</li>
+<li>Then we remove zero-variance variables, which includes variables like the text features about URLs and hashtags in this case.</li>
+<li>Finally, we center and scale the predictors because of the specific kind of model we want to try out.</li>
+</ul>
+<p>We’re mostly going to use this recipe in a <code>workflow()</code> so we don’t need to stress too much about whether to <code>prep()</code> or not. Since we <em>are</em> going to compute variable importance, we will need to come back to <code>juice(avatar_prep)</code>.</p>
+<p>Let’s compare <em>two</em> different models, a random forest model and a support vector machine model. We start by creating the model specifications.</p>
+<pre class="r"><code>rf_spec &lt;- rand_forest(trees = 1000) %&gt;%
+  set_engine(&quot;ranger&quot;) %&gt;%
+  set_mode(&quot;classification&quot;)
+
+rf_spec</code></pre>
+<pre><code>Random Forest Model Specification (classification)
+
+Main Arguments:
+  trees = 1000
+
+Computational engine: ranger </code></pre>
+<pre class="r"><code>svm_spec &lt;- svm_rbf(cost = 0.5) %&gt;%
+  set_engine(&quot;kernlab&quot;) %&gt;%
+  set_mode(&quot;classification&quot;)
+
+svm_spec</code></pre>
+<pre><code>Radial Basis Function Support Vector Machine Specification (classification)
+
+Main Arguments:
+  cost = 0.5
+
+Computational engine: kernlab </code></pre>
+<p>Next let’s start putting together a tidymodels <code>workflow()</code>, a helper object to help manage modeling pipelines with pieces that fit together like Lego blocks. Notice that there is no model yet: <code>Model: None</code>.</p>
+<pre class="r"><code>avatar_wf &lt;- workflow() %&gt;%
+  add_recipe(avatar_rec)
+
+avatar_wf</code></pre>
+<pre><code>== Workflow ==========================================================
+Preprocessor: Recipe
+Model: None
+
+-- Preprocessor ------------------------------------------------------
+4 Recipe Steps
+
+* step_downsample()
+* step_textfeature()
+* step_zv()
+* step_normalize()</code></pre>
+<p>Now we can add a model, and the fit to each of the resamples. First, we can fit the random forest model.</p>
+<pre class="r"><code># library(doParallel)
+# cl &lt;- makeCluster(detectCores(), type=&#39;PSOCK&#39;)
+# registerDoParallel(cl)
+
+set.seed(1234)
+rf_rs &lt;- avatar_wf %&gt;%
+  add_model(rf_spec) %&gt;%
+  fit_resamples(
+    resamples = avatar_folds,
+    metrics = metric_set(roc_auc, accuracy, sens, spec),
+    control = control_grid(save_pred = TRUE)
+  )</code></pre>
+<p>Second, we can fit the support vector machine model.</p>
+<pre class="r"><code>set.seed(2345)
+svm_rs &lt;- avatar_wf %&gt;%
+  add_model(svm_spec) %&gt;%
+  fit_resamples(
+    resamples = avatar_folds,
+    metrics = metric_set(roc_auc, accuracy, sens, spec),
+    control = control_grid(save_pred = TRUE)
+  )</code></pre>
+<p>We have fit each of our candidate models to our resampled training set!</p>
+</div>
+<div id="evaluate-model" class="section level2">
+<h2>Evaluate model</h2>
+<p>It’s time to see how we did.</p>
+<pre class="r"><code>collect_metrics(rf_rs)</code></pre>
+<pre><code># A tibble: 4 x 5
+  .metric  .estimator  mean     n std_err
+  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+1 accuracy binary     0.530    10 0.00429
+2 roc_auc  binary     0.548    10 0.00512
+3 sens     binary     0.543    10 0.0116 
+4 spec     binary     0.527    10 0.00467</code></pre>
+<pre class="r"><code>conf_mat_resampled(rf_rs)</code></pre>
+<pre><code># A tibble: 4 x 3
+  Prediction Truth  Freq
+  &lt;fct&gt;      &lt;fct&gt; &lt;dbl&gt;
+1 Aang       Aang   73.2
+2 Aang       Other 291. 
+3 Other      Aang   61.5
+4 Other      Other 324  </code></pre>
+<p>Well, that is underwhelming!</p>
+<pre class="r"><code>collect_metrics(svm_rs)</code></pre>
+<pre><code># A tibble: 4 x 5
+  .metric  .estimator  mean     n std_err
+  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+1 accuracy binary     0.493    10 0.00877
+2 roc_auc  binary     0.567    10 0.0101 
+3 sens     binary     0.615    10 0.0128 
+4 spec     binary     0.467    10 0.0110 </code></pre>
+<pre class="r"><code>conf_mat_resampled(svm_rs)</code></pre>
+<pre><code># A tibble: 4 x 3
+  Prediction Truth  Freq
+  &lt;fct&gt;      &lt;fct&gt; &lt;dbl&gt;
+1 Aang       Aang   82.8
+2 Aang       Other 328. 
+3 Other      Aang   51.9
+4 Other      Other 287. </code></pre>
+<p>Different, but not really better! The SVM model is better able to identify the positive cases but at the expense of the negative cases. Overall, we definitely see that this is a hard problem that we barely are able to have any predictive ability for.</p>
+<p>Let’s say we are more interested in detecting Aang’s lines, even at the expense of the false positives.</p>
+<pre class="r"><code>svm_rs %&gt;%
+  collect_predictions() %&gt;%
+  group_by(id) %&gt;%
+  roc_curve(aang, .pred_Aang) %&gt;%
+  ggplot(aes(1 - specificity, sensitivity, color = id)) +
+  geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
+  geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
+  scale_color_avatar(palette = &quot;EarthKingdom&quot;) +
+  coord_equal()</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-15-1.png" width="2400" style="display: block; margin: auto;" /></p>
+<p>This plot highlights how this model is barely doing better than guessing.</p>
+<p>Keeping in mind the realities of our model performance, let’s talk about how to compute variable importance for a model like an SVM, which does not have information within it about variable importance like a linear model or a tree-based model. In this case, we can use a method like permutation of the variables.</p>
+<pre class="r"><code>library(vip)
+
+set.seed(345)
+avatar_imp &lt;- avatar_wf %&gt;%
+  add_model(svm_spec) %&gt;%
+  fit(avatar_train) %&gt;%
+  pull_workflow_fit() %&gt;%
+  vi(
+    method = &quot;permute&quot;, nsim = 10,
+    target = &quot;aang&quot;, metric = &quot;auc&quot;, reference_class = &quot;Other&quot;,
+    pred_wrapper = kernlab::predict, train = juice(avatar_prep)
+  )
+
+avatar_imp %&gt;%
+  slice_max(Importance, n = 8) %&gt;%
+  mutate(
+    Variable = str_remove(Variable, &quot;textfeature_text_n_&quot;),
+    Variable = fct_reorder(Variable, Importance)
+  ) %&gt;%
+  ggplot(aes(Importance, Variable, color = Variable)) +
+  geom_errorbar(aes(xmin = Importance - StDev, xmax = Importance + StDev),
+    alpha = 0.5, size = 1.3
+  ) +
+  geom_point(size = 3) +
+  theme(legend.position = &quot;none&quot;) +
+  scale_color_avatar(palette = &quot;FireNation&quot;) +
+  labs(y = NULL)</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-16-1.png" width="2400" style="display: block; margin: auto;" /></p>
+<p>These are the text features that are most important globally for whether a line was spoken by Aang or not.</p>
+<p>Finally, we can return to the testing data to confirm that our (admittedly lackluster) performance is about the same.</p>
+<pre class="r"><code>avatar_final &lt;- avatar_wf %&gt;%
+  add_model(svm_spec) %&gt;%
+  last_fit(avatar_split)
+
+avatar_final %&gt;%
+  collect_metrics()</code></pre>
+<pre><code># A tibble: 2 x 3
+  .metric  .estimator .estimate
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+1 accuracy binary         0.526
+2 roc_auc  binary         0.565</code></pre>
+<pre class="r"><code>avatar_final %&gt;%
+  collect_predictions() %&gt;%
+  conf_mat(aang, .pred_class)</code></pre>
+<pre><code>          Truth
+Prediction Aang Other
+     Aang   261   995
+     Other  188  1054</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.0 (2020-04-24)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+ [1] vip_0.2.2              themis_0.1.2          
+ [3] textrecipes_0.3.0.9000 yardstick_0.0.7       
+ [5] workflows_0.1.3        tune_0.1.1            
+ [7] rsample_0.0.7          recipes_0.1.13        
+ [9] parsnip_0.1.3          modeldata_0.0.2       
+[11] infer_0.5.3            dials_0.0.8           
+[13] broom_0.7.0            tidymodels_0.1.1      
+[15] textfeatures_0.3.3     tidylo_0.1.0          
+[17] tidytext_0.2.5         pdftools_2.3.1        
+[19] here_0.1               tvthemes_1.1.0        
+[21] forcats_0.5.0          stringr_1.4.0         
+[23] dplyr_1.0.2            purrr_0.3.4           
+[25] readr_1.3.1            tidyr_1.1.2           
+[27] tibble_3.0.3           ggplot2_3.3.2         
+[29] tidyverse_1.3.0        scales_1.1.1          
+[31] knitr_1.29             workflowr_1.6.2       
+
+loaded via a namespace (and not attached):
+  [1] mlr_2.17.1         readxl_1.3.1       backports_1.1.9   
+  [4] fastmatch_1.1-0    plyr_1.8.6         selectr_0.4-2     
+  [7] tidytuesdayR_1.0.1 splines_4.0.0      listenv_0.8.0     
+ [10] tfse_0.5.0         SnowballC_0.7.0    usethis_1.6.1     
+ [13] digest_0.6.25      foreach_1.5.0      htmltools_0.5.0   
+ [16] magick_2.4.0       fansi_0.4.1        checkmate_2.0.0   
+ [19] magrittr_1.5       BBmisc_1.11        unbalanced_2.0    
+ [22] doParallel_1.0.15  globals_0.12.5     modelr_0.1.8      
+ [25] gower_0.2.2        extrafont_0.17     R.utils_2.10.1    
+ [28] extrafontdb_1.0    hardhat_0.1.4      askpass_1.1       
+ [31] colorspace_1.4-1   blob_1.2.1         rvest_0.3.6       
+ [34] haven_2.3.1        xfun_0.16          crayon_1.3.4      
+ [37] jsonlite_1.7.1     survival_3.2-3     iterators_1.0.12  
+ [40] glue_1.4.2         gtable_0.3.0       ipred_0.9-9       
+ [43] kernlab_0.9-29     R.cache_0.14.0     Rttf2pt1_1.3.8    
+ [46] qpdf_1.1           emo_0.0.0.9000     DBI_1.1.0         
+ [49] Rcpp_1.0.5         GPfit_1.0-8        lava_1.6.7        
+ [52] prodlim_2019.11.13 httr_1.4.2         FNN_1.1.3         
+ [55] ellipsis_0.3.1     ParamHelpers_1.14  pkgconfig_2.0.3   
+ [58] R.methodsS3_1.8.1  farver_2.0.3       nnet_7.3-14       
+ [61] dbplyr_1.4.4       utf8_1.1.4         tidyselect_1.1.0  
+ [64] labeling_0.3       rlang_0.4.7        DiceDesign_1.8-1  
+ [67] later_1.1.0.1      munsell_0.5.0      cellranger_1.1.0  
+ [70] tools_4.0.0        cli_2.0.2          generics_0.0.2    
+ [73] ranger_0.12.1      evaluate_0.14      yaml_2.2.1        
+ [76] rematch2_2.1.2     fs_1.5.0           RANN_2.6.1        
+ [79] future_1.18.0      whisker_0.4        R.oo_1.24.0       
+ [82] xml2_1.3.2         tokenizers_0.2.1   compiler_4.0.0    
+ [85] rstudioapi_0.11    curl_4.3           reprex_0.3.0      
+ [88] lhs_1.0.2          stringi_1.4.6      lattice_0.20-41   
+ [91] Matrix_1.2-18      styler_1.3.2       vctrs_0.3.4       
+ [94] pillar_1.4.6       lifecycle_0.2.0    furrr_0.1.0       
+ [97] data.table_1.13.0  httpuv_1.5.4       R6_2.4.1          
+[100] promises_1.1.1     gridExtra_2.3      janeaustenr_0.1.5 
+[103] codetools_0.2-16   MASS_7.3-52        assertthat_0.2.1  
+[106] rprojroot_1.3-2    ROSE_0.0-3         withr_2.2.0       
+[109] parallel_4.0.0     hms_0.5.3          grid_4.0.0        
+[112] rpart_4.1-15       timeDate_3043.102  class_7.3-17      
+[115] rmarkdown_2.3      parallelMap_1.5.0  git2r_0.27.1      
+[118] pROC_1.16.2        lubridate_1.7.9   </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
