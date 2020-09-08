@@ -77,8 +77,8 @@ p <- tbi_year %>%
 
 anim<- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
 
-anim_save(filename = "output/BrainInjurygganimqdodge1.gif", animation = anim)
+anim_save(filename = "docs/assets/BrainInjurygganimqdodge1.gif", animation = anim)
 
 ```
 
-![](../output/BrainInjurygganimqdodge1.gif)
+![](assets/BrainInjurygganimqdodge1.gif)
