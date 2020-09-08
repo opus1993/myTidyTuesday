@@ -24,7 +24,7 @@ theme_set(hrbrthemes::theme_ipsum_ps())
 
 ## Get the Data
 
-```{r}
+```{r loadData}
 tbi_age <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv')
 tbi_year <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_year.csv')
 tbi_military <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_military.csv')
@@ -41,7 +41,7 @@ The goal of this week's #TidyTuesday is to spread awareness for just how common 
 > One of every 60 people in the U.S. lives with a TBI related disability. Moderate and severe traumatic brain injury (TBI) can lead to a lifetime of physical, cognitive, emotional, and behavioral changes.
 
 
-```{r}
+```{r incidenceChart}
 tbi_year %>%
   ggplot(aes(factor(year), number_est, fill = factor(injury_mechanism)))+
   geom_col()+
@@ -79,4 +79,4 @@ animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_rendere
 
 ```
 
-![](output/BrainInjurygganimqdodge1.gif)
+![](../output/BrainInjurygganimqdodge1.gif)
