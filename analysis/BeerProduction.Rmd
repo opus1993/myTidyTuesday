@@ -379,9 +379,15 @@ p<-beer_states %>%
         fill = "% Percent")+
    theme(legend.position = c(0.7,0.1))
 
-# animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer("docs/figure/BeerProduction.Rmd/BeerStatesAnimated-1.gif"))
-animate(p,  width = 900, height = 750, end_pause = 50)
+anim<- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
+
+anim_save(filename = "docs/assets/BeerStatesAnimated.gif", animation = anim)
 ```
+
+```{r}
+knitr::include_graphics("assets/BeerStatesAnimated.gif", error = FALSE)
+```
+
 
 ## What is the relationship between the materials used? (using resampling methods)
 
@@ -475,7 +481,4 @@ beer_aug %>%
   theme(plot.title.position = "plot")
 ```
 
-```{r}
-devtools::session_info()
-```
 
