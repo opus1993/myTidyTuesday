@@ -314,10 +314,14 @@ p<-stages_joined %>%
        x = "Cumulative Points at Stage",
        y = "")
 
-#animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer("docs/figure/TourDeFrance.Rmd/animation-1.gif"))
+anim<- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
 
-animate(p,  width = 900, height = 750, end_pause = 50)
+anim_save(filename = "docs/assets/TDFanimation.gif", animation = anim)
 
+```
+
+```{r}
+knitr::include_graphics("assets/TDFanimation.gif", error = FALSE)
 ```
 
 # Lets explore the names and life durations of the Tour de France winners
@@ -368,10 +372,4 @@ life_wins
 (life_wins / nations ) +
   plot_annotation("Tour de France Winners")
 
-```
-
-```{r session}
-Sys.time()
-git2r::repository()
-sessionInfo()
 ```
