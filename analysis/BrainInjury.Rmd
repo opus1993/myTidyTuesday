@@ -65,7 +65,6 @@ p <- tbi_year %>%
   filter(injury_mechanism != "Total") %>% 
   ggplot(aes(x = injury_mechanism,y = number_est, fill = type )) +
   geom_bar(position = "dodge", stat = "identity") + 
-  viridis::scale_fill_viridis(discrete = TRUE, option = "A" ) +  
   scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 20)) +
   coord_flip() +
   transition_states(year, transition_length = 10, state_length = 1) +
@@ -81,4 +80,6 @@ anim_save(filename = "docs/assets/BrainInjurygganimqdodge1.gif", animation = ani
 
 ```
 
-![](assets/BrainInjurygganimqdodge1.gif)
+```{r}
+knitr::include_graphics("assets/BrainInjurygganimqdodge1.gif", error = FALSE)
+```
