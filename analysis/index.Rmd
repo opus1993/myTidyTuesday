@@ -12,8 +12,19 @@ Welcome to my TidyTuesday website collection.
 
 Table of TT subjects, dates, graphic techniques
 
-May 5, 2020  [Animal Crossing](AnimalCrossing.html) {tidytext, stm, textrecipes, vip} topic modeling
+|--|--|--|
+November 26, 2019 | [Student Debt](StudentDebt.html) | {cowplot, ggrepel, igraph}
+March 10, 2020 | [College Tuition](CollegeTuitionandDiversity.html) | {tidymodels}  
+March 24, 2020 | [Brain Injury](BrainInjury.html) | {gganimate, vip, tidymodels}
+March 31, 2020 |[Beer Production](BeerProduction.html) | {gghighlight, tidymetrics}
+April 21, 2020 | [GDPR Fines](GDPRfines.html) | {ggbeeswarm, rnaturalearth, tidymodels}
+May 5, 2020 | [Animal Crossing](AnimalCrossing.html) | {tidytext, stm, textrecipes, vip} topic modeling
+July 7, 2020 | [Coffee](Coffee.html) | {widyr, tidytext}
+March 17, 2020 | [The Office](TheOffice.html) |  {tidymodels, tidytext}
+July 15, 2020 | [Astronaut Missions](Astronaut.html) | {tidymodels, baguette}
+August 11, 2020 | [Last Airbender](LastAirbender.html) | {tidytext, tidylo, textfeatures}
+August 31, 2020 | [Crop Yields](CropYields.html) | {ggrepel}
+September 8, 2020 | [Friends](Friends.html) | {tidytext}
 
-July 15, 2020 [Astronaut](Astronaut.html) Missions {tidymodels, baguette} 
 
 
