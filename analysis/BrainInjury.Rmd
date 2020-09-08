@@ -75,7 +75,9 @@ p <- tbi_year %>%
   theme(plot.title.position = "plot") +  
   scale_y_log10(labels = scales::comma) 
 
-animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer("output/BrainInjurygganimqdodge1.gif"))
+anim<- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
+
+anim_save(filename = "output/BrainInjurygganimqdodge1.gif", animation = anim)
 
 ```
 
