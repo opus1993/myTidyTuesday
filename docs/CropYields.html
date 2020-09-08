@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2020-08-31" />
+
+<title>Crop Yields</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Crop Yields</h1>
+<h4 class="date">2020-08-31</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-09-07
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree43300b3a988d3a3621ef028851aef69d1bc1d32etargetblank43300b3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/43300b3a988d3a3621ef028851aef69d1bc1d32e" target="_blank">43300b3</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree43300b3a988d3a3621ef028851aef69d1bc1d32etargetblank43300b3a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/43300b3a988d3a3621ef028851aef69d1bc1d32e" target="_blank">43300b3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/Astronaut.Rmd
+    Untracked:  analysis/BeerProduction.Rmd
+    Untracked:  analysis/BrainInjury.Rmd
+    Untracked:  analysis/Coffee.Rmd
+    Untracked:  analysis/CollegeTuitionandDiversity.Rmd
+    Untracked:  analysis/GDPRfines.Rmd
+    Untracked:  analysis/GDPRfines_cache/
+    Untracked:  analysis/LastAirbender.Rmd
+    Untracked:  analysis/LastAirbender_cache/
+    Untracked:  analysis/NFLattendance.Rmd
+    Untracked:  analysis/StudentDebt.Rmd
+    Untracked:  analysis/TheOffice.Rmd
+    Untracked:  analysis/TourDeFrance.Rmd
+    Untracked:  analysis/figure/
+    Untracked:  code/BrainInjuryCleaningScript.R
+    Untracked:  code/caribou.R
+    Untracked:  code/studentdebt.R
+    Untracked:  figure/BrainInjury.Rmd/
+    Untracked:  figure/NFL attendance.Rmd/
+    Untracked:  figure/TourDeFrance.Rmd/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/CropYields.Rmd</code>) and HTML (<code>docs/CropYields.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/43300b3a988d3a3621ef028851aef69d1bc1d32e/analysis/CropYields.Rmd" target="_blank">43300b3</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-07
+</td>
+<td>
+wflow_publish(“analysis/CropYields.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="tidytuesday" class="section level1">
+<h1>TidyTuesday</h1>
+<p>Join the R4DS Online Learning Community in the weekly #TidyTuesday event! Every week we post a raw dataset, a chart or article related to that dataset, and ask you to explore the data. While the dataset will be “tamed”, it will not always be tidy! As such you might need to apply various R for Data Science techniques to wrangle the data into a true tidy format. The goal of TidyTuesday is to apply your R skills, get feedback, explore other’s work, and connect with the greater #RStats community! As such we encourage everyone of all skills to participate!</p>
+</div>
+<div id="load-the-weekly-data" class="section level1">
+<h1>Load the weekly Data</h1>
+<p>Dowload the weekly data and make available in the <code>tt</code> object.</p>
+<pre class="r"><code>tt &lt;- tt_load(&quot;2020-09-01&quot;)</code></pre>
+<pre><code>--- Compiling #TidyTuesday Information for 2020-09-01 ----</code></pre>
+<pre><code>--- There are 5 files available ---</code></pre>
+<pre><code>--- Starting Download ---</code></pre>
+<pre><code>
+    Downloading file 1 of 5: `arable_land_pin.csv`
+    Downloading file 2 of 5: `cereal_crop_yield_vs_fertilizer_application.csv`
+    Downloading file 3 of 5: `cereal_yields_vs_tractor_inputs_in_agriculture.csv`
+    Downloading file 4 of 5: `key_crop_yields.csv`
+    Downloading file 5 of 5: `land_use_vs_yield_change_in_cereal_production.csv`</code></pre>
+<pre><code>--- Download complete ---</code></pre>
+</div>
+<div id="readme" class="section level1">
+<h1>Readme</h1>
+<p>Take a look at the readme for the weekly data to get insight on the dataset. This includes a data dictionary, source, and a link to an article on the data.</p>
+<pre class="r"><code>tt</code></pre>
+</div>
+<div id="glimpse-data" class="section level1">
+<h1>Glimpse Data</h1>
+<p>Take an initial look at the format of the data available.</p>
+<pre class="r"><code>tt %&gt;% 
+  map(glimpse)</code></pre>
+<pre><code>Rows: 11,280
+Columns: 4
+$ Entity                                                                   &lt;chr&gt; ...
+$ Code                                                                     &lt;chr&gt; ...
+$ Year                                                                     &lt;dbl&gt; ...
+$ `Arable land needed to produce a fixed quantity of crops ((1.0 = 1961))` &lt;dbl&gt; ...
+Rows: 11,965
+Columns: 5
+$ Entity                                            &lt;chr&gt; &quot;Afghanistan&quot;, &quot;A...
+$ Code                                              &lt;chr&gt; &quot;AFG&quot;, &quot;AFG&quot;, &quot;AF...
+$ Year                                              &lt;dbl&gt; 1961, 1962, 1963,...
+$ `Cereal yield (tonnes per hectare)`               &lt;dbl&gt; 1.1151, 1.0790, 0...
+$ `Nitrogen fertilizer use (kilograms per hectare)` &lt;dbl&gt; NA, NA, NA, NA, N...
+Rows: 49,403
+Columns: 6
+$ Entity                                                  &lt;chr&gt; &quot;Afghanista...
+$ Code                                                    &lt;chr&gt; &quot;AFG&quot;, &quot;AFG...
+$ Year                                                    &lt;chr&gt; &quot;1961&quot;, &quot;19...
+$ `Tractors per 100 sq km arable land`                    &lt;dbl&gt; 0.1568627, ...
+$ `Cereal yield (kilograms per hectare) (kg per hectare)` &lt;dbl&gt; 1115.1, 107...
+$ `Total population (Gapminder)`                          &lt;dbl&gt; 9169000, 93...
+Rows: 13,075
+Columns: 14
+$ Entity                             &lt;chr&gt; &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;A...
+$ Code                               &lt;chr&gt; &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG...
+$ Year                               &lt;dbl&gt; 1961, 1962, 1963, 1964, 1965, 19...
+$ `Wheat (tonnes per hectare)`       &lt;dbl&gt; 1.0220, 0.9735, 0.8317, 0.9510, ...
+$ `Rice (tonnes per hectare)`        &lt;dbl&gt; 1.5190, 1.5190, 1.5190, 1.7273, ...
+$ `Maize (tonnes per hectare)`       &lt;dbl&gt; 1.4000, 1.4000, 1.4260, 1.4257, ...
+$ `Soybeans (tonnes per hectare)`    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
+$ `Potatoes (tonnes per hectare)`    &lt;dbl&gt; 8.6667, 7.6667, 8.1333, 8.6000, ...
+$ `Beans (tonnes per hectare)`       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
+$ `Peas (tonnes per hectare)`        &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
+$ `Cassava (tonnes per hectare)`     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
+$ `Barley (tonnes per hectare)`      &lt;dbl&gt; 1.0800, 1.0800, 1.0800, 1.0857, ...
+$ `Cocoa beans (tonnes per hectare)` &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
+$ `Bananas (tonnes per hectare)`     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
+Rows: 49,259
+Columns: 6
+$ Entity                                                      &lt;chr&gt; &quot;Afghan...
+$ Code                                                        &lt;chr&gt; &quot;AFG&quot;, ...
+$ Year                                                        &lt;chr&gt; &quot;1961&quot;,...
+$ `Cereal yield index`                                        &lt;dbl&gt; 100, 97...
+$ `Change to land area used for cereal production since 1961` &lt;dbl&gt; 100, 10...
+$ `Total population (Gapminder)`                              &lt;dbl&gt; 9169000...</code></pre>
+<pre><code>$arable_land_pin
+# A tibble: 11,280 x 4
+   Entity     Code   Year `Arable land needed to produce a fixed quantity of cr~
+   &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;                                                  &lt;dbl&gt;
+ 1 Afghanist~ AFG    1961                                                  1    
+ 2 Afghanist~ AFG    1962                                                  0.984
+ 3 Afghanist~ AFG    1963                                                  1.01 
+ 4 Afghanist~ AFG    1964                                                  0.939
+ 5 Afghanist~ AFG    1965                                                  0.907
+ 6 Afghanist~ AFG    1966                                                  0.927
+ 7 Afghanist~ AFG    1967                                                  0.832
+ 8 Afghanist~ AFG    1968                                                  0.812
+ 9 Afghanist~ AFG    1969                                                  0.792
+10 Afghanist~ AFG    1970                                                  0.876
+# ... with 11,270 more rows
+
+$cereal_crop_yield_vs_fertilizer_application
+# A tibble: 11,965 x 5
+   Entity    Code   Year `Cereal yield (tonnes p~ `Nitrogen fertilizer use (kil~
+   &lt;chr&gt;     &lt;chr&gt; &lt;dbl&gt;                    &lt;dbl&gt;                          &lt;dbl&gt;
+ 1 Afghanis~ AFG    1961                    1.12                              NA
+ 2 Afghanis~ AFG    1962                    1.08                              NA
+ 3 Afghanis~ AFG    1963                    0.986                             NA
+ 4 Afghanis~ AFG    1964                    1.08                              NA
+ 5 Afghanis~ AFG    1965                    1.10                              NA
+ 6 Afghanis~ AFG    1966                    1.01                              NA
+ 7 Afghanis~ AFG    1967                    1.22                              NA
+ 8 Afghanis~ AFG    1968                    1.29                              NA
+ 9 Afghanis~ AFG    1969                    1.31                              NA
+10 Afghanis~ AFG    1970                    1.11                              NA
+# ... with 11,955 more rows
+
+$cereal_yields_vs_tractor_inputs_in_agriculture
+# A tibble: 49,403 x 6
+   Entity  Code  Year  `Tractors per 100~ `Cereal yield (kilo~ `Total populatio~
+   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;                &lt;dbl&gt;             &lt;dbl&gt;
+ 1 Afghan~ AFG   1961               0.157                1115.           9169000
+ 2 Afghan~ AFG   1962               0.195                1079            9351000
+ 3 Afghan~ AFG   1963               0.258                 986.           9543000
+ 4 Afghan~ AFG   1964               0.256                1083.           9745000
+ 5 Afghan~ AFG   1965               0.385                1099.           9956000
+ 6 Afghan~ AFG   1966               0.511                1012.          10175000
+ 7 Afghan~ AFG   1967               0.637                1224.          10400000
+ 8 Afghan~ AFG   1968               0.637                1288.          10637000
+ 9 Afghan~ AFG   1969               0.700                1310.          10894000
+10 Afghan~ AFG   1970               0.699                1105.          11174000
+# ... with 49,393 more rows
+
+$key_crop_yields
+# A tibble: 13,075 x 14
+   Entity Code   Year `Wheat (tonnes ~ `Rice (tonnes p~ `Maize (tonnes ~
+   &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+ 1 Afgha~ AFG    1961            1.02              1.52             1.4 
+ 2 Afgha~ AFG    1962            0.974             1.52             1.4 
+ 3 Afgha~ AFG    1963            0.832             1.52             1.43
+ 4 Afgha~ AFG    1964            0.951             1.73             1.43
+ 5 Afgha~ AFG    1965            0.972             1.73             1.44
+ 6 Afgha~ AFG    1966            0.867             1.52             1.44
+ 7 Afgha~ AFG    1967            1.12              1.92             1.41
+ 8 Afgha~ AFG    1968            1.16              1.95             1.71
+ 9 Afgha~ AFG    1969            1.19              1.98             1.72
+10 Afgha~ AFG    1970            0.956             1.81             1.48
+# ... with 13,065 more rows, and 8 more variables: `Soybeans (tonnes per
+#   hectare)` &lt;dbl&gt;, `Potatoes (tonnes per hectare)` &lt;dbl&gt;, `Beans (tonnes per
+#   hectare)` &lt;dbl&gt;, `Peas (tonnes per hectare)` &lt;dbl&gt;, `Cassava (tonnes per
+#   hectare)` &lt;dbl&gt;, `Barley (tonnes per hectare)` &lt;dbl&gt;, `Cocoa beans (tonnes
+#   per hectare)` &lt;dbl&gt;, `Bananas (tonnes per hectare)` &lt;dbl&gt;
+
+$land_use_vs_yield_change_in_cereal_production
+# A tibble: 49,259 x 6
+   Entity  Code  Year  `Cereal yield in~ `Change to land area~ `Total populatio~
+   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;             &lt;dbl&gt;                 &lt;dbl&gt;             &lt;dbl&gt;
+ 1 Afghan~ AFG   1961                100                   100           9169000
+ 2 Afghan~ AFG   1962                 97                   103           9351000
+ 3 Afghan~ AFG   1963                 88                   103           9543000
+ 4 Afghan~ AFG   1964                 97                   104           9745000
+ 5 Afghan~ AFG   1965                 99                   104           9956000
+ 6 Afghan~ AFG   1966                 91                   104          10175000
+ 7 Afghan~ AFG   1967                110                    94          10400000
+ 8 Afghan~ AFG   1968                115                    92          10637000
+ 9 Afghan~ AFG   1969                118                    93          10894000
+10 Afghan~ AFG   1970                 99                    96          11174000
+# ... with 49,249 more rows</code></pre>
+</div>
+<div id="wrangle" class="section level1">
+<h1>Wrangle</h1>
+<p>Explore the data and process it into a nice format for plotting! Access each dataset by name by using a dollarsign after the <code>tt</code> object and then the name of the data set.</p>
+<pre class="r"><code>nutrient&lt;-tt$cereal_crop_yield_vs_fertilizer_application
+
+nutrient_rates &lt;- nutrient %&gt;%
+  mutate(Cereal = `Cereal yield (tonnes per hectare)`,
+         Nitrogen = `Nitrogen fertilizer use (kilograms per hectare)`,           Nitrogen = if_else(is.na(Nitrogen),0,Nitrogen),
+           Efficiency = Cereal / Nitrogen, .keep = &quot;unused&quot;) %&gt;%
+  filter(Efficiency &lt; 10, !is.na(Code)) %&gt;% 
+  tidyr::nest(data = c(Efficiency, Nitrogen, Cereal, Year)) %&gt;%
+  mutate(fit = map(.x = data,.f = ~ lm(Efficiency ~ Year, data = .))) %&gt;%
+  mutate(slope = purrr::map_dbl(.x = fit, .f = ~broom::tidy(.)$estimate[2])) %&gt;%
+  tidyr::unnest(data) %&gt;%
+  group_by(Entity) %&gt;%
+  mutate(avg_yield = mean(Cereal))%&gt;%
+  ungroup()
+
+btm&lt;-quantile(nutrient_rates$slope, probs = c(0.2,0.8))[1]
+top&lt;-quantile(nutrient_rates$slope, probs = c(0.2,0.8))[2]
+
+nutrient_rates&lt;-nutrient_rates %&gt;%
+  mutate(bin = case_when(
+     slope &lt; btm ~ &quot;Decrease&quot;,
+     slope &gt; top ~ &quot;Increase&quot;,
+     TRUE ~ &quot;Flat&quot;
+  ),
+  Year = as.integer(Year))
+
+nutrient_rates %&gt;%
+  filter(bin %in% c(&quot;Decrease&quot;,&quot;Increase&quot;), avg_yield&gt;5) %&gt;%
+  ggplot(aes(Year, Efficiency))+
+  geom_point()+
+  geom_smooth(aes(color = bin), method = &quot;loess&quot;, formula = &quot;y ~ x&quot;, alpha = 0.1)+
+  scale_x_continuous(n.breaks = 4)+
+  facet_wrap(~Entity)+
+  theme(legend.position = &quot;top&quot;, plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Nutrient Efficiency&quot;,
+       subtitle = &quot;Cereal Yield Tonnes per Hectare divided by Nitrogen Equivalent Fertilizer kg per Hectare&quot;,
+       caption = &quot;FAO and Our World in Data | @jim_gruman&quot;)</code></pre>
+<p><img src="figure/CropYields.Rmd/Wrangle-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>key_crop_yields &lt;- tt$key_crop_yields
+
+land_use &lt;- tt$land_use_vs_yield_change_in_cereal_production</code></pre>
+<pre class="r"><code>top_countries&lt;-land_use %&gt;%
+  janitor::clean_names() %&gt;% 
+  filter(!is.na(code),
+         entity != &quot;World&quot;) %&gt;% 
+  group_by(entity) %&gt;% 
+  filter(year == max(year)) %&gt;% 
+  ungroup() %&gt;% 
+  slice_max(total_population_gapminder, n = 30) %&gt;% 
+  pull(entity)</code></pre>
+<pre class="r"><code>tidy_yields&lt;-key_crop_yields %&gt;% 
+  janitor::clean_names() %&gt;% 
+  pivot_longer(wheat_tonnes_per_hectare:bananas_tonnes_per_hectare,
+               names_to = &quot;crop&quot;,
+               values_to = &quot;yield&quot;) %&gt;% 
+  mutate(crop = str_remove(crop, &quot;_tonnes_per_hectare&quot;)) %&gt;% 
+  filter(crop %in% c(&quot;wheat&quot;,&quot;rice&quot;,&quot;maize&quot;,&quot;barley&quot;),
+         entity %in% top_countries,
+         !is.na(yield))</code></pre>
+<pre class="r"><code>tidy_yields %&gt;% 
+  ggplot(aes(year, yield, color = crop))+
+  geom_point(alpha = 0.7, size = 1.5)+
+  geom_line(alpha = 0.7, size = 1.5)+  
+  facet_wrap(~ entity)+
+  scale_x_continuous(n.breaks = 2)+
+  labs(x = NULL, y = &quot;yields (tons per hectare)&quot;)</code></pre>
+<p><img src="figure/CropYields.Rmd/unnamed-chunk-4-1.png" width="864" style="display: block; margin: auto;" /></p>
+<div id="many-models" class="section level2">
+<h2>Many Models</h2>
+<p>we will use statistical modeling to measure the country to country differences and changes over time</p>
+<pre class="r"><code>library(tidymodels)</code></pre>
+<pre><code>-- Attaching packages ------------------------------- tidymodels 0.1.1 --</code></pre>
+<pre><code>v broom     0.7.0      v recipes   0.1.13
+v dials     0.0.8      v rsample   0.0.7 
+v infer     0.5.3      v tune      0.1.1 
+v modeldata 0.0.2      v workflows 0.1.3 
+v parsnip   0.1.3      v yardstick 0.0.7 </code></pre>
+<pre><code>-- Conflicts ---------------------------------- tidymodels_conflicts() --
+x scales::discard() masks purrr::discard()
+x dplyr::filter()   masks stats::filter()
+x recipes::fixed()  masks stringr::fixed()
+x dplyr::lag()      masks stats::lag()
+x yardstick::spec() masks readr::spec()
+x recipes::step()   masks stats::step()</code></pre>
+<pre class="r"><code>tidy_lm&lt;-tidy_yields %&gt;% 
+  nest(yields = c(year, yield)) %&gt;% 
+  mutate(model = map(yields, ~ lm(yield ~ year, data = .x)))
+
+slopes &lt;-tidy_lm %&gt;% 
+  mutate(coefs = map(model, tidy)) %&gt;%
+  unnest(coefs) %&gt;%
+  filter(term == &quot;year&quot;) %&gt;% 
+  mutate(p.value = p.adjust(p.value))</code></pre>
+<pre class="r"><code>library(ggrepel)
+slopes %&gt;% 
+  ggplot(aes(estimate, p.value, label = entity))+
+  geom_vline(xintercept = 0, lty = 2, size = 1.5, alpha = 0.7, color = &quot;gray50&quot;)+
+  geom_point(aes(color = crop),alpha = 0.8, size = 2.5, show.legend = FALSE)+
+  geom_text_repel(size = 3)+
+  scale_y_log10()+
+  facet_wrap(~ crop)+
+  labs(y = &quot;p.value effect size: Likelihood that this slope was no different than chance, \nsmaller is more confident&quot;,
+       x = &quot;estimate of the slope, values greater than 0 are yearly increases&quot;)</code></pre>
+<p><img src="figure/CropYields.Rmd/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.0 (2020-04-24)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggrepel_0.8.2      yardstick_0.0.7    workflows_0.1.3    tune_0.1.1        
+ [5] rsample_0.0.7      recipes_0.1.13     parsnip_0.1.3      modeldata_0.0.2   
+ [9] infer_0.5.3        dials_0.0.8        scales_1.1.1       broom_0.7.0       
+[13] tidymodels_0.1.1   tidytuesdayR_1.0.1 forcats_0.5.0      stringr_1.4.0     
+[17] dplyr_1.0.2        purrr_0.3.4        readr_1.3.1        tidyr_1.1.2       
+[21] tibble_3.0.3       ggplot2_3.3.2      tidyverse_1.3.0    workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+ [1] colorspace_1.4-1   selectr_0.4-2      ellipsis_0.3.1     class_7.3-17      
+ [5] rprojroot_1.3-2    snakecase_0.11.0   fs_1.5.0           rstudioapi_0.11   
+ [9] listenv_0.8.0      furrr_0.1.0        farver_2.0.3       prodlim_2019.11.13
+[13] fansi_0.4.1        lubridate_1.7.9    xml2_1.3.2         codetools_0.2-16  
+[17] splines_4.0.0      extrafont_0.17     knitr_1.29         jsonlite_1.7.1    
+[21] pROC_1.16.2        Rttf2pt1_1.3.8     dbplyr_1.4.4       compiler_4.0.0    
+[25] httr_1.4.2         backports_1.1.9    assertthat_0.2.1   Matrix_1.2-18     
+[29] cli_2.0.2          later_1.1.0.1      hrbrthemes_0.8.0   htmltools_0.5.0   
+[33] tools_4.0.0        gtable_0.3.0       glue_1.4.2         Rcpp_1.0.5        
+[37] cellranger_1.1.0   DiceDesign_1.8-1   vctrs_0.3.4        nlme_3.1-149      
+[41] extrafontdb_1.0    iterators_1.0.12   timeDate_3043.102  xfun_0.16         
+[45] gower_0.2.2        globals_0.12.5     rvest_0.3.6        lifecycle_0.2.0   
+[49] future_1.18.0      MASS_7.3-52        ipred_0.9-9        hms_0.5.3         
+[53] promises_1.1.1     parallel_4.0.0     yaml_2.2.1         curl_4.3          
+[57] gdtools_0.2.2      rpart_4.1-15       stringi_1.4.6      foreach_1.5.0     
+[61] lhs_1.0.2          lava_1.6.7         cpp11_0.2.1        rlang_0.4.7       
+[65] pkgconfig_2.0.3    systemfonts_0.3.0  evaluate_0.14      lattice_0.20-41   
+[69] labeling_0.3       tidyselect_1.1.0   plyr_1.8.6         magrittr_1.5      
+[73] R6_2.4.1           generics_0.0.2     DBI_1.1.0          pillar_1.4.6      
+[77] haven_2.3.1        whisker_0.4        withr_2.2.0        mgcv_1.8-31       
+[81] survival_3.2-3     nnet_7.3-14        janitor_2.0.1      modelr_0.1.8      
+[85] crayon_1.3.4       utf8_1.1.4         rmarkdown_2.3      usethis_1.6.1     
+[89] grid_4.0.0         readxl_1.3.1       blob_1.2.1         git2r_0.27.1      
+[93] reprex_0.3.0       digest_0.6.25      httpuv_1.5.4       GPfit_1.0-8       
+[97] munsell_0.5.0     </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
