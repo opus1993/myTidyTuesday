@@ -20,7 +20,7 @@ library(tidyverse)
 theme_set(hrbrthemes::theme_ipsum_ps())
 
 ```
-Let's build a very simple model for [NFL attendance from the #tidytuesday data of 4 February 2020](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-04/readme.md)
+Let's build a very simple model for [NFL attendance](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-04/readme.md) 
 
 ## Explore data
 
