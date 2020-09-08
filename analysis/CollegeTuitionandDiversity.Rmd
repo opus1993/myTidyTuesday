@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.height=6)
 library(tidymodels)
 library(tidyverse)
-theme_set(theme_minimal())
+theme_set(hrbrthemes::theme_ipsum_pub())
 
 ```
 
@@ -51,9 +51,11 @@ diversity_gender<-diversity_school %>%
 
 diversity_gender %>%
   ggplot(aes(WomensEnrollment))+
-  geom_histogram(alpha = 0.8)+
+  geom_histogram(alpha = 0.8, fill = hrbrthemes::ipsum_pal()(1))+
   labs(title = "US College Enrollment Category: Women's Proportion",
-       subtitle = "TidyTuesday 2020 Week 11",
+       subtitle = "TidyTuesday 2020 Week 11", 
+       x = "Women's Enrollment Portion",
+       y = "Count of Institutions",
        caption = paste0("Jim Gruman ", Sys.Date()))+
   scale_x_continuous(labels=scales::percent)+
   theme(plot.title.position = "plot")
