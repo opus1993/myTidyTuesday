@@ -328,7 +328,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-07
+<strong>Last updated:</strong> 2020-09-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -419,16 +419,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeba5f963841d9bc1c4b9689fb0c2fc5f416733170targetblankba5f963a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/ba5f963841d9bc1c4b9689fb0c2fc5f416733170" target="_blank">ba5f963</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree68407b9059aa612b6830699ba62569a8731ecdd0targetblank68407b9a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/68407b9059aa612b6830699ba62569a8731ecdd0" target="_blank">68407b9</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeba5f963841d9bc1c4b9689fb0c2fc5f416733170targetblankba5f963a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree68407b9059aa612b6830699ba62569a8731ecdd0targetblank68407b9a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/ba5f963841d9bc1c4b9689fb0c2fc5f416733170" target="_blank">ba5f963</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/68407b9059aa612b6830699ba62569a8731ecdd0" target="_blank">68407b9</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -437,23 +437,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  analysis/Astronaut.Rmd
-    Untracked:  analysis/BeerProduction.Rmd
-    Untracked:  analysis/Coffee.Rmd
-    Untracked:  analysis/CollegeTuitionandDiversity.Rmd
-    Untracked:  analysis/StudentDebt.Rmd
-    Untracked:  analysis/TheOffice.Rmd
-    Untracked:  code/BrainInjuryCleaningScript.R
-    Untracked:  code/caribou.R
-    Untracked:  code/studentdebt.R
-    Untracked:  figure/BrainInjury.Rmd/
-    Untracked:  figure/NFL attendance.Rmd/
-    Untracked:  figure/TourDeFrance.Rmd/
-
-Unstaged changes:
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -492,6 +475,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/68407b9059aa612b6830699ba62569a8731ecdd0/analysis/LastAirbender.Rmd" target="_blank">68407b9</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-10
+</td>
+<td>
+wflow_publish(“analysis/LastAirbender.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/7db7d41f2857683bd68ca54db19eb10f59c64fc0/docs/LastAirbender.html" target="_blank">7db7d41</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -564,7 +581,7 @@ avatar_raw %&gt;%
 <p>Rows with <code>Scene Description</code> are not dialogue; the main character Aang speaks the most lines overall. How does this change through the three “books” of the show?</p>
 <pre class="r"><code>library(tidytext)
 
-avatar_raw %&gt;%
+p1 &lt;- avatar_raw %&gt;%
   filter(!is.na(character_words)) %&gt;%
   mutate(
     book = fct_inorder(book),
@@ -581,8 +598,21 @@ avatar_raw %&gt;%
     avatar_pal(&quot;EarthKingdom&quot;)(1),
     avatar_pal(&quot;FireNation&quot;)(1)
   )) +
-  labs(y = NULL)</code></pre>
-<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-2-1.png" width="2400" style="display: block; margin: auto;" /></p>
+  labs(
+    y = NULL, x = NULL,
+    title = &quot;Last Airbender words spoken by book&quot;
+  )
+
+ggsave(filename = &quot;docs/assets/airbender-1.pdf&quot;, plot = p1, width = 12, height = 8, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/airbender-1.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300, filenames = &quot;docs/assets/airbender-1.png&quot;
+)</code></pre>
+<pre><code>Converting page 1 to docs/assets/airbender-1.png... done!</code></pre>
+<pre><code>[1] &quot;docs/assets/airbender-1.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-1.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/airbender-1.png" style="display: block; margin: auto;" /></p>
 <p>Let’s create a dataset for our modeling question, and look at a few example lines.</p>
 <pre class="r"><code>avatar &lt;- avatar_raw %&gt;%
   filter(!is.na(character_words)) %&gt;%
@@ -614,7 +644,7 @@ avatar_lo &lt;- avatar %&gt;%
   bind_log_odds(aang, word, n) %&gt;%
   arrange(-log_odds_weighted)
 
-avatar_lo %&gt;%
+p2 &lt;- avatar_lo %&gt;%
   group_by(aang) %&gt;%
   top_n(15) %&gt;%
   ungroup() %&gt;%
@@ -623,11 +653,21 @@ avatar_lo %&gt;%
   geom_col(alpha = 0.8, show.legend = FALSE) +
   facet_wrap(~aang, scales = &quot;free&quot;) +
   scale_fill_avatar(palette = &quot;AirNomads&quot;) +
-  labs(y = NULL)</code></pre>
-<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-4-1.png" width="2400" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># ggsave(here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;logodds.pdf&quot;), width = 8, height = 5, device = cairo_pdf)
+  labs(
+    y = NULL, x = &quot;log odds weights&quot;,
+    title = &quot;Last Airbender Importance of Words&quot;
+  )
 
-# pdf_convert(pdf = here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;logodds.pdf&quot;), format = &quot;png&quot;, dpi = 300, filenames = here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;logodds.png&quot;))</code></pre>
+ggsave(filename = &quot;docs/assets/airbender-2.pdf&quot;, plot = p2, width = 12, height = 8, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/airbender-2.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300, filenames = &quot;docs/assets/airbender-2.png&quot;
+)</code></pre>
+<pre><code>Converting page 1 to docs/assets/airbender-2.png... done!</code></pre>
+<pre><code>[1] &quot;docs/assets/airbender-2.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-2.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/airbender-2.png" style="display: block; margin: auto;" /></p>
 <p>These words make sense, but the counts are probably too low to build a good model with. Instead, let’s try using <a href="https://textfeatures.mikewk.com/">text features</a> like the number of punctuation characters, number of pronons, and so forth.</p>
 <pre class="r"><code>library(textfeatures)
 
@@ -637,7 +677,7 @@ tf &lt;- textfeatures(
   normalize = FALSE, verbose = FALSE
 )
 
-tf %&gt;%
+p3 &lt;- tf %&gt;%
   bind_cols(avatar) %&gt;%
   group_by(aang) %&gt;%
   summarise(across(starts_with(&quot;n_&quot;), mean)) %&gt;%
@@ -648,11 +688,18 @@ tf %&gt;%
   geom_col(position = &quot;dodge&quot;, alpha = 0.8, show.legend = FALSE) +
   facet_wrap(~text_feature, scales = &quot;free&quot;, ncol = 6) +
   scale_fill_avatar(&quot;AirNomads&quot;) +
-  labs(x = NULL, y = &quot;Mean text features per spoken line&quot;)</code></pre>
-<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-5-1.png" width="3000" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># ggsave(here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;textfeatures.pdf&quot;), width = 8, height = 5, device = cairo_pdf)
+  labs(x = NULL, y = &quot;Mean text features per spoken line&quot;)
 
-# pdf_convert(pdf = here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;textfeatures.pdf&quot;), format = &quot;png&quot;, dpi = 300, filenames = here(&quot;docs&quot;,&quot;figure&quot;,&quot;LastAirbender.Rmd&quot;,&quot;textfeatures.png&quot;))</code></pre>
+ggsave(filename = &quot;docs/assets/airbender-3.pdf&quot;, plot = p3, width = 12, height = 8, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/airbender-3.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300, filenames = &quot;docs/assets/airbender-3.png&quot;
+)</code></pre>
+<pre><code>Converting page 1 to docs/assets/airbender-3.png... done!</code></pre>
+<pre><code>[1] &quot;docs/assets/airbender-3.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-3.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/airbender-3.png" style="display: block; margin: auto;" /></p>
 <p>You can <a href="https://textfeatures.mikewk.com/reference/count_functions.html">read the definitions of these counts here</a>. The differences in these features are what we want to build a model to use in prediction.</p>
 </div>
 <div id="build-a-model" class="section level2">
@@ -843,7 +890,7 @@ svm_rs &lt;- avatar_wf %&gt;%
 4 Other      Other 287. </code></pre>
 <p>Different, but not really better! The SVM model is better able to identify the positive cases but at the expense of the negative cases. Overall, we definitely see that this is a hard problem that we barely are able to have any predictive ability for.</p>
 <p>Let’s say we are more interested in detecting Aang’s lines, even at the expense of the false positives.</p>
-<pre class="r"><code>svm_rs %&gt;%
+<pre class="r"><code>p4 &lt;- svm_rs %&gt;%
   collect_predictions() %&gt;%
   group_by(id) %&gt;%
   roc_curve(aang, .pred_Aang) %&gt;%
@@ -851,8 +898,19 @@ svm_rs &lt;- avatar_wf %&gt;%
   geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
   geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
   scale_color_avatar(palette = &quot;EarthKingdom&quot;) +
-  coord_equal()</code></pre>
-<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-15-1.png" width="2400" style="display: block; margin: auto;" /></p>
+  coord_equal() +
+  labs(title = &quot;ROC curve of Support Vector Machine Models \nby cross validation fold&quot;)
+
+ggsave(filename = &quot;docs/assets/airbender-4.pdf&quot;, plot = p4, width = 12, height = 8, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/airbender-4.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300, filenames = &quot;docs/assets/airbender-4.png&quot;
+)</code></pre>
+<pre><code>Converting page 1 to docs/assets/airbender-4.png... done!</code></pre>
+<pre><code>[1] &quot;docs/assets/airbender-4.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-4.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/airbender-4.png" style="display: block; margin: auto;" /></p>
 <p>This plot highlights how this model is barely doing better than guessing.</p>
 <p>Keeping in mind the realities of our model performance, let’s talk about how to compute variable importance for a model like an SVM, which does not have information within it about variable importance like a linear model or a tree-based model. In this case, we can use a method like permutation of the variables.</p>
 <pre class="r"><code>library(vip)
@@ -868,7 +926,7 @@ avatar_imp &lt;- avatar_wf %&gt;%
     pred_wrapper = kernlab::predict, train = juice(avatar_prep)
   )
 
-avatar_imp %&gt;%
+p5 &lt;- avatar_imp %&gt;%
   slice_max(Importance, n = 8) %&gt;%
   mutate(
     Variable = str_remove(Variable, &quot;textfeature_text_n_&quot;),
@@ -881,8 +939,18 @@ avatar_imp %&gt;%
   geom_point(size = 3) +
   theme(legend.position = &quot;none&quot;) +
   scale_color_avatar(palette = &quot;FireNation&quot;) +
-  labs(y = NULL)</code></pre>
-<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-16-1.png" width="2400" style="display: block; margin: auto;" /></p>
+  labs(y = NULL)
+
+ggsave(filename = &quot;docs/assets/airbender-5.pdf&quot;, plot = p5, width = 12, height = 8, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/airbender-5.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300, filenames = &quot;docs/assets/airbender-5.png&quot;
+)</code></pre>
+<pre><code>Converting page 1 to docs/assets/airbender-5.png... done!</code></pre>
+<pre><code>[1] &quot;docs/assets/airbender-5.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-5.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/airbender-5.png" style="display: block; margin: auto;" /></p>
 <p>These are the text features that are most important globally for whether a line was spoken by Aang or not.</p>
 <p>Finally, we can return to the testing data to confirm that our (admittedly lackluster) performance is about the same.</p>
 <pre class="r"><code>avatar_final &lt;- avatar_wf %&gt;%
@@ -937,14 +1005,16 @@ other attached packages:
 [11] infer_0.5.3            dials_0.0.8           
 [13] broom_0.7.0            tidymodels_0.1.1      
 [15] textfeatures_0.3.3     tidylo_0.1.0          
-[17] tidytext_0.2.5         pdftools_2.3.1        
-[19] here_0.1               tvthemes_1.1.0        
-[21] forcats_0.5.0          stringr_1.4.0         
-[23] dplyr_1.0.2            purrr_0.3.4           
-[25] readr_1.3.1            tidyr_1.1.2           
-[27] tibble_3.0.3           ggplot2_3.3.2         
-[29] tidyverse_1.3.0        scales_1.1.1          
-[31] knitr_1.29             workflowr_1.6.2       
+[17] tidytext_0.2.5         showtext_0.9          
+[19] showtextdb_3.0         sysfonts_0.8.1        
+[21] pdftools_2.3.1         here_0.1              
+[23] tvthemes_1.1.0         forcats_0.5.0         
+[25] stringr_1.4.0          dplyr_1.0.2           
+[27] purrr_0.3.4            readr_1.3.1           
+[29] tidyr_1.1.2            tibble_3.0.3          
+[31] ggplot2_3.3.2          tidyverse_1.3.0       
+[33] scales_1.1.1           knitr_1.29            
+[35] workflowr_1.6.2       
 
 loaded via a namespace (and not attached):
   [1] mlr_2.17.1         readxl_1.3.1       backports_1.1.9   
@@ -976,12 +1046,12 @@ loaded via a namespace (and not attached):
  [79] future_1.18.0      whisker_0.4        R.oo_1.24.0       
  [82] xml2_1.3.2         tokenizers_0.2.1   compiler_4.0.0    
  [85] rstudioapi_0.11    curl_4.3           reprex_0.3.0      
- [88] lhs_1.0.2          stringi_1.4.6      lattice_0.20-41   
+ [88] lhs_1.0.2          stringi_1.5.3      lattice_0.20-41   
  [91] Matrix_1.2-18      styler_1.3.2       vctrs_0.3.4       
  [94] pillar_1.4.6       lifecycle_0.2.0    furrr_0.1.0       
  [97] data.table_1.13.0  httpuv_1.5.4       R6_2.4.1          
 [100] promises_1.1.1     gridExtra_2.3      janeaustenr_0.1.5 
-[103] codetools_0.2-16   MASS_7.3-52        assertthat_0.2.1  
+[103] codetools_0.2-16   MASS_7.3-53        assertthat_0.2.1  
 [106] rprojroot_1.3-2    ROSE_0.0-3         withr_2.2.0       
 [109] parallel_4.0.0     hms_0.5.3          grid_4.0.0        
 [112] rpart_4.1-15       timeDate_3043.102  class_7.3-17      
