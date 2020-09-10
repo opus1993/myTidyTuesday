@@ -338,12 +338,6 @@ ggplot() +
 
 
 ```{r}
-library(patchwork)
-(pred_fine + gdpr_raw_histogram / gdpr_fines_levied ) + plot_layout(heights = c(1,3))
-
-```
-
-```{r}
 # https://twitter.com/davsjob/status/1256293020791685123?s=19
 # David Sjoberg built this incredible chart
 #
