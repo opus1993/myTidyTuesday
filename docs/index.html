@@ -325,7 +325,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-08
+<strong>Last updated:</strong> 2020-09-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -356,16 +356,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree6373e76aa746bc0d2b21f0328032ceeb3a8755b2targetblank6373e76a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/6373e76aa746bc0d2b21f0328032ceeb3a8755b2" target="_blank">6373e76</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree84becf647d7a1b8a48d1e968f9593f23302cae4dtargetblank84becf6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/84becf647d7a1b8a48d1e968f9593f23302cae4d" target="_blank">84becf6</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree6373e76aa746bc0d2b21f0328032ceeb3a8755b2targetblank6373e76a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree84becf647d7a1b8a48d1e968f9593f23302cae4dtargetblank84becf6a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/6373e76aa746bc0d2b21f0328032ceeb3a8755b2" target="_blank">6373e76</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/84becf647d7a1b8a48d1e968f9593f23302cae4d" target="_blank">84becf6</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -377,12 +377,9 @@ Ignored files:
 
 Untracked files:
     Untracked:  analysis/Friends.Rmd
-    Untracked:  figure/TourDeFrance.Rmd/
 
 Unstaged changes:
-    Deleted:    figure/BeerProduction.Rmd/BeerStatesAnimated-1.gif
-    Deleted:    figure/BeerProduction.Rmd/unnamed-chunk-16-1.gif
-    Deleted:    output/BrainInjurygganimqdodge1.gif
+    Modified:   analysis/GDPRfines.Rmd
 
 </code></pre>
 <p>
@@ -421,6 +418,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/84becf647d7a1b8a48d1e968f9593f23302cae4d/analysis/index.Rmd" target="_blank">84becf6</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-10
+</td>
+<td>
+wflow_publish(“analysis/index.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/47f945fb23c86a81fada48945f079d0800a1ad5c/docs/index.html" target="_blank">47f945f</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -590,59 +621,9 @@ Start workflowr project.
 </colgroup>
 <tbody>
 <tr class="odd">
-<td>November 26, 2019</td>
-<td><a href="StudentDebt.html">Student Debt</a></td>
-<td>{cowplot, ggrepel, dygraphs}</td>
-</tr>
-<tr class="even">
-<td>February 4, 2020</td>
-<td><a href="NFLattendance.html">NFL Attendance</a></td>
-<td>{tidymodels}</td>
-</tr>
-<tr class="odd">
-<td>March 10, 2020</td>
-<td><a href="CollegeTuitionandDiversity.html">College Tuition</a></td>
-<td>{tidymodels}</td>
-</tr>
-<tr class="even">
-<td>March 24, 2020</td>
-<td><a href="BrainInjury.html">Brain Injury</a></td>
-<td>{gganimate, vip, tidymodels}</td>
-</tr>
-<tr class="odd">
-<td>March 31, 2020</td>
-<td><a href="BeerProduction.html">Beer Production</a></td>
-<td>{gghighlight, tidymetrics}</td>
-</tr>
-<tr class="even">
-<td>April 21, 2020</td>
-<td><a href="GDPRfines.html">GDPR Fines</a></td>
-<td>{ggbeeswarm, rnaturalearth, tidymodels}</td>
-</tr>
-<tr class="odd">
-<td>May 5, 2020</td>
-<td><a href="AnimalCrossing.html">Animal Crossing</a></td>
-<td>{tidytext, stm, textrecipes, vip} topic modeling</td>
-</tr>
-<tr class="even">
-<td>July 7, 2020</td>
-<td><a href="Coffee.html">Coffee</a></td>
-<td>{widyr, tidytext}</td>
-</tr>
-<tr class="odd">
-<td>March 17, 2020</td>
-<td><a href="TheOffice.html">The Office</a></td>
-<td>{tidymodels, tidytext}</td>
-</tr>
-<tr class="even">
-<td>July 15, 2020</td>
-<td><a href="Astronaut.html">Astronaut Missions</a></td>
-<td>{tidymodels, baguette}</td>
-</tr>
-<tr class="odd">
-<td>August 11, 2020</td>
-<td><a href="LastAirbender.html">Last Airbender</a></td>
-<td>{tidytext, tidylo, textfeatures}</td>
+<td>September 8, 2020</td>
+<td><a href="Friends.html">Friends</a></td>
+<td>{tidytext, tidylo}</td>
 </tr>
 <tr class="even">
 <td>August 31, 2020</td>
@@ -650,9 +631,59 @@ Start workflowr project.
 <td>{ggrepel}</td>
 </tr>
 <tr class="odd">
-<td>September 8, 2020</td>
-<td><a href="Friends.html">Friends</a></td>
-<td>{tidytext}</td>
+<td>August 11, 2020</td>
+<td><a href="LastAirbender.html">Last Airbender</a></td>
+<td>{tidytext, tidylo, textfeatures}</td>
+</tr>
+<tr class="even">
+<td>July 15, 2020</td>
+<td><a href="Astronaut.html">Astronaut Missions</a></td>
+<td>{tidymodels, baguette}</td>
+</tr>
+<tr class="odd">
+<td>March 17, 2020</td>
+<td><a href="TheOffice.html">The Office</a></td>
+<td>{tidymodels, tidytext}</td>
+</tr>
+<tr class="even">
+<td>July 7, 2020</td>
+<td><a href="Coffee.html">Coffee</a></td>
+<td>{widyr, tidytext}</td>
+</tr>
+<tr class="odd">
+<td>May 5, 2020</td>
+<td><a href="AnimalCrossing.html">Animal Crossing</a></td>
+<td>{tidytext, stm, textrecipes, vip} topic modeling</td>
+</tr>
+<tr class="even">
+<td>April 21, 2020</td>
+<td><a href="GDPRfines.html">GDPR Fines</a></td>
+<td>{ggbeeswarm, rnaturalearth, tidymodels}</td>
+</tr>
+<tr class="odd">
+<td>March 31, 2020</td>
+<td><a href="BeerProduction.html">Beer Production</a></td>
+<td>{gghighlight, tidymetrics}</td>
+</tr>
+<tr class="even">
+<td>March 24, 2020</td>
+<td><a href="BrainInjury.html">Brain Injury</a></td>
+<td>{gganimate, vip, tidymodels}</td>
+</tr>
+<tr class="odd">
+<td>March 10, 2020</td>
+<td><a href="CollegeTuitionandDiversity.html">College Tuition</a></td>
+<td>{tidymodels}</td>
+</tr>
+<tr class="even">
+<td>February 4, 2020</td>
+<td><a href="NFLattendance.html">NFL Attendance</a></td>
+<td>{tidymodels}</td>
+</tr>
+<tr class="odd">
+<td>November 26, 2019</td>
+<td><a href="StudentDebt.html">Student Debt</a></td>
+<td>{cowplot, ggrepel, dygraphs}</td>
 </tr>
 </tbody>
 </table>
