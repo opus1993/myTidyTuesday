@@ -331,7 +331,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-07
+<strong>Last updated:</strong> 2020-09-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -422,16 +422,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree3702d28f0597da21a75c1ce419b682421f16f255targetblank3702d28a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/3702d28f0597da21a75c1ce419b682421f16f255" target="_blank">3702d28</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree3260f4bf7fe1830bd56c4e08a5ae8ffbd703ecaatargetblank3260f4ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/3260f4bf7fe1830bd56c4e08a5ae8ffbd703ecaa" target="_blank">3260f4b</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree3702d28f0597da21a75c1ce419b682421f16f255targetblank3702d28a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree3260f4bf7fe1830bd56c4e08a5ae8ffbd703ecaatargetblank3260f4ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/3702d28f0597da21a75c1ce419b682421f16f255" target="_blank">3702d28</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/3260f4bf7fe1830bd56c4e08a5ae8ffbd703ecaa" target="_blank">3260f4b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -440,12 +440,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  code/studentdebt.R
-    Untracked:  figure/BrainInjury.Rmd/
-    Untracked:  figure/NFL attendance.Rmd/
-    Untracked:  figure/TourDeFrance.Rmd/
 
 </code></pre>
 <p>
@@ -484,6 +478,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/3260f4bf7fe1830bd56c4e08a5ae8ffbd703ecaa/analysis/GDPRfines.Rmd" target="_blank">3260f4b</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-10
+</td>
+<td>
+wflow_publish(“analysis/GDPRfines.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/24169b9e8a42f566b18d3ba208251a484d2ff579/docs/GDPRfines.html" target="_blank">24169b9</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1322,11 +1350,11 @@ Zero variance filter removed no terms [trained]</code></pre>
     set_engine(&quot;lm&quot;))
 
 gdpr_wf</code></pre>
-<pre><code>== Workflow =============================================================
+<pre><code>== Workflow ===========================================================================
 Preprocessor: Recipe
 Model: linear_reg()
 
--- Preprocessor ---------------------------------------------------------
+-- Preprocessor -----------------------------------------------------------------------
 4 Recipe Steps
 
 * step_log()
@@ -1334,7 +1362,7 @@ Model: linear_reg()
 * step_dummy()
 * step_zv()
 
--- Model ----------------------------------------------------------------
+-- Model ------------------------------------------------------------------------------
 Linear Regression Model Specification (regression)
 
 Computational engine: lm </code></pre>
@@ -1938,9 +1966,6 @@ ggplot() +
   coord_sf(xlim = c(-27.5, 37.5), ylim = c(32.5, 82.5), expand = FALSE) +
   labs(x = &quot;&quot;, y = &quot;&quot;)</code></pre>
 <p><img src="figure/GDPRfines.Rmd/unnamed-chunk-12-1.png" width="2400" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>library(patchwork)
-(pred_fine + gdpr_raw_histogram / gdpr_fines_levied) + plot_layout(heights = c(1, 3))</code></pre>
-<p><img src="figure/GDPRfines.Rmd/unnamed-chunk-13-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># https://twitter.com/davsjob/status/1256293020791685123?s=19
 # David Sjoberg built this incredible chart
 #
@@ -2026,7 +2051,7 @@ ggplot() +
     plot.title = element_text(color = &quot;white&quot;, size = 16, family = &quot;Helvetica&quot;, face = &quot;bold&quot;),
     plot.subtitle = element_text(color = &quot;white&quot;, size = 8)
   )</code></pre>
-<p><img src="figure/GDPRfines.Rmd/unnamed-chunk-14-1.png" width="2400" style="display: block; margin: auto;" /></p>
+<p><img src="figure/GDPRfines.Rmd/unnamed-chunk-13-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -2052,19 +2077,19 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] patchwork_1.0.1     ggbeeswarm_0.6.0    rvest_0.3.6        
- [4] xml2_1.3.2          ggtext_0.1.0.9000   sf_0.9-5           
- [7] rnaturalearth_0.1.0 yardstick_0.0.7     workflows_0.1.3    
-[10] tune_0.1.1          rsample_0.0.7       recipes_0.1.13     
-[13] parsnip_0.1.3       modeldata_0.0.2     infer_0.5.3        
-[16] dials_0.0.8         scales_1.1.1        broom_0.7.0        
-[19] tidymodels_0.1.1    forcats_0.5.0       stringr_1.4.0      
-[22] dplyr_1.0.2         purrr_0.3.4         readr_1.3.1        
-[25] tidyr_1.1.2         tibble_3.0.3        ggplot2_3.3.2      
-[28] tidyverse_1.3.0     workflowr_1.6.2    
+ [1] ggbeeswarm_0.6.0    rvest_0.3.6         xml2_1.3.2         
+ [4] ggtext_0.1.0.9000   sf_0.9-5            rnaturalearth_0.1.0
+ [7] yardstick_0.0.7     workflows_0.1.3     tune_0.1.1         
+[10] rsample_0.0.7       recipes_0.1.13      parsnip_0.1.3      
+[13] modeldata_0.0.2     infer_0.5.3         dials_0.0.8        
+[16] scales_1.1.1        broom_0.7.0         tidymodels_0.1.1   
+[19] forcats_0.5.0       stringr_1.4.0       dplyr_1.0.2        
+[22] purrr_0.3.4         readr_1.3.1         tidyr_1.1.2        
+[25] tibble_3.0.3        ggplot2_3.3.2       tidyverse_1.3.0    
+[28] workflowr_1.6.2    
 
 loaded via a namespace (and not attached):
-  [1] readxl_1.3.1             backports_1.1.9          systemfonts_0.3.0       
+  [1] readxl_1.3.1             backports_1.1.9          systemfonts_0.3.1       
   [4] selectr_0.4-2            plyr_1.8.6               sp_1.4-2                
   [7] splines_4.0.0            listenv_0.8.0            digest_0.6.25           
  [10] foreach_1.5.0            htmltools_0.5.0          fansi_0.4.1             
@@ -2090,14 +2115,14 @@ loaded via a namespace (and not attached):
  [70] future_1.18.0            whisker_0.4              R.oo_1.24.0             
  [73] ggbump_0.1.0             compiler_4.0.0           rstudioapi_0.11         
  [76] beeswarm_0.2.3           curl_4.3                 e1071_1.7-3             
- [79] reprex_0.3.0             lhs_1.0.2                stringi_1.4.6           
+ [79] reprex_0.3.0             lhs_1.0.2                stringi_1.5.3           
  [82] highr_0.8                rgeos_0.5-5              gdtools_0.2.2           
  [85] hrbrthemes_0.8.0         lattice_0.20-41          rnaturalearthhires_0.2.0
  [88] Matrix_1.2-18            markdown_1.1             classInt_0.4-3          
  [91] styler_1.3.2             vctrs_0.3.4              pillar_1.4.6            
  [94] lifecycle_0.2.0          furrr_0.1.0              httpuv_1.5.4            
  [97] R6_2.4.1                 promises_1.1.1           KernSmooth_2.23-17      
-[100] vipor_0.4.5              codetools_0.2-16         MASS_7.3-52             
+[100] vipor_0.4.5              codetools_0.2-16         MASS_7.3-53             
 [103] assertthat_0.2.1         rprojroot_1.3-2          withr_2.2.0             
 [106] parallel_4.0.0           hms_0.5.3                grid_4.0.0              
 [109] rpart_4.1-15             timeDate_3043.102        rnaturalearthdata_0.1.0 
