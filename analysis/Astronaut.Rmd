@@ -273,8 +273,4 @@ new_astronauts %>%
 
 You can really get a sense of how these two kinds of models work from the differences in these plots (tree vs. splines with knots), but from both, we can see that missions to space stations are longer, and missions in that “Other” category change characteristics over time pretty dramatically.
 
-```{r}
-devtools::session_info()
-```
-
 
