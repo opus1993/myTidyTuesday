@@ -12,19 +12,31 @@ Welcome to my TidyTuesday website collection.
 
 |   |   |   |    
 |---|---|---|
-|November 26, 2019 | [Student Debt](StudentDebt.html) | {cowplot, ggrepel, dygraphs}|
-|February 4, 2020 | [NFL Attendance](NFLattendance.html) | {tidymodels}
-|March 10, 2020 | [College Tuition](CollegeTuitionandDiversity.html) | {tidymodels}|  
-|March 24, 2020 | [Brain Injury](BrainInjury.html) | {gganimate, vip, tidymodels}|
-|March 31, 2020 |[Beer Production](BeerProduction.html) | {gghighlight, tidymetrics}|
-|April 21, 2020 | [GDPR Fines](GDPRfines.html) | {ggbeeswarm, rnaturalearth, tidymodels}|
-|May 5, 2020 | [Animal Crossing](AnimalCrossing.html) | {tidytext, stm, textrecipes, vip} topic modeling|
-|July 7, 2020 | [Coffee](Coffee.html) | {widyr, tidytext}|
-|March 17, 2020 | [The Office](TheOffice.html) |  {tidymodels, tidytext}|
-|July 15, 2020 | [Astronaut Missions](Astronaut.html) | {tidymodels, baguette}|
-|August 11, 2020 | [Last Airbender](LastAirbender.html) | {tidytext, tidylo, textfeatures}|
+|September 8, 2020 | [Friends](Friends.html) | {tidytext, tidylo}|
 |August 31, 2020 | [Crop Yields](CropYields.html) | {ggrepel}|
-|September 8, 2020 | [Friends](Friends.html) | {tidytext}|
+|August 11, 2020 | [Last Airbender](LastAirbender.html) | {tidytext, tidylo, textfeatures}|
+|July 15, 2020 | [Astronaut Missions](Astronaut.html) | {tidymodels, baguette}|
+|March 17, 2020 | [The Office](TheOffice.html) |  {tidymodels, tidytext}|
+|July 7, 2020 | [Coffee](Coffee.html) | {widyr, tidytext}|
+|May 5, 2020 | [Animal Crossing](AnimalCrossing.html) | {tidytext, stm, textrecipes, vip} topic modeling|
+|April 21, 2020 | [GDPR Fines](GDPRfines.html) | {ggbeeswarm, rnaturalearth, tidymodels}|
+|March 31, 2020 |[Beer Production](BeerProduction.html) | {gghighlight, tidymetrics}|
+|March 24, 2020 | [Brain Injury](BrainInjury.html) | {gganimate, vip, tidymodels}|
+|March 10, 2020 | [College Tuition](CollegeTuitionandDiversity.html) | {tidymodels}|
+|February 4, 2020 | [NFL Attendance](NFLattendance.html) | {tidymodels} |
+|November 26, 2019 | [Student Debt](StudentDebt.html) | {cowplot, ggrepel, dygraphs}|
+
+  
+
+
+
+
+
+
+
+
+
+
 
 
 
