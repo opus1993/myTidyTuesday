@@ -20,6 +20,11 @@ library(tidyverse)
 library(tvthemes)
 library(here)
 library(pdftools)
+
+library(showtext)
+
+font_add(family = "Slayer", regular = "C:/Users/jimgr/AppData/Local/Microsoft/Windows/Fonts/slayer11.TTF") 
+
 theme_set(theme_avatar(title.font = "Slayer",
                        text.font = "Slayer",
                        title.size = 14))
@@ -49,7 +54,7 @@ Rows with `Scene Description` are not dialogue; the main character Aang speaks t
 ```{r warning=FALSE}
 library(tidytext)
 
-avatar_raw %>%
+p1<- avatar_raw %>%
     filter(!is.na(character_words)) %>%
     mutate(book = fct_inorder(book),
            character = fct_lump_n(character, 10)) %>%
@@ -62,9 +67,20 @@ avatar_raw %>%
     scale_fill_manual(values = c(avatar_pal("WaterTribe")(1),
                                  avatar_pal("EarthKingdom")(1),
                                  avatar_pal("FireNation")(1))) +
-    labs(y = NULL)
+    labs(y = NULL, x = NULL,
+         title = "Last Airbender words spoken by book")
+
+ggsave(filename = "docs/assets/airbender-1.pdf", plot = p1, width = 12, height = 8, device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/airbender-1.pdf", format = "png",
+                      dpi = 300, filenames = "docs/assets/airbender-1.png")
 
 ```
+
+```{r}
+knitr::include_graphics("assets/airbender-1.png", error = FALSE)
+```
+
 
 Let's create a dataset for our modeling question, and look at a few example lines.
 
@@ -94,7 +110,7 @@ avatar_lo <- avatar %>%
     bind_log_odds(aang, word, n) %>%
     arrange(-log_odds_weighted)
 
-avatar_lo %>%
+p2<-avatar_lo %>%
     group_by(aang) %>%
     top_n(15) %>%
     ungroup %>%
@@ -103,13 +119,18 @@ avatar_lo %>%
     geom_col(alpha = 0.8, show.legend = FALSE) +
     facet_wrap(~aang, scales = "free") +
     scale_fill_avatar(palette = "AirNomads") +
-    labs(y = NULL)
+    labs(y = NULL, x = "log odds weights",
+         title = "Last Airbender Importance of Words")
 
-# ggsave(here("docs","figure","LastAirbender.Rmd","logodds.pdf"), width = 8, height = 5, device = cairo_pdf)
+ggsave(filename = "docs/assets/airbender-2.pdf", plot = p2, width = 12, height = 8, device = cairo_pdf)
 
-# pdf_convert(pdf = here("docs","figure","LastAirbender.Rmd","logodds.pdf"), format = "png", dpi = 300, filenames = here("docs","figure","LastAirbender.Rmd","logodds.png"))
+pdftools::pdf_convert(pdf = "docs/assets/airbender-2.pdf", format = "png",
+                      dpi = 300, filenames = "docs/assets/airbender-2.png")
 
+```
 
+```{r}
+knitr::include_graphics("assets/airbender-2.png", error = FALSE)
 ```
 
 These words make sense, but the counts are probably too low to build a good model with. Instead, let's try using [text features](https://textfeatures.mikewk.com/) like the number of punctuation characters, number of pronons, and so forth.
@@ -122,7 +143,7 @@ tf <- textfeatures(
   normalize = FALSE, verbose = FALSE
   )
 
-tf %>%
+p3<-tf %>%
     bind_cols(avatar) %>%
     group_by(aang) %>%
     summarise(across(starts_with("n_"), mean)) %>%
@@ -135,10 +156,15 @@ tf %>%
     scale_fill_avatar("AirNomads") +
     labs(x = NULL, y = "Mean text features per spoken line")
 
-# ggsave(here("docs","figure","LastAirbender.Rmd","textfeatures.pdf"), width = 8, height = 5, device = cairo_pdf)
+ggsave(filename = "docs/assets/airbender-3.pdf", plot = p3, width = 12, height = 8, device = cairo_pdf)
 
-# pdf_convert(pdf = here("docs","figure","LastAirbender.Rmd","textfeatures.pdf"), format = "png", dpi = 300, filenames = here("docs","figure","LastAirbender.Rmd","textfeatures.png"))
+pdftools::pdf_convert(pdf = "docs/assets/airbender-3.pdf", format = "png",
+                      dpi = 300, filenames = "docs/assets/airbender-3.png")
 
+```
+
+```{r}
+knitr::include_graphics("assets/airbender-3.png", error = FALSE)
 ```
 
 You can [read the definitions of these counts here](https://textfeatures.mikewk.com/reference/count_functions.html). The differences in these features are what we want to build a model to use in prediction.
@@ -269,7 +295,7 @@ Different, but not really better! The SVM model is better able to identify the p
 Let's say we are more interested in detecting Aang's lines, even at the expense of the false positives.
 
 ```{r}
-svm_rs %>%
+p4<- svm_rs %>%
     collect_predictions() %>%
     group_by(id) %>%    
     roc_curve(aang, .pred_Aang) %>%
@@ -277,7 +303,18 @@ svm_rs %>%
     geom_abline(lty = 2, color = "gray80", size = 1.5) +
     geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
     scale_color_avatar(palette = "EarthKingdom") +
-    coord_equal()
+    coord_equal()+
+    labs(title = "ROC curve of Support Vector Machine Models \nby cross validation fold")
+
+ggsave(filename = "docs/assets/airbender-4.pdf", plot = p4, width = 12, height = 8, device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/airbender-4.pdf", format = "png",
+                      dpi = 300, filenames = "docs/assets/airbender-4.png")
+
+```
+
+```{r}
+knitr::include_graphics("assets/airbender-4.png", error = FALSE)
 ```
 
 This plot highlights how this model is barely doing better than guessing.
@@ -296,7 +333,7 @@ avatar_imp <- avatar_wf %>%
        target = "aang", metric = "auc", reference_class = "Other",
        pred_wrapper = kernlab::predict, train = juice(avatar_prep))
 
-avatar_imp %>%
+p5<-avatar_imp %>%
     slice_max(Importance, n = 8) %>%
     mutate(Variable = str_remove(Variable, "textfeature_text_n_"),
            Variable = fct_reorder(Variable, Importance)) %>%
@@ -307,6 +344,16 @@ avatar_imp %>%
     theme(legend.position = "none") +
     scale_color_avatar(palette = "FireNation") +
     labs(y = NULL)
+
+ggsave(filename = "docs/assets/airbender-5.pdf", plot = p5, width = 12, height = 8, device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/airbender-5.pdf", format = "png",
+                      dpi = 300, filenames = "docs/assets/airbender-5.png")
+
+```
+
+```{r}
+knitr::include_graphics("assets/airbender-5.png", error = FALSE)
 ```
 
 These are the text features that are most important globally for whether a line was spoken by Aang or not.
