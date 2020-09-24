@@ -12,6 +12,7 @@ Welcome to my TidyTuesday website collection.
 
 |   |   |   |    
 |---|---|---|
+|September 24, 2020| [Hops](Hops.html)| {rnassqs, blscrapeR}|
 |September 22, 2020 | [Himalayan Climbers](HimalayanClimbers.html) | {ebbr, ggdark} |
 |September 15, 2020 | [Kids Health Spending](KidsSpending.html) | {geojsonio, rgeos}| 
 |September 8, 2020 | [Friends](Friends.html) | {tidytext, tidylo}|
