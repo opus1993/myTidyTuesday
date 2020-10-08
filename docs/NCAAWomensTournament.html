@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-10-07" />
+
+<title>NCAA Womens Tournament</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">NCAA Womens Tournament</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">October 7, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-07
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+</p>
+</div>
+<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div class="panel-body">
+The following chunks had caches available:
+<ul>
+<li>
+session-info-chunk-inserted-by-workflowr
+</li>
+<li>
+unnamed-chunk-1
+</li>
+<li>
+unnamed-chunk-10
+</li>
+<li>
+unnamed-chunk-11
+</li>
+<li>
+unnamed-chunk-12
+</li>
+<li>
+unnamed-chunk-13
+</li>
+<li>
+unnamed-chunk-14
+</li>
+<li>
+unnamed-chunk-15
+</li>
+<li>
+unnamed-chunk-16
+</li>
+<li>
+unnamed-chunk-2
+</li>
+<li>
+unnamed-chunk-3
+</li>
+<li>
+unnamed-chunk-4
+</li>
+<li>
+unnamed-chunk-5
+</li>
+<li>
+unnamed-chunk-6
+</li>
+<li>
+unnamed-chunk-7
+</li>
+<li>
+unnamed-chunk-8
+</li>
+<li>
+unnamed-chunk-9
+</li>
+</ul>
+<p>To ensure reproducibility of the results, delete the cache directory <code>NCAAWomensTournament_cache</code> and re-run the analysis. To have workflowr automatically delete the cache directory prior to building the file, set <code>delete_cache = TRUE</code> when running <code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb9c9cb8fa1684467cc57035c8e10b0b24862ae69targetblankb9c9cb8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/b9c9cb8fa1684467cc57035c8e10b0b24862ae69" target="_blank">b9c9cb8</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb9c9cb8fa1684467cc57035c8e10b0b24862ae69targetblankb9c9cb8a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/b9c9cb8fa1684467cc57035c8e10b0b24862ae69" target="_blank">b9c9cb8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/NCAAWomensTournament_cache/
+    Untracked:  figure/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/NCAAWomensTournament.Rmd</code>) and HTML (<code>docs/NCAAWomensTournament.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/b9c9cb8fa1684467cc57035c8e10b0b24862ae69/analysis/NCAAWomensTournament.Rmd" target="_blank">b9c9cb8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-07
+</td>
+<td>
+wflow_publish(“analysis/NCAAWomensTournament.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<blockquote>
+<p>Adapted from <a href="https://juliasilge.com/blog/ncaa-tuning/">NCAA Tuning</a> by Julia Silge <span class="citation">@JuliaSilge</span></p>
+</blockquote>
+<p>This example walks through how to tune and choose hyperparameters using this week’s #TidyTuesday dataset on NCAA women’s basketball tournaments. 🏀</p>
+<div id="explore-the-data" class="section level2">
+<h2>Explore the data</h2>
+<p>Our modeling goal is to estimate the relationship of <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-10-06/readme.md">expected tournament wins by seed from this week’s #TidyTuesday dataset</a>. This is similar to the <a href="https://fivethirtyeight.com/features/tom-izzo-is-the-best-coach-in-modern-ncaa-tournament-history-by-far/">“average” column in the FiveThirtyEight table in this article</a>.</p>
+<p>Let’s start by reading in the data.</p>
+<pre class="r"><code>library(tidyverse)
+library(paletteer)
+
+tt &lt;- tidytuesdayR::tt_load(&quot;2020-10-06&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `tournament.csv`</code></pre>
+<pre class="r"><code>tournament &lt;- tt$tournament
+
+theme_set(theme_minimal() +
+  theme(plot.title.position = &quot;plot&quot;))</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>We can look at the mean wins by seed.</p>
+<pre class="r"><code>tournament %&gt;%
+  group_by(seed) %&gt;%
+  summarise(exp_wins = mean(tourney_w, na.rm = TRUE)) %&gt;%
+  ggplot(aes(seed, exp_wins)) +
+  geom_point(alpha = 0.8, size = 3) +
+  labs(y = &quot;tournament wins (mean)&quot;)</code></pre>
+<img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-2-1.png" width="2400" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Let’s visualize all the tournament results, not just the averages.</p>
+<pre class="r"><code>tournament %&gt;%
+  filter(!is.na(seed)) %&gt;%
+  ggplot(aes(seed, tourney_w)) +
+  geom_bin2d(binwidth = c(1, 1), alpha = 0.8) +
+  scale_fill_paletteer_c(&quot;scico::bamako&quot;) +
+  labs(
+    fill = &quot;number of\nteams&quot;,
+    y = &quot;tournament wins&quot;,
+    title = &quot;Womens NCAA Tournament&quot;,
+    caption = &quot;Data by FiveThirtyEight | Visualization by @jim_gruman&quot;
+  )</code></pre>
+<img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-3-1.png" width="2100" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>We have a lot of options to deal with data like this (curvy, integers, all greater than zero) but one straightforward option is <a href="https://www.tmwr.org/recipes.html#spline-functions">splines</a>. Splines aren’t perfect for this because they aren’t constrained to stay greater than zero or to always decrease, but they work pretty well and can be used in lots of situations. We have to choose the <strong>degrees of freedom</strong> for the splines.</p>
+<pre class="r"><code>library(splines)
+
+plot_smoother &lt;- function(deg_free) {
+  p &lt;- ggplot(tournament, aes(seed, tourney_w)) +
+    geom_bin2d(binwidth = c(1, 1), alpha = 0.8) +
+    scale_fill_paletteer_c(&quot;scico::bamako&quot;) +
+    geom_smooth(
+      method = lm, se = FALSE, color = &quot;black&quot;,
+      formula = y ~ ns(x, df = deg_free)
+    ) +
+    labs(
+      fill = &quot;number of\nteams&quot;,
+      y = &quot;tournament wins&quot;,
+      title = &quot;Womens NCAA Tournament&quot;,
+      caption = &quot;Data by FiveThirtyEight | Visualization by @jim_gruman&quot;,
+      subtitle = paste(deg_free, &quot;spline terms&quot;)
+    )
+
+  print(p)
+}
+
+walk(c(2, 4, 6, 8, 10, 15), plot_smoother)</code></pre>
+<img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-4-.gif" width="2100" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>As the number of degrees of freedom goes up, the curves get more wiggly. This would allow the model to fit a more complex relationship, perhaps too much so. We can <em>tune</em> this hyperparameter to find the best value.</p>
+</div>
+<div id="build-a-model" class="section level2">
+<h2>Build a model</h2>
+<p>We can start by loading the <code>tidymodels</code> metapackage, and splitting our data into training and testing sets.</p>
+<pre class="r"><code>library(tidymodels)
+
+set.seed(123)
+tourney_split &lt;- tournament %&gt;%
+  filter(!is.na(seed)) %&gt;%
+  initial_split(strata = seed)
+
+tourney_train &lt;- training(tourney_split)
+tourney_test &lt;- testing(tourney_split)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>We are going to use <a href="https://www.tmwr.org/resampling.html">resampling</a> to evaluate model performance. A bootstrap sample is a sample that is the same size as the original data set that is made using replacement. This results in analysis samples that have multiple replicates of some of the original rows of the data.</p>
+<pre class="r"><code>set.seed(234)
+tourney_folds &lt;- bootstraps(tourney_train)
+tourney_folds</code></pre>
+<pre><code># Bootstrap sampling 
+# A tibble: 25 x 2
+   splits             id         
+   &lt;list&gt;             &lt;chr&gt;      
+ 1 &lt;split [1.6K/545]&gt; Bootstrap01
+ 2 &lt;split [1.6K/587]&gt; Bootstrap02
+ 3 &lt;split [1.6K/597]&gt; Bootstrap03
+ 4 &lt;split [1.6K/581]&gt; Bootstrap04
+ 5 &lt;split [1.6K/581]&gt; Bootstrap05
+ 6 &lt;split [1.6K/597]&gt; Bootstrap06
+ 7 &lt;split [1.6K/570]&gt; Bootstrap07
+ 8 &lt;split [1.6K/572]&gt; Bootstrap08
+ 9 &lt;split [1.6K/598]&gt; Bootstrap09
+10 &lt;split [1.6K/576]&gt; Bootstrap10
+# ... with 15 more rows</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Next we build a recipe for data preprocessing. It only has one step!</p>
+<ul>
+<li><p>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what our training data is.</p></li>
+<li><p>For our first and only step, we create new spline terms from the original <code>seed</code> variable. We don’t know what the best value for the degrees of freedom is, so we will <code>tune()</code> it. We can set an <code>id</code> value for the tuneable parameter to more easily keep track of it, if we want.</p></li>
+</ul>
+<p>The object <code>tourney_rec</code> is a recipe that has <strong>not</strong> been trained on data yet, and in fact, we can’t do this because we haven’t decided on a value for <code>deg_free</code>.</p>
+<pre class="r"><code>tourney_rec &lt;- recipe(tourney_w ~ seed, data = tourney_train) %&gt;%
+  step_ns(seed, deg_free = tune(&quot;seed_splines&quot;))
+
+tourney_rec</code></pre>
+<pre><code>Data Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor          1
+
+Operations:
+
+Natural Splines on seed</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Next, let’s create a model specification for a linear regression model, and the combine the recipe and model together in a <a href="https://www.tmwr.org/workflows.html">workflow</a>.</p>
+<pre class="r"><code>lm_spec &lt;- linear_reg() %&gt;% set_engine(&quot;lm&quot;)
+
+tourney_wf &lt;- workflow() %&gt;%
+  add_recipe(tourney_rec) %&gt;%
+  add_model(lm_spec)
+
+tourney_wf</code></pre>
+<pre><code>== Workflow =====================================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ---------------------------------
+1 Recipe Step
+
+* step_ns()
+
+-- Model ----------------------------------------
+Linear Regression Model Specification (regression)
+
+Computational engine: lm </code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>This workflow is almost ready to go, but we need to decide what values to try for the splines. There are several different ways to <a href="https://dials.tidymodels.org/">create tuning grids</a>, but if the grid you need is very simple, you might prefer to create it by hand.</p>
+<pre class="r"><code>spline_grid &lt;- tibble(seed_splines = c(1:4, 6, 8, 10))
+spline_grid %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">seed_splines</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Now we can put this all together! When we use <code>tune_grid()</code>, we will fit each of the options in the grid to each of the resamples.</p>
+<pre class="r"><code>doParallel::registerDoParallel()
+save_preds &lt;- control_grid(save_pred = TRUE)
+
+spline_rs &lt;-
+  tune_grid(
+    tourney_wf,
+    resamples = tourney_folds,
+    grid = spline_grid,
+    control = save_preds
+  )
+
+spline_rs</code></pre>
+<pre><code># Tuning results
+# Bootstrap sampling 
+# A tibble: 25 x 5
+   splits           id         .metrics        .notes         .predictions      
+   &lt;list&gt;           &lt;chr&gt;      &lt;list&gt;          &lt;list&gt;         &lt;list&gt;            
+ 1 &lt;split [1.6K/54~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [3,815 x ~
+ 2 &lt;split [1.6K/58~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [4,109 x ~
+ 3 &lt;split [1.6K/59~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [4,179 x ~
+ 4 &lt;split [1.6K/58~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [4,067 x ~
+ 5 &lt;split [1.6K/58~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [4,067 x ~
+ 6 &lt;split [1.6K/59~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [4,179 x ~
+ 7 &lt;split [1.6K/57~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [3,990 x ~
+ 8 &lt;split [1.6K/57~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [4,004 x ~
+ 9 &lt;split [1.6K/59~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [4,186 x ~
+10 &lt;split [1.6K/57~ Bootstrap~ &lt;tibble [14 x ~ &lt;tibble [0 x ~ &lt;tibble [4,032 x ~
+# ... with 15 more rows</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>We have now fit each of our candidate set of spline features to our resampled training set!</p>
+</div>
+<div id="evaluate-model" class="section level2">
+<h2>Evaluate model</h2>
+<p>Now let’s check out how we did.</p>
+<pre class="r"><code>collect_metrics(spline_rs) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">seed_splines</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.9820789</td>
+<td align="right">25</td>
+<td align="right">0.0074122</td>
+<td align="left">Recipe1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.4324241</td>
+<td align="right">25</td>
+<td align="right">0.0037218</td>
+<td align="left">Recipe1</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8963207</td>
+<td align="right">25</td>
+<td align="right">0.0074867</td>
+<td align="left">Recipe2</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5277060</td>
+<td align="right">25</td>
+<td align="right">0.0048634</td>
+<td align="left">Recipe2</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8705224</td>
+<td align="right">25</td>
+<td align="right">0.0072657</td>
+<td align="left">Recipe3</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5544773</td>
+<td align="right">25</td>
+<td align="right">0.0051758</td>
+<td align="left">Recipe3</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8690526</td>
+<td align="right">25</td>
+<td align="right">0.0073342</td>
+<td align="left">Recipe4</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5559348</td>
+<td align="right">25</td>
+<td align="right">0.0053810</td>
+<td align="left">Recipe4</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8682244</td>
+<td align="right">25</td>
+<td align="right">0.0071908</td>
+<td align="left">Recipe5</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5567226</td>
+<td align="right">25</td>
+<td align="right">0.0053598</td>
+<td align="left">Recipe5</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8671609</td>
+<td align="right">25</td>
+<td align="right">0.0070222</td>
+<td align="left">Recipe6</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5578574</td>
+<td align="right">25</td>
+<td align="right">0.0053565</td>
+<td align="left">Recipe6</td>
+</tr>
+<tr class="odd">
+<td align="right">10</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8679082</td>
+<td align="right">25</td>
+<td align="right">0.0069267</td>
+<td align="left">Recipe7</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5571631</td>
+<td align="right">25</td>
+<td align="right">0.0053763</td>
+<td align="left">Recipe7</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Looks like the model got better and better as we added more degrees of freedom, which isn’t too shocking. In what way did it change?</p>
+<pre class="r"><code>collect_metrics(spline_rs) %&gt;%
+  ggplot(aes(seed_splines, mean, color = .metric)) +
+  geom_line(size = 1.5, alpha = 0.5) +
+  geom_point(size = 3) +
+  facet_wrap(~.metric, ncol = 1, scales = &quot;free_y&quot;) +
+  labs(x = &quot;degrees of freedom&quot;, y = NULL) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-12-1.png" width="2400" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>The model improved a lot as we increased the degrees of freedom at the beginning, but then continuing to add more didn’t make much difference. We could choose the numerically optimal hyperparameter with <code>select_best()</code> but that would choose a more wiggly, complex model than we probably want. We can choose a <em>simpler</em> model that performs well, within some limits around the numerically optimal result. We could choose either by percent loss in performance or within one standard error in performance.</p>
+<pre class="r"><code>select_by_pct_loss(spline_rs,
+  metric = &quot;rmse&quot;,
+  limit = 5,
+  seed_splines
+) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">seed_splines</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+<th align="right">.best</th>
+<th align="right">.loss</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8963207</td>
+<td align="right">25</td>
+<td align="right">0.0074867</td>
+<td align="left">Recipe2</td>
+<td align="right">0.8671609</td>
+<td align="right">3.362669</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>select_by_one_std_err(spline_rs,
+  metric = &quot;rmse&quot;,
+  seed_splines
+) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">seed_splines</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+<th align="right">.best</th>
+<th align="right">.bound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8705224</td>
+<td align="right">25</td>
+<td align="right">0.0072657</td>
+<td align="left">Recipe3</td>
+<td align="right">0.8671609</td>
+<td align="right">0.8741831</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Looks like 2 or 3 degrees of freedom is a good option. Let’s go with 3, and update our tuneable workflow with this information and then fit it to our training data.</p>
+<pre class="r"><code>final_wf &lt;- finalize_workflow(tourney_wf, tibble(seed_splines = 3))
+tourney_fit &lt;- fit(final_wf, tourney_train)
+tourney_fit</code></pre>
+<pre><code>== Workflow [trained] ===========================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ---------------------------------
+1 Recipe Step
+
+* step_ns()
+
+-- Model ----------------------------------------
+
+Call:
+stats::lm(formula = ..y ~ ., data = data)
+
+Coefficients:
+(Intercept)    seed_ns_1    seed_ns_2    seed_ns_3  
+      3.272       -1.855       -5.590       -1.822  </code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>We can predict from this fitted workflow. For example, we can predict on the testing data and compute model performance.</p>
+<pre class="r"><code>tourney_test %&gt;%
+  bind_cols(predict(tourney_fit, tourney_test)) %&gt;%
+  metrics(tourney_w, .pred) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8771268</td>
+</tr>
+<tr class="even">
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5453362</td>
+</tr>
+<tr class="odd">
+<td align="left">mae</td>
+<td align="left">standard</td>
+<td align="right">0.6088415</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Pretty good! We can also predict on other kinds of new data. For example, let’s recreate the <a href="https://fivethirtyeight.com/features/tom-izzo-is-the-best-coach-in-modern-ncaa-tournament-history-by-far/">“average” column in the FiveThirtyEight table on expected wins</a>.</p>
+<pre class="r"><code>predict(tourney_fit, new_data = tibble(seed = 1:16)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">.pred</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3.2724387</td>
+</tr>
+<tr class="even">
+<td align="right">2.6120242</td>
+</tr>
+<tr class="odd">
+<td align="right">1.9906131</td>
+</tr>
+<tr class="even">
+<td align="right">1.4472091</td>
+</tr>
+<tr class="odd">
+<td align="right">1.0208157</td>
+</tr>
+<tr class="even">
+<td align="right">0.7377920</td>
+</tr>
+<tr class="odd">
+<td align="right">0.5739204</td>
+</tr>
+<tr class="even">
+<td align="right">0.4923387</td>
+</tr>
+<tr class="odd">
+<td align="right">0.4561848</td>
+</tr>
+<tr class="even">
+<td align="right">0.4285966</td>
+</tr>
+<tr class="odd">
+<td align="right">0.3796417</td>
+</tr>
+<tr class="even">
+<td align="right">0.3071066</td>
+</tr>
+<tr class="odd">
+<td align="right">0.2157073</td>
+</tr>
+<tr class="even">
+<td align="right">0.1101597</td>
+</tr>
+<tr class="odd">
+<td align="right">-0.0048199</td>
+</tr>
+<tr class="even">
+<td align="right">-0.1245156</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>It’s close! This isn’t a huge surprise, since we’re fitting curves to data in a straightforward way here, but it’s still good to see. You can also see why splines aren’t perfect for this task, because the prediction isn’t constrained to positive values.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.0 (2020-04-24)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] splines   stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] yardstick_0.0.7      workflows_0.2.0      tune_0.1.1          
+ [4] rsample_0.0.8        recipes_0.1.13       parsnip_0.1.3       
+ [7] modeldata_0.0.2      infer_0.5.3          dials_0.0.9         
+[10] scales_1.1.1         broom_0.7.1          tidymodels_0.1.1    
+[13] paletteer_1.2.0.9000 forcats_0.5.0        stringr_1.4.0       
+[16] dplyr_1.0.2          purrr_0.3.4          readr_1.4.0         
+[19] tidyr_1.1.2          tibble_3.0.3         ggplot2_3.3.2       
+[22] tidyverse_1.3.0      workflowr_1.6.2     
+
+loaded via a namespace (and not attached):
+  [1] colorspace_1.4-1   selectr_0.4-2      ellipsis_0.3.1    
+  [4] class_7.3-17       rprojroot_1.3-2    fs_1.5.0          
+  [7] rstudioapi_0.11    listenv_0.8.0      furrr_0.1.0       
+ [10] farver_2.0.3       scico_1.2.0        prodlim_2019.11.13
+ [13] fansi_0.4.1        lubridate_1.7.9    xml2_1.3.2        
+ [16] codetools_0.2-16   R.methodsS3_1.8.1  doParallel_1.0.15 
+ [19] knitr_1.30         jsonlite_1.7.1     pROC_1.16.2       
+ [22] dbplyr_1.4.4       R.oo_1.24.0        compiler_4.0.0    
+ [25] httr_1.4.2         backports_1.1.10   assertthat_0.2.1  
+ [28] Matrix_1.2-18      cli_2.0.2          later_1.1.0.1     
+ [31] htmltools_0.5.0    tools_4.0.0        gtable_0.3.0      
+ [34] glue_1.4.2         Rcpp_1.0.5         cellranger_1.1.0  
+ [37] styler_1.3.2       DiceDesign_1.8-1   vctrs_0.3.4       
+ [40] nlme_3.1-149       iterators_1.0.12   timeDate_3043.102 
+ [43] xfun_0.18          gower_0.2.2        globals_0.13.0    
+ [46] rvest_0.3.6        lifecycle_0.2.0    future_1.19.1     
+ [49] MASS_7.3-53        ipred_0.9-9        hms_0.5.3         
+ [52] promises_1.1.1     parallel_4.0.0     rematch2_2.1.2    
+ [55] prismatic_0.2.0    yaml_2.2.1         curl_4.3          
+ [58] rpart_4.1-15       stringi_1.5.3      highr_0.8         
+ [61] foreach_1.5.0      gifski_0.8.6       lhs_1.1.1         
+ [64] hardhat_0.1.4      lava_1.6.8         rlang_0.4.7       
+ [67] pkgconfig_2.0.3    evaluate_0.14      lattice_0.20-41   
+ [70] labeling_0.3       tidyselect_1.1.0   plyr_1.8.6        
+ [73] magrittr_1.5       tidytuesdayR_1.0.1 R6_2.4.1          
+ [76] generics_0.0.2     DBI_1.1.0          pillar_1.4.6      
+ [79] haven_2.3.1        withr_2.3.0        mgcv_1.8-33       
+ [82] survival_3.2-7     nnet_7.3-14        modelr_0.1.8      
+ [85] crayon_1.3.4       utf8_1.1.4         rmarkdown_2.4     
+ [88] emo_0.0.0.9000     usethis_1.6.3      grid_4.0.0        
+ [91] readxl_1.3.1       blob_1.2.1         git2r_0.27.1      
+ [94] reprex_0.3.0       digest_0.6.25      R.cache_0.14.0    
+ [97] httpuv_1.5.4       R.utils_2.10.1     munsell_0.5.0     
+[100] GPfit_1.0-8       </code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
