@@ -33,6 +33,15 @@ div.section {
 }
 </style>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
+
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -333,7 +342,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-24
+<strong>Last updated:</strong> 2020-10-07
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -364,16 +373,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec90a477f4b2f7d5fe2a194185396c1cb3b92f358targetblankc90a477a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/c90a477f4b2f7d5fe2a194185396c1cb3b92f358" target="_blank">c90a477</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreecc449bef5332b6dea94b950d2d0299d086266ac1targetblankcc449bea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/cc449bef5332b6dea94b950d2d0299d086266ac1" target="_blank">cc449be</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec90a477f4b2f7d5fe2a194185396c1cb3b92f358targetblankc90a477a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreecc449bef5332b6dea94b950d2d0299d086266ac1targetblankcc449bea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/c90a477f4b2f7d5fe2a194185396c1cb3b92f358" target="_blank">c90a477</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/cc449bef5332b6dea94b950d2d0299d086266ac1" target="_blank">cc449be</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -382,6 +391,11 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/NCAAWomensTournament.Rmd
+    Untracked:  analysis/NCAAWomensTournament_cache/
+    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -420,6 +434,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/cc449bef5332b6dea94b950d2d0299d086266ac1/analysis/index.Rmd" target="_blank">cc449be</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-07
+</td>
+<td>
+wflow_publish(“analysis/index.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/089769fb4dc8bd6c65db231a70a0e3de6ba007d1/docs/index.html" target="_blank">089769f</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -725,81 +773,86 @@ Start workflowr project.
 </colgroup>
 <tbody>
 <tr class="odd">
+<td>October 7, 2020</td>
+<td><a href="NCAAWomensTournament.html">NCAA Womens Tournament</a></td>
+<td>{tidymodels, splines}</td>
+</tr>
+<tr class="even">
 <td>September 24, 2020</td>
 <td><a href="Hops.html">Hops</a></td>
 <td>{rnassqs, blscrapeR}</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>September 22, 2020</td>
 <td><a href="HimalayanClimbers.html">Himalayan Climbers</a></td>
 <td>{ebbr, ggdark}</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>September 15, 2020</td>
 <td><a href="KidsSpending.html">Kids Health Spending</a></td>
 <td>{geojsonio, rgeos}</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>September 8, 2020</td>
 <td><a href="Friends.html">Friends</a></td>
 <td>{tidytext, tidylo}</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>August 31, 2020</td>
 <td><a href="CropYields.html">Crop Yields</a></td>
 <td>{ggrepel}</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>August 11, 2020</td>
 <td><a href="LastAirbender.html">Last Airbender</a></td>
 <td>{tidytext, tidylo, textfeatures}</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>July 15, 2020</td>
 <td><a href="Astronaut.html">Astronaut Missions</a></td>
 <td>{tidymodels, baguette}</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>March 17, 2020</td>
 <td><a href="TheOffice.html">The Office</a></td>
 <td>{tidymodels, tidytext}</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>July 7, 2020</td>
 <td><a href="Coffee.html">Coffee</a></td>
 <td>{widyr, tidytext}</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>May 5, 2020</td>
 <td><a href="AnimalCrossing.html">Animal Crossing</a></td>
 <td>{tidytext, stm, textrecipes, vip} topic modeling</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>April 21, 2020</td>
 <td><a href="GDPRfines.html">GDPR Fines</a></td>
 <td>{ggbeeswarm, rnaturalearth, tidymodels}</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>March 31, 2020</td>
 <td><a href="BeerProduction.html">Beer Production</a></td>
 <td>{gghighlight, tidymetrics}</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>March 24, 2020</td>
 <td><a href="BrainInjury.html">Brain Injury</a></td>
 <td>{gganimate, vip, tidymodels}</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>March 10, 2020</td>
 <td><a href="CollegeTuitionandDiversity.html">College Tuition</a></td>
 <td>{tidymodels}</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>February 4, 2020</td>
 <td><a href="NFLattendance.html">NFL Attendance</a></td>
 <td>{tidymodels}</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>November 26, 2019</td>
 <td><a href="StudentDebt.html">Student Debt</a></td>
 <td>{cowplot, ggrepel, dygraphs}</td>
