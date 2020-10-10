@@ -13,9 +13,15 @@ editor_options:
 This week's data comes from the Himalayan Database, a compilation of records for all expeditions that have climbed in the Nepal Himalaya mountain chain. The data covers all expeditions from 1905 thru the spring of 2019 for more than 465 significant peaks in Nepal.
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE,
-                      fig.width = 12,
-                      fig.height = 7.402)
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 8, 
+                      fig.height = 5)
 
 library(tidyverse)
 library(scales)
@@ -25,14 +31,14 @@ library(ggdark)
 
 library(gt)
 
-theme_set(theme_minimal()+
+theme_set(theme_minimal() +
             theme(plot.title.position = "plot"))
 
 pal <- paletteer_d("dutchmasters::milkmaid")
 
 ```
 
-```{r Load}
+```{r Load, include = FALSE}
 tt <- tidytuesdayR::tt_load("2020-09-22")
 
 peaks <- tt$peaks %>% 
@@ -123,21 +129,21 @@ For further reading: Introduction to Empirical Bayes: Examples from Baseball Sta
 library(ebbr)
 # empirical bayes for binomials in R
 
-peaks_eb<-peak_summarized %>% 
+peaks_eb <- peak_summarized %>% 
   filter(members >= 20) %>% 
   arrange(desc(pct_death)) %>% 
   add_ebb_estimate(member_deaths, members) 
 
 peaks_eb %>% 
-  ggplot(aes(pct_death, .fitted))+
-  geom_point(aes(size = members))+
-  geom_abline(color = "red")+
-  scale_x_continuous(labels = scales::percent_format(accuracy = 1))+
-  scale_y_continuous(labels = percent_format(accuracy = 1))+
-  scale_color_continuous(trans = "log10")+
+  ggplot(aes(pct_death, .fitted)) +
+  geom_point(aes(size = members)) +
+  geom_abline(color = "red") +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_color_continuous(trans = "log10") +
   labs(x = "Death Rate (raw)",
        y = "Adjusted Estimate of Death Rate using empirical Bayes",
-       title = "How much adjustment compression using priors?")+
+       title = "How much adjustment compression using priors?") +
   theme(legend.position = c(0.8, 0.2))
 ```
 
@@ -148,15 +154,15 @@ peaks_eb %>%
   filter(members >= 500) %>% 
   arrange(desc(.fitted)) %>% 
   mutate(peak_name = fct_reorder(peak_name, .fitted)) %>% 
-  ggplot(aes(.fitted, peak_name))+
-  geom_point(aes(size = members))+
-  geom_errorbarh(aes(xmin = .low, xmax = .high), color = "gray")+
-  expand_limits(x = 0)+
-  scale_x_continuous(labels = percent_format(accuracy = 1))+
+  ggplot(aes(.fitted, peak_name)) +
+  geom_point(aes(size = members)) +
+  geom_errorbarh(aes(xmin = .low, xmax = .high), color = "gray") +
+  expand_limits(x = 0) +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
   labs(subtitle = "Estimate of Death Rate using empirical Bayes with 95% credible interval",
        y = "", x = "",
        title = "Deadliest Himalayan Peaks with more than 500 climbers",
-       caption = "Visual: @jim_gruman, Data: the Himalayan Database")+
+       caption = "Visual: @jim_gruman, Data: the Himalayan Database") +
   theme(plot.title.position = "plot",
         panel.grid.major.y = element_blank(),
         legend.position = c(0.8, 0.2))
@@ -168,8 +174,8 @@ How does death rate relate to elevation?
 ```{r}
 peaks_eb %>% 
   filter(members >= 500) %>% 
-  ggplot(aes(height_meters, .fitted))+
-  geom_point(aes(size = members))+
+  ggplot(aes(height_meters, .fitted)) +
+  geom_point(aes(size = members)) +
   labs(title = "There does not appear to be a relationship between death rate and height")
 ```
 
@@ -182,12 +188,12 @@ expeditions %>%
          !is.na(peak_name)) %>% 
   mutate(peak_name = fct_lump(peak_name, 10),
          peak_name = fct_reorder(peak_name, days_to_highpoint, mean)) %>% 
-  ggplot(aes(days_to_highpoint, peak_name))+
-  geom_boxplot()+
+  ggplot(aes(days_to_highpoint, peak_name)) +
+  geom_boxplot() +
   labs(title = "Duration to successfully summit the most popular Himalayan peaks",
        caption = "Visual: @jim_gruman, Data:  the Himalayan Database",
        x = "Days from basecamp to summit",
-       y = "")+
+       y = "") +
   theme(panel.grid.major.y = element_blank())
   
 ```
@@ -197,14 +203,14 @@ expeditions %>%
 ```{r}
 expeditions %>% 
   filter(peak_name == "Everest") %>% 
-  ggplot(aes(days_to_highpoint, fill = success))+
-  geom_density(alpha = 0.3)+
-  scale_y_continuous(labels = percent_format(accuracy = 1))+
+  ggplot(aes(days_to_highpoint, fill = success)) +
+  geom_density(alpha = 0.3) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
   labs(title = "Duration to successfully summit Everest",
        caption = "Visual: @jim_gruman, Data:  the Himalayan Database",
        x = "Days from basecamp to summit",
        y = "Percentage",
-       fill = "")+
+       fill = "") +
   theme(panel.grid.major.y = element_blank(),
         legend.position = c(0.6,0.5),
         legend.background = element_rect(color = "white"))
@@ -215,13 +221,13 @@ When have the Everest expeditions been successful?
 
 ```{r}
 expeditions %>% 
-  ggplot(aes(year, fill = success))+
-  geom_histogram(alpha = 0.3)+
+  ggplot(aes(year, fill = success)) + 
+  geom_histogram(alpha = 0.3) +
   labs(title = "Year of Everest climbs",
        caption = "Visual: @jim_gruman, Data:  the Himalayan Database",
        x = "Year",
        y = "Climbers",
-       fill = "")+
+       fill = "") +
   theme(panel.grid.major.y = element_blank(),
         legend.position = c(0.2,0.5),
         legend.background = element_rect(color = "white"))
@@ -238,34 +244,34 @@ everest_by_decade <- expeditions %>%
 
 everest_by_decade %>% 
   ggplot(aes(decade, pct_death)) +
-  geom_line(aes(color = "All climbers"))+
+  geom_line(aes(color = "All climbers")) +
   geom_line(aes(y = pct_hired_staff_deaths, color = "Hired Staff")) +
-  geom_point(aes(color = "All climbers", size = members))+
+  geom_point(aes(color = "All climbers", size = members)) +
   geom_point(aes(y = pct_hired_staff_deaths, color = "Hired Staff", size = hired_staff)) +
-  scale_y_continuous(labels = percent_format(accuracy = .1))+
+  scale_y_continuous(labels = percent_format(accuracy = .1)) +
   scale_x_continuous(breaks = seq(1970, 2010, 10),
-                     labels = c("<= 1980",seq(1980, 2010, 10)))+
-  expand_limits(y = 0)+
+                     labels = c("<= 1980",seq(1980, 2010, 10))) +
+  expand_limits(y = 0) +
   labs(x = "Decade", color = "",
        y = "Death Rate",
        title = "Everest has been getting less deadly over time",
        subtitle = "Though trends have reversed for hired staff",
-       size = "Number of climbers",caption = "Visual: @jim_gruman, Data:  the Himalayan Database")+
+       size = "Number of climbers",caption = "Visual: @jim_gruman, Data:  the Himalayan Database") +
   theme(legend.position = c(0.2, 0.4),
         legend.background = element_rect(color = "white"))
 
 everest_by_decade %>% 
   ggplot(aes(decade, success_rate)) +
-  geom_line()+
+  geom_line() +
   geom_point(aes(size = n_climbs)) +
-  scale_y_continuous(labels = percent_format(accuracy = 1))+
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
   scale_x_continuous(breaks = seq(1970, 2010, 10),
-                     labels = c("<= 1980",seq(1980, 2010, 10)))+
-  expand_limits(y = 0)+
+                     labels = c("<= 1980",seq(1980, 2010, 10))) +
+  expand_limits(y = 0) +
   labs(x = "Decade",
        y = "Success Rate",
        title = "The Everest summit success rate has been increasing",
-       size = "Number of climbs",caption = "Visual: @jim_gruman, Data:  the Himalayan Database")+
+       size = "Number of climbs",caption = "Visual: @jim_gruman, Data:  the Himalayan Database") +
   theme(legend.position = c(0.7, 0.3),
         legend.background = element_rect(color = "white"))
   
@@ -344,7 +350,7 @@ model %>%
   ggplot(aes(estimate, term)) +
   geom_point() +
   geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), color = "gray") +
-  geom_vline(xintercept = 1, color = "red")+
+  geom_vline(xintercept = 1, color = "red") +
   labs(title = "Relative risk factors for death on Everest summits",
        caption = "Visual: @jim_gruman, Data:  the Himalayan Database",
        x = "Exponentiated estimate for log odds")
@@ -364,7 +370,7 @@ top_peaks <- members %>%
   slice(1:20) %>% 
   pull(peak_name)
 
-prop_women<- members %>% 
+prop_women <- members %>% 
   filter(peak_name %in% top_peaks) %>% 
   count(peak_name, year, sex) %>% 
   pivot_wider(names_from = sex, values_from = n, names_prefix = "num_") %>% 
@@ -378,7 +384,7 @@ prop_women<- members %>%
 Calculate proportion of female climbers per peak per year
 
 ```{r}
-prop_women<- members %>% 
+prop_women <- members %>% 
   filter(peak_name %in% top_peaks) %>% 
   count(peak_name, year, sex) %>% 
   pivot_wider(names_from = sex, values_from = n, names_prefix = "num_") %>% 
@@ -444,6 +450,7 @@ members %>%
   ) %>%
   ggplot(aes(season, percent, fill = season)) +
   geom_col(alpha = 0.8, position = "dodge", show.legend = FALSE) +
+  scale_fill_paletteer_d("ggsci::lanonc_lancet") +
   scale_y_continuous(labels = scales::percent_format()) +
   facet_wrap(~died, scales = "free") +
   labs(x = NULL, y = "% of expedition members")
@@ -468,8 +475,9 @@ members_df <- members %>%
 
 We can start by loading the tidymodels metapackage, and splitting our data into training and testing sets.
 
-```{r}
+```{r, include = FALSE}
 library(tidymodels)
+library(themis)
 
 members_split <- initial_split(members_df, strata = died)
 members_train <- training(members_split)
@@ -497,8 +505,6 @@ Next we build a recipe for data preprocessing.
 The object members_rec is a recipe that has not been trained on data yet (for example, which categorical levels should be collapsed has not been calculated).
 
 ```{r}
-library(themis)
-
 members_rec <- recipe(died ~ ., data = members_train) %>%
   step_medianimpute(age) %>%
   step_other(peak_id, citizenship) %>%
@@ -550,7 +556,6 @@ glm_rs <- members_wf %>%
     control = control_resamples(save_pred = TRUE)
   )
 
-glm_rs
 ```
 
 Second, we can fit the random forest model.
@@ -564,7 +569,6 @@ rf_rs <- members_wf %>%
     control = control_resamples(save_pred = TRUE)
   )
 
-rf_rs
 ```
 
 We have fit each of our candidate models to our resampled training set!
@@ -594,7 +598,7 @@ glm_rs %>%
 
 ```{r}
 rf_rs %>%
-  conf_mat_resampled()%>% knitr::kable()
+  conf_mat_resampled() %>% knitr::kable()
 ```
 
 The random forest model is quite bad at identifying which expedition members died, while the logistic regression model does about the same for both classes.
