@@ -1,10 +1,14 @@
 ---
-title: "KidsSpending"
+title: "Kids Spending"
 date: "September 22, 2020"
 author: "Jim Gruman"
 output:
-  workflowr::wflow_html: default
-  code_folding: hide
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
@@ -12,10 +16,18 @@ editor_options:
 The data for this week was provided by the US Census Bureau from their State and Local Government finance survey
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
 ```
 
-```{r prep, message=FALSE, warning=TRUE}
+```{r prep, message=FALSE}
 ## packages
 library(workflowr)
 library(tidyverse)
@@ -31,7 +43,9 @@ sysfonts::font_add(family = "IBM Plex Sans", regular = "C:/Users/jimgr/Documents
 theme_set(theme_void(base_family =  "IBM Plex Sans"))
 ```
 
-```{r data}
+Import the data
+
+```{r data, include = FALSE}
 
 tt <- tidytuesdayR::tt_load("2020-09-15")
 
@@ -99,13 +113,12 @@ df_kids_labels <-
   )
   
 ## combine data
-df_kids_hex_buffer <-
-  map_hex_buffer_fortified %>%
+df_kids_hex_buffer <- map_hex_buffer_fortified %>%
   left_join(df_kids_health, by = c("id" = "state")) 
 ```
 
-```{r plot, fig.width = 12, fig.height = 7.402}
-p1 <- ggplot(data = df_kids_tl,
+```{r plot}
+ggplot(data = df_kids_tl,
        aes(year_x, inf_y, group = state)) +
   geom_polygon(
     data = df_kids_hex_buffer,
@@ -196,16 +209,3 @@ p1 <- ggplot(data = df_kids_tl,
                                     margin = margin(b = 10, t = 15)))
 ```
 
-
-```{r convert-to-png}
-## convert PDFs to PNGs
-ggsave(filename = "docs/assets/kidsspending.pdf",plot = p1,  width = 12, height = 7.402, device = cairo_pdf)
-
-pdf_convert(pdf = "docs/assets/kidsspending.pdf", 
-            filenames = "docs/assets/kidsspending.png",
-            format = "png", dpi = 500)
-```
-
-```{r}
-knitr::include_graphics("assets/kidsspending.png", error = FALSE)
-```
