@@ -36,6 +36,15 @@ div.section {
 }
 </style>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
+
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -349,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-24
+<strong>Last updated:</strong> 2020-10-09
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -440,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree23786b13712d9ceb4fb75a56715d938d2108b03ctargetblank23786b1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/23786b13712d9ceb4fb75a56715d938d2108b03c" target="_blank">23786b1</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea13fc609bc59e8171df21a7cf10af1a821737a49targetblanka13fc60a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a13fc609bc59e8171df21a7cf10af1a821737a49" target="_blank">a13fc60</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree23786b13712d9ceb4fb75a56715d938d2108b03ctargetblank23786b1a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea13fc609bc59e8171df21a7cf10af1a821737a49targetblanka13fc60a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/23786b13712d9ceb4fb75a56715d938d2108b03c" target="_blank">23786b1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a13fc609bc59e8171df21a7cf10af1a821737a49" target="_blank">a13fc60</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -459,8 +468,8 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
-Unstaged changes:
-    Modified:   analysis/index.Rmd
+Untracked files:
+    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -504,6 +513,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/a13fc609bc59e8171df21a7cf10af1a821737a49/analysis/HimalayanClimbers.Rmd" target="_blank">a13fc60</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-09
+</td>
+<td>
+wflow_publish(“analysis/HimalayanClimbers.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/c799b3566c61c330a138ad4c46d93f70a71a057f/docs/HimalayanClimbers.html" target="_blank">c799b35</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/opus1993/myTidyTuesday/blob/23786b13712d9ceb4fb75a56715d938d2108b03c/analysis/HimalayanClimbers.Rmd" target="_blank">23786b1</a>
 </td>
 <td>
@@ -524,46 +567,45 @@ wflow_publish(“analysis/HimalayanClimbers.Rmd”)
 </div>
 </div>
 <p>This week’s data comes from the Himalayan Database, a compilation of records for all expeditions that have climbed in the Nepal Himalaya mountain chain. The data covers all expeditions from 1905 thru the spring of 2019 for more than 465 significant peaks in Nepal.</p>
-<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2020-09-22&quot;)</code></pre>
-<pre><code>--- Compiling #TidyTuesday Information for 2020-09-22 ----</code></pre>
-<pre><code>--- There are 3 files available ---</code></pre>
-<pre><code>--- Starting Download ---</code></pre>
-<pre><code>
-    Downloading file 1 of 3: `peaks.csv`
-    Downloading file 2 of 3: `members.csv`
-    Downloading file 3 of 3: `expeditions.csv`</code></pre>
-<pre><code>--- Download complete ---</code></pre>
-<pre class="r"><code>peaks &lt;- tt$peaks %&gt;% 
-  rename(height_meters = height_metres)</code></pre>
 <p>Let’s first explore the details of the mountain peaks</p>
-<pre class="r"><code>peaks %&gt;% 
+<pre class="r"><code>peaks %&gt;%
   arrange(desc(height_meters)) %&gt;%
-  head(20) %&gt;% 
+  head(20) %&gt;%
   mutate(peak_name = fct_reorder(peak_name, height_meters)) %&gt;%
   ggplot(aes(height_meters, peak_name, fill = climbing_status)) +
   geom_col() +
   scale_fill_manual(values = pal[1:2]) +
-  labs(x = &quot;Height (meters)&quot;,
-       y = &quot;Elevation&quot;,
-       title = &quot;Top 20 Himalayan Peaks&quot;,
-       fill = &quot;&quot;) +
-  theme(plot.title.position = &quot;plot&quot;,
-        legend.position = &quot;top&quot;,
-        panel.grid.major.y = element_blank())</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-1-1.png" width="1152" style="display: block; margin: auto;" /></p>
+  labs(
+    x = &quot;Height (meters)&quot;,
+    y = &quot;Elevation&quot;,
+    title = &quot;Top 20 Himalayan Peaks&quot;,
+    fill = &quot;&quot;
+  ) +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    legend.position = &quot;top&quot;,
+    panel.grid.major.y = element_blank()
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-1-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <p>Let’s tidy some of the expeditions dataset</p>
-<pre class="r"><code>na_reasons &lt;- c(&quot;Unknown&quot;,
-                &quot;Attempt rumoured&quot;,
-                &quot;Did not attempt climb&quot;, 
-                &quot;Did not reach base camp&quot;)
+<pre class="r"><code>na_reasons &lt;- c(
+  &quot;Unknown&quot;,
+  &quot;Attempt rumoured&quot;,
+  &quot;Did not attempt climb&quot;,
+  &quot;Did not reach base camp&quot;
+)
 
-expeditions &lt;- tt$expeditions %&gt;% 
-  mutate(time_to_highpoint = highpoint_date -
-           basecamp_date,
-         success = case_when(str_detect(termination_reason, &quot;Success&quot;) ~ &quot;Success&quot;,
-                             termination_reason %in% na_reasons ~ &quot;Other&quot;, 
-                             TRUE ~ &quot;Failure&quot;),
-         days_to_highpoint = as.integer(highpoint_date - basecamp_date))</code></pre>
+expeditions &lt;- tt$expeditions %&gt;%
+  mutate(
+    time_to_highpoint = highpoint_date -
+      basecamp_date,
+    success = case_when(
+      str_detect(termination_reason, &quot;Success&quot;) ~ &quot;Success&quot;,
+      termination_reason %in% na_reasons ~ &quot;Other&quot;,
+      TRUE ~ &quot;Failure&quot;
+    ),
+    days_to_highpoint = as.integer(highpoint_date - basecamp_date)
+  )</code></pre>
 <p>Other questions that could be posed and possible answered with this dataset:</p>
 <ul>
 <li><p>Fraction of successful climbs per year</p></li>
@@ -573,24 +615,27 @@ expeditions &lt;- tt$expeditions %&gt;%
 <li><p>Correlation between frequency of expeditions and death rate</p></li>
 <li><p>Which are the most dangerous peaks that have been climbed?</p></li>
 </ul>
-<pre class="r"><code>summarize_expeditions &lt;- function(tbl){
-  tbl %&gt;% 
-    summarize(first_climb = min(year),
-            success_rate = mean(success == &quot;Success&quot;),
-            n_climbs = n(),
-            across(members:hired_staff_deaths, sum)) %&gt;% 
-      mutate(pct_death = member_deaths / members,
-         pct_hired_staff_deaths = hired_staff_deaths / hired_staff)
+<pre class="r"><code>summarize_expeditions &lt;- function(tbl) {
+  tbl %&gt;%
+    summarize(
+      first_climb = min(year),
+      success_rate = mean(success == &quot;Success&quot;),
+      n_climbs = n(),
+      across(members:hired_staff_deaths, sum)
+    ) %&gt;%
+    mutate(
+      pct_death = member_deaths / members,
+      pct_hired_staff_deaths = hired_staff_deaths / hired_staff
+    )
 }
 
 
-peak_summarized &lt;- expeditions  %&gt;% 
-  group_by(peak_id, peak_name) %&gt;% 
-  summarize_expeditions() %&gt;% 
-  ungroup() %&gt;% 
-  arrange(desc(n_climbs)) %&gt;% 
+peak_summarized &lt;- expeditions %&gt;%
+  group_by(peak_id, peak_name) %&gt;%
+  summarize_expeditions() %&gt;%
+  ungroup() %&gt;%
+  arrange(desc(n_climbs)) %&gt;%
   inner_join(peaks %&gt;% select(peak_id, height_meters), by = &quot;peak_id&quot;)</code></pre>
-<pre><code>`summarise()` regrouping output by &#39;peak_id&#39; (override with `.groups` argument)</code></pre>
 <p>What are the deadliest mountains?</p>
 <p>Answering the question directly from the proportions may be misleading because some mountains have so few climbers.</p>
 <p>Given the limited amount of data available on some mountains, the death rate is adjusted by adding the available priors from all climbing. The model could be further refined by regressing on information about oxygen use or other features.</p>
@@ -598,136 +643,167 @@ peak_summarized &lt;- expeditions  %&gt;%
 <pre class="r"><code>library(ebbr)
 # empirical bayes for binomials in R
 
-peaks_eb&lt;-peak_summarized %&gt;% 
-  filter(members &gt;= 20) %&gt;% 
-  arrange(desc(pct_death)) %&gt;% 
-  add_ebb_estimate(member_deaths, members) 
+peaks_eb &lt;- peak_summarized %&gt;%
+  filter(members &gt;= 20) %&gt;%
+  arrange(desc(pct_death)) %&gt;%
+  add_ebb_estimate(member_deaths, members)
 
-peaks_eb %&gt;% 
-  ggplot(aes(pct_death, .fitted))+
-  geom_point(aes(size = members))+
-  geom_abline(color = &quot;red&quot;)+
-  scale_x_continuous(labels = scales::percent_format(accuracy = 1))+
-  scale_y_continuous(labels = percent_format(accuracy = 1))+
-  scale_color_continuous(trans = &quot;log10&quot;)+
-  labs(x = &quot;Death Rate (raw)&quot;,
-       y = &quot;Adjusted Estimate of Death Rate using empirical Bayes&quot;,
-       title = &quot;How much adjustment compression using priors?&quot;)+
+peaks_eb %&gt;%
+  ggplot(aes(pct_death, .fitted)) +
+  geom_point(aes(size = members)) +
+  geom_abline(color = &quot;red&quot;) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_color_continuous(trans = &quot;log10&quot;) +
+  labs(
+    x = &quot;Death Rate (raw)&quot;,
+    y = &quot;Adjusted Estimate of Death Rate using empirical Bayes&quot;,
+    title = &quot;How much adjustment compression using priors?&quot;
+  ) +
   theme(legend.position = c(0.8, 0.2))</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-4-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>peaks_eb %&gt;% 
-  filter(members &gt;= 500) %&gt;% 
-  arrange(desc(.fitted)) %&gt;% 
-  mutate(peak_name = fct_reorder(peak_name, .fitted)) %&gt;% 
-  ggplot(aes(.fitted, peak_name))+
-  geom_point(aes(size = members))+
-  geom_errorbarh(aes(xmin = .low, xmax = .high), color = &quot;gray&quot;)+
-  expand_limits(x = 0)+
-  scale_x_continuous(labels = percent_format(accuracy = 1))+
-  labs(subtitle = &quot;Estimate of Death Rate using empirical Bayes with 95% credible interval&quot;,
-       y = &quot;&quot;, x = &quot;&quot;,
-       title = &quot;Deadliest Himalayan Peaks with more than 500 climbers&quot;,
-       caption = &quot;Visual: @jim_gruman, Data: the Himalayan Database&quot;)+
-  theme(plot.title.position = &quot;plot&quot;,
-        panel.grid.major.y = element_blank(),
-        legend.position = c(0.8, 0.2))</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-4-1.png" width="2400" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>peaks_eb %&gt;%
+  filter(members &gt;= 500) %&gt;%
+  arrange(desc(.fitted)) %&gt;%
+  mutate(peak_name = fct_reorder(peak_name, .fitted)) %&gt;%
+  ggplot(aes(.fitted, peak_name)) +
+  geom_point(aes(size = members)) +
+  geom_errorbarh(aes(xmin = .low, xmax = .high), color = &quot;gray&quot;) +
+  expand_limits(x = 0) +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  labs(
+    subtitle = &quot;Estimate of Death Rate using empirical Bayes with 95% credible interval&quot;,
+    y = &quot;&quot;, x = &quot;&quot;,
+    title = &quot;Deadliest Himalayan Peaks with more than 500 climbers&quot;,
+    caption = &quot;Visual: @jim_gruman, Data: the Himalayan Database&quot;
+  ) +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    panel.grid.major.y = element_blank(),
+    legend.position = c(0.8, 0.2)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-5-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <p>How does death rate relate to elevation?</p>
-<pre class="r"><code>peaks_eb %&gt;% 
-  filter(members &gt;= 500) %&gt;% 
-  ggplot(aes(height_meters, .fitted))+
-  geom_point(aes(size = members))+
+<pre class="r"><code>peaks_eb %&gt;%
+  filter(members &gt;= 500) %&gt;%
+  ggplot(aes(height_meters, .fitted)) +
+  geom_point(aes(size = members)) +
   labs(title = &quot;There does not appear to be a relationship between death rate and height&quot;)</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-6-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <p>What is the distance between the base camp and the summit?</p>
-<pre class="r"><code>expeditions %&gt;% 
-  filter(success == &quot;Success&quot;, 
-         !is.na(days_to_highpoint),
-         !is.na(peak_name)) %&gt;% 
-  mutate(peak_name = fct_lump(peak_name, 10),
-         peak_name = fct_reorder(peak_name, days_to_highpoint, mean)) %&gt;% 
-  ggplot(aes(days_to_highpoint, peak_name))+
-  geom_boxplot()+
-  labs(title = &quot;Duration to successfully summit the most popular Himalayan peaks&quot;,
-       caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
-       x = &quot;Days from basecamp to summit&quot;,
-       y = &quot;&quot;)+
+<pre class="r"><code>expeditions %&gt;%
+  filter(
+    success == &quot;Success&quot;,
+    !is.na(days_to_highpoint),
+    !is.na(peak_name)
+  ) %&gt;%
+  mutate(
+    peak_name = fct_lump(peak_name, 10),
+    peak_name = fct_reorder(peak_name, days_to_highpoint, mean)
+  ) %&gt;%
+  ggplot(aes(days_to_highpoint, peak_name)) +
+  geom_boxplot() +
+  labs(
+    title = &quot;Duration to successfully summit the most popular Himalayan peaks&quot;,
+    caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
+    x = &quot;Days from basecamp to summit&quot;,
+    y = &quot;&quot;
+  ) +
   theme(panel.grid.major.y = element_blank())</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-7-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <div id="explore-everest-more-closely" class="section level2">
 <h2>Explore everest more closely</h2>
-<pre class="r"><code>expeditions %&gt;% 
-  filter(peak_name == &quot;Everest&quot;) %&gt;% 
-  ggplot(aes(days_to_highpoint, fill = success))+
-  geom_density(alpha = 0.3)+
-  scale_y_continuous(labels = percent_format(accuracy = 1))+
-  labs(title = &quot;Duration to successfully summit Everest&quot;,
-       caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
-       x = &quot;Days from basecamp to summit&quot;,
-       y = &quot;Percentage&quot;,
-       fill = &quot;&quot;)+
-  theme(panel.grid.major.y = element_blank(),
-        legend.position = c(0.6,0.5),
-        legend.background = element_rect(color = &quot;white&quot;))</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-8-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>expeditions %&gt;%
+  filter(peak_name == &quot;Everest&quot;) %&gt;%
+  ggplot(aes(days_to_highpoint, fill = success)) +
+  geom_density(alpha = 0.3) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  labs(
+    title = &quot;Duration to successfully summit Everest&quot;,
+    caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
+    x = &quot;Days from basecamp to summit&quot;,
+    y = &quot;Percentage&quot;,
+    fill = &quot;&quot;
+  ) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    legend.position = c(0.6, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-8-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <p>When have the Everest expeditions been successful?</p>
-<pre class="r"><code>expeditions %&gt;% 
-  ggplot(aes(year, fill = success))+
-  geom_histogram(alpha = 0.3)+
-  labs(title = &quot;Year of Everest climbs&quot;,
-       caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
-       x = &quot;Year&quot;,
-       y = &quot;Climbers&quot;,
-       fill = &quot;&quot;)+
-  theme(panel.grid.major.y = element_blank(),
-        legend.position = c(0.2,0.5),
-        legend.background = element_rect(color = &quot;white&quot;))</code></pre>
-<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-9-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>expeditions %&gt;%
+  ggplot(aes(year, fill = success)) +
+  geom_histogram(alpha = 0.3) +
+  labs(
+    title = &quot;Year of Everest climbs&quot;,
+    caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Climbers&quot;,
+    fill = &quot;&quot;
+  ) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    legend.position = c(0.2, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-9-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <p>What is the median amount of time to climb?</p>
-<pre class="r"><code>everest_by_decade &lt;- expeditions %&gt;% 
-  filter(peak_name  == &quot;Everest&quot;) %&gt;% 
-  mutate(decade = pmax(10 * (year %/% 10), 1970)) %&gt;%  # limp prior to 1970
-  group_by(decade, peak_name) %&gt;% 
-  summarize_expeditions() </code></pre>
-<pre><code>`summarise()` regrouping output by &#39;decade&#39; (override with `.groups` argument)</code></pre>
-<pre class="r"><code>everest_by_decade %&gt;% 
+<pre class="r"><code>everest_by_decade &lt;- expeditions %&gt;%
+  filter(peak_name == &quot;Everest&quot;) %&gt;%
+  mutate(decade = pmax(10 * (year %/% 10), 1970)) %&gt;% # limp prior to 1970
+  group_by(decade, peak_name) %&gt;%
+  summarize_expeditions()
+
+everest_by_decade %&gt;%
   ggplot(aes(decade, pct_death)) +
-  geom_line(aes(color = &quot;All climbers&quot;))+
+  geom_line(aes(color = &quot;All climbers&quot;)) +
   geom_line(aes(y = pct_hired_staff_deaths, color = &quot;Hired Staff&quot;)) +
-  geom_point(aes(color = &quot;All climbers&quot;, size = members))+
+  geom_point(aes(color = &quot;All climbers&quot;, size = members)) +
   geom_point(aes(y = pct_hired_staff_deaths, color = &quot;Hired Staff&quot;, size = hired_staff)) +
-  scale_y_continuous(labels = percent_format(accuracy = .1))+
-  scale_x_continuous(breaks = seq(1970, 2010, 10),
-                     labels = c(&quot;&lt;= 1980&quot;,seq(1980, 2010, 10)))+
-  expand_limits(y = 0)+
-  labs(x = &quot;Decade&quot;, color = &quot;&quot;,
-       y = &quot;Death Rate&quot;,
-       title = &quot;Everest has been getting less deadly over time&quot;,
-       subtitle = &quot;Though trends have reversed for hired staff&quot;,
-       size = &quot;Number of climbers&quot;,caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;)+
-  theme(legend.position = c(0.2, 0.4),
-        legend.background = element_rect(color = &quot;white&quot;))</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-10-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>everest_by_decade %&gt;% 
+  scale_y_continuous(labels = percent_format(accuracy = .1)) +
+  scale_x_continuous(
+    breaks = seq(1970, 2010, 10),
+    labels = c(&quot;&lt;= 1980&quot;, seq(1980, 2010, 10))
+  ) +
+  expand_limits(y = 0) +
+  labs(
+    x = &quot;Decade&quot;, color = &quot;&quot;,
+    y = &quot;Death Rate&quot;,
+    title = &quot;Everest has been getting less deadly over time&quot;,
+    subtitle = &quot;Though trends have reversed for hired staff&quot;,
+    size = &quot;Number of climbers&quot;, caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;
+  ) +
+  theme(
+    legend.position = c(0.2, 0.4),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-10-1.png" width="2400" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>everest_by_decade %&gt;%
   ggplot(aes(decade, success_rate)) +
-  geom_line()+
+  geom_line() +
   geom_point(aes(size = n_climbs)) +
-  scale_y_continuous(labels = percent_format(accuracy = 1))+
-  scale_x_continuous(breaks = seq(1970, 2010, 10),
-                     labels = c(&quot;&lt;= 1980&quot;,seq(1980, 2010, 10)))+
-  expand_limits(y = 0)+
-  labs(x = &quot;Decade&quot;,
-       y = &quot;Success Rate&quot;,
-       title = &quot;The Everest summit success rate has been increasing&quot;,
-       size = &quot;Number of climbs&quot;,caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;)+
-  theme(legend.position = c(0.7, 0.3),
-        legend.background = element_rect(color = &quot;white&quot;))</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-10-2.png" width="1152" style="display: block; margin: auto;" /></p>
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_x_continuous(
+    breaks = seq(1970, 2010, 10),
+    labels = c(&quot;&lt;= 1980&quot;, seq(1980, 2010, 10))
+  ) +
+  expand_limits(y = 0) +
+  labs(
+    x = &quot;Decade&quot;,
+    y = &quot;Success Rate&quot;,
+    title = &quot;The Everest summit success rate has been increasing&quot;,
+    size = &quot;Number of climbs&quot;, caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;
+  ) +
+  theme(
+    legend.position = c(0.7, 0.3),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-10-2.png" width="2400" style="display: block; margin: auto;" /></p>
 <p>Examine the death probability per expedition member. What causes climber fatalities?</p>
 <pre class="r"><code>members &lt;- tt$members
 
-members %&gt;% 
+members %&gt;%
   count(died, death_cause) %&gt;%
   knitr::kable()</code></pre>
 <table>
@@ -806,7 +882,7 @@ members %&gt;%
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>members %&gt;% 
+<pre class="r"><code>members %&gt;%
   count(sex) %&gt;%
   knitr::kable()</code></pre>
 <table>
@@ -834,13 +910,14 @@ members %&gt;%
 <p>For Everest, what are the significant features in predicting death?</p>
 <pre class="r"><code>library(broom)
 
-members %&gt;% 
-  filter(peak_name == &quot;Everest&quot;) %&gt;% 
-  mutate(expedition_role = fct_lump(expedition_role, 5)) %&gt;% 
-  glm(died ~ year + age + sex + expedition_role, 
-      data = .,
-      family = &quot;binomial&quot;) %&gt;% 
-  tidy() %&gt;% 
+members %&gt;%
+  filter(peak_name == &quot;Everest&quot;) %&gt;%
+  mutate(expedition_role = fct_lump(expedition_role, 5)) %&gt;%
+  glm(died ~ year + age + sex + expedition_role,
+    data = .,
+    family = &quot;binomial&quot;
+  ) %&gt;%
+  tidy() %&gt;%
   mutate(p.value = format.pval(p.value)) %&gt;%
   knitr::kable()</code></pre>
 <table>
@@ -920,13 +997,14 @@ members %&gt;%
 </tbody>
 </table>
 <p>The significant features include the year (lowers likelihood), the leader role (more likely to die), age (more likely to die), and the H-Aworker (much more likely to die)</p>
-<pre class="r"><code>members %&gt;% 
-  filter(peak_name == &quot;Everest&quot;, !is.na(age)) %&gt;% 
-  group_by(age = 10 * (age %/% 10)) %&gt;% 
-  summarize(n_climbers = n(),
-            pct_death = mean(died))  %&gt;%
+<pre class="r"><code>members %&gt;%
+  filter(peak_name == &quot;Everest&quot;, !is.na(age)) %&gt;%
+  group_by(age = 10 * (age %/% 10)) %&gt;%
+  summarize(
+    n_climbers = n(),
+    pct_death = mean(died)
+  ) %&gt;%
   knitr::kable()</code></pre>
-<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -978,13 +1056,14 @@ members %&gt;%
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>members %&gt;% 
-  filter(peak_name == &quot;Everest&quot;, !is.na(age)) %&gt;% 
-  group_by(hired) %&gt;% 
-  summarize(n_climbers = n(),
-            pct_death = mean(died))  %&gt;%
+<pre class="r"><code>members %&gt;%
+  filter(peak_name == &quot;Everest&quot;, !is.na(age)) %&gt;%
+  group_by(hired) %&gt;%
+  summarize(
+    n_climbers = n(),
+    pct_death = mean(died)
+  ) %&gt;%
   knitr::kable()</code></pre>
-<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -1008,51 +1087,58 @@ members %&gt;%
 </table>
 <p>It seems that expedition role H-A worker may be confounded with hired in some funky way</p>
 <p>What happens when oxygen is included?</p>
-<pre class="r"><code>model &lt;- members %&gt;% 
-  filter(peak_name == &quot;Everest&quot;, !is.na(age)) %&gt;% 
-  mutate(leader = expedition_role == &quot;Leader&quot;) %&gt;% 
-  glm(died ~ year + age + sex + leader + hired + oxygen_used, 
-      data = .,
-      family = &quot;binomial&quot;) 
+<pre class="r"><code>model &lt;- members %&gt;%
+  filter(peak_name == &quot;Everest&quot;, !is.na(age)) %&gt;%
+  mutate(leader = expedition_role == &quot;Leader&quot;) %&gt;%
+  glm(died ~ year + age + sex + leader + hired + oxygen_used,
+    data = .,
+    family = &quot;binomial&quot;
+  )
 
-model %&gt;% 
-  tidy(conf.int = TRUE, exponentiate = TRUE) %&gt;% 
-  filter(term != &quot;(Intercept)&quot;) %&gt;% 
-  mutate(term = fct_reorder(term, estimate)) %&gt;% 
+model %&gt;%
+  tidy(conf.int = TRUE, exponentiate = TRUE) %&gt;%
+  filter(term != &quot;(Intercept)&quot;) %&gt;%
+  mutate(term = fct_reorder(term, estimate)) %&gt;%
   ggplot(aes(estimate, term)) +
   geom_point() +
   geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), color = &quot;gray&quot;) +
-  geom_vline(xintercept = 1, color = &quot;red&quot;)+
-  labs(title = &quot;Relative risk factors for death on Everest summits&quot;,
-       caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
-       x = &quot;Exponentiated estimate for log odds&quot;)</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-15-1.png" width="1152" style="display: block; margin: auto;" /> There may be an interaction, where added risk to hired workers is associated with climbing expeditions that use oxygen (maybe due to carrying the tanks). Maybe explore it further next time.</p>
+  geom_vline(xintercept = 1, color = &quot;red&quot;) +
+  labs(
+    title = &quot;Relative risk factors for death on Everest summits&quot;,
+    caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
+    x = &quot;Exponentiated estimate for log odds&quot;
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-15-1.png" width="2400" style="display: block; margin: auto;" /> There may be an interaction, where added risk to hired workers is associated with climbing expeditions that use oxygen (maybe due to carrying the tanks). Maybe explore it further next time.</p>
 <hr />
 </div>
 <div id="women-on-himalayan-climbing-expeditions-dm_ferrero" class="section level2">
 <h2>Women on Himalayan climbing expeditions <span class="citation">@dm_ferrero</span></h2>
 <p>Calculate proportion of female climbers per peak per year</p>
-<pre class="r"><code>top_peaks &lt;- members %&gt;% 
-  count(peak_name, sort = TRUE) %&gt;% 
-  slice(1:20) %&gt;% 
+<pre class="r"><code>top_peaks &lt;- members %&gt;%
+  count(peak_name, sort = TRUE) %&gt;%
+  slice(1:20) %&gt;%
   pull(peak_name)
 
-prop_women&lt;- members %&gt;% 
-  filter(peak_name %in% top_peaks) %&gt;% 
-  count(peak_name, year, sex) %&gt;% 
-  pivot_wider(names_from = sex, values_from = n, names_prefix = &quot;num_&quot;) %&gt;% 
-  replace_na(list(num_F = 0)) %&gt;% 
-  mutate(prop_F = num_F/(num_M + num_F),
-         total_peeps = num_M + num_F) %&gt;% 
+prop_women &lt;- members %&gt;%
+  filter(peak_name %in% top_peaks) %&gt;%
+  count(peak_name, year, sex) %&gt;%
+  pivot_wider(names_from = sex, values_from = n, names_prefix = &quot;num_&quot;) %&gt;%
+  replace_na(list(num_F = 0)) %&gt;%
+  mutate(
+    prop_F = num_F / (num_M + num_F),
+    total_peeps = num_M + num_F
+  ) %&gt;%
   arrange(year)</code></pre>
 <p>Calculate proportion of female climbers per peak per year</p>
-<pre class="r"><code>prop_women&lt;- members %&gt;% 
-  filter(peak_name %in% top_peaks) %&gt;% 
-  count(peak_name, year, sex) %&gt;% 
-  pivot_wider(names_from = sex, values_from = n, names_prefix = &quot;num_&quot;) %&gt;% 
-  replace_na(list(num_F = 0)) %&gt;% 
-  mutate(prop_F = num_F/(num_M + num_F),
-         total_peeps = num_M + num_F) %&gt;% 
+<pre class="r"><code>prop_women &lt;- members %&gt;%
+  filter(peak_name %in% top_peaks) %&gt;%
+  count(peak_name, year, sex) %&gt;%
+  pivot_wider(names_from = sex, values_from = n, names_prefix = &quot;num_&quot;) %&gt;%
+  replace_na(list(num_F = 0)) %&gt;%
+  mutate(
+    prop_F = num_F / (num_M + num_F),
+    total_peeps = num_M + num_F
+  ) %&gt;%
   arrange(year)</code></pre>
 <p>Inspired by Danielle Ferraro <span class="citation">@dm_ferraro</span></p>
 <pre class="r"><code># Set palette
@@ -1063,30 +1149,31 @@ ggplot(prop_women, aes(x = year, y = factor(peak_name, levels = rev(top_peaks)))
   geom_point(aes(size = total_peeps, color = prop_F), alpha = 0.7) +
   scale_color_stepsn(colors = cols, n.breaks = 4, labels = scales::percent_format(accuracy = 1)) +
   scale_x_continuous(breaks = seq(1900, 2010, by = 10)) +
-  labs(x = NULL,
-       y = NULL,
-       size = &quot;Total expedition\nmembers&quot;,
-       color = &quot;Percentage of\nwomen&quot;,
-       title = &quot;Women on Himalayan climbing expeditions&quot;,
-       subtitle = &quot;Each point represents the number of expedition members and percentage of women on that peak for that year&quot;,
-       caption = &quot;Data: The Himalayan Database\nFigure by @jim_gruman for #TidyTuesday&quot;) +
+  labs(
+    x = NULL,
+    y = NULL,
+    size = &quot;Total expedition\nmembers&quot;,
+    color = &quot;Percentage of\nwomen&quot;,
+    title = &quot;Women on Himalayan climbing expeditions&quot;,
+    subtitle = &quot;Each point represents the number of expedition members and percentage of women on that peak for that year&quot;,
+    caption = &quot;Data: The Himalayan Database\nFigure by @jim_gruman for #TidyTuesday&quot;
+  ) +
   # theme_ipsum_rc() +
   dark_theme_gray(base_size = 14, base_family = &quot;ArialNarrow&quot;) +
-  theme(plot.background = element_rect(fill = &quot;grey10&quot;),
-        panel.background = element_blank(),
-        panel.grid.major = element_line(color = &quot;grey30&quot;, size = 0.2),
-        panel.grid.minor = element_line(color = &quot;grey30&quot;, size = 0.2),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        legend.background = element_blank(),
-        axis.ticks = element_blank(),
-        legend.key = element_blank(),
-        plot.title = element_text(size = 22),
-        plot.title.position = &quot;plot&quot;
+  theme(
+    plot.background = element_rect(fill = &quot;grey10&quot;),
+    panel.background = element_blank(),
+    panel.grid.major = element_line(color = &quot;grey30&quot;, size = 0.2),
+    panel.grid.minor = element_line(color = &quot;grey30&quot;, size = 0.2),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    legend.background = element_blank(),
+    axis.ticks = element_blank(),
+    legend.key = element_blank(),
+    plot.title = element_text(size = 22),
+    plot.title.position = &quot;plot&quot;
   )</code></pre>
-<pre><code>Inverted geom defaults of fill and color/colour.
-To change them back, use invert_geom_defaults().</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-18-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-18-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="more-machine-learning-modeling" class="section level1">
@@ -1106,10 +1193,11 @@ To change them back, use invert_geom_defaults().</code></pre>
   ) %&gt;%
   ggplot(aes(season, percent, fill = season)) +
   geom_col(alpha = 0.8, position = &quot;dodge&quot;, show.legend = FALSE) +
+  scale_fill_paletteer_d(&quot;ggsci::lanonc_lancet&quot;) +
   scale_y_continuous(labels = scales::percent_format()) +
   facet_wrap(~died, scales = &quot;free&quot;) +
   labs(x = NULL, y = &quot;% of expedition members&quot;)</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-19-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-19-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <p>Let’s now create the dataset that we’ll use for modeling by filtering on some of the variables and transforming some variables to a be factors. There are still lots of <code>NA</code> values for age but we are going to impute those.</p>
 <pre class="r"><code>members_df &lt;- members %&gt;%
   filter(season != &quot;Unknown&quot;, !is.na(sex), !is.na(citizenship)) %&gt;%
@@ -1123,23 +1211,6 @@ To change them back, use invert_geom_defaults().</code></pre>
 <div id="build-a-model" class="section level2">
 <h2>Build a Model</h2>
 <p>We can start by loading the tidymodels metapackage, and splitting our data into training and testing sets.</p>
-<pre class="r"><code>library(tidymodels)</code></pre>
-<pre><code>-- Attaching packages ---------- tidymodels 0.1.1 --</code></pre>
-<pre><code>v dials     0.0.9      v rsample   0.0.8 
-v infer     0.5.3      v tune      0.1.1 
-v modeldata 0.0.2      v workflows 0.2.0 
-v parsnip   0.1.3      v yardstick 0.0.7 
-v recipes   0.1.13     </code></pre>
-<pre><code>-- Conflicts ------------- tidymodels_conflicts() --
-x scales::discard() masks purrr::discard()
-x dplyr::filter()   masks stats::filter()
-x recipes::fixed()  masks stringr::fixed()
-x dplyr::lag()      masks stats::lag()
-x yardstick::spec() masks readr::spec()
-x recipes::step()   masks stats::step()</code></pre>
-<pre class="r"><code>members_split &lt;- initial_split(members_df, strata = died)
-members_train &lt;- training(members_split)
-members_test &lt;- testing(members_split)</code></pre>
 <p>We are going to use <a href="https://www.tmwr.org/resampling.html">resampling</a> to evaluate model performance.</p>
 <pre class="r"><code>members_folds &lt;- vfold_cv(members_train, strata = died)</code></pre>
 <p>Next we build a recipe for data preprocessing.</p>
@@ -1151,21 +1222,6 @@ members_test &lt;- testing(members_split)</code></pre>
 <li><p>Finally, there are many more people who survived their expedition than who died (thankfully) so we will use <code>step_smote()</code> to balance the classes.</p></li>
 </ul>
 <p>The object members_rec is a recipe that has not been trained on data yet (for example, which categorical levels should be collapsed has not been calculated).</p>
-<pre class="r"><code>library(themis)</code></pre>
-<pre><code>Registered S3 methods overwritten by &#39;themis&#39;:
-  method               from   
-  bake.step_downsample recipes
-  bake.step_upsample   recipes
-  prep.step_downsample recipes
-  prep.step_upsample   recipes
-  tidy.step_downsample recipes
-  tidy.step_upsample   recipes</code></pre>
-<pre><code>
-Attaching package: &#39;themis&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:recipes&#39;:
-
-    step_downsample, step_upsample, tunable.step_downsample,
-    tunable.step_upsample</code></pre>
 <pre class="r"><code>members_rec &lt;- recipe(died ~ ., data = members_train) %&gt;%
   step_medianimpute(age) %&gt;%
   step_other(peak_id, citizenship) %&gt;%
@@ -1212,11 +1268,11 @@ Computational engine: ranger </code></pre>
   add_recipe(members_rec)
 
 members_wf</code></pre>
-<pre><code>== Workflow ========================================
+<pre><code>== Workflow ====================================================
 Preprocessor: Recipe
 Model: None
 
--- Preprocessor ------------------------------------
+-- Preprocessor ------------------------------------------------
 4 Recipe Steps
 
 * step_medianimpute()
@@ -1233,24 +1289,7 @@ glm_rs &lt;- members_wf %&gt;%
     resamples = members_folds,
     metrics = members_metrics,
     control = control_resamples(save_pred = TRUE)
-  )
-
-glm_rs</code></pre>
-<pre><code># Resampling results
-# 10-fold cross-validation using stratification 
-# A tibble: 10 x 5
-   splits              id     .metrics        .notes         .predictions       
-   &lt;list&gt;              &lt;chr&gt;  &lt;list&gt;          &lt;list&gt;         &lt;list&gt;             
- 1 &lt;split [51.6K/5.7K~ Fold01 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,739 x 5~
- 2 &lt;split [51.6K/5.7K~ Fold02 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 3 &lt;split [51.6K/5.7K~ Fold03 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 4 &lt;split [51.6K/5.7K~ Fold04 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 5 &lt;split [51.6K/5.7K~ Fold05 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 6 &lt;split [51.6K/5.7K~ Fold06 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 7 &lt;split [51.6K/5.7K~ Fold07 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 8 &lt;split [51.6K/5.7K~ Fold08 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 9 &lt;split [51.6K/5.7K~ Fold09 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
-10 &lt;split [51.6K/5.7K~ Fold10 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~</code></pre>
+  )</code></pre>
 <p>Second, we can fit the random forest model.</p>
 <pre class="r"><code>rf_rs &lt;- members_wf %&gt;%
   add_model(rf_spec) %&gt;%
@@ -1258,24 +1297,7 @@ glm_rs</code></pre>
     resamples = members_folds,
     metrics = members_metrics,
     control = control_resamples(save_pred = TRUE)
-  )
-
-rf_rs</code></pre>
-<pre><code># Resampling results
-# 10-fold cross-validation using stratification 
-# A tibble: 10 x 5
-   splits              id     .metrics        .notes         .predictions       
-   &lt;list&gt;              &lt;chr&gt;  &lt;list&gt;          &lt;list&gt;         &lt;list&gt;             
- 1 &lt;split [51.6K/5.7K~ Fold01 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,739 x 5~
- 2 &lt;split [51.6K/5.7K~ Fold02 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 3 &lt;split [51.6K/5.7K~ Fold03 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 4 &lt;split [51.6K/5.7K~ Fold04 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 5 &lt;split [51.6K/5.7K~ Fold05 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 6 &lt;split [51.6K/5.7K~ Fold06 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 7 &lt;split [51.6K/5.7K~ Fold07 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 8 &lt;split [51.6K/5.7K~ Fold08 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
- 9 &lt;split [51.6K/5.7K~ Fold09 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~
-10 &lt;split [51.6K/5.7K~ Fold10 &lt;tibble [4 x 3~ &lt;tibble [0 x ~ &lt;tibble [5,738 x 5~</code></pre>
+  )</code></pre>
 <p>We have fit each of our candidate models to our resampled training set!</p>
 </div>
 <div id="evaluate-models" class="section level2">
@@ -1296,30 +1318,30 @@ rf_rs</code></pre>
 <tr class="odd">
 <td align="left">accuracy</td>
 <td align="left">binary</td>
-<td align="right">0.6162668</td>
+<td align="right">0.6141581</td>
 <td align="right">10</td>
-<td align="right">0.0028445</td>
+<td align="right">0.0038293</td>
 </tr>
 <tr class="even">
 <td align="left">roc_auc</td>
 <td align="left">binary</td>
-<td align="right">0.6966390</td>
+<td align="right">0.7023625</td>
 <td align="right">10</td>
-<td align="right">0.0120650</td>
+<td align="right">0.0126670</td>
 </tr>
 <tr class="odd">
 <td align="left">sens</td>
 <td align="left">binary</td>
-<td align="right">0.6752783</td>
+<td align="right">0.6871908</td>
 <td align="right">10</td>
-<td align="right">0.0232296</td>
+<td align="right">0.0213846</td>
 </tr>
 <tr class="even">
 <td align="left">spec</td>
 <td align="left">binary</td>
-<td align="right">0.6153328</td>
+<td align="right">0.6131003</td>
 <td align="right">10</td>
-<td align="right">0.0030006</td>
+<td align="right">0.0039947</td>
 </tr>
 </tbody>
 </table>
@@ -1339,36 +1361,37 @@ rf_rs</code></pre>
 <tr class="odd">
 <td align="left">accuracy</td>
 <td align="left">binary</td>
-<td align="right">0.9699726</td>
+<td align="right">0.9707394</td>
 <td align="right">10</td>
-<td align="right">0.0008112</td>
+<td align="right">0.0015633</td>
 </tr>
 <tr class="even">
 <td align="left">roc_auc</td>
 <td align="left">binary</td>
-<td align="right">0.7467396</td>
+<td align="right">0.7463019</td>
 <td align="right">10</td>
-<td align="right">0.0103049</td>
+<td align="right">0.0113529</td>
 </tr>
 <tr class="odd">
 <td align="left">sens</td>
 <td align="left">binary</td>
-<td align="right">0.1517896</td>
+<td align="right">0.1598841</td>
 <td align="right">10</td>
-<td align="right">0.0163523</td>
+<td align="right">0.0107783</td>
 </tr>
 <tr class="even">
 <td align="left">spec</td>
 <td align="left">binary</td>
-<td align="right">0.9817907</td>
+<td align="right">0.9824955</td>
 <td align="right">10</td>
-<td align="right">0.0008023</td>
+<td align="right">0.0013859</td>
 </tr>
 </tbody>
 </table>
 <p>The accuracy is great but that sensitivity is not what we’d like to see. The random forest model has not done a great job of learning how to recognize both classes, even with our oversampling strategy. Let’s dig deeper into how these models are doing to see this more. For example, how are they predicting the two classes?</p>
 <pre class="r"><code>glm_rs %&gt;%
-  conf_mat_resampled() %&gt;% knitr::kable()</code></pre>
+  conf_mat_resampled() %&gt;%
+  knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -1381,27 +1404,28 @@ rf_rs</code></pre>
 <tr class="odd">
 <td align="left">died</td>
 <td align="left">died</td>
-<td align="right">55.8</td>
+<td align="right">56.4</td>
 </tr>
 <tr class="even">
 <td align="left">died</td>
 <td align="left">survived</td>
-<td align="right">2175.7</td>
+<td align="right">2188.4</td>
 </tr>
 <tr class="odd">
 <td align="left">survived</td>
 <td align="left">died</td>
-<td align="right">26.2</td>
+<td align="right">25.6</td>
 </tr>
 <tr class="even">
 <td align="left">survived</td>
 <td align="left">survived</td>
-<td align="right">3480.4</td>
+<td align="right">3467.7</td>
 </tr>
 </tbody>
 </table>
 <pre class="r"><code>rf_rs %&gt;%
-  conf_mat_resampled()%&gt;% knitr::kable()</code></pre>
+  conf_mat_resampled() %&gt;%
+  knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -1414,22 +1438,22 @@ rf_rs</code></pre>
 <tr class="odd">
 <td align="left">died</td>
 <td align="left">died</td>
-<td align="right">12.7</td>
+<td align="right">13.1</td>
 </tr>
 <tr class="even">
 <td align="left">died</td>
 <td align="left">survived</td>
-<td align="right">103.0</td>
+<td align="right">99.0</td>
 </tr>
 <tr class="odd">
 <td align="left">survived</td>
 <td align="left">died</td>
-<td align="right">69.3</td>
+<td align="right">68.9</td>
 </tr>
 <tr class="even">
 <td align="left">survived</td>
 <td align="left">survived</td>
-<td align="right">5553.1</td>
+<td align="right">5557.1</td>
 </tr>
 </tbody>
 </table>
@@ -1443,7 +1467,7 @@ rf_rs</code></pre>
   geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
   geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
   coord_equal()</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-33-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-33-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <p>It is finally time for us to return to the testing set. Notice that we have not used the testing set yet during this whole analysis; to compare and assess models we used resamples of the training set. Let’s <em>fit</em> one more time to the training data and evaluate on the testing data using the function <code>last_fit()</code>.</p>
 <pre class="r"><code>members_final &lt;- members_wf %&gt;%
   add_model(glm_spec) %&gt;%
@@ -1470,21 +1494,21 @@ members_final</code></pre>
 <tr class="odd">
 <td align="left">accuracy</td>
 <td align="left">binary</td>
-<td align="right">0.6152881</td>
+<td align="right">0.6172226</td>
 </tr>
 <tr class="even">
 <td align="left">roc_auc</td>
 <td align="left">binary</td>
-<td align="right">0.7038210</td>
+<td align="right">0.6984225</td>
 </tr>
 </tbody>
 </table>
 <pre class="r"><code>collect_predictions(members_final) %&gt;%
-  conf_mat(died, .pred_class) </code></pre>
+  conf_mat(died, .pred_class)</code></pre>
 <pre><code>          Truth
 Prediction  died survived
-  died       197     7269
-  survived    89    11571</code></pre>
+  died       195     7230
+  survived    91    11610</code></pre>
 <p>The coefficients (which we can get out using <code>tidy()</code>) have been estimated using the training data. If we use <code>exponentiate = TRUE</code>, we have odds ratios.</p>
 <pre class="r"><code>members_final %&gt;%
   pull(.workflow) %&gt;%
@@ -1506,127 +1530,127 @@ Prediction  died survived
 <tr class="odd">
 <td align="left">(Intercept)</td>
 <td align="right">0.0000</td>
-<td align="right">0.9287</td>
-<td align="right">-57.5190</td>
+<td align="right">0.9299</td>
+<td align="right">-58.1268</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
 <td align="left">peak_id_other</td>
-<td align="right">0.2500</td>
-<td align="right">0.0331</td>
-<td align="right">-41.8148</td>
+<td align="right">0.2302</td>
+<td align="right">0.0338</td>
+<td align="right">-43.4002</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="odd">
 <td align="left">peak_id_MANA</td>
-<td align="right">0.2614</td>
-<td align="right">0.0413</td>
-<td align="right">-32.4872</td>
+<td align="right">0.2453</td>
+<td align="right">0.0419</td>
+<td align="right">-33.5713</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
 <td align="left">peak_id_EVER</td>
-<td align="right">0.3109</td>
-<td align="right">0.0352</td>
-<td align="right">-33.2267</td>
+<td align="right">0.2929</td>
+<td align="right">0.0359</td>
+<td align="right">-34.2378</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="odd">
 <td align="left">hired</td>
-<td align="right">0.4536</td>
-<td align="right">0.0559</td>
-<td align="right">-14.1455</td>
+<td align="right">0.4606</td>
+<td align="right">0.0554</td>
+<td align="right">-13.9857</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
 <td align="left">sex_M</td>
-<td align="right">0.5426</td>
-<td align="right">0.0291</td>
-<td align="right">-21.0448</td>
+<td align="right">0.5387</td>
+<td align="right">0.0292</td>
+<td align="right">-21.2026</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="odd">
 <td align="left">citizenship_other</td>
-<td align="right">0.7798</td>
-<td align="right">0.0305</td>
-<td align="right">-8.1529</td>
+<td align="right">0.7685</td>
+<td align="right">0.0306</td>
+<td align="right">-8.5974</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
-<td align="left">season_Winter</td>
-<td align="right">0.8861</td>
-<td align="right">0.0415</td>
-<td align="right">-2.9155</td>
-<td align="right">0.0036</td>
+<td align="left">peak_id_CHOY</td>
+<td align="right">0.8461</td>
+<td align="right">0.0418</td>
+<td align="right">-3.9936</td>
+<td align="right">0.0001</td>
 </tr>
 <tr class="odd">
-<td align="left">peak_id_CHOY</td>
-<td align="right">0.9002</td>
-<td align="right">0.0412</td>
-<td align="right">-2.5529</td>
-<td align="right">0.0107</td>
+<td align="left">season_Winter</td>
+<td align="right">0.8829</td>
+<td align="right">0.0414</td>
+<td align="right">-3.0047</td>
+<td align="right">0.0027</td>
 </tr>
 <tr class="even">
 <td align="left">citizenship_Japan</td>
-<td align="right">0.9125</td>
-<td align="right">0.0365</td>
-<td align="right">-2.5092</td>
-<td align="right">0.0121</td>
+<td align="right">0.9155</td>
+<td align="right">0.0366</td>
+<td align="right">-2.4128</td>
+<td align="right">0.0158</td>
 </tr>
 <tr class="odd">
 <td align="left">age</td>
-<td align="right">0.9930</td>
+<td align="right">0.9932</td>
 <td align="right">0.0007</td>
-<td align="right">-9.7566</td>
+<td align="right">-9.3586</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
 <td align="left">season_Spring</td>
-<td align="right">1.0163</td>
+<td align="right">1.0240</td>
 <td align="right">0.0155</td>
-<td align="right">1.0429</td>
-<td align="right">0.2970</td>
+<td align="right">1.5267</td>
+<td align="right">0.1268</td>
 </tr>
 <tr class="odd">
 <td align="left">year</td>
-<td align="right">1.0281</td>
+<td align="right">1.0285</td>
 <td align="right">0.0005</td>
-<td align="right">59.5007</td>
+<td align="right">60.1571</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
 <td align="left">citizenship_Nepal</td>
-<td align="right">1.1354</td>
-<td align="right">0.0626</td>
-<td align="right">2.0304</td>
-<td align="right">0.0423</td>
+<td align="right">1.1260</td>
+<td align="right">0.0622</td>
+<td align="right">1.9076</td>
+<td align="right">0.0564</td>
 </tr>
 <tr class="odd">
 <td align="left">citizenship_UK</td>
-<td align="right">1.7031</td>
-<td align="right">0.0427</td>
-<td align="right">12.4820</td>
+<td align="right">1.8554</td>
+<td align="right">0.0433</td>
+<td align="right">14.2884</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
 <td align="left">citizenship_USA</td>
-<td align="right">1.8845</td>
-<td align="right">0.0420</td>
-<td align="right">15.0864</td>
+<td align="right">2.0620</td>
+<td align="right">0.0426</td>
+<td align="right">17.0070</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="odd">
 <td align="left">success</td>
-<td align="right">2.0471</td>
-<td align="right">0.0158</td>
-<td align="right">45.3355</td>
+<td align="right">2.0834</td>
+<td align="right">0.0159</td>
+<td align="right">46.2704</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
 <td align="left">season_Summer</td>
-<td align="right">4.9691</td>
-<td align="right">0.0855</td>
-<td align="right">18.7446</td>
+<td align="right">5.1846</td>
+<td align="right">0.0868</td>
+<td align="right">18.9508</td>
 <td align="right">0.0000</td>
 </tr>
 </tbody>
@@ -1647,7 +1671,7 @@ Prediction  died survived
   ) +
   geom_point(size = 2, color = &quot;#85144B&quot;) +
   labs(y = NULL, x = &quot;Coefficent from logistic regression&quot;)</code></pre>
-<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-38-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-38-1.png" width="2400" style="display: block; margin: auto;" /></p>
 <ul>
 <li><p>The features with coefficients on the positive side (like climbing in summer, being on a successful expedition, or being from the UK or US) are associated with surviving.</p></li>
 <li><p>The features with coefficients on the negative side (like climbing specific peaks including Everest, being one of the hired members of a expedition, or being a man) are associated with dying.</p></li>
@@ -1681,50 +1705,52 @@ other attached packages:
  [1] themis_0.1.2         yardstick_0.0.7      workflows_0.2.0     
  [4] tune_0.1.1           rsample_0.0.8        recipes_0.1.13      
  [7] parsnip_0.1.3        modeldata_0.0.2      infer_0.5.3         
-[10] dials_0.0.9          tidymodels_0.1.1     broom_0.7.0         
+[10] dials_0.0.9          tidymodels_0.1.1     broom_0.7.1         
 [13] ebbr_0.1             gt_0.2.2             ggdark_0.2.1        
 [16] paletteer_1.2.0.9000 scales_1.1.1         forcats_0.5.0       
 [19] stringr_1.4.0        dplyr_1.0.2          purrr_0.3.4         
-[22] readr_1.3.1          tidyr_1.1.2          tibble_3.0.3        
+[22] readr_1.4.0          tidyr_1.1.2          tibble_3.0.3        
 [25] ggplot2_3.3.2        tidyverse_1.3.0      workflowr_1.6.2     
 
 loaded via a namespace (and not attached):
-  [1] VGAM_1.1-3         colorspace_1.4-1   selectr_0.4-2     
-  [4] ellipsis_0.3.1     class_7.3-17       rprojroot_1.3-2   
-  [7] fs_1.5.0           rstudioapi_0.11    listenv_0.8.0     
- [10] furrr_0.1.0        farver_2.0.3       ParamHelpers_1.14 
- [13] prodlim_2019.11.13 fansi_0.4.1        lubridate_1.7.9   
- [16] ranger_0.12.1      xml2_1.3.2         codetools_0.2-16  
- [19] splines_4.0.0      doParallel_1.0.15  knitr_1.30        
- [22] jsonlite_1.7.1     pROC_1.16.2        dbplyr_1.4.4      
- [25] compiler_4.0.0     httr_1.4.2         backports_1.1.10  
- [28] assertthat_0.2.1   Matrix_1.2-18      lazyeval_0.2.2    
- [31] cli_2.0.2          later_1.1.0.1      htmltools_0.5.0   
- [34] tools_4.0.0        gtable_0.3.0       glue_1.4.2        
- [37] RANN_2.6.1         parallelMap_1.5.0  fastmatch_1.1-0   
- [40] Rcpp_1.0.5         cellranger_1.1.0   DiceDesign_1.8-1  
- [43] vctrs_0.3.4        iterators_1.0.12   timeDate_3043.102 
- [46] mlr_2.17.1         xfun_0.17          gower_0.2.2       
- [49] globals_0.13.0     rvest_0.3.6        lifecycle_0.2.0   
- [52] future_1.19.1      MASS_7.3-53        ipred_0.9-9       
- [55] hms_0.5.3          promises_1.1.1     parallel_4.0.0    
- [58] rematch2_2.1.2     BBmisc_1.11        prismatic_0.2.0   
- [61] yaml_2.2.1         curl_4.3           rpart_4.1-15      
- [64] stringi_1.5.3      highr_0.8          foreach_1.5.0     
- [67] checkmate_2.0.0    lhs_1.0.2          hardhat_0.1.4     
- [70] lava_1.6.7         rlang_0.4.7        pkgconfig_2.0.3   
- [73] evaluate_0.14      lattice_0.20-41    labeling_0.3      
- [76] tidyselect_1.1.0   plyr_1.8.6         magrittr_1.5      
- [79] tidytuesdayR_1.0.1 R6_2.4.1           generics_0.0.2    
- [82] DBI_1.1.0          pillar_1.4.6       haven_2.3.1       
- [85] whisker_0.4        withr_2.3.0        survival_3.2-3    
- [88] nnet_7.3-14        ROSE_0.0-3         modelr_0.1.8      
- [91] crayon_1.3.4       utf8_1.1.4         unbalanced_2.0    
- [94] rmarkdown_2.3      usethis_1.6.3      grid_4.0.0        
- [97] readxl_1.3.1       data.table_1.13.0  FNN_1.1.3         
-[100] blob_1.2.1         git2r_0.27.1       reprex_0.3.0      
-[103] digest_0.6.25      httpuv_1.5.4       stats4_4.0.0      
-[106] munsell_0.5.0      GPfit_1.0-8       </code></pre>
+  [1] readxl_1.3.1       mlr_2.18.0         backports_1.1.10  
+  [4] fastmatch_1.1-0    VGAM_1.1-3         plyr_1.8.6        
+  [7] selectr_0.4-2      lazyeval_0.2.2     tidytuesdayR_1.0.1
+ [10] splines_4.0.0      listenv_0.8.0      usethis_1.6.3     
+ [13] digest_0.6.25      foreach_1.5.0      htmltools_0.5.0   
+ [16] fansi_0.4.1        magrittr_1.5       checkmate_2.0.0   
+ [19] BBmisc_1.11        unbalanced_2.0     doParallel_1.0.15 
+ [22] globals_0.13.0     modelr_0.1.8       gower_0.2.2       
+ [25] R.utils_2.10.1     hardhat_0.1.4      colorspace_1.4-1  
+ [28] blob_1.2.1         rvest_0.3.6        haven_2.3.1       
+ [31] xfun_0.18          crayon_1.3.4       prismatic_0.2.0   
+ [34] jsonlite_1.7.1     survival_3.2-7     iterators_1.0.12  
+ [37] glue_1.4.2         gtable_0.3.0       ipred_0.9-9       
+ [40] R.cache_0.14.0     DBI_1.1.0          Rcpp_1.0.5        
+ [43] GPfit_1.0-8        stats4_4.0.0       lava_1.6.8        
+ [46] prodlim_2019.11.13 httr_1.4.2         FNN_1.1.3         
+ [49] ellipsis_0.3.1     pkgconfig_2.0.3    R.methodsS3_1.8.1 
+ [52] ParamHelpers_1.14  farver_2.0.3       nnet_7.3-14       
+ [55] dbplyr_1.4.4       utf8_1.1.4         tidyselect_1.1.0  
+ [58] labeling_0.3       rlang_0.4.7        DiceDesign_1.8-1  
+ [61] later_1.1.0.1      munsell_0.5.0      cellranger_1.1.0  
+ [64] tools_4.0.0        cli_2.0.2          generics_0.0.2    
+ [67] ranger_0.12.1      evaluate_0.14      yaml_2.2.1        
+ [70] rematch2_2.1.2     knitr_1.30         fs_1.5.0          
+ [73] RANN_2.6.1         future_1.19.1      whisker_0.4       
+ [76] R.oo_1.24.0        xml2_1.3.2         compiler_4.0.0    
+ [79] rstudioapi_0.11    curl_4.3           reprex_0.3.0      
+ [82] lhs_1.1.1          stringi_1.5.3      highr_0.8         
+ [85] lattice_0.20-41    Matrix_1.2-18      styler_1.3.2      
+ [88] vctrs_0.3.4        pillar_1.4.6       lifecycle_0.2.0   
+ [91] furrr_0.1.0        data.table_1.13.0  httpuv_1.5.4      
+ [94] R6_2.4.1           promises_1.1.1     codetools_0.2-16  
+ [97] MASS_7.3-53        assertthat_0.2.1   rprojroot_1.3-2   
+[100] ROSE_0.0-3         withr_2.3.0        parallel_4.0.0    
+[103] hms_0.5.3          grid_4.0.0         rpart_4.1-15      
+[106] timeDate_3043.102  class_7.3-17       rmarkdown_2.4     
+[109] git2r_0.27.1       parallelMap_1.5.0  pROC_1.16.2       
+[112] lubridate_1.7.9   </code></pre>
 </div>
 </div>
 </div>
