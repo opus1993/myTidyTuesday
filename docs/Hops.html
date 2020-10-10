@@ -36,6 +36,15 @@ div.section {
 }
 </style>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
+
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -349,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-24
+<strong>Last updated:</strong> 2020-10-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -440,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9f01bd51afb0ef61b3f85b66c9db96bb6080f626targetblank9f01bd5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9f01bd51afb0ef61b3f85b66c9db96bb6080f626" target="_blank">9f01bd5</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9f01bd51afb0ef61b3f85b66c9db96bb6080f626targetblank9f01bd5a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9f01bd51afb0ef61b3f85b66c9db96bb6080f626" target="_blank">9f01bd5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -458,6 +467,9 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -496,6 +508,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/8878bc532c6296b93e89c78086b8b796f18910eb/docs/Hops.html" target="_blank">8878bc5</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -669,7 +698,7 @@ attached base packages:
 other attached packages:
  [1] paletteer_1.2.0.9000 scales_1.1.1         blscrapeR_3.2.0     
  [4] rnassqs_0.5.0        forcats_0.5.0        stringr_1.4.0       
- [7] dplyr_1.0.2          purrr_0.3.4          readr_1.3.1         
+ [7] dplyr_1.0.2          purrr_0.3.4          readr_1.4.0         
 [10] tidyr_1.1.2          tibble_3.0.3         ggplot2_3.3.2       
 [13] tidyverse_1.3.0      workflowr_1.6.2     
 
@@ -678,9 +707,9 @@ loaded via a namespace (and not attached):
  [5] digest_0.6.25    R6_2.4.1         cellranger_1.1.0 backports_1.1.10
  [9] reprex_0.3.0     evaluate_0.14    httr_1.4.2       pillar_1.4.6    
 [13] rlang_0.4.7      curl_4.3         readxl_1.3.1     rstudioapi_0.11 
-[17] whisker_0.4      blob_1.2.1       rmarkdown_2.3    labeling_0.3    
-[21] munsell_0.5.0    broom_0.7.0      compiler_4.0.0   httpuv_1.5.4    
-[25] modelr_0.1.8     xfun_0.17        pkgconfig_2.0.3  htmltools_0.5.0 
+[17] whisker_0.4      blob_1.2.1       rmarkdown_2.4    labeling_0.3    
+[21] munsell_0.5.0    broom_0.7.1      compiler_4.0.0   httpuv_1.5.4    
+[25] modelr_0.1.8     xfun_0.18        pkgconfig_2.0.3  htmltools_0.5.0 
 [29] tidyselect_1.1.0 fansi_0.4.1      crayon_1.3.4     dbplyr_1.4.4    
 [33] withr_2.3.0      later_1.1.0.1    prismatic_0.2.0  grid_4.0.0      
 [37] jsonlite_1.7.1   gtable_0.3.0     lifecycle_0.2.0  DBI_1.1.0       

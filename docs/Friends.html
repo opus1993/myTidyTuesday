@@ -17,13 +17,16 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -32,6 +35,15 @@ div.section {
   padding-top: 12px;
 }
 </style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -255,6 +267,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -292,13 +307,27 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
 <div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
 
@@ -329,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-10
+<strong>Last updated:</strong> 2020-10-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -420,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeded5953f6a1c80620bc129134b4a466c2a7e0475targetblankded5953a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/ded5953f6a1c80620bc129134b4a466c2a7e0475" target="_blank">ded5953</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeded5953f6a1c80620bc129134b4a466c2a7e0475targetblankded5953a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/ded5953f6a1c80620bc129134b4a466c2a7e0475" target="_blank">ded5953</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -439,8 +468,8 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
-Unstaged changes:
-    Modified:   analysis/GDPRfines.Rmd
+Untracked files:
+    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -484,6 +513,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/467d8cfbf4ab18f959c6cc96e5319e5418135522/analysis/Friends.Rmd" target="_blank">467d8cf</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/a5e8f7a58c0637ba87ea253024396d49be699e47/docs/Friends.html" target="_blank">a5e8f7a</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/opus1993/myTidyTuesday/blob/ded5953f6a1c80620bc129134b4a466c2a7e0475/analysis/Friends.Rmd" target="_blank">ded5953</a>
 </td>
 <td>
@@ -504,93 +567,37 @@ wflow_publish(“analysis/Friends.Rmd”)
 </div>
 </div>
 <p>The data this week comes from the <code>friends</code> R package for the Friends transcripts and information on the episodes themselves, like when the characters interact with one another.</p>
-<p>There’s text, appearance, ratings, and many other datasets here. We will check out the <code>tidytext</code> mining package and the newly released <strong>Supervised Machine Learning for Text Analysis in R</strong> book, both which are freely available online.</p>
+<p>There’s text, appearance, ratings, and many other datasets here. We will check out the <code>tidytext</code> mining package and the newly released <a href="https://smltar.com/">Supervised Machine Learning for Text Analysis in R</a> book, both which are freely available online.</p>
+<pre class="r"><code>library(tidyverse)
+library(tidytuesdayR)
+library(tidytext)
+
+library(showtext)
+library(glue)
+library(ggbump)
+
+font_add(family = &quot;Gabriel Weiss&#39; Friends Font&quot;, regular = &quot;C:/Users/jimgr/AppData/Local/Microsoft/Windows/Fonts/GABRWFFR.TTF&quot;)
+font_add(
+  family = &quot;IBM Plex Sans&quot;, regular =
+    &quot;C:/Users/jimgr/Documents/R/win-library/4.0/hrbrthemes/fonts/plex-sans/IBMPlexSans-Regular.TTF&quot;
+)
+
+theme_set(theme_minimal(base_family = &quot;Gabriel Weiss&#39; Friends Font&quot;) +
+  theme(plot.title.position = &quot;plot&quot;))
+
+friends.pal &lt;- c(&quot;#F74035&quot;, &quot;#008F48&quot;, &quot;#3F9DD4&quot;, &quot;#9787CD&quot;, &quot;#F6D400&quot;, &quot;#941205&quot;)</code></pre>
 <p>Download the weekly data and make available in the <code>tt</code> object.</p>
 <pre class="r"><code>tt &lt;- tt_load(&quot;2020-09-08&quot;)</code></pre>
 <pre><code>
     Downloading file 1 of 3: `friends.csv`
     Downloading file 2 of 3: `friends_info.csv`
     Downloading file 3 of 3: `friends_emotions.csv`</code></pre>
-<p>Take an initial look at the format of the data available.</p>
-<pre class="r"><code>tt %&gt;% 
-  purrr::map(glimpse)</code></pre>
-<pre><code>Rows: 67,373
-Columns: 6
-$ text      &lt;chr&gt; &quot;There&#39;s nothing to tell! He&#39;s just some guy I work with!...
-$ speaker   &lt;chr&gt; &quot;Monica Geller&quot;, &quot;Joey Tribbiani&quot;, &quot;Chandler Bing&quot;, &quot;Phoe...
-$ season    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
-$ episode   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
-$ scene     &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
-$ utterance &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17...
-Rows: 236
-Columns: 8
-$ season            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
-$ episode           &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15...
-$ title             &lt;chr&gt; &quot;The Pilot&quot;, &quot;The One with the Sonogram at the En...
-$ directed_by       &lt;chr&gt; &quot;James Burrows&quot;, &quot;James Burrows&quot;, &quot;James Burrows&quot;...
-$ written_by        &lt;chr&gt; &quot;David Crane &amp; Marta Kauffman&quot;, &quot;David Crane &amp; Ma...
-$ air_date          &lt;date&gt; 1994-09-22, 1994-09-29, 1994-10-06, 1994-10-13, ...
-$ us_views_millions &lt;dbl&gt; 21.5, 20.2, 19.5, 19.7, 18.6, 18.2, 23.5, 21.1, 2...
-$ imdb_rating       &lt;dbl&gt; 8.3, 8.1, 8.2, 8.1, 8.5, 8.1, 9.0, 8.1, 8.2, 8.1,...
-Rows: 12,606
-Columns: 5
-$ season    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
-$ episode   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
-$ scene     &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, ...
-$ utterance &lt;dbl&gt; 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, ...
-$ emotion   &lt;chr&gt; &quot;Mad&quot;, &quot;Neutral&quot;, &quot;Joyful&quot;, &quot;Neutral&quot;, &quot;Neutral&quot;, &quot;Neutra...</code></pre>
-<pre><code>$friends
-# A tibble: 67,373 x 6
-   text                                speaker    season episode scene utterance
-   &lt;chr&gt;                               &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
- 1 There&#39;s nothing to tell! He&#39;s just~ Monica Ge~      1       1     1         1
- 2 C&#39;mon, you&#39;re going out with the g~ Joey Trib~      1       1     1         2
- 3 All right Joey, be nice. So does h~ Chandler ~      1       1     1         3
- 4 Wait, does he eat chalk?            Phoebe Bu~      1       1     1         4
- 5 (They all stare, bemused.)          Scene Dir~      1       1     1         5
- 6 Just, &#39;cause, I don&#39;t want her to ~ Phoebe Bu~      1       1     1         6
- 7 Okay, everybody relax. This is not~ Monica Ge~      1       1     1         7
- 8 Sounds like a date to me.           Chandler ~      1       1     1         8
- 9 [Time Lapse]                        Scene Dir~      1       1     1         9
-10 Alright, so I&#39;m back in high schoo~ Chandler ~      1       1     1        10
-# ... with 67,363 more rows
-
-$friends_info
-# A tibble: 236 x 8
-   season episode title directed_by written_by air_date   us_views_millio~
-    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;date&gt;                &lt;dbl&gt;
- 1      1       1 The ~ James Burr~ David Cra~ 1994-09-22             21.5
- 2      1       2 The ~ James Burr~ David Cra~ 1994-09-29             20.2
- 3      1       3 The ~ James Burr~ Jeffrey A~ 1994-10-06             19.5
- 4      1       4 The ~ James Burr~ Alexa Jun~ 1994-10-13             19.7
- 5      1       5 The ~ Pamela Fry~ Jeff Gree~ 1994-10-20             18.6
- 6      1       6 The ~ Arlene San~ Adam Chas~ 1994-10-27             18.2
- 7      1       7 The ~ James Burr~ Jeffrey A~ 1994-11-03             23.5
- 8      1       8 The ~ James Burr~ Marta Kau~ 1994-11-10             21.1
- 9      1       9 The ~ James Burr~ Jeff Gree~ 1994-11-17             23.1
-10      1      10 The ~ Peter Bone~ Adam Chas~ 1994-12-15             19.9
-# ... with 226 more rows, and 1 more variable: imdb_rating &lt;dbl&gt;
-
-$friends_emotions
-# A tibble: 12,606 x 5
-   season episode scene utterance emotion
-    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;  
- 1      1       1     4         1 Mad    
- 2      1       1     4         3 Neutral
- 3      1       1     4         4 Joyful 
- 4      1       1     4         5 Neutral
- 5      1       1     4         6 Neutral
- 6      1       1     4         7 Neutral
- 7      1       1     4         8 Scared 
- 8      1       1     4        10 Joyful 
- 9      1       1     4        11 Joyful 
-10      1       1     4        12 Sad    
-# ... with 12,596 more rows</code></pre>
-<pre class="r"><code>library(glue)
-friends.text &lt;- tt$friends %&gt;%
-    inner_join(tt$friends_info, by = c(&quot;season&quot;, &quot;episode&quot;)) %&gt;%
-    mutate(episode_title = glue(&quot;{ season }.{ episode } {title}&quot;),
-           episode_title = fct_reorder(episode_title, season + .001*episode))
+<pre class="r"><code>friends.text &lt;- tt$friends %&gt;%
+  inner_join(tt$friends_info, by = c(&quot;season&quot;, &quot;episode&quot;)) %&gt;%
+  mutate(
+    episode_title = glue(&quot;{ season }.{ episode } {title}&quot;),
+    episode_title = fct_reorder(episode_title, season + .001 * episode)
+  )
 
 epi.info &lt;- tt$friends_info
 emotion &lt;- tt$friends_emotions
@@ -608,176 +615,248 @@ main.characters %&gt;%
 <div id="words-each-character-had-per-season" class="section level1">
 <h1>Words each Character had per season</h1>
 <p>With inspiration from Dr. Christian Hoggard <span class="citation">@CSHoggard</span></p>
-<pre class="r"><code>friends.parsed &lt;- friends.text %&gt;% 
+<pre class="r"><code>friends.parsed &lt;- friends.text %&gt;%
   filter(speaker %in% main.characters$speaker) %&gt;%
   mutate(
     word_count = str_count(text, &quot;\\w+&quot;),
     speaker = word(speaker)
   ) %&gt;%
-  select(-utterance, -scene) %&gt;% 
+  select(-utterance, -scene) %&gt;%
   group_by(speaker, season) %&gt;%
   summarise(word_sum = sum(word_count))
 
-friends.parsed %&gt;% 
+friends.parsed %&gt;%
   group_by(speaker) %&gt;%
-  summarise(total_sum = sum(word_sum))</code></pre>
-<pre><code># A tibble: 6 x 2
-  speaker  total_sum
-  &lt;chr&gt;        &lt;int&gt;
-1 Chandler     93526
-2 Joey         93642
-3 Monica       89597
-4 Phoebe       88011
-5 Rachel      105237
-6 Ross        104144</code></pre>
+  summarise(total_sum = sum(word_sum)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">speaker</th>
+<th align="right">total_sum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Chandler</td>
+<td align="right">93526</td>
+</tr>
+<tr class="even">
+<td align="left">Joey</td>
+<td align="right">93642</td>
+</tr>
+<tr class="odd">
+<td align="left">Monica</td>
+<td align="right">89597</td>
+</tr>
+<tr class="even">
+<td align="left">Phoebe</td>
+<td align="right">88011</td>
+</tr>
+<tr class="odd">
+<td align="left">Rachel</td>
+<td align="right">105237</td>
+</tr>
+<tr class="even">
+<td align="left">Ross</td>
+<td align="right">104144</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>img_friends &lt;- &quot;https://turbologo.com/articles/wp-content/uploads/2019/12/friends-logo-cover-678x381.png.&quot;</code></pre>
-<pre class="r"><code>p &lt;- ggplot(friends.parsed, aes(season, word_sum, colour = speaker)) + 
+<pre class="r"><code>p &lt;- ggplot(friends.parsed, aes(season, word_sum, colour = speaker)) +
   geom_line(size = 1) +
   geom_point(size = 3) +
-  lims(y = c(5000,14000)) +
+  lims(y = c(5000, 14000)) +
   scale_x_continuous(n.breaks = 10) +
   scale_colour_manual(values = friends.pal) +
-  labs(title = &quot;The One About Who Spoke the Most?&quot;,
-       subtitle = &quot;Total number of words per season&quot;,
-       caption = &quot;@jim_gruman | Source: friends R package | #TidyTuesday&quot;,
-       x = &quot;Season&quot;,
-       y = &quot;Word count&quot;) +
+  labs(
+    title = &quot;The One About Who Spoke the Most?&quot;,
+    subtitle = &quot;Total number of words per season&quot;,
+    caption = &quot;@jim_gruman | Source: friends R package | #TidyTuesday&quot;,
+    x = &quot;Season&quot;,
+    y = &quot;&quot;
+  ) +
   annotate(&quot;text&quot;, x = 9, y = 13500, size = 4, colour = &quot;grey97&quot;, family = &quot;IBM Plex Sans&quot;, label = &quot;Rachel spoke over 17,000 words \n more than Pheobe!&quot;) +
-  guides(colour = guide_legend(nrow = 1, override.aes = list(linetype = 0, size=4))) +
-  theme(legend.position = &quot;top&quot;,
-        legend.title = element_blank(),
-        legend.text = element_text(color = &quot;grey97&quot;, size = 11),
-        plot.margin = margin(20, 20, 20, 20),
-        plot.title.position = &quot;plot&quot;,
-        plot.background = element_rect(fill = &quot;#000000&quot;),
-        panel.grid.major = element_line(size = 0.35, linetype = &#39;solid&#39;, colour = &quot;grey10&quot;),
-        panel.grid.minor = element_line(size = 0.3, linetype = &#39;solid&#39;, colour = &quot;grey10&quot;),
-        axis.text.x = element_text(color = &quot;grey97&quot;),
-        axis.title.x = element_text(color = &quot;grey97&quot;, margin = margin(20, 0, 5, 0)),
-        axis.text.y = element_text(color = &quot;grey97&quot;, margin = margin(0, 20, 0, 5)),
-        axis.title.y = element_text(color = &quot;grey97&quot;),
-        plot.title = element_text(color = &quot;grey97&quot;, size = 32, margin = margin(0, 0, 10, 0)),
-        plot.subtitle = element_text(color = &quot;grey97&quot;, size = 12, margin = margin(0, 0, 20, 0)),
-        plot.caption = element_text(size = 9, colour = &quot;grey97&quot;, margin = margin(20, 0, 0, 0)))
+  guides(colour = guide_legend(nrow = 1, override.aes = list(linetype = 0, size = 4))) +
+  theme(
+    legend.position = &quot;top&quot;,
+    legend.title = element_blank(),
+    legend.text = element_text(color = &quot;grey97&quot;, size = 11),
+    plot.margin = margin(20, 20, 20, 20),
+    plot.title.position = &quot;plot&quot;,
+    plot.background = element_rect(fill = &quot;#000000&quot;),
+    panel.grid.major = element_line(size = 0.35, linetype = &quot;solid&quot;, colour = &quot;grey10&quot;),
+    panel.grid.minor = element_line(size = 0.3, linetype = &quot;solid&quot;, colour = &quot;grey10&quot;),
+    axis.text.x = element_text(color = &quot;grey97&quot;),
+    axis.title.x = element_text(color = &quot;grey97&quot;, margin = margin(20, 0, 5, 0)),
+    axis.text.y = element_text(color = &quot;grey97&quot;, margin = margin(0, 20, 0, 5)),
+    axis.title.y = element_text(color = &quot;grey97&quot;),
+    plot.title = element_text(color = &quot;grey97&quot;, size = 32, margin = margin(0, 0, 10, 0)),
+    plot.subtitle = element_text(color = &quot;grey97&quot;, size = 12, margin = margin(0, 0, 20, 0)),
+    plot.caption = element_text(size = 9, colour = &quot;grey97&quot;, margin = margin(20, 0, 0, 0))
+  )
 
-p1&lt;-cowplot::ggdraw() +
+p1 &lt;- cowplot::ggdraw() +
   cowplot::draw_plot(p) +
-  cowplot::draw_image(img_friends, scale=0.2, y=-0.45, x=-0.4)
+  cowplot::draw_image(img_friends, scale = 0.2, y = -0.45, x = -0.4)
 
-ggsave(filename = &quot;docs/assets/friends-1.pdf&quot;, plot = p1, width = 12, height = 8, device = cairo_pdf)
-
-pdftools::pdf_convert(pdf = &quot;docs/assets/friends-1.pdf&quot;, format = &quot;png&quot;,
-                      dpi = 300, filenames = &quot;docs/assets/friends-1.png&quot;)</code></pre>
-<pre><code>Converting page 1 to docs/assets/friends-1.png... done!</code></pre>
-<pre><code>[1] &quot;docs/assets/friends-1.png&quot;</code></pre>
-<pre class="r"><code>knitr::include_graphics(&quot;assets/friends-1.png&quot;, error = FALSE)</code></pre>
-<p><img src="assets/friends-1.png" style="display: block; margin: auto;" /></p>
+p1</code></pre>
+<p><img src="figure/Friends.Rmd/WhoSpokeTheMost-1.png" width="3000" style="display: block; margin: auto;" /></p>
 </div>
 <div id="visualize-the-lines-by-season-in-ranks" class="section level1">
 <h1>Visualize the Lines by Season in Ranks</h1>
 <p>With inspiration from David Smale <span class="citation">@committedtotape</span></p>
-<pre class="r"><code>library(ggbump)
-
-lines_by_season &lt;- friends.text %&gt;% 
+<pre class="r"><code>lines_by_season &lt;- friends.text %&gt;%
   filter(speaker %in% main.characters$speaker) %&gt;%
   count(season, speaker, name = &quot;lines&quot;) %&gt;%
   group_by(season) %&gt;%
   arrange(season, -lines) %&gt;%
   mutate(rank = row_number()) %&gt;%
-  inner_join(main.characters, by = &quot;speaker&quot;) 
+  inner_join(main.characters, by = &quot;speaker&quot;)
 
-p2&lt;-lines_by_season %&gt;%
-  ggplot(aes(season, rank, color = firstname))+
+lines_by_season %&gt;%
+  ggplot(aes(season, rank, color = firstname)) +
   geom_point(size = 7) +
-  geom_text(data = lines_by_season %&gt;% filter(season == 1),
-            aes(x = season - .2, label = firstname), size = 6, hjust =1)+
-  geom_text(data = lines_by_season %&gt;% filter(season == 10),
-            aes(x = season + .2, label = firstname), size = 6, hjust =0)+
-  geom_bump(size = 2, smooth = 5)+
-  scale_x_continuous(limits = c(0, 11),
-                     breaks = seq(1,10,1),
-                     position = &quot;top&quot;)+
-  scale_y_reverse(breaks = seq(1,6,1),
-                  position = &quot;left&quot;)+
-  scale_color_manual(values = friends.pal)+
-  labs(title = &quot;Aw, Phoebs!&quot;,
-       subtitle = &quot;Friends ranked by number of lines per seasons \nPhoebe has the fewest lines in 5 of 10 seasons&quot;,
-       caption = &quot;Data: friends R package | @jim_gruman&quot;,
-       x = &quot;Season&quot;, y = &quot;Rank&quot;)+
-  theme(legend.position = &quot;none&quot;,
-        plot.background = element_rect(fill = &quot;#000000&quot;, color = &quot;gray10&quot;),
-        axis.text.x = element_text(color = &quot;gray90&quot;, size = 16),
-        axis.text.y = element_text(color = &quot;gray90&quot;, size = 16),
-        axis.title.x.top = element_text(color = &quot;gray90&quot;, size = 16, 
-                                        hjust = 0.5, 
-                                        margin = margin(0,0,10,0)),
-        axis.title.y.left = element_text(color = &quot;gray90&quot;, size = 16, 
-                                        hjust = 0, vjust = 0.5,
-                                        angle = 0),
-        plot.title = element_text(color = &quot;#9C61FD&quot;, hjust = 0.5,
-                                  size = 34, margin = margin(0,0,10,0)),
-        plot.subtitle = element_text(color = &quot;gray90&quot;, hjust = 0.5,
-                                     size = 16, margin = margin(0,0,20,0)),
-        plot.caption = element_text(color = &quot;gray90&quot;, hjust = 1, size = 10,
-                                    margin = margin(20,0,5,0)),
-        plot.margin = margin(20,20,20,20),
-        panel.grid = element_blank()
-        )
-
-ggsave(filename = &quot;docs/assets/friends-2.pdf&quot;, plot = p2, width = 12,height = 8, device = cairo_pdf)
-
-pdftools::pdf_convert(pdf = &quot;docs/assets/friends-2.pdf&quot;, format = &quot;png&quot;,
-                      dpi = 300, filenames = &quot;docs/assets/friends-2.png&quot;)</code></pre>
-<pre><code>Converting page 1 to docs/assets/friends-2.png... done!</code></pre>
-<pre><code>[1] &quot;docs/assets/friends-2.png&quot;</code></pre>
-<pre class="r"><code>knitr::include_graphics(&quot;assets/friends-2.png&quot;, error = FALSE)</code></pre>
-<p><img src="assets/friends-2.png" style="display: block; margin: auto;" /></p>
+  geom_text(
+    data = lines_by_season %&gt;% filter(season == 1),
+    aes(x = season - .2, label = firstname), size = 6, hjust = 1
+  ) +
+  geom_text(
+    data = lines_by_season %&gt;% filter(season == 10),
+    aes(x = season + .2, label = firstname), size = 6, hjust = 0
+  ) +
+  geom_bump(size = 2, smooth = 5) +
+  scale_x_continuous(
+    limits = c(0, 11),
+    breaks = seq(1, 10, 1),
+    position = &quot;top&quot;
+  ) +
+  scale_y_reverse(
+    breaks = seq(1, 6, 1),
+    position = &quot;left&quot;
+  ) +
+  scale_color_manual(values = friends.pal) +
+  labs(
+    title = &quot;Aw, Phoebs!&quot;,
+    subtitle = &quot;Friends ranked by number of lines per season \nPhoebe has the fewest lines in 5 of 10 seasons&quot;,
+    caption = &quot;Data: friends R package | @jim_gruman&quot;,
+    x = &quot;Season&quot;, y = &quot;Rank&quot;
+  ) +
+  theme(
+    legend.position = &quot;none&quot;,
+    plot.background = element_rect(fill = &quot;#000000&quot;, color = &quot;gray10&quot;),
+    axis.text.x = element_text(color = &quot;gray90&quot;, size = 16),
+    axis.text.y = element_text(color = &quot;gray90&quot;, size = 16),
+    axis.title.x.top = element_text(
+      color = &quot;gray90&quot;, size = 16,
+      hjust = 0.5,
+      margin = margin(0, 0, 10, 0)
+    ),
+    axis.title.y.left = element_text(
+      color = &quot;gray90&quot;, size = 16,
+      hjust = 0, vjust = 0.5,
+      angle = 0
+    ),
+    plot.title = element_text(
+      color = &quot;#9C61FD&quot;, hjust = 0.5,
+      size = 34, margin = margin(0, 0, 10, 0)
+    ),
+    plot.subtitle = element_text(
+      color = &quot;gray90&quot;, hjust = 0.5,
+      size = 16, margin = margin(0, 0, 20, 0)
+    ),
+    plot.caption = element_text(
+      color = &quot;gray90&quot;, hjust = 1, size = 10,
+      margin = margin(20, 0, 5, 0)
+    ),
+    plot.margin = margin(20, 20, 20, 20),
+    panel.grid = element_blank()
+  )</code></pre>
+<p><img src="figure/Friends.Rmd/Ranks-1.png" width="3000" style="display: block; margin: auto;" /></p>
 <p>Let’s model features with regression to infer what features drive imdb_rating</p>
-<pre class="r"><code>speaker_lines_per_episode&lt;-friends.text %&gt;% 
-  count(speaker, episode_title, imdb_rating) %&gt;% 
-  complete(speaker, episode_title, fill = list(n = 0)) %&gt;% 
+<pre class="r"><code>speaker_lines_per_episode &lt;- friends.text %&gt;%
+  count(speaker, episode_title, imdb_rating) %&gt;%
+  complete(speaker, episode_title, fill = list(n = 0)) %&gt;%
   group_by(episode_title) %&gt;%
-  fill(imdb_rating, .direction = &quot;downup&quot;) %&gt;% 
-  ungroup() %&gt;% 
-  add_count(episode_title, wt = n, name = &quot;episode_total&quot;) %&gt;% 
+  fill(imdb_rating, .direction = &quot;downup&quot;) %&gt;%
+  ungroup() %&gt;%
+  add_count(episode_title, wt = n, name = &quot;episode_total&quot;) %&gt;%
   mutate(pct = n / episode_total)
 
 speaker_lines_per_episode %&gt;%
   semi_join(main.characters, by = &quot;speaker&quot;) %&gt;%
-  mutate(speaker = fct_reorder(speaker, n)) %&gt;% 
-  ggplot(aes(pct, speaker))+
-  geom_boxplot() </code></pre>
-<p><img src="figure/Friends.Rmd/unnamed-chunk-7-1.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>speaker_lines_per_episode %&gt;% 
-  semi_join(main.characters, by = &quot;speaker&quot;) %&gt;% 
-  group_by(speaker) %&gt;% 
-  summarize(correlation = cor(pct,imdb_rating))</code></pre>
-<pre><code># A tibble: 6 x 2
-  speaker        correlation
-  &lt;chr&gt;                &lt;dbl&gt;
-1 Chandler Bing      -0.0416
-2 Joey Tribbiani     -0.0135
-3 Monica Geller       0.0678
-4 Phoebe Buffay      -0.0170
-5 Rachel Green        0.0379
-6 Ross Geller         0.185 </code></pre>
-<pre class="r"><code>friends.text %&gt;% 
+  mutate(speaker = fct_reorder(speaker, n)) %&gt;%
+  ggplot(aes(pct, speaker, color = speaker)) +
+  geom_boxplot(
+    outlier.shape = NA,
+    show.legend = FALSE,
+    fill = &quot;white&quot;
+  ) +
+  geom_jitter(show.legend = FALSE) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    x = &quot;&quot;, y = &quot;&quot;,
+    title = &quot;Portion of the lines of each episode&quot;
+  )</code></pre>
+<p><img src="figure/Friends.Rmd/LinesPerEpisode-1.png" width="3000" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>speaker_lines_per_episode %&gt;%
+  semi_join(main.characters, by = &quot;speaker&quot;) %&gt;%
+  group_by(speaker) %&gt;%
+  summarize(correlation = cor(pct, imdb_rating)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">speaker</th>
+<th align="right">correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Chandler Bing</td>
+<td align="right">-0.0415741</td>
+</tr>
+<tr class="even">
+<td align="left">Joey Tribbiani</td>
+<td align="right">-0.0135204</td>
+</tr>
+<tr class="odd">
+<td align="left">Monica Geller</td>
+<td align="right">0.0678008</td>
+</tr>
+<tr class="even">
+<td align="left">Phoebe Buffay</td>
+<td align="right">-0.0169874</td>
+</tr>
+<tr class="odd">
+<td align="left">Rachel Green</td>
+<td align="right">0.0378711</td>
+</tr>
+<tr class="even">
+<td align="left">Ross Geller</td>
+<td align="right">0.1847020</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>friends.text %&gt;%
   group_by(episode_title) %&gt;%
-  summarize(n = n(), 
-            imdb_rating = min(imdb_rating)) %&gt;% 
-  ggplot(aes(n, imdb_rating))+
+  summarize(
+    n = n(),
+    imdb_rating = min(imdb_rating)
+  ) %&gt;%
+  ggplot(aes(n, imdb_rating)) +
   geom_point()</code></pre>
-<p><img src="figure/Friends.Rmd/unnamed-chunk-7-2.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Friends.Rmd/LinesPerEpisode-2.png" width="3000" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># setup the training set
-speakers_per_episode_wide&lt;- speaker_lines_per_episode %&gt;% 
-  semi_join(main.characters, by = &quot;speaker&quot;) %&gt;% 
-  select(episode_title, speaker, pct, imdb_rating, episode_total) %&gt;% 
+speakers_per_episode_wide &lt;- speaker_lines_per_episode %&gt;%
+  semi_join(main.characters, by = &quot;speaker&quot;) %&gt;%
+  select(episode_title, speaker, pct, imdb_rating, episode_total) %&gt;%
   spread(speaker, pct) %&gt;%
   select(-episode_title)
 
-speakers_per_episode_wide %&gt;% 
-  lm(imdb_rating ~ ., data = .) %&gt;% 
-#  aov() %&gt;%
+speakers_per_episode_wide %&gt;%
+  lm(imdb_rating ~ ., data = .) %&gt;%
   summary()</code></pre>
 <pre><code>
 Call:
@@ -809,57 +888,121 @@ F-statistic: 2.755 on 7 and 228 DF,  p-value: 0.009136</code></pre>
 library(tidylo)
 
 words_unnested &lt;- friends.text %&gt;%
-   left_join(emotion, by = c(&quot;season&quot;, &quot;episode&quot;, &quot;utterance&quot;)) %&gt;% 
-   select(text, speaker, season, episode_title, emotion) %&gt;% 
-   unnest_tokens(word, text) %&gt;% 
-   anti_join(stop_words, by = &quot;word&quot;) %&gt;% 
-   filter(!word %in% c(&quot;yeah&quot;,&quot;hey&quot;,&quot;gonna&quot;,&quot;uh&quot;, &quot;y&#39;know&quot;, &quot;um&quot;, &quot;ah&quot;, &quot;um&quot;, &quot;la&quot;, &quot;wh&quot;)) %&gt;% 
-   filter(!str_detect(word, &quot;[:digit:]|^aa&quot;),
-          !is.na(emotion), emotion != &quot;Neutral&quot; )
+  left_join(emotion, by = c(&quot;season&quot;, &quot;episode&quot;, &quot;utterance&quot;)) %&gt;%
+  select(text, speaker, season, episode_title, emotion) %&gt;%
+  unnest_tokens(word, text) %&gt;%
+  anti_join(stop_words, by = &quot;word&quot;) %&gt;%
+  filter(!word %in% c(&quot;yeah&quot;, &quot;hey&quot;, &quot;gonna&quot;, &quot;uh&quot;, &quot;y&#39;know&quot;, &quot;um&quot;, &quot;ah&quot;, &quot;um&quot;, &quot;la&quot;, &quot;wh&quot;)) %&gt;%
+  filter(
+    !str_detect(word, &quot;[:digit:]|^aa&quot;),
+    !is.na(emotion), emotion != &quot;Neutral&quot;
+  )
 
-words_unnested %&gt;% 
-  count(word, sort = TRUE)</code></pre>
-<pre><code># A tibble: 9,023 x 2
-   word         n
-   &lt;chr&gt;    &lt;int&gt;
- 1 ross      3461
- 2 god       2872
- 3 joey      2380
- 4 time      2090
- 5 guys      2077
- 6 rachel    2048
- 7 monica    2032
- 8 chandler  2009
- 9 guy       1782
-10 phoebe    1589
-# ... with 9,013 more rows</code></pre>
-<pre class="r"><code>by_speaker_word&lt;- words_unnested %&gt;%
-  semi_join(main.characters, by = &quot;speaker&quot;) %&gt;% 
-  count(speaker, word, emotion, name = &quot;n_emotion&quot;) %&gt;% 
-  group_by(speaker, word) %&gt;% 
-  summarize(n = sum(n_emotion),
-            emotion =  first(emotion, order_by = -n_emotion)) 
+words_unnested %&gt;%
+  count(word, sort = TRUE) %&gt;%
+  slice_max(order_by = n, n = 15) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">word</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ross</td>
+<td align="right">3461</td>
+</tr>
+<tr class="even">
+<td align="left">god</td>
+<td align="right">2872</td>
+</tr>
+<tr class="odd">
+<td align="left">joey</td>
+<td align="right">2380</td>
+</tr>
+<tr class="even">
+<td align="left">time</td>
+<td align="right">2090</td>
+</tr>
+<tr class="odd">
+<td align="left">guys</td>
+<td align="right">2077</td>
+</tr>
+<tr class="even">
+<td align="left">rachel</td>
+<td align="right">2048</td>
+</tr>
+<tr class="odd">
+<td align="left">monica</td>
+<td align="right">2032</td>
+</tr>
+<tr class="even">
+<td align="left">chandler</td>
+<td align="right">2009</td>
+</tr>
+<tr class="odd">
+<td align="left">guy</td>
+<td align="right">1782</td>
+</tr>
+<tr class="even">
+<td align="left">phoebe</td>
+<td align="right">1589</td>
+</tr>
+<tr class="odd">
+<td align="left">wait</td>
+<td align="right">1515</td>
+</tr>
+<tr class="even">
+<td align="left">love</td>
+<td align="right">1492</td>
+</tr>
+<tr class="odd">
+<td align="left">huh</td>
+<td align="right">1310</td>
+</tr>
+<tr class="even">
+<td align="left">ya</td>
+<td align="right">1296</td>
+</tr>
+<tr class="odd">
+<td align="left">umm</td>
+<td align="right">1295</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>by_speaker_word &lt;- words_unnested %&gt;%
+  semi_join(main.characters, by = &quot;speaker&quot;) %&gt;%
+  count(speaker, word, emotion, name = &quot;n_emotion&quot;) %&gt;%
+  group_by(speaker, word) %&gt;%
+  summarize(
+    n = sum(n_emotion),
+    emotion = first(emotion, order_by = -n_emotion)
+  )
 
 # what are the most over-represented words for each character?
-unique_sentiments &lt;-  by_speaker_word %&gt;% 
-  bind_log_odds(speaker, word, n) %&gt;% 
-  group_by(speaker) %&gt;% 
-  slice_max(log_odds_weighted, n = 20) %&gt;% 
-  mutate(size = scales::rescale(log_odds_weighted, to = c(3,9)))</code></pre>
+unique_sentiments &lt;- by_speaker_word %&gt;%
+  bind_log_odds(speaker, word, n) %&gt;%
+  group_by(speaker) %&gt;%
+  slice_max(log_odds_weighted, n = 12) %&gt;%
+  mutate(size = scales::rescale(log_odds_weighted, to = c(3, 9)))</code></pre>
 </div>
 <div id="visualize-a-word-cloud-with-words-most-representative-of-each-character-and-most-common-emotional-sentiment" class="section level1">
 <h1>Visualize a word cloud with words most representative of each character and most common emotional sentiment</h1>
 <p>Jack Davison <span class="citation">@JDavison_</span> inspired this beautiful word cloud</p>
 <p>Credit David Robinson for the <code>tidylo</code> insight</p>
-<pre class="r"><code>p3&lt;-ggplot(unique_sentiments,
-       aes(
-         label = word,
-         size = log_odds_weighted,
-         color = emotion,
-         alpha = log_odds_weighted
-       )) +
+<pre class="r"><code>ggplot(
+  unique_sentiments,
+  aes(
+    label = word,
+    size = log_odds_weighted,
+    color = emotion,
+    alpha = log_odds_weighted
+  )
+) +
   ggwordcloud::geom_text_wordcloud_area(area_corr_power = 1) +
-  facet_wrap(~ speaker) +
+  facet_wrap(~speaker) +
   scale_radius(range = c(3, 20)) +
   scale_color_manual(values = friends.pal) +
   scale_alpha(range = c(.5, 1)) +
@@ -890,18 +1033,12 @@ unique_sentiments &lt;-  by_speaker_word %&gt;%
       color = &quot;#f4c93cff&quot;
     )
   ) +
-  labs(title = &quot;the one with the sentiment analysis&quot;,
-       subtitle = &quot;(&lt;span style=&#39;color:#F74035&#39;&gt;Joyful&lt;/span&gt; &lt;span style=&#39;color:#008F48&#39;&gt;Mad&lt;/span&gt; &lt;span style=&#39;color:#3F9DD4&#39;&gt;Peaceful&lt;/span&gt; &lt;span style=&#39;color:#9787CD&#39;&gt;Powerful&lt;/span&gt; &lt;span style=&#39;color:#F6D400&#39;&gt;Sad&lt;/span&gt; &lt;span style=&#39;color:#941205&#39;&gt;Scared&lt;/span&gt;)&lt;br&gt;&lt;br&gt;&quot;,
-       caption = &quot;&lt;br&gt;Data from &lt;b&gt;{friends}&lt;/b&gt; (github.com/EmilHvitfeldt/friends)&lt;br&gt; Visualisation by &lt;b&gt;Jim Gruman&lt;/b&gt; (Twitter @jim_gruman)&lt;br&gt;Code found at &lt;b&gt;opus1993.github.io/myTidyTuesday/&lt;/b&gt;&quot;)
-
-ggsave(filename = &quot;docs/assets/friends-3.pdf&quot;, plot = p3, width = 18, height = 12, device = cairo_pdf)
-
-pdftools::pdf_convert(pdf = &quot;docs/assets/friends-3.pdf&quot;, format = &quot;png&quot;,
-                      dpi = 300, filenames = &quot;docs/assets/friends-3.png&quot;)</code></pre>
-<pre><code>Converting page 1 to docs/assets/friends-3.png... done!</code></pre>
-<pre><code>[1] &quot;docs/assets/friends-3.png&quot;</code></pre>
-<pre class="r"><code>knitr::include_graphics(&quot;assets/friends-3.png&quot;, error = FALSE)</code></pre>
-<p><img src="assets/friends-3.png" style="display: block; margin: auto;" /></p>
+  labs(
+    title = &quot;the one with the sentiment analysis&quot;,
+    subtitle = &quot;(&lt;span style=&#39;color:#F74035&#39;&gt;Joyful&lt;/span&gt; &lt;span style=&#39;color:#008F48&#39;&gt;Mad&lt;/span&gt; &lt;span style=&#39;color:#3F9DD4&#39;&gt;Peaceful&lt;/span&gt; &lt;span style=&#39;color:#9787CD&#39;&gt;Powerful&lt;/span&gt; &lt;span style=&#39;color:#F6D400&#39;&gt;Sad&lt;/span&gt; &lt;span style=&#39;color:#941205&#39;&gt;Scared&lt;/span&gt;)&lt;br&gt;&lt;br&gt;&quot;,
+    caption = &quot;&lt;br&gt;Data from &lt;b&gt;{friends}&lt;/b&gt; (github.com/EmilHvitfeldt/friends)&lt;br&gt; Visualisation by &lt;b&gt;Jim Gruman&lt;/b&gt; (Twitter @jim_gruman)&lt;br&gt;Code found at &lt;b&gt;opus1993.github.io/myTidyTuesday&lt;/b&gt;&quot;
+  )</code></pre>
+<p><img src="figure/Friends.Rmd/word_cloud-1.png" width="4800" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -928,31 +1065,32 @@ attached base packages:
 
 other attached packages:
  [1] tidylo_0.1.0       ggbump_0.1.0       glue_1.4.2         showtext_0.9      
- [5] showtextdb_3.0     sysfonts_0.8.1     tidytext_0.2.5     tidytuesdayR_1.0.1
+ [5] showtextdb_3.0     sysfonts_0.8.1     tidytext_0.2.6     tidytuesdayR_1.0.1
  [9] forcats_0.5.0      stringr_1.4.0      dplyr_1.0.2        purrr_0.3.4       
-[13] readr_1.3.1        tidyr_1.1.2        tibble_3.0.3       ggplot2_3.3.2     
+[13] readr_1.4.0        tidyr_1.1.2        tibble_3.0.3       ggplot2_3.3.2     
 [17] tidyverse_1.3.0    workflowr_1.6.2   
 
 loaded via a namespace (and not attached):
- [1] ggtext_0.1.0.9000 fs_1.5.0          usethis_1.6.1     lubridate_1.7.9  
+ [1] ggtext_0.1.0.9000 fs_1.5.0          usethis_1.6.3     lubridate_1.7.9  
  [5] httr_1.4.2        ggwordcloud_0.5.0 rprojroot_1.3-2   SnowballC_0.7.0  
- [9] tools_4.0.0       backports_1.1.9   utf8_1.1.4        R6_2.4.1         
-[13] DBI_1.1.0         colorspace_1.4-1  withr_2.2.0       tidyselect_1.1.0 
+ [9] R.cache_0.14.0    tools_4.0.0       backports_1.1.10  R6_2.4.1         
+[13] DBI_1.1.0         colorspace_1.4-1  withr_2.3.0       tidyselect_1.1.0 
 [17] curl_4.3          compiler_4.0.0    git2r_0.27.1      cli_2.0.2        
 [21] rvest_0.3.6       xml2_1.3.2        labeling_0.3      scales_1.1.1     
-[25] askpass_1.1       digest_0.6.25     rmarkdown_2.3     pkgconfig_2.0.3  
-[29] htmltools_0.5.0   dbplyr_1.4.4      rlang_0.4.7       readxl_1.3.1     
-[33] rstudioapi_0.11   generics_0.0.2    farver_2.0.3      jsonlite_1.7.1   
-[37] tokenizers_0.2.1  magrittr_1.5      Matrix_1.2-18     Rcpp_1.0.5       
-[41] munsell_0.5.0     fansi_0.4.1       lifecycle_0.2.0   stringi_1.5.3    
-[45] whisker_0.4       yaml_2.2.1        grid_4.0.0        blob_1.2.1       
-[49] promises_1.1.1    crayon_1.3.4      lattice_0.20-41   haven_2.3.1      
-[53] cowplot_1.1.0     gridtext_0.1.1    hms_0.5.3         magick_2.4.0     
-[57] knitr_1.29        pillar_1.4.6      markdown_1.1      reprex_0.3.0     
-[61] evaluate_0.14     pdftools_2.3.1    qpdf_1.1          modelr_0.1.8     
-[65] png_0.1-7         vctrs_0.3.4       httpuv_1.5.4      selectr_0.4-2    
-[69] cellranger_1.1.0  gtable_0.3.0      assertthat_0.2.1  xfun_0.16        
-[73] broom_0.7.0       janeaustenr_0.1.5 later_1.1.0.1     ellipsis_0.3.1   </code></pre>
+[25] digest_0.6.25     rmarkdown_2.4     R.utils_2.10.1    pkgconfig_2.0.3  
+[29] htmltools_0.5.0   styler_1.3.2      dbplyr_1.4.4      highr_0.8        
+[33] rlang_0.4.7       readxl_1.3.1      rstudioapi_0.11   generics_0.0.2   
+[37] farver_2.0.3      jsonlite_1.7.1    tokenizers_0.2.1  R.oo_1.24.0      
+[41] magrittr_1.5      Matrix_1.2-18     Rcpp_1.0.5        munsell_0.5.0    
+[45] fansi_0.4.1       lifecycle_0.2.0   R.methodsS3_1.8.1 stringi_1.5.3    
+[49] whisker_0.4       yaml_2.2.1        grid_4.0.0        blob_1.2.1       
+[53] promises_1.1.1    crayon_1.3.4      lattice_0.20-41   haven_2.3.1      
+[57] cowplot_1.1.0     gridtext_0.1.1    hms_0.5.3         magick_2.4.0     
+[61] knitr_1.30        pillar_1.4.6      markdown_1.1      reprex_0.3.0     
+[65] evaluate_0.14     modelr_0.1.8      png_0.1-7         vctrs_0.3.4      
+[69] httpuv_1.5.4      selectr_0.4-2     cellranger_1.1.0  gtable_0.3.0     
+[73] rematch2_2.1.2    assertthat_0.2.1  xfun_0.18         broom_0.7.1      
+[77] janeaustenr_0.1.5 later_1.1.0.1     ellipsis_0.3.1   </code></pre>
 </div>
 </div>
 
@@ -1001,6 +1139,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

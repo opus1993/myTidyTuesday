@@ -24,6 +24,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -32,6 +34,15 @@ div.section {
   padding-top: 12px;
 }
 </style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -292,7 +303,13 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -329,7 +346,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-07
+<strong>Last updated:</strong> 2020-10-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -420,16 +437,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree0221a961a5aa6b41132baa62ce41ace9a729f016targetblank0221a96a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/0221a961a5aa6b41132baa62ce41ace9a729f016" target="_blank">0221a96</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree0221a961a5aa6b41132baa62ce41ace9a729f016targetblank0221a96a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/0221a961a5aa6b41132baa62ce41ace9a729f016" target="_blank">0221a96</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -440,15 +457,7 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  code/studentdebt.R
-    Untracked:  figure/BrainInjury.Rmd/
-    Untracked:  figure/NFL attendance.Rmd/
-    Untracked:  figure/TourDeFrance.Rmd/
-
-Unstaged changes:
-    Modified:   analysis/BrainInjury.Rmd
-    Modified:   analysis/GDPRfines.Rmd
-    Modified:   analysis/index.Rmd
+    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -487,6 +496,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/ff66a1c16865d3b174f3745aeb8a5b01449ae04c/docs/AnimalCrossing.html" target="_blank">ff66a1c</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -858,11 +884,11 @@ lasso_wf &lt;- workflow() %&gt;%
   add_model(lasso_spec)
 
 lasso_wf</code></pre>
-<pre><code>== Workflow =============================================================
+<pre><code>== Workflow =====================================
 Preprocessor: Recipe
 Model: logistic_reg()
 
--- Preprocessor ---------------------------------------------------------
+-- Preprocessor ---------------------------------
 8 Recipe Steps
 
 * step_mutate()
@@ -874,7 +900,7 @@ Model: logistic_reg()
 * step_tfidf()
 * step_normalize()
 
--- Model ----------------------------------------------------------------
+-- Model ----------------------------------------
 Logistic Regression Model Specification (classification)
 
 Main Arguments:
@@ -893,16 +919,16 @@ review_folds</code></pre>
 # A tibble: 25 x 2
    splits             id         
    &lt;list&gt;             &lt;chr&gt;      
- 1 &lt;split [2.2K/807]&gt; Bootstrap01
- 2 &lt;split [2.2K/831]&gt; Bootstrap02
- 3 &lt;split [2.2K/825]&gt; Bootstrap03
- 4 &lt;split [2.2K/840]&gt; Bootstrap04
- 5 &lt;split [2.2K/842]&gt; Bootstrap05
- 6 &lt;split [2.2K/827]&gt; Bootstrap06
- 7 &lt;split [2.2K/846]&gt; Bootstrap07
- 8 &lt;split [2.2K/829]&gt; Bootstrap08
- 9 &lt;split [2.2K/800]&gt; Bootstrap09
-10 &lt;split [2.2K/847]&gt; Bootstrap10
+ 1 &lt;split [2.2K/853]&gt; Bootstrap01
+ 2 &lt;split [2.2K/829]&gt; Bootstrap02
+ 3 &lt;split [2.2K/809]&gt; Bootstrap03
+ 4 &lt;split [2.2K/827]&gt; Bootstrap04
+ 5 &lt;split [2.2K/803]&gt; Bootstrap05
+ 6 &lt;split [2.2K/809]&gt; Bootstrap06
+ 7 &lt;split [2.2K/831]&gt; Bootstrap07
+ 8 &lt;split [2.2K/817]&gt; Bootstrap08
+ 9 &lt;split [2.2K/831]&gt; Bootstrap09
+10 &lt;split [2.2K/832]&gt; Bootstrap10
 # ... with 15 more rows</code></pre>
 <p>Now we can put it all together and implement the tuning. We can set specific metrics to compute during tuning with <code>metric_set()</code>. Let’s look at AUC, positive predictive value, and negative predictive value so we can understand if one class is harder to predict than another.</p>
 <pre class="r"><code>lasso_grid &lt;- tune::tune_grid(
@@ -917,16 +943,16 @@ review_folds</code></pre>
 <pre><code># A tibble: 120 x 7
     penalty .metric .estimator  mean     n std_err .config
       &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
- 1 1.00e-10 npv     binary     0.748    25 0.00484 Model01
- 2 1.00e-10 ppv     binary     0.861    25 0.00233 Model01
- 3 1.00e-10 roc_auc binary     0.882    25 0.00195 Model01
- 4 1.80e-10 npv     binary     0.748    25 0.00484 Model02
- 5 1.80e-10 ppv     binary     0.861    25 0.00233 Model02
- 6 1.80e-10 roc_auc binary     0.882    25 0.00195 Model02
- 7 3.26e-10 npv     binary     0.748    25 0.00484 Model03
- 8 3.26e-10 ppv     binary     0.861    25 0.00233 Model03
- 9 3.26e-10 roc_auc binary     0.882    25 0.00195 Model03
-10 5.88e-10 npv     binary     0.748    25 0.00484 Model04
+ 1 1.00e-10 npv     binary     0.743    25 0.00559 Model01
+ 2 1.00e-10 ppv     binary     0.865    25 0.00252 Model01
+ 3 1.00e-10 roc_auc binary     0.877    25 0.00264 Model01
+ 4 1.80e-10 npv     binary     0.743    25 0.00559 Model02
+ 5 1.80e-10 ppv     binary     0.865    25 0.00252 Model02
+ 6 1.80e-10 roc_auc binary     0.877    25 0.00264 Model02
+ 7 3.26e-10 npv     binary     0.743    25 0.00559 Model03
+ 8 3.26e-10 ppv     binary     0.865    25 0.00252 Model03
+ 9 3.26e-10 roc_auc binary     0.877    25 0.00264 Model03
+10 5.88e-10 npv     binary     0.743    25 0.00559 Model04
 # ... with 110 more rows</code></pre>
 <p>Visualization is often more helpful to understand model performance.</p>
 <pre class="r"><code>lasso_grid %&gt;%
@@ -958,11 +984,11 @@ best_auc</code></pre>
 <pre class="r"><code>final_lasso &lt;- finalize_workflow(lasso_wf, best_auc)
 
 final_lasso</code></pre>
-<pre><code>== Workflow =============================================================
+<pre><code>== Workflow =====================================
 Preprocessor: Recipe
 Model: logistic_reg()
 
--- Preprocessor ---------------------------------------------------------
+-- Preprocessor ---------------------------------
 8 Recipe Steps
 
 * step_mutate()
@@ -974,7 +1000,7 @@ Model: logistic_reg()
 * step_tfidf()
 * step_normalize()
 
--- Model ----------------------------------------------------------------
+-- Model ----------------------------------------
 Logistic Regression Model Specification (classification)
 
 Main Arguments:
@@ -1035,7 +1061,7 @@ review_final %&gt;%
 <pre><code># A tibble: 2 x 3
   .metric  .estimator .estimate
   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
-1 accuracy binary         0.881
+1 accuracy binary         0.864
 2 roc_auc  binary         0.941</code></pre>
 <p>We did not overfit during our tuning process, and the overall accuracy is not bad. Let’s create a confusion matrix for the testing data.</p>
 <pre class="r"><code>review_final %&gt;%
@@ -1043,8 +1069,8 @@ review_final %&gt;%
   conf_mat(rating, .pred_class)</code></pre>
 <pre><code>          Truth
 Prediction bad good
-      bad  432   46
-      good  43  228</code></pre>
+      bad  438   65
+      good  37  209</code></pre>
 <p>Though our overall accuracy isn’t great, we discover here that it is easier to detect the negative reviews than the positive ones.</p>
 <pre class="r"><code>devtools::session_info()</code></pre>
 <pre><code>- Session info ---------------------------------------------------------------
@@ -1057,29 +1083,28 @@ Prediction bad good
  collate  English_United States.1252  
  ctype    English_United States.1252  
  tz       America/Chicago             
- date     2020-09-07                  
+ date     2020-10-10                  
 
 - Packages -------------------------------------------------------------------
  package     * version    date       lib
  assertthat    0.2.1      2019-03-21 [1]
- backports     1.1.9      2020-08-24 [1]
+ backports     1.1.10     2020-09-15 [1]
  blob          1.2.1      2020-01-20 [1]
- broom       * 0.7.0      2020-07-09 [1]
+ broom       * 0.7.1      2020-10-02 [1]
  callr         3.4.4      2020-09-07 [1]
  cellranger    1.1.0      2016-07-27 [1]
  class         7.3-17     2020-04-26 [1]
  cli           2.0.2      2020-02-28 [1]
  codetools     0.2-16     2018-12-24 [2]
  colorspace    1.4-1      2019-03-18 [1]
- cpp11         0.2.1      2020-08-11 [1]
  crayon        1.3.4      2017-09-16 [1]
  curl          4.3        2019-12-02 [1]
  data.table    1.13.0     2020-07-24 [1]
  DBI           1.1.0      2019-12-15 [1]
  dbplyr        1.4.4      2020-05-27 [1]
  desc          1.2.0      2018-05-01 [1]
- devtools      2.3.1      2020-07-21 [1]
- dials       * 0.0.8      2020-07-08 [1]
+ devtools      2.3.2      2020-09-18 [1]
+ dials       * 0.0.9      2020-09-16 [1]
  DiceDesign    1.8-1      2019-07-31 [1]
  digest        0.6.25     2020-02-23 [1]
  dplyr       * 1.0.2      2020-08-18 [1]
@@ -1093,13 +1118,13 @@ Prediction bad good
  foreach       1.5.0      2020-03-30 [1]
  fs            1.5.0      2020-07-31 [1]
  furrr         0.1.0      2018-05-16 [1]
- future        1.18.0     2020-07-09 [1]
+ future        1.19.1     2020-09-22 [1]
  gdtools       0.2.2      2020-04-03 [1]
  generics      0.0.2      2018-11-29 [1]
  ggplot2     * 3.3.2      2020-06-19 [1]
  git2r         0.27.1     2020-05-03 [1]
  glmnet        4.0-2      2020-06-16 [1]
- globals       0.12.5     2019-12-07 [1]
+ globals       0.13.0     2020-09-17 [1]
  glue          1.4.2      2020-08-27 [1]
  gower         0.2.2      2020-06-23 [1]
  GPfit         1.0-8      2019-02-08 [1]
@@ -1118,17 +1143,17 @@ Prediction bad good
  iterators     1.0.12     2019-07-26 [1]
  janeaustenr   0.1.5      2017-06-10 [1]
  jsonlite      1.7.1      2020-09-07 [1]
- knitr         1.29       2020-06-23 [1]
+ knitr         1.30       2020-09-22 [1]
  labeling      0.3        2014-08-23 [1]
  later         1.1.0.1    2020-06-05 [1]
  lattice       0.20-41    2020-04-02 [1]
- lava          1.6.7      2020-03-05 [1]
- lhs           1.0.2      2020-04-13 [1]
+ lava          1.6.8      2020-09-26 [1]
+ lhs           1.1.1      2020-10-05 [1]
  lifecycle     0.2.0      2020-03-06 [1]
  listenv       0.8.0      2019-12-05 [1]
  lubridate   * 1.7.9      2020-06-08 [1]
  magrittr      1.5        2014-11-22 [1]
- MASS          7.3-52     2020-08-18 [1]
+ MASS          7.3-53     2020-09-09 [1]
  Matrix        1.2-18     2019-11-27 [2]
  memoise       1.1.0      2017-04-21 [1]
  modeldata   * 0.0.2      2020-06-22 [1]
@@ -1146,72 +1171,61 @@ Prediction bad good
  processx      3.4.4      2020-09-03 [1]
  prodlim       2019.11.13 2019-11-17 [1]
  promises      1.1.1      2020-06-09 [1]
- ps            1.3.4      2020-08-11 [1]
+ ps            1.4.0      2020-10-07 [1]
  purrr       * 0.3.4      2020-04-17 [1]
  R6            2.4.1      2019-11-12 [1]
- ragg          0.3.1      2020-07-03 [1]
+ ragg          0.4.0      2020-10-05 [1]
  Rcpp          1.0.5      2020-07-06 [1]
- readr       * 1.3.1      2018-12-21 [1]
+ readr       * 1.4.0      2020-10-05 [1]
  readxl        1.3.1      2019-03-13 [1]
  recipes     * 0.1.13     2020-06-23 [1]
  remotes       2.2.0      2020-07-21 [1]
  reprex        0.3.0      2019-05-16 [1]
  reshape2      1.4.4      2020-04-09 [1]
  rlang         0.4.7      2020-07-09 [1]
- rmarkdown     2.3        2020-06-18 [1]
+ rmarkdown     2.4        2020-09-30 [1]
  rpart         4.1-15     2019-04-12 [2]
  rprojroot     1.3-2      2018-01-03 [1]
- rsample     * 0.0.7      2020-06-04 [1]
+ rsample     * 0.0.8      2020-09-23 [1]
  rstudioapi    0.11       2020-02-07 [1]
  Rttf2pt1      1.3.8      2020-01-10 [1]
  rvest         0.3.6      2020-07-25 [1]
  scales      * 1.1.1      2020-05-11 [1]
  sessioninfo   1.1.1      2018-11-05 [1]
- shape         1.4.4      2018-02-07 [1]
+ shape         1.4.5      2020-09-13 [1]
  SnowballC     0.7.0      2020-04-01 [1]
- stm         * 1.3.5      2019-12-17 [1]
+ stm         * 1.3.6      2020-09-18 [1]
  stopwords     2.0        2020-04-14 [1]
- stringi       1.4.6      2020-02-17 [1]
+ stringi       1.5.3      2020-09-09 [1]
  stringr     * 1.4.0      2019-02-10 [1]
- survival      3.2-3      2020-06-13 [1]
- systemfonts   0.3.0      2020-09-01 [1]
+ survival      3.2-7      2020-09-28 [1]
+ systemfonts   0.3.2      2020-09-29 [1]
  testthat      2.3.2      2020-03-02 [1]
  textrecipes * 0.3.0.9000 2020-08-12 [1]
+ textshaping   0.1.1      2020-09-29 [1]
  tibble      * 3.0.3      2020-07-10 [1]
  tidymodels  * 0.1.1      2020-07-14 [1]
  tidyr       * 1.1.2      2020-08-27 [1]
  tidyselect    1.1.0      2020-05-11 [1]
- tidytext    * 0.2.5      2020-07-11 [1]
+ tidytext    * 0.2.6      2020-09-20 [1]
  tidyverse   * 1.3.0      2019-11-21 [1]
  timeDate      3043.102   2018-02-21 [1]
  tokenizers    0.2.1      2018-03-29 [1]
  tune        * 0.1.1      2020-07-08 [1]
- usethis       1.6.1      2020-04-29 [1]
+ usethis       1.6.3      2020-09-17 [1]
  utf8          1.1.4      2018-05-24 [1]
  vctrs         0.3.4      2020-08-29 [1]
  vip         * 0.2.2      2020-04-06 [1]
  whisker       0.4        2019-08-28 [1]
- withr         2.2.0      2020-04-20 [1]
+ withr         2.3.0      2020-09-22 [1]
  workflowr   * 1.6.2      2020-04-30 [1]
- workflows   * 0.1.3      2020-08-10 [1]
- xfun          0.16       2020-07-24 [1]
+ workflows   * 0.2.0      2020-09-15 [1]
+ xfun          0.18       2020-09-29 [1]
  xml2          1.3.2      2020-04-23 [1]
  yaml          2.2.1      2020-02-01 [1]
  yardstick   * 0.0.7      2020-07-13 [1]
  source                                 
  CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
@@ -1220,7 +1234,6 @@ Prediction bad good
  CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
@@ -1229,26 +1242,8 @@ Prediction bad good
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
@@ -1268,6 +1263,36 @@ Prediction bad good
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
+ CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
@@ -1287,24 +1312,16 @@ Prediction bad good
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
  CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
@@ -1312,9 +1329,18 @@ Prediction bad good
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.2)                         
  CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
  CRAN (R 4.0.2)                         
+ CRAN (R 4.0.0)                         
+ CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  Github (tidymodels/textrecipes@8d1c05e)
+ CRAN (R 4.0.2)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.0)                         
  CRAN (R 4.0.2)                         
@@ -1365,54 +1391,54 @@ attached base packages:
 
 other attached packages:
  [1] vip_0.2.2              textrecipes_0.3.0.9000 yardstick_0.0.7       
- [4] workflows_0.1.3        tune_0.1.1             rsample_0.0.7         
+ [4] workflows_0.2.0        tune_0.1.1             rsample_0.0.8         
  [7] recipes_0.1.13         parsnip_0.1.3          modeldata_0.0.2       
-[10] infer_0.5.3            dials_0.0.8            scales_1.1.1          
-[13] broom_0.7.0            tidymodels_0.1.1       stm_1.3.5             
-[16] lubridate_1.7.9        tidytext_0.2.5         forcats_0.5.0         
+[10] infer_0.5.3            dials_0.0.9            scales_1.1.1          
+[13] broom_0.7.1            tidymodels_0.1.1       stm_1.3.6             
+[16] lubridate_1.7.9        tidytext_0.2.6         forcats_0.5.0         
 [19] stringr_1.4.0          dplyr_1.0.2            purrr_0.3.4           
-[22] readr_1.3.1            tidyr_1.1.2            tibble_3.0.3          
+[22] readr_1.4.0            tidyr_1.1.2            tibble_3.0.3          
 [25] ggplot2_3.3.2          tidyverse_1.3.0        workflowr_1.6.2       
 
 loaded via a namespace (and not attached):
-  [1] readxl_1.3.1       backports_1.1.9    systemfonts_0.3.0 
+  [1] readxl_1.3.1       backports_1.1.10   systemfonts_0.3.2 
   [4] plyr_1.8.6         splines_4.0.0      listenv_0.8.0     
-  [7] SnowballC_0.7.0    usethis_1.6.1      digest_0.6.25     
+  [7] SnowballC_0.7.0    usethis_1.6.3      digest_0.6.25     
  [10] foreach_1.5.0      htmltools_0.5.0    fansi_0.4.1       
  [13] magrittr_1.5       memoise_1.1.0      remotes_2.2.0     
- [16] globals_0.12.5     modelr_0.1.8       gower_0.2.2       
+ [16] globals_0.13.0     modelr_0.1.8       gower_0.2.2       
  [19] extrafont_0.17     extrafontdb_1.0    hardhat_0.1.4     
  [22] prettyunits_1.1.1  colorspace_1.4-1   blob_1.2.1        
- [25] rvest_0.3.6        haven_2.3.1        xfun_0.16         
- [28] callr_3.4.4        crayon_1.3.4       jsonlite_1.7.1    
- [31] survival_3.2-3     iterators_1.0.12   glue_1.4.2        
- [34] stopwords_2.0      gtable_0.3.0       ipred_0.9-9       
- [37] pkgbuild_1.1.0     Rttf2pt1_1.3.8     shape_1.4.4       
- [40] DBI_1.1.0          cpp11_0.2.1        Rcpp_1.0.5        
- [43] GPfit_1.0-8        lava_1.6.7         prodlim_2019.11.13
+ [25] rvest_0.3.6        textshaping_0.1.1  haven_2.3.1       
+ [28] xfun_0.18          callr_3.4.4        crayon_1.3.4      
+ [31] jsonlite_1.7.1     survival_3.2-7     iterators_1.0.12  
+ [34] glue_1.4.2         stopwords_2.0      gtable_0.3.0      
+ [37] ipred_0.9-9        pkgbuild_1.1.0     Rttf2pt1_1.3.8    
+ [40] shape_1.4.5        DBI_1.1.0          Rcpp_1.0.5        
+ [43] GPfit_1.0-8        lava_1.6.8         prodlim_2019.11.13
  [46] glmnet_4.0-2       httr_1.4.2         ellipsis_0.3.1    
  [49] pkgconfig_2.0.3    farver_2.0.3       nnet_7.3-14       
  [52] dbplyr_1.4.4       utf8_1.1.4         tidyselect_1.1.0  
  [55] labeling_0.3       rlang_0.4.7        DiceDesign_1.8-1  
  [58] reshape2_1.4.4     later_1.1.0.1      munsell_0.5.0     
  [61] cellranger_1.1.0   tools_4.0.0        cli_2.0.2         
- [64] generics_0.0.2     devtools_2.3.1     evaluate_0.14     
- [67] yaml_2.2.1         ragg_0.3.1         processx_3.4.4    
- [70] knitr_1.29         fs_1.5.0           future_1.18.0     
+ [64] generics_0.0.2     devtools_2.3.2     evaluate_0.14     
+ [67] yaml_2.2.1         ragg_0.4.0         processx_3.4.4    
+ [70] knitr_1.30         fs_1.5.0           future_1.19.1     
  [73] whisker_0.4        xml2_1.3.2         tokenizers_0.2.1  
  [76] compiler_4.0.0     rstudioapi_0.11    curl_4.3          
- [79] testthat_2.3.2     reprex_0.3.0       lhs_1.0.2         
- [82] stringi_1.4.6      highr_0.8          ps_1.3.4          
+ [79] testthat_2.3.2     reprex_0.3.0       lhs_1.1.1         
+ [82] stringi_1.5.3      ps_1.4.0           highr_0.8         
  [85] desc_1.2.0         gdtools_0.2.2      hrbrthemes_0.8.0  
  [88] lattice_0.20-41    Matrix_1.2-18      vctrs_0.3.4       
  [91] pillar_1.4.6       lifecycle_0.2.0    furrr_0.1.0       
  [94] data.table_1.13.0  httpuv_1.5.4       R6_2.4.1          
  [97] promises_1.1.1     gridExtra_2.3      janeaustenr_0.1.5 
 [100] sessioninfo_1.1.1  codetools_0.2-16   pkgload_1.1.0     
-[103] MASS_7.3-52        assertthat_0.2.1   rprojroot_1.3-2   
-[106] withr_2.2.0        parallel_4.0.0     hms_0.5.3         
+[103] MASS_7.3-53        assertthat_0.2.1   rprojroot_1.3-2   
+[106] withr_2.3.0        parallel_4.0.0     hms_0.5.3         
 [109] grid_4.0.0         rpart_4.1-15       timeDate_3043.102 
-[112] class_7.3-17       rmarkdown_2.3      git2r_0.27.1      
+[112] class_7.3-17       rmarkdown_2.4      git2r_0.27.1      
 [115] pROC_1.16.2       </code></pre>
 </div>
 </div>

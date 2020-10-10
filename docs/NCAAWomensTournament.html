@@ -358,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-07
+<strong>Last updated:</strong> 2020-10-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -449,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree34c2925b3abd6788ceafbc10ac1b9463552990c9targetblank34c2925a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/34c2925b3abd6788ceafbc10ac1b9463552990c9" target="_blank">34c2925</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree34c2925b3abd6788ceafbc10ac1b9463552990c9targetblank34c2925a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/34c2925b3abd6788ceafbc10ac1b9463552990c9" target="_blank">34c2925</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -508,6 +508,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/467d8cfbf4ab18f959c6cc96e5319e5418135522/analysis/NCAAWomensTournament.Rmd" target="_blank">467d8cf</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/15cddb9186552a305f49a30ea288193e100ae92f/docs/NCAAWomensTournament.html" target="_blank">15cddb9</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -591,7 +625,7 @@ theme_set(theme_minimal() +
   ggplot(aes(seed, exp_wins)) +
   geom_point(alpha = 0.8, size = 3) +
   labs(y = &quot;tournament wins (mean)&quot;)</code></pre>
-<p><img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-2-1.png" width="2400" style="display: block; margin: auto;" /></p>
+<p><img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-2-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Let’s visualize all the tournament results, not just the averages.</p>
 <pre class="r"><code>tournament %&gt;%
   filter(!is.na(seed)) %&gt;%
@@ -599,10 +633,14 @@ theme_set(theme_minimal() +
   geom_bin2d(binwidth = c(1, 1), alpha = 0.8) +
   scale_fill_paletteer_c(&quot;scico::bamako&quot;) +
   labs(
-    fill = &quot;number of\nteams&quot;,
-    y = &quot;tournament wins&quot;,
-    title = &quot;Womens NCAA Tournament&quot;,
+    fill = &quot;number of\nteams&quot;, y = &quot;&quot;,
+    subtitle = &quot;Tournament wins&quot;,
+    title = &quot;Womens NCAA&quot;,
     caption = &quot;Data by FiveThirtyEight | Visualization by @jim_gruman&quot;
+  ) +
+  theme(
+    legend.position = c(0.9, 0.9),
+    legend.background = element_rect(color = &quot;white&quot;)
   )</code></pre>
 <p><img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-3-1.png" width="2100" style="display: block; margin: auto;" /></p>
 <p>We have a lot of options to deal with data like this (curvy, integers, all greater than zero) but one straightforward option is <a href="https://www.tmwr.org/recipes.html#spline-functions">splines</a>. Splines aren’t perfect for this because they aren’t constrained to stay greater than zero or to always decrease, but they work pretty well and can be used in lots of situations. We have to choose the <strong>degrees of freedom</strong> for the splines.</p>
@@ -618,11 +656,15 @@ plot_smoother &lt;- function(deg_free) {
     ) +
     labs(
       fill = &quot;number of\nteams&quot;,
-      y = &quot;tournament wins&quot;,
-      title = &quot;Womens NCAA Tournament&quot;,
+      title = &quot;Womens NCAA&quot;,
       caption = &quot;Data by FiveThirtyEight | Visualization by @jim_gruman&quot;,
-      subtitle = paste(deg_free, &quot;spline terms&quot;)
+      subtitle = paste(&quot;Tournament Wins explained by &quot;, deg_free, &quot;spline terms&quot;)
+    ) +
+    theme(
+      legend.position = c(0.9, 0.9),
+      legend.background = element_rect(color = &quot;white&quot;)
     )
+
 
   print(p)
 }
@@ -707,34 +749,34 @@ Computational engine: lm </code></pre>
 <p>This workflow is almost ready to go, but we need to decide what values to try for the splines. There are several different ways to <a href="https://dials.tidymodels.org/">create tuning grids</a>, but if the grid you need is very simple, you might prefer to create it by hand.</p>
 <pre class="r"><code>spline_grid &lt;- tibble(seed_splines = c(1:4, 6, 8, 10))
 spline_grid %&gt;%
-  knitr::kable()</code></pre>
+  knitr::kable(align = &quot;l&quot;)</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="right">seed_splines</th>
+<th align="left">seed_splines</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
+<td align="left">1</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
+<td align="left">2</td>
 </tr>
 <tr class="odd">
-<td align="right">3</td>
+<td align="left">3</td>
 </tr>
 <tr class="even">
-<td align="right">4</td>
+<td align="left">4</td>
 </tr>
 <tr class="odd">
-<td align="right">6</td>
+<td align="left">6</td>
 </tr>
 <tr class="even">
-<td align="right">8</td>
+<td align="left">8</td>
 </tr>
 <tr class="odd">
-<td align="right">10</td>
+<td align="left">10</td>
 </tr>
 </tbody>
 </table>
@@ -923,7 +965,7 @@ spline_rs</code></pre>
   facet_wrap(~.metric, ncol = 1, scales = &quot;free_y&quot;) +
   labs(x = &quot;degrees of freedom&quot;, y = NULL) +
   theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-12-1.png" width="2400" style="display: block; margin: auto;" /></p>
+<p><img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-12-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>The model improved a lot as we increased the degrees of freedom at the beginning, but then continuing to add more didn’t make much difference. We could choose the numerically optimal hyperparameter with <code>select_best()</code> but that would choose a more wiggly, complex model than we probably want. We can choose a <em>simpler</em> model that performs well, within some limits around the numerically optimal result. We could choose either by percent loss in performance or within one standard error in performance.</p>
 <pre class="r"><code>select_by_pct_loss(spline_rs,
   metric = &quot;rmse&quot;,
@@ -1017,30 +1059,30 @@ Coefficients:
 <pre class="r"><code>tourney_test %&gt;%
   bind_cols(predict(tourney_fit, tourney_test)) %&gt;%
   metrics(tourney_w, .pred) %&gt;%
-  knitr::kable()</code></pre>
+  knitr::kable(align = &quot;l&quot;)</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">.metric</th>
 <th align="left">.estimator</th>
-<th align="right">.estimate</th>
+<th align="left">.estimate</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">rmse</td>
 <td align="left">standard</td>
-<td align="right">0.8771268</td>
+<td align="left">0.8771268</td>
 </tr>
 <tr class="even">
 <td align="left">rsq</td>
 <td align="left">standard</td>
-<td align="right">0.5453362</td>
+<td align="left">0.5453362</td>
 </tr>
 <tr class="odd">
 <td align="left">mae</td>
 <td align="left">standard</td>
-<td align="right">0.6088415</td>
+<td align="left">0.6088415</td>
 </tr>
 </tbody>
 </table>

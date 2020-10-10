@@ -24,6 +24,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -32,6 +34,15 @@ div.section {
   padding-top: 12px;
 }
 </style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -292,7 +303,13 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -329,7 +346,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-08
+<strong>Last updated:</strong> 2020-10-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -420,16 +437,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree0704459e61e21785fd18c502f4b41fa693c12e43targetblank0704459a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/0704459e61e21785fd18c502f4b41fa693c12e43" target="_blank">0704459</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree0704459e61e21785fd18c502f4b41fa693c12e43targetblank0704459a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/0704459e61e21785fd18c502f4b41fa693c12e43" target="_blank">0704459</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -440,14 +457,7 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  analysis/Friends.Rmd
-    Untracked:  figure/NFL attendance.Rmd/
-    Untracked:  figure/TourDeFrance.Rmd/
-
-Unstaged changes:
-    Deleted:    figure/BeerProduction.Rmd/BeerStatesAnimated-1.gif
-    Deleted:    figure/BeerProduction.Rmd/unnamed-chunk-16-1.gif
-    Deleted:    output/BrainInjurygganimqdodge1.gif
+    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -486,6 +496,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/caff775f3a7c6293689c708a5927eb805cca339d/docs/BeerProduction.html" target="_blank">caff775</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-09-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1045,7 +1072,7 @@ beer_coefs&lt;-beer_models %&gt;%
 <pre><code># A tibble: 1 x 6
   term                   .lower .estimate .upper .alpha .method   
   &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;     
-1 malt_and_malt_products  0.198     0.206  0.213   0.05 percentile</code></pre>
+1 malt_and_malt_products  0.199     0.206  0.213   0.05 percentile</code></pre>
 <pre class="r"><code>beer_aug&lt;-beer_models %&gt;%
   dplyr::mutate(augmented = purrr::map(model, augment)) %&gt;%
   unnest(augmented)
@@ -1082,52 +1109,52 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] gganimate_1.0.6   sf_0.9-5          maps_3.3.0        yardstick_0.0.7  
- [5] workflows_0.1.3   tune_0.1.1        rsample_0.0.7     recipes_0.1.13   
- [9] parsnip_0.1.3     modeldata_0.0.2   infer_0.5.3       dials_0.0.8      
-[13] scales_1.1.1      broom_0.7.0       tidymodels_0.1.1  gghighlight_0.3.0
+ [1] gganimate_1.0.6   sf_0.9-6          maps_3.3.0        yardstick_0.0.7  
+ [5] workflows_0.2.0   tune_0.1.1        rsample_0.0.8     recipes_0.1.13   
+ [9] parsnip_0.1.3     modeldata_0.0.2   infer_0.5.3       dials_0.0.9      
+[13] scales_1.1.1      broom_0.7.1       tidymodels_0.1.1  gghighlight_0.3.0
 [17] GGally_2.0.0      tidymetrics_0.0.1 lubridate_1.7.9   forcats_0.5.0    
-[21] stringr_1.4.0     dplyr_1.0.2       purrr_0.3.4       readr_1.3.1      
+[21] stringr_1.4.0     dplyr_1.0.2       purrr_0.3.4       readr_1.4.0      
 [25] tidyr_1.1.2       tibble_3.0.3      ggplot2_3.3.2     tidyverse_1.3.0  
 [29] workflowr_1.6.2  
 
 loaded via a namespace (and not attached):
-  [1] readxl_1.3.1       backports_1.1.9    systemfonts_0.3.0 
+  [1] readxl_1.3.1       backports_1.1.10   systemfonts_0.3.2 
   [4] plyr_1.8.6         splines_4.0.0      listenv_0.8.0     
   [7] digest_0.6.25      foreach_1.5.0      htmltools_0.5.0   
- [10] fansi_0.4.1        magrittr_1.5       globals_0.12.5    
+ [10] fansi_0.4.1        magrittr_1.5       globals_0.13.0    
  [13] modelr_0.1.8       gower_0.2.2        extrafont_0.17    
  [16] extrafontdb_1.0    lpSolve_5.6.15     prettyunits_1.1.1 
  [19] colorspace_1.4-1   blob_1.2.1         rvest_0.3.6       
- [22] ggrepel_0.8.2      haven_2.3.1        xfun_0.16         
- [25] crayon_1.3.4       jsonlite_1.7.1     survival_3.2-3    
+ [22] ggrepel_0.8.2      haven_2.3.1        xfun_0.18         
+ [25] crayon_1.3.4       jsonlite_1.7.1     survival_3.2-7    
  [28] iterators_1.0.12   glue_1.4.2         gtable_0.3.0      
  [31] ipred_0.9-9        Rttf2pt1_1.3.8     DBI_1.1.0         
- [34] cpp11_0.2.1        ggthemes_4.2.0     Rcpp_1.0.5        
- [37] progress_1.2.2     units_0.6-7        GPfit_1.0-8       
- [40] lava_1.6.7         prodlim_2019.11.13 httr_1.4.2        
- [43] RColorBrewer_1.1-2 ellipsis_0.3.1     pkgconfig_2.0.3   
- [46] reshape_0.8.8      farver_2.0.3       nnet_7.3-14       
- [49] transformr_0.1.3   dbplyr_1.4.4       janitor_2.0.1     
- [52] utf8_1.1.4         tidyselect_1.1.0   labeling_0.3      
- [55] rlang_0.4.7        DiceDesign_1.8-1   later_1.1.0.1     
- [58] munsell_0.5.0      cellranger_1.1.0   tools_4.0.0       
- [61] cli_2.0.2          generics_0.0.2     gifski_0.8.6      
- [64] evaluate_0.14      yaml_2.2.1         knitr_1.29        
- [67] fs_1.5.0           nlme_3.1-149       future_1.18.0     
- [70] whisker_0.4        xml2_1.3.2         compiler_4.0.0    
- [73] rstudioapi_0.11    curl_4.3           e1071_1.7-3       
- [76] reprex_0.3.0       lhs_1.0.2          tweenr_1.0.1      
- [79] stringi_1.4.6      gdtools_0.2.2      hrbrthemes_0.8.0  
- [82] lattice_0.20-41    Matrix_1.2-18      classInt_0.4-3    
- [85] vctrs_0.3.4        pillar_1.4.6       lifecycle_0.2.0   
- [88] furrr_0.1.0        httpuv_1.5.4       R6_2.4.1          
- [91] promises_1.1.1     KernSmooth_2.23-17 codetools_0.2-16  
- [94] MASS_7.3-52        assertthat_0.2.1   rprojroot_1.3-2   
- [97] withr_2.2.0        mgcv_1.8-31        parallel_4.0.0    
-[100] hms_0.5.3          grid_4.0.0         rpart_4.1-15      
-[103] timeDate_3043.102  class_7.3-17       snakecase_0.11.0  
-[106] rmarkdown_2.3      git2r_0.27.1       pROC_1.16.2       </code></pre>
+ [34] ggthemes_4.2.0     Rcpp_1.0.5         progress_1.2.2    
+ [37] units_0.6-7        GPfit_1.0-8        lava_1.6.8        
+ [40] prodlim_2019.11.13 httr_1.4.2         RColorBrewer_1.1-2
+ [43] ellipsis_0.3.1     pkgconfig_2.0.3    reshape_0.8.8     
+ [46] farver_2.0.3       nnet_7.3-14        transformr_0.1.3  
+ [49] dbplyr_1.4.4       janitor_2.0.1      utf8_1.1.4        
+ [52] tidyselect_1.1.0   labeling_0.3       rlang_0.4.7       
+ [55] DiceDesign_1.8-1   later_1.1.0.1      munsell_0.5.0     
+ [58] cellranger_1.1.0   tools_4.0.0        cli_2.0.2         
+ [61] generics_0.0.2     gifski_0.8.6       evaluate_0.14     
+ [64] yaml_2.2.1         knitr_1.30         fs_1.5.0          
+ [67] nlme_3.1-149       future_1.19.1      whisker_0.4       
+ [70] xml2_1.3.2         compiler_4.0.0     rstudioapi_0.11   
+ [73] curl_4.3           e1071_1.7-3        reprex_0.3.0      
+ [76] lhs_1.1.1          tweenr_1.0.1       stringi_1.5.3     
+ [79] gdtools_0.2.2      hrbrthemes_0.8.0   lattice_0.20-41   
+ [82] Matrix_1.2-18      classInt_0.4-3     vctrs_0.3.4       
+ [85] pillar_1.4.6       lifecycle_0.2.0    furrr_0.1.0       
+ [88] httpuv_1.5.4       R6_2.4.1           promises_1.1.1    
+ [91] KernSmooth_2.23-17 codetools_0.2-16   MASS_7.3-53       
+ [94] assertthat_0.2.1   rprojroot_1.3-2    withr_2.3.0       
+ [97] mgcv_1.8-33        parallel_4.0.0     hms_0.5.3         
+[100] grid_4.0.0         rpart_4.1-15       timeDate_3043.102 
+[103] class_7.3-17       snakecase_0.11.0   rmarkdown_2.4     
+[106] git2r_0.27.1       pROC_1.16.2       </code></pre>
 </div>
 </div>
 
