@@ -21,8 +21,8 @@ knitr::opts_chunk$set(cache = FALSE,
                       dpi = 300, 
                       cache.lazy = FALSE,
                       tidy = "styler", 
-                      fig.width = 8, 
-                      fig.height = 5)
+                      fig.width = 12, 
+                      fig.height = 7.402)
 ```
 
 > Adapted from [NCAA Tuning](https://juliasilge.com/blog/ncaa-tuning/) by Julia Silge @JuliaSilge
@@ -43,7 +43,7 @@ tt <- tidytuesdayR::tt_load("2020-10-06")
 
 tournament <- tt$tournament
 
-theme_set(theme_minimal()+
+theme_set(theme_minimal() +
             theme(plot.title.position = "plot"))
 
 ```
@@ -67,10 +67,12 @@ tournament %>%
   ggplot(aes(seed, tourney_w)) +
   geom_bin2d(binwidth = c(1, 1), alpha = 0.8) +
   scale_fill_paletteer_c("scico::bamako") +
-  labs(fill = "number of\nteams",
-       y = "tournament wins",
-       title = "Womens NCAA Tournament",
-       caption = "Data by FiveThirtyEight | Visualization by @jim_gruman")
+  labs(fill = "number of\nteams", y = "",
+       subtitle = "Tournament wins",
+       title = "Womens NCAA",
+       caption = "Data by FiveThirtyEight | Visualization by @jim_gruman") +
+  theme(legend.position = c(0.9,0.9),
+        legend.background = element_rect(color = "white"))
   
 
 ```
@@ -89,10 +91,12 @@ plot_smoother <- function(deg_free) {
       formula = y ~ ns(x, df = deg_free)
     ) +
       labs(fill = "number of\nteams",
-       y = "tournament wins",
-       title = "Womens NCAA Tournament",
+       title = "Womens NCAA",
        caption = "Data by FiveThirtyEight | Visualization by @jim_gruman",
-       subtitle = paste(deg_free, "spline terms"))
+       subtitle = paste("Tournament Wins explained by ", deg_free, "spline terms")) +
+  theme(legend.position = c(0.9,0.9),
+        legend.background = element_rect(color = "white"))
+    
   
   print(p)
 }
@@ -158,7 +162,7 @@ This workflow is almost ready to go, but we need to decide what values to try fo
 ```{r}
 spline_grid <- tibble(seed_splines = c(1:4, 6, 8, 10))
 spline_grid %>%
-  knitr::kable()
+  knitr::kable(align = "l")
 ```
 
 Now we can put this all together! When we use `tune_grid()`, we will fit each of the options in the grid to each of the resamples.
@@ -228,7 +232,7 @@ We can predict from this fitted workflow. For example, we can predict on the tes
 tourney_test %>%
   bind_cols(predict(tourney_fit, tourney_test)) %>%
   metrics(tourney_w, .pred) %>%
-  knitr::kable()
+  knitr::kable(align = "l")
 ```
 
 Pretty good! We can also predict on other kinds of new data. For example, let's recreate the ["average" column in the FiveThirtyEight table on expected wins](https://fivethirtyeight.com/features/tom-izzo-is-the-best-coach-in-modern-ncaa-tournament-history-by-far/).
