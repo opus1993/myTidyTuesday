@@ -181,7 +181,7 @@ df_prod %>%
 
 ```
 
-Comparing acreage in the 6 years before RFS2 to the most recent 6 years, we see that the largest increases have come in ND, SD, NE, and KS. Corn acreage in 2014-2019 was actually lower in IL and IN than in 2001-2006.
+Comparing acreage in the 6 years before RFS2 to the most recent 6 years, we see that the largest increases have come in ND, SD, NE, and KS. Corn acreage in 2014-2019 was actually lower in Illinois, Indiana, and Michigan than in 2001-2006.
 
 ```{r}
 max_state <- 12
@@ -203,8 +203,8 @@ df_prod %>%
          state_alpha = fct_lump_n(state_alpha, 
                                   max_state ,
                                   w = Pre_RFS),
-         state_rank = ifelse(state_rank >= max_state+1,
-                              max_state+1,
+         state_rank = ifelse(state_rank >= max_state + 1,
+                              max_state + 1,
                               state_rank)) %>% 
   group_by(state_alpha, state_rank) %>%
   summarise(Pre_RFS = sum(Pre_RFS), 
