@@ -12,6 +12,7 @@ Welcome to my TidyTuesday website collection.
 
 |   |   |   |    
 |---|---|---|
+|October 9, 2020|[Corn Production](CornProduction.html)|{rnassqs, httr}|
 |October 7, 2020| [NCAA Womens Tournament](NCAAWomensTournament.html) | {tidymodels, splines}|
 |September 24, 2020| [Hops](Hops.html)| {rnassqs, blscrapeR}|
 |September 22, 2020 | [Himalayan Climbers](HimalayanClimbers.html) | {ebbr, ggdark} |
