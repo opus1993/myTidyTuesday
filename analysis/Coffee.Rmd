@@ -3,18 +3,26 @@ title: "Coffee"
 author: "Jim Gruman"
 date: 'July 7, 2020'
 output:
-  workflowr::wflow_html: default
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      message = FALSE, 
+knitr::opts_chunk$set(cache = FALSE, 
                       warning = FALSE, 
-                      fig.showtext = T, 
-                      fig.width = 9,
-                      fig.height=6)
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
 ```
 
 ```{r prep, message=FALSE}
@@ -40,7 +48,7 @@ coffee_ratings <- coffee$coffee_ratings %>%
   filter(total_cup_points > 0) 
 ```
 
-```{r}
+```{r p1}
 coffee_ratings %>%
   count(species, sort = TRUE) %>%
   knitr::kable()
@@ -52,76 +60,131 @@ coffee_lumped <- coffee_ratings %>%
 coffee_lumped %>%
   mutate(variety = fct_reorder(variety, total_cup_points)) %>%
   ggplot(aes(total_cup_points, variety)) +
-  geom_boxplot(color = "#d95f0e")+
-  theme(plot.title.position = "plot")+
+  geom_boxplot(color = "#d95f0e") +
+  theme(plot.title.position = "plot") +
   labs(title = "Coffee Quality Ratings",
        caption = "https://github.com/jldbc/coffee-quality-database",
        x = "Total Cup Points",
        y = "Coffee Variety")
 
-coffee_lumped %>%
+p1 <- coffee_lumped %>%
   ggplot(aes(total_cup_points, fill = variety)) +
   geom_histogram(binwidth = 2) +
-  facet_wrap(~ variety, scale = "free_y") +
+  facet_wrap(~ variety, scales = "free_y") +
   theme(legend.position = "none",
-        plot.title.position = "plot")+
+        plot.title.position = "plot") +
   labs(title = "Coffee Quality Ratings",
        caption = "https://github.com/jldbc/coffee-quality-database",
        x = "Total Cup Points",
        y = "Number of Submissions")
+
+ggsave(filename = "docs/assets/coffee-1.pdf", 
+       plot = p1, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/coffee-1.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/coffee-1.png",
+                      verbose = FALSE)
+
 ```
 
 ```{r}
+knitr::include_graphics("assets/coffee-1.png", error = FALSE)
+```
+
+```{r p2}
 coffee_ratings %>%
   summarize(across(everything(), ~ mean(!is.na(.)))) %>%
   gather() %>%
-  arrange(desc(value))%>%
+  slice_max(order_by = value, n = 12) %>%
   knitr::kable()
 
 coffee_ratings %>%
-  filter(!is.na(producer))%>%
-  mutate(producer = fct_lump(producer, 20))%>%
+  filter(!is.na(producer)) %>%
+  mutate(producer = fct_lump(producer, 20)) %>%
   count(producer, sort = TRUE) %>%
   knitr::kable(caption = "Count of Coffee Samples by")
 
 coffee_ratings %>%
-  filter(!is.na(company))%>% 
-  mutate(company = fct_lump(company, 20))%>%
-  count(company, sort = TRUE)%>%
+  filter(!is.na(company)) %>% 
+  mutate(company = fct_lump(company, 20)) %>%
+  count(company, sort = TRUE) %>%
   knitr::kable(caption = "Count of Coffee Samples by")
 
 coffee_ratings %>%
-  filter(!is.na(color))%>% 
-  count(color, sort = TRUE)%>%
+  filter(!is.na(color)) %>% 
+  count(color, sort = TRUE) %>%
   knitr::kable(caption = "Count of Coffee Samples by")
 
-coffee_ratings %>%
+p2 <- coffee_ratings %>%
   count(country = fct_lump(country_of_origin, 12), sort = TRUE) %>%
   filter(!is.na(country)) %>%
   mutate(country = fct_reorder(country, n)) %>%
   ggplot(aes(n, country)) +
-  geom_col(fill = "#d95f0e")+
-  theme(plot.title.position = "plot")+
+  geom_col(fill = "#d95f0e") +
+  theme(plot.title.position = "plot") +
   labs(title = "Coffee Quality Ratings",
        caption = "https://github.com/jldbc/coffee-quality-database",
        x = "Number of Submissions",
        y = "")
 
-coffee_ratings %>%
+ggsave(filename = "docs/assets/coffee-2.pdf", 
+       plot = p2, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/coffee-2.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/coffee-2.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/coffee-2.png", error = FALSE)
+```
+
+
+
+```{r p3}
+p3 <- coffee_ratings %>%
   filter(!is.na(country_of_origin)) %>%
   mutate(country = fct_lump(country_of_origin, 12),
          country = fct_reorder(country, total_cup_points)) %>%
   ggplot(aes(total_cup_points, country)) +
   geom_boxplot(color = "#d95f0e") +
-  theme(plot.title.position = "plot")+
+  theme(plot.title.position = "plot") +
   labs(title = "Coffee Quality Ratings",
        caption = "https://github.com/jldbc/coffee-quality-database",
        x = "Total Cup Points",
        y = "")
+
+ggsave(filename = "docs/assets/coffee-3.pdf", 
+       plot = p3, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/coffee-3.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/coffee-3.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/coffee-3.png", error = FALSE)
 ```
 
 
-```{r}
+```{r p4}
 coffee_metrics <- coffee_ratings %>%
   dplyr::select(coffee_id, total_cup_points, variety, company,
          country_of_origin,
@@ -129,17 +192,37 @@ coffee_metrics <- coffee_ratings %>%
          aroma:moisture) %>%
   pivot_longer(aroma:cupper_points, names_to = "metric", values_to = "value")
 
-coffee_metrics %>%
+p4 <- coffee_metrics %>%
   mutate(metric = fct_reorder(metric, value)) %>%
   ggplot(aes(value, metric)) +
-  geom_density_ridges(fill = "#d95f0e")+
-  scale_x_continuous(limits = c(5,10.2))+
-  theme(plot.title.position = "plot")+
+  geom_density_ridges(fill = "#d95f0e") +
+  scale_x_continuous(limits = c(5,10.2)) +
+  theme(plot.title.position = "plot") +
   labs(title = "Coffee Quality Ratings",
        caption = "https://github.com/jldbc/coffee-quality-database",
        x = "Score",
        y = "")
 
+ggsave(filename = "docs/assets/coffee-4.pdf", 
+       plot = p4, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/coffee-4.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/coffee-4.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/coffee-4.png", error = FALSE)
+```
+
+
+```{r}
 coffee_metrics %>%
   group_by(metric) %>%
   summarize(average = mean(value),
@@ -148,25 +231,45 @@ coffee_metrics %>%
   knitr::kable()
 ```
 
-```{r, fig.height=7}
+```{r p5}
 correlations <- coffee_metrics %>%
   pairwise_cor(metric, coffee_id, value, sort = TRUE)
 
-correlations %>%
+p5 <- correlations %>%
   head(50) %>%
   graph_from_data_frame() %>%
   ggraph() +
   geom_edge_link(aes(edge_alpha = correlation),show.legend = FALSE ) +
   geom_node_point() +
-  geom_node_text(aes(label = name), repel = TRUE)+
-  theme(plot.title.position = "plot")+
+  geom_node_text(aes(label = name), repel = TRUE) +
+  theme(plot.title.position = "plot") +
   labs(title = "Coffee Quality",
        subtitle = "Network Diagram of Attribute Correlation",
        caption = "https://github.com/jldbc/coffee-quality-database",
        x = "",
        y = "")
 
-coffee_metrics %>%
+ggsave(filename = "docs/assets/coffee-5.pdf", 
+       plot = p5, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/coffee-5.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/coffee-5.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/coffee-5.png", error = FALSE)
+```
+
+
+```{r}
+p6 <- coffee_metrics %>%
   filter(!metric %in% c("sweetness", "clean_cup", "uniformity")) %>%
   group_by(metric) %>%
   mutate(centered = value - mean(value)) %>%
@@ -177,30 +280,67 @@ coffee_metrics %>%
   ggplot(aes(value, metric)) +
   geom_col( fill = "#d95f0e") +
   scale_y_reordered() +
-  facet_wrap(~ dimension, scales = "free_y")+
-  theme(plot.title.position = "plot")+
+  facet_wrap(~ dimension, scales = "free_y") +
+  theme(plot.title.position = "plot") +
   labs(title = "Coffee Quality",
        subtitle = "Principal Components of Attributes",
        caption = "https://github.com/jldbc/coffee-quality-database",
        x = "",
        y = "")
+
+ggsave(filename = "docs/assets/coffee-6.pdf", 
+       plot = p6, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/coffee-6.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/coffee-6.png",
+                      verbose = FALSE)
+
 ```
 
 ```{r}
-coffee_ratings %>%
+knitr::include_graphics("assets/coffee-6.png", error = FALSE)
+```
+
+```{r p7}
+p7 <- coffee_ratings %>%
   filter(altitude_mean_meters < 10000,
          altitude != 1) %>%
   mutate(altitude_mean_meters = pmin(altitude_mean_meters, 3500)) %>%
   ggplot(aes(altitude_mean_meters, total_cup_points)) +
   geom_point(color = "#d95f0e", alpha = 0.3) +
-  geom_smooth(method = "lm")+
-  theme(plot.title.position = "plot")+
+  geom_smooth(method = "lm") +
+  theme(plot.title.position = "plot") +
   labs(title = "Coffee Quality",
        caption = "https://github.com/jldbc/coffee-quality-database",
        x = "Altitude (meters)",
        y = "Total Cup Points")
 
-coffee_metrics %>%
+ggsave(filename = "docs/assets/coffee-7.pdf", 
+       plot = p7, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/coffee-7.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/coffee-7.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/coffee-7.png", error = FALSE)
+```
+
+
+```{r p8}
+p8 <- coffee_metrics %>%
   filter(altitude_mean_meters < 10000) %>%
   mutate(altitude_mean_meters = pmin(altitude_mean_meters, 3000)) %>%
   mutate(km = altitude_mean_meters / 1000) %>%
@@ -218,40 +358,65 @@ coffee_metrics %>%
   theme(plot.title.position = "plot",
         legend.position = "top",
         legend.spacing.x = unit(6, "mm"),
-        panel.grid.major.y = element_blank())+
+        panel.grid.major.y = element_blank()) +
   labs(title = "Coffee Quality",
        y = "Evaluation of coffee",
        x = "Each kilometer of altitude contributes\n this much to score (95% confidence interval)",
        caption = "https://github.com/jldbc/coffee-quality-database")
+
+ggsave(filename = "docs/assets/coffee-8.pdf", 
+       plot = p8, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/coffee-8.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/coffee-8.png",
+                      verbose = FALSE)
+
 ```
 
 ```{r}
-coffee_lumped%>%
+knitr::include_graphics("assets/coffee-8.png", error = FALSE)
+```
+
+```{r p9}
+p9 <- coffee_lumped %>%
   mutate(country_of_origin = fct_lump_lowfreq(country_of_origin, 8)) %>%
   group_by(country_of_origin, variety) %>%
   summarise(score = mean(total_cup_points)) %>%
-  ungroup()%>%
+  ungroup() %>%
   filter(!variety %in% c("Other", "Yellow Bourbon")) %>%
   mutate(country_of_origin = reorder_within(country_of_origin, score, variety)) %>%
-  ggplot()+
-  geom_col(aes(x=score, 
-              y=country_of_origin, 
-              fill = ggplot2::cut_width(score,2)), show.legend = FALSE)+
+  ggplot() +
+  geom_col(aes(x = score, 
+              y = country_of_origin, 
+              fill = ggplot2::cut_width(score,2)), show.legend = FALSE) +
   scale_fill_brewer(type = "seq", palette = "YlOrBr") +
   scale_y_reordered() +
 #  scale_fill_brewer(type= "seq", palette = "YlOrBr")+
-  theme(plot.title.position = "plot")+
+  theme(plot.title.position = "plot") +
   labs(title = "Mean Coffee Quality Total Cup Points",
        y = "", x = "Variety",
-       caption = "#TidyTuesday 2020-07-07 @Jim_Gruman\n https://github.com/jldbc/coffee-quality-database")+
+       caption = "#TidyTuesday 2020-07-07 @Jim_Gruman\n https://github.com/jldbc/coffee-quality-database") +
   facet_wrap(~ variety,  scales = "free_y")
+
+ggsave(filename = "docs/assets/coffee-9.pdf", 
+       plot = p9, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/coffee-9.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/coffee-9.png",
+                      verbose = FALSE)
 
 ```
 
-***
-
-```{r session}
-Sys.time()
-git2r::repository()
-sessionInfo()
+```{r}
+knitr::include_graphics("assets/coffee-9.png", error = FALSE)
 ```

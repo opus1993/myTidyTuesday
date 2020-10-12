@@ -20,8 +20,8 @@ knitr::opts_chunk$set(cache = FALSE,
                       dpi = 300, 
                       cache.lazy = FALSE,
                       tidy = "styler", 
-                      fig.width = 8, 
-                      fig.height = 5)
+                      fig.width = 12, 
+                      fig.height = 7.402)
 ```
 
 > Adapted from [Mandate It and (Hope) It will Come](https://asmith.ucdavis.edu/news/ethanol-boom) by Aaron Smith @ASmithUCD
@@ -34,7 +34,9 @@ library(blscrapeR)
 library(readxl)
 library(httr)
 
-theme_set(theme_minimal() +
+sysfonts::font_add(family = "IBM Plex Sans", regular = "C:/Users/jimgr/Documents/R/win-library/4.0/hrbrthemes/fonts/plex-sans/IBMPlexSans-Regular.TTF")
+
+theme_set(theme_minimal(base_family =  "IBM Plex Sans") +
             theme(plot.title.position = "plot"))
 ```
 

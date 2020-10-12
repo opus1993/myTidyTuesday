@@ -3,7 +3,12 @@ title: "BeerProduction"
 author: "Jim Gruman"
 date: 'March 31, 2020'
 output:
-  workflowr::wflow_html: default
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
 editor_options:
   chunk_output_type: console
 name: beer_production
@@ -22,13 +27,15 @@ dimensions:
 ---
 
 ```{r setup, include=FALSE}
-#ragg_png = function(..., dpi = 192) ragg::agg_png(..., res = dpi, units = 'in')
-knitr::opts_chunk$set(echo = TRUE, 
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
                       message = FALSE, 
-                      warning = FALSE,
-                      fig.width = 9,
-                      fig.height = 6)
-
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
 ```
 
 ```{r libraries}
@@ -90,7 +97,8 @@ increase_states <-
   top_n(5, pct_chg) %>%
   pull(state)    
 
-increase_states
+increase_states %>% 
+  knitr::kable()
 ```
 
 ```{r makeBeerDf}
@@ -110,18 +118,18 @@ beer_df <-
 Lets have a look at the materials trends. What ingredients are used in beer production?
 
 ```{r materialsTrends}
-brewing_materials %>%
+p1 <- brewing_materials %>%
   filter(!str_detect(material_type, "Total"),
          !(month == 12 & year %in% 2014:2015)) %>%  # remove the subtotals) %>%
   filter(date == max(date)) %>%
   mutate(type = fct_reorder(type, month_current)) %>%
   ggplot(aes(type, month_current/1000000, fill =  type)) +
-  geom_col()+
+  geom_col() +
   scale_y_continuous(breaks = scales::pretty_breaks()) +
-  coord_flip()+
+  coord_flip() +
   theme(plot.title.position = "plot",
         legend.position = "",
-        panel.grid.major.y =  element_blank())+
+        panel.grid.major.y =  element_blank()) +
   labs(
     x = '',
     y = 'Million Pounds',
@@ -129,14 +137,31 @@ brewing_materials %>%
     subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
     caption = '@Jim_Gruman | #TidyTuesday'
   )
+
+ggsave(filename = "docs/assets/beer-1.pdf", 
+       plot = p1, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/beer-1.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/beer-1.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/beer-1.png", error = FALSE)
 ```
 
 ```{r materialsTrendsChart}
-brewing_materials %>%
+p2 <- brewing_materials %>%
   filter(!str_detect(type, "Total"), year < 2016,
          !(month == 12 & year %in% 2014:2015)) %>%  # remove the subtotals
-  ggplot(aes(date, month_current/1000000, color= type)) +
-  geom_line()+
+  ggplot(aes(date, month_current/1000000, color = type)) +
+  geom_line() +
     labs(
     x = '',
     y = 'Million Pounds',
@@ -144,15 +169,32 @@ brewing_materials %>%
     title = 'Ingredients in US Beer Production, 2008-2016',
     subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
     caption = '@Jim_Gruman | #TidyTuesday'
-  )+
+  ) +
   theme(plot.title.position = "plot")
+
+ggsave(filename = "docs/assets/beer-2.pdf", 
+       plot = p2, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/beer-2.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/beer-2.png",
+                      verbose = FALSE)
+
 ```
 
-Tidymetrics
+```{r}
+knitr::include_graphics("assets/beer-2.png", error = FALSE)
+```
+
+## Tidymetrics
 
 ```{r brewingSummarizedChart}
 library(tidymetrics)
-brewing_summarized <-brewing_materials %>%
+brewing_summarized <- brewing_materials %>%
   rename(material = type) %>%
   filter(!str_detect(material_type, "Total"), year < 2016,
          !(month == 12 & year %in% 2014:2015)) %>%
@@ -161,10 +203,10 @@ brewing_summarized <-brewing_materials %>%
   summarize(total_pounds = sum(month_current)) %>%
   ungroup()
 
-brewing_summarized %>%
+p3 <- brewing_summarized %>%
   filter(material_type != "All", material != "All", period == "month") %>%
-  ggplot(aes(date, total_pounds/1000000, color = material))+
-  geom_line()+
+  ggplot(aes(date, total_pounds/1000000, color = material)) +
+  geom_line() +
     labs(
     x = 'Date',
     y = 'Million Pounds',
@@ -172,13 +214,32 @@ brewing_summarized %>%
     title = 'Ingredients in US Beer Production, 2008-2016',
     subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
     caption = '@Jim_Gruman | #TidyTuesday'
-  )+
+  ) +
   theme(plot.title.position = "plot")
 
-brewing_summarized %>%
+ggsave(filename = "docs/assets/beer-3.pdf", 
+       plot = p3, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/beer-3.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/beer-3.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/beer-3.png", error = FALSE)
+```
+
+```{r p4}
+p4 <- brewing_summarized %>%
   filter(material_type != "All", material != "All", period == "quarter") %>%
-  ggplot(aes(date, total_pounds/1000000, color = material))+
-  geom_line()+
+  ggplot(aes(date, total_pounds/1000000, color = material)) +
+  geom_line() +
     labs(
     x = 'Date',
     y = 'Million Pounds',
@@ -186,13 +247,32 @@ brewing_summarized %>%
     title = 'Ingredients in US Beer Production, 2008-2016',
     subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
     caption = '@Jim_Gruman | #TidyTuesday'
-  )+
+  ) +
   theme(plot.title.position = "plot")
 
-brewing_summarized %>%
+ggsave(filename = "docs/assets/beer-4.pdf", 
+       plot = p4, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/beer-4.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/beer-4.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/beer-4.png", error = FALSE)
+```
+
+```{r p5}
+p5 <- brewing_summarized %>%
   filter(material_type != "All", material != "All", period == "year") %>%
-  ggplot(aes(date, total_pounds/1000000, color = material))+
-  geom_line()+
+  ggplot(aes(date, total_pounds/1000000, color = material)) +
+  geom_line() +
     labs(
     x = 'Date',
     y = 'Million Pounds',
@@ -203,15 +283,34 @@ brewing_summarized %>%
   )  +
   theme(plot.title.position = "plot")
 
+ggsave(filename = "docs/assets/beer-5.pdf", 
+       plot = p5, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/beer-5.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/beer-5.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/beer-5.png", error = FALSE)
 ```
 
 ```{r materialsByYearChart}
-brewing_materials %>%
+p6 <- brewing_materials %>%
   filter(material_type == "Total Used", year < 2016) %>%
   mutate(month = factor(month, labels = month.abb)) %>%
-  ggplot(aes(x= month,y=month_current/1000000, group = factor(year), color = factor(year)))+
+  ggplot(aes(x = month,
+             y = month_current/1000000, 
+             group = factor(year), 
+             color = factor(year))) +
   geom_line() +
-  expand_limits(y=0) +
+  expand_limits(y = 0) +
     labs(x = '',
     y = 'Million Pounds',
     color = "Year",
@@ -221,6 +320,22 @@ brewing_materials %>%
   scale_y_continuous(labels = scales::comma_format())  +
   theme(plot.title.position = "plot") 
 
+ggsave(filename = "docs/assets/beer-6.pdf", 
+       plot = p6, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/beer-6.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/beer-6.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/beer-6.png", error = FALSE)
 ```
 
 ```{r, shinymetrics, eval=FALSE}
@@ -236,13 +351,13 @@ preview_metric(brewing_metrics$production_NA_total_pounds)
 # change the dropdown from "last year" to "all time" because 2019 is not in this dataset
 ```
 
-```{r, byBrewerSize}
-brewer_size %>%
-  filter(brewer_size != "Total", !is.na(total_barrels))%>%
+```{r byBrewerSize}
+p7 <- brewer_size %>%
+  filter(brewer_size != "Total", !is.na(total_barrels)) %>%
   mutate(brewer_size = fct_lump(brewer_size, 5, w = total_barrels),
          barrel_number = coalesce(parse_number(as.character(brewer_size)),1),
          brewer_size = fct_reorder(brewer_size, barrel_number)) %>%
-  ggplot(aes(as_factor(year), total_barrels/1000000, fill = brewer_size))+
+  ggplot(aes(as_factor(year), total_barrels/1000000, fill = brewer_size)) +
   geom_col() +
   scale_y_continuous(labels = scales::comma_format())  +
     labs(x = 'Year',
@@ -252,6 +367,23 @@ brewer_size %>%
     subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
     caption = '@Jim_Gruman | #TidyTuesday')   +
   theme(plot.title.position = "plot")
+
+ggsave(filename = "docs/assets/beer-7.pdf", 
+       plot = p7, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/beer-7.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/beer-7.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/beer-7.png", error = FALSE)
 ```
 
 ## Where is Beer produced?
@@ -284,48 +416,59 @@ ggplot(beer_df, aes(year, barrels, group = state)) +
 
 ```{r BeerStatesCounts}
 beer_states %>%
-  count(type, sort = TRUE, wt = barrels)
+  count(type, sort = TRUE, wt = barrels) %>% 
+    knitr::kable()
 
 beer_states %>%
   group_by(year) %>%
-  summarize(barrels = sum(barrels, na.rm = TRUE))
+  summarize(barrels = sum(barrels, na.rm = TRUE)) %>% 
+    knitr::kable()
 
 # Who consumes beer on premises?
 
 beer_states %>%
-  filter(type == "On Premises", year == max(year), state != "total")%>%
-  arrange(desc(barrels))
+  filter(type == "On Premises", year == max(year), state != "total") %>%
+  slice_max(order_by = barrels, n = 10) %>% 
+  knitr::kable()
 
 beer_states %>%
-  filter( year == max(year), state != "total")%>%
+  filter( year == max(year), state != "total") %>%
   group_by(state) %>%
   mutate(percent = barrels / sum(barrels)) %>%
   filter(type == "On Premises") %>%
-  arrange(desc(percent))
+  ungroup() %>% 
+  slice_max(order_by = percent, n = 10) %>% 
+  knitr::kable()
 
 beer_states %>%
-  filter( year == max(year), state != "total")%>%
+  filter( year == max(year), state != "total") %>%
   group_by(state) %>%
   mutate(percent = barrels / sum(barrels)) %>%
   filter(type == "Bottles and Cans") %>%
-  arrange(desc(percent))
+  ungroup() %>% 
+  slice_max(order_by = percent, n = 10) %>% 
+  knitr::kable()
 
 beer_states %>%
-  filter( year == max(year), state != "total")%>%
+  filter( year == max(year), state != "total") %>%
   group_by(state) %>%
   mutate(percent = barrels / sum(barrels)) %>%
   filter(type == "Kegs and Barrels") %>%
-  arrange(desc(percent))
+  ungroup() %>% 
+  slice_max(order_by = percent, n = 10) %>% 
+  knitr::kable()
 
-states_percents_2019 <-beer_states %>%
-  filter( year == max(year), state != "total")%>%
+states_percents_2019 <- beer_states %>%
+  filter( year == max(year), state != "total") %>%
   group_by(state) %>%
   mutate(percent = barrels / sum(barrels)) %>%
   ungroup() 
 
 states_percents_2019 %>%
   filter(type == "On Premises") %>%
-  arrange(desc(percent))
+  ungroup() %>% 
+  slice_max(order_by = percent, n = 10) %>% 
+  knitr::kable()
 
 ```
 
@@ -335,21 +478,19 @@ library(sf)
 
 states <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
 
-states
-
 states_percents_2019 %>%
-   mutate(ID = str_to_lower(state.name[match(state,state.abb)]))%>%
+   mutate(ID = str_to_lower(state.name[match(state,state.abb)])) %>%
    inner_join(states, by = "ID") %>%
-   ggplot()+
+   ggplot() +
    scale_fill_gradient2(low = "yellow", high = "blue", midpoint = 0.5,
-                        labels = scales::percent)+
+                        labels = scales::percent) +
    geom_sf(aes(geometry = geom, fill = percent)) +
-   facet_wrap(~ type, nrow = 2)+
-   ggthemes::theme_map()+
+   facet_wrap(~ type, nrow = 2) +
+   ggthemes::theme_map() +
    labs(title = "In Each State, What is the Highest Proportion of Beer Consumed?",
         subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
         caption = '@Jim_Gruman | #TidyTuesday',
-        fill = "% Percent")+
+        fill = "% Percent") +
    theme(legend.position = c(0.7,0.1))
    
 ```
@@ -359,14 +500,14 @@ states_percents_2019 %>%
 ```{r BeerStatesAnimated}
 library(gganimate)
 
-p<-beer_states %>%
-  filter(state != "total")%>%
+p <- beer_states %>%
+  filter(state != "total") %>%
   group_by(state, year) %>%
   mutate(percent = barrels / sum(barrels)) %>%
   ungroup() %>%
-  mutate(ID = str_to_lower(state.name[match(state, state.abb)]))%>%
+  mutate(ID = str_to_lower(state.name[match(state, state.abb)])) %>%
   inner_join(states, by = "ID") %>%
-  ggplot(aes(geometry = geom, fill = percent))+
+  ggplot(aes(geometry = geom, fill = percent)) +
   geom_sf() +
   transition_time(year) +
   facet_wrap(~ type, nrow = 2) +
@@ -376,10 +517,10 @@ p<-beer_states %>%
   labs(title = "In Each State, What is the Highest Proportion of Beer Consumed? {as.integer(frame_time)}",
         subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau, 2008-2019',
         caption = '@Jim_Gruman | #TidyTuesday',
-        fill = "% Percent")+
+        fill = "% Percent") +
    theme(legend.position = c(0.7,0.1))
 
-anim<- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
+anim <- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
 
 anim_save(filename = "docs/assets/BeerStatesAnimated.gif", animation = anim)
 ```
@@ -394,9 +535,11 @@ knitr::include_graphics("assets/BeerStatesAnimated.gif", error = FALSE)
 How much sugar do beer producers need per pound of malt?
 
 ```{r howMuchsugarPerMalt}
-brewing_materials %>% count(type, wt = month_current,  sort = TRUE)
+brewing_materials %>% 
+  count(type, wt = month_current,  sort = TRUE) %>% 
+    knitr::kable()
 
-brewing_filtered<-brewing_materials %>%
+brewing_filtered <- brewing_materials %>%
   filter(!str_detect(type, "Total"), year < 2016,
          !(month == 12 & year %in% 2014:2015))
 
@@ -405,7 +548,7 @@ brewing_filtered<-brewing_materials %>%
 Explore the relationship between ingredients
 
 ```{r makeSugarMaltDF}
-brewing_df<-brewing_filtered %>%
+brewing_df <- brewing_filtered %>%
   select(date, type, month_current) %>%
   pivot_wider(names_from = type, 
               values_from = month_current) %>%
@@ -413,8 +556,8 @@ brewing_df<-brewing_filtered %>%
 
 # is there a remote correlation between
 brewing_df %>%
-  ggplot(aes(malt_and_malt_products, sugar_and_syrups))+
-  geom_smooth(method = "lm")+
+  ggplot(aes(malt_and_malt_products, sugar_and_syrups)) +
+  geom_smooth(method = "lm") +
   geom_point()
   
 ```
@@ -423,13 +566,15 @@ brewing_df %>%
 A simple linear model
 ```{r sugarMaltLinearModel}
 # force the y-intercept to be zero (no beer, no malt, no sugar)
-beer_fit<-lm(sugar_and_syrups ~ 0 + malt_and_malt_products, data = brewing_df)
+beer_fit <- lm(sugar_and_syrups ~ 0 + malt_and_malt_products, data = brewing_df)
 
 summary(beer_fit)
 ```
 
+
 ```{r sugarMaltLinearModelTidyFits}
-tidy(beer_fit)
+tidy(beer_fit) %>% 
+    knitr::kable()
 ```
 
 ## Bootstrap Resampling
@@ -437,17 +582,17 @@ tidy(beer_fit)
 to arrive at a confidence interval for a linear model
 
 ```{r setupBeerMaltBootstrap}
-beer_boot<-bootstraps(data = brewing_df, times = 1e3, apparent = FALSE)
+beer_boot <- bootstraps(data = brewing_df, times = 1e3, apparent = FALSE)
 ```
 
 ```{r beerMaltModelsOnBootstraps}
-beer_models<- beer_boot %>% 
+beer_models <- beer_boot %>% 
   dplyr::mutate(model = purrr::map(splits, ~ lm(sugar_and_syrups ~ 0 + malt_and_malt_products, 
                                   data = . )),
   coef_info = purrr::map(model, tidy))
 
-beer_coefs<-beer_models %>%
-     unnest(coef_info)
+beer_coefs <- beer_models %>%
+     unnest(coef_info) 
      
 ```
 
@@ -457,8 +602,9 @@ What is the distribution of the estimates for the model?
 
 ```{r beerMaltSlopeEstimates}
 beer_coefs %>%
-  ggplot(aes(estimate))+
-  geom_histogram(alpha = 0.7)
+  ggplot(aes(estimate)) +
+  geom_histogram(alpha = 0.7) +
+  labs(title = "Malt Coefficient Estimate for predicting Sugar and Syrups")
 ```
 
 Our bootstrap confidence intervals:
@@ -469,15 +615,15 @@ int_pctl(beer_models, coef_info)
 
 
 ```{r beerMaltSlopeCIplot}
-beer_aug<-beer_models %>%
+beer_aug <- beer_models %>%
   dplyr::mutate(augmented = purrr::map(model, augment)) %>%
   unnest(augmented)
 
 beer_aug %>%
-  ggplot(aes(malt_and_malt_products, sugar_and_syrups))+
-  geom_line(aes(y=.fitted, group = id), alpha = 0.1, color = "cyan3")+
-  geom_point()+
-  labs(title = "Bootstrap Resampling Model Estimates Confidence Interval")+
+  ggplot(aes(malt_and_malt_products, sugar_and_syrups)) +
+  geom_line(aes(y = .fitted, group = id), alpha = 0.1, color = "cyan3") +
+  geom_point() +
+  labs(title = "Bootstrap Resampling Model Estimates Confidence Interval") +
   theme(plot.title.position = "plot")
 ```
 

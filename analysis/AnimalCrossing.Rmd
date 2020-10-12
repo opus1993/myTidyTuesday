@@ -3,19 +3,26 @@ title: "Animal Crossing Sentiment Analysis"
 author: "Jim Gruman"
 date: "May 5, 2020"
 output:
-  workflowr::wflow_html: default
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
 
 ```{r setup}
-ragg_png = function(..., dpi = 192) ragg::agg_png(..., res = dpi, units = 'in')
-knitr::opts_chunk$set(echo = TRUE, 
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
                       message = FALSE, 
-                      warning = FALSE,
-                      dev = "ragg_png", fig.ext = "png",
-                      fig.width = 9,
-                      fig.height = 6)
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
 ```
 
 Our goal this week is to explore and predict ratings for [Animal Crossing user reviews in this week’s #TidyTuesday dataset](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-05/readme.md) from the text in the review. This is what is typically called a sentiment analysis modeling, and it’s a common real-world problem. 
@@ -33,7 +40,7 @@ user_reviews %>%
   count(grade) %>%
   ggplot(aes(factor(grade), n)) +
   geom_col(aes(fill = factor(grade)),
-           show.legend = FALSE)+
+           show.legend = FALSE) +
   labs(title = "Most Animal Crossing Reviews are Very Low or High",
        subtitle = paste0("User Review Scores from ",format(min(user_reviews$date),"%B %d, %Y")
                                         ," to ",
@@ -77,14 +84,14 @@ reviews_parsed %>%
   unnest_tokens(word, text) %>%
   count(user_name, name = "total_words") %>%
   ggplot(aes(total_words)) +
-  geom_histogram(fill = "#2AA198", bins = 30)+
-  scale_x_log10()+
+  geom_histogram(fill = "#2AA198", bins = 30) +
+  scale_x_log10() +
   labs(title = "Count of Words in Animal Crossing Reviews",
        subtitle = paste0("Reviews from ",format(min(user_reviews$date),"%B %d, %Y")
                                         ," to ",
                          format(max(user_reviews$date),"%B %d, %Y")),
        caption = "Jim Gruman | #TidyTuesday" ,
-       x = "Number of Words in Review", y = "Number of Reviews")+
+       x = "Number of Words in Review", y = "Number of Reviews") +
   geom_vline(xintercept = 100, color = "firebrick") +
   annotate("text", x = 105, y = 325, hjust = 0, color = "firebrick",
            label = "Sharp cliff at 100 words") 
@@ -97,19 +104,19 @@ After a cursory inspection of the text of the reviews, there are some where the 
 Let's take a look at how the reviews evolve over time:
 
 ```{r}
-by_week <-reviews_parsed %>%
+by_week <- reviews_parsed %>%
   group_by(week = floor_date(date, "week", week_start = 1)) %>%
   summarize(nb_reviews = n(),
             avg_grade = mean(grade),
             pct_zero = mean(grade == 0),
-            pct_ten = mean(grade ==10)) 
+            pct_ten = mean(grade == 10)) 
 
 by_week %>% 
   ggplot(aes(week, avg_grade)) +
-  geom_line(color = "#2AA198")+
-  geom_point(aes(size = nb_reviews), color = "#2AA198")+
-  expand_limits(y = 0)+
-  scale_x_date(date_labels = "%b %d", date_breaks = "1 week")+
+  geom_line(color = "#2AA198") +
+  geom_point(aes(size = nb_reviews), color = "#2AA198") +
+  expand_limits(y = 0) +
+  scale_x_date(date_labels = "%b %d", date_breaks = "1 week") +
   labs(x = "Week", y = "Average Grade",
        size = "# of Reviews",
        title = "Animal Crossing User Review Grades",
@@ -120,11 +127,11 @@ by_week %>%
   gather(type, value, contains("pct")) %>%
   mutate(type = ifelse(type == "pct_zero", "Rated 0", "Rated 10")) %>%
   ggplot(aes(week, value, color = type)) +
-  geom_line()+
-  geom_point(aes(size = nb_reviews))+
-  expand_limits(y = 0)+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
-  scale_x_date(date_labels = "%b %d", date_breaks = "1 week")+
+  geom_line() +
+  geom_point(aes(size = nb_reviews)) +
+  expand_limits(y = 0) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_date(date_labels = "%b %d", date_breaks = "1 week") +
   labs(x = "Week", y = "Portion of Reviews",
        size = "# of Reviews",
        title = "Most Polarizing Animal Crossing Reviews",
@@ -136,17 +143,17 @@ by_week %>%
 Let's take a look at how the reviews evolve by day of the week:
 
 ```{r}
-by_dow <-reviews_parsed %>%
+by_dow <- reviews_parsed %>%
   group_by(dow = wday(date, label = TRUE, week_start = 1)) %>%
   summarize(nb_reviews = n(),
             avg_grade = mean(grade),
             pct_zero = mean(grade == 0),
-            pct_ten = mean(grade ==10)) 
+            pct_ten = mean(grade == 10)) 
 
 by_dow %>% 
   ggplot(aes(dow, avg_grade)) +
-  geom_point(aes(size = nb_reviews), color = "#2AA198")+
-  expand_limits(y = 0)+
+  geom_point(aes(size = nb_reviews), color = "#2AA198") +
+  expand_limits(y = 0) +
 #  scale_x_date(date_labels = "%b %d", date_breaks = "1 week")+
   labs(x = "Day", y = "Average Grade",
        size = "# of Reviews",
@@ -158,9 +165,9 @@ by_dow %>%
   gather(type, value, contains("pct")) %>%
   mutate(type = ifelse(type == "pct_zero", "Rated 0", "Rated 10")) %>%
   ggplot(aes(dow, value, color = type)) +
-  geom_point(aes(size = nb_reviews))+
-  expand_limits(y = 0)+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  geom_point(aes(size = nb_reviews)) +
+  expand_limits(y = 0) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
 #  scale_x_date(date_labels = "%b %d", date_breaks = "1 week")+
   labs(x = "Day", y = "Portion of Reviews",
        size = "# of Reviews",
@@ -174,7 +181,7 @@ by_dow %>%
 For further topic modeling, we will remove the stop words and excessive copy-pasting within each review document.
 
 ```{r}
-user_review_words<-reviews_parsed %>%
+user_review_words <- reviews_parsed %>%
   unnest_tokens(word, text) %>%
   anti_join(stop_words, by = "word") %>%
   group_by(user_name, word) %>%
@@ -187,19 +194,19 @@ user_review_words<-reviews_parsed %>%
 What are the words that are positively or negatively associated with each user grade?
 
 ```{r}
-by_word<-user_review_words %>%
+by_word <- user_review_words %>%
   group_by(word) %>%
   summarize(avg_grade = mean(grade),
             nb_reviews = n()) %>%
   filter(nb_reviews >= 25) %>%
   arrange(desc(avg_grade)) 
 
-by_word%>%
+by_word %>%
   filter(nb_reviews >= 75) %>%
-  ggplot(aes(nb_reviews, avg_grade))+
-  geom_point()+
+  ggplot(aes(nb_reviews, avg_grade)) +
+  geom_point() +
   geom_text(aes(label = word),
-            vjust = 1, hjust =1, check_overlap = TRUE) +
+            vjust = 1, hjust = 1, check_overlap = TRUE) +
   scale_x_log10()
 ```
 
@@ -208,11 +215,11 @@ To make a nice chart, let's zoom in on the 20 words associated with the lowest R
 ```{r}
 by_word %>%
   top_n(20, -avg_grade) %>%
-  ggplot(aes(nb_reviews, avg_grade))+
-  geom_point()+
+  ggplot(aes(nb_reviews, avg_grade)) +
+  geom_point() +
   geom_text(aes(label = word),
-            vjust = 1, hjust =1, check_overlap = TRUE) +
-  scale_x_log10()+
+            vjust = 1, hjust = 1, check_overlap = TRUE) +
+  scale_x_log10() +
   labs(x = "Number of Reviews", y = "Mean Review Grade",
        title = "Words Associated with Lowest Animal Crossing Reviews",
        subtitle = "20 most common words in unfavorable reviews; Appearing at least 25 times",
@@ -229,7 +236,7 @@ We will arbitrarily choose to cluster here into 6 topics.
 library(tidyr)
 library(stm)
 
-review_matrix <-user_review_words %>%
+review_matrix <- user_review_words %>%
   group_by(word) %>%
   filter(n() >= 25) %>%
   cast_sparse(user_name, word, n)
@@ -248,22 +255,22 @@ We can plot the words most highly associated with each of 6 topics:
 tidy(topic_model) %>%
   group_by(topic) %>%
   top_n(10, beta) %>%
-  ggplot(aes(beta, reorder_within(term, by = beta, within = topic),fill = factor(topic)))+
-  geom_col(show.legend = FALSE)+
-  tidytext::scale_y_reordered()+
-  facet_wrap(~ topic, scales = "free_y")+
+  ggplot(aes(beta, reorder_within(term, by = beta, within = topic),fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  tidytext::scale_y_reordered() +
+  facet_wrap(~ topic, scales = "free_y") +
   labs(x = "beta",
        y = "Word Tokens",
        title = "Animal Crossing Review Topics",
-       caption = "@jim_gruman | #TidyTuesday")+
+       caption = "@jim_gruman | #TidyTuesday") +
   theme(axis.text.x.bottom = element_text(size = 8),
-        plot.margin = unit(c(c(1, 1, 1, 0.5)), units="cm"))
+        plot.margin = unit(c(c(1, 1, 1, 0.5)), units = "cm"))
 ```
 
 Is there a correlation between the document gamma and the grade that the reviewer gave? We will use the Spearman Correlation, which is sensitive to the ranks of the items.  And once again, we will examine how each topic is represented over time.
 
 ```{r}
-topic_model_gamma <-tidy(topic_model, matrix = "gamma") %>%
+topic_model_gamma <- tidy(topic_model, matrix = "gamma") %>%
   mutate(user_name = rownames(review_matrix)[document])  %>%
     inner_join(user_reviews, by = "user_name")
 
@@ -275,12 +282,12 @@ topic_model_gamma %>%
 topic_model_gamma %>%
   group_by(week = floor_date(date, "week", week_start = 1),
            topic) %>%
-  summarize(avg_gamma= mean(gamma)) %>%
-  ggplot(aes(week, avg_gamma, color = factor(topic)))+
+  summarize(avg_gamma = mean(gamma)) %>%
+  ggplot(aes(week, avg_gamma, color = factor(topic))) +
   geom_line(size = 2) +
-  expand_limits(y = 0)+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
-  scale_x_date(date_labels = "%b %d", date_breaks = "1 week")+
+  expand_limits(y = 0) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_date(date_labels = "%b %d", date_breaks = "1 week") +
   labs(x = "Date", color = "Topic",
        y = "Average gamma (document-topic association)",
        title = "Animal Crossing Review Topic Evolution",
@@ -361,9 +368,8 @@ lambda_grid <- grid_regular(penalty(), levels = 40)
 
 Next, we need a set of resampled data to fit and evaluate all these models.
 
-```{r}
+```{r folds}
 review_folds <- bootstraps(review_train, strata = rating)
-review_folds
 ```
 
 Now we can put it all together and implement the tuning. We can set specific metrics to compute during tuning with `metric_set()`. Let’s look at AUC, positive predictive value, and negative predictive value so we can understand if one class is harder to predict than another.
@@ -377,16 +383,9 @@ lasso_grid <- tune::tune_grid(
 )
 ```
 
-Once we have our tuning results, we can examine them in detail.
+Once we have our tuning results, we can examine them in detail. Visualization is often more helpful to understand model performance.
 
-```{r}
-lasso_grid %>%
-  collect_metrics()
-```
-
-Visualization is often more helpful to understand model performance.
-
-```{r}
+```{r lassoGrid}
 lasso_grid %>%
   collect_metrics() %>%
   ggplot(aes(penalty, mean, color = .metric)) +
@@ -402,33 +401,27 @@ This shows us a lot. We see clearly that AUC and PPV have benefited from the reg
 Let’s keep our model as is for now, and choose a final model based on AUC. We can use `select_best()` to find the best AUC and then update our workflow lasso_wf with this value.
 
 ```{r}
-#best_auc <- lasso_grid %>%
-#  select_best(metric = "roc_auc")
-
 best_auc <- lasso_grid %>%
   collect_metrics() %>%
   filter(.metric == "roc_auc") %>%
   top_n(1, wt = mean) %>%
   select(penalty)
-
-best_auc
 ```
 
 ```{r}
 final_lasso <- finalize_workflow(lasso_wf, best_auc)
 
-final_lasso
 ```
 
 This is our tuned, finalized workflow (but it is not fit yet). One of the things we can do when we start to fit this finalized workflow on the whole training set is to see what the most important variables are using the `vip` package.
 
-```{r}
+```{r finalLasso}
 library(vip)
 
 final_lasso %>%
   fit(review_train) %>%
   pull_workflow_fit() %>%
-  vi(lambda = best_auc$penalty) %>%
+  vip::vi(lambda = best_auc$penalty) %>%
   group_by(Sign) %>%
   top_n(20, wt = abs(Importance)) %>%
   ungroup() %>%
@@ -440,14 +433,14 @@ final_lasso %>%
   ggplot(aes(x = Importance, y = Variable, fill = Sign)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~Sign, scales = "free_y") +
-  labs(y = NULL)+
+  labs(y = NULL) +
   labs(title = "Animal Crossing Review Word Importance",
        caption = "@jim_gruman | #TidyTuesday")
 ```
 
 People who are happy with Animal Crossing like to talk about how relaxing, fantastic, enjoyable, and great it is, and also talk in their reviews about the “review bombing” of the negative reviews. Notice that many of the words from the negative reviews are specifically used to talk about the multiplayer experience. These users want a fix and they declare Nintendo greedy for the one-island-per-console play.
 
-```{r}
+```{r variableImportance}
 final_lasso %>%
   fit(review_train) %>%
   pull_workflow_fit() %>%
@@ -465,7 +458,7 @@ final_lasso %>%
   geom_col(show.legend = FALSE) +
   geom_label(aes(label = id), x = 0.1, show.legend = FALSE) +
   facet_wrap(~Sign, scales = "free_y") +
-  labs(y = NULL)+
+  labs(y = NULL) +
   labs(title = "Animal Crossing Review Day of Week Importance",
        caption = "@jim_gruman | #TidyTuesday")
 ```
@@ -474,24 +467,21 @@ The Day of Week feature does not appear in the Top 20. In this model, a Review w
 
 Finally, let’s return to our test data. The `tune` package has a function `last_fit()` which is nice for situations when you have tuned and finalized a model or workflow and want to fit it one last time on your training data and evaluate it on your testing data. You only have to pass this function your finalized model/workflow and your split.
 
-```{r}
+```{r finalMetrics}
 review_final <- last_fit(final_lasso, review_split)
 
 review_final %>%
-  collect_metrics()
+  collect_metrics() %>% 
+  knitr::kable()
 ```
 
 We did not overfit during our tuning process, and the overall accuracy is not bad. Let’s create a confusion matrix for the testing data.
 
-```{r}
+```{r finalPredictions}
 review_final %>%
   collect_predictions() %>%
-  conf_mat(rating, .pred_class)
+  conf_mat(rating, .pred_class) 
 ```
 
 Though our overall accuracy isn’t great, we discover here that it is easier to detect the negative reviews than the positive ones.
-
-```{r}
-devtools::session_info()
-```
 

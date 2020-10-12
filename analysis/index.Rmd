@@ -23,7 +23,7 @@ Welcome to my TidyTuesday website collection.
 |July 15, 2020 | [Astronaut Missions](Astronaut.html) | {tidymodels, baguette}|
 |March 17, 2020 | [The Office](TheOffice.html) |  {tidymodels, tidytext}|
 |July 7, 2020 | [Coffee](Coffee.html) | {widyr, tidytext}|
-|May 5, 2020 | [Animal Crossing](AnimalCrossing.html) | {tidytext, stm, textrecipes, vip} topic modeling|
+|May 5, 2020 | [Animal Crossing](AnimalCrossing.html) | {tidytext, stm, textrecipes, vip, stm}|
 |April 21, 2020 | [GDPR Fines](GDPRfines.html) | {ggbeeswarm, rnaturalearth, tidymodels}|
 |March 31, 2020 |[Beer Production](BeerProduction.html) | {gghighlight, tidymetrics}|
 |March 24, 2020 | [Brain Injury](BrainInjury.html) | {gganimate, vip, tidymodels}|

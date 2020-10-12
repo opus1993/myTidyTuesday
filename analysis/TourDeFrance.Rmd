@@ -3,17 +3,23 @@ title: "TourDeFrance"
 author: "Jim Gruman"
 date: 'April 7, 2020'
 output:
-  workflowr::wflow_html: default
+  workflowr::wflow_html: 
+    toc: false
+    code_folding: hide
 editor_options:
   chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
                       message = FALSE, 
-                      warning = FALSE,
-                      fig.width = 9,
-                      fig.height = 6)
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
 ```
 
 ## Visualising Tour De France Data
@@ -37,6 +43,7 @@ library(tidyverse)
 library(paletteer)
 library(ggtext)
 library(rvest)
+
 theme_set(hrbrthemes::theme_ipsum())
 library(lubridate)
 
@@ -71,7 +78,7 @@ country_ids <- cf_io %>%
       `[[`(1) %>% 
       trimws() %>% 
       {
-        .[nchar(.)>0]
+        .[nchar(.) > 0]
       }
     
     data.frame(
@@ -97,7 +104,7 @@ get_country_flag <- function(x){
 ### Nationalities of the Winners
 
 ```{r nations}
-tdf_nations<-tdf_winners %>%
+tdf_nations <- tdf_winners %>%
   mutate(nationality = stringr::str_squish(nationality),
          nationality = case_when(
     nationality == "Great Britain" ~ "United Kingdom",
@@ -109,28 +116,41 @@ tdf_nations<-tdf_winners %>%
 
 flag_labels <- get_country_flag(tdf_nations$nationality)
 
-pal <- RColorBrewer::brewer.pal('Set1',n=8)
+pal <- RColorBrewer::brewer.pal('Set1',n = 8)
 
-nations<- tdf_nations %>%
-  ggplot(aes(n, nationality))+
+nations <- tdf_nations %>%
+  ggplot(aes(n, nationality)) +
   geom_bar(fill = "green", stat = "identity") +
   scale_y_discrete(name = NULL, labels = flag_labels) +
-  scale_fill_discrete(guide=FALSE)+
+  scale_fill_discrete(guide = FALSE) +
   theme(axis.text.y = ggtext::element_markdown(color = "black", size = 11),
         axis.title.y = element_blank(),
-        plot.title.position = "plot") +
+        plot.title.position = "plot",
+        panel.grid.major.y = element_blank()) +
   expand_limits(x = c(0,45)) +
   labs( title = "National Wins",
         caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())) 
 
-nations
+ggsave(filename = "docs/assets/TDF-nations.pdf", 
+       plot = nations, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
 
+pdftools::pdf_convert(pdf = "docs/assets/TDF-nations.pdf", format = "png",
+                      dpi = 300, filenames = "docs/assets/TDF-nations.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/TDF-nations.png", error = FALSE)
 ```
 
 ### Physical characteristics and race characteristics by decade
 
 ```{r averages}
-by_decade <-tdf_winners %>%
+by_decade <- tdf_winners %>%
   group_by(decade = 10 * (year(year) %/% 10 )) %>%
   summarize(winner_age = mean(age, na.rm = TRUE),
             winner_height = mean(height, na.rm = TRUE),
@@ -138,60 +158,112 @@ by_decade <-tdf_winners %>%
             winner_margin = mean(time_margin, na.rm = TRUE),
             winner_time = mean(time_overall, na.rm = TRUE),
             winner_speed = mean(speed, na.rm = TRUE))
+```
 
-by_decade %>%  
+
+```{r p1}
+p1 <- by_decade %>%  
   ggplot(aes(decade, winner_age)) +
   geom_line(color = "#9EB0FFFF", size = 3) +
-  expand_limits(y = 0)+
+  expand_limits(y = 0) +
   labs( y = "",
     title = "Average Age of Tour de France Winners By Decade",
     subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
     caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
-  )+
+  ) +
   theme(legend.position = "",
-        plot.title.position = "plot")+
+        plot.title.position = "plot") +
   scale_color_paletteer_d("nord::aurora")
 
-by_decade %>%  
-  ggplot(aes(decade, winner_margin))+
+ggsave(filename = "docs/assets/TDF-p1.pdf", 
+       plot = p1, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/TDF-p1.pdf", format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/TDF-p1.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/TDF-p1.png", error = FALSE)
+```
+
+```{r p2}
+p2 <- by_decade %>%  
+  ggplot(aes(decade, winner_margin)) +
   geom_line(color = "#5AA3DAFF", size = 3) +
-  expand_limits(y = 0)+
+  expand_limits(y = 0) +
   labs( y = "Hours",
     title = "Margin of Victory of Tour de France Winners By Decade",
     subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
     caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
-  )+
+  ) + 
   theme(legend.position = "",
         plot.title.position = "plot")
 
-by_decade %>%  
-  ggplot(aes(decade, winner_speed))+
+ggsave(filename = "docs/assets/TDF-p2.pdf", 
+       plot = p2, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/TDF-p2.pdf", format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/TDF-p2.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/TDF-p2.png", error = FALSE)
+```
+
+```{r p3}
+p3 <- by_decade %>%  
+  ggplot(aes(decade, winner_speed)) +
   geom_line(color = "#2D7597FF", size = 3) +
-  expand_limits(y = 0)+
+  expand_limits(y = 0) +
   labs( y = "Hours",
     title = "Average Speed of Tour de France Winners By Decade",
     subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
     caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
-  )+
+  ) +
   theme(legend.position = "",
         plot.title.position = "plot")
 
-# average margin has been shrinking
+ggsave(filename = "docs/assets/TDF-p3.pdf", 
+       plot = p3, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
 
+pdftools::pdf_convert(pdf = "docs/assets/TDF-p3.pdf", format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/TDF-p3.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/TDF-p3.png", error = FALSE)
 ```
 
 ### Life Expectancy of TDF winners with survival analysis
 
 extrapolated for the riders 38 still alive (not yet dead)
 
-```{r survival}
+```{r survival, fig.width=6, fig.height=4}
 library(survival)
 surv_model <- tdf_winners %>%
   distinct(winner_name, .keep_all = TRUE)  %>%
   transmute(birth_year = year(born),
             death_year = year(died),
             dead =  as.integer(!is.na(death_year))) %>%
-  mutate(age_at_death = coalesce(death_year, 2020)- birth_year) %>%
+  mutate(age_at_death = coalesce(death_year, 2020) - birth_year) %>%
   survfit(Surv(age_at_death, dead) ~ 1, data = .) 
 
 surv_model %>%
@@ -199,7 +271,7 @@ surv_model %>%
 
 library(broom)
 
-glance(surv_model)
+glance(surv_model) %>% knitr::kable()
 
 ```
 
@@ -208,27 +280,43 @@ Of the 63 Tour De France winners, 38 are still alive. After accounting for survi
 ### Stage data
 
 ```{r stages}
-p1<-stage_data %>%
+p <- stage_data %>%
   group_by(decade = 10 * (year %/% 10 )) %>%
   distinct(rider, edition, age) %>%
     ggplot(aes(decade, age)) +
   geom_jitter(color = "#9EB0FFFF", size = 0.5, alpha = 0.1)
 
-p1 + 
+p4 <- p + 
   geom_line(data = by_decade, aes(decade, winner_age), 
             color = "#2D7597FF", size = 3) +
-  expand_limits(y = 0)+
-  labs( y = "", x= "",
+  expand_limits(y = 0) +
+  labs( y = "", x = "",
     title = "Average Age of Tour de France Winners By Decade",
     subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
     caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
-  )+
+  ) +
   theme(legend.position = "",
         plot.title.position = "plot")
+
+ggsave(filename = "docs/assets/TDF-p4.pdf", 
+       plot = p4, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/TDF-p4.pdf", format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/TDF-p4.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/TDF-p4.png", error = FALSE)
 ```
 
 ```{r stage_completion}
-stages_joined<-stage_data  %>%
+stages_joined <- stage_data  %>%
   tidyr::extract(stage_results_id, "stage", "stage-(.*)") %>%
   mutate(stage = if_else(year %in% 1967:1968 & stage == 0, "1a", stage),
          stage = if_else(year %in% 1967:1968 & stage == 1,"1b", stage),
@@ -240,20 +328,42 @@ stages_joined<-stage_data  %>%
   group_by(year, stage) %>%
   mutate(finishers = sum(!is.na(rank))) %>%
   ungroup() %>%
-  mutate(percentile = 1- rank / finishers)
+  mutate(percentile = 1 - rank / finishers)
 
 
 stages_joined %>%
   group_by(winner_country) %>%
   summarize(stages = n(), median_percentile = median(percentile, na.rm = TRUE)) %>%
-  arrange(desc(stages))
+  arrange(desc(stages)) %>% knitr::kable()
+```
 
-stages_joined %>%
+```{r}
+p5 <- stages_joined %>%
   count(year, stage) %>%
   ggplot(aes(n)) +
-  geom_histogram()
-# it appears that some racers are eliminated or drop out as stages are completed
+  geom_histogram() +
+  labs(title = "Number of Stages Joined Each Year")
 
+ggsave(filename = "docs/assets/TDF-p5.pdf", 
+       plot = p5, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/TDF-p5.pdf", format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/TDF-p5.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/TDF-p5.png", error = FALSE)
+```
+
+It appears that some racers are eliminated or drop out as stages are completed
+
+```{r}
 total_points <- stages_joined %>%
   group_by(year, rider) %>%
   summarize(total_points = sum(points, na.rm = TRUE)) %>%
@@ -265,7 +375,7 @@ total_points <- stages_joined %>%
 ### Does the winner of the first stage predict their final point ranking?
 
 ```{r first_predictive_final}
-stages_joined %>%
+p6 <- stages_joined %>%
   filter(stage == "1") %>%
   inner_join(total_points, by = c("year","rider")) %>%
   select(year, rider, 
@@ -273,17 +383,33 @@ stages_joined %>%
          points_rank) %>%
   filter(!is.na(percentile_first_stage)) %>%
   mutate(first_stage_bin = cut(percentile_first_stage, seq(0,1,0.1))) %>%
-  filter(!is.na(first_stage_bin))%>%
+  filter(!is.na(first_stage_bin)) %>%
   ggplot(aes(first_stage_bin, points_rank)) +
-  geom_boxplot()+
+  geom_boxplot() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
-        plot.title.position = "plot")+
+        plot.title.position = "plot") +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Decile Perforance in the First Stage",
        y = "Overall Points Percentile",
        title = "Relationship of TDF First Stage Finish w/ Overall Finish",
        subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
        caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date()))
+
+ggsave(filename = "docs/assets/TDF-p6.pdf", 
+       plot = p6, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/TDF-p6.pdf", format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/TDF-p6.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/TDF-p6.png", error = FALSE)
 ```
 
 
@@ -291,30 +417,30 @@ stages_joined %>%
 library(gganimate)
 library(tidytext)
 
-top_10_2016<-total_points %>%
-  filter(year == 2016)%>%
+top_10_2016 <- total_points %>%
+  filter(year == 2016) %>%
   top_n(10, total_points)
 
-p<-stages_joined %>%
+p <- stages_joined %>%
   filter(year == 2016) %>%
-  semi_join(top_10_2016, by = "rider")%>%
+  semi_join(top_10_2016, by = "rider") %>%
   mutate(stage = as.integer(stage),
          points = coalesce(points, 0)) %>%
-  arrange(stage)%>%
+  arrange(stage) %>%
   group_by(rider) %>%
-  mutate(cumulative_points = cumsum(points))%>%
+  mutate(cumulative_points = cumsum(points)) %>%
   ungroup() %>%
 #  mutate(rider = reorder_within(rider, cumulative_points, stage))%>%
-  ggplot(aes(cumulative_points, rider,fill = cumulative_points))+
-  geom_col()+
-  transition_time(stage)+
+  ggplot(aes(cumulative_points, rider,fill = cumulative_points)) +
+  geom_col() +
+  transition_time(stage) +
   theme(legend.position = "none",
-        plot.title.position = "plot")+
+        plot.title.position = "plot") +
   labs(title = "The 2016 Tour de France Stage: {frame_time}",
        x = "Cumulative Points at Stage",
        y = "")
 
-anim<- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
+anim <- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
 
 anim_save(filename = "docs/assets/TDFanimation.gif", animation = anim)
 
@@ -327,49 +453,85 @@ knitr::include_graphics("assets/TDFanimation.gif", error = FALSE)
 # Lets explore the names and life durations of the Tour de France winners
 
 ```{r lifespans, fig.height=8}
-unique(tdf_winners$birth_country)
+unique(tdf_winners$birth_country) %>% knitr::kable(caption = "All of the Unique Birth Countries")
 
-winners<- tdf_winners %>%
+winners <- tdf_winners %>%
   select(edition,winner_name,born,died,nickname,nationality,start_date, year) %>%
   # factor and reorder the winners by birth date
   mutate(winner_name = fct_reorder(winner_name, desc(born))) %>%
   # compute a life duration in numeric years
-  mutate(life_duration = as.numeric(as.duration(ymd(born) %--%ymd(died)),"years")) %>%
+  mutate(life_duration = as.numeric(as.duration(ymd(born) %--% ymd(died)),"years")) %>%
   filter(!is.na(life_duration))
 
-pal <- RColorBrewer::brewer.pal('Set1',n=3)
+pal <- RColorBrewer::brewer.pal('Set1',n = 3)
 
-life_wins<-winners %>%
-  ggplot()+
+life_wins <- winners %>%
+  ggplot() +
   geom_linerange(aes(ymin = born,
                      ymax = died,
-                     x=winner_name,
-                     color=life_duration),lwd=1.1) +
+                     x = winner_name,
+                     color = life_duration),
+                     lwd = 1.1) +
   coord_flip() +
-  labs(x = "Winner",
+  labs(x = "",
        y = "Year") +
-  geom_point(aes(x=winner_name,
-                 y=year),
-                 shape=19, size=2,color='grey')+
+  geom_point(aes(x = winner_name,
+                 y = year),
+                 shape = 19, 
+                 size = 2,
+                 color = 'grey') +
   scale_shape_identity('',
          labels = 'Won the \nTour de France',
-         breaks=c(19),
+         breaks = c(19),
          guide = 'legend') +
   scale_colour_gradient2('Lifetime \n(years)',
-                         low = pal[1], mid = pal[2], high=pal[3], midpoint = 60) +
-  labs(title='Lifespans', 
-       subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle')+
+                         low = pal[1], mid = pal[2], 
+                         high = pal[3], midpoint = 60) +
+  labs(title = 'Lifespans of Riders', 
+       subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle') +
   guides(colour = guide_legend(order = 1),
          shape = guide_legend(order = 2)) +
-  theme(plot.title.position = "plot")
+  theme(plot.title.position = "plot",
+        legend.position = c(0.9,0.9),
+        legend.background = element_rect(color = "white"))
 
-life_wins
+
+ggsave(filename = "docs/assets/TDF-lifewins.pdf", 
+       plot = life_wins, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/TDF-lifewins.pdf", format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/TDF-lifewins.png",
+                      verbose = FALSE)
 
 ```
 
-```{r TourdeFrance, fig.width=6, fig.height=14}
+```{r}
+knitr::include_graphics("assets/TDF-lifewins.png", error = FALSE)
+```
 
-(life_wins / nations ) +
+```{r TourdeFrance}
+
+p7 <- (life_wins / nations ) +
   plot_annotation("Tour de France Winners")
 
+ggsave(filename = "docs/assets/TDF-p7.pdf", 
+       plot = p7, 
+       width = 7.402, 
+       height = 14, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/TDF-p7.pdf", format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/TDF-p7.png",
+                      verbose = FALSE)
+
 ```
+
+```{r}
+knitr::include_graphics("assets/TDF-p7.png", error = FALSE)
+```
+

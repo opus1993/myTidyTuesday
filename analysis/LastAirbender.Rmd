@@ -3,17 +3,25 @@ title: "TheLastAirbender"
 author: "Jim Gruman"
 date: "8/11/2020"
 output:
-  workflowr::wflow_html: default
+  workflowr::wflow_html: 
+    toc: false
+    code_folding: hide
 editor_options:
   chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-library(knitr)
-knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
-                      echo = TRUE, dpi = 300, cache.lazy = FALSE,
-                      tidy = "styler", fig.width = 8, fig.height = 5,
-                      device = cairo_pdf)
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
+
+
 options(cli.width = 70, width = 70)
 library(scales)
 library(tidyverse)
@@ -41,12 +49,14 @@ This week's #TidyTuesday dataset is from [episodes of *Avatar: The Last Airbende
 ```{r}
 library(tidyverse)
 
-avatar<- tidytuesdayR::tt_load("2020-08-11")
+avatar <- tidytuesdayR::tt_load("2020-08-11")
 
 avatar_raw <- avatar$avatar
 
 avatar_raw %>%
-    count(character, sort = TRUE)
+    count(character, sort = TRUE) %>% 
+    head() %>% 
+    knitr::kable(caption = "The 6 characters with the most lines")
 ```
 
 Rows with `Scene Description` are not dialogue; the main character Aang speaks the most lines overall. How does this change through the three "books" of the show?
@@ -54,7 +64,7 @@ Rows with `Scene Description` are not dialogue; the main character Aang speaks t
 ```{r warning=FALSE}
 library(tidytext)
 
-p1<- avatar_raw %>%
+p1 <- avatar_raw %>%
     filter(!is.na(character_words)) %>%
     mutate(book = fct_inorder(book),
            character = fct_lump_n(character, 10)) %>%
@@ -70,10 +80,15 @@ p1<- avatar_raw %>%
     labs(y = NULL, x = NULL,
          title = "Last Airbender words spoken by book")
 
-ggsave(filename = "docs/assets/airbender-1.pdf", plot = p1, width = 12, height = 8, device = cairo_pdf)
+ggsave(filename = "docs/assets/airbender-1.pdf", 
+       plot = p1, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
 
 pdftools::pdf_convert(pdf = "docs/assets/airbender-1.pdf", format = "png",
-                      dpi = 300, filenames = "docs/assets/airbender-1.png")
+                      dpi = 300, filenames = "docs/assets/airbender-1.png",
+                      verbose = FALSE)
 
 ```
 
@@ -93,7 +108,8 @@ avatar <- avatar_raw %>%
 avatar %>%
     filter(aang == "Aang") %>%
     sample_n(10) %>%
-    pull(text)
+    pull(text) %>% 
+    knitr::kable()
 ```
 
 This... may be a challenge.
@@ -110,9 +126,9 @@ avatar_lo <- avatar %>%
     bind_log_odds(aang, word, n) %>%
     arrange(-log_odds_weighted)
 
-p2<-avatar_lo %>%
+p2 <- avatar_lo %>%
     group_by(aang) %>%
-    top_n(15) %>%
+    top_n(n = 15, wt = log_odds_weighted) %>%
     ungroup %>%
     mutate(word = reorder(word, log_odds_weighted)) %>%
     ggplot(aes(log_odds_weighted, word, fill = aang)) +
@@ -124,8 +140,11 @@ p2<-avatar_lo %>%
 
 ggsave(filename = "docs/assets/airbender-2.pdf", plot = p2, width = 12, height = 8, device = cairo_pdf)
 
-pdftools::pdf_convert(pdf = "docs/assets/airbender-2.pdf", format = "png",
-                      dpi = 300, filenames = "docs/assets/airbender-2.png")
+pdftools::pdf_convert(pdf = "docs/assets/airbender-2.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/airbender-2.png",
+                      verbose = FALSE)
 
 ```
 
@@ -143,7 +162,7 @@ tf <- textfeatures(
   normalize = FALSE, verbose = FALSE
   )
 
-p3<-tf %>%
+p3 <- tf %>%
     bind_cols(avatar) %>%
     group_by(aang) %>%
     summarise(across(starts_with("n_"), mean)) %>%
@@ -156,10 +175,15 @@ p3<-tf %>%
     scale_fill_avatar("AirNomads") +
     labs(x = NULL, y = "Mean text features per spoken line")
 
-ggsave(filename = "docs/assets/airbender-3.pdf", plot = p3, width = 12, height = 8, device = cairo_pdf)
+ggsave(filename = "docs/assets/airbender-3.pdf", 
+       plot = p3, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
 
 pdftools::pdf_convert(pdf = "docs/assets/airbender-3.pdf", format = "png",
-                      dpi = 300, filenames = "docs/assets/airbender-3.png")
+                      dpi = 300, filenames = "docs/assets/airbender-3.png",
+                      verbose = FALSE)
 
 ```
 
@@ -204,7 +228,9 @@ avatar_rec <- recipe(aang ~ text, data = avatar_train) %>%
 
 avatar_prep <- prep(avatar_rec)
 avatar_prep
-juice(avatar_prep)
+
+juice(avatar_prep) %>% head() %>% 
+  knitr::kable()
 ```
 
 Let's walk through the steps in this recipe.
@@ -279,15 +305,15 @@ We have fit each of our candidate models to our resampled training set!
 It's time to see how we did.
 
 ```{r}
-collect_metrics(rf_rs)
-conf_mat_resampled(rf_rs)
+collect_metrics(rf_rs) %>% knitr::kable()
+conf_mat_resampled(rf_rs) %>% knitr::kable()
 ```
 
 Well, that is underwhelming!
 
 ```{r}
-collect_metrics(svm_rs)
-conf_mat_resampled(svm_rs)
+collect_metrics(svm_rs) %>% knitr::kable()
+conf_mat_resampled(svm_rs) %>% knitr::kable()
 ```
 
 Different, but not really better! The SVM model is better able to identify the positive cases but at the expense of the negative cases. Overall, we definitely see that this is a hard problem that we barely are able to have any predictive ability for.
@@ -295,7 +321,7 @@ Different, but not really better! The SVM model is better able to identify the p
 Let's say we are more interested in detecting Aang's lines, even at the expense of the false positives.
 
 ```{r}
-p4<- svm_rs %>%
+p4 <- svm_rs %>%
     collect_predictions() %>%
     group_by(id) %>%    
     roc_curve(aang, .pred_Aang) %>%
@@ -303,13 +329,17 @@ p4<- svm_rs %>%
     geom_abline(lty = 2, color = "gray80", size = 1.5) +
     geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
     scale_color_avatar(palette = "EarthKingdom") +
-    coord_equal()+
+    coord_equal() +
     labs(title = "ROC curve of Support Vector Machine Models \nby cross validation fold")
 
-ggsave(filename = "docs/assets/airbender-4.pdf", plot = p4, width = 12, height = 8, device = cairo_pdf)
+ggsave(filename = "docs/assets/airbender-4.pdf", 
+       plot = p4, 
+       width = 12, 
+       height = 7.402, device = cairo_pdf)
 
 pdftools::pdf_convert(pdf = "docs/assets/airbender-4.pdf", format = "png",
-                      dpi = 300, filenames = "docs/assets/airbender-4.png")
+                      dpi = 300, filenames = "docs/assets/airbender-4.png",
+                      verbose = FALSE)
 
 ```
 
@@ -333,7 +363,7 @@ avatar_imp <- avatar_wf %>%
        target = "aang", metric = "auc", reference_class = "Other",
        pred_wrapper = kernlab::predict, train = juice(avatar_prep))
 
-p5<-avatar_imp %>%
+p5 <- avatar_imp %>%
     slice_max(Importance, n = 8) %>%
     mutate(Variable = str_remove(Variable, "textfeature_text_n_"),
            Variable = fct_reorder(Variable, Importance)) %>%
@@ -345,10 +375,13 @@ p5<-avatar_imp %>%
     scale_color_avatar(palette = "FireNation") +
     labs(y = NULL)
 
-ggsave(filename = "docs/assets/airbender-5.pdf", plot = p5, width = 12, height = 8, device = cairo_pdf)
+ggsave(filename = "docs/assets/airbender-5.pdf", plot = p5, 
+       width = 12, 
+       height = 7.402, device = cairo_pdf)
 
 pdftools::pdf_convert(pdf = "docs/assets/airbender-5.pdf", format = "png",
-                      dpi = 300, filenames = "docs/assets/airbender-5.png")
+                      dpi = 300, filenames = "docs/assets/airbender-5.png",
+                      verbose = FALSE)
 
 ```
 
@@ -366,7 +399,7 @@ avatar_final <- avatar_wf %>%
   last_fit(avatar_split)
 
 avatar_final %>%
-    collect_metrics()
+    collect_metrics() %>% knitr::kable()
 
 avatar_final %>%
     collect_predictions() %>%

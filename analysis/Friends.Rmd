@@ -25,8 +25,8 @@ knitr::opts_chunk$set(cache = FALSE,
                       dpi = 300, 
                       cache.lazy = FALSE,
                       tidy = "styler", 
-                      fig.width = 10, 
-                      fig.height = 5)
+                      fig.width = 12, 
+                      fig.height = 7.402)
 ```
 
 ```{r libraries}
@@ -137,10 +137,24 @@ p <- ggplot(friends.parsed, aes(season, word_sum, colour = speaker)) +
 
 p1 <- cowplot::ggdraw() +
   cowplot::draw_plot(p) +
-  cowplot::draw_image(img_friends, scale=0.2, y = -0.45, x = -0.4)
+  cowplot::draw_image(img_friends, scale = 0.2, y = -0.45, x = -0.4)
 
-p1
+ggsave(filename = "docs/assets/friends-1.pdf", 
+       plot = p1, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
 
+pdftools::pdf_convert(pdf = "docs/assets/friends-1.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/friends-1.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/friends-1.png", error = FALSE)
 ```
 
 # Visualize the Lines by Season in Ranks
@@ -156,7 +170,7 @@ lines_by_season <- friends.text %>%
   mutate(rank = row_number()) %>%
   inner_join(main.characters, by = "speaker") 
 
-lines_by_season %>%
+p2 <- lines_by_season %>%
   ggplot(aes(season, rank, color = firstname)) +
   geom_point(size = 7) +
   geom_text(data = lines_by_season %>% filter(season == 1),
@@ -194,6 +208,22 @@ lines_by_season %>%
         panel.grid = element_blank()
         )
 
+ggsave(filename = "docs/assets/friends-2.pdf", 
+       plot = p2, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/friends-2.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/friends-2.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/friends-2.png", error = FALSE)
 ```
 
 Let's model features with regression to infer what features drive imdb_rating
@@ -292,7 +322,7 @@ Jack Davison @JDavison_ inspired this beautiful word cloud
 Credit David Robinson for the `tidylo` insight 
 
 ```{r word_cloud, fig.width= 16, fig.height= 9}
-ggplot(unique_sentiments,
+p3 <- ggplot(unique_sentiments,
        aes(
          label = word,
          size = log_odds_weighted,
@@ -335,7 +365,22 @@ ggplot(unique_sentiments,
        subtitle = "(<span style='color:#F74035'>Joyful</span> <span style='color:#008F48'>Mad</span> <span style='color:#3F9DD4'>Peaceful</span> <span style='color:#9787CD'>Powerful</span> <span style='color:#F6D400'>Sad</span> <span style='color:#941205'>Scared</span>)<br><br>",
        caption = "<br>Data from <b>{friends}</b> (github.com/EmilHvitfeldt/friends)<br> Visualisation by <b>Jim Gruman</b> (Twitter @jim_gruman)<br>Code found at <b>opus1993.github.io/myTidyTuesday</b>")
 
+ggsave(filename = "docs/assets/friends-3.pdf", 
+       plot = p3, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
 
+pdftools::pdf_convert(pdf = "docs/assets/friends-3.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/friends-3.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/friends-3.png", error = FALSE)
 ```
 
 

@@ -3,19 +3,38 @@ title: The Office for Tidy Tuesday
 author: "Jim Gruman"
 date: 'March 17, 2020'
 output:
-  workflowr::wflow_html: default
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+```{r libraries, include=FALSE}
 library(tidymodels)
 library(tidyverse)
 library(tidytext)
 library(vip)
-theme_set(theme_minimal())
+theme_set(theme_minimal() +
+            theme(plot.title.position = "plot"))
 ```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
+```
+
 
 # Lasso Regression using Tidymodels Workflows and The Office TidyTuesday DataSet
 
@@ -31,8 +50,6 @@ The data this week comes from the `schrute` R package for **The Office** transcr
 # Get the Data
 office_ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv')
 
-schrute::theoffice
-
 ```
 
 ## Explore the data
@@ -43,12 +60,12 @@ Our modeling goal here is to predict the IMDB ratings for episodes of **The Offi
 office_ratings %>%
   group_by(season) %>%
   summarize(avg_rating = mean(imdb_rating)) %>%
-  ggplot(aes(season, avg_rating))+
-  geom_line()+
-  scale_x_continuous(breaks = 1:9)+
+  ggplot(aes(season, avg_rating))  +
+  geom_line() +
+  scale_x_continuous(breaks = 1:9) +
   labs(title = "The Office",
        subtitle = "Average IMDB Rating",
-       caption = paste0("Jim Gruman ", Sys.Date()))+
+       caption = paste0("Jim Gruman ", Sys.Date())) +
   theme(plot.title.position = "plot")
 
 office_ratings %>%
@@ -56,19 +73,20 @@ office_ratings %>%
                             title, ""),
          title = fct_inorder(title),
          episode_number = row_number()) %>%
-  ggplot(aes(episode_number, imdb_rating))+
-  geom_line()+
-  geom_smooth(alpha = 0.3)+
-  geom_point(aes(color = factor(season), size = total_votes))+
-  geom_text(aes(label = top_title), check_overlap = TRUE, hjust = 0.5)+
-  expand_limits(x = -15)+
+  ggplot(aes(episode_number, imdb_rating)) +
+  geom_line() +
+  geom_smooth(alpha = 0.3) +
+  geom_point(aes(color = factor(season), size = total_votes)) +
+  geom_text(aes(label = top_title), check_overlap = TRUE, hjust = 0.5) +
+  expand_limits(x = -15 ) +
   labs(title = "Popularity of The Office episodes",
        subtitle = "IMDB Rating, Color by Season, Size by # of Ratings",
-       caption = paste0("Jim Gruman ", Sys.Date()))+
+       caption = paste0("Jim Gruman ", Sys.Date())) +
   theme(plot.title.position = "plot",
         panel.grid.major.x = element_blank(),
         legend.position = "none") +
-  xlab("Episode Number")+ylab("IMDB Rating")
+  xlab("Episode Number") +
+  ylab("IMDB Rating")
 
 ```
 
@@ -78,12 +96,12 @@ office_ratings %>%
   mutate(title = paste0(season, ".", episode, " ", title),
          title = fct_reorder(title, imdb_rating)) %>%
   head(20) %>%
-  ggplot(aes(title, imdb_rating, color = factor(season), size = total_votes))+
-  geom_point()+
-  coord_flip()+
+  ggplot(aes(title, imdb_rating, color = factor(season), size = total_votes)) +
+  geom_point() +
+  coord_flip() +
   labs(color = "Season",
        title = "Most Popular Episodes of The Office",
-       subtitle = "Top 20 Season.Episode Titles, Color by Season and Size by Total Votes", caption = paste0("Jim Gruman ", Sys.Date()))+
+       subtitle = "Top 20 Season.Episode Titles, Color by Season and Size by Total Votes", caption = paste0("Jim Gruman ", Sys.Date())) +
     theme(plot.title.position = "plot")
 
 ```
@@ -118,8 +136,6 @@ office_info <- schrute::theoffice %>%
   ) %>%
   select(season, episode, episode_name, director, writer, character)
 
-office_info
-
 ```
 
 Lets explore words that individual characters say, that other characters do not, that are most indicative of that person.
@@ -130,28 +146,25 @@ In information retrieval, tf–idf or TFIDF, short for term frequency–inverse 
 office_transcripts <- as_tibble(schrute::theoffice)
 
 blacklist <- c("yeah", "hey", "uh", "gonna", "lot", "ah", "huh", "hmm", "um", "ha", "na", "no", "nah", "ahh")
-blacklist_character<-c("Group", "Everyone", "All")
+blacklist_character <- c("Group", "Everyone", "All")
 
-transcript_words<-office_transcripts %>%
+transcript_words <- office_transcripts %>%
   group_by(character) %>%
-  filter(n()>= 100,
-         n_distinct(episode_name)>2)%>%
-  ungroup()%>%
+  filter(n() >= 100,
+         n_distinct(episode_name) > 2) %>%
+  ungroup() %>%
   select(-text_w_direction) %>%
   unnest_tokens(word,text) %>%
   anti_join(stop_words, by = "word") %>%
   filter(!word %in% blacklist,
          !character %in% blacklist_character)
 
-character_tf_idf<-transcript_words %>%
-  add_count(word)%>%
-  filter(n>20)%>%
+character_tf_idf <- transcript_words %>%
+  add_count(word) %>%
+  filter(n > 20) %>%
   count(word, character) %>%
   bind_tf_idf(word, character, n) %>%
   arrange(desc(tf_idf))
-
-character_tf_idf
-
 ```
 
 Let's explore the content of Dwight's and Jim's lines. What words are most characteristic, or specific, to the character, with a high term frequency and low overall IDF. 
@@ -161,42 +174,42 @@ character_tf_idf %>%
   filter(character == "Dwight") %>%
   mutate(word = fct_reorder(word, tf_idf)) %>%
   head(20) %>%
-  ggplot(aes(word, tf_idf))+
-  geom_col()+
-  coord_flip()+  
+  ggplot(aes(word, tf_idf)) +
+  geom_col() +
+  coord_flip() +  
   labs(title = "Dwight's Lines in The Office",
        subtitle = "Highest Tf-IDF words", 
-       caption = paste0("Jim Gruman ", Sys.Date()))+
+       caption = paste0("Jim Gruman ", Sys.Date())) +
   theme(plot.title.position = "plot")
 
 character_tf_idf %>%
   filter(character == "Jim") %>%
   mutate(word = fct_reorder(word, tf_idf)) %>%
   head(20) %>%
-  ggplot(aes(word, tf_idf))+
-  geom_col()+
-  coord_flip()+  
+  ggplot(aes(word, tf_idf)) +
+  geom_col() +
+  coord_flip() +  
   labs(title = "Jim's Lines in The Office",
        subtitle = "Highest Tf-IDF words", 
-       caption = paste0("Jim Gruman ", Sys.Date()))+
+       caption = paste0("Jim Gruman ", Sys.Date())) +
   theme(plot.title.position = "plot")
 
 
 character_tf_idf %>%
   filter(character %in% c("Jim","Dwight","Michael","Meredith")) %>%
-  group_by(character)%>%
-  top_n(10, tf_idf)%>%
-  ungroup()%>%
+  group_by(character) %>%
+  top_n(10, tf_idf) %>%
+  ungroup() %>%
   mutate(word = reorder_within(word, tf_idf, character)) %>%
-  ggplot(aes(word, tf_idf))+
-  geom_col()+
-  coord_flip()+  
-  scale_x_reordered()+
-  facet_wrap(~ character, scales = "free")+
+  ggplot(aes(word, tf_idf)) +
+  geom_col() +
+  coord_flip() +  
+  scale_x_reordered() +
+  facet_wrap(~ character, scales = "free") +
   labs(title = "Character Lines in The Office",
        subtitle = "Words most specific to a character", 
        caption = paste0("Jim Gruman ", Sys.Date()),
-       x="", y="TF-IDF of character-word pairs")+
+       x = "", y = "TF-IDF of character-word pairs") +
   theme(plot.title.position = "plot")
 ```
 
@@ -213,8 +226,6 @@ characters <- office_info %>%
     values_from = n,
     values_fill = list(n = 0)
   )
-
-characters
 ```
 
 And, let’s find which directors and writers are involved in each episode. I’m choosing here to combine this into one category in modeling, for a simpler model, since these are often the same individuals. And we will only model on creators that were involved in at least 15 distinct episodes.
@@ -233,8 +244,6 @@ creators <- office_info %>%
     values_from = person_value,
     values_fill = list(person_value = 0)
   )
-
-creators
 ```
 
 Next, let’s find the season and episode number for each episode, and then finally put it all together into one dataset for modeling.
@@ -248,7 +257,6 @@ office <- office_info %>%
                select(episode_name, imdb_rating)) %>%
   janitor::clean_names()
 
-office
 ```
 
 One more quick peek into the dataset. This time, across all seasons, do the ratings of the episodes follow a pattern through the course of the season? Ratings appear to be higher for episodes later in the season. What else is associated with higher ratings? Let’s use LASSO regression to find out!
@@ -256,12 +264,12 @@ One more quick peek into the dataset. This time, across all seasons, do the rati
 ```{r}
 office %>%
   ggplot(aes(episode, imdb_rating, fill = as.factor(episode))) +
-  geom_boxplot(show.legend = FALSE)+
-  scale_x_continuous(breaks = 1:28)+
+  geom_boxplot(show.legend = FALSE) +
+  scale_x_continuous(breaks = 1:28) +
   labs(title = "The Office Ratings",
        subtitle = "IMDB, by episode, across all seasons", 
        caption = paste0("Jim Gruman ", Sys.Date()),
-       x="", y="IMDB Rating")+
+       x = "", y = "IMDB Rating") +
   theme(plot.title.position = "plot")
 
 ```
@@ -312,7 +320,8 @@ lasso_fit <- wf %>%
 
 lasso_fit %>%
   pull_workflow_fit() %>%
-  tidy()
+  tidy() %>% 
+  knitr::kable()
 ```
 
 If you have used `glmnet` before, this is the familiar output where we can see (here, for the most regularized examples) the features that contribute to higher IMDB ratings.
@@ -342,14 +351,8 @@ lasso_grid <- tune_grid(
   grid = lambda_grid
 )
 ```
-And the results?
 
-```{r}
-lasso_grid %>%
-  collect_metrics()
-```
-
-That’s nice, but I would rather see a visualization of performance with the regularization parameter.
+Let's take a look at a visualization of performance with the regularization parameter.
 
 ```{r}
 lasso_grid %>%
@@ -409,6 +412,7 @@ last_fit(
   final_lasso,
   office_split
 ) %>%
-  collect_metrics()
+  collect_metrics() %>% 
+  knitr::kable()
 ```
 

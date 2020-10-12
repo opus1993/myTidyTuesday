@@ -3,17 +3,26 @@ title: "StudentDebt"
 author: "Jim Gruman"
 date: "November 26, 2019"
 output:
-  workflowr::wflow_html: default
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
                       message = FALSE, 
-                      warning = FALSE,
-                      fig.width = 9,
-                      fig.height = 6)
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
 ```
 
 
@@ -45,7 +54,7 @@ loans<- loans %>%
          garnishments_pct = round(wage_garnishments/total,2))
 
 #impute the loan collections agency names
-loans<-loans %>%
+loans <- loans %>%
   mutate(agency_name = as_factor( case_when(
          agency_name == "Account Control Technology, Inc." ~ "ACT",
          agency_name == "Action Financial Services*" ~ "Action Financial Services",
@@ -66,10 +75,10 @@ loans %>%
             Voluntary = sum(voluntary_payments, na.rm = TRUE),
             Garnishments = sum(wage_garnishments, na.rm = TRUE)) %>%
   pivot_longer(cols = Consolidation:Garnishments, names_to = "Type", values_to = "Totals") %>%
-  ggplot()+
-  geom_area(aes(x=report_dt, y=Totals/1000000000, fill= Type)) +
-  scale_fill_viridis(discrete = T)+
-  cowplot::theme_minimal_hgrid(16)+
+  ggplot() +
+  geom_area(aes(x = report_dt, y = Totals/1000000000, fill = Type)) +
+  scale_fill_viridis(discrete = T) +
+  cowplot::theme_minimal_hgrid(16) +
   scale_x_date() +
   labs(
     title = "Student Loan Default Recoveries",
@@ -79,7 +88,7 @@ loans %>%
     caption = "Plot: @jim_gruman. Data: US Dept. of Education",
     fill = "Recovery Method"
   ) +
-  scale_y_continuous(breaks = seq(0,3,0.5))+
+  scale_y_continuous(breaks = seq(0,3,0.5)) +
   theme(legend.position = "top",
         plot.title.position = "plot")
 ```
@@ -94,15 +103,15 @@ loans %>%
             Voluntary = 100*round(sum(voluntary_payments, na.rm = TRUE)/Recoveries,2),
             Garnishments = 100*round(sum(wage_garnishments, na.rm = TRUE)/Recoveries,2)) %>%
   pivot_longer(cols = Consolidation:Garnishments, names_to = "Type", values_to = "Percentage") %>%
-  ggplot()+
-  geom_area(aes(x=report_dt, y = Percentage, fill = Type)) +
+  ggplot() +
+  geom_area(aes(x = report_dt, y = Percentage, fill = Type)) +
   scale_fill_viridis(discrete = T) +
   cowplot::theme_minimal_hgrid(16) +
-  scale_x_date()+
-  scale_y_continuous()+
-  facet_wrap(~ agency_name, ncol = 4)+
+  scale_x_date() +
+  scale_y_continuous() +
+  facet_wrap(~ agency_name, ncol = 4) +
   theme(legend.position = "top", 
-        plot.title.position = "plot")+
+        plot.title.position = "plot") +
   labs(
     title = "Student Loan Default Recovery Type",
     subtitle = "By Quarter : 2015-2018",
@@ -119,7 +128,7 @@ loans %>%
   summarize(Consolidation = sum(consolidation, na.rm = TRUE),
             Rehabilitation = sum(rehabilitation, na.rm = TRUE),
             Voluntary = sum(voluntary_payments, na.rm = TRUE),
-            Garnishments = sum(wage_garnishments, na.rm = TRUE))%>%
+            Garnishments = sum(wage_garnishments, na.rm = TRUE)) %>%
   as.ts() %>%
   dygraph(main = "Student Loan Repayments") %>%
   dySeries("Consolidation", drawPoints = TRUE, pointSize = 5, color = "red") %>%

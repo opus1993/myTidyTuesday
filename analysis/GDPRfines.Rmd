@@ -3,16 +3,27 @@ title: "GDPR Fines"
 author: "Jim Gruman"
 date: 'April 21, 2020'
 output:
-  workflowr::wflow_html: default
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
 
-knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
-                      echo = TRUE, dpi = 300, cache.lazy = FALSE,
-                      tidy = "styler", fig.width = 8, fig.height = 5) 
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
 library(tidyverse)
 library(tidymodels)
 theme_set(hrbrthemes::theme_ft_rc())
@@ -52,27 +63,45 @@ Let's get started by looking at the data on violations.
 gdpr_raw <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-21/gdpr_violations.tsv')
 
 gdpr_raw %>%
-  head()%>%
-  knitr::kable("html")%>%
-  kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
-                            full_width = F, fixed_thead = T)%>%
-  kableExtra::scroll_box(width = "800px", height = "200px")
+  head() %>%
+  knitr::kable("html") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped","condensed"),
+                            full_width = F, 
+                            fixed_thead = T) %>%
+  kableExtra::scroll_box(width = "800px", 
+                         height = "200px")
 ```
 
 How are the fines distributed?
 
 
-```{r}
-gdpr_raw_histogram<-gdpr_raw %>%
+```{r p1}
+p1 <- gdpr_raw %>%
   ggplot(aes(price + 1)) +
   geom_histogram(fill = "midnightblue", alpha = 0.7) +
   scale_x_log10(labels = scales::dollar_format(prefix = "€")) +
   labs(title = "EU General Data Protection Regulation 2016/679 (GDPR)",
        subtitle = "Scraped from https://www.privacyaffairs.com/gdpr-fines/",
        x = "GDPR fine (EUR)", y = "Number of GDPR violations",
-       caption = '@Jim_Gruman | #TidyTuesday')+
+       caption = '@Jim_Gruman | #TidyTuesday') +
   theme(plot.title.position = "plot")
-gdpr_raw_histogram
+
+ggsave(filename = "docs/assets/gdpr-1.pdf", 
+       plot = p1, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/gdpr-1.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/gdpr-1.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/gdpr-1.png", error = FALSE)
 ```
 
 Some of the violations were fined zero EUR. Let's make a one-article-per-row version of this dataset.
@@ -91,19 +120,19 @@ gdpr_tidy <- gdpr_raw %>%
   select(-n) 
 
 gdpr_tidy %>% 
-  head()%>%
-  knitr::kable("html")%>%
+  head() %>%
+  knitr::kable("html") %>%
   kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
-                            full_width = F, fixed_thead = T)%>%
+                            full_width = F, fixed_thead = T) %>%
   kableExtra::scroll_box(width = "800px", height = "200px")
 ```
 
 How are the fines distributed by article?
 
-```{r}
+```{r p2}
 library(ggbeeswarm)
 
-gdpr_fines_levied<-gdpr_tidy %>%
+p2 <- gdpr_tidy %>%
   mutate(articles = str_replace_all(articles, "Art. ", "Article "),
          articles = fct_reorder(articles, price)) %>%
   ggplot(aes(articles, price + 1, color = articles, fill = articles)) +
@@ -113,10 +142,26 @@ gdpr_fines_levied<-gdpr_tidy %>%
   labs(x = NULL, y = "GDPR fine (EUR)",
        title = "GDPR Fines Levied, by Article",
        subtitle = "For 250 violations in 25 countries",
-       caption = '@Jim_Gruman | #TidyTuesday')+
+       caption = '@Jim_Gruman | #TidyTuesday') +
   theme(legend.position = "none",
         plot.title.position = "plot") 
-gdpr_fines_levied
+
+ggsave(filename = "docs/assets/gdpr-2.pdf", 
+       plot = p2, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/gdpr-2.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/gdpr-2.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/gdpr-2.png", error = FALSE)
 ```
 
 Now let's create a dataset for modeling.
@@ -130,8 +175,8 @@ gdpr_violations <- gdpr_tidy %>%
   janitor::clean_names()
 
 gdpr_violations %>% 
-  head()%>%
-  knitr::kable("html")%>%
+  head() %>%
+  knitr::kable("html") %>%
   kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
                             full_width = F, fixed_thead = T)%>%
   kableExtra::scroll_box(width = "800px", height = "200px")
@@ -211,10 +256,10 @@ new_gdpr <- crossing(country = "Other",
            total_articles = art_5 + art_6 + art_13 + art_15 + art_32)
 
 new_gdpr %>%
-    head()%>%
-    knitr::kable("html")%>%
+    head() %>%
+    knitr::kable("html") %>%
     kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
-                            full_width = F, fixed_thead = T)%>%
+                            full_width = F, fixed_thead = T) %>%
     kableExtra::scroll_box(width = "800px", height = "200px")
 ```
 
@@ -233,17 +278,17 @@ gdpr_res <- new_gdpr %>%
     bind_cols(conf_int_pred)
 
 gdpr_res %>%
-    head()%>%
-    knitr::kable("html")%>%
+    head() %>%
+    knitr::kable("html") %>%
     kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
-                            full_width = F, fixed_thead = T)%>%
+                            full_width = F, fixed_thead = T) %>%
     kableExtra::scroll_box(width = "800px", height = "200px")
 ```
 
 There are lots of things we can do wtih these results! For example, what are the predicted GDPR fines for violations of each article type (violating only one article)?
 
-```{r, fig.width=7, fig.height=4.5}
-pred_fine<-gdpr_res %>% 
+```{r p3}
+p3 <- gdpr_res %>% 
     filter(total_articles == 1) %>%
     pivot_longer(art_5:art_32) %>%
     filter(value > 0) %>%
@@ -261,13 +306,29 @@ pred_fine<-gdpr_res %>%
     scale_y_log10(labels = scales::dollar_format(prefix = "€", accuracy = 1)) +
     theme(legend.position = "none",
           plot.title.position = "plot") 
-pred_fine
+
+ggsave(filename = "docs/assets/gdpr-3.pdf", 
+       plot = p3, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/gdpr-3.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/gdpr-3.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/gdpr-3.png", error = FALSE)
 ```
 
 We can see here that violations such as data breaches have higher fines on average than violations about rights of access.
 
 
-```{r cache=FALSE}
+```{r p4}
 # Get countries in dataset as a vector
 gdpr_countries <- gdpr_raw %>% 
   distinct(name) %>% 
@@ -310,7 +371,7 @@ price_arrows <- countries_map %>%
   ) %>% 
   unnest(c(arrow_x, arrow_y))
 
-ggplot() +
+p4 <- ggplot() +
   # map
   geom_sf(data = countries_map, aes(geometry = geometry), fill = "#EBE9E1", colour = "grey70", size = 0.25) +
   # country name
@@ -331,17 +392,34 @@ ggplot() +
     plot.title.position = "plot",
     plot.title = element_text(color = "gray40", size = 12, family = "Helvetica", face = "bold")
   ) +
-  coord_sf(xlim = c(-27.5, 37.5), ylim = c(32.5, 82.5), expand = FALSE)+
-  labs(x="", y="")
+  coord_sf(xlim = c(-27.5, 37.5), ylim = c(32.5, 82.5), expand = FALSE) +
+  labs(x = "",y = "")
+
+
+ggsave(filename = "docs/assets/gdpr-4.pdf", 
+       plot = p4, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/gdpr-4.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/gdpr-4.png",
+                      verbose = FALSE)
 
 ```
 
-
 ```{r}
+knitr::include_graphics("assets/gdpr-4.png", error = FALSE)
+```
+
+
+```{r p5}
 # https://twitter.com/davsjob/status/1256293020791685123?s=19
 # David Sjoberg built this incredible chart
 #
-df <- gdpr_raw%>% 
+df <- gdpr_raw %>% 
   group_by(name) %>% 
   summarise(price = sum(price)) %>% 
   ungroup()
@@ -372,7 +450,7 @@ ranking <- st_geometry(sdf) %>%
 sdf <- sdf %>% 
   bind_cols(ranking %>% select(fine_cap))
 
-ggplot() + 
+p5 <- ggplot() + 
   geom_sf(data = sdf, size = .3, fill = "transparent", color = "gray17") +
   # Sigmoid from country to start of barchart
   ggbump::geom_sigmoid(data = ranking, 
@@ -389,7 +467,7 @@ ggplot() +
   geom_point(data = ranking, 
              aes(x = X, y = Y, color = fine_cap), size = 2) +
   # Country text
-  geom_text(data = ranking, aes(x = x_axis_start-.5, y = fine_cap, label = country, color = fine_cap), hjust = 1, size = 2.5, nudge_y = .5) +
+  geom_text(data = ranking, aes(x = x_axis_start -.5, y = fine_cap, label = country, color = fine_cap), hjust = 1, size = 2.5, nudge_y = .5) +
   # Value text
   geom_text(data = ranking, aes(x = fine_cap_x, y = fine_cap, label = val_txt2, color = fine_cap), hjust = 0, size = 2, nudge_x = .4) +
   coord_sf(clip = "off") +
@@ -406,5 +484,22 @@ ggplot() +
         plot.title = element_text(color = "white", size = 16, family = "Helvetica", face = "bold"),
         plot.subtitle = element_text(color = "white", size = 8))
 
+
+ggsave(filename = "docs/assets/gdpr-5.pdf", 
+       plot = p5, 
+       width = 12, 
+       height = 7.402, 
+       device = cairo_pdf)
+
+pdftools::pdf_convert(pdf = "docs/assets/gdpr-5.pdf", 
+                      format = "png",
+                      dpi = 300, 
+                      filenames = "docs/assets/gdpr-5.png",
+                      verbose = FALSE)
+
+```
+
+```{r}
+knitr::include_graphics("assets/gdpr-5.png", error = FALSE)
 ```
 

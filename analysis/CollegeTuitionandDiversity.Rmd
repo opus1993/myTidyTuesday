@@ -3,18 +3,26 @@ title: College Tuition and Diversity
 author: "Jim Gruman"
 date: 'March 10, 2020'
 output:
-  workflowr::wflow_html: default
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      message = FALSE, 
+knitr::opts_chunk$set(cache = FALSE, 
                       warning = FALSE, 
-                      fig.showtext = T, 
-                      fig.width = 9,
-                      fig.height=6)
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
 library(tidymodels)
 library(tidyverse)
 theme_set(hrbrthemes::theme_ipsum_pub())
@@ -45,19 +53,19 @@ diversity_school <- readr::read_csv('https://raw.githubusercontent.com/rfordatas
 What are the characteristics of schools that enroll and graduate more women?
 
 ```{r}
-diversity_gender<-diversity_school %>%
-  filter(category == "Women")%>%
+diversity_gender <- diversity_school %>%
+  filter(category == "Women") %>%
   mutate(WomensEnrollment = enrollment / total_enrollment)
 
 diversity_gender %>%
-  ggplot(aes(WomensEnrollment))+
-  geom_histogram(alpha = 0.8, fill = hrbrthemes::ipsum_pal()(1))+
+  ggplot(aes(WomensEnrollment)) +
+  geom_histogram(alpha = 0.8, fill = hrbrthemes::ipsum_pal()(1)) +
   labs(title = "US College Enrollment Category: Women's Proportion",
        subtitle = "TidyTuesday 2020 Week 11", 
        x = "Women's Enrollment Portion",
        y = "Count of Institutions",
-       caption = paste0("Jim Gruman ", Sys.Date()))+
-  scale_x_continuous(labels=scales::percent)+
+       caption = paste0("Jim Gruman ", Sys.Date())) +
+  scale_x_continuous(labels = scales::percent) +
   theme(plot.title.position = "plot")
 
 median(diversity_gender$WomensEnrollment)
@@ -67,7 +75,7 @@ median(diversity_gender$WomensEnrollment)
 How can we understand what drives higher proportions of enrollment of Women?
 
 ```{r warning=FALSE}
-university_df<-diversity_gender %>%
+university_df <- diversity_gender %>%
   transmute(diversity = case_when(WomensEnrollment > 0.586 ~ "high",
                                   TRUE ~ "low"),
             name, state, total_enrollment) %>%
@@ -79,33 +87,33 @@ university_df<-diversity_gender %>%
   mutate_if(is.character, factor)
 
 university_df %>%
-  ggplot(aes(type, in_state_tuition, fill = diversity))+
-  geom_boxplot()+
-  scale_y_continuous(labels = scales::dollar_format())+
-  facet_wrap(~region)+  
+  ggplot(aes(type, in_state_tuition, fill = diversity)) +
+  geom_boxplot() +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  facet_wrap(~region) +  
   labs(title = "College Enrollment Category:  High Women's Enrollment",
        subtitle = "TidyTuesday 2020 Week 11",
-       caption = paste0("Jim Gruman ", Sys.Date()))+
+       caption = paste0("Jim Gruman ", Sys.Date())) +
   theme(plot.title.position = "plot")
 
 
 university_df %>%
-  ggplot(aes(type, total_enrollment, fill = diversity))+
-  geom_boxplot()+
-  scale_y_log10()+
+  ggplot(aes(type, total_enrollment, fill = diversity)) +
+  geom_boxplot() +
+  scale_y_log10() +
   labs(title = "College Enrollment Category:  High Women's Enrollment",
        subtitle = "TidyTuesday 2020 Week 11",
-       caption = paste0("Jim Gruman ", Sys.Date()))+
+       caption = paste0("Jim Gruman ", Sys.Date())) +
   theme(plot.title.position = "plot")
 
 university_df %>%
-  ggplot(aes(type, make_world_better_percent/100, fill = diversity))+
-  geom_boxplot()+
+  ggplot(aes(type, make_world_better_percent/100, fill = diversity)) +
+  geom_boxplot() +
   labs(title = "College Enrollment Category:  High Women's Enrollment",
        subtitle = "TidyTuesday 2020 Week 11",
-       caption = paste0("Jim Gruman ", Sys.Date()))+
-  scale_y_continuous(labels = scales::percent_format())+
-  theme(plot.title.position = "plot")+
+       caption = paste0("Jim Gruman ", Sys.Date())) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  theme(plot.title.position = "plot") +
   ylab("Alumni belief in making World Better")
   
 
@@ -118,11 +126,11 @@ Lets build several classification models, starting with pre-processing
 ```{r}
 set.seed(42)
 
-uni_split<-initial_split(university_df, strate = diversity)
-uni_train<- training(uni_split)
-uni_test<- testing(uni_split)
+uni_split <- initial_split(university_df, strate = diversity)
+uni_train <- training(uni_split)
+uni_test <- testing(uni_split)
 
-uni_rec<-recipe(diversity ~ ., data = uni_train) %>%
+uni_rec <- recipe(diversity ~ ., data = uni_train) %>%
   step_corr(all_numeric()) %>%
   step_dummy(all_nominal(), -all_outcomes()) %>%
   step_zv(all_numeric()) %>%
@@ -140,10 +148,10 @@ juice(uni_rec)
 A GLM classification model, with meaningful feature coefficients:
 
 ```{r}
-glm_spec<-logistic_reg()%>%
+glm_spec <- logistic_reg() %>%
   set_engine("glm")
 
-glm_fit<-glm_spec %>%
+glm_fit <- glm_spec %>%
   fit(diversity ~ ., data = juice(uni_rec))
 
 glm_fit
@@ -153,11 +161,11 @@ glm_fit
 A k-nearest neighbors model
 
 ```{r}
-knn_spec<-nearest_neighbor()%>%
+knn_spec <- nearest_neighbor() %>%
   set_engine("kknn") %>%
   set_mode("classification")
 
-knn_fit<-knn_spec %>%
+knn_fit <- knn_spec %>%
   fit(diversity ~ ., data = juice(uni_rec))
 
 knn_fit
@@ -167,11 +175,11 @@ knn_fit
 An a decision tree model, with explainable branching. It is interesting to note here that the first split is on stem_percent.
 
 ```{r}
-tree_spec<-decision_tree()%>%
+tree_spec <- decision_tree() %>%
   set_engine("rpart") %>%
   set_mode("classification")
 
-tree_fit<-tree_spec %>%
+tree_fit <- tree_spec %>%
   fit(diversity ~ ., data = juice(uni_rec))
 
 tree_fit
@@ -185,7 +193,7 @@ To measure each model, resampling is a best practice to simulate how well model 
 We will create 10-cross validation sets
 ```{r}
 set.seed(42)
-folds<-vfold_cv(juice(uni_rec), strata = diversity)
+folds <- vfold_cv(juice(uni_rec), strata = diversity)
 
 set.seed(42)
 glm_rs <- glm_spec %>%
@@ -198,14 +206,14 @@ glm_rs <- glm_spec %>%
 #glm_rs %>% unnest(.metrics)
 
 set.seed(42)
-knn_rs<-knn_spec %>%
+knn_rs <- knn_spec %>%
   fit_resamples(diversity ~ ., 
                 folds, 
                 metrics = metric_set(roc_auc),
                 control = control_resamples(save_pred = TRUE))
 
 set.seed(42)
-tree_rs<-tree_spec %>%
+tree_rs <- tree_spec %>%
   fit_resamples(diversity ~ ., 
                 folds, 
                 metrics = metric_set(roc_auc),
@@ -217,13 +225,13 @@ tree_rs<-tree_spec %>%
 At a quick glance, the mean roc_auc is highest with the glm approach.
 
 ```{r}
-glm_rs %>% collect_metrics()
+glm_rs %>% collect_metrics() %>% knitr::kable()
 ```
 ```{r}
-knn_rs %>% collect_metrics()
+knn_rs %>% collect_metrics() %>% knitr::kable()
 ```
 ```{r}
-tree_rs %>% collect_metrics()
+tree_rs %>% collect_metrics() %>% knitr::kable()
 
 ```
 
@@ -234,7 +242,7 @@ glm_rs %>%
   unnest(.predictions) %>%
   mutate(model = "glm") %>%
   bind_rows(tree_rs %>%
-              unnest(.predictions)%>%
+              unnest(.predictions) %>%
               mutate(model = "tree")) %>%
   bind_rows(knn_rs %>%
               unnest(.predictions) %>%
@@ -252,7 +260,7 @@ glm_fit %>%
   predict(new_data = bake(uni_rec, new_data = uni_test),
           type = "prob") %>%
   mutate(truth = uni_test$diversity) %>%
-  roc_auc(truth, .pred_high)
+  roc_auc(truth, .pred_high) %>% knitr::kable()
 
 ```
 
@@ -261,7 +269,7 @@ glm_fit %>%
   predict(new_data = bake(uni_rec, new_data = uni_test),
           type = "class") %>%
   mutate(truth = uni_test$diversity) %>%
-  conf_mat(truth, .pred_class)%>%
+  conf_mat(truth, .pred_class) %>%
   pluck(1) %>%
   as_tibble() %>%
   ggplot(aes(Prediction, Truth, alpha = n)) +
@@ -279,7 +287,7 @@ glm_fit %>%
 
 ```
 
-Acknowledgements:
+Resources:
 
 [Julia Silge's blog](https://juliasilge.com/blog/tuition-resampling/)
 
