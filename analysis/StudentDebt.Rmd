@@ -122,7 +122,7 @@ loans %>%
   ) 
 ```
 
-```{r}
+```{r eval = FALSE}
 loans %>%
   group_by(report_dt) %>%
   summarize(Consolidation = sum(consolidation, na.rm = TRUE),
