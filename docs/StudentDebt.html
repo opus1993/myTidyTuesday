@@ -25,14 +25,6 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
-<link href="site_libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet" />
-<script src="site_libs/dygraphs-1.1.1/dygraph-combined.js"></script>
-<script src="site_libs/dygraphs-1.1.1/shapes.js"></script>
-<script src="site_libs/moment-2.8.4/moment.js"></script>
-<script src="site_libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script>
-<script src="site_libs/moment-fquarter-1.0.0/moment-fquarter.min.js"></script>
-<script src="site_libs/dygraphs-binding-1.1.1.6/dygraphs.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -457,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee09d4592beeaed3913ba908ea839c18961e228edtargetblanke09d459a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/e09d4592beeaed3913ba908ea839c18961e228ed" target="_blank">e09d459</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee09d4592beeaed3913ba908ea839c18961e228edtargetblanke09d459a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/e09d4592beeaed3913ba908ea839c18961e228ed" target="_blank">e09d459</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -516,6 +508,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/e09d4592beeaed3913ba908ea839c18961e228ed/analysis/StudentDebt.Rmd" target="_blank">e09d459</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish(“analysis/StudentDebt.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/1e1cc32172ca654ffeeb987e32a3d4db2f2e30e2/docs/StudentDebt.html" target="_blank">1e1cc32</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -740,8 +766,6 @@ loans %&gt;%
   dySeries(&quot;Voluntary&quot;, drawPoints = TRUE, pointSize = 5, color = &quot;orange&quot;) %&gt;%
   dySeries(&quot;Garnishments&quot;, drawPoints = TRUE, pointSize = 5, color = &quot;black&quot;) %&gt;%
   dyLegend(width = 800)</code></pre>
-<div id="htmlwidget-d7473d51fc4a2e78385c" style="width:3600px;height:2220.6px;" class="dygraphs html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d7473d51fc4a2e78385c">{"x":{"attrs":{"title":"Student Loan Repayments","labels":["year","report_dt","Consolidation","Rehabilitation","Voluntary","Garnishments"],"retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}},"colors":["#808000","red","green","orange","black"],"series":{"Consolidation":{"axis":"y","drawPoints":true,"pointSize":5},"Rehabilitation":{"axis":"y","drawPoints":true,"pointSize":5},"Voluntary":{"axis":"y","drawPoints":true,"pointSize":5},"Garnishments":{"axis":"y","drawPoints":true,"pointSize":5}},"legend":"auto","labelsDivWidth":800,"labelsShowZeroValues":true,"labelsSeparateLines":false,"hideOverlayOnMouseOut":true},"scale":"yearly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["0001-01-01T00:00:00.000Z","0002-01-01T00:00:00.000Z","0003-01-01T00:00:00.000Z","0004-01-01T00:00:00.000Z","0005-01-01T00:00:00.000Z","0006-01-01T00:00:00.000Z","0007-01-01T00:00:00.000Z","0008-01-01T00:00:00.000Z","0009-01-01T00:00:00.000Z","0010-01-01T00:00:00.000Z","0011-01-01T00:00:00.000Z","0012-01-01T00:00:00.000Z","0013-01-01T00:00:00.000Z"],[16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805],[209930907.1,214614999.52,287996045.89,359519194.92,317899447.87,317975605.13,450281514.77,420092507.71,310380551.98,244209548.01,419198975.05,429254029.72,369170819.97],[1390645645.15,1756425113.12,1589058548.67,1730126406.17,1498709276.97,2030603051.03,1543881356.65,1767508325.62,1901452649.21,2197748561.5,1991748611.93,1561474786.35,1886592381.8],[93161839.14,82916229.38,91294867.12,90817058.07,88965826.25,87809644.72,102030437.52,105518248.9,100710023.3,90066743.88,118461450.85,141847370.4,142177131.39],[170267634.38,176656336.12,168407593.66,159147799.79,160487400.83,163994466.68,182381643.12,134522276.57,157860033.02,179659316.03,207749722.87,224432540.28,229820860.55]]},"evals":[],"jsHooks":[]}</script>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -774,25 +798,25 @@ other attached packages:
 [17] tidyverse_1.3.0   workflowr_1.6.2  
 
 loaded via a namespace (and not attached):
- [1] fs_1.5.0           xts_0.12.1         usethis_1.6.3      httr_1.4.2        
- [5] rprojroot_1.3-2    R.cache_0.14.0     tools_4.0.3        backports_1.1.10  
- [9] R6_2.4.1           DBI_1.1.0          colorspace_1.4-1   withr_2.3.0       
-[13] tidyselect_1.1.0   gridExtra_2.3      curl_4.3           compiler_4.0.3    
-[17] git2r_0.27.1       cli_2.0.2          rvest_0.3.6        xml2_1.3.2        
-[21] labeling_0.3       scales_1.1.1       systemfonts_0.3.2  digest_0.6.25     
-[25] rmarkdown_2.4      R.utils_2.10.1     tidytuesdayR_1.0.1 pkgconfig_2.0.3   
-[29] htmltools_0.5.0    styler_1.3.2       dbplyr_1.4.4       htmlwidgets_1.5.2 
-[33] rlang_0.4.8        readxl_1.3.1       rstudioapi_0.11    generics_0.0.2    
-[37] farver_2.0.3       zoo_1.8-8          jsonlite_1.7.1     R.oo_1.24.0       
-[41] magrittr_1.5       Rcpp_1.0.5         munsell_0.5.0      fansi_0.4.1       
-[45] gdtools_0.2.2      lifecycle_0.2.0    R.methodsS3_1.8.1  stringi_1.5.3     
-[49] whisker_0.4        yaml_2.2.1         grid_4.0.3         blob_1.2.1        
-[53] promises_1.1.1     crayon_1.3.4       lattice_0.20-41    haven_2.3.1       
-[57] hms_0.5.3          knitr_1.30         pillar_1.4.6       uuid_0.1-4        
-[61] reprex_0.3.0       glue_1.4.2         evaluate_0.14      modelr_0.1.8      
-[65] vctrs_0.3.4        httpuv_1.5.4       selectr_0.4-2      cellranger_1.1.0  
-[69] gtable_0.3.0       rematch2_2.1.2     assertthat_0.2.1   xfun_0.18         
-[73] broom_0.7.1        later_1.1.0.1      ellipsis_0.3.1    </code></pre>
+ [1] fs_1.5.0           usethis_1.6.3      httr_1.4.2         rprojroot_1.3-2   
+ [5] R.cache_0.14.0     tools_4.0.3        backports_1.1.10   R6_2.4.1          
+ [9] DBI_1.1.0          colorspace_1.4-1   withr_2.3.0        tidyselect_1.1.0  
+[13] gridExtra_2.3      curl_4.3           compiler_4.0.3     git2r_0.27.1      
+[17] cli_2.0.2          rvest_0.3.6        xml2_1.3.2         labeling_0.3      
+[21] scales_1.1.1       systemfonts_0.3.2  digest_0.6.25      rmarkdown_2.4     
+[25] R.utils_2.10.1     tidytuesdayR_1.0.1 pkgconfig_2.0.3    htmltools_0.5.0   
+[29] styler_1.3.2       dbplyr_1.4.4       htmlwidgets_1.5.2  rlang_0.4.8       
+[33] readxl_1.3.1       rstudioapi_0.11    generics_0.0.2     farver_2.0.3      
+[37] zoo_1.8-8          jsonlite_1.7.1     R.oo_1.24.0        magrittr_1.5      
+[41] Rcpp_1.0.5         munsell_0.5.0      fansi_0.4.1        gdtools_0.2.2     
+[45] lifecycle_0.2.0    R.methodsS3_1.8.1  stringi_1.5.3      whisker_0.4       
+[49] yaml_2.2.1         grid_4.0.3         blob_1.2.1         promises_1.1.1    
+[53] crayon_1.3.4       lattice_0.20-41    haven_2.3.1        hms_0.5.3         
+[57] knitr_1.30         pillar_1.4.6       uuid_0.1-4         reprex_0.3.0      
+[61] glue_1.4.2         evaluate_0.14      modelr_0.1.8       vctrs_0.3.4       
+[65] httpuv_1.5.4       selectr_0.4-2      cellranger_1.1.0   gtable_0.3.0      
+[69] rematch2_2.1.2     assertthat_0.2.1   xfun_0.18          broom_0.7.1       
+[73] later_1.1.0.1      ellipsis_0.3.1    </code></pre>
 </div>
 
 
