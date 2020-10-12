@@ -1,5 +1,5 @@
 ---
-title: College Tuition and Diversity
+title: "College Tuition and Diversity"
 author: "Jim Gruman"
 date: 'March 10, 2020'
 output:

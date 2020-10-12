@@ -4,34 +4,84 @@ site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
+    code_folding: hide
 editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my TidyTuesday website collection.
+Welcome to my TidyTuesday website collection. Most of the activity here is related to the [rfordatascience #TidyTuesday](https://github.com/rfordatascience/tidytuesday) weekly social data project. The exercises here are certainly not finished products. They demonstrate what could be accomplished in an hour or two after-hours from datasets that can be found out in the "wild." In many cases, I've used these to explore packages with new features and functions and to facilitate conversations with others in the community via Twitter and Slack.
 
-|   |   |   |    
-|---|---|---|
-|October 9, 2020|[Corn Production](CornProduction.html)|{rnassqs, httr}|
-|October 7, 2020| [NCAA Womens Tournament](NCAAWomensTournament.html) | {tidymodels, splines}|
-|September 24, 2020| [Hops](Hops.html)| {rnassqs, blscrapeR}|
-|September 22, 2020 | [Himalayan Climbers](HimalayanClimbers.html) | {ebbr, ggdark} |
-|September 15, 2020 | [Kids Health Spending](KidsSpending.html) | {geojsonio, rgeos}| 
-|September 8, 2020 | [Friends](Friends.html) | {tidytext, tidylo}|
-|August 31, 2020 | [Crop Yields](CropYields.html) | {ggrepel}|
-|August 11, 2020 | [Last Airbender](LastAirbender.html) | {tidytext, tidylo, textfeatures}|
-|July 15, 2020 | [Astronaut Missions](Astronaut.html) | {tidymodels, baguette}|
-|March 17, 2020 | [The Office](TheOffice.html) |  {tidymodels, tidytext}|
-|July 7, 2020 | [Coffee](Coffee.html) | {widyr, tidytext}|
-|May 5, 2020 | [Animal Crossing](AnimalCrossing.html) | {tidytext, stm, textrecipes, vip, stm}|
-|April 21, 2020 | [GDPR Fines](GDPRfines.html) | {ggbeeswarm, rnaturalearth, tidymodels}|
-|March 31, 2020 |[Beer Production](BeerProduction.html) | {gghighlight, tidymetrics}|
-|March 24, 2020 | [Brain Injury](BrainInjury.html) | {gganimate, vip, tidymodels}|
-|March 10, 2020 | [College Tuition](CollegeTuitionandDiversity.html) | {tidymodels}|
-|February 4, 2020 | [NFL Attendance](NFLattendance.html) | {tidymodels} |
-|November 26, 2019 | [Student Debt](StudentDebt.html) | {cowplot, ggrepel, dygraphs}|
+```{r, include = FALSE}
+library(purrr)
+library(dplyr)
+library(knitr)
+library(kableExtra)
 
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
+
+articles <- tibble(file = dir(path = "analysis")) %>% 
+  filter(!file %in% c("_site.yml","about.Rmd","index.Rmd","license.Rmd"))
+
+title_f <- function(file) {
+  lines <- readLines(paste0("analysis/",file),
+                     warn = FALSE)  
+  lines[grepl("^title:", lines)]
+}
+
+date_f <- function(file) {
+  lines <- readLines(paste0("analysis/",file),
+                     warn = FALSE)  
+  lines[grepl("^date:", lines)]
+}
+
+library_f <- function(file) {
+  lines <- readLines(paste0("analysis/",file),
+                     warn = FALSE)  
+  lines[grepl("^library", lines)]
+}
+```
+
+```{r}
+
+articles <- articles %>% 
+  mutate(title = map_chr(file,~ title_f(.))) %>% 
+  mutate(dateline = map_chr(file, ~ date_f(.))) %>% 
+  mutate(libraries = map(file, ~ library_f(.))) %>%
+  tidyr::unnest_longer(col = libraries) %>% 
+  mutate(title = stringr::str_sub(title, start = 9L,
+                                  stringr::str_length(title) - 1L)) %>% mutate(dateline = stringr::str_sub(dateline, start = 8L,
+                                  stringr::str_length(dateline) - 1L)) %>% 
+  mutate(libraries = stringr::str_sub(libraries, start = 9L,
+                                  stringr::str_length(libraries) - 1L)) %>%  filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate") ) %>% 
+  tidyr::nest(package = libraries) 
+
+df_url <- articles %>% 
+  mutate(link = stringr::str_remove(file,".Rmd")) %>% 
+  mutate(link = paste0("https://opus1993.github.io/myTidyTuesday/",link,".html")) %>% 
+  pull(link)  
+
+articles %>% 
+  mutate(title = text_spec(title,
+                           format = "html", 
+                           link = df_url)) %>% 
+  select(-file) %>% 
+  arrange(desc(lubridate::mdy(dateline))) %>% 
+  knitr::kable("html", 
+               escape = FALSE,
+               col.names = c("Title","Date","Packages")) %>%
+  kable_styling(bootstrap_options = c("hover", "condensed"),
+                full_width = TRUE,
+                fixed_thead = TRUE)  
   
+```
 
 
 

@@ -1,5 +1,5 @@
 ---
-title: The Office for Tidy Tuesday
+title: "The Office for Tidy Tuesday"
 author: "Jim Gruman"
 date: 'March 17, 2020'
 output:

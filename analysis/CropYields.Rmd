@@ -1,6 +1,6 @@
 ---
 title: "Crop Yields"
-date: 2020-08-31
+date: "August 31, 2020"
 output:
   workflowr::wflow_html:
     toc: no

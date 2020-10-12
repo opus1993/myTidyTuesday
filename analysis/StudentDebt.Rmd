@@ -1,5 +1,5 @@
 ---
-title: "StudentDebt"
+title: "Student Debt"
 author: "Jim Gruman"
 date: "November 26, 2019"
 output:

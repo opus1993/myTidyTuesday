@@ -1,5 +1,5 @@
 ---
-title: "BeerProduction"
+title: "Beer Production"
 author: "Jim Gruman"
 date: 'March 31, 2020'
 output:
@@ -39,11 +39,11 @@ knitr::opts_chunk$set(cache = FALSE,
 ```
 
 ```{r libraries}
-library(tidyverse)   
+library(tidyverse)
 library(lubridate)
 library(tidymetrics)
-library(GGally)      
-library(gghighlight) 
+library(GGally)
+library(gghighlight)
 library(tidymodels)
 theme_set(hrbrthemes::theme_ft_rc())
 
