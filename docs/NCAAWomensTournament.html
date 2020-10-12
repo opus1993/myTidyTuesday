@@ -358,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-11
+<strong>Last updated:</strong> 2020-10-12
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -449,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree45b1724e53dfa5a7c6d33d256ce69df50c375519targetblank45b1724a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/45b1724e53dfa5a7c6d33d256ce69df50c375519" target="_blank">45b1724</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree45b1724e53dfa5a7c6d33d256ce69df50c375519targetblank45b1724a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/45b1724e53dfa5a7c6d33d256ce69df50c375519" target="_blank">45b1724</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -467,9 +467,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -508,6 +505,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/1e1cc32172ca654ffeeb987e32a3d4db2f2e30e2/docs/NCAAWomensTournament.html" target="_blank">1e1cc32</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -750,16 +764,16 @@ tourney_wf &lt;- workflow() %&gt;%
   add_model(lm_spec)
 
 tourney_wf</code></pre>
-<pre><code>== Workflow ==============================================================
+<pre><code>== Workflow =============================
 Preprocessor: Recipe
 Model: linear_reg()
 
--- Preprocessor ----------------------------------------------------------
+-- Preprocessor -------------------------
 1 Recipe Step
 
 * step_ns()
 
--- Model -----------------------------------------------------------------
+-- Model --------------------------------
 Linear Regression Model Specification (regression)
 
 Computational engine: lm </code></pre>
@@ -1055,16 +1069,16 @@ spline_rs</code></pre>
 <pre class="r"><code>final_wf &lt;- finalize_workflow(tourney_wf, tibble(seed_splines = 3))
 tourney_fit &lt;- fit(final_wf, tourney_train)
 tourney_fit</code></pre>
-<pre><code>== Workflow [trained] ====================================================
+<pre><code>== Workflow [trained] ===================
 Preprocessor: Recipe
 Model: linear_reg()
 
--- Preprocessor ----------------------------------------------------------
+-- Preprocessor -------------------------
 1 Recipe Step
 
 * step_ns()
 
--- Model -----------------------------------------------------------------
+-- Model --------------------------------
 
 Call:
 stats::lm(formula = ..y ~ ., data = data)
