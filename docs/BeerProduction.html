@@ -17,12 +17,13 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
@@ -266,6 +267,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -317,6 +321,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">BeerProduction</h1>
@@ -346,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-10
+<strong>Last updated:</strong> 2020-10-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -437,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -496,6 +508,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9a61ca86f951fb5cd24379a3258da701356ee345/analysis/BeerProduction.Rmd" target="_blank">9a61ca8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/23f838130a3109ef6b43b04e4c5eaeef7b09147f/docs/BeerProduction.html" target="_blank">23f8381</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -571,20 +617,20 @@ wflow_publish(“analysis/BeerProduction.Rmd”)
 </div>
 </div>
 </div>
-<pre class="r"><code>library(tidyverse)   
+<pre class="r"><code>library(tidyverse)
 library(lubridate)
 library(tidymetrics)
-library(GGally)      
-library(gghighlight) 
+library(GGally)
+library(gghighlight)
 library(tidymodels)
 theme_set(hrbrthemes::theme_ft_rc())</code></pre>
 <div id="import-this-weeks-data" class="section level2">
 <h2>Import this week’s data</h2>
-<pre class="r"><code>brewing_materials &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewing_materials.csv&#39;) %&gt;%
-    mutate(date = ymd(paste0(year, &quot;/&quot;, month, &quot;/1&quot;))) 
-beer_taxed &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_taxed.csv&#39;)
-brewer_size &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewer_size.csv&#39;)
-beer_states &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_states.csv&#39;)</code></pre>
+<pre class="r"><code>brewing_materials &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewing_materials.csv&quot;) %&gt;%
+  mutate(date = ymd(paste0(year, &quot;/&quot;, month, &quot;/1&quot;)))
+beer_taxed &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_taxed.csv&quot;)
+brewer_size &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewer_size.csv&quot;)
+beer_states &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_states.csv&quot;)</code></pre>
 </div>
 <div id="exploration" class="section level2">
 <h2>Exploration</h2>
@@ -603,7 +649,7 @@ table(brewer_size$brewer_size)</code></pre>
 <pre class="r"><code>all_barrels &lt;-
   beer_states %&gt;%
   na.omit() %&gt;%
-  filter(state != &#39;total&#39;) %&gt;%
+  filter(state != &quot;total&quot;) %&gt;%
   group_by(state, year) %&gt;%
   summarise(barrels = sum(barrels))</code></pre>
 <p>The top 5 states with largest increase in barrels from 2008 to 2019</p>
@@ -614,372 +660,938 @@ table(brewer_size$brewer_size)</code></pre>
   mutate(pct_chg = (total_barrels - lag(total_barrels)) / lag(total_barrels)) %&gt;%
   ungroup() %&gt;%
   top_n(5, pct_chg) %&gt;%
-  pull(state)    
+  pull(state)
 
-increase_states</code></pre>
-<pre><code>[1] &quot;AL&quot; &quot;CT&quot; &quot;ND&quot; &quot;RI&quot; &quot;TN&quot;</code></pre>
-<pre class="r"><code>#Lets get the state names
+increase_states %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AL</td>
+</tr>
+<tr class="even">
+<td align="left">CT</td>
+</tr>
+<tr class="odd">
+<td align="left">ND</td>
+</tr>
+<tr class="even">
+<td align="left">RI</td>
+</tr>
+<tr class="odd">
+<td align="left">TN</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Lets get the state names
 states &lt;- tibble(state = state.abb, state_name = state.name)
 
-beer_df &lt;- 
+beer_df &lt;-
   beer_states %&gt;%
   na.omit() %&gt;%
-  filter(state != &#39;total&#39;) %&gt;%
+  filter(state != &quot;total&quot;) %&gt;%
   group_by(state, year) %&gt;%
   summarise(barrels = sum(barrels)) %&gt;%
   mutate(total_barrels = cumsum(barrels)) %&gt;%
-  left_join(states, by = &#39;state&#39;)</code></pre>
+  left_join(states, by = &quot;state&quot;)</code></pre>
 <p>Lets have a look at the materials trends. What ingredients are used in beer production?</p>
-<pre class="r"><code>brewing_materials %&gt;%
-  filter(!str_detect(material_type, &quot;Total&quot;),
-         !(month == 12 &amp; year %in% 2014:2015)) %&gt;%  # remove the subtotals) %&gt;%
+<pre class="r"><code>p1 &lt;- brewing_materials %&gt;%
+  filter(
+    !str_detect(material_type, &quot;Total&quot;),
+    !(month == 12 &amp; year %in% 2014:2015)
+  ) %&gt;% # remove the subtotals) %&gt;%
   filter(date == max(date)) %&gt;%
   mutate(type = fct_reorder(type, month_current)) %&gt;%
-  ggplot(aes(type, month_current/1000000, fill =  type)) +
-  geom_col()+
+  ggplot(aes(type, month_current / 1000000, fill = type)) +
+  geom_col() +
   scale_y_continuous(breaks = scales::pretty_breaks()) +
-  coord_flip()+
-  theme(plot.title.position = &quot;plot&quot;,
-        legend.position = &quot;&quot;,
-        panel.grid.major.y =  element_blank())+
+  coord_flip() +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    legend.position = &quot;&quot;,
+    panel.grid.major.y = element_blank()
+  ) +
   labs(
-    x = &#39;&#39;,
-    y = &#39;Million Pounds&#39;,
-    title = &#39;Ingredients in US Beer Production, in the month of December 2019&#39;,
-    subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau&#39;,
-    caption = &#39;@Jim_Gruman | #TidyTuesday&#39;
-  )</code></pre>
-<p><img src="figure/BeerProduction.Rmd/materialsTrends-1.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>brewing_materials %&gt;%
-  filter(!str_detect(type, &quot;Total&quot;), year &lt; 2016,
-         !(month == 12 &amp; year %in% 2014:2015)) %&gt;%  # remove the subtotals
-  ggplot(aes(date, month_current/1000000, color= type)) +
-  geom_line()+
-    labs(
-    x = &#39;&#39;,
-    y = &#39;Million Pounds&#39;,
+    x = &quot;&quot;,
+    y = &quot;Million Pounds&quot;,
+    title = &quot;Ingredients in US Beer Production, in the month of December 2019&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  )
+
+ggsave(
+  filename = &quot;docs/assets/beer-1.pdf&quot;,
+  plot = p1,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/beer-1.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/beer-1.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/beer-1.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/beer-1.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/beer-1.png" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p2 &lt;- brewing_materials %&gt;%
+  filter(
+    !str_detect(type, &quot;Total&quot;), year &lt; 2016,
+    !(month == 12 &amp; year %in% 2014:2015)
+  ) %&gt;% # remove the subtotals
+  ggplot(aes(date, month_current / 1000000, color = type)) +
+  geom_line() +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Million Pounds&quot;,
     color = &quot;Material&quot;,
-    title = &#39;Ingredients in US Beer Production, 2008-2016&#39;,
-    subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau&#39;,
-    caption = &#39;@Jim_Gruman | #TidyTuesday&#39;
-  )+
-  theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/BeerProduction.Rmd/materialsTrendsChart-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>Tidymetrics</p>
+    title = &quot;Ingredients in US Beer Production, 2008-2016&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  theme(plot.title.position = &quot;plot&quot;)
+
+ggsave(
+  filename = &quot;docs/assets/beer-2.pdf&quot;,
+  plot = p2,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/beer-2.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/beer-2.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/beer-2.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/beer-2.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/beer-2.png" style="display: block; margin: auto;" /></p>
+</div>
+<div id="tidymetrics" class="section level2">
+<h2>Tidymetrics</h2>
 <pre class="r"><code>library(tidymetrics)
-brewing_summarized &lt;-brewing_materials %&gt;%
+brewing_summarized &lt;- brewing_materials %&gt;%
   rename(material = type) %&gt;%
-  filter(!str_detect(material_type, &quot;Total&quot;), year &lt; 2016,
-         !(month == 12 &amp; year %in% 2014:2015)) %&gt;%
- tidymetrics::cross_by_dimensions(material_type, material) %&gt;%  # duplicates the data to summarize it
-  cross_by_periods(c(&quot;month&quot;,&quot;quarter&quot;,&quot;year&quot;)) %&gt;%
+  filter(
+    !str_detect(material_type, &quot;Total&quot;), year &lt; 2016,
+    !(month == 12 &amp; year %in% 2014:2015)
+  ) %&gt;%
+  tidymetrics::cross_by_dimensions(material_type, material) %&gt;% # duplicates the data to summarize it
+  cross_by_periods(c(&quot;month&quot;, &quot;quarter&quot;, &quot;year&quot;)) %&gt;%
   summarize(total_pounds = sum(month_current)) %&gt;%
   ungroup()
 
-brewing_summarized %&gt;%
+p3 &lt;- brewing_summarized %&gt;%
   filter(material_type != &quot;All&quot;, material != &quot;All&quot;, period == &quot;month&quot;) %&gt;%
-  ggplot(aes(date, total_pounds/1000000, color = material))+
-  geom_line()+
-    labs(
-    x = &#39;Date&#39;,
-    y = &#39;Million Pounds&#39;,
+  ggplot(aes(date, total_pounds / 1000000, color = material)) +
+  geom_line() +
+  labs(
+    x = &quot;Date&quot;,
+    y = &quot;Million Pounds&quot;,
     color = &quot;Material&quot;,
-    title = &#39;Ingredients in US Beer Production, 2008-2016&#39;,
-    subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau&#39;,
-    caption = &#39;@Jim_Gruman | #TidyTuesday&#39;
-  )+
-  theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/BeerProduction.Rmd/brewingSummarizedChart-1.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>brewing_summarized %&gt;%
+    title = &quot;Ingredients in US Beer Production, 2008-2016&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  theme(plot.title.position = &quot;plot&quot;)
+
+ggsave(
+  filename = &quot;docs/assets/beer-3.pdf&quot;,
+  plot = p3,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/beer-3.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/beer-3.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/beer-3.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/beer-3.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/beer-3.png" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p4 &lt;- brewing_summarized %&gt;%
   filter(material_type != &quot;All&quot;, material != &quot;All&quot;, period == &quot;quarter&quot;) %&gt;%
-  ggplot(aes(date, total_pounds/1000000, color = material))+
-  geom_line()+
-    labs(
-    x = &#39;Date&#39;,
-    y = &#39;Million Pounds&#39;,
+  ggplot(aes(date, total_pounds / 1000000, color = material)) +
+  geom_line() +
+  labs(
+    x = &quot;Date&quot;,
+    y = &quot;Million Pounds&quot;,
     color = &quot;Material&quot;,
-    title = &#39;Ingredients in US Beer Production, 2008-2016&#39;,
-    subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau&#39;,
-    caption = &#39;@Jim_Gruman | #TidyTuesday&#39;
-  )+
-  theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/BeerProduction.Rmd/brewingSummarizedChart-2.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>brewing_summarized %&gt;%
+    title = &quot;Ingredients in US Beer Production, 2008-2016&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  theme(plot.title.position = &quot;plot&quot;)
+
+ggsave(
+  filename = &quot;docs/assets/beer-4.pdf&quot;,
+  plot = p4,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/beer-4.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/beer-4.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/beer-4.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/beer-4.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/beer-4.png" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p5 &lt;- brewing_summarized %&gt;%
   filter(material_type != &quot;All&quot;, material != &quot;All&quot;, period == &quot;year&quot;) %&gt;%
-  ggplot(aes(date, total_pounds/1000000, color = material))+
-  geom_line()+
-    labs(
-    x = &#39;Date&#39;,
-    y = &#39;Million Pounds&#39;,
+  ggplot(aes(date, total_pounds / 1000000, color = material)) +
+  geom_line() +
+  labs(
+    x = &quot;Date&quot;,
+    y = &quot;Million Pounds&quot;,
     color = &quot;Material&quot;,
-    title = &#39;Ingredients in US Beer Production, 2008-2016&#39;,
-    subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau&#39;,
-    caption = &#39;@Jim_Gruman | #TidyTuesday&#39;
-  )  +
-  theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/BeerProduction.Rmd/brewingSummarizedChart-3.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>brewing_materials %&gt;%
+    title = &quot;Ingredients in US Beer Production, 2008-2016&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  theme(plot.title.position = &quot;plot&quot;)
+
+ggsave(
+  filename = &quot;docs/assets/beer-5.pdf&quot;,
+  plot = p5,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/beer-5.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/beer-5.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/beer-5.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/beer-5.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/beer-5.png" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p6 &lt;- brewing_materials %&gt;%
   filter(material_type == &quot;Total Used&quot;, year &lt; 2016) %&gt;%
   mutate(month = factor(month, labels = month.abb)) %&gt;%
-  ggplot(aes(x= month,y=month_current/1000000, group = factor(year), color = factor(year)))+
+  ggplot(aes(
+    x = month,
+    y = month_current / 1000000,
+    group = factor(year),
+    color = factor(year)
+  )) +
   geom_line() +
-  expand_limits(y=0) +
-    labs(x = &#39;&#39;,
-    y = &#39;Million Pounds&#39;,
+  expand_limits(y = 0) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Million Pounds&quot;,
     color = &quot;Year&quot;,
-    title = &#39;Ingredients in US Beer Production, 2008-2016&#39;,
-    subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau&#39;,
-    caption = &#39;@Jim_Gruman | #TidyTuesday&#39;) +  
-  scale_y_continuous(labels = scales::comma_format())  +
-  theme(plot.title.position = &quot;plot&quot;) </code></pre>
-<p><img src="figure/BeerProduction.Rmd/materialsByYearChart-1.png" width="864" style="display: block; margin: auto;" /></p>
+    title = &quot;Ingredients in US Beer Production, 2008-2016&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  theme(plot.title.position = &quot;plot&quot;)
+
+ggsave(
+  filename = &quot;docs/assets/beer-6.pdf&quot;,
+  plot = p6,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/beer-6.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/beer-6.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/beer-6.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/beer-6.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/beer-6.png" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>remotes::install_github(&quot;ramnathv/shinymetrics&quot;)
 remotes::install_github(&quot;ramnathv/shinybones&quot;)
 
-brewing_metrics&lt;-create_metrics(brewing_summarized)
+brewing_metrics &lt;- create_metrics(brewing_summarized)
 
 library(shinymetrics)
 
-# interactive plotly visualization of grouped time multi-dimensional BI 
+# interactive plotly visualization of grouped time multi-dimensional BI
 preview_metric(brewing_metrics$production_NA_total_pounds)
 # change the dropdown from &quot;last year&quot; to &quot;all time&quot; because 2019 is not in this dataset</code></pre>
-<pre class="r"><code>brewer_size %&gt;%
-  filter(brewer_size != &quot;Total&quot;, !is.na(total_barrels))%&gt;%
-  mutate(brewer_size = fct_lump(brewer_size, 5, w = total_barrels),
-         barrel_number = coalesce(parse_number(as.character(brewer_size)),1),
-         brewer_size = fct_reorder(brewer_size, barrel_number)) %&gt;%
-  ggplot(aes(as_factor(year), total_barrels/1000000, fill = brewer_size))+
+<pre class="r"><code>p7 &lt;- brewer_size %&gt;%
+  filter(brewer_size != &quot;Total&quot;, !is.na(total_barrels)) %&gt;%
+  mutate(
+    brewer_size = fct_lump(brewer_size, 5, w = total_barrels),
+    barrel_number = coalesce(parse_number(as.character(brewer_size)), 1),
+    brewer_size = fct_reorder(brewer_size, barrel_number)
+  ) %&gt;%
+  ggplot(aes(as_factor(year), total_barrels / 1000000, fill = brewer_size)) +
   geom_col() +
-  scale_y_continuous(labels = scales::comma_format())  +
-    labs(x = &#39;Year&#39;,
-    y = &#39;Million Barrels&#39;,
+  scale_y_continuous(labels = scales::comma_format()) +
+  labs(
+    x = &quot;Year&quot;,
+    y = &quot;Million Barrels&quot;,
     fill = &quot;Brewer Size&quot;,
-    title = &#39;Total Production, by US Brewer Size in 2019&#39;,
-    subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau&#39;,
-    caption = &#39;@Jim_Gruman | #TidyTuesday&#39;)   +
-  theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/BeerProduction.Rmd/byBrewerSize-1.png" width="864" style="display: block; margin: auto;" /></p>
+    title = &quot;Total Production, by US Brewer Size in 2019&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  theme(plot.title.position = &quot;plot&quot;)
+
+ggsave(
+  filename = &quot;docs/assets/beer-7.pdf&quot;,
+  plot = p7,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/beer-7.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/beer-7.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/beer-7.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/beer-7.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/beer-7.png" style="display: block; margin: auto;" /></p>
 </div>
 <div id="where-is-beer-produced" class="section level2">
 <h2>Where is Beer produced?</h2>
 <pre class="r"><code>ggplot(beer_df, aes(year, barrels, group = state)) +
   geom_line(aes(color = state), show.legend = F) +
-  gghighlight(                               
+  gghighlight(
     state %in% increase_states,
     label_key = state_name,
-    label_params = list(size = 3, family = &#39;Arial Narrow&#39;,
-                        fill = &#39;grey95&#39;, alpha = 0.9, 
-                        label.r = 0.1, segment.alpha = 0),
-    unhighlighted_params = list(color = &#39;grey88&#39;)
+    label_params = list(
+      size = 3, family = &quot;Arial Narrow&quot;,
+      fill = &quot;grey95&quot;, alpha = 0.9,
+      label.r = 0.1, segment.alpha = 0
+    ),
+    unhighlighted_params = list(color = &quot;grey88&quot;)
   ) +
   labs(
-    x = &#39;Year&#39;,
-    y = &#39;Total number of barrels produced&#39;,
-    title = &#39;States with the Largest Increase in Beer Production, 2008-2019&#39;,
-    subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau&#39;,
-    caption = &#39;@Jim_Gruman | #TidyTuesday&#39;
+    x = &quot;Year&quot;,
+    y = &quot;Total number of barrels produced&quot;,
+    title = &quot;States with the Largest Increase in Beer Production, 2008-2019&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
   ) +
   scale_x_continuous(breaks = scales::pretty_breaks()) +
   scale_y_log10(labels = scales::label_number()) +
-  theme(panel.grid = element_blank(),
-        panel.grid.major = element_blank(),
-        plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/BeerProduction.Rmd/whereBeerProduced-1.png" width="864" style="display: block; margin: auto;" /></p>
+  theme(
+    panel.grid = element_blank(),
+    panel.grid.major = element_blank(),
+    plot.title.position = &quot;plot&quot;
+  )</code></pre>
+<p><img src="figure/BeerProduction.Rmd/whereBeerProduced-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>beer_states %&gt;%
-  count(type, sort = TRUE, wt = barrels)</code></pre>
-<pre><code># A tibble: 3 x 2
-  type                       n
-  &lt;chr&gt;                  &lt;dbl&gt;
-1 Bottles and Cans 3790640995.
-2 Kegs and Barrels  413060363.
-3 On Premises        32942944.</code></pre>
+  count(type, sort = TRUE, wt = barrels) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">type</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bottles and Cans</td>
+<td align="right">3790640995</td>
+</tr>
+<tr class="even">
+<td align="left">Kegs and Barrels</td>
+<td align="right">413060363</td>
+</tr>
+<tr class="odd">
+<td align="left">On Premises</td>
+<td align="right">32942944</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>beer_states %&gt;%
   group_by(year) %&gt;%
-  summarize(barrels = sum(barrels, na.rm = TRUE))</code></pre>
-<pre><code># A tibble: 12 x 2
-    year    barrels
-   &lt;dbl&gt;      &lt;dbl&gt;
- 1  2008 369365660.
- 2  2009 366722996 
- 3  2010 362423267.
- 4  2011 356149025.
- 5  2012 360802673.
- 6  2013 356172814.
- 7  2014 354773849.
- 8  2015 352082099.
- 9  2016 348860505.
-10  2017 341358612.
-11  2018 333778335.
-12  2019 334154466.</code></pre>
+  summarize(barrels = sum(barrels, na.rm = TRUE)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">year</th>
+<th align="right">barrels</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2008</td>
+<td align="right">369365660</td>
+</tr>
+<tr class="even">
+<td align="right">2009</td>
+<td align="right">366722996</td>
+</tr>
+<tr class="odd">
+<td align="right">2010</td>
+<td align="right">362423267</td>
+</tr>
+<tr class="even">
+<td align="right">2011</td>
+<td align="right">356149025</td>
+</tr>
+<tr class="odd">
+<td align="right">2012</td>
+<td align="right">360802673</td>
+</tr>
+<tr class="even">
+<td align="right">2013</td>
+<td align="right">356172814</td>
+</tr>
+<tr class="odd">
+<td align="right">2014</td>
+<td align="right">354773849</td>
+</tr>
+<tr class="even">
+<td align="right">2015</td>
+<td align="right">352082099</td>
+</tr>
+<tr class="odd">
+<td align="right">2016</td>
+<td align="right">348860505</td>
+</tr>
+<tr class="even">
+<td align="right">2017</td>
+<td align="right">341358612</td>
+</tr>
+<tr class="odd">
+<td align="right">2018</td>
+<td align="right">333778335</td>
+</tr>
+<tr class="even">
+<td align="right">2019</td>
+<td align="right">334154466</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code># Who consumes beer on premises?
 
 beer_states %&gt;%
-  filter(type == &quot;On Premises&quot;, year == max(year), state != &quot;total&quot;)%&gt;%
-  arrange(desc(barrels))</code></pre>
-<pre><code># A tibble: 51 x 4
-   state  year barrels type       
-   &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;      
- 1 CA     2019 399693. On Premises
- 2 NC     2019 222609. On Premises
- 3 TX     2019 196218. On Premises
- 4 FL     2019 182784. On Premises
- 5 CO     2019 175934. On Premises
- 6 VA     2019 163801. On Premises
- 7 NY     2019 150617. On Premises
- 8 WA     2019 144278. On Premises
- 9 OH     2019 132030. On Premises
-10 MI     2019 131485. On Premises
-# ... with 41 more rows</code></pre>
+  filter(type == &quot;On Premises&quot;, year == max(year), state != &quot;total&quot;) %&gt;%
+  slice_max(order_by = barrels, n = 10) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">state</th>
+<th align="right">year</th>
+<th align="right">barrels</th>
+<th align="left">type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CA</td>
+<td align="right">2019</td>
+<td align="right">399693.0</td>
+<td align="left">On Premises</td>
+</tr>
+<tr class="even">
+<td align="left">NC</td>
+<td align="right">2019</td>
+<td align="right">222608.5</td>
+<td align="left">On Premises</td>
+</tr>
+<tr class="odd">
+<td align="left">TX</td>
+<td align="right">2019</td>
+<td align="right">196218.4</td>
+<td align="left">On Premises</td>
+</tr>
+<tr class="even">
+<td align="left">FL</td>
+<td align="right">2019</td>
+<td align="right">182784.1</td>
+<td align="left">On Premises</td>
+</tr>
+<tr class="odd">
+<td align="left">CO</td>
+<td align="right">2019</td>
+<td align="right">175934.3</td>
+<td align="left">On Premises</td>
+</tr>
+<tr class="even">
+<td align="left">VA</td>
+<td align="right">2019</td>
+<td align="right">163800.7</td>
+<td align="left">On Premises</td>
+</tr>
+<tr class="odd">
+<td align="left">NY</td>
+<td align="right">2019</td>
+<td align="right">150616.8</td>
+<td align="left">On Premises</td>
+</tr>
+<tr class="even">
+<td align="left">WA</td>
+<td align="right">2019</td>
+<td align="right">144278.0</td>
+<td align="left">On Premises</td>
+</tr>
+<tr class="odd">
+<td align="left">OH</td>
+<td align="right">2019</td>
+<td align="right">132029.7</td>
+<td align="left">On Premises</td>
+</tr>
+<tr class="even">
+<td align="left">MI</td>
+<td align="right">2019</td>
+<td align="right">131484.7</td>
+<td align="left">On Premises</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>beer_states %&gt;%
-  filter( year == max(year), state != &quot;total&quot;)%&gt;%
+  filter(year == max(year), state != &quot;total&quot;) %&gt;%
   group_by(state) %&gt;%
   mutate(percent = barrels / sum(barrels)) %&gt;%
   filter(type == &quot;On Premises&quot;) %&gt;%
-  arrange(desc(percent))</code></pre>
-<pre><code># A tibble: 51 x 5
-# Groups:   state [51]
-   state  year barrels type        percent
-   &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;
- 1 ND     2019  10219. On Premises   0.982
- 2 OK     2019  21129. On Premises   0.925
- 3 SD     2019   9386. On Premises   0.722
- 4 WV     2019   8302. On Premises   0.673
- 5 AL     2019  47160. On Premises   0.659
- 6 SC     2019  53161. On Premises   0.625
- 7 IA     2019  61429. On Premises   0.560
- 8 MS     2019  11912. On Premises   0.555
- 9 DC     2019  16348. On Premises   0.547
-10 AR     2019  16569. On Premises   0.542
-# ... with 41 more rows</code></pre>
+  ungroup() %&gt;%
+  slice_max(order_by = percent, n = 10) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">state</th>
+<th align="right">year</th>
+<th align="right">barrels</th>
+<th align="left">type</th>
+<th align="right">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ND</td>
+<td align="right">2019</td>
+<td align="right">10218.59</td>
+<td align="left">On Premises</td>
+<td align="right">0.9824301</td>
+</tr>
+<tr class="even">
+<td align="left">OK</td>
+<td align="right">2019</td>
+<td align="right">21128.75</td>
+<td align="left">On Premises</td>
+<td align="right">0.9250823</td>
+</tr>
+<tr class="odd">
+<td align="left">SD</td>
+<td align="right">2019</td>
+<td align="right">9386.07</td>
+<td align="left">On Premises</td>
+<td align="right">0.7221454</td>
+</tr>
+<tr class="even">
+<td align="left">WV</td>
+<td align="right">2019</td>
+<td align="right">8301.94</td>
+<td align="left">On Premises</td>
+<td align="right">0.6731332</td>
+</tr>
+<tr class="odd">
+<td align="left">AL</td>
+<td align="right">2019</td>
+<td align="right">47160.08</td>
+<td align="left">On Premises</td>
+<td align="right">0.6594634</td>
+</tr>
+<tr class="even">
+<td align="left">SC</td>
+<td align="right">2019</td>
+<td align="right">53161.06</td>
+<td align="left">On Premises</td>
+<td align="right">0.6250491</td>
+</tr>
+<tr class="odd">
+<td align="left">IA</td>
+<td align="right">2019</td>
+<td align="right">61429.37</td>
+<td align="left">On Premises</td>
+<td align="right">0.5601052</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="right">2019</td>
+<td align="right">11912.45</td>
+<td align="left">On Premises</td>
+<td align="right">0.5553916</td>
+</tr>
+<tr class="odd">
+<td align="left">DC</td>
+<td align="right">2019</td>
+<td align="right">16347.97</td>
+<td align="left">On Premises</td>
+<td align="right">0.5468092</td>
+</tr>
+<tr class="even">
+<td align="left">AR</td>
+<td align="right">2019</td>
+<td align="right">16568.73</td>
+<td align="left">On Premises</td>
+<td align="right">0.5421403</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>beer_states %&gt;%
-  filter( year == max(year), state != &quot;total&quot;)%&gt;%
+  filter(year == max(year), state != &quot;total&quot;) %&gt;%
   group_by(state) %&gt;%
   mutate(percent = barrels / sum(barrels)) %&gt;%
   filter(type == &quot;Bottles and Cans&quot;) %&gt;%
-  arrange(desc(percent))</code></pre>
-<pre><code># A tibble: 51 x 5
-# Groups:   state [51]
-   state  year   barrels type             percent
-   &lt;chr&gt; &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
- 1 TN     2019  2641268. Bottles and Cans   0.965
- 2 GA     2019 12855949. Bottles and Cans   0.959
- 3 MO     2019 11393002. Bottles and Cans   0.936
- 4 TX     2019 16934638. Bottles and Cans   0.931
- 5 NY     2019  7720585. Bottles and Cans   0.928
- 6 OH     2019 16176334. Bottles and Cans   0.915
- 7 CO     2019 17351292. Bottles and Cans   0.909
- 8 WI     2019  8353029. Bottles and Cans   0.905
- 9 VA     2019 12829544. Bottles and Cans   0.905
-10 NH     2019  2276766. Bottles and Cans   0.877
-# ... with 41 more rows</code></pre>
+  ungroup() %&gt;%
+  slice_max(order_by = percent, n = 10) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">state</th>
+<th align="right">year</th>
+<th align="right">barrels</th>
+<th align="left">type</th>
+<th align="right">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">TN</td>
+<td align="right">2019</td>
+<td align="right">2641268</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.9653619</td>
+</tr>
+<tr class="even">
+<td align="left">GA</td>
+<td align="right">2019</td>
+<td align="right">12855949</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.9586046</td>
+</tr>
+<tr class="odd">
+<td align="left">MO</td>
+<td align="right">2019</td>
+<td align="right">11393002</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.9362237</td>
+</tr>
+<tr class="even">
+<td align="left">TX</td>
+<td align="right">2019</td>
+<td align="right">16934638</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.9311265</td>
+</tr>
+<tr class="odd">
+<td align="left">NY</td>
+<td align="right">2019</td>
+<td align="right">7720585</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.9278049</td>
+</tr>
+<tr class="even">
+<td align="left">OH</td>
+<td align="right">2019</td>
+<td align="right">16176334</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.9151082</td>
+</tr>
+<tr class="odd">
+<td align="left">CO</td>
+<td align="right">2019</td>
+<td align="right">17351292</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.9085595</td>
+</tr>
+<tr class="even">
+<td align="left">WI</td>
+<td align="right">2019</td>
+<td align="right">8353029</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.9052277</td>
+</tr>
+<tr class="odd">
+<td align="left">VA</td>
+<td align="right">2019</td>
+<td align="right">12829544</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.9048032</td>
+</tr>
+<tr class="even">
+<td align="left">NH</td>
+<td align="right">2019</td>
+<td align="right">2276766</td>
+<td align="left">Bottles and Cans</td>
+<td align="right">0.8768696</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>beer_states %&gt;%
-  filter( year == max(year), state != &quot;total&quot;)%&gt;%
+  filter(year == max(year), state != &quot;total&quot;) %&gt;%
   group_by(state) %&gt;%
   mutate(percent = barrels / sum(barrels)) %&gt;%
   filter(type == &quot;Kegs and Barrels&quot;) %&gt;%
-  arrange(desc(percent))</code></pre>
-<pre><code># A tibble: 51 x 5
-# Groups:   state [51]
-   state  year barrels type             percent
-   &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
- 1 ME     2019 101033. Kegs and Barrels   0.457
- 2 HI     2019  35112. Kegs and Barrels   0.428
- 3 WY     2019  18726. Kegs and Barrels   0.409
- 4 WA     2019 208290. Kegs and Barrels   0.385
- 5 ID     2019  14403. Kegs and Barrels   0.328
- 6 WV     2019   4017. Kegs and Barrels   0.326
- 7 NM     2019  37838. Kegs and Barrels   0.317
- 8 MA     2019 143222. Kegs and Barrels   0.316
- 9 AK     2019  55454. Kegs and Barrels   0.307
-10 IN     2019  49086. Kegs and Barrels   0.295
-# ... with 41 more rows</code></pre>
-<pre class="r"><code>states_percents_2019 &lt;-beer_states %&gt;%
-  filter( year == max(year), state != &quot;total&quot;)%&gt;%
+  ungroup() %&gt;%
+  slice_max(order_by = percent, n = 10) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">state</th>
+<th align="right">year</th>
+<th align="right">barrels</th>
+<th align="left">type</th>
+<th align="right">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ME</td>
+<td align="right">2019</td>
+<td align="right">101032.66</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.4569666</td>
+</tr>
+<tr class="even">
+<td align="left">HI</td>
+<td align="right">2019</td>
+<td align="right">35111.73</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.4276785</td>
+</tr>
+<tr class="odd">
+<td align="left">WY</td>
+<td align="right">2019</td>
+<td align="right">18726.19</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.4088702</td>
+</tr>
+<tr class="even">
+<td align="left">WA</td>
+<td align="right">2019</td>
+<td align="right">208289.99</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.3847573</td>
+</tr>
+<tr class="odd">
+<td align="left">ID</td>
+<td align="right">2019</td>
+<td align="right">14402.52</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.3281886</td>
+</tr>
+<tr class="even">
+<td align="left">WV</td>
+<td align="right">2019</td>
+<td align="right">4017.18</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.3257187</td>
+</tr>
+<tr class="odd">
+<td align="left">NM</td>
+<td align="right">2019</td>
+<td align="right">37837.50</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.3171628</td>
+</tr>
+<tr class="even">
+<td align="left">MA</td>
+<td align="right">2019</td>
+<td align="right">143222.34</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.3157124</td>
+</tr>
+<tr class="odd">
+<td align="left">AK</td>
+<td align="right">2019</td>
+<td align="right">55454.19</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.3071597</td>
+</tr>
+<tr class="even">
+<td align="left">IN</td>
+<td align="right">2019</td>
+<td align="right">49086.33</td>
+<td align="left">Kegs and Barrels</td>
+<td align="right">0.2948186</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>states_percents_2019 &lt;- beer_states %&gt;%
+  filter(year == max(year), state != &quot;total&quot;) %&gt;%
   group_by(state) %&gt;%
   mutate(percent = barrels / sum(barrels)) %&gt;%
-  ungroup() 
+  ungroup()
 
 states_percents_2019 %&gt;%
   filter(type == &quot;On Premises&quot;) %&gt;%
-  arrange(desc(percent))</code></pre>
-<pre><code># A tibble: 51 x 5
-   state  year barrels type        percent
-   &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;
- 1 ND     2019  10219. On Premises   0.982
- 2 OK     2019  21129. On Premises   0.925
- 3 SD     2019   9386. On Premises   0.722
- 4 WV     2019   8302. On Premises   0.673
- 5 AL     2019  47160. On Premises   0.659
- 6 SC     2019  53161. On Premises   0.625
- 7 IA     2019  61429. On Premises   0.560
- 8 MS     2019  11912. On Premises   0.555
- 9 DC     2019  16348. On Premises   0.547
-10 AR     2019  16569. On Premises   0.542
-# ... with 41 more rows</code></pre>
+  ungroup() %&gt;%
+  slice_max(order_by = percent, n = 10) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">state</th>
+<th align="right">year</th>
+<th align="right">barrels</th>
+<th align="left">type</th>
+<th align="right">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ND</td>
+<td align="right">2019</td>
+<td align="right">10218.59</td>
+<td align="left">On Premises</td>
+<td align="right">0.9824301</td>
+</tr>
+<tr class="even">
+<td align="left">OK</td>
+<td align="right">2019</td>
+<td align="right">21128.75</td>
+<td align="left">On Premises</td>
+<td align="right">0.9250823</td>
+</tr>
+<tr class="odd">
+<td align="left">SD</td>
+<td align="right">2019</td>
+<td align="right">9386.07</td>
+<td align="left">On Premises</td>
+<td align="right">0.7221454</td>
+</tr>
+<tr class="even">
+<td align="left">WV</td>
+<td align="right">2019</td>
+<td align="right">8301.94</td>
+<td align="left">On Premises</td>
+<td align="right">0.6731332</td>
+</tr>
+<tr class="odd">
+<td align="left">AL</td>
+<td align="right">2019</td>
+<td align="right">47160.08</td>
+<td align="left">On Premises</td>
+<td align="right">0.6594634</td>
+</tr>
+<tr class="even">
+<td align="left">SC</td>
+<td align="right">2019</td>
+<td align="right">53161.06</td>
+<td align="left">On Premises</td>
+<td align="right">0.6250491</td>
+</tr>
+<tr class="odd">
+<td align="left">IA</td>
+<td align="right">2019</td>
+<td align="right">61429.37</td>
+<td align="left">On Premises</td>
+<td align="right">0.5601052</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="right">2019</td>
+<td align="right">11912.45</td>
+<td align="left">On Premises</td>
+<td align="right">0.5553916</td>
+</tr>
+<tr class="odd">
+<td align="left">DC</td>
+<td align="right">2019</td>
+<td align="right">16347.97</td>
+<td align="left">On Premises</td>
+<td align="right">0.5468092</td>
+</tr>
+<tr class="even">
+<td align="left">AR</td>
+<td align="right">2019</td>
+<td align="right">16568.73</td>
+<td align="left">On Premises</td>
+<td align="right">0.5421403</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>library(maps)
 library(sf)
 
 states &lt;- st_as_sf(map(&quot;state&quot;, plot = FALSE, fill = TRUE))
 
-states</code></pre>
-<pre><code>Simple feature collection with 49 features and 1 field
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -124.6813 ymin: 25.12993 xmax: -67.00742 ymax: 49.38323
-geographic CRS: WGS 84
-First 10 features:
-                     ID                           geom
-1               alabama MULTIPOLYGON (((-87.46201 3...
-2               arizona MULTIPOLYGON (((-114.6374 3...
-3              arkansas MULTIPOLYGON (((-94.05103 3...
-4            california MULTIPOLYGON (((-120.006 42...
-5              colorado MULTIPOLYGON (((-102.0552 4...
-6           connecticut MULTIPOLYGON (((-73.49902 4...
-7              delaware MULTIPOLYGON (((-75.80231 3...
-8  district of columbia MULTIPOLYGON (((-77.13731 3...
-9               florida MULTIPOLYGON (((-85.01548 3...
-10              georgia MULTIPOLYGON (((-80.89018 3...</code></pre>
-<pre class="r"><code>states_percents_2019 %&gt;%
-   mutate(ID = str_to_lower(state.name[match(state,state.abb)]))%&gt;%
-   inner_join(states, by = &quot;ID&quot;) %&gt;%
-   ggplot()+
-   scale_fill_gradient2(low = &quot;yellow&quot;, high = &quot;blue&quot;, midpoint = 0.5,
-                        labels = scales::percent)+
-   geom_sf(aes(geometry = geom, fill = percent)) +
-   facet_wrap(~ type, nrow = 2)+
-   ggthemes::theme_map()+
-   labs(title = &quot;In Each State, What is the Highest Proportion of Beer Consumed?&quot;,
-        subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau&#39;,
-        caption = &#39;@Jim_Gruman | #TidyTuesday&#39;,
-        fill = &quot;% Percent&quot;)+
-   theme(legend.position = c(0.7,0.1))</code></pre>
-<p><img src="figure/BeerProduction.Rmd/BeerStatesMaps-1.png" width="864" style="display: block; margin: auto;" /></p>
+states_percents_2019 %&gt;%
+  mutate(ID = str_to_lower(state.name[match(state, state.abb)])) %&gt;%
+  inner_join(states, by = &quot;ID&quot;) %&gt;%
+  ggplot() +
+  scale_fill_gradient2(
+    low = &quot;yellow&quot;, high = &quot;blue&quot;, midpoint = 0.5,
+    labels = scales::percent
+  ) +
+  geom_sf(aes(geometry = geom, fill = percent)) +
+  facet_wrap(~type, nrow = 2) +
+  ggthemes::theme_map() +
+  labs(
+    title = &quot;In Each State, What is the Highest Proportion of Beer Consumed?&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;,
+    fill = &quot;% Percent&quot;
+  ) +
+  theme(legend.position = c(0.7, 0.1))</code></pre>
+<p><img src="figure/BeerProduction.Rmd/BeerStatesMaps-1.png" width="3600" style="display: block; margin: auto;" /></p>
 </div>
 <div id="an-animated-map.-because-its-tidytuesday" class="section level2">
 <h2>An animated map. Because it’s TidyTuesday</h2>
 <pre class="r"><code>library(gganimate)
 
-p&lt;-beer_states %&gt;%
-  filter(state != &quot;total&quot;)%&gt;%
+p &lt;- beer_states %&gt;%
+  filter(state != &quot;total&quot;) %&gt;%
   group_by(state, year) %&gt;%
   mutate(percent = barrels / sum(barrels)) %&gt;%
   ungroup() %&gt;%
-  mutate(ID = str_to_lower(state.name[match(state, state.abb)]))%&gt;%
+  mutate(ID = str_to_lower(state.name[match(state, state.abb)])) %&gt;%
   inner_join(states, by = &quot;ID&quot;) %&gt;%
-  ggplot(aes(geometry = geom, fill = percent))+
+  ggplot(aes(geometry = geom, fill = percent)) +
   geom_sf() +
   transition_time(year) +
-  facet_wrap(~ type, nrow = 2) +
-  scale_fill_gradient2(low = &quot;yellow&quot;, high = &quot;blue&quot;, midpoint = 0.5,
-                        labels = scales::percent) +
+  facet_wrap(~type, nrow = 2) +
+  scale_fill_gradient2(
+    low = &quot;yellow&quot;, high = &quot;blue&quot;, midpoint = 0.5,
+    labels = scales::percent
+  ) +
   ggthemes::theme_map() +
-  labs(title = &quot;In Each State, What is the Highest Proportion of Beer Consumed? {as.integer(frame_time)}&quot;,
-        subtitle = &#39;US Alcohol and Tobacco Tax and Trade Bureau, 2008-2019&#39;,
-        caption = &#39;@Jim_Gruman | #TidyTuesday&#39;,
-        fill = &quot;% Percent&quot;)+
-   theme(legend.position = c(0.7,0.1))
+  labs(
+    title = &quot;In Each State, What is the Highest Proportion of Beer Consumed? {as.integer(frame_time)}&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau, 2008-2019&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;,
+    fill = &quot;% Percent&quot;
+  ) +
+  theme(legend.position = c(0.7, 0.1))
 
-anim&lt;- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
+anim &lt;- animate(p, width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
 
 anim_save(filename = &quot;docs/assets/BeerStatesAnimated.gif&quot;, animation = anim)</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/BeerStatesAnimated.gif&quot;, error = FALSE)</code></pre>
@@ -988,41 +1600,90 @@ anim_save(filename = &quot;docs/assets/BeerStatesAnimated.gif&quot;, animation =
 <div id="what-is-the-relationship-between-the-materials-used-using-resampling-methods" class="section level2">
 <h2>What is the relationship between the materials used? (using resampling methods)</h2>
 <p>How much sugar do beer producers need per pound of malt?</p>
-<pre class="r"><code>brewing_materials %&gt;% count(type, wt = month_current,  sort = TRUE)</code></pre>
-<pre><code># A tibble: 12 x 2
-   type                                 n
-   &lt;chr&gt;                            &lt;dbl&gt;
- 1 Total Used                 53559516695
- 2 Total Grain products       44734903124
- 3 Malt and malt products     32697313882
- 4 Total Non-Grain products    8824613571
- 5 Sugar and syrups            6653104081
- 6 Rice and rice products      5685742541
- 7 Corn and corn products      5207759409
- 8 Hops (dry)                  1138840132
- 9 Other                        998968470
-10 Barley and barley products   941444745
-11 Wheat and wheat products     202642547
-12 Hops (used as extracts)       33700888</code></pre>
-<pre class="r"><code>brewing_filtered&lt;-brewing_materials %&gt;%
-  filter(!str_detect(type, &quot;Total&quot;), year &lt; 2016,
-         !(month == 12 &amp; year %in% 2014:2015))</code></pre>
+<pre class="r"><code>brewing_materials %&gt;%
+  count(type, wt = month_current, sort = TRUE) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">type</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Total Used</td>
+<td align="right">53559516695</td>
+</tr>
+<tr class="even">
+<td align="left">Total Grain products</td>
+<td align="right">44734903124</td>
+</tr>
+<tr class="odd">
+<td align="left">Malt and malt products</td>
+<td align="right">32697313882</td>
+</tr>
+<tr class="even">
+<td align="left">Total Non-Grain products</td>
+<td align="right">8824613571</td>
+</tr>
+<tr class="odd">
+<td align="left">Sugar and syrups</td>
+<td align="right">6653104081</td>
+</tr>
+<tr class="even">
+<td align="left">Rice and rice products</td>
+<td align="right">5685742541</td>
+</tr>
+<tr class="odd">
+<td align="left">Corn and corn products</td>
+<td align="right">5207759409</td>
+</tr>
+<tr class="even">
+<td align="left">Hops (dry)</td>
+<td align="right">1138840132</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="right">998968470</td>
+</tr>
+<tr class="even">
+<td align="left">Barley and barley products</td>
+<td align="right">941444745</td>
+</tr>
+<tr class="odd">
+<td align="left">Wheat and wheat products</td>
+<td align="right">202642547</td>
+</tr>
+<tr class="even">
+<td align="left">Hops (used as extracts)</td>
+<td align="right">33700888</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>brewing_filtered &lt;- brewing_materials %&gt;%
+  filter(
+    !str_detect(type, &quot;Total&quot;), year &lt; 2016,
+    !(month == 12 &amp; year %in% 2014:2015)
+  )</code></pre>
 <p>Explore the relationship between ingredients</p>
-<pre class="r"><code>brewing_df&lt;-brewing_filtered %&gt;%
+<pre class="r"><code>brewing_df &lt;- brewing_filtered %&gt;%
   select(date, type, month_current) %&gt;%
-  pivot_wider(names_from = type, 
-              values_from = month_current) %&gt;%
+  pivot_wider(
+    names_from = type,
+    values_from = month_current
+  ) %&gt;%
   janitor::clean_names()
 
 # is there a remote correlation between
 brewing_df %&gt;%
-  ggplot(aes(malt_and_malt_products, sugar_and_syrups))+
-  geom_smooth(method = &quot;lm&quot;)+
+  ggplot(aes(malt_and_malt_products, sugar_and_syrups)) +
+  geom_smooth(method = &quot;lm&quot;) +
   geom_point()</code></pre>
-<p><img src="figure/BeerProduction.Rmd/makeSugarMaltDF-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/BeerProduction.Rmd/makeSugarMaltDF-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>A simple linear model</p>
 <pre class="r"><code># force the y-intercept to be zero (no beer, no malt, no sugar)
-beer_fit&lt;-lm(sugar_and_syrups ~ 0 + malt_and_malt_products, data = brewing_df)
+beer_fit &lt;- lm(sugar_and_syrups ~ 0 + malt_and_malt_products, data = brewing_df)
 
 summary(beer_fit)</code></pre>
 <pre><code>
@@ -1042,48 +1703,69 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 Residual standard error: 11480000 on 93 degrees of freedom
 Multiple R-squared:  0.9746,    Adjusted R-squared:  0.9743 
 F-statistic:  3567 on 1 and 93 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>tidy(beer_fit)</code></pre>
-<pre><code># A tibble: 1 x 5
-  term                   estimate std.error statistic  p.value
-  &lt;chr&gt;                     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 malt_and_malt_products    0.206   0.00345      59.7 5.72e-76</code></pre>
+<pre class="r"><code>tidy(beer_fit) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">malt_and_malt_products</td>
+<td align="right">0.205804</td>
+<td align="right">0.0034461</td>
+<td align="right">59.72037</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="bootstrap-resampling" class="section level2">
 <h2>Bootstrap Resampling</h2>
 <p>to arrive at a confidence interval for a linear model</p>
-<pre class="r"><code>beer_boot&lt;-bootstraps(data = brewing_df, times = 1e3, apparent = FALSE)</code></pre>
-<pre class="r"><code>beer_models&lt;- beer_boot %&gt;% 
-  dplyr::mutate(model = purrr::map(splits, ~ lm(sugar_and_syrups ~ 0 + malt_and_malt_products, 
-                                  data = . )),
-  coef_info = purrr::map(model, tidy))
+<pre class="r"><code>beer_boot &lt;- bootstraps(data = brewing_df, times = 1e3, apparent = FALSE)</code></pre>
+<pre class="r"><code>beer_models &lt;- beer_boot %&gt;%
+  dplyr::mutate(
+    model = purrr::map(splits, ~ lm(sugar_and_syrups ~ 0 + malt_and_malt_products,
+      data = .
+    )),
+    coef_info = purrr::map(model, tidy)
+  )
 
-beer_coefs&lt;-beer_models %&gt;%
-     unnest(coef_info)</code></pre>
+beer_coefs &lt;- beer_models %&gt;%
+  unnest(coef_info)</code></pre>
 </div>
 <div id="evaluate-results" class="section level2">
 <h2>Evaluate results</h2>
 <p>What is the distribution of the estimates for the model?</p>
 <pre class="r"><code>beer_coefs %&gt;%
-  ggplot(aes(estimate))+
-  geom_histogram(alpha = 0.7)</code></pre>
-<p><img src="figure/BeerProduction.Rmd/beerMaltSlopeEstimates-1.png" width="864" style="display: block; margin: auto;" /></p>
+  ggplot(aes(estimate)) +
+  geom_histogram(alpha = 0.7) +
+  labs(title = &quot;Malt Coefficient Estimate for predicting Sugar and Syrups&quot;)</code></pre>
+<p><img src="figure/BeerProduction.Rmd/beerMaltSlopeEstimates-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Our bootstrap confidence intervals:</p>
 <pre class="r"><code>int_pctl(beer_models, coef_info)</code></pre>
 <pre><code># A tibble: 1 x 6
   term                   .lower .estimate .upper .alpha .method   
   &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;     
 1 malt_and_malt_products  0.199     0.206  0.213   0.05 percentile</code></pre>
-<pre class="r"><code>beer_aug&lt;-beer_models %&gt;%
+<pre class="r"><code>beer_aug &lt;- beer_models %&gt;%
   dplyr::mutate(augmented = purrr::map(model, augment)) %&gt;%
   unnest(augmented)
 
 beer_aug %&gt;%
-  ggplot(aes(malt_and_malt_products, sugar_and_syrups))+
-  geom_line(aes(y=.fitted, group = id), alpha = 0.1, color = &quot;cyan3&quot;)+
-  geom_point()+
-  labs(title = &quot;Bootstrap Resampling Model Estimates Confidence Interval&quot;)+
+  ggplot(aes(malt_and_malt_products, sugar_and_syrups)) +
+  geom_line(aes(y = .fitted, group = id), alpha = 0.1, color = &quot;cyan3&quot;) +
+  geom_point() +
+  labs(title = &quot;Bootstrap Resampling Model Estimates Confidence Interval&quot;) +
   theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/BeerProduction.Rmd/beerMaltSlopeCIplot-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/BeerProduction.Rmd/beerMaltSlopeCIplot-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1092,7 +1774,7 @@ beer_aug %&gt;%
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19041)
 
@@ -1110,7 +1792,7 @@ attached base packages:
 
 other attached packages:
  [1] gganimate_1.0.6   sf_0.9-6          maps_3.3.0        yardstick_0.0.7  
- [5] workflows_0.2.0   tune_0.1.1        rsample_0.0.8     recipes_0.1.13   
+ [5] workflows_0.2.1   tune_0.1.1        rsample_0.0.8     recipes_0.1.13   
  [9] parsnip_0.1.3     modeldata_0.0.2   infer_0.5.3       dials_0.0.9      
 [13] scales_1.1.1      broom_0.7.1       tidymodels_0.1.1  gghighlight_0.3.0
 [17] GGally_2.0.0      tidymetrics_0.0.1 lubridate_1.7.9   forcats_0.5.0    
@@ -1120,41 +1802,44 @@ other attached packages:
 
 loaded via a namespace (and not attached):
   [1] readxl_1.3.1       backports_1.1.10   systemfonts_0.3.2 
-  [4] plyr_1.8.6         splines_4.0.0      listenv_0.8.0     
+  [4] plyr_1.8.6         splines_4.0.3      listenv_0.8.0     
   [7] digest_0.6.25      foreach_1.5.0      htmltools_0.5.0   
  [10] fansi_0.4.1        magrittr_1.5       globals_0.13.0    
  [13] modelr_0.1.8       gower_0.2.2        extrafont_0.17    
- [16] extrafontdb_1.0    lpSolve_5.6.15     prettyunits_1.1.1 
- [19] colorspace_1.4-1   blob_1.2.1         rvest_0.3.6       
- [22] ggrepel_0.8.2      haven_2.3.1        xfun_0.18         
- [25] crayon_1.3.4       jsonlite_1.7.1     survival_3.2-7    
- [28] iterators_1.0.12   glue_1.4.2         gtable_0.3.0      
- [31] ipred_0.9-9        Rttf2pt1_1.3.8     DBI_1.1.0         
- [34] ggthemes_4.2.0     Rcpp_1.0.5         progress_1.2.2    
- [37] units_0.6-7        GPfit_1.0-8        lava_1.6.8        
- [40] prodlim_2019.11.13 httr_1.4.2         RColorBrewer_1.1-2
- [43] ellipsis_0.3.1     pkgconfig_2.0.3    reshape_0.8.8     
- [46] farver_2.0.3       nnet_7.3-14        transformr_0.1.3  
- [49] dbplyr_1.4.4       janitor_2.0.1      utf8_1.1.4        
- [52] tidyselect_1.1.0   labeling_0.3       rlang_0.4.7       
- [55] DiceDesign_1.8-1   later_1.1.0.1      munsell_0.5.0     
- [58] cellranger_1.1.0   tools_4.0.0        cli_2.0.2         
- [61] generics_0.0.2     gifski_0.8.6       evaluate_0.14     
- [64] yaml_2.2.1         knitr_1.30         fs_1.5.0          
- [67] nlme_3.1-149       future_1.19.1      whisker_0.4       
- [70] xml2_1.3.2         compiler_4.0.0     rstudioapi_0.11   
- [73] curl_4.3           e1071_1.7-3        reprex_0.3.0      
- [76] lhs_1.1.1          tweenr_1.0.1       stringi_1.5.3     
- [79] gdtools_0.2.2      hrbrthemes_0.8.0   lattice_0.20-41   
- [82] Matrix_1.2-18      classInt_0.4-3     vctrs_0.3.4       
- [85] pillar_1.4.6       lifecycle_0.2.0    furrr_0.1.0       
- [88] httpuv_1.5.4       R6_2.4.1           promises_1.1.1    
- [91] KernSmooth_2.23-17 codetools_0.2-16   MASS_7.3-53       
- [94] assertthat_0.2.1   rprojroot_1.3-2    withr_2.3.0       
- [97] mgcv_1.8-33        parallel_4.0.0     hms_0.5.3         
-[100] grid_4.0.0         rpart_4.1-15       timeDate_3043.102 
-[103] class_7.3-17       snakecase_0.11.0   rmarkdown_2.4     
-[106] git2r_0.27.1       pROC_1.16.2       </code></pre>
+ [16] R.utils_2.10.1     extrafontdb_1.0    askpass_1.1       
+ [19] lpSolve_5.6.15     prettyunits_1.1.1  colorspace_1.4-1  
+ [22] blob_1.2.1         rvest_0.3.6        ggrepel_0.8.2     
+ [25] haven_2.3.1        xfun_0.18          crayon_1.3.4      
+ [28] jsonlite_1.7.1     survival_3.2-7     iterators_1.0.12  
+ [31] glue_1.4.2         gtable_0.3.0       ipred_0.9-9       
+ [34] R.cache_0.14.0     Rttf2pt1_1.3.8     qpdf_1.1          
+ [37] DBI_1.1.0          ggthemes_4.2.0     Rcpp_1.0.5        
+ [40] progress_1.2.2     units_0.6-7        GPfit_1.0-8       
+ [43] lava_1.6.8         prodlim_2019.11.13 pdftools_2.3.1    
+ [46] httr_1.4.2         RColorBrewer_1.1-2 ellipsis_0.3.1    
+ [49] pkgconfig_2.0.3    reshape_0.8.8      R.methodsS3_1.8.1 
+ [52] farver_2.0.3       transformr_0.1.3   nnet_7.3-14       
+ [55] dbplyr_1.4.4       utf8_1.1.4         janitor_2.0.1     
+ [58] tidyselect_1.1.0   labeling_0.3       rlang_0.4.8       
+ [61] DiceDesign_1.8-1   later_1.1.0.1      munsell_0.5.0     
+ [64] cellranger_1.1.0   tools_4.0.3        cli_2.0.2         
+ [67] generics_0.0.2     gifski_0.8.6       evaluate_0.14     
+ [70] yaml_2.2.1         rematch2_2.1.2     knitr_1.30        
+ [73] fs_1.5.0           nlme_3.1-149       future_1.19.1     
+ [76] whisker_0.4        R.oo_1.24.0        xml2_1.3.2        
+ [79] compiler_4.0.3     rstudioapi_0.11    curl_4.3          
+ [82] e1071_1.7-3        reprex_0.3.0       tweenr_1.0.1      
+ [85] lhs_1.1.1          stringi_1.5.3      highr_0.8         
+ [88] gdtools_0.2.2      hrbrthemes_0.8.6   lattice_0.20-41   
+ [91] Matrix_1.2-18      classInt_0.4-3     styler_1.3.2      
+ [94] vctrs_0.3.4        pillar_1.4.6       lifecycle_0.2.0   
+ [97] furrr_0.1.0        httpuv_1.5.4       R6_2.4.1          
+[100] promises_1.1.1     KernSmooth_2.23-17 codetools_0.2-16  
+[103] MASS_7.3-53        assertthat_0.2.1   rprojroot_1.3-2   
+[106] withr_2.3.0        mgcv_1.8-33        parallel_4.0.3    
+[109] hms_0.5.3          grid_4.0.3         rpart_4.1-15      
+[112] timeDate_3043.102  class_7.3-17       snakecase_0.11.0  
+[115] rmarkdown_2.4      git2r_0.27.1       pROC_1.16.2       </code></pre>
 </div>
 </div>
 
@@ -1203,6 +1888,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

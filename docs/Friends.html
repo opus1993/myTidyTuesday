@@ -358,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-10
+<strong>Last updated:</strong> 2020-10-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -449,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -508,6 +508,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9a61ca86f951fb5cd24379a3258da701356ee345/analysis/Friends.Rmd" target="_blank">9a61ca8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/23f838130a3109ef6b43b04e4c5eaeef7b09147f/docs/Friends.html" target="_blank">23f8381</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -701,8 +735,24 @@ p1 &lt;- cowplot::ggdraw() +
   cowplot::draw_plot(p) +
   cowplot::draw_image(img_friends, scale = 0.2, y = -0.45, x = -0.4)
 
-p1</code></pre>
-<p><img src="figure/Friends.Rmd/WhoSpokeTheMost-1.png" width="3000" style="display: block; margin: auto;" /></p>
+ggsave(
+  filename = &quot;docs/assets/friends-1.pdf&quot;,
+  plot = p1,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/friends-1.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/friends-1.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/friends-1.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/friends-1.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/friends-1.png" style="display: block; margin: auto;" /></p>
 </div>
 <div id="visualize-the-lines-by-season-in-ranks" class="section level1">
 <h1>Visualize the Lines by Season in Ranks</h1>
@@ -715,7 +765,7 @@ p1</code></pre>
   mutate(rank = row_number()) %&gt;%
   inner_join(main.characters, by = &quot;speaker&quot;)
 
-lines_by_season %&gt;%
+p2 &lt;- lines_by_season %&gt;%
   ggplot(aes(season, rank, color = firstname)) +
   geom_point(size = 7) +
   geom_text(
@@ -772,8 +822,26 @@ lines_by_season %&gt;%
     ),
     plot.margin = margin(20, 20, 20, 20),
     panel.grid = element_blank()
-  )</code></pre>
-<p><img src="figure/Friends.Rmd/Ranks-1.png" width="3000" style="display: block; margin: auto;" /></p>
+  )
+
+ggsave(
+  filename = &quot;docs/assets/friends-2.pdf&quot;,
+  plot = p2,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/friends-2.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/friends-2.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/friends-2.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/friends-2.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/friends-2.png" style="display: block; margin: auto;" /></p>
 <p>Let’s model features with regression to infer what features drive imdb_rating</p>
 <pre class="r"><code>speaker_lines_per_episode &lt;- friends.text %&gt;%
   count(speaker, episode_title, imdb_rating) %&gt;%
@@ -799,7 +867,7 @@ speaker_lines_per_episode %&gt;%
     x = &quot;&quot;, y = &quot;&quot;,
     title = &quot;Portion of the lines of each episode&quot;
   )</code></pre>
-<p><img src="figure/Friends.Rmd/LinesPerEpisode-1.png" width="3000" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Friends.Rmd/LinesPerEpisode-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>speaker_lines_per_episode %&gt;%
   semi_join(main.characters, by = &quot;speaker&quot;) %&gt;%
   group_by(speaker) %&gt;%
@@ -847,7 +915,7 @@ speaker_lines_per_episode %&gt;%
   ) %&gt;%
   ggplot(aes(n, imdb_rating)) +
   geom_point()</code></pre>
-<p><img src="figure/Friends.Rmd/LinesPerEpisode-2.png" width="3000" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Friends.Rmd/LinesPerEpisode-2.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># setup the training set
 speakers_per_episode_wide &lt;- speaker_lines_per_episode %&gt;%
   semi_join(main.characters, by = &quot;speaker&quot;) %&gt;%
@@ -992,7 +1060,7 @@ unique_sentiments &lt;- by_speaker_word %&gt;%
 <h1>Visualize a word cloud with words most representative of each character and most common emotional sentiment</h1>
 <p>Jack Davison <span class="citation">@JDavison_</span> inspired this beautiful word cloud</p>
 <p>Credit David Robinson for the <code>tidylo</code> insight</p>
-<pre class="r"><code>ggplot(
+<pre class="r"><code>p3 &lt;- ggplot(
   unique_sentiments,
   aes(
     label = word,
@@ -1037,8 +1105,26 @@ unique_sentiments &lt;- by_speaker_word %&gt;%
     title = &quot;the one with the sentiment analysis&quot;,
     subtitle = &quot;(&lt;span style=&#39;color:#F74035&#39;&gt;Joyful&lt;/span&gt; &lt;span style=&#39;color:#008F48&#39;&gt;Mad&lt;/span&gt; &lt;span style=&#39;color:#3F9DD4&#39;&gt;Peaceful&lt;/span&gt; &lt;span style=&#39;color:#9787CD&#39;&gt;Powerful&lt;/span&gt; &lt;span style=&#39;color:#F6D400&#39;&gt;Sad&lt;/span&gt; &lt;span style=&#39;color:#941205&#39;&gt;Scared&lt;/span&gt;)&lt;br&gt;&lt;br&gt;&quot;,
     caption = &quot;&lt;br&gt;Data from &lt;b&gt;{friends}&lt;/b&gt; (github.com/EmilHvitfeldt/friends)&lt;br&gt; Visualisation by &lt;b&gt;Jim Gruman&lt;/b&gt; (Twitter @jim_gruman)&lt;br&gt;Code found at &lt;b&gt;opus1993.github.io/myTidyTuesday&lt;/b&gt;&quot;
-  )</code></pre>
-<p><img src="figure/Friends.Rmd/word_cloud-1.png" width="4800" style="display: block; margin: auto;" /></p>
+  )
+
+ggsave(
+  filename = &quot;docs/assets/friends-3.pdf&quot;,
+  plot = p3,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/friends-3.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/friends-3.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/friends-3.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/friends-3.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/friends-3.png" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1047,7 +1133,7 @@ unique_sentiments &lt;- by_speaker_word %&gt;%
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19041)
 
@@ -1073,24 +1159,25 @@ other attached packages:
 loaded via a namespace (and not attached):
  [1] ggtext_0.1.0.9000 fs_1.5.0          usethis_1.6.3     lubridate_1.7.9  
  [5] httr_1.4.2        ggwordcloud_0.5.0 rprojroot_1.3-2   SnowballC_0.7.0  
- [9] R.cache_0.14.0    tools_4.0.0       backports_1.1.10  R6_2.4.1         
+ [9] R.cache_0.14.0    tools_4.0.3       backports_1.1.10  R6_2.4.1         
 [13] DBI_1.1.0         colorspace_1.4-1  withr_2.3.0       tidyselect_1.1.0 
-[17] curl_4.3          compiler_4.0.0    git2r_0.27.1      cli_2.0.2        
+[17] curl_4.3          compiler_4.0.3    git2r_0.27.1      cli_2.0.2        
 [21] rvest_0.3.6       xml2_1.3.2        labeling_0.3      scales_1.1.1     
-[25] digest_0.6.25     rmarkdown_2.4     R.utils_2.10.1    pkgconfig_2.0.3  
-[29] htmltools_0.5.0   styler_1.3.2      dbplyr_1.4.4      highr_0.8        
-[33] rlang_0.4.7       readxl_1.3.1      rstudioapi_0.11   generics_0.0.2   
-[37] farver_2.0.3      jsonlite_1.7.1    tokenizers_0.2.1  R.oo_1.24.0      
-[41] magrittr_1.5      Matrix_1.2-18     Rcpp_1.0.5        munsell_0.5.0    
-[45] fansi_0.4.1       lifecycle_0.2.0   R.methodsS3_1.8.1 stringi_1.5.3    
-[49] whisker_0.4       yaml_2.2.1        grid_4.0.0        blob_1.2.1       
-[53] promises_1.1.1    crayon_1.3.4      lattice_0.20-41   haven_2.3.1      
-[57] cowplot_1.1.0     gridtext_0.1.1    hms_0.5.3         magick_2.4.0     
-[61] knitr_1.30        pillar_1.4.6      markdown_1.1      reprex_0.3.0     
-[65] evaluate_0.14     modelr_0.1.8      png_0.1-7         vctrs_0.3.4      
-[69] httpuv_1.5.4      selectr_0.4-2     cellranger_1.1.0  gtable_0.3.0     
-[73] rematch2_2.1.2    assertthat_0.2.1  xfun_0.18         broom_0.7.1      
-[77] janeaustenr_0.1.5 later_1.1.0.1     ellipsis_0.3.1   </code></pre>
+[25] askpass_1.1       digest_0.6.25     rmarkdown_2.4     R.utils_2.10.1   
+[29] pkgconfig_2.0.3   htmltools_0.5.0   styler_1.3.2      dbplyr_1.4.4     
+[33] highr_0.8         rlang_0.4.8       readxl_1.3.1      rstudioapi_0.11  
+[37] generics_0.0.2    farver_2.0.3      jsonlite_1.7.1    tokenizers_0.2.1 
+[41] R.oo_1.24.0       magrittr_1.5      Matrix_1.2-18     Rcpp_1.0.5       
+[45] munsell_0.5.0     fansi_0.4.1       lifecycle_0.2.0   R.methodsS3_1.8.1
+[49] stringi_1.5.3     whisker_0.4       yaml_2.2.1        grid_4.0.3       
+[53] blob_1.2.1        promises_1.1.1    crayon_1.3.4      lattice_0.20-41  
+[57] haven_2.3.1       cowplot_1.1.0     gridtext_0.1.1    hms_0.5.3        
+[61] magick_2.4.0      knitr_1.30        pillar_1.4.6      markdown_1.1     
+[65] reprex_0.3.0      evaluate_0.14     pdftools_2.3.1    qpdf_1.1         
+[69] modelr_0.1.8      png_0.1-7         vctrs_0.3.4       httpuv_1.5.4     
+[73] selectr_0.4-2     cellranger_1.1.0  gtable_0.3.0      rematch2_2.1.2   
+[77] assertthat_0.2.1  xfun_0.18         broom_0.7.1       janeaustenr_0.1.5
+[81] later_1.1.0.1     ellipsis_0.3.1   </code></pre>
 </div>
 </div>
 

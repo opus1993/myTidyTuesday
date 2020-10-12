@@ -16,12 +16,13 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
@@ -265,6 +266,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -316,6 +320,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Crop Yields</h1>
@@ -344,7 +356,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-10
+<strong>Last updated:</strong> 2020-10-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -435,16 +447,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -496,6 +508,40 @@ Message
 <tbody>
 <tr>
 <td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9a61ca86f951fb5cd24379a3258da701356ee345/analysis/CropYields.Rmd" target="_blank">9a61ca8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/23f838130a3109ef6b43b04e4c5eaeef7b09147f/docs/CropYields.html" target="_blank">23f8381</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 html
 </td>
 <td>
@@ -543,16 +589,12 @@ wflow_publish(“analysis/CropYields.Rmd”)
 <h1>Load the weekly Data</h1>
 <p>Dowload the weekly data and make available in the <code>tt</code> object.</p>
 <pre class="r"><code>tt &lt;- tt_load(&quot;2020-09-01&quot;)</code></pre>
-<pre><code>--- Compiling #TidyTuesday Information for 2020-09-01 ----</code></pre>
-<pre><code>--- There are 5 files available ---</code></pre>
-<pre><code>--- Starting Download ---</code></pre>
 <pre><code>
     Downloading file 1 of 5: `arable_land_pin.csv`
     Downloading file 2 of 5: `cereal_crop_yield_vs_fertilizer_application.csv`
     Downloading file 3 of 5: `cereal_yields_vs_tractor_inputs_in_agriculture.csv`
     Downloading file 4 of 5: `key_crop_yields.csv`
     Downloading file 5 of 5: `land_use_vs_yield_change_in_cereal_production.csv`</code></pre>
-<pre><code>--- Download complete ---</code></pre>
 </div>
 <div id="readme" class="section level1">
 <h1>Readme</h1>
@@ -562,244 +604,122 @@ wflow_publish(“analysis/CropYields.Rmd”)
 <div id="glimpse-data" class="section level1">
 <h1>Glimpse Data</h1>
 <p>Take an initial look at the format of the data available.</p>
-<pre class="r"><code>tt %&gt;% 
+<pre class="r"><code>tt %&gt;%
   map(glimpse)</code></pre>
-<pre><code>Rows: 11,280
-Columns: 4
-$ Entity                                                                   &lt;chr&gt; ...
-$ Code                                                                     &lt;chr&gt; ...
-$ Year                                                                     &lt;dbl&gt; ...
-$ `Arable land needed to produce a fixed quantity of crops ((1.0 = 1961))` &lt;dbl&gt; ...
-Rows: 11,965
-Columns: 5
-$ Entity                                            &lt;chr&gt; &quot;Afghanistan&quot;, &quot;A...
-$ Code                                              &lt;chr&gt; &quot;AFG&quot;, &quot;AFG&quot;, &quot;AF...
-$ Year                                              &lt;dbl&gt; 1961, 1962, 1963,...
-$ `Cereal yield (tonnes per hectare)`               &lt;dbl&gt; 1.1151, 1.0790, 0...
-$ `Nitrogen fertilizer use (kilograms per hectare)` &lt;dbl&gt; NA, NA, NA, NA, N...
-Rows: 49,403
-Columns: 6
-$ Entity                                                  &lt;chr&gt; &quot;Afghanista...
-$ Code                                                    &lt;chr&gt; &quot;AFG&quot;, &quot;AFG...
-$ Year                                                    &lt;chr&gt; &quot;1961&quot;, &quot;19...
-$ `Tractors per 100 sq km arable land`                    &lt;dbl&gt; 0.1568627, ...
-$ `Cereal yield (kilograms per hectare) (kg per hectare)` &lt;dbl&gt; 1115.1, 107...
-$ `Total population (Gapminder)`                          &lt;dbl&gt; 9169000, 93...
-Rows: 13,075
-Columns: 14
-$ Entity                             &lt;chr&gt; &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;A...
-$ Code                               &lt;chr&gt; &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG...
-$ Year                               &lt;dbl&gt; 1961, 1962, 1963, 1964, 1965, 19...
-$ `Wheat (tonnes per hectare)`       &lt;dbl&gt; 1.0220, 0.9735, 0.8317, 0.9510, ...
-$ `Rice (tonnes per hectare)`        &lt;dbl&gt; 1.5190, 1.5190, 1.5190, 1.7273, ...
-$ `Maize (tonnes per hectare)`       &lt;dbl&gt; 1.4000, 1.4000, 1.4260, 1.4257, ...
-$ `Soybeans (tonnes per hectare)`    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
-$ `Potatoes (tonnes per hectare)`    &lt;dbl&gt; 8.6667, 7.6667, 8.1333, 8.6000, ...
-$ `Beans (tonnes per hectare)`       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
-$ `Peas (tonnes per hectare)`        &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
-$ `Cassava (tonnes per hectare)`     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
-$ `Barley (tonnes per hectare)`      &lt;dbl&gt; 1.0800, 1.0800, 1.0800, 1.0857, ...
-$ `Cocoa beans (tonnes per hectare)` &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
-$ `Bananas (tonnes per hectare)`     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, ...
-Rows: 49,259
-Columns: 6
-$ Entity                                                      &lt;chr&gt; &quot;Afghan...
-$ Code                                                        &lt;chr&gt; &quot;AFG&quot;, ...
-$ Year                                                        &lt;chr&gt; &quot;1961&quot;,...
-$ `Cereal yield index`                                        &lt;dbl&gt; 100, 97...
-$ `Change to land area used for cereal production since 1961` &lt;dbl&gt; 100, 10...
-$ `Total population (Gapminder)`                              &lt;dbl&gt; 9169000...</code></pre>
-<pre><code>$arable_land_pin
-# A tibble: 11,280 x 4
-   Entity     Code   Year `Arable land needed to produce a fixed quantity of cr~
-   &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;                                                  &lt;dbl&gt;
- 1 Afghanist~ AFG    1961                                                  1    
- 2 Afghanist~ AFG    1962                                                  0.984
- 3 Afghanist~ AFG    1963                                                  1.01 
- 4 Afghanist~ AFG    1964                                                  0.939
- 5 Afghanist~ AFG    1965                                                  0.907
- 6 Afghanist~ AFG    1966                                                  0.927
- 7 Afghanist~ AFG    1967                                                  0.832
- 8 Afghanist~ AFG    1968                                                  0.812
- 9 Afghanist~ AFG    1969                                                  0.792
-10 Afghanist~ AFG    1970                                                  0.876
-# ... with 11,270 more rows
-
-$cereal_crop_yield_vs_fertilizer_application
-# A tibble: 11,965 x 5
-   Entity    Code   Year `Cereal yield (tonnes p~ `Nitrogen fertilizer use (kil~
-   &lt;chr&gt;     &lt;chr&gt; &lt;dbl&gt;                    &lt;dbl&gt;                          &lt;dbl&gt;
- 1 Afghanis~ AFG    1961                    1.12                              NA
- 2 Afghanis~ AFG    1962                    1.08                              NA
- 3 Afghanis~ AFG    1963                    0.986                             NA
- 4 Afghanis~ AFG    1964                    1.08                              NA
- 5 Afghanis~ AFG    1965                    1.10                              NA
- 6 Afghanis~ AFG    1966                    1.01                              NA
- 7 Afghanis~ AFG    1967                    1.22                              NA
- 8 Afghanis~ AFG    1968                    1.29                              NA
- 9 Afghanis~ AFG    1969                    1.31                              NA
-10 Afghanis~ AFG    1970                    1.11                              NA
-# ... with 11,955 more rows
-
-$cereal_yields_vs_tractor_inputs_in_agriculture
-# A tibble: 49,403 x 6
-   Entity  Code  Year  `Tractors per 100~ `Cereal yield (kilo~ `Total populatio~
-   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;                &lt;dbl&gt;             &lt;dbl&gt;
- 1 Afghan~ AFG   1961               0.157                1115.           9169000
- 2 Afghan~ AFG   1962               0.195                1079            9351000
- 3 Afghan~ AFG   1963               0.258                 986.           9543000
- 4 Afghan~ AFG   1964               0.256                1083.           9745000
- 5 Afghan~ AFG   1965               0.385                1099.           9956000
- 6 Afghan~ AFG   1966               0.511                1012.          10175000
- 7 Afghan~ AFG   1967               0.637                1224.          10400000
- 8 Afghan~ AFG   1968               0.637                1288.          10637000
- 9 Afghan~ AFG   1969               0.700                1310.          10894000
-10 Afghan~ AFG   1970               0.699                1105.          11174000
-# ... with 49,393 more rows
-
-$key_crop_yields
-# A tibble: 13,075 x 14
-   Entity Code   Year `Wheat (tonnes ~ `Rice (tonnes p~ `Maize (tonnes ~
-   &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
- 1 Afgha~ AFG    1961            1.02              1.52             1.4 
- 2 Afgha~ AFG    1962            0.974             1.52             1.4 
- 3 Afgha~ AFG    1963            0.832             1.52             1.43
- 4 Afgha~ AFG    1964            0.951             1.73             1.43
- 5 Afgha~ AFG    1965            0.972             1.73             1.44
- 6 Afgha~ AFG    1966            0.867             1.52             1.44
- 7 Afgha~ AFG    1967            1.12              1.92             1.41
- 8 Afgha~ AFG    1968            1.16              1.95             1.71
- 9 Afgha~ AFG    1969            1.19              1.98             1.72
-10 Afgha~ AFG    1970            0.956             1.81             1.48
-# ... with 13,065 more rows, and 8 more variables: `Soybeans (tonnes per
-#   hectare)` &lt;dbl&gt;, `Potatoes (tonnes per hectare)` &lt;dbl&gt;, `Beans (tonnes per
-#   hectare)` &lt;dbl&gt;, `Peas (tonnes per hectare)` &lt;dbl&gt;, `Cassava (tonnes per
-#   hectare)` &lt;dbl&gt;, `Barley (tonnes per hectare)` &lt;dbl&gt;, `Cocoa beans (tonnes
-#   per hectare)` &lt;dbl&gt;, `Bananas (tonnes per hectare)` &lt;dbl&gt;
-
-$land_use_vs_yield_change_in_cereal_production
-# A tibble: 49,259 x 6
-   Entity  Code  Year  `Cereal yield in~ `Change to land area~ `Total populatio~
-   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;             &lt;dbl&gt;                 &lt;dbl&gt;             &lt;dbl&gt;
- 1 Afghan~ AFG   1961                100                   100           9169000
- 2 Afghan~ AFG   1962                 97                   103           9351000
- 3 Afghan~ AFG   1963                 88                   103           9543000
- 4 Afghan~ AFG   1964                 97                   104           9745000
- 5 Afghan~ AFG   1965                 99                   104           9956000
- 6 Afghan~ AFG   1966                 91                   104          10175000
- 7 Afghan~ AFG   1967                110                    94          10400000
- 8 Afghan~ AFG   1968                115                    92          10637000
- 9 Afghan~ AFG   1969                118                    93          10894000
-10 Afghan~ AFG   1970                 99                    96          11174000
-# ... with 49,249 more rows</code></pre>
 </div>
 <div id="wrangle" class="section level1">
 <h1>Wrangle</h1>
 <p>Explore the data and process it into a nice format for plotting! Access each dataset by name by using a dollarsign after the <code>tt</code> object and then the name of the data set.</p>
-<pre class="r"><code>nutrient&lt;-tt$cereal_crop_yield_vs_fertilizer_application
+<pre class="r"><code>nutrient &lt;- tt$cereal_crop_yield_vs_fertilizer_application
 
 nutrient_rates &lt;- nutrient %&gt;%
-  mutate(Cereal = `Cereal yield (tonnes per hectare)`,
-         Nitrogen = `Nitrogen fertilizer use (kilograms per hectare)`,           Nitrogen = if_else(is.na(Nitrogen),0,Nitrogen),
-           Efficiency = Cereal / Nitrogen, .keep = &quot;unused&quot;) %&gt;%
-  filter(Efficiency &lt; 10, !is.na(Code)) %&gt;% 
+  mutate(
+    Cereal = `Cereal yield (tonnes per hectare)`,
+    Nitrogen = `Nitrogen fertilizer use (kilograms per hectare)`, Nitrogen = if_else(is.na(Nitrogen), 0, Nitrogen),
+    Efficiency = Cereal / Nitrogen, .keep = &quot;unused&quot;
+  ) %&gt;%
+  filter(Efficiency &lt; 10, !is.na(Code)) %&gt;%
   tidyr::nest(data = c(Efficiency, Nitrogen, Cereal, Year)) %&gt;%
-  mutate(fit = map(.x = data,.f = ~ lm(Efficiency ~ Year, data = .))) %&gt;%
-  mutate(slope = purrr::map_dbl(.x = fit, .f = ~broom::tidy(.)$estimate[2])) %&gt;%
+  mutate(fit = map(.x = data, .f = ~ lm(Efficiency ~ Year, data = .))) %&gt;%
+  mutate(slope = purrr::map_dbl(.x = fit, .f = ~ broom::tidy(.)$estimate[2])) %&gt;%
   tidyr::unnest(data) %&gt;%
   group_by(Entity) %&gt;%
-  mutate(avg_yield = mean(Cereal))%&gt;%
+  mutate(avg_yield = mean(Cereal)) %&gt;%
   ungroup()
 
-btm&lt;-quantile(nutrient_rates$slope, probs = c(0.2,0.8))[1]
-top&lt;-quantile(nutrient_rates$slope, probs = c(0.2,0.8))[2]
+btm &lt;- quantile(nutrient_rates$slope, probs = c(0.2, 0.8))[1]
+top &lt;- quantile(nutrient_rates$slope, probs = c(0.2, 0.8))[2]
 
-nutrient_rates&lt;-nutrient_rates %&gt;%
-  mutate(bin = case_when(
-     slope &lt; btm ~ &quot;Decrease&quot;,
-     slope &gt; top ~ &quot;Increase&quot;,
-     TRUE ~ &quot;Flat&quot;
-  ),
-  Year = as.integer(Year))
+nutrient_rates &lt;- nutrient_rates %&gt;%
+  mutate(
+    bin = case_when(
+      slope &lt; btm ~ &quot;Decrease&quot;,
+      slope &gt; top ~ &quot;Increase&quot;,
+      TRUE ~ &quot;Flat&quot;
+    ),
+    Year = as.integer(Year)
+  )
 
 nutrient_rates %&gt;%
-  filter(bin %in% c(&quot;Decrease&quot;,&quot;Increase&quot;), avg_yield&gt;5) %&gt;%
-  ggplot(aes(Year, Efficiency))+
-  geom_point()+
-  geom_smooth(aes(color = bin), method = &quot;loess&quot;, formula = &quot;y ~ x&quot;, alpha = 0.1)+
-  scale_x_continuous(n.breaks = 4)+
-  facet_wrap(~Entity)+
-  theme(legend.position = &quot;top&quot;, plot.title.position = &quot;plot&quot;)+
-  labs(title = &quot;Nutrient Efficiency&quot;,
-       subtitle = &quot;Cereal Yield Tonnes per Hectare divided by Nitrogen Equivalent Fertilizer kg per Hectare&quot;,
-       caption = &quot;FAO and Our World in Data | @jim_gruman&quot;)</code></pre>
-<p><img src="figure/CropYields.Rmd/Wrangle-1.png" width="1152" style="display: block; margin: auto;" /></p>
+  filter(bin %in% c(&quot;Decrease&quot;, &quot;Increase&quot;), avg_yield &gt; 5) %&gt;%
+  ggplot(aes(Year, Efficiency)) +
+  geom_point() +
+  geom_smooth(aes(color = bin), method = &quot;loess&quot;, formula = &quot;y ~ x&quot;, alpha = 0.1, show.legend = FALSE) +
+  scale_x_continuous(n.breaks = 4) +
+  facet_wrap(~Entity) +
+  theme(legend.position = &quot;top&quot;, plot.title.position = &quot;plot&quot;) +
+  labs(
+    title = &quot;Nutrient Efficiency&quot;,
+    subtitle = &quot;Cereal Yield Tonnes per Hectare divided by Nitrogen Equivalent Fertilizer kg per Hectare&quot;,
+    caption = &quot;FAO and Our World in Data | @jim_gruman&quot;
+  )</code></pre>
+<p><img src="figure/CropYields.Rmd/Wrangle-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>key_crop_yields &lt;- tt$key_crop_yields
 
 land_use &lt;- tt$land_use_vs_yield_change_in_cereal_production</code></pre>
-<pre class="r"><code>top_countries&lt;-land_use %&gt;%
-  janitor::clean_names() %&gt;% 
-  filter(!is.na(code),
-         entity != &quot;World&quot;) %&gt;% 
-  group_by(entity) %&gt;% 
-  filter(year == max(year)) %&gt;% 
-  ungroup() %&gt;% 
-  slice_max(total_population_gapminder, n = 30) %&gt;% 
+<pre class="r"><code>top_countries &lt;- land_use %&gt;%
+  janitor::clean_names() %&gt;%
+  filter(
+    !is.na(code),
+    entity != &quot;World&quot;
+  ) %&gt;%
+  group_by(entity) %&gt;%
+  filter(year == max(year)) %&gt;%
+  ungroup() %&gt;%
+  slice_max(total_population_gapminder, n = 30) %&gt;%
   pull(entity)</code></pre>
-<pre class="r"><code>tidy_yields&lt;-key_crop_yields %&gt;% 
-  janitor::clean_names() %&gt;% 
+<pre class="r"><code>tidy_yields &lt;- key_crop_yields %&gt;%
+  janitor::clean_names() %&gt;%
   pivot_longer(wheat_tonnes_per_hectare:bananas_tonnes_per_hectare,
-               names_to = &quot;crop&quot;,
-               values_to = &quot;yield&quot;) %&gt;% 
-  mutate(crop = str_remove(crop, &quot;_tonnes_per_hectare&quot;)) %&gt;% 
-  filter(crop %in% c(&quot;wheat&quot;,&quot;rice&quot;,&quot;maize&quot;,&quot;barley&quot;),
-         entity %in% top_countries,
-         !is.na(yield))</code></pre>
-<pre class="r"><code>tidy_yields %&gt;% 
-  ggplot(aes(year, yield, color = crop))+
-  geom_point(alpha = 0.7, size = 1.5)+
-  geom_line(alpha = 0.7, size = 1.5)+  
-  facet_wrap(~ entity)+
-  scale_x_continuous(n.breaks = 2)+
-  labs(x = NULL, y = &quot;yields (tons per hectare)&quot;)</code></pre>
-<p><img src="figure/CropYields.Rmd/unnamed-chunk-4-1.png" width="864" style="display: block; margin: auto;" /></p>
+    names_to = &quot;crop&quot;,
+    values_to = &quot;yield&quot;
+  ) %&gt;%
+  mutate(crop = str_remove(crop, &quot;_tonnes_per_hectare&quot;)) %&gt;%
+  filter(
+    crop %in% c(&quot;wheat&quot;, &quot;rice&quot;, &quot;maize&quot;, &quot;barley&quot;),
+    entity %in% top_countries,
+    !is.na(yield)
+  )</code></pre>
+<pre class="r"><code>tidy_yields %&gt;%
+  ggplot(aes(year, yield, color = crop)) +
+  geom_point(alpha = 0.7, size = 1.5) +
+  geom_line(alpha = 0.7, size = 1.5) +
+  facet_wrap(~entity) +
+  scale_x_continuous(n.breaks = 2) +
+  labs(
+    x = NULL,
+    subtitle = &quot;yields (tons per hectare)&quot;,
+    title = &quot;Global increases in yields of cereal grains&quot;
+  )</code></pre>
+<p><img src="figure/CropYields.Rmd/unnamed-chunk-4-1.png" width="2700" style="display: block; margin: auto;" /></p>
 <div id="many-models" class="section level2">
 <h2>Many Models</h2>
-<p>we will use statistical modeling to measure the country to country differences and changes over time</p>
-<pre class="r"><code>library(tidymodels)</code></pre>
-<pre><code>-- Attaching packages ------- tidymodels 0.1.1 --</code></pre>
-<pre><code>v broom     0.7.1      v recipes   0.1.13
-v dials     0.0.9      v rsample   0.0.8 
-v infer     0.5.3      v tune      0.1.1 
-v modeldata 0.0.2      v workflows 0.2.0 
-v parsnip   0.1.3      v yardstick 0.0.7 </code></pre>
-<pre><code>-- Conflicts ---------- tidymodels_conflicts() --
-x scales::discard() masks purrr::discard()
-x dplyr::filter()   masks stats::filter()
-x recipes::fixed()  masks stringr::fixed()
-x dplyr::lag()      masks stats::lag()
-x yardstick::spec() masks readr::spec()
-x recipes::step()   masks stats::step()</code></pre>
-<pre class="r"><code>tidy_lm&lt;-tidy_yields %&gt;% 
-  nest(yields = c(year, yield)) %&gt;% 
+<p>Let’s use statistical modeling to measure the country to country differences and changes over time. In this case, a simple linear estimate is useful to compare each country’s growth rates.</p>
+<p>This chart depicts the estimate of growth on the x-axis, and the p-value on the y-axis. Consider the p-value the likelihood that the growth estimate is no different than random chance. A smaller p-value is a greater confidence in the effect.</p>
+<pre class="r"><code>library(tidymodels)
+
+tidy_lm &lt;- tidy_yields %&gt;%
+  nest(yields = c(year, yield)) %&gt;%
   mutate(model = map(yields, ~ lm(yield ~ year, data = .x)))
 
-slopes &lt;-tidy_lm %&gt;% 
+slopes &lt;- tidy_lm %&gt;%
   mutate(coefs = map(model, tidy)) %&gt;%
   unnest(coefs) %&gt;%
-  filter(term == &quot;year&quot;) %&gt;% 
+  filter(term == &quot;year&quot;) %&gt;%
   mutate(p.value = p.adjust(p.value))</code></pre>
 <pre class="r"><code>library(ggrepel)
-slopes %&gt;% 
-  ggplot(aes(estimate, p.value, label = entity))+
-  geom_vline(xintercept = 0, lty = 2, size = 1.5, alpha = 0.7, color = &quot;gray50&quot;)+
-  geom_point(aes(color = crop),alpha = 0.8, size = 2.5, show.legend = FALSE)+
-  geom_text_repel(size = 3)+
-  scale_y_log10()+
-  facet_wrap(~ crop)+
-  labs(y = &quot;p.value effect size: Likelihood that this slope was no different than chance, \nsmaller is more confident&quot;,
-       x = &quot;estimate of the slope, values greater than 0 are yearly increases&quot;)</code></pre>
-<p><img src="figure/CropYields.Rmd/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
+slopes %&gt;%
+  ggplot(aes(estimate, p.value, label = entity)) +
+  geom_vline(xintercept = 0, lty = 2, size = 1.5, alpha = 0.7, color = &quot;gray50&quot;) +
+  geom_point(aes(color = crop), alpha = 0.8, size = 2.5, show.legend = FALSE) +
+  geom_text_repel(size = 3) +
+  scale_y_log10() +
+  facet_wrap(~crop) +
+  labs(
+    y = &quot;p.value effect size: Likelihood that this slope was no different than chance, \nsmaller is more confident&quot;,
+    x = &quot;estimate of the slope, values greater than 0 are yearly increases&quot;
+  )</code></pre>
+<p><img src="figure/CropYields.Rmd/unnamed-chunk-6-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -808,7 +728,7 @@ slopes %&gt;%
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19041)
 
@@ -825,7 +745,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] ggrepel_0.8.2      yardstick_0.0.7    workflows_0.2.0    tune_0.1.1        
+ [1] ggrepel_0.8.2      yardstick_0.0.7    workflows_0.2.1    tune_0.1.1        
  [5] rsample_0.0.8      recipes_0.1.13     parsnip_0.1.3      modeldata_0.0.2   
  [9] infer_0.5.3        dials_0.0.9        scales_1.1.1       broom_0.7.1       
 [13] tidymodels_0.1.1   tidytuesdayR_1.0.1 forcats_0.5.0      stringr_1.4.0     
@@ -833,30 +753,40 @@ other attached packages:
 [21] tibble_3.0.3       ggplot2_3.3.2      tidyverse_1.3.0    workflowr_1.6.2   
 
 loaded via a namespace (and not attached):
- [1] colorspace_1.4-1   selectr_0.4-2      ellipsis_0.3.1     class_7.3-17      
- [5] rprojroot_1.3-2    snakecase_0.11.0   fs_1.5.0           rstudioapi_0.11   
- [9] listenv_0.8.0      furrr_0.1.0        farver_2.0.3       prodlim_2019.11.13
-[13] fansi_0.4.1        lubridate_1.7.9    xml2_1.3.2         codetools_0.2-16  
-[17] splines_4.0.0      extrafont_0.17     knitr_1.30         jsonlite_1.7.1    
-[21] pROC_1.16.2        Rttf2pt1_1.3.8     dbplyr_1.4.4       compiler_4.0.0    
-[25] httr_1.4.2         backports_1.1.10   assertthat_0.2.1   Matrix_1.2-18     
-[29] cli_2.0.2          later_1.1.0.1      hrbrthemes_0.8.0   htmltools_0.5.0   
-[33] tools_4.0.0        gtable_0.3.0       glue_1.4.2         Rcpp_1.0.5        
-[37] cellranger_1.1.0   DiceDesign_1.8-1   vctrs_0.3.4        nlme_3.1-149      
-[41] extrafontdb_1.0    iterators_1.0.12   timeDate_3043.102  xfun_0.18         
-[45] gower_0.2.2        globals_0.13.0     rvest_0.3.6        lifecycle_0.2.0   
-[49] future_1.19.1      MASS_7.3-53        ipred_0.9-9        hms_0.5.3         
-[53] promises_1.1.1     parallel_4.0.0     yaml_2.2.1         curl_4.3          
-[57] gdtools_0.2.2      rpart_4.1-15       stringi_1.5.3      foreach_1.5.0     
-[61] lhs_1.1.1          lava_1.6.8         rlang_0.4.7        pkgconfig_2.0.3   
-[65] systemfonts_0.3.2  evaluate_0.14      lattice_0.20-41    labeling_0.3      
-[69] tidyselect_1.1.0   plyr_1.8.6         magrittr_1.5       R6_2.4.1          
-[73] generics_0.0.2     DBI_1.1.0          pillar_1.4.6       haven_2.3.1       
-[77] whisker_0.4        withr_2.3.0        mgcv_1.8-33        survival_3.2-7    
-[81] nnet_7.3-14        janitor_2.0.1      modelr_0.1.8       crayon_1.3.4      
-[85] utf8_1.1.4         rmarkdown_2.4      usethis_1.6.3      grid_4.0.0        
-[89] readxl_1.3.1       blob_1.2.1         git2r_0.27.1       reprex_0.3.0      
-[93] digest_0.6.25      httpuv_1.5.4       GPfit_1.0-8        munsell_0.5.0     </code></pre>
+  [1] colorspace_1.4-1   selectr_0.4-2      ellipsis_0.3.1    
+  [4] class_7.3-17       rprojroot_1.3-2    snakecase_0.11.0  
+  [7] fs_1.5.0           rstudioapi_0.11    listenv_0.8.0     
+ [10] furrr_0.1.0        farver_2.0.3       prodlim_2019.11.13
+ [13] fansi_0.4.1        lubridate_1.7.9    xml2_1.3.2        
+ [16] codetools_0.2-16   splines_4.0.3      R.methodsS3_1.8.1 
+ [19] extrafont_0.17     knitr_1.30         jsonlite_1.7.1    
+ [22] pROC_1.16.2        Rttf2pt1_1.3.8     dbplyr_1.4.4      
+ [25] R.oo_1.24.0        compiler_4.0.3     httr_1.4.2        
+ [28] backports_1.1.10   assertthat_0.2.1   Matrix_1.2-18     
+ [31] cli_2.0.2          later_1.1.0.1      hrbrthemes_0.8.6  
+ [34] htmltools_0.5.0    tools_4.0.3        gtable_0.3.0      
+ [37] glue_1.4.2         Rcpp_1.0.5         cellranger_1.1.0  
+ [40] styler_1.3.2       DiceDesign_1.8-1   vctrs_0.3.4       
+ [43] nlme_3.1-149       extrafontdb_1.0    iterators_1.0.12  
+ [46] timeDate_3043.102  xfun_0.18          gower_0.2.2       
+ [49] globals_0.13.0     rvest_0.3.6        lifecycle_0.2.0   
+ [52] future_1.19.1      MASS_7.3-53        ipred_0.9-9       
+ [55] hms_0.5.3          promises_1.1.1     parallel_4.0.3    
+ [58] yaml_2.2.1         curl_4.3           gdtools_0.2.2     
+ [61] rpart_4.1-15       stringi_1.5.3      foreach_1.5.0     
+ [64] lhs_1.1.1          lava_1.6.8         rlang_0.4.8       
+ [67] pkgconfig_2.0.3    systemfonts_0.3.2  evaluate_0.14     
+ [70] lattice_0.20-41    labeling_0.3       tidyselect_1.1.0  
+ [73] plyr_1.8.6         magrittr_1.5       R6_2.4.1          
+ [76] generics_0.0.2     DBI_1.1.0          pillar_1.4.6      
+ [79] haven_2.3.1        whisker_0.4        withr_2.3.0       
+ [82] mgcv_1.8-33        survival_3.2-7     nnet_7.3-14       
+ [85] janitor_2.0.1      modelr_0.1.8       crayon_1.3.4      
+ [88] rmarkdown_2.4      usethis_1.6.3      grid_4.0.3        
+ [91] readxl_1.3.1       blob_1.2.1         git2r_0.27.1      
+ [94] reprex_0.3.0       digest_0.6.25      R.cache_0.14.0    
+ [97] httpuv_1.5.4       R.utils_2.10.1     GPfit_1.0-8       
+[100] munsell_0.5.0     </code></pre>
 </div>
 </div>
 </div>
@@ -906,6 +836,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

@@ -16,12 +16,13 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
@@ -265,6 +266,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -316,6 +320,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">TheLastAirbender</h1>
@@ -345,7 +357,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-10
+<strong>Last updated:</strong> 2020-10-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -436,16 +448,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -495,6 +507,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9a61ca86f951fb5cd24379a3258da701356ee345/analysis/LastAirbender.Rmd" target="_blank">9a61ca8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/23f838130a3109ef6b43b04e4c5eaeef7b09147f/docs/LastAirbender.html" target="_blank">23f8381</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -600,21 +646,44 @@ avatar &lt;- tidytuesdayR::tt_load(&quot;2020-08-11&quot;)</code></pre>
 <pre class="r"><code>avatar_raw &lt;- avatar$avatar
 
 avatar_raw %&gt;%
-  count(character, sort = TRUE)</code></pre>
-<pre><code># A tibble: 374 x 2
-   character             n
-   &lt;chr&gt;             &lt;int&gt;
- 1 Scene Description  3393
- 2 Aang               1796
- 3 Sokka              1639
- 4 Katara             1437
- 5 Zuko                776
- 6 Toph                507
- 7 Iroh                337
- 8 Azula               211
- 9 Jet                 134
-10 Suki                114
-# ... with 364 more rows</code></pre>
+  count(character, sort = TRUE) %&gt;%
+  head() %&gt;%
+  knitr::kable(caption = &quot;The 6 characters with the most lines&quot;)</code></pre>
+<table>
+<caption>The 6 characters with the most lines</caption>
+<thead>
+<tr class="header">
+<th align="left">character</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Scene Description</td>
+<td align="right">3393</td>
+</tr>
+<tr class="even">
+<td align="left">Aang</td>
+<td align="right">1796</td>
+</tr>
+<tr class="odd">
+<td align="left">Sokka</td>
+<td align="right">1639</td>
+</tr>
+<tr class="even">
+<td align="left">Katara</td>
+<td align="right">1437</td>
+</tr>
+<tr class="odd">
+<td align="left">Zuko</td>
+<td align="right">776</td>
+</tr>
+<tr class="even">
+<td align="left">Toph</td>
+<td align="right">507</td>
+</tr>
+</tbody>
+</table>
 <p>Rows with <code>Scene Description</code> are not dialogue; the main character Aang speaks the most lines overall. How does this change through the three “books” of the show?</p>
 <pre class="r"><code>library(tidytext)
 
@@ -640,13 +709,19 @@ p1 &lt;- avatar_raw %&gt;%
     title = &quot;Last Airbender words spoken by book&quot;
   )
 
-ggsave(filename = &quot;docs/assets/airbender-1.pdf&quot;, plot = p1, width = 12, height = 8, device = cairo_pdf)
+ggsave(
+  filename = &quot;docs/assets/airbender-1.pdf&quot;,
+  plot = p1,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
 
 pdftools::pdf_convert(
   pdf = &quot;docs/assets/airbender-1.pdf&quot;, format = &quot;png&quot;,
-  dpi = 300, filenames = &quot;docs/assets/airbender-1.png&quot;
+  dpi = 300, filenames = &quot;docs/assets/airbender-1.png&quot;,
+  verbose = FALSE
 )</code></pre>
-<pre><code>Converting page 1 to docs/assets/airbender-1.png... done!</code></pre>
 <pre><code>[1] &quot;docs/assets/airbender-1.png&quot;</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-1.png&quot;, error = FALSE)</code></pre>
 <p><img src="assets/airbender-1.png" style="display: block; margin: auto;" /></p>
@@ -659,17 +734,50 @@ pdftools::pdf_convert(
 avatar %&gt;%
   filter(aang == &quot;Aang&quot;) %&gt;%
   sample_n(10) %&gt;%
-  pull(text)</code></pre>
-<pre><code> [1] &quot;What? If he&#39;s still what?&quot;                                                                                               
- [2] &quot;She does?&quot;                                                                                                               
- [3] &quot;How could you let them take Appa?! &lt;U+200C&gt; Why didn&#39;t you stop them&lt;U+200C&gt;?!&quot;                                          
- [4] &quot;Um ... I have a scar. It&#39;s really embarrassing.&quot;                                                                         
- [5] &quot;No, I don&#39;t think I do.&quot;                                                                                                 
- [6] &quot;It&#39;s nothing. I just had a bad dream.  Go back to sleep.&quot;                                                                
- [7] &quot;What are you doing?&quot;                                                                                                     
- [8] &quot;Shh! I know you can see underground, but don&#39;t ruin the surprise. Just watch.  Yeah!  I&#39;m putting an orchestra together.&quot;
- [9] &quot;Firebenders? They were here?&quot;                                                                                            
-[10] &quot;That was amazing!&quot;                                                                                                       </code></pre>
+  pull(text) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">What? If he’s still what?</td>
+</tr>
+<tr class="even">
+<td align="left">She does?</td>
+</tr>
+<tr class="odd">
+<td align="left">How could you let them take Appa?! &lt;U+200C&gt; Why didn’t you stop them&lt;U+200C&gt;?!</td>
+</tr>
+<tr class="even">
+<td align="left">Um … I have a scar. It’s really embarrassing.</td>
+</tr>
+<tr class="odd">
+<td align="left">No, I don’t think I do.</td>
+</tr>
+<tr class="even">
+<td align="left">It’s nothing. I just had a bad dream. Go back to sleep.</td>
+</tr>
+<tr class="odd">
+<td align="left">What are you doing?</td>
+</tr>
+<tr class="even">
+<td align="left">Shh! I know you can see underground, but don’t ruin the surprise. Just watch. Yeah! I’m putting an orchestra together.</td>
+</tr>
+<tr class="odd">
+<td align="left">Firebenders? They were here?</td>
+</tr>
+<tr class="even">
+<td align="left">That was amazing!</td>
+</tr>
+</tbody>
+</table>
 <p>This… may be a challenge.</p>
 <p>What are the highest log odds words from Aang and other speakers?</p>
 <pre class="r"><code>library(tidytext)
@@ -683,7 +791,7 @@ avatar_lo &lt;- avatar %&gt;%
 
 p2 &lt;- avatar_lo %&gt;%
   group_by(aang) %&gt;%
-  top_n(15) %&gt;%
+  top_n(n = 15, wt = log_odds_weighted) %&gt;%
   ungroup() %&gt;%
   mutate(word = reorder(word, log_odds_weighted)) %&gt;%
   ggplot(aes(log_odds_weighted, word, fill = aang)) +
@@ -698,10 +806,12 @@ p2 &lt;- avatar_lo %&gt;%
 ggsave(filename = &quot;docs/assets/airbender-2.pdf&quot;, plot = p2, width = 12, height = 8, device = cairo_pdf)
 
 pdftools::pdf_convert(
-  pdf = &quot;docs/assets/airbender-2.pdf&quot;, format = &quot;png&quot;,
-  dpi = 300, filenames = &quot;docs/assets/airbender-2.png&quot;
+  pdf = &quot;docs/assets/airbender-2.pdf&quot;,
+  format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/airbender-2.png&quot;,
+  verbose = FALSE
 )</code></pre>
-<pre><code>Converting page 1 to docs/assets/airbender-2.png... done!</code></pre>
 <pre><code>[1] &quot;docs/assets/airbender-2.png&quot;</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-2.png&quot;, error = FALSE)</code></pre>
 <p><img src="assets/airbender-2.png" style="display: block; margin: auto;" /></p>
@@ -727,13 +837,19 @@ p3 &lt;- tf %&gt;%
   scale_fill_avatar(&quot;AirNomads&quot;) +
   labs(x = NULL, y = &quot;Mean text features per spoken line&quot;)
 
-ggsave(filename = &quot;docs/assets/airbender-3.pdf&quot;, plot = p3, width = 12, height = 8, device = cairo_pdf)
+ggsave(
+  filename = &quot;docs/assets/airbender-3.pdf&quot;,
+  plot = p3,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
 
 pdftools::pdf_convert(
   pdf = &quot;docs/assets/airbender-3.pdf&quot;, format = &quot;png&quot;,
-  dpi = 300, filenames = &quot;docs/assets/airbender-3.png&quot;
+  dpi = 300, filenames = &quot;docs/assets/airbender-3.png&quot;,
+  verbose = FALSE
 )</code></pre>
-<pre><code>Converting page 1 to docs/assets/airbender-3.png... done!</code></pre>
 <pre><code>[1] &quot;docs/assets/airbender-3.png&quot;</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-3.png&quot;, error = FALSE)</code></pre>
 <p><img src="assets/airbender-3.png" style="display: block; margin: auto;" /></p>
@@ -794,29 +910,135 @@ Down-sampling based on aang [trained]
 Text feature extraction for text [trained]
 Zero variance filter removed 15 items [trained]
 Centering and scaling for 12 items [trained]</code></pre>
-<pre class="r"><code>juice(avatar_prep)</code></pre>
-<pre><code># A tibble: 2,694 x 13
-   aang  textfeature_tex~ textfeature_tex~ textfeature_tex~
-   &lt;fct&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
- 1 Aang            -0.382           -0.375         -0.492  
- 2 Aang            -0.676           -0.724         -0.608  
- 3 Aang            -0.382           -0.375         -0.353  
- 4 Aang            -0.676           -0.724         -0.655  
- 5 Aang            -0.676           -0.724         -0.747  
- 6 Aang            -0.284           -0.259         -0.307  
- 7 Aang            -0.676           -0.724         -0.678  
- 8 Aang             0.108            0.206          0.0879 
- 9 Aang            -0.872           -0.957         -0.910  
-10 Aang            -0.186           -0.143         -0.00491
-# ... with 2,684 more rows, and 9 more variables:
-#   textfeature_text_n_uq_charS &lt;dbl&gt;,
-#   textfeature_text_n_commas &lt;dbl&gt;,
-#   textfeature_text_n_periods &lt;dbl&gt;,
-#   textfeature_text_n_exclaims &lt;dbl&gt;,
-#   textfeature_text_n_extraspaces &lt;dbl&gt;,
-#   textfeature_text_n_caps &lt;dbl&gt;, textfeature_text_n_lowers &lt;dbl&gt;,
-#   textfeature_text_n_nonasciis &lt;dbl&gt;,
-#   textfeature_text_n_puncts &lt;dbl&gt;</code></pre>
+<pre class="r"><code>juice(avatar_prep) %&gt;%
+  head() %&gt;%
+  knitr::kable()</code></pre>
+<table style="width:100%;">
+<colgroup>
+<col width="1%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="7%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">aang</th>
+<th align="right">textfeature_text_n_words</th>
+<th align="right">textfeature_text_n_uq_words</th>
+<th align="right">textfeature_text_n_charS</th>
+<th align="right">textfeature_text_n_uq_charS</th>
+<th align="right">textfeature_text_n_commas</th>
+<th align="right">textfeature_text_n_periods</th>
+<th align="right">textfeature_text_n_exclaims</th>
+<th align="right">textfeature_text_n_extraspaces</th>
+<th align="right">textfeature_text_n_caps</th>
+<th align="right">textfeature_text_n_lowers</th>
+<th align="right">textfeature_text_n_nonasciis</th>
+<th align="right">textfeature_text_n_puncts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Aang</td>
+<td align="right">-0.3817686</td>
+<td align="right">-0.3753638</td>
+<td align="right">-0.4921796</td>
+<td align="right">-0.3063799</td>
+<td align="right">-0.6802032</td>
+<td align="right">1.2098716</td>
+<td align="right">-0.5599673</td>
+<td align="right">-0.3872991</td>
+<td align="right">-0.7402030</td>
+<td align="right">-0.4875655</td>
+<td align="right">-0.0926952</td>
+<td align="right">-0.9723525</td>
+</tr>
+<tr class="even">
+<td align="left">Aang</td>
+<td align="right">-0.6757893</td>
+<td align="right">-0.7243446</td>
+<td align="right">-0.6081963</td>
+<td align="right">-1.1773480</td>
+<td align="right">-0.6802032</td>
+<td align="right">1.8949062</td>
+<td align="right">-0.5599673</td>
+<td align="right">-0.3872991</td>
+<td align="right">-0.7402030</td>
+<td align="right">-0.6392546</td>
+<td align="right">-0.0926952</td>
+<td align="right">-0.9723525</td>
+</tr>
+<tr class="odd">
+<td align="left">Aang</td>
+<td align="right">-0.3817686</td>
+<td align="right">-0.3753638</td>
+<td align="right">-0.3529595</td>
+<td align="right">-0.1612185</td>
+<td align="right">-0.6802032</td>
+<td align="right">-0.8452319</td>
+<td align="right">-0.5599673</td>
+<td align="right">-0.3872991</td>
+<td align="right">-0.7402030</td>
+<td align="right">-0.2853133</td>
+<td align="right">-0.0926952</td>
+<td align="right">-0.0930247</td>
+</tr>
+<tr class="even">
+<td align="left">Aang</td>
+<td align="right">-0.6757893</td>
+<td align="right">-0.7243446</td>
+<td align="right">-0.6546029</td>
+<td align="right">-0.7418639</td>
+<td align="right">-0.6802032</td>
+<td align="right">-0.8452319</td>
+<td align="right">-0.5599673</td>
+<td align="right">-0.3872991</td>
+<td align="right">-0.7402030</td>
+<td align="right">-0.6392546</td>
+<td align="right">-0.0926952</td>
+<td align="right">0.7863032</td>
+</tr>
+<tr class="odd">
+<td align="left">Aang</td>
+<td align="right">-0.6757893</td>
+<td align="right">-0.7243446</td>
+<td align="right">-0.7474163</td>
+<td align="right">-1.0321866</td>
+<td align="right">-0.6802032</td>
+<td align="right">1.8949062</td>
+<td align="right">-0.5599673</td>
+<td align="right">-0.3872991</td>
+<td align="right">-0.7402030</td>
+<td align="right">-0.8162253</td>
+<td align="right">-0.0926952</td>
+<td align="right">-0.0930247</td>
+</tr>
+<tr class="even">
+<td align="left">Aang</td>
+<td align="right">-0.2837616</td>
+<td align="right">-0.2590368</td>
+<td align="right">-0.3065528</td>
+<td align="right">0.4194268</td>
+<td align="right">0.4398869</td>
+<td align="right">-0.1601974</td>
+<td align="right">0.7438805</td>
+<td align="right">1.2480988</td>
+<td align="right">0.2203495</td>
+<td align="right">-0.3611579</td>
+<td align="right">-0.0926952</td>
+<td align="right">-0.0930247</td>
+</tr>
+</tbody>
+</table>
 <p>Let’s walk through the steps in this recipe.</p>
 <ul>
 <li>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what data we are using.</li>
@@ -892,39 +1114,155 @@ svm_rs &lt;- avatar_wf %&gt;%
 <div id="evaluate-model" class="section level2">
 <h2>Evaluate model</h2>
 <p>It’s time to see how we did.</p>
-<pre class="r"><code>collect_metrics(rf_rs)</code></pre>
-<pre><code># A tibble: 4 x 5
-  .metric  .estimator  mean     n std_err
-  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-1 accuracy binary     0.530    10 0.00429
-2 roc_auc  binary     0.548    10 0.00512
-3 sens     binary     0.543    10 0.0116 
-4 spec     binary     0.527    10 0.00467</code></pre>
-<pre class="r"><code>conf_mat_resampled(rf_rs)</code></pre>
-<pre><code># A tibble: 4 x 3
-  Prediction Truth  Freq
-  &lt;fct&gt;      &lt;fct&gt; &lt;dbl&gt;
-1 Aang       Aang   73.2
-2 Aang       Other 291. 
-3 Other      Aang   61.5
-4 Other      Other 324  </code></pre>
+<pre class="r"><code>collect_metrics(rf_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.5300217</td>
+<td align="right">10</td>
+<td align="right">0.0042852</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.5480318</td>
+<td align="right">10</td>
+<td align="right">0.0051188</td>
+</tr>
+<tr class="odd">
+<td align="left">sens</td>
+<td align="left">binary</td>
+<td align="right">0.5434163</td>
+<td align="right">10</td>
+<td align="right">0.0115501</td>
+</tr>
+<tr class="even">
+<td align="left">spec</td>
+<td align="left">binary</td>
+<td align="right">0.5270854</td>
+<td align="right">10</td>
+<td align="right">0.0046716</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>conf_mat_resampled(rf_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Prediction</th>
+<th align="left">Truth</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Aang</td>
+<td align="left">Aang</td>
+<td align="right">73.2</td>
+</tr>
+<tr class="even">
+<td align="left">Aang</td>
+<td align="left">Other</td>
+<td align="right">290.7</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="left">Aang</td>
+<td align="right">61.5</td>
+</tr>
+<tr class="even">
+<td align="left">Other</td>
+<td align="left">Other</td>
+<td align="right">324.0</td>
+</tr>
+</tbody>
+</table>
 <p>Well, that is underwhelming!</p>
-<pre class="r"><code>collect_metrics(svm_rs)</code></pre>
-<pre><code># A tibble: 4 x 5
-  .metric  .estimator  mean     n std_err
-  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-1 accuracy binary     0.493    10 0.00877
-2 roc_auc  binary     0.567    10 0.0101 
-3 sens     binary     0.615    10 0.0128 
-4 spec     binary     0.467    10 0.0110 </code></pre>
-<pre class="r"><code>conf_mat_resampled(svm_rs)</code></pre>
-<pre><code># A tibble: 4 x 3
-  Prediction Truth  Freq
-  &lt;fct&gt;      &lt;fct&gt; &lt;dbl&gt;
-1 Aang       Aang   82.8
-2 Aang       Other 328. 
-3 Other      Aang   51.9
-4 Other      Other 287. </code></pre>
+<pre class="r"><code>collect_metrics(svm_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.4931911</td>
+<td align="right">10</td>
+<td align="right">0.0087726</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.5674829</td>
+<td align="right">10</td>
+<td align="right">0.0100962</td>
+</tr>
+<tr class="odd">
+<td align="left">sens</td>
+<td align="left">binary</td>
+<td align="right">0.6146490</td>
+<td align="right">10</td>
+<td align="right">0.0127889</td>
+</tr>
+<tr class="even">
+<td align="left">spec</td>
+<td align="left">binary</td>
+<td align="right">0.4665689</td>
+<td align="right">10</td>
+<td align="right">0.0109952</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>conf_mat_resampled(svm_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Prediction</th>
+<th align="left">Truth</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Aang</td>
+<td align="left">Aang</td>
+<td align="right">82.8</td>
+</tr>
+<tr class="even">
+<td align="left">Aang</td>
+<td align="left">Other</td>
+<td align="right">327.9</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="left">Aang</td>
+<td align="right">51.9</td>
+</tr>
+<tr class="even">
+<td align="left">Other</td>
+<td align="left">Other</td>
+<td align="right">286.8</td>
+</tr>
+</tbody>
+</table>
 <p>Different, but not really better! The SVM model is better able to identify the positive cases but at the expense of the negative cases. Overall, we definitely see that this is a hard problem that we barely are able to have any predictive ability for.</p>
 <p>Let’s say we are more interested in detecting Aang’s lines, even at the expense of the false positives.</p>
 <pre class="r"><code>p4 &lt;- svm_rs %&gt;%
@@ -938,13 +1276,18 @@ svm_rs &lt;- avatar_wf %&gt;%
   coord_equal() +
   labs(title = &quot;ROC curve of Support Vector Machine Models \nby cross validation fold&quot;)
 
-ggsave(filename = &quot;docs/assets/airbender-4.pdf&quot;, plot = p4, width = 12, height = 8, device = cairo_pdf)
+ggsave(
+  filename = &quot;docs/assets/airbender-4.pdf&quot;,
+  plot = p4,
+  width = 12,
+  height = 7.402, device = cairo_pdf
+)
 
 pdftools::pdf_convert(
   pdf = &quot;docs/assets/airbender-4.pdf&quot;, format = &quot;png&quot;,
-  dpi = 300, filenames = &quot;docs/assets/airbender-4.png&quot;
+  dpi = 300, filenames = &quot;docs/assets/airbender-4.png&quot;,
+  verbose = FALSE
 )</code></pre>
-<pre><code>Converting page 1 to docs/assets/airbender-4.png... done!</code></pre>
 <pre><code>[1] &quot;docs/assets/airbender-4.png&quot;</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-4.png&quot;, error = FALSE)</code></pre>
 <p><img src="assets/airbender-4.png" style="display: block; margin: auto;" /></p>
@@ -978,13 +1321,17 @@ p5 &lt;- avatar_imp %&gt;%
   scale_color_avatar(palette = &quot;FireNation&quot;) +
   labs(y = NULL)
 
-ggsave(filename = &quot;docs/assets/airbender-5.pdf&quot;, plot = p5, width = 12, height = 8, device = cairo_pdf)
+ggsave(
+  filename = &quot;docs/assets/airbender-5.pdf&quot;, plot = p5,
+  width = 12,
+  height = 7.402, device = cairo_pdf
+)
 
 pdftools::pdf_convert(
   pdf = &quot;docs/assets/airbender-5.pdf&quot;, format = &quot;png&quot;,
-  dpi = 300, filenames = &quot;docs/assets/airbender-5.png&quot;
+  dpi = 300, filenames = &quot;docs/assets/airbender-5.png&quot;,
+  verbose = FALSE
 )</code></pre>
-<pre><code>Converting page 1 to docs/assets/airbender-5.png... done!</code></pre>
 <pre><code>[1] &quot;docs/assets/airbender-5.png&quot;</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/airbender-5.png&quot;, error = FALSE)</code></pre>
 <p><img src="assets/airbender-5.png" style="display: block; margin: auto;" /></p>
@@ -995,12 +1342,29 @@ pdftools::pdf_convert(
   last_fit(avatar_split)
 
 avatar_final %&gt;%
-  collect_metrics()</code></pre>
-<pre><code># A tibble: 2 x 3
-  .metric  .estimator .estimate
-  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
-1 accuracy binary         0.526
-2 roc_auc  binary         0.565</code></pre>
+  collect_metrics() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.5264211</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.5647690</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>avatar_final %&gt;%
   collect_predictions() %&gt;%
   conf_mat(aang, .pred_class)</code></pre>
@@ -1016,7 +1380,7 @@ Prediction Aang Other
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19041)
 
@@ -1036,7 +1400,7 @@ attached base packages:
 other attached packages:
  [1] vip_0.2.2              themis_0.1.2          
  [3] textrecipes_0.3.0.9000 yardstick_0.0.7       
- [5] workflows_0.2.0        tune_0.1.1            
+ [5] workflows_0.2.1        tune_0.1.1            
  [7] rsample_0.0.8          recipes_0.1.13        
  [9] parsnip_0.1.3          modeldata_0.0.2       
 [11] infer_0.5.3            dials_0.0.9           
@@ -1050,13 +1414,12 @@ other attached packages:
 [27] purrr_0.3.4            readr_1.4.0           
 [29] tidyr_1.1.2            tibble_3.0.3          
 [31] ggplot2_3.3.2          tidyverse_1.3.0       
-[33] scales_1.1.1           knitr_1.30            
-[35] workflowr_1.6.2       
+[33] scales_1.1.1           workflowr_1.6.2       
 
 loaded via a namespace (and not attached):
   [1] mlr_2.18.0         readxl_1.3.1       backports_1.1.10  
   [4] fastmatch_1.1-0    plyr_1.8.6         selectr_0.4-2     
-  [7] tidytuesdayR_1.0.1 splines_4.0.0      listenv_0.8.0     
+  [7] tidytuesdayR_1.0.1 splines_4.0.3      listenv_0.8.0     
  [10] tfse_0.5.0         SnowballC_0.7.0    usethis_1.6.3     
  [13] digest_0.6.25      foreach_1.5.0      htmltools_0.5.0   
  [16] magick_2.4.0       fansi_0.4.1        checkmate_2.0.0   
@@ -1075,25 +1438,26 @@ loaded via a namespace (and not attached):
  [55] ellipsis_0.3.1     ParamHelpers_1.14  pkgconfig_2.0.3   
  [58] R.methodsS3_1.8.1  farver_2.0.3       nnet_7.3-14       
  [61] dbplyr_1.4.4       utf8_1.1.4         tidyselect_1.1.0  
- [64] labeling_0.3       rlang_0.4.7        DiceDesign_1.8-1  
+ [64] labeling_0.3       rlang_0.4.8        DiceDesign_1.8-1  
  [67] later_1.1.0.1      munsell_0.5.0      cellranger_1.1.0  
- [70] tools_4.0.0        cli_2.0.2          generics_0.0.2    
+ [70] tools_4.0.3        cli_2.0.2          generics_0.0.2    
  [73] ranger_0.12.1      evaluate_0.14      yaml_2.2.1        
- [76] rematch2_2.1.2     fs_1.5.0           RANN_2.6.1        
- [79] future_1.19.1      whisker_0.4        R.oo_1.24.0       
- [82] xml2_1.3.2         tokenizers_0.2.1   compiler_4.0.0    
- [85] rstudioapi_0.11    curl_4.3           reprex_0.3.0      
- [88] lhs_1.1.1          stringi_1.5.3      lattice_0.20-41   
- [91] Matrix_1.2-18      styler_1.3.2       vctrs_0.3.4       
- [94] pillar_1.4.6       lifecycle_0.2.0    furrr_0.1.0       
- [97] data.table_1.13.0  httpuv_1.5.4       R6_2.4.1          
-[100] promises_1.1.1     gridExtra_2.3      janeaustenr_0.1.5 
-[103] codetools_0.2-16   MASS_7.3-53        assertthat_0.2.1  
-[106] rprojroot_1.3-2    ROSE_0.0-3         withr_2.3.0       
-[109] parallel_4.0.0     hms_0.5.3          grid_4.0.0        
-[112] rpart_4.1-15       timeDate_3043.102  class_7.3-17      
-[115] rmarkdown_2.4      parallelMap_1.5.0  git2r_0.27.1      
-[118] pROC_1.16.2        lubridate_1.7.9   </code></pre>
+ [76] rematch2_2.1.2     knitr_1.30         fs_1.5.0          
+ [79] RANN_2.6.1         future_1.19.1      whisker_0.4       
+ [82] R.oo_1.24.0        xml2_1.3.2         tokenizers_0.2.1  
+ [85] compiler_4.0.3     rstudioapi_0.11    curl_4.3          
+ [88] reprex_0.3.0       lhs_1.1.1          stringi_1.5.3     
+ [91] highr_0.8          lattice_0.20-41    Matrix_1.2-18     
+ [94] styler_1.3.2       vctrs_0.3.4        pillar_1.4.6      
+ [97] lifecycle_0.2.0    furrr_0.1.0        data.table_1.13.0 
+[100] httpuv_1.5.4       R6_2.4.1           promises_1.1.1    
+[103] gridExtra_2.3      janeaustenr_0.1.5  codetools_0.2-16  
+[106] MASS_7.3-53        assertthat_0.2.1   rprojroot_1.3-2   
+[109] ROSE_0.0-3         withr_2.3.0        parallel_4.0.3    
+[112] hms_0.5.3          grid_4.0.3         rpart_4.1-15      
+[115] timeDate_3043.102  class_7.3-17       rmarkdown_2.4     
+[118] parallelMap_1.5.0  git2r_0.27.1       pROC_1.16.2       
+[121] lubridate_1.7.9   </code></pre>
 </div>
 </div>
 
@@ -1142,6 +1506,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

@@ -17,12 +17,13 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
 <link href="site_libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet" />
@@ -274,6 +275,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -325,6 +329,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">StudentDebt</h1>
@@ -354,7 +366,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-10
+<strong>Last updated:</strong> 2020-10-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -445,16 +457,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -504,6 +516,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9a61ca86f951fb5cd24379a3258da701356ee345/analysis/StudentDebt.Rmd" target="_blank">9a61ca8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/23f838130a3109ef6b43b04e4c5eaeef7b09147f/docs/StudentDebt.html" target="_blank">23f8381</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -595,40 +641,45 @@ library(ggiraph)</code></pre>
     Downloading file 1 of 1: `loans.csv`</code></pre>
 <pre class="r"><code>loans &lt;- tuesdata$loans
 
-loans&lt;- loans %&gt;%
-   mutate(report_dt = yq(paste0(&quot;20&quot;,year,&quot;-&quot;, quarter))) %&gt;%
-   select(-year, -quarter) %&gt;%
-   mutate(consolidation_pct = round(consolidation/total,2),
-         rehabilitation_pct = round(rehabilitation/total,2),
-         voluntary_pct = round(voluntary_payments/total,2),
-         garnishments_pct = round(wage_garnishments/total,2))
+loans &lt;- loans %&gt;%
+  mutate(report_dt = yq(paste0(&quot;20&quot;, year, &quot;-&quot;, quarter))) %&gt;%
+  select(-year, -quarter) %&gt;%
+  mutate(
+    consolidation_pct = round(consolidation / total, 2),
+    rehabilitation_pct = round(rehabilitation / total, 2),
+    voluntary_pct = round(voluntary_payments / total, 2),
+    garnishments_pct = round(wage_garnishments / total, 2)
+  )
 
-#impute the loan collections agency names
-loans&lt;-loans %&gt;%
-  mutate(agency_name = as_factor( case_when(
-         agency_name == &quot;Account Control Technology, Inc.&quot; ~ &quot;ACT&quot;,
-         agency_name == &quot;Action Financial Services*&quot; ~ &quot;Action Financial Services&quot;,
-         agency_name == &quot;Central Research*&quot; ~ &quot;Central Research&quot;,
-         agency_name == &quot;Coast Professional, Inc.&quot; ~ &quot;Coast Professional&quot;,
-         agency_name == &quot;Credit Adjustments, Inc.&quot; ~ &quot;Credit Adjustments&quot;,
-         agency_name == &quot;FMS Investment Corp&quot; ~ &quot;FMS&quot;,
-         agency_name == &quot;GC Services LP&quot; ~ &quot;GC Services&quot;,
-         agency_name == &quot;National Recoveries, Inc.&quot; ~ &quot;National Recoveries, Inc&quot;,
-         agency_name == &quot;Pioneer Credit Recovery, Inc&quot; ~ &quot;Pioneer&quot;,
-         agency_name == &quot;Windham Professionals, Inc.&quot; ~ &quot;Windham&quot;,
-         TRUE ~ agency_name)))
+# impute the loan collections agency names
+loans &lt;- loans %&gt;%
+  mutate(agency_name = as_factor(case_when(
+    agency_name == &quot;Account Control Technology, Inc.&quot; ~ &quot;ACT&quot;,
+    agency_name == &quot;Action Financial Services*&quot; ~ &quot;Action Financial Services&quot;,
+    agency_name == &quot;Central Research*&quot; ~ &quot;Central Research&quot;,
+    agency_name == &quot;Coast Professional, Inc.&quot; ~ &quot;Coast Professional&quot;,
+    agency_name == &quot;Credit Adjustments, Inc.&quot; ~ &quot;Credit Adjustments&quot;,
+    agency_name == &quot;FMS Investment Corp&quot; ~ &quot;FMS&quot;,
+    agency_name == &quot;GC Services LP&quot; ~ &quot;GC Services&quot;,
+    agency_name == &quot;National Recoveries, Inc.&quot; ~ &quot;National Recoveries, Inc&quot;,
+    agency_name == &quot;Pioneer Credit Recovery, Inc&quot; ~ &quot;Pioneer&quot;,
+    agency_name == &quot;Windham Professionals, Inc.&quot; ~ &quot;Windham&quot;,
+    TRUE ~ agency_name
+  )))
 
 loans %&gt;%
   group_by(report_dt) %&gt;%
-  summarize(Consolidation = sum(consolidation, na.rm = TRUE),
-            Rehabilitation = sum(rehabilitation, na.rm = TRUE),
-            Voluntary = sum(voluntary_payments, na.rm = TRUE),
-            Garnishments = sum(wage_garnishments, na.rm = TRUE)) %&gt;%
+  summarize(
+    Consolidation = sum(consolidation, na.rm = TRUE),
+    Rehabilitation = sum(rehabilitation, na.rm = TRUE),
+    Voluntary = sum(voluntary_payments, na.rm = TRUE),
+    Garnishments = sum(wage_garnishments, na.rm = TRUE)
+  ) %&gt;%
   pivot_longer(cols = Consolidation:Garnishments, names_to = &quot;Type&quot;, values_to = &quot;Totals&quot;) %&gt;%
-  ggplot()+
-  geom_area(aes(x=report_dt, y=Totals/1000000000, fill= Type)) +
-  scale_fill_viridis(discrete = T)+
-  cowplot::theme_minimal_hgrid(16)+
+  ggplot() +
+  geom_area(aes(x = report_dt, y = Totals / 1000000000, fill = Type)) +
+  scale_fill_viridis(discrete = T) +
+  cowplot::theme_minimal_hgrid(16) +
   scale_x_date() +
   labs(
     title = &quot;Student Loan Default Recoveries&quot;,
@@ -638,27 +689,33 @@ loans %&gt;%
     caption = &quot;Plot: @jim_gruman. Data: US Dept. of Education&quot;,
     fill = &quot;Recovery Method&quot;
   ) +
-  scale_y_continuous(breaks = seq(0,3,0.5))+
-  theme(legend.position = &quot;top&quot;,
-        plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/StudentDebt.Rmd/loadData-1.png" width="864" style="display: block; margin: auto;" /></p>
+  scale_y_continuous(breaks = seq(0, 3, 0.5)) +
+  theme(
+    legend.position = &quot;top&quot;,
+    plot.title.position = &quot;plot&quot;
+  )</code></pre>
+<p><img src="figure/StudentDebt.Rmd/loadData-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>loans %&gt;%
   group_by(report_dt, agency_name) %&gt;%
-  summarize(Recoveries = sum(total, na.rm = TRUE),
-            Consolidation = 100*round(sum(consolidation, na.rm = TRUE)/Recoveries,2),
-            Rehabilitation = 100*round(sum(rehabilitation, na.rm = TRUE)/Recoveries,2),
-            Voluntary = 100*round(sum(voluntary_payments, na.rm = TRUE)/Recoveries,2),
-            Garnishments = 100*round(sum(wage_garnishments, na.rm = TRUE)/Recoveries,2)) %&gt;%
+  summarize(
+    Recoveries = sum(total, na.rm = TRUE),
+    Consolidation = 100 * round(sum(consolidation, na.rm = TRUE) / Recoveries, 2),
+    Rehabilitation = 100 * round(sum(rehabilitation, na.rm = TRUE) / Recoveries, 2),
+    Voluntary = 100 * round(sum(voluntary_payments, na.rm = TRUE) / Recoveries, 2),
+    Garnishments = 100 * round(sum(wage_garnishments, na.rm = TRUE) / Recoveries, 2)
+  ) %&gt;%
   pivot_longer(cols = Consolidation:Garnishments, names_to = &quot;Type&quot;, values_to = &quot;Percentage&quot;) %&gt;%
-  ggplot()+
-  geom_area(aes(x=report_dt, y = Percentage, fill = Type)) +
+  ggplot() +
+  geom_area(aes(x = report_dt, y = Percentage, fill = Type)) +
   scale_fill_viridis(discrete = T) +
   cowplot::theme_minimal_hgrid(16) +
-  scale_x_date()+
-  scale_y_continuous()+
-  facet_wrap(~ agency_name, ncol = 4)+
-  theme(legend.position = &quot;top&quot;, 
-        plot.title.position = &quot;plot&quot;)+
+  scale_x_date() +
+  scale_y_continuous() +
+  facet_wrap(~agency_name, ncol = 4) +
+  theme(
+    legend.position = &quot;top&quot;,
+    plot.title.position = &quot;plot&quot;
+  ) +
   labs(
     title = &quot;Student Loan Default Recovery Type&quot;,
     subtitle = &quot;By Quarter : 2015-2018&quot;,
@@ -666,14 +723,16 @@ loans %&gt;%
     y = &quot;% Recovered&quot;,
     caption = &quot;Plot: @jim_gruman. Data: US Dept. of Education&quot;,
     fill = &quot;Recovery Method&quot;
-  ) </code></pre>
-<p><img src="figure/StudentDebt.Rmd/faceted_recovery_org-1.png" width="1152" style="display: block; margin: auto;" /></p>
+  )</code></pre>
+<p><img src="figure/StudentDebt.Rmd/faceted_recovery_org-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>loans %&gt;%
   group_by(report_dt) %&gt;%
-  summarize(Consolidation = sum(consolidation, na.rm = TRUE),
-            Rehabilitation = sum(rehabilitation, na.rm = TRUE),
-            Voluntary = sum(voluntary_payments, na.rm = TRUE),
-            Garnishments = sum(wage_garnishments, na.rm = TRUE))%&gt;%
+  summarize(
+    Consolidation = sum(consolidation, na.rm = TRUE),
+    Rehabilitation = sum(rehabilitation, na.rm = TRUE),
+    Voluntary = sum(voluntary_payments, na.rm = TRUE),
+    Garnishments = sum(wage_garnishments, na.rm = TRUE)
+  ) %&gt;%
   as.ts() %&gt;%
   dygraph(main = &quot;Student Loan Repayments&quot;) %&gt;%
   dySeries(&quot;Consolidation&quot;, drawPoints = TRUE, pointSize = 5, color = &quot;red&quot;) %&gt;%
@@ -681,7 +740,7 @@ loans %&gt;%
   dySeries(&quot;Voluntary&quot;, drawPoints = TRUE, pointSize = 5, color = &quot;orange&quot;) %&gt;%
   dySeries(&quot;Garnishments&quot;, drawPoints = TRUE, pointSize = 5, color = &quot;black&quot;) %&gt;%
   dyLegend(width = 800)</code></pre>
-<div id="htmlwidget-d7473d51fc4a2e78385c" style="width:864px;height:576px;" class="dygraphs html-widget"></div>
+<div id="htmlwidget-d7473d51fc4a2e78385c" style="width:3600px;height:2220.6px;" class="dygraphs html-widget"></div>
 <script type="application/json" data-for="htmlwidget-d7473d51fc4a2e78385c">{"x":{"attrs":{"title":"Student Loan Repayments","labels":["year","report_dt","Consolidation","Rehabilitation","Voluntary","Garnishments"],"retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}},"colors":["#808000","red","green","orange","black"],"series":{"Consolidation":{"axis":"y","drawPoints":true,"pointSize":5},"Rehabilitation":{"axis":"y","drawPoints":true,"pointSize":5},"Voluntary":{"axis":"y","drawPoints":true,"pointSize":5},"Garnishments":{"axis":"y","drawPoints":true,"pointSize":5}},"legend":"auto","labelsDivWidth":800,"labelsShowZeroValues":true,"labelsSeparateLines":false,"hideOverlayOnMouseOut":true},"scale":"yearly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["0001-01-01T00:00:00.000Z","0002-01-01T00:00:00.000Z","0003-01-01T00:00:00.000Z","0004-01-01T00:00:00.000Z","0005-01-01T00:00:00.000Z","0006-01-01T00:00:00.000Z","0007-01-01T00:00:00.000Z","0008-01-01T00:00:00.000Z","0009-01-01T00:00:00.000Z","0010-01-01T00:00:00.000Z","0011-01-01T00:00:00.000Z","0012-01-01T00:00:00.000Z","0013-01-01T00:00:00.000Z"],[16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805],[209930907.1,214614999.52,287996045.89,359519194.92,317899447.87,317975605.13,450281514.77,420092507.71,310380551.98,244209548.01,419198975.05,429254029.72,369170819.97],[1390645645.15,1756425113.12,1589058548.67,1730126406.17,1498709276.97,2030603051.03,1543881356.65,1767508325.62,1901452649.21,2197748561.5,1991748611.93,1561474786.35,1886592381.8],[93161839.14,82916229.38,91294867.12,90817058.07,88965826.25,87809644.72,102030437.52,105518248.9,100710023.3,90066743.88,118461450.85,141847370.4,142177131.39],[170267634.38,176656336.12,168407593.66,159147799.79,160487400.83,163994466.68,182381643.12,134522276.57,157860033.02,179659316.03,207749722.87,224432540.28,229820860.55]]},"evals":[],"jsHooks":[]}</script>
 <br>
 <p>
@@ -691,7 +750,7 @@ loans %&gt;%
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19041)
 
@@ -715,24 +774,25 @@ other attached packages:
 [17] tidyverse_1.3.0   workflowr_1.6.2  
 
 loaded via a namespace (and not attached):
- [1] tidytuesdayR_1.0.1 httr_1.4.2         jsonlite_1.7.1     modelr_0.1.8      
- [5] assertthat_0.2.1   selectr_0.4-2      blob_1.2.1         cellranger_1.1.0  
- [9] yaml_2.2.1         gdtools_0.2.2      pillar_1.4.6       backports_1.1.10  
-[13] lattice_0.20-41    glue_1.4.2         uuid_0.1-4         digest_0.6.25     
-[17] promises_1.1.1     rvest_0.3.6        colorspace_1.4-1   htmltools_0.5.0   
-[21] httpuv_1.5.4       pkgconfig_2.0.3    broom_0.7.1        haven_2.3.1       
-[25] scales_1.1.1       whisker_0.4        later_1.1.0.1      git2r_0.27.1      
-[29] farver_2.0.3       generics_0.0.2     usethis_1.6.3      ellipsis_0.3.1    
-[33] withr_2.3.0        cli_2.0.2          magrittr_1.5       crayon_1.3.4      
-[37] readxl_1.3.1       evaluate_0.14      fs_1.5.0           fansi_0.4.1       
-[41] xts_0.12.1         xml2_1.3.2         tools_4.0.0        hms_0.5.3         
-[45] lifecycle_0.2.0    munsell_0.5.0      reprex_0.3.0       compiler_4.0.0    
-[49] systemfonts_0.3.2  rlang_0.4.7        grid_4.0.0         rstudioapi_0.11   
-[53] htmlwidgets_1.5.2  labeling_0.3       rmarkdown_2.4      gtable_0.3.0      
-[57] curl_4.3           DBI_1.1.0          R6_2.4.1           gridExtra_2.3     
-[61] zoo_1.8-8          knitr_1.30         rprojroot_1.3-2    stringi_1.5.3     
-[65] Rcpp_1.0.5         vctrs_0.3.4        dbplyr_1.4.4       tidyselect_1.1.0  
-[69] xfun_0.18         </code></pre>
+ [1] fs_1.5.0           xts_0.12.1         usethis_1.6.3      httr_1.4.2        
+ [5] rprojroot_1.3-2    R.cache_0.14.0     tools_4.0.3        backports_1.1.10  
+ [9] R6_2.4.1           DBI_1.1.0          colorspace_1.4-1   withr_2.3.0       
+[13] tidyselect_1.1.0   gridExtra_2.3      curl_4.3           compiler_4.0.3    
+[17] git2r_0.27.1       cli_2.0.2          rvest_0.3.6        xml2_1.3.2        
+[21] labeling_0.3       scales_1.1.1       systemfonts_0.3.2  digest_0.6.25     
+[25] rmarkdown_2.4      R.utils_2.10.1     tidytuesdayR_1.0.1 pkgconfig_2.0.3   
+[29] htmltools_0.5.0    styler_1.3.2       dbplyr_1.4.4       htmlwidgets_1.5.2 
+[33] rlang_0.4.8        readxl_1.3.1       rstudioapi_0.11    generics_0.0.2    
+[37] farver_2.0.3       zoo_1.8-8          jsonlite_1.7.1     R.oo_1.24.0       
+[41] magrittr_1.5       Rcpp_1.0.5         munsell_0.5.0      fansi_0.4.1       
+[45] gdtools_0.2.2      lifecycle_0.2.0    R.methodsS3_1.8.1  stringi_1.5.3     
+[49] whisker_0.4        yaml_2.2.1         grid_4.0.3         blob_1.2.1        
+[53] promises_1.1.1     crayon_1.3.4       lattice_0.20-41    haven_2.3.1       
+[57] hms_0.5.3          knitr_1.30         pillar_1.4.6       uuid_0.1-4        
+[61] reprex_0.3.0       glue_1.4.2         evaluate_0.14      modelr_0.1.8      
+[65] vctrs_0.3.4        httpuv_1.5.4       selectr_0.4-2      cellranger_1.1.0  
+[69] gtable_0.3.0       rematch2_2.1.2     assertthat_0.2.1   xfun_0.18         
+[73] broom_0.7.1        later_1.1.0.1      ellipsis_0.3.1    </code></pre>
 </div>
 
 
@@ -780,6 +840,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

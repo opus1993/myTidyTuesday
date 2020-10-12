@@ -17,12 +17,13 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
@@ -266,6 +267,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -317,6 +321,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">TourDeFrance</h1>
@@ -346,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-10
+<strong>Last updated:</strong> 2020-10-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -437,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -496,6 +508,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9a61ca86f951fb5cd24379a3258da701356ee345/analysis/TourDeFrance.Rmd" target="_blank">9a61ca8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/23f838130a3109ef6b43b04e4c5eaeef7b09147f/docs/TourDeFrance.html" target="_blank">23f8381</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -594,19 +640,22 @@ wflow_publish(“analysis/TourDeFrance.Rmd”)
 library(paletteer)
 library(ggtext)
 library(rvest)
+
 theme_set(hrbrthemes::theme_ipsum())
 library(lubridate)
 
 library(patchwork)
 
-tuesdata &lt;- tidytuesdayR::tt_load(&#39;2020-04-07&#39;)</code></pre>
+tuesdata &lt;- tidytuesdayR::tt_load(&quot;2020-04-07&quot;)</code></pre>
 <pre><code>
     Downloading file 1 of 3: `stage_data.csv`
     Downloading file 2 of 3: `tdf_stages.csv`
     Downloading file 3 of 3: `tdf_winners.csv`</code></pre>
 <pre class="r"><code>tdf_winners &lt;- tuesdata$tdf_winners %&gt;%
-       mutate(year = ymd(year(start_date),truncated = 2L),
-              speed = distance / time_overall)
+  mutate(
+    year = ymd(year(start_date), truncated = 2L),
+    speed = distance / time_overall
+  )
 
 stage_data &lt;- tuesdata$stage_data
 tdf_stages &lt;- tuesdata$tdf_stages %&gt;%
@@ -618,204 +667,553 @@ showtext::showtext_auto()</code></pre>
 
 cf_io &lt;- read_html(&quot;https://www.countryflags.io/&quot;)
 
-country_ids &lt;- cf_io %&gt;% 
-  html_nodes(&quot;.item_country&quot;) %&gt;% 
-  lapply(function(el){
-    
-    key &lt;- el %&gt;% 
-      html_text %&gt;% 
-      str_split(&quot;\\n&quot;) %&gt;% 
-      `[[`(1) %&gt;% 
-      trimws() %&gt;% 
+country_ids &lt;- cf_io %&gt;%
+  html_nodes(&quot;.item_country&quot;) %&gt;%
+  lapply(function(el) {
+    key &lt;- el %&gt;%
+      html_text() %&gt;%
+      str_split(&quot;\\n&quot;) %&gt;%
+      `[[`(1) %&gt;%
+      trimws() %&gt;%
       {
-        .[nchar(.)&gt;0]
+        .[nchar(.) &gt; 0]
       }
-    
+
     data.frame(
       code = key[1],
       nationality = key[2]
     )
-  }) %&gt;% 
-  bind_rows
+  }) %&gt;%
+  bind_rows()
 
-get_country_flag &lt;- function(x){
-  
-  urls &lt;- sapply(x, function(x){
+get_country_flag &lt;- function(x) {
+  urls &lt;- sapply(x, function(x) {
     code &lt;- country_ids$code[which(country_ids$nationality == x)]
     file.path(&quot;https://www.countryflags.io&quot;, code, &quot;flat/64.png&quot;)
   })
-  
-  paste0(&quot;&lt;img src=&#39;&quot;,urls,&quot;&#39; width=&#39;30&#39; /&gt;&quot;)
-  
+
+  paste0(&quot;&lt;img src=&#39;&quot;, urls, &quot;&#39; width=&#39;30&#39; /&gt;&quot;)
 }</code></pre>
 </div>
 <div id="nationalities-of-the-winners" class="section level3">
 <h3>Nationalities of the Winners</h3>
-<pre class="r"><code>tdf_nations&lt;-tdf_winners %&gt;%
-  mutate(nationality = stringr::str_squish(nationality),
-         nationality = case_when(
-    nationality == &quot;Great Britain&quot; ~ &quot;United Kingdom&quot;,
-    TRUE ~ nationality
-  )) %&gt;%  
+<pre class="r"><code>tdf_nations &lt;- tdf_winners %&gt;%
+  mutate(
+    nationality = stringr::str_squish(nationality),
+    nationality = case_when(
+      nationality == &quot;Great Britain&quot; ~ &quot;United Kingdom&quot;,
+      TRUE ~ nationality
+    )
+  ) %&gt;%
   count(nationality, sort = TRUE) %&gt;%
-  mutate(nationality = fct_reorder(nationality,n)) %&gt;%
-  top_n(8, n) 
+  mutate(nationality = fct_reorder(nationality, n)) %&gt;%
+  top_n(8, n)
 
 flag_labels &lt;- get_country_flag(tdf_nations$nationality)
 
-pal &lt;- RColorBrewer::brewer.pal(&#39;Set1&#39;,n=8)
+pal &lt;- RColorBrewer::brewer.pal(&quot;Set1&quot;, n = 8)
 
-nations&lt;- tdf_nations %&gt;%
-  ggplot(aes(n, nationality))+
+nations &lt;- tdf_nations %&gt;%
+  ggplot(aes(n, nationality)) +
   geom_bar(fill = &quot;green&quot;, stat = &quot;identity&quot;) +
   scale_y_discrete(name = NULL, labels = flag_labels) +
-  scale_fill_discrete(guide=FALSE)+
-  theme(axis.text.y = ggtext::element_markdown(color = &quot;black&quot;, size = 11),
-        axis.title.y = element_blank(),
-        plot.title.position = &quot;plot&quot;) +
-  expand_limits(x = c(0,45)) +
-  labs( title = &quot;National Wins&quot;,
-        caption = paste0(&#39;@Jim_Gruman | #TidyTuesday | &#39;, Sys.Date())) 
+  scale_fill_discrete(guide = FALSE) +
+  theme(
+    axis.text.y = ggtext::element_markdown(color = &quot;black&quot;, size = 11),
+    axis.title.y = element_blank(),
+    plot.title.position = &quot;plot&quot;,
+    panel.grid.major.y = element_blank()
+  ) +
+  expand_limits(x = c(0, 45)) +
+  labs(
+    title = &quot;National Wins&quot;,
+    caption = paste0(&quot;@Jim_Gruman | #TidyTuesday | &quot;, Sys.Date())
+  )
 
-nations</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/nations-1.png" width="864" style="display: block; margin: auto;" /></p>
+ggsave(
+  filename = &quot;docs/assets/TDF-nations.pdf&quot;,
+  plot = nations,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/TDF-nations.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300, filenames = &quot;docs/assets/TDF-nations.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/TDF-nations.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/TDF-nations.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/TDF-nations.png" style="display: block; margin: auto;" /></p>
 </div>
 <div id="physical-characteristics-and-race-characteristics-by-decade" class="section level3">
 <h3>Physical characteristics and race characteristics by decade</h3>
-<pre class="r"><code>by_decade &lt;-tdf_winners %&gt;%
-  group_by(decade = 10 * (year(year) %/% 10 )) %&gt;%
-  summarize(winner_age = mean(age, na.rm = TRUE),
-            winner_height = mean(height, na.rm = TRUE),
-            winner_weight = mean(weight, na.rm = TRUE),
-            winner_margin = mean(time_margin, na.rm = TRUE),
-            winner_time = mean(time_overall, na.rm = TRUE),
-            winner_speed = mean(speed, na.rm = TRUE))
-
-by_decade %&gt;%  
+<pre class="r"><code>by_decade &lt;- tdf_winners %&gt;%
+  group_by(decade = 10 * (year(year) %/% 10)) %&gt;%
+  summarize(
+    winner_age = mean(age, na.rm = TRUE),
+    winner_height = mean(height, na.rm = TRUE),
+    winner_weight = mean(weight, na.rm = TRUE),
+    winner_margin = mean(time_margin, na.rm = TRUE),
+    winner_time = mean(time_overall, na.rm = TRUE),
+    winner_speed = mean(speed, na.rm = TRUE)
+  )</code></pre>
+<pre class="r"><code>p1 &lt;- by_decade %&gt;%
   ggplot(aes(decade, winner_age)) +
   geom_line(color = &quot;#9EB0FFFF&quot;, size = 3) +
-  expand_limits(y = 0)+
-  labs( y = &quot;&quot;,
+  expand_limits(y = 0) +
+  labs(
+    y = &quot;&quot;,
     title = &quot;Average Age of Tour de France Winners By Decade&quot;,
-    subtitle = &#39;source: Alastair Rushworths R Data Package tdf and Kaggle&#39;,
-    caption = paste0(&#39;@Jim_Gruman | #TidyTuesday | &#39;, Sys.Date())
-  )+
-  theme(legend.position = &quot;&quot;,
-        plot.title.position = &quot;plot&quot;)+
-  scale_color_paletteer_d(&quot;nord::aurora&quot;)</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/averages-1.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>by_decade %&gt;%  
-  ggplot(aes(decade, winner_margin))+
+    subtitle = &quot;source: Alastair Rushworths R Data Package tdf and Kaggle&quot;,
+    caption = paste0(&quot;@Jim_Gruman | #TidyTuesday | &quot;, Sys.Date())
+  ) +
+  theme(
+    legend.position = &quot;&quot;,
+    plot.title.position = &quot;plot&quot;
+  ) +
+  scale_color_paletteer_d(&quot;nord::aurora&quot;)
+
+ggsave(
+  filename = &quot;docs/assets/TDF-p1.pdf&quot;,
+  plot = p1,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/TDF-p1.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/TDF-p1.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/TDF-p1.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/TDF-p1.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/TDF-p1.png" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p2 &lt;- by_decade %&gt;%
+  ggplot(aes(decade, winner_margin)) +
   geom_line(color = &quot;#5AA3DAFF&quot;, size = 3) +
-  expand_limits(y = 0)+
-  labs( y = &quot;Hours&quot;,
+  expand_limits(y = 0) +
+  labs(
+    y = &quot;Hours&quot;,
     title = &quot;Margin of Victory of Tour de France Winners By Decade&quot;,
-    subtitle = &#39;source: Alastair Rushworths R Data Package tdf and Kaggle&#39;,
-    caption = paste0(&#39;@Jim_Gruman | #TidyTuesday | &#39;, Sys.Date())
-  )+
-  theme(legend.position = &quot;&quot;,
-        plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/averages-2.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>by_decade %&gt;%  
-  ggplot(aes(decade, winner_speed))+
+    subtitle = &quot;source: Alastair Rushworths R Data Package tdf and Kaggle&quot;,
+    caption = paste0(&quot;@Jim_Gruman | #TidyTuesday | &quot;, Sys.Date())
+  ) +
+  theme(
+    legend.position = &quot;&quot;,
+    plot.title.position = &quot;plot&quot;
+  )
+
+ggsave(
+  filename = &quot;docs/assets/TDF-p2.pdf&quot;,
+  plot = p2,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/TDF-p2.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/TDF-p2.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/TDF-p2.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/TDF-p2.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/TDF-p2.png" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p3 &lt;- by_decade %&gt;%
+  ggplot(aes(decade, winner_speed)) +
   geom_line(color = &quot;#2D7597FF&quot;, size = 3) +
-  expand_limits(y = 0)+
-  labs( y = &quot;Hours&quot;,
+  expand_limits(y = 0) +
+  labs(
+    y = &quot;Hours&quot;,
     title = &quot;Average Speed of Tour de France Winners By Decade&quot;,
-    subtitle = &#39;source: Alastair Rushworths R Data Package tdf and Kaggle&#39;,
-    caption = paste0(&#39;@Jim_Gruman | #TidyTuesday | &#39;, Sys.Date())
-  )+
-  theme(legend.position = &quot;&quot;,
-        plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/averages-3.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># average margin has been shrinking</code></pre>
+    subtitle = &quot;source: Alastair Rushworths R Data Package tdf and Kaggle&quot;,
+    caption = paste0(&quot;@Jim_Gruman | #TidyTuesday | &quot;, Sys.Date())
+  ) +
+  theme(
+    legend.position = &quot;&quot;,
+    plot.title.position = &quot;plot&quot;
+  )
+
+ggsave(
+  filename = &quot;docs/assets/TDF-p3.pdf&quot;,
+  plot = p3,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/TDF-p3.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/TDF-p3.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/TDF-p3.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/TDF-p3.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/TDF-p3.png" style="display: block; margin: auto;" /></p>
 </div>
 <div id="life-expectancy-of-tdf-winners-with-survival-analysis" class="section level3">
 <h3>Life Expectancy of TDF winners with survival analysis</h3>
 <p>extrapolated for the riders 38 still alive (not yet dead)</p>
 <pre class="r"><code>library(survival)
 surv_model &lt;- tdf_winners %&gt;%
-  distinct(winner_name, .keep_all = TRUE)  %&gt;%
-  transmute(birth_year = year(born),
-            death_year = year(died),
-            dead =  as.integer(!is.na(death_year))) %&gt;%
-  mutate(age_at_death = coalesce(death_year, 2020)- birth_year) %&gt;%
-  survfit(Surv(age_at_death, dead) ~ 1, data = .) 
+  distinct(winner_name, .keep_all = TRUE) %&gt;%
+  transmute(
+    birth_year = year(born),
+    death_year = year(died),
+    dead = as.integer(!is.na(death_year))
+  ) %&gt;%
+  mutate(age_at_death = coalesce(death_year, 2020) - birth_year) %&gt;%
+  survfit(Surv(age_at_death, dead) ~ 1, data = .)
 
 surv_model %&gt;%
   plot()</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/survival-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TourDeFrance.Rmd/survival-1.png" width="1800" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>library(broom)
 
-glance(surv_model)</code></pre>
-<pre><code># A tibble: 1 x 10
-  records n.max n.start events rmean rmean.std.error median conf.low conf.high
-    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-1      63    63      63     38  69.6            2.69     77       71        82
-# ... with 1 more variable: nobs &lt;int&gt;</code></pre>
+glance(surv_model) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">records</th>
+<th align="right">n.max</th>
+<th align="right">n.start</th>
+<th align="right">events</th>
+<th align="right">rmean</th>
+<th align="right">rmean.std.error</th>
+<th align="right">median</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+<th align="right">nobs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">63</td>
+<td align="right">63</td>
+<td align="right">63</td>
+<td align="right">38</td>
+<td align="right">69.62491</td>
+<td align="right">2.685674</td>
+<td align="right">77</td>
+<td align="right">71</td>
+<td align="right">82</td>
+<td align="right">63</td>
+</tr>
+</tbody>
+</table>
 <p>Of the 63 Tour De France winners, 38 are still alive. After accounting for survival expectations for the living, the median life expectancy of a Tour de France winner is estimated as 77 years old.</p>
 </div>
 <div id="stage-data" class="section level3">
 <h3>Stage data</h3>
-<pre class="r"><code>p1&lt;-stage_data %&gt;%
-  group_by(decade = 10 * (year %/% 10 )) %&gt;%
+<pre class="r"><code>p &lt;- stage_data %&gt;%
+  group_by(decade = 10 * (year %/% 10)) %&gt;%
   distinct(rider, edition, age) %&gt;%
-    ggplot(aes(decade, age)) +
+  ggplot(aes(decade, age)) +
   geom_jitter(color = &quot;#9EB0FFFF&quot;, size = 0.5, alpha = 0.1)
 
-p1 + 
-  geom_line(data = by_decade, aes(decade, winner_age), 
-            color = &quot;#2D7597FF&quot;, size = 3) +
-  expand_limits(y = 0)+
-  labs( y = &quot;&quot;, x= &quot;&quot;,
+p4 &lt;- p +
+  geom_line(
+    data = by_decade, aes(decade, winner_age),
+    color = &quot;#2D7597FF&quot;, size = 3
+  ) +
+  expand_limits(y = 0) +
+  labs(
+    y = &quot;&quot;, x = &quot;&quot;,
     title = &quot;Average Age of Tour de France Winners By Decade&quot;,
-    subtitle = &#39;source: Alastair Rushworths R Data Package tdf and Kaggle&#39;,
-    caption = paste0(&#39;@Jim_Gruman | #TidyTuesday | &#39;, Sys.Date())
-  )+
-  theme(legend.position = &quot;&quot;,
-        plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/stages-1.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>stages_joined&lt;-stage_data  %&gt;%
+    subtitle = &quot;source: Alastair Rushworths R Data Package tdf and Kaggle&quot;,
+    caption = paste0(&quot;@Jim_Gruman | #TidyTuesday | &quot;, Sys.Date())
+  ) +
+  theme(
+    legend.position = &quot;&quot;,
+    plot.title.position = &quot;plot&quot;
+  )
+
+ggsave(
+  filename = &quot;docs/assets/TDF-p4.pdf&quot;,
+  plot = p4,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/TDF-p4.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/TDF-p4.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/TDF-p4.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/TDF-p4.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/TDF-p4.png" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>stages_joined &lt;- stage_data %&gt;%
   tidyr::extract(stage_results_id, &quot;stage&quot;, &quot;stage-(.*)&quot;) %&gt;%
-  mutate(stage = if_else(year %in% 1967:1968 &amp; stage == 0, &quot;1a&quot;, stage),
-         stage = if_else(year %in% 1967:1968 &amp; stage == 1,&quot;1b&quot;, stage),
-         stage = if_else(year %in% 1969:2012 &amp; stage == 0, &quot;P&quot;, stage)) %&gt;%
+  mutate(
+    stage = if_else(year %in% 1967:1968 &amp; stage == 0, &quot;1a&quot;, stage),
+    stage = if_else(year %in% 1967:1968 &amp; stage == 1, &quot;1b&quot;, stage),
+    stage = if_else(year %in% 1969:2012 &amp; stage == 0, &quot;P&quot;, stage)
+  ) %&gt;%
   filter(year &lt; 2018) %&gt;%
-  left_join(tdf_stages, by = c(&quot;year&quot;,&quot;stage&quot;)) %&gt;% 
+  left_join(tdf_stages, by = c(&quot;year&quot;, &quot;stage&quot;)) %&gt;%
   select(-winner, bib_number, winner_country) %&gt;%
   mutate(rank = as.integer(rank)) %&gt;%
   group_by(year, stage) %&gt;%
   mutate(finishers = sum(!is.na(rank))) %&gt;%
   ungroup() %&gt;%
-  mutate(percentile = 1- rank / finishers)
+  mutate(percentile = 1 - rank / finishers)
 
 
 stages_joined %&gt;%
   group_by(winner_country) %&gt;%
   summarize(stages = n(), median_percentile = median(percentile, na.rm = TRUE)) %&gt;%
-  arrange(desc(stages))</code></pre>
-<pre><code># A tibble: 41 x 3
-   winner_country stages median_percentile
-   &lt;chr&gt;           &lt;int&gt;             &lt;dbl&gt;
- 1 FRA             63231             0.495
- 2 BEL             45020             0.495
- 3 ITA             28970             0.496
- 4 NED             20185             0.496
- 5 ESP             17210             0.5  
- 6 GER             11659             0.497
- 7 GBR             10858             0.5  
- 8 SUI              6632             0.497
- 9 LUX              6100             0.5  
-10 USA              6063             0.497
-# ... with 31 more rows</code></pre>
-<pre class="r"><code>stages_joined %&gt;%
+  arrange(desc(stages)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">winner_country</th>
+<th align="right">stages</th>
+<th align="right">median_percentile</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FRA</td>
+<td align="right">63231</td>
+<td align="right">0.4948454</td>
+</tr>
+<tr class="even">
+<td align="left">BEL</td>
+<td align="right">45020</td>
+<td align="right">0.4952381</td>
+</tr>
+<tr class="odd">
+<td align="left">ITA</td>
+<td align="right">28970</td>
+<td align="right">0.4957265</td>
+</tr>
+<tr class="even">
+<td align="left">NED</td>
+<td align="right">20185</td>
+<td align="right">0.4960630</td>
+</tr>
+<tr class="odd">
+<td align="left">ESP</td>
+<td align="right">17210</td>
+<td align="right">0.5000000</td>
+</tr>
+<tr class="even">
+<td align="left">GER</td>
+<td align="right">11659</td>
+<td align="right">0.4973822</td>
+</tr>
+<tr class="odd">
+<td align="left">GBR</td>
+<td align="right">10858</td>
+<td align="right">0.5000000</td>
+</tr>
+<tr class="even">
+<td align="left">SUI</td>
+<td align="right">6632</td>
+<td align="right">0.4970075</td>
+</tr>
+<tr class="odd">
+<td align="left">LUX</td>
+<td align="right">6100</td>
+<td align="right">0.5000000</td>
+</tr>
+<tr class="even">
+<td align="left">USA</td>
+<td align="right">6063</td>
+<td align="right">0.4966437</td>
+</tr>
+<tr class="odd">
+<td align="left">AUS</td>
+<td align="right">5137</td>
+<td align="right">0.4974082</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="right">3572</td>
+<td align="right">0.4940893</td>
+</tr>
+<tr class="odd">
+<td align="left">NOR</td>
+<td align="right">2955</td>
+<td align="right">0.5029240</td>
+</tr>
+<tr class="even">
+<td align="left">DEN</td>
+<td align="right">2847</td>
+<td align="right">0.4968749</td>
+</tr>
+<tr class="odd">
+<td align="left">COL</td>
+<td align="right">2605</td>
+<td align="right">0.4968749</td>
+</tr>
+<tr class="even">
+<td align="left">POR</td>
+<td align="right">1905</td>
+<td align="right">0.5000000</td>
+</tr>
+<tr class="odd">
+<td align="left">SVK</td>
+<td align="right">1730</td>
+<td align="right">0.4972678</td>
+</tr>
+<tr class="even">
+<td align="left">FRG</td>
+<td align="right">1464</td>
+<td align="right">0.4953739</td>
+</tr>
+<tr class="odd">
+<td align="left">IRE</td>
+<td align="right">1232</td>
+<td align="right">0.4963675</td>
+</tr>
+<tr class="even">
+<td align="left">RUS</td>
+<td align="right">1172</td>
+<td align="right">0.5027933</td>
+</tr>
+<tr class="odd">
+<td align="left">URS</td>
+<td align="right">1032</td>
+<td align="right">0.4971386</td>
+</tr>
+<tr class="even">
+<td align="left">UZB</td>
+<td align="right">1013</td>
+<td align="right">0.4960384</td>
+</tr>
+<tr class="odd">
+<td align="left">POL</td>
+<td align="right">831</td>
+<td align="right">0.4970760</td>
+</tr>
+<tr class="even">
+<td align="left">EST</td>
+<td align="right">740</td>
+<td align="right">0.4945055</td>
+</tr>
+<tr class="odd">
+<td align="left">KAZ</td>
+<td align="right">682</td>
+<td align="right">0.5029590</td>
+</tr>
+<tr class="even">
+<td align="left">UKR</td>
+<td align="right">611</td>
+<td align="right">0.5058824</td>
+</tr>
+<tr class="odd">
+<td align="left">CZE</td>
+<td align="right">520</td>
+<td align="right">0.4965035</td>
+</tr>
+<tr class="even">
+<td align="left">MEX</td>
+<td align="right">387</td>
+<td align="right">0.4974359</td>
+</tr>
+<tr class="odd">
+<td align="left">AUT</td>
+<td align="right">349</td>
+<td align="right">0.4968750</td>
+</tr>
+<tr class="even">
+<td align="left">IRL</td>
+<td align="right">316</td>
+<td align="right">0.4958678</td>
+</tr>
+<tr class="odd">
+<td align="left">LAT</td>
+<td align="right">245</td>
+<td align="right">0.4957983</td>
+</tr>
+<tr class="even">
+<td align="left">CAN</td>
+<td align="right">198</td>
+<td align="right">0.4974747</td>
+</tr>
+<tr class="odd">
+<td align="left">BRA</td>
+<td align="right">194</td>
+<td align="right">0.4974227</td>
+</tr>
+<tr class="even">
+<td align="left">c(“FRA”, “FRA”)</td>
+<td align="right">194</td>
+<td align="right">0.4909091</td>
+</tr>
+<tr class="odd">
+<td align="left">GDR</td>
+<td align="right">190</td>
+<td align="right">0.4973118</td>
+</tr>
+<tr class="even">
+<td align="left">SLO</td>
+<td align="right">173</td>
+<td align="right">0.4970414</td>
+</tr>
+<tr class="odd">
+<td align="left">RSA</td>
+<td align="right">171</td>
+<td align="right">0.4970238</td>
+</tr>
+<tr class="even">
+<td align="left">LTU</td>
+<td align="right">164</td>
+<td align="right">0.4969512</td>
+</tr>
+<tr class="odd">
+<td align="left">c(“BEL”, “BEL”)</td>
+<td align="right">125</td>
+<td align="right">0.4955357</td>
+</tr>
+<tr class="even">
+<td align="left">SWE</td>
+<td align="right">101</td>
+<td align="right">0.4947917</td>
+</tr>
+<tr class="odd">
+<td align="left">c(“BEL”, “GER”)</td>
+<td align="right">55</td>
+<td align="right">0.4891304</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>p5 &lt;- stages_joined %&gt;%
   count(year, stage) %&gt;%
   ggplot(aes(n)) +
-  geom_histogram()</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/stage_completion-1.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># it appears that some racers are eliminated or drop out as stages are completed
+  geom_histogram() +
+  labs(title = &quot;Number of Stages Joined Each Year&quot;)
 
-total_points &lt;- stages_joined %&gt;%
+ggsave(
+  filename = &quot;docs/assets/TDF-p5.pdf&quot;,
+  plot = p5,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/TDF-p5.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/TDF-p5.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/TDF-p5.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/TDF-p5.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/TDF-p5.png" style="display: block; margin: auto;" /></p>
+<p>It appears that some racers are eliminated or drop out as stages are completed</p>
+<pre class="r"><code>total_points &lt;- stages_joined %&gt;%
   group_by(year, rider) %&gt;%
   summarize(total_points = sum(points, na.rm = TRUE)) %&gt;%
   mutate(points_rank = percent_rank(total_points)) %&gt;%
@@ -823,53 +1221,81 @@ total_points &lt;- stages_joined %&gt;%
 </div>
 <div id="does-the-winner-of-the-first-stage-predict-their-final-point-ranking" class="section level3">
 <h3>Does the winner of the first stage predict their final point ranking?</h3>
-<pre class="r"><code>stages_joined %&gt;%
+<pre class="r"><code>p6 &lt;- stages_joined %&gt;%
   filter(stage == &quot;1&quot;) %&gt;%
-  inner_join(total_points, by = c(&quot;year&quot;,&quot;rider&quot;)) %&gt;%
-  select(year, rider, 
-         percentile_first_stage = percentile,
-         points_rank) %&gt;%
+  inner_join(total_points, by = c(&quot;year&quot;, &quot;rider&quot;)) %&gt;%
+  select(year, rider,
+    percentile_first_stage = percentile,
+    points_rank
+  ) %&gt;%
   filter(!is.na(percentile_first_stage)) %&gt;%
-  mutate(first_stage_bin = cut(percentile_first_stage, seq(0,1,0.1))) %&gt;%
-  filter(!is.na(first_stage_bin))%&gt;%
+  mutate(first_stage_bin = cut(percentile_first_stage, seq(0, 1, 0.1))) %&gt;%
+  filter(!is.na(first_stage_bin)) %&gt;%
   ggplot(aes(first_stage_bin, points_rank)) +
-  geom_boxplot()+
-  theme(axis.text.x = element_text(angle = 90, hjust = 1),
-        plot.title.position = &quot;plot&quot;)+
+  geom_boxplot() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1),
+    plot.title.position = &quot;plot&quot;
+  ) +
   scale_y_continuous(labels = scales::percent) +
-  labs(x = &quot;Decile Perforance in the First Stage&quot;,
-       y = &quot;Overall Points Percentile&quot;,
-       title = &quot;Relationship of TDF First Stage Finish w/ Overall Finish&quot;,
-       subtitle = &#39;source: Alastair Rushworths R Data Package tdf and Kaggle&#39;,
-       caption = paste0(&#39;@Jim_Gruman | #TidyTuesday | &#39;, Sys.Date()))</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/first_predictive_final-1.png" width="864" style="display: block; margin: auto;" /></p>
+  labs(
+    x = &quot;Decile Perforance in the First Stage&quot;,
+    y = &quot;Overall Points Percentile&quot;,
+    title = &quot;Relationship of TDF First Stage Finish w/ Overall Finish&quot;,
+    subtitle = &quot;source: Alastair Rushworths R Data Package tdf and Kaggle&quot;,
+    caption = paste0(&quot;@Jim_Gruman | #TidyTuesday | &quot;, Sys.Date())
+  )
+
+ggsave(
+  filename = &quot;docs/assets/TDF-p6.pdf&quot;,
+  plot = p6,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/TDF-p6.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/TDF-p6.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/TDF-p6.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/TDF-p6.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/TDF-p6.png" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>library(gganimate)
 library(tidytext)
 
-top_10_2016&lt;-total_points %&gt;%
-  filter(year == 2016)%&gt;%
+top_10_2016 &lt;- total_points %&gt;%
+  filter(year == 2016) %&gt;%
   top_n(10, total_points)
 
-p&lt;-stages_joined %&gt;%
+p &lt;- stages_joined %&gt;%
   filter(year == 2016) %&gt;%
-  semi_join(top_10_2016, by = &quot;rider&quot;)%&gt;%
-  mutate(stage = as.integer(stage),
-         points = coalesce(points, 0)) %&gt;%
-  arrange(stage)%&gt;%
+  semi_join(top_10_2016, by = &quot;rider&quot;) %&gt;%
+  mutate(
+    stage = as.integer(stage),
+    points = coalesce(points, 0)
+  ) %&gt;%
+  arrange(stage) %&gt;%
   group_by(rider) %&gt;%
-  mutate(cumulative_points = cumsum(points))%&gt;%
+  mutate(cumulative_points = cumsum(points)) %&gt;%
   ungroup() %&gt;%
-#  mutate(rider = reorder_within(rider, cumulative_points, stage))%&gt;%
-  ggplot(aes(cumulative_points, rider,fill = cumulative_points))+
-  geom_col()+
-  transition_time(stage)+
-  theme(legend.position = &quot;none&quot;,
-        plot.title.position = &quot;plot&quot;)+
-  labs(title = &quot;The 2016 Tour de France Stage: {frame_time}&quot;,
-       x = &quot;Cumulative Points at Stage&quot;,
-       y = &quot;&quot;)
+  #  mutate(rider = reorder_within(rider, cumulative_points, stage))%&gt;%
+  ggplot(aes(cumulative_points, rider, fill = cumulative_points)) +
+  geom_col() +
+  transition_time(stage) +
+  theme(
+    legend.position = &quot;none&quot;,
+    plot.title.position = &quot;plot&quot;
+  ) +
+  labs(
+    title = &quot;The 2016 Tour de France Stage: {frame_time}&quot;,
+    x = &quot;Cumulative Points at Stage&quot;,
+    y = &quot;&quot;
+  )
 
-anim&lt;- animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
+anim &lt;- animate(p, width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
 
 anim_save(filename = &quot;docs/assets/TDFanimation.gif&quot;, animation = anim)</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/TDFanimation.gif&quot;, error = FALSE)</code></pre>
@@ -878,49 +1304,156 @@ anim_save(filename = &quot;docs/assets/TDFanimation.gif&quot;, animation = anim)
 </div>
 <div id="lets-explore-the-names-and-life-durations-of-the-tour-de-france-winners" class="section level1">
 <h1>Lets explore the names and life durations of the Tour de France winners</h1>
-<pre class="r"><code>unique(tdf_winners$birth_country)</code></pre>
-<pre><code> [1] &quot;Italy&quot;       &quot;France&quot;      &quot;Belgium&quot;     &quot;Luxembourg&quot;  &quot;Switzerland&quot;
- [6] &quot;Spain&quot;       &quot;Netherlands&quot; &quot;USA&quot;         &quot;Ireland&quot;     &quot;Denmark&quot;    
-[11] &quot;Germany&quot;     &quot;Australia&quot;   &quot;Kenya&quot;       &quot;Wales&quot;       &quot;Columbia&quot;   </code></pre>
-<pre class="r"><code>winners&lt;- tdf_winners %&gt;%
-  select(edition,winner_name,born,died,nickname,nationality,start_date, year) %&gt;%
+<pre class="r"><code>unique(tdf_winners$birth_country) %&gt;% knitr::kable(caption = &quot;All of the Unique Birth Countries&quot;)</code></pre>
+<table>
+<caption>All of the Unique Birth Countries</caption>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Italy</td>
+</tr>
+<tr class="even">
+<td align="left">France</td>
+</tr>
+<tr class="odd">
+<td align="left">Belgium</td>
+</tr>
+<tr class="even">
+<td align="left">Luxembourg</td>
+</tr>
+<tr class="odd">
+<td align="left">Switzerland</td>
+</tr>
+<tr class="even">
+<td align="left">Spain</td>
+</tr>
+<tr class="odd">
+<td align="left">Netherlands</td>
+</tr>
+<tr class="even">
+<td align="left">USA</td>
+</tr>
+<tr class="odd">
+<td align="left">Ireland</td>
+</tr>
+<tr class="even">
+<td align="left">Denmark</td>
+</tr>
+<tr class="odd">
+<td align="left">Germany</td>
+</tr>
+<tr class="even">
+<td align="left">Australia</td>
+</tr>
+<tr class="odd">
+<td align="left">Kenya</td>
+</tr>
+<tr class="even">
+<td align="left">Wales</td>
+</tr>
+<tr class="odd">
+<td align="left">Columbia</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>winners &lt;- tdf_winners %&gt;%
+  select(edition, winner_name, born, died, nickname, nationality, start_date, year) %&gt;%
   # factor and reorder the winners by birth date
   mutate(winner_name = fct_reorder(winner_name, desc(born))) %&gt;%
   # compute a life duration in numeric years
-  mutate(life_duration = as.numeric(as.duration(ymd(born) %--%ymd(died)),&quot;years&quot;)) %&gt;%
+  mutate(life_duration = as.numeric(as.duration(ymd(born) %--% ymd(died)), &quot;years&quot;)) %&gt;%
   filter(!is.na(life_duration))
 
-pal &lt;- RColorBrewer::brewer.pal(&#39;Set1&#39;,n=3)
+pal &lt;- RColorBrewer::brewer.pal(&quot;Set1&quot;, n = 3)
 
-life_wins&lt;-winners %&gt;%
-  ggplot()+
-  geom_linerange(aes(ymin = born,
-                     ymax = died,
-                     x=winner_name,
-                     color=life_duration),lwd=1.1) +
+life_wins &lt;- winners %&gt;%
+  ggplot() +
+  geom_linerange(aes(
+    ymin = born,
+    ymax = died,
+    x = winner_name,
+    color = life_duration
+  ),
+  lwd = 1.1
+  ) +
   coord_flip() +
-  labs(x = &quot;Winner&quot;,
-       y = &quot;Year&quot;) +
-  geom_point(aes(x=winner_name,
-                 y=year),
-                 shape=19, size=2,color=&#39;grey&#39;)+
-  scale_shape_identity(&#39;&#39;,
-         labels = &#39;Won the \nTour de France&#39;,
-         breaks=c(19),
-         guide = &#39;legend&#39;) +
-  scale_colour_gradient2(&#39;Lifetime \n(years)&#39;,
-                         low = pal[1], mid = pal[2], high=pal[3], midpoint = 60) +
-  labs(title=&#39;Lifespans&#39;, 
-       subtitle = &#39;source: Alastair Rushworths R Data Package tdf and Kaggle&#39;)+
-  guides(colour = guide_legend(order = 1),
-         shape = guide_legend(order = 2)) +
-  theme(plot.title.position = &quot;plot&quot;)
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Year&quot;
+  ) +
+  geom_point(aes(
+    x = winner_name,
+    y = year
+  ),
+  shape = 19,
+  size = 2,
+  color = &quot;grey&quot;
+  ) +
+  scale_shape_identity(&quot;&quot;,
+    labels = &quot;Won the \nTour de France&quot;,
+    breaks = c(19),
+    guide = &quot;legend&quot;
+  ) +
+  scale_colour_gradient2(&quot;Lifetime \n(years)&quot;,
+    low = pal[1], mid = pal[2],
+    high = pal[3], midpoint = 60
+  ) +
+  labs(
+    title = &quot;Lifespans of Riders&quot;,
+    subtitle = &quot;source: Alastair Rushworths R Data Package tdf and Kaggle&quot;
+  ) +
+  guides(
+    colour = guide_legend(order = 1),
+    shape = guide_legend(order = 2)
+  ) +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    legend.position = c(0.9, 0.9),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )
 
-life_wins</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/lifespans-1.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>(life_wins / nations ) +
-  plot_annotation(&quot;Tour de France Winners&quot;)</code></pre>
-<p><img src="figure/TourDeFrance.Rmd/TourdeFrance-1.png" width="576" style="display: block; margin: auto;" /></p>
+
+ggsave(
+  filename = &quot;docs/assets/TDF-lifewins.pdf&quot;,
+  plot = life_wins,
+  width = 12,
+  height = 7.402,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/TDF-lifewins.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/TDF-lifewins.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/TDF-lifewins.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/TDF-lifewins.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/TDF-lifewins.png" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p7 &lt;- (life_wins / nations) +
+  plot_annotation(&quot;Tour de France Winners&quot;)
+
+ggsave(
+  filename = &quot;docs/assets/TDF-p7.pdf&quot;,
+  plot = p7,
+  width = 7.402,
+  height = 14,
+  device = cairo_pdf
+)
+
+pdftools::pdf_convert(
+  pdf = &quot;docs/assets/TDF-p7.pdf&quot;, format = &quot;png&quot;,
+  dpi = 300,
+  filenames = &quot;docs/assets/TDF-p7.png&quot;,
+  verbose = FALSE
+)</code></pre>
+<pre><code>[1] &quot;docs/assets/TDF-p7.png&quot;</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/TDF-p7.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/TDF-p7.png" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -929,7 +1462,7 @@ life_wins</code></pre>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19041)
 
@@ -955,28 +1488,30 @@ other attached packages:
 [19] tidyverse_1.3.0      workflowr_1.6.2     
 
 loaded via a namespace (and not attached):
- [1] bitops_1.0-6       fs_1.5.0           usethis_1.6.3      progress_1.2.2    
- [5] RColorBrewer_1.1-2 httr_1.4.2         rprojroot_1.3-2    SnowballC_0.7.0   
- [9] tools_4.0.0        backports_1.1.10   utf8_1.1.4         R6_2.4.1          
-[13] DBI_1.1.0          colorspace_1.4-1   withr_2.3.0        prettyunits_1.1.1 
-[17] tidyselect_1.1.0   curl_4.3           compiler_4.0.0     git2r_0.27.1      
-[21] extrafontdb_1.0    cli_2.0.2          labeling_0.3       scales_1.1.1      
-[25] systemfonts_0.3.2  digest_0.6.25      rmarkdown_2.4      tidytuesdayR_1.0.1
-[29] pkgconfig_2.0.3    htmltools_0.5.0    showtext_0.9       extrafont_0.17    
-[33] dbplyr_1.4.4       rlang_0.4.7        readxl_1.3.1       rstudioapi_0.11   
-[37] sysfonts_0.8.1     generics_0.0.2     farver_2.0.3       jsonlite_1.7.1    
-[41] tokenizers_0.2.1   RCurl_1.98-1.2     magrittr_1.5       Matrix_1.2-18     
-[45] Rcpp_1.0.5         munsell_0.5.0      fansi_0.4.1        gdtools_0.2.2     
-[49] lifecycle_0.2.0    stringi_1.5.3      whisker_0.4        yaml_2.2.1        
-[53] snakecase_0.11.0   plyr_1.8.6         grid_4.0.0         hrbrthemes_0.8.0  
-[57] blob_1.2.1         promises_1.1.1     crayon_1.3.4       lattice_0.20-41   
-[61] splines_4.0.0      haven_2.3.1        gridtext_0.1.1     hms_0.5.3         
-[65] knitr_1.30         pillar_1.4.6       markdown_1.1       reprex_0.3.0      
-[69] glue_1.4.2         evaluate_0.14      gifski_0.8.6       modelr_0.1.8      
-[73] tweenr_1.0.1       vctrs_0.3.4        png_0.1-7          httpuv_1.5.4      
-[77] selectr_0.4-2      Rttf2pt1_1.3.8     cellranger_1.1.0   gtable_0.3.0      
-[81] rematch2_2.1.2     assertthat_0.2.1   xfun_0.18          janitor_2.0.1     
-[85] janeaustenr_0.1.5  later_1.1.0.1      showtextdb_3.0     ellipsis_0.3.1    </code></pre>
+ [1] colorspace_1.4-1   selectr_0.4-2      ellipsis_0.3.1     showtext_0.9      
+ [5] rprojroot_1.3-2    snakecase_0.11.0   markdown_1.1       fs_1.5.0          
+ [9] gridtext_0.1.1     rstudioapi_0.11    showtextdb_3.0     farver_2.0.3      
+[13] SnowballC_0.7.0    fansi_0.4.1        splines_4.0.3      R.methodsS3_1.8.1 
+[17] extrafont_0.17     knitr_1.30         jsonlite_1.7.1     Rttf2pt1_1.3.8    
+[21] dbplyr_1.4.4       png_0.1-7          R.oo_1.24.0        compiler_4.0.3    
+[25] httr_1.4.2         backports_1.1.10   assertthat_0.2.1   Matrix_1.2-18     
+[29] cli_2.0.2          tweenr_1.0.1       later_1.1.0.1      hrbrthemes_0.8.6  
+[33] htmltools_0.5.0    prettyunits_1.1.1  tools_4.0.3        gtable_0.3.0      
+[37] glue_1.4.2         Rcpp_1.0.5         cellranger_1.1.0   styler_1.3.2      
+[41] vctrs_0.3.4        pdftools_2.3.1     extrafontdb_1.0    xfun_0.18         
+[45] lifecycle_0.2.0    scales_1.1.1       hms_0.5.3          promises_1.1.1    
+[49] rematch2_2.1.2     RColorBrewer_1.1-2 yaml_2.2.1         curl_4.3          
+[53] gdtools_0.2.2      stringi_1.5.3      highr_0.8          tokenizers_0.2.1  
+[57] gifski_0.8.6       rlang_0.4.8        pkgconfig_2.0.3    systemfonts_0.3.2 
+[61] bitops_1.0-6       evaluate_0.14      lattice_0.20-41    labeling_0.3      
+[65] tidyselect_1.1.0   plyr_1.8.6         magrittr_1.5       tidytuesdayR_1.0.1
+[69] R6_2.4.1           generics_0.0.2     DBI_1.1.0          pillar_1.4.6      
+[73] haven_2.3.1        whisker_0.4        withr_2.3.0        RCurl_1.98-1.2    
+[77] janeaustenr_0.1.5  janitor_2.0.1      modelr_0.1.8       crayon_1.3.4      
+[81] rmarkdown_2.4      sysfonts_0.8.1     progress_1.2.2     usethis_1.6.3     
+[85] grid_4.0.3         readxl_1.3.1       qpdf_1.1           blob_1.2.1        
+[89] git2r_0.27.1       reprex_0.3.0       digest_0.6.25      R.cache_0.14.0    
+[93] httpuv_1.5.4       R.utils_2.10.1     munsell_0.5.0      askpass_1.1       </code></pre>
 </div>
 </div>
 
@@ -1025,6 +1560,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

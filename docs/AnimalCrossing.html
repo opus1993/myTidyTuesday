@@ -17,12 +17,13 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
@@ -266,6 +267,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -317,6 +321,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Animal Crossing Sentiment Analysis</h1>
@@ -346,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-10
+<strong>Last updated:</strong> 2020-10-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -437,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -496,6 +508,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9a61ca86f951fb5cd24379a3258da701356ee345/analysis/AnimalCrossing.Rmd" target="_blank">9a61ca8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/23f838130a3109ef6b43b04e4c5eaeef7b09147f/docs/AnimalCrossing.html" target="_blank">23f8381</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -554,13 +600,15 @@ wflow_publish("analysis/_site.yml", republish = TRUE)
 </div>
 </div>
 </div>
-<pre class="r"><code>ragg_png = function(..., dpi = 192) ragg::agg_png(..., res = dpi, units = &#39;in&#39;)
-knitr::opts_chunk$set(echo = TRUE, 
+<pre class="r"><code>knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
                       message = FALSE, 
-                      warning = FALSE,
-                      dev = &quot;ragg_png&quot;, fig.ext = &quot;png&quot;,
-                      fig.width = 9,
-                      fig.height = 6)</code></pre>
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = &quot;styler&quot;, 
+                      fig.width = 12, 
+                      fig.height = 7.402)</code></pre>
 <p>Our goal this week is to explore and predict ratings for <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-05/readme.md">Animal Crossing user reviews in this week’s #TidyTuesday dataset</a> from the text in the review. This is what is typically called a sentiment analysis modeling, and it’s a common real-world problem.</p>
 <div id="explore-the-data" class="section level2">
 <h2>Explore the data</h2>
@@ -574,14 +622,19 @@ user_reviews %&gt;%
   count(grade) %&gt;%
   ggplot(aes(factor(grade), n)) +
   geom_col(aes(fill = factor(grade)),
-           show.legend = FALSE)+
-  labs(title = &quot;Most Animal Crossing Reviews are Very Low or High&quot;,
-       subtitle = paste0(&quot;User Review Scores from &quot;,format(min(user_reviews$date),&quot;%B %d, %Y&quot;)
-                                        ,&quot; to &quot;,
-                         format(max(user_reviews$date),&quot;%B %d, %Y&quot;)),
-       caption = &quot;Jim Gruman | #TidyTuesday&quot; ,
-       x = &quot;Grade&quot;, y = &quot;Number of Reviews&quot;)</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-1-1.png" width="864" style="display: block; margin: auto;" /></p>
+    show.legend = FALSE
+  ) +
+  labs(
+    title = &quot;Most Animal Crossing Reviews are Very Low or High&quot;,
+    subtitle = paste0(
+      &quot;User Review Scores from &quot;, format(min(user_reviews$date), &quot;%B %d, %Y&quot;),
+      &quot; to &quot;,
+      format(max(user_reviews$date), &quot;%B %d, %Y&quot;)
+    ),
+    caption = &quot;Jim Gruman | #TidyTuesday&quot;,
+    x = &quot;Grade&quot;, y = &quot;Number of Reviews&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-1-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>This phenomenon is common in surveys, where many people give the extreme scores of zero and 10. This does not look like a nice distribution for predicting a not-really-continuous quantity like grade, so we’ll convert these user scores to a label, good vs. bad user reviews, and build a classification model. A common theme for the negative reviews is frustration with the one-island-per-console setup, and more specifically the relative roles of player 1 vs. others on the same console.</p>
 <p>There is definitely evidence of scraping problems when looking at the review text. Let’s remove at least the final “Expand” from the reviews, and create a new categorical rating variable.</p>
 <pre class="r"><code>reviews_parsed &lt;- user_reviews %&gt;%
@@ -592,10 +645,10 @@ user_reviews %&gt;%
   )))</code></pre>
 <p>What is the distribution of the new, dependent, category variable <strong>rating</strong>?</p>
 <p>There is a slight skew but we will soldier on and ignore it.</p>
-<pre class="r"><code>reviews_parsed  %&gt;%
+<pre class="r"><code>reviews_parsed %&gt;%
   ggplot(aes(rating)) +
   geom_bar()</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-3-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-3-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>What is the distribution of words per review?</p>
 <p>The graph suggests that something is driving a bimodal distribution, with a gap at about 100 words. It should be investigated further.</p>
 <pre class="r"><code>library(tidytext)
@@ -605,93 +658,111 @@ reviews_parsed %&gt;%
   unnest_tokens(word, text) %&gt;%
   count(user_name, name = &quot;total_words&quot;) %&gt;%
   ggplot(aes(total_words)) +
-  geom_histogram(fill = &quot;#2AA198&quot;, bins = 30)+
-  scale_x_log10()+
-  labs(title = &quot;Count of Words in Animal Crossing Reviews&quot;,
-       subtitle = paste0(&quot;Reviews from &quot;,format(min(user_reviews$date),&quot;%B %d, %Y&quot;)
-                                        ,&quot; to &quot;,
-                         format(max(user_reviews$date),&quot;%B %d, %Y&quot;)),
-       caption = &quot;Jim Gruman | #TidyTuesday&quot; ,
-       x = &quot;Number of Words in Review&quot;, y = &quot;Number of Reviews&quot;)+
+  geom_histogram(fill = &quot;#2AA198&quot;, bins = 30) +
+  scale_x_log10() +
+  labs(
+    title = &quot;Count of Words in Animal Crossing Reviews&quot;,
+    subtitle = paste0(
+      &quot;Reviews from &quot;, format(min(user_reviews$date), &quot;%B %d, %Y&quot;),
+      &quot; to &quot;,
+      format(max(user_reviews$date), &quot;%B %d, %Y&quot;)
+    ),
+    caption = &quot;Jim Gruman | #TidyTuesday&quot;,
+    x = &quot;Number of Words in Review&quot;, y = &quot;Number of Reviews&quot;
+  ) +
   geom_vline(xintercept = 100, color = &quot;firebrick&quot;) +
-  annotate(&quot;text&quot;, x = 105, y = 325, hjust = 0, color = &quot;firebrick&quot;,
-           label = &quot;Sharp cliff at 100 words&quot;) </code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-4-1.png" width="864" style="display: block; margin: auto;" /></p>
+  annotate(&quot;text&quot;,
+    x = 105, y = 325, hjust = 0, color = &quot;firebrick&quot;,
+    label = &quot;Sharp cliff at 100 words&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-4-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>After a cursory inspection of the text of the reviews, there are some where the author pasted the same phrase into the field verbatim several times. We will filter out the repeats above 3x in the modeling dataset.</p>
 <div id="review-grades-over-time" class="section level3">
 <h3>Review Grades over time</h3>
 <p>Let’s take a look at how the reviews evolve over time:</p>
-<pre class="r"><code>by_week &lt;-reviews_parsed %&gt;%
+<pre class="r"><code>by_week &lt;- reviews_parsed %&gt;%
   group_by(week = floor_date(date, &quot;week&quot;, week_start = 1)) %&gt;%
-  summarize(nb_reviews = n(),
-            avg_grade = mean(grade),
-            pct_zero = mean(grade == 0),
-            pct_ten = mean(grade ==10)) 
+  summarize(
+    nb_reviews = n(),
+    avg_grade = mean(grade),
+    pct_zero = mean(grade == 0),
+    pct_ten = mean(grade == 10)
+  )
 
-by_week %&gt;% 
+by_week %&gt;%
   ggplot(aes(week, avg_grade)) +
-  geom_line(color = &quot;#2AA198&quot;)+
-  geom_point(aes(size = nb_reviews), color = &quot;#2AA198&quot;)+
-  expand_limits(y = 0)+
-  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;)+
-  labs(x = &quot;Week&quot;, y = &quot;Average Grade&quot;,
-       size = &quot;# of Reviews&quot;,
-       title = &quot;Animal Crossing User Review Grades&quot;,
-       subtitle = paste0(&quot;By Week&quot;),
-       caption = &quot;Jim Gruman | #TidyTuesday&quot; )</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-5-1.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>by_week %&gt;% 
+  geom_line(color = &quot;#2AA198&quot;) +
+  geom_point(aes(size = nb_reviews), color = &quot;#2AA198&quot;) +
+  expand_limits(y = 0) +
+  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;) +
+  labs(
+    x = &quot;Week&quot;, y = &quot;Average Grade&quot;,
+    size = &quot;# of Reviews&quot;,
+    title = &quot;Animal Crossing User Review Grades&quot;,
+    subtitle = paste0(&quot;By Week&quot;),
+    caption = &quot;Jim Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-5-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>by_week %&gt;%
   gather(type, value, contains(&quot;pct&quot;)) %&gt;%
   mutate(type = ifelse(type == &quot;pct_zero&quot;, &quot;Rated 0&quot;, &quot;Rated 10&quot;)) %&gt;%
   ggplot(aes(week, value, color = type)) +
-  geom_line()+
-  geom_point(aes(size = nb_reviews))+
-  expand_limits(y = 0)+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
-  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;)+
-  labs(x = &quot;Week&quot;, y = &quot;Portion of Reviews&quot;,
-       size = &quot;# of Reviews&quot;,
-       title = &quot;Most Polarizing Animal Crossing Reviews&quot;,
-       color = &quot;Review Grade&quot;,
-       subtitle = paste0(&quot;By Week&quot;),
-       caption = &quot;Jim Gruman | #TidyTuesday&quot; )</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-5-2.png" width="864" style="display: block; margin: auto;" /></p>
+  geom_line() +
+  geom_point(aes(size = nb_reviews)) +
+  expand_limits(y = 0) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;) +
+  labs(
+    x = &quot;Week&quot;, y = &quot;Portion of Reviews&quot;,
+    size = &quot;# of Reviews&quot;,
+    title = &quot;Most Polarizing Animal Crossing Reviews&quot;,
+    color = &quot;Review Grade&quot;,
+    subtitle = paste0(&quot;By Week&quot;),
+    caption = &quot;Jim Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-5-2.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Let’s take a look at how the reviews evolve by day of the week:</p>
-<pre class="r"><code>by_dow &lt;-reviews_parsed %&gt;%
+<pre class="r"><code>by_dow &lt;- reviews_parsed %&gt;%
   group_by(dow = wday(date, label = TRUE, week_start = 1)) %&gt;%
-  summarize(nb_reviews = n(),
-            avg_grade = mean(grade),
-            pct_zero = mean(grade == 0),
-            pct_ten = mean(grade ==10)) 
+  summarize(
+    nb_reviews = n(),
+    avg_grade = mean(grade),
+    pct_zero = mean(grade == 0),
+    pct_ten = mean(grade == 10)
+  )
 
-by_dow %&gt;% 
+by_dow %&gt;%
   ggplot(aes(dow, avg_grade)) +
-  geom_point(aes(size = nb_reviews), color = &quot;#2AA198&quot;)+
-  expand_limits(y = 0)+
-#  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;)+
-  labs(x = &quot;Day&quot;, y = &quot;Average Grade&quot;,
-       size = &quot;# of Reviews&quot;,
-       title = &quot;Animal Crossing User Review Grades&quot;,
-       subtitle = paste0(&quot;By Day of Week&quot;),
-       caption = &quot;Jim Gruman | #TidyTuesday&quot; )</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>by_dow %&gt;% 
+  geom_point(aes(size = nb_reviews), color = &quot;#2AA198&quot;) +
+  expand_limits(y = 0) +
+  #  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;)+
+  labs(
+    x = &quot;Day&quot;, y = &quot;Average Grade&quot;,
+    size = &quot;# of Reviews&quot;,
+    title = &quot;Animal Crossing User Review Grades&quot;,
+    subtitle = paste0(&quot;By Day of Week&quot;),
+    caption = &quot;Jim Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-6-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>by_dow %&gt;%
   gather(type, value, contains(&quot;pct&quot;)) %&gt;%
   mutate(type = ifelse(type == &quot;pct_zero&quot;, &quot;Rated 0&quot;, &quot;Rated 10&quot;)) %&gt;%
   ggplot(aes(dow, value, color = type)) +
-  geom_point(aes(size = nb_reviews))+
-  expand_limits(y = 0)+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
-#  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;)+
-  labs(x = &quot;Day&quot;, y = &quot;Portion of Reviews&quot;,
-       size = &quot;# of Reviews&quot;,
-       title = &quot;Most Polarizing Animal Crossing Reviews&quot;,
-       color = &quot;Review Grade&quot;,
-       subtitle = paste0(&quot;By The Day of the Week&quot;),
-       caption = &quot;Jim Gruman | #TidyTuesday&quot; )</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-6-2.png" width="864" style="display: block; margin: auto;" /></p>
+  geom_point(aes(size = nb_reviews)) +
+  expand_limits(y = 0) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  #  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;)+
+  labs(
+    x = &quot;Day&quot;, y = &quot;Portion of Reviews&quot;,
+    size = &quot;# of Reviews&quot;,
+    title = &quot;Most Polarizing Animal Crossing Reviews&quot;,
+    color = &quot;Review Grade&quot;,
+    subtitle = paste0(&quot;By The Day of the Week&quot;),
+    caption = &quot;Jim Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-6-2.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>For further topic modeling, we will remove the stop words and excessive copy-pasting within each review document.</p>
-<pre class="r"><code>user_review_words&lt;-reviews_parsed %&gt;%
+<pre class="r"><code>user_review_words &lt;- reviews_parsed %&gt;%
   unnest_tokens(word, text) %&gt;%
   anti_join(stop_words, by = &quot;word&quot;) %&gt;%
   group_by(user_name, word) %&gt;%
@@ -700,34 +771,40 @@ by_dow %&gt;%
   ungroup() %&gt;%
   count(user_name, date, grade, word)</code></pre>
 <p>What are the words that are positively or negatively associated with each user grade?</p>
-<pre class="r"><code>by_word&lt;-user_review_words %&gt;%
+<pre class="r"><code>by_word &lt;- user_review_words %&gt;%
   group_by(word) %&gt;%
-  summarize(avg_grade = mean(grade),
-            nb_reviews = n()) %&gt;%
+  summarize(
+    avg_grade = mean(grade),
+    nb_reviews = n()
+  ) %&gt;%
   filter(nb_reviews &gt;= 25) %&gt;%
-  arrange(desc(avg_grade)) 
+  arrange(desc(avg_grade))
 
-by_word%&gt;%
+by_word %&gt;%
   filter(nb_reviews &gt;= 75) %&gt;%
-  ggplot(aes(nb_reviews, avg_grade))+
-  geom_point()+
+  ggplot(aes(nb_reviews, avg_grade)) +
+  geom_point() +
   geom_text(aes(label = word),
-            vjust = 1, hjust =1, check_overlap = TRUE) +
+    vjust = 1, hjust = 1, check_overlap = TRUE
+  ) +
   scale_x_log10()</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-8-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-8-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>To make a nice chart, let’s zoom in on the 20 words associated with the lowest Review Grades:</p>
 <pre class="r"><code>by_word %&gt;%
   top_n(20, -avg_grade) %&gt;%
-  ggplot(aes(nb_reviews, avg_grade))+
-  geom_point()+
+  ggplot(aes(nb_reviews, avg_grade)) +
+  geom_point() +
   geom_text(aes(label = word),
-            vjust = 1, hjust =1, check_overlap = TRUE) +
-  scale_x_log10()+
-  labs(x = &quot;Number of Reviews&quot;, y = &quot;Mean Review Grade&quot;,
-       title = &quot;Words Associated with Lowest Animal Crossing Reviews&quot;,
-       subtitle = &quot;20 most common words in unfavorable reviews; Appearing at least 25 times&quot;,
-       caption = &quot;Jim Gruman | #TidyTuesday&quot; )</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-9-1.png" width="864" style="display: block; margin: auto;" /></p>
+    vjust = 1, hjust = 1, check_overlap = TRUE
+  ) +
+  scale_x_log10() +
+  labs(
+    x = &quot;Number of Reviews&quot;, y = &quot;Mean Review Grade&quot;,
+    title = &quot;Words Associated with Lowest Animal Crossing Reviews&quot;,
+    subtitle = &quot;20 most common words in unfavorable reviews; Appearing at least 25 times&quot;,
+    caption = &quot;Jim Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-9-1.png" width="3600" style="display: block; margin: auto;" /></p>
 </div>
 <div id="structural-topic-model" class="section level3">
 <h3>Structural Topic Model</h3>
@@ -736,35 +813,39 @@ by_word%&gt;%
 <pre class="r"><code>library(tidyr)
 library(stm)
 
-review_matrix &lt;-user_review_words %&gt;%
+review_matrix &lt;- user_review_words %&gt;%
   group_by(word) %&gt;%
   filter(n() &gt;= 25) %&gt;%
   cast_sparse(user_name, word, n)
 
-topic_model &lt;- stm(review_matrix, 
-                   K = 6,
-                   verbose = FALSE, 
-                   init.type = &quot;Spectral&quot;
-                   )</code></pre>
+topic_model &lt;- stm(review_matrix,
+  K = 6,
+  verbose = FALSE,
+  init.type = &quot;Spectral&quot;
+)</code></pre>
 <p>We can plot the words most highly associated with each of 6 topics:</p>
 <pre class="r"><code>tidy(topic_model) %&gt;%
   group_by(topic) %&gt;%
   top_n(10, beta) %&gt;%
-  ggplot(aes(beta, reorder_within(term, by = beta, within = topic),fill = factor(topic)))+
-  geom_col(show.legend = FALSE)+
-  tidytext::scale_y_reordered()+
-  facet_wrap(~ topic, scales = &quot;free_y&quot;)+
-  labs(x = &quot;beta&quot;,
-       y = &quot;Word Tokens&quot;,
-       title = &quot;Animal Crossing Review Topics&quot;,
-       caption = &quot;@jim_gruman | #TidyTuesday&quot;)+
-  theme(axis.text.x.bottom = element_text(size = 8),
-        plot.margin = unit(c(c(1, 1, 1, 0.5)), units=&quot;cm&quot;))</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-11-1.png" width="864" style="display: block; margin: auto;" /></p>
+  ggplot(aes(beta, reorder_within(term, by = beta, within = topic), fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  tidytext::scale_y_reordered() +
+  facet_wrap(~topic, scales = &quot;free_y&quot;) +
+  labs(
+    x = &quot;beta&quot;,
+    y = &quot;Word Tokens&quot;,
+    title = &quot;Animal Crossing Review Topics&quot;,
+    caption = &quot;@jim_gruman | #TidyTuesday&quot;
+  ) +
+  theme(
+    axis.text.x.bottom = element_text(size = 8),
+    plot.margin = unit(c(c(1, 1, 1, 0.5)), units = &quot;cm&quot;)
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-11-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Is there a correlation between the document gamma and the grade that the reviewer gave? We will use the Spearman Correlation, which is sensitive to the ranks of the items. And once again, we will examine how each topic is represented over time.</p>
-<pre class="r"><code>topic_model_gamma &lt;-tidy(topic_model, matrix = &quot;gamma&quot;) %&gt;%
-  mutate(user_name = rownames(review_matrix)[document])  %&gt;%
-    inner_join(user_reviews, by = &quot;user_name&quot;)
+<pre class="r"><code>topic_model_gamma &lt;- tidy(topic_model, matrix = &quot;gamma&quot;) %&gt;%
+  mutate(user_name = rownames(review_matrix)[document]) %&gt;%
+  inner_join(user_reviews, by = &quot;user_name&quot;)
 
 topic_model_gamma %&gt;%
   group_by(topic) %&gt;%
@@ -805,19 +886,23 @@ topic_model_gamma %&gt;%
 </tbody>
 </table>
 <pre class="r"><code>topic_model_gamma %&gt;%
-  group_by(week = floor_date(date, &quot;week&quot;, week_start = 1),
-           topic) %&gt;%
-  summarize(avg_gamma= mean(gamma)) %&gt;%
-  ggplot(aes(week, avg_gamma, color = factor(topic)))+
+  group_by(
+    week = floor_date(date, &quot;week&quot;, week_start = 1),
+    topic
+  ) %&gt;%
+  summarize(avg_gamma = mean(gamma)) %&gt;%
+  ggplot(aes(week, avg_gamma, color = factor(topic))) +
   geom_line(size = 2) +
-  expand_limits(y = 0)+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
-  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;)+
-  labs(x = &quot;Date&quot;, color = &quot;Topic&quot;,
-       y = &quot;Average gamma (document-topic association)&quot;,
-       title = &quot;Animal Crossing Review Topic Evolution&quot;,
-       caption = &quot;@jim_gruman | #TidyTuesday&quot;)</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;" /></p>
+  expand_limits(y = 0) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_date(date_labels = &quot;%b %d&quot;, date_breaks = &quot;1 week&quot;) +
+  labs(
+    x = &quot;Date&quot;, color = &quot;Topic&quot;,
+    y = &quot;Average gamma (document-topic association)&quot;,
+    title = &quot;Animal Crossing Review Topic Evolution&quot;,
+    caption = &quot;@jim_gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-12-1.png" width="3600" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="build-a-model" class="section level2">
@@ -831,8 +916,8 @@ review_test &lt;- testing(review_split)</code></pre>
 <p>Next, let’s preprocess the data to get it ready for modeling. We can use specialized steps from textrecipes, along with the general recipe steps.</p>
 <pre class="r"><code>library(textrecipes)
 
-review_rec &lt;- recipe(rating ~ text+date, data = review_train) %&gt;%
-  step_mutate(date = as.numeric(difftime(date,min(date), units = &quot;days&quot;))) %&gt;%
+review_rec &lt;- recipe(rating ~ text + date, data = review_train) %&gt;%
+  step_mutate(date = as.numeric(difftime(date, min(date), units = &quot;days&quot;))) %&gt;%
   step_mutate(dow = wday(date, label = TRUE, week_start = 1)) %&gt;%
   step_dummy(dow) %&gt;%
   step_tokenize(text) %&gt;%
@@ -884,11 +969,11 @@ lasso_wf &lt;- workflow() %&gt;%
   add_model(lasso_spec)
 
 lasso_wf</code></pre>
-<pre><code>== Workflow =====================================
+<pre><code>== Workflow ==============================================================
 Preprocessor: Recipe
 Model: logistic_reg()
 
--- Preprocessor ---------------------------------
+-- Preprocessor ----------------------------------------------------------
 8 Recipe Steps
 
 * step_mutate()
@@ -900,7 +985,7 @@ Model: logistic_reg()
 * step_tfidf()
 * step_normalize()
 
--- Model ----------------------------------------
+-- Model -----------------------------------------------------------------
 Logistic Regression Model Specification (classification)
 
 Main Arguments:
@@ -913,23 +998,7 @@ Computational engine: glmnet </code></pre>
 <p>Let’s get ready to <code>tune</code> the lasso model! First, we need a set of possible regularization parameters to try.</p>
 <pre class="r"><code>lambda_grid &lt;- grid_regular(penalty(), levels = 40)</code></pre>
 <p>Next, we need a set of resampled data to fit and evaluate all these models.</p>
-<pre class="r"><code>review_folds &lt;- bootstraps(review_train, strata = rating)
-review_folds</code></pre>
-<pre><code># Bootstrap sampling using stratification 
-# A tibble: 25 x 2
-   splits             id         
-   &lt;list&gt;             &lt;chr&gt;      
- 1 &lt;split [2.2K/853]&gt; Bootstrap01
- 2 &lt;split [2.2K/829]&gt; Bootstrap02
- 3 &lt;split [2.2K/809]&gt; Bootstrap03
- 4 &lt;split [2.2K/827]&gt; Bootstrap04
- 5 &lt;split [2.2K/803]&gt; Bootstrap05
- 6 &lt;split [2.2K/809]&gt; Bootstrap06
- 7 &lt;split [2.2K/831]&gt; Bootstrap07
- 8 &lt;split [2.2K/817]&gt; Bootstrap08
- 9 &lt;split [2.2K/831]&gt; Bootstrap09
-10 &lt;split [2.2K/832]&gt; Bootstrap10
-# ... with 15 more rows</code></pre>
+<pre class="r"><code>review_folds &lt;- bootstraps(review_train, strata = rating)</code></pre>
 <p>Now we can put it all together and implement the tuning. We can set specific metrics to compute during tuning with <code>metric_set()</code>. Let’s look at AUC, positive predictive value, and negative predictive value so we can understand if one class is harder to predict than another.</p>
 <pre class="r"><code>lasso_grid &lt;- tune::tune_grid(
   lasso_wf,
@@ -937,84 +1006,32 @@ review_folds</code></pre>
   grid = lambda_grid,
   metrics = yardstick::metric_set(yardstick::roc_auc, yardstick::ppv, yardstick::npv)
 )</code></pre>
-<p>Once we have our tuning results, we can examine them in detail.</p>
-<pre class="r"><code>lasso_grid %&gt;%
-  collect_metrics()</code></pre>
-<pre><code># A tibble: 120 x 7
-    penalty .metric .estimator  mean     n std_err .config
-      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
- 1 1.00e-10 npv     binary     0.743    25 0.00559 Model01
- 2 1.00e-10 ppv     binary     0.865    25 0.00252 Model01
- 3 1.00e-10 roc_auc binary     0.877    25 0.00264 Model01
- 4 1.80e-10 npv     binary     0.743    25 0.00559 Model02
- 5 1.80e-10 ppv     binary     0.865    25 0.00252 Model02
- 6 1.80e-10 roc_auc binary     0.877    25 0.00264 Model02
- 7 3.26e-10 npv     binary     0.743    25 0.00559 Model03
- 8 3.26e-10 ppv     binary     0.865    25 0.00252 Model03
- 9 3.26e-10 roc_auc binary     0.877    25 0.00264 Model03
-10 5.88e-10 npv     binary     0.743    25 0.00559 Model04
-# ... with 110 more rows</code></pre>
-<p>Visualization is often more helpful to understand model performance.</p>
+<p>Once we have our tuning results, we can examine them in detail. Visualization is often more helpful to understand model performance.</p>
 <pre class="r"><code>lasso_grid %&gt;%
   collect_metrics() %&gt;%
   ggplot(aes(penalty, mean, color = .metric)) +
   geom_line(size = 1.5, show.legend = FALSE) +
   facet_wrap(~.metric) +
   scale_x_log10()</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-20-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/AnimalCrossing.Rmd/lassoGrid-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>This shows us a lot. We see clearly that AUC and PPV have benefited from the regularization and we could identify the best value of penalty for each of those metrics. The same is not true for NPV. One class (the happy comments) is harder to predict than the other. It might be worth including more tokens in our model, based on this plot.</p>
 </div>
 <div id="choose-the-final-model" class="section level3">
 <h3>Choose the final model</h3>
 <p>Let’s keep our model as is for now, and choose a final model based on AUC. We can use <code>select_best()</code> to find the best AUC and then update our workflow lasso_wf with this value.</p>
-<pre class="r"><code>#best_auc &lt;- lasso_grid %&gt;%
-#  select_best(metric = &quot;roc_auc&quot;)
-
-best_auc &lt;- lasso_grid %&gt;%
+<pre class="r"><code>best_auc &lt;- lasso_grid %&gt;%
   collect_metrics() %&gt;%
   filter(.metric == &quot;roc_auc&quot;) %&gt;%
   top_n(1, wt = mean) %&gt;%
-  select(penalty)
-
-best_auc</code></pre>
-<pre><code># A tibble: 1 x 1
-  penalty
-    &lt;dbl&gt;
-1 0.00889</code></pre>
-<pre class="r"><code>final_lasso &lt;- finalize_workflow(lasso_wf, best_auc)
-
-final_lasso</code></pre>
-<pre><code>== Workflow =====================================
-Preprocessor: Recipe
-Model: logistic_reg()
-
--- Preprocessor ---------------------------------
-8 Recipe Steps
-
-* step_mutate()
-* step_mutate()
-* step_dummy()
-* step_tokenize()
-* step_stopwords()
-* step_tokenfilter()
-* step_tfidf()
-* step_normalize()
-
--- Model ----------------------------------------
-Logistic Regression Model Specification (classification)
-
-Main Arguments:
-  penalty = 0.00888623816274339
-  mixture = 1
-
-Computational engine: glmnet </code></pre>
+  select(penalty)</code></pre>
+<pre class="r"><code>final_lasso &lt;- finalize_workflow(lasso_wf, best_auc)</code></pre>
 <p>This is our tuned, finalized workflow (but it is not fit yet). One of the things we can do when we start to fit this finalized workflow on the whole training set is to see what the most important variables are using the <code>vip</code> package.</p>
 <pre class="r"><code>library(vip)
 
 final_lasso %&gt;%
   fit(review_train) %&gt;%
   pull_workflow_fit() %&gt;%
-  vi(lambda = best_auc$penalty) %&gt;%
+  vip::vi(lambda = best_auc$penalty) %&gt;%
   group_by(Sign) %&gt;%
   top_n(20, wt = abs(Importance)) %&gt;%
   ungroup() %&gt;%
@@ -1026,10 +1043,12 @@ final_lasso %&gt;%
   ggplot(aes(x = Importance, y = Variable, fill = Sign)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~Sign, scales = &quot;free_y&quot;) +
-  labs(y = NULL)+
-  labs(title = &quot;Animal Crossing Review Word Importance&quot;,
-       caption = &quot;@jim_gruman | #TidyTuesday&quot;)</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-23-1.png" width="864" style="display: block; margin: auto;" /></p>
+  labs(y = NULL) +
+  labs(
+    title = &quot;Animal Crossing Review Word Importance&quot;,
+    caption = &quot;@jim_gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/finalLasso-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>People who are happy with Animal Crossing like to talk about how relaxing, fantastic, enjoyable, and great it is, and also talk in their reviews about the “review bombing” of the negative reviews. Notice that many of the words from the negative reviews are specifically used to talk about the multiplayer experience. These users want a fix and they declare Nintendo greedy for the one-island-per-console play.</p>
 <pre class="r"><code>final_lasso %&gt;%
   fit(review_train) %&gt;%
@@ -1048,21 +1067,40 @@ final_lasso %&gt;%
   geom_col(show.legend = FALSE) +
   geom_label(aes(label = id), x = 0.1, show.legend = FALSE) +
   facet_wrap(~Sign, scales = &quot;free_y&quot;) +
-  labs(y = NULL)+
-  labs(title = &quot;Animal Crossing Review Day of Week Importance&quot;,
-       caption = &quot;@jim_gruman | #TidyTuesday&quot;)</code></pre>
-<p><img src="figure/AnimalCrossing.Rmd/unnamed-chunk-24-1.png" width="864" style="display: block; margin: auto;" /></p>
+  labs(y = NULL) +
+  labs(
+    title = &quot;Animal Crossing Review Day of Week Importance&quot;,
+    caption = &quot;@jim_gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/AnimalCrossing.Rmd/variableImportance-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>The Day of Week feature does not appear in the Top 20. In this model, a Review written on a Wednesday (day 3) is 88th in importance, after 87 tokenized words. It has a positive influence. Thursday, day 4, is negative.</p>
 <p>Finally, let’s return to our test data. The <code>tune</code> package has a function <code>last_fit()</code> which is nice for situations when you have tuned and finalized a model or workflow and want to fit it one last time on your training data and evaluate it on your testing data. You only have to pass this function your finalized model/workflow and your split.</p>
 <pre class="r"><code>review_final &lt;- last_fit(final_lasso, review_split)
 
 review_final %&gt;%
-  collect_metrics()</code></pre>
-<pre><code># A tibble: 2 x 3
-  .metric  .estimator .estimate
-  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
-1 accuracy binary         0.864
-2 roc_auc  binary         0.941</code></pre>
+  collect_metrics() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.8638184</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.9406608</td>
+</tr>
+</tbody>
+</table>
 <p>We did not overfit during our tuning process, and the overall accuracy is not bad. Let’s create a confusion matrix for the testing data.</p>
 <pre class="r"><code>review_final %&gt;%
   collect_predictions() %&gt;%
@@ -1072,299 +1110,6 @@ Prediction bad good
       bad  438   65
       good  37  209</code></pre>
 <p>Though our overall accuracy isn’t great, we discover here that it is easier to detect the negative reviews than the positive ones.</p>
-<pre class="r"><code>devtools::session_info()</code></pre>
-<pre><code>- Session info ---------------------------------------------------------------
- setting  value                       
- version  R version 4.0.0 (2020-04-24)
- os       Windows 10 x64              
- system   x86_64, mingw32             
- ui       RTerm                       
- language (EN)                        
- collate  English_United States.1252  
- ctype    English_United States.1252  
- tz       America/Chicago             
- date     2020-10-10                  
-
-- Packages -------------------------------------------------------------------
- package     * version    date       lib
- assertthat    0.2.1      2019-03-21 [1]
- backports     1.1.10     2020-09-15 [1]
- blob          1.2.1      2020-01-20 [1]
- broom       * 0.7.1      2020-10-02 [1]
- callr         3.4.4      2020-09-07 [1]
- cellranger    1.1.0      2016-07-27 [1]
- class         7.3-17     2020-04-26 [1]
- cli           2.0.2      2020-02-28 [1]
- codetools     0.2-16     2018-12-24 [2]
- colorspace    1.4-1      2019-03-18 [1]
- crayon        1.3.4      2017-09-16 [1]
- curl          4.3        2019-12-02 [1]
- data.table    1.13.0     2020-07-24 [1]
- DBI           1.1.0      2019-12-15 [1]
- dbplyr        1.4.4      2020-05-27 [1]
- desc          1.2.0      2018-05-01 [1]
- devtools      2.3.2      2020-09-18 [1]
- dials       * 0.0.9      2020-09-16 [1]
- DiceDesign    1.8-1      2019-07-31 [1]
- digest        0.6.25     2020-02-23 [1]
- dplyr       * 1.0.2      2020-08-18 [1]
- ellipsis      0.3.1      2020-05-15 [1]
- evaluate      0.14       2019-05-28 [1]
- extrafont     0.17       2014-12-08 [1]
- extrafontdb   1.0        2012-06-11 [1]
- fansi         0.4.1      2020-01-08 [1]
- farver        2.0.3      2020-01-16 [1]
- forcats     * 0.5.0      2020-03-01 [1]
- foreach       1.5.0      2020-03-30 [1]
- fs            1.5.0      2020-07-31 [1]
- furrr         0.1.0      2018-05-16 [1]
- future        1.19.1     2020-09-22 [1]
- gdtools       0.2.2      2020-04-03 [1]
- generics      0.0.2      2018-11-29 [1]
- ggplot2     * 3.3.2      2020-06-19 [1]
- git2r         0.27.1     2020-05-03 [1]
- glmnet        4.0-2      2020-06-16 [1]
- globals       0.13.0     2020-09-17 [1]
- glue          1.4.2      2020-08-27 [1]
- gower         0.2.2      2020-06-23 [1]
- GPfit         1.0-8      2019-02-08 [1]
- gridExtra     2.3        2017-09-09 [1]
- gtable        0.3.0      2019-03-25 [1]
- hardhat       0.1.4      2020-07-02 [1]
- haven         2.3.1      2020-06-01 [1]
- highr         0.8        2019-03-20 [1]
- hms           0.5.3      2020-01-08 [1]
- hrbrthemes    0.8.0      2020-03-06 [1]
- htmltools     0.5.0      2020-06-16 [1]
- httpuv        1.5.4      2020-06-06 [1]
- httr          1.4.2      2020-07-20 [1]
- infer       * 0.5.3      2020-07-14 [1]
- ipred         0.9-9      2019-04-28 [1]
- iterators     1.0.12     2019-07-26 [1]
- janeaustenr   0.1.5      2017-06-10 [1]
- jsonlite      1.7.1      2020-09-07 [1]
- knitr         1.30       2020-09-22 [1]
- labeling      0.3        2014-08-23 [1]
- later         1.1.0.1    2020-06-05 [1]
- lattice       0.20-41    2020-04-02 [1]
- lava          1.6.8      2020-09-26 [1]
- lhs           1.1.1      2020-10-05 [1]
- lifecycle     0.2.0      2020-03-06 [1]
- listenv       0.8.0      2019-12-05 [1]
- lubridate   * 1.7.9      2020-06-08 [1]
- magrittr      1.5        2014-11-22 [1]
- MASS          7.3-53     2020-09-09 [1]
- Matrix        1.2-18     2019-11-27 [2]
- memoise       1.1.0      2017-04-21 [1]
- modeldata   * 0.0.2      2020-06-22 [1]
- modelr        0.1.8      2020-05-19 [1]
- munsell       0.5.0      2018-06-12 [1]
- nnet          7.3-14     2020-04-26 [1]
- parsnip     * 0.1.3      2020-08-04 [1]
- pillar        1.4.6      2020-07-10 [1]
- pkgbuild      1.1.0      2020-07-13 [1]
- pkgconfig     2.0.3      2019-09-22 [1]
- pkgload       1.1.0      2020-05-29 [1]
- plyr          1.8.6      2020-03-03 [1]
- prettyunits   1.1.1      2020-01-24 [1]
- pROC          1.16.2     2020-03-19 [1]
- processx      3.4.4      2020-09-03 [1]
- prodlim       2019.11.13 2019-11-17 [1]
- promises      1.1.1      2020-06-09 [1]
- ps            1.4.0      2020-10-07 [1]
- purrr       * 0.3.4      2020-04-17 [1]
- R6            2.4.1      2019-11-12 [1]
- ragg          0.4.0      2020-10-05 [1]
- Rcpp          1.0.5      2020-07-06 [1]
- readr       * 1.4.0      2020-10-05 [1]
- readxl        1.3.1      2019-03-13 [1]
- recipes     * 0.1.13     2020-06-23 [1]
- remotes       2.2.0      2020-07-21 [1]
- reprex        0.3.0      2019-05-16 [1]
- reshape2      1.4.4      2020-04-09 [1]
- rlang         0.4.7      2020-07-09 [1]
- rmarkdown     2.4        2020-09-30 [1]
- rpart         4.1-15     2019-04-12 [2]
- rprojroot     1.3-2      2018-01-03 [1]
- rsample     * 0.0.8      2020-09-23 [1]
- rstudioapi    0.11       2020-02-07 [1]
- Rttf2pt1      1.3.8      2020-01-10 [1]
- rvest         0.3.6      2020-07-25 [1]
- scales      * 1.1.1      2020-05-11 [1]
- sessioninfo   1.1.1      2018-11-05 [1]
- shape         1.4.5      2020-09-13 [1]
- SnowballC     0.7.0      2020-04-01 [1]
- stm         * 1.3.6      2020-09-18 [1]
- stopwords     2.0        2020-04-14 [1]
- stringi       1.5.3      2020-09-09 [1]
- stringr     * 1.4.0      2019-02-10 [1]
- survival      3.2-7      2020-09-28 [1]
- systemfonts   0.3.2      2020-09-29 [1]
- testthat      2.3.2      2020-03-02 [1]
- textrecipes * 0.3.0.9000 2020-08-12 [1]
- textshaping   0.1.1      2020-09-29 [1]
- tibble      * 3.0.3      2020-07-10 [1]
- tidymodels  * 0.1.1      2020-07-14 [1]
- tidyr       * 1.1.2      2020-08-27 [1]
- tidyselect    1.1.0      2020-05-11 [1]
- tidytext    * 0.2.6      2020-09-20 [1]
- tidyverse   * 1.3.0      2019-11-21 [1]
- timeDate      3043.102   2018-02-21 [1]
- tokenizers    0.2.1      2018-03-29 [1]
- tune        * 0.1.1      2020-07-08 [1]
- usethis       1.6.3      2020-09-17 [1]
- utf8          1.1.4      2018-05-24 [1]
- vctrs         0.3.4      2020-08-29 [1]
- vip         * 0.2.2      2020-04-06 [1]
- whisker       0.4        2019-08-28 [1]
- withr         2.3.0      2020-09-22 [1]
- workflowr   * 1.6.2      2020-04-30 [1]
- workflows   * 0.2.0      2020-09-15 [1]
- xfun          0.18       2020-09-29 [1]
- xml2          1.3.2      2020-04-23 [1]
- yaml          2.2.1      2020-02-01 [1]
- yardstick   * 0.0.7      2020-07-13 [1]
- source                                 
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- Github (tidymodels/textrecipes@8d1c05e)
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.2)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
- CRAN (R 4.0.0)                         
-
-[1] C:/Users/jimgr/Documents/R/win-library/4.0
-[2] C:/Program Files/R/R-4.0.0/library</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1373,7 +1118,7 @@ Prediction bad good
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19041)
 
@@ -1391,7 +1136,7 @@ attached base packages:
 
 other attached packages:
  [1] vip_0.2.2              textrecipes_0.3.0.9000 yardstick_0.0.7       
- [4] workflows_0.2.0        tune_0.1.1             rsample_0.0.8         
+ [4] workflows_0.2.1        tune_0.1.1             rsample_0.0.8         
  [7] recipes_0.1.13         parsnip_0.1.3          modeldata_0.0.2       
 [10] infer_0.5.3            dials_0.0.9            scales_1.1.1          
 [13] broom_0.7.1            tidymodels_0.1.1       stm_1.3.6             
@@ -1401,45 +1146,42 @@ other attached packages:
 [25] ggplot2_3.3.2          tidyverse_1.3.0        workflowr_1.6.2       
 
 loaded via a namespace (and not attached):
-  [1] readxl_1.3.1       backports_1.1.10   systemfonts_0.3.2 
-  [4] plyr_1.8.6         splines_4.0.0      listenv_0.8.0     
-  [7] SnowballC_0.7.0    usethis_1.6.3      digest_0.6.25     
- [10] foreach_1.5.0      htmltools_0.5.0    fansi_0.4.1       
- [13] magrittr_1.5       memoise_1.1.0      remotes_2.2.0     
- [16] globals_0.13.0     modelr_0.1.8       gower_0.2.2       
- [19] extrafont_0.17     extrafontdb_1.0    hardhat_0.1.4     
- [22] prettyunits_1.1.1  colorspace_1.4-1   blob_1.2.1        
- [25] rvest_0.3.6        textshaping_0.1.1  haven_2.3.1       
- [28] xfun_0.18          callr_3.4.4        crayon_1.3.4      
- [31] jsonlite_1.7.1     survival_3.2-7     iterators_1.0.12  
- [34] glue_1.4.2         stopwords_2.0      gtable_0.3.0      
- [37] ipred_0.9-9        pkgbuild_1.1.0     Rttf2pt1_1.3.8    
- [40] shape_1.4.5        DBI_1.1.0          Rcpp_1.0.5        
- [43] GPfit_1.0-8        lava_1.6.8         prodlim_2019.11.13
- [46] glmnet_4.0-2       httr_1.4.2         ellipsis_0.3.1    
- [49] pkgconfig_2.0.3    farver_2.0.3       nnet_7.3-14       
- [52] dbplyr_1.4.4       utf8_1.1.4         tidyselect_1.1.0  
- [55] labeling_0.3       rlang_0.4.7        DiceDesign_1.8-1  
- [58] reshape2_1.4.4     later_1.1.0.1      munsell_0.5.0     
- [61] cellranger_1.1.0   tools_4.0.0        cli_2.0.2         
- [64] generics_0.0.2     devtools_2.3.2     evaluate_0.14     
- [67] yaml_2.2.1         ragg_0.4.0         processx_3.4.4    
- [70] knitr_1.30         fs_1.5.0           future_1.19.1     
- [73] whisker_0.4        xml2_1.3.2         tokenizers_0.2.1  
- [76] compiler_4.0.0     rstudioapi_0.11    curl_4.3          
- [79] testthat_2.3.2     reprex_0.3.0       lhs_1.1.1         
- [82] stringi_1.5.3      ps_1.4.0           highr_0.8         
- [85] desc_1.2.0         gdtools_0.2.2      hrbrthemes_0.8.0  
- [88] lattice_0.20-41    Matrix_1.2-18      vctrs_0.3.4       
- [91] pillar_1.4.6       lifecycle_0.2.0    furrr_0.1.0       
- [94] data.table_1.13.0  httpuv_1.5.4       R6_2.4.1          
- [97] promises_1.1.1     gridExtra_2.3      janeaustenr_0.1.5 
-[100] sessioninfo_1.1.1  codetools_0.2-16   pkgload_1.1.0     
-[103] MASS_7.3-53        assertthat_0.2.1   rprojroot_1.3-2   
-[106] withr_2.3.0        parallel_4.0.0     hms_0.5.3         
-[109] grid_4.0.0         rpart_4.1-15       timeDate_3043.102 
-[112] class_7.3-17       rmarkdown_2.4      git2r_0.27.1      
-[115] pROC_1.16.2       </code></pre>
+  [1] colorspace_1.4-1   ellipsis_0.3.1     class_7.3-17      
+  [4] rprojroot_1.3-2    fs_1.5.0           rstudioapi_0.11   
+  [7] listenv_0.8.0      furrr_0.1.0        farver_2.0.3      
+ [10] SnowballC_0.7.0    prodlim_2019.11.13 fansi_0.4.1       
+ [13] xml2_1.3.2         codetools_0.2-16   splines_4.0.3     
+ [16] R.methodsS3_1.8.1  extrafont_0.17     knitr_1.30        
+ [19] jsonlite_1.7.1     pROC_1.16.2        Rttf2pt1_1.3.8    
+ [22] dbplyr_1.4.4       R.oo_1.24.0        compiler_4.0.3    
+ [25] httr_1.4.2         backports_1.1.10   assertthat_0.2.1  
+ [28] Matrix_1.2-18      cli_2.0.2          later_1.1.0.1     
+ [31] hrbrthemes_0.8.6   htmltools_0.5.0    tools_4.0.3       
+ [34] gtable_0.3.0       glue_1.4.2         reshape2_1.4.4    
+ [37] Rcpp_1.0.5         cellranger_1.1.0   styler_1.3.2      
+ [40] DiceDesign_1.8-1   vctrs_0.3.4        extrafontdb_1.0   
+ [43] iterators_1.0.12   timeDate_3043.102  xfun_0.18         
+ [46] gower_0.2.2        stopwords_2.0      globals_0.13.0    
+ [49] rvest_0.3.6        lifecycle_0.2.0    future_1.19.1     
+ [52] MASS_7.3-53        ipred_0.9-9        hms_0.5.3         
+ [55] promises_1.1.1     parallel_4.0.3     rematch2_2.1.2    
+ [58] yaml_2.2.1         curl_4.3           gridExtra_2.3     
+ [61] gdtools_0.2.2      rpart_4.1-15       stringi_1.5.3     
+ [64] highr_0.8          tokenizers_0.2.1   foreach_1.5.0     
+ [67] lhs_1.1.1          hardhat_0.1.4      shape_1.4.5       
+ [70] lava_1.6.8         rlang_0.4.8        pkgconfig_2.0.3   
+ [73] systemfonts_0.3.2  evaluate_0.14      lattice_0.20-41   
+ [76] labeling_0.3       tidyselect_1.1.0   plyr_1.8.6        
+ [79] magrittr_1.5       R6_2.4.1           generics_0.0.2    
+ [82] DBI_1.1.0          pillar_1.4.6       haven_2.3.1       
+ [85] whisker_0.4        withr_2.3.0        survival_3.2-7    
+ [88] nnet_7.3-14        janeaustenr_0.1.5  modelr_0.1.8      
+ [91] crayon_1.3.4       rmarkdown_2.4      usethis_1.6.3     
+ [94] grid_4.0.3         readxl_1.3.1       data.table_1.13.0 
+ [97] blob_1.2.1         git2r_0.27.1       reprex_0.3.0      
+[100] digest_0.6.25      R.cache_0.14.0     httpuv_1.5.4      
+[103] R.utils_2.10.1     glmnet_4.0-2       GPfit_1.0-8       
+[106] munsell_0.5.0     </code></pre>
 </div>
 </div>
 </div>
@@ -1489,6 +1231,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

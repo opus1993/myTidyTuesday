@@ -17,12 +17,13 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
@@ -266,6 +267,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -317,6 +321,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">The Office for Tidy Tuesday</h1>
@@ -346,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-10
+<strong>Last updated:</strong> 2020-10-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -437,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -496,6 +508,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9a61ca86f951fb5cd24379a3258da701356ee345/analysis/TheOffice.Rmd" target="_blank">9a61ca8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/23f838130a3109ef6b43b04e4c5eaeef7b09147f/docs/TheOffice.html" target="_blank">23f8381</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -548,33 +594,7 @@ wflow_publish(“analysis/TheOffice.Rmd”)
 <h2>Get the data</h2>
 <p>The data this week comes from the <code>schrute</code> R package for <strong>The Office</strong> transcripts and <code>data.world</code> for <em>IMDB</em> ratings of each episode.</p>
 <pre class="r"><code># Get the Data
-office_ratings &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv&#39;)</code></pre>
-<pre><code>
--- Column specification -------------------------
-cols(
-  season = col_double(),
-  episode = col_double(),
-  title = col_character(),
-  imdb_rating = col_double(),
-  total_votes = col_double(),
-  air_date = col_date(format = &quot;&quot;)
-)</code></pre>
-<pre class="r"><code>schrute::theoffice</code></pre>
-<pre><code># A tibble: 55,130 x 12
-   index season episode episode_name director writer character text 
-   &lt;int&gt;  &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;
- 1     1      1       1 Pilot        Ken Kwa~ Ricky~ Michael   All ~
- 2     2      1       1 Pilot        Ken Kwa~ Ricky~ Jim       Oh, ~
- 3     3      1       1 Pilot        Ken Kwa~ Ricky~ Michael   So y~
- 4     4      1       1 Pilot        Ken Kwa~ Ricky~ Jim       Actu~
- 5     5      1       1 Pilot        Ken Kwa~ Ricky~ Michael   All ~
- 6     6      1       1 Pilot        Ken Kwa~ Ricky~ Michael   Yes,~
- 7     7      1       1 Pilot        Ken Kwa~ Ricky~ Michael   I&#39;ve~
- 8     8      1       1 Pilot        Ken Kwa~ Ricky~ Pam       Well~
- 9     9      1       1 Pilot        Ken Kwa~ Ricky~ Michael   If y~
-10    10      1       1 Pilot        Ken Kwa~ Ricky~ Pam       What?
-# ... with 55,120 more rows, and 4 more variables: text_w_direction &lt;chr&gt;,
-#   imdb_rating &lt;dbl&gt;, total_votes &lt;int&gt;, air_date &lt;fct&gt;</code></pre>
+office_ratings &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv&quot;)</code></pre>
 </div>
 <div id="explore-the-data" class="section level2">
 <h2>Explore the data</h2>
@@ -582,48 +602,60 @@ cols(
 <pre class="r"><code>office_ratings %&gt;%
   group_by(season) %&gt;%
   summarize(avg_rating = mean(imdb_rating)) %&gt;%
-  ggplot(aes(season, avg_rating))+
-  geom_line()+
-  scale_x_continuous(breaks = 1:9)+
-  labs(title = &quot;The Office&quot;,
-       subtitle = &quot;Average IMDB Rating&quot;,
-       caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()))+
+  ggplot(aes(season, avg_rating)) +
+  geom_line() +
+  scale_x_continuous(breaks = 1:9) +
+  labs(
+    title = &quot;The Office&quot;,
+    subtitle = &quot;Average IMDB Rating&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+  ) +
   theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-2-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>office_ratings %&gt;%
-  mutate(top_title = ifelse(imdb_rating &gt;= 9.2 | imdb_rating &lt;= 7,
-                            title, &quot;&quot;),
-         title = fct_inorder(title),
-         episode_number = row_number()) %&gt;%
-  ggplot(aes(episode_number, imdb_rating))+
-  geom_line()+
-  geom_smooth(alpha = 0.3)+
-  geom_point(aes(color = factor(season), size = total_votes))+
-  geom_text(aes(label = top_title), check_overlap = TRUE, hjust = 0.5)+
-  expand_limits(x = -15)+
-  labs(title = &quot;Popularity of The Office episodes&quot;,
-       subtitle = &quot;IMDB Rating, Color by Season, Size by # of Ratings&quot;,
-       caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()))+
-  theme(plot.title.position = &quot;plot&quot;,
-        panel.grid.major.x = element_blank(),
-        legend.position = &quot;none&quot;) +
-  xlab(&quot;Episode Number&quot;)+ylab(&quot;IMDB Rating&quot;)</code></pre>
-<pre><code>`geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+  mutate(
+    top_title = ifelse(imdb_rating &gt;= 9.2 | imdb_rating &lt;= 7,
+      title, &quot;&quot;
+    ),
+    title = fct_inorder(title),
+    episode_number = row_number()
+  ) %&gt;%
+  ggplot(aes(episode_number, imdb_rating)) +
+  geom_line() +
+  geom_smooth(alpha = 0.3) +
+  geom_point(aes(color = factor(season), size = total_votes)) +
+  geom_text(aes(label = top_title), check_overlap = TRUE, hjust = 0.5) +
+  expand_limits(x = -15) +
+  labs(
+    title = &quot;Popularity of The Office episodes&quot;,
+    subtitle = &quot;IMDB Rating, Color by Season, Size by # of Ratings&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+  ) +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    panel.grid.major.x = element_blank(),
+    legend.position = &quot;none&quot;
+  ) +
+  xlab(&quot;Episode Number&quot;) +
+  ylab(&quot;IMDB Rating&quot;)</code></pre>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-2-2.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>office_ratings %&gt;%
   arrange(desc(imdb_rating)) %&gt;%
-  mutate(title = paste0(season, &quot;.&quot;, episode, &quot; &quot;, title),
-         title = fct_reorder(title, imdb_rating)) %&gt;%
+  mutate(
+    title = paste0(season, &quot;.&quot;, episode, &quot; &quot;, title),
+    title = fct_reorder(title, imdb_rating)
+  ) %&gt;%
   head(20) %&gt;%
-  ggplot(aes(title, imdb_rating, color = factor(season), size = total_votes))+
-  geom_point()+
-  coord_flip()+
-  labs(color = &quot;Season&quot;,
-       title = &quot;Most Popular Episodes of The Office&quot;,
-       subtitle = &quot;Top 20 Season.Episode Titles, Color by Season and Size by Total Votes&quot;, caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()))+
-    theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+  ggplot(aes(title, imdb_rating, color = factor(season), size = total_votes)) +
+  geom_point() +
+  coord_flip() +
+  labs(
+    color = &quot;Season&quot;,
+    title = &quot;Most Popular Episodes of The Office&quot;,
+    subtitle = &quot;Top 20 Season.Episode Titles, Color by Season and Size by Total Votes&quot;, caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+  ) +
+  theme(plot.title.position = &quot;plot&quot;)</code></pre>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-3-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>To merge the datasets on episode, we have to clean the ratings file field by removing punctuation, digits, the words “part” and “parts”, and make all text lower case. Even after cleaning, three episode titles have to be manually imputed with a case_when statement to successfully join every episode rating with the text of the episode.</p>
 <pre class="r"><code>remove_regex &lt;- &quot;[:punct:]|[:digit:]|parts |part |the |and&quot;
 
@@ -640,7 +672,8 @@ office_ratings &lt;- office_ratings %&gt;%
     episode_name == &quot;email surveillance&quot; ~ &quot;email surveilance&quot;,
     episode_name == &quot;coverup&quot; ~ &quot;cover&quot;,
     episode_name == &quot;sex ed&quot; ~ &quot;sx ed&quot;,
-    TRUE ~ episode_name))
+    TRUE ~ episode_name
+  ))
 
 office_info &lt;- schrute::theoffice %&gt;%
   mutate(
@@ -650,105 +683,83 @@ office_info &lt;- schrute::theoffice %&gt;%
     episode_name = str_remove_all(episode_name, remove_regex),
     episode_name = str_trim(episode_name)
   ) %&gt;%
-  select(season, episode, episode_name, director, writer, character)
-
-office_info</code></pre>
-<pre><code># A tibble: 55,130 x 6
-   season episode episode_name director   writer                       character
-    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                        &lt;chr&gt;    
- 1      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Michael  
- 2      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Jim      
- 3      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Michael  
- 4      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Jim      
- 5      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Michael  
- 6      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Michael  
- 7      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Michael  
- 8      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Pam      
- 9      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Michael  
-10      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch~ Pam      
-# ... with 55,120 more rows</code></pre>
+  select(season, episode, episode_name, director, writer, character)</code></pre>
 <p>Lets explore words that individual characters say, that other characters do not, that are most indicative of that person.</p>
 <p>In information retrieval, tf–idf or TFIDF, short for term frequency–inverse document frequency, is a numerical statistic that is intended to reflect how important a word is to a document in a collection or corpus. It is often used as a weighting factor in searches of information retrieval, text mining, and user modeling. The tf–idf value increases proportionally to the number of times a word appears in the document and is offset by the number of documents in the corpus that contain the word, which helps to adjust for the fact that some words appear more frequently in general. tf–idf is one of the most popular term-weighting schemes today.</p>
 <pre class="r"><code>office_transcripts &lt;- as_tibble(schrute::theoffice)
 
 blacklist &lt;- c(&quot;yeah&quot;, &quot;hey&quot;, &quot;uh&quot;, &quot;gonna&quot;, &quot;lot&quot;, &quot;ah&quot;, &quot;huh&quot;, &quot;hmm&quot;, &quot;um&quot;, &quot;ha&quot;, &quot;na&quot;, &quot;no&quot;, &quot;nah&quot;, &quot;ahh&quot;)
-blacklist_character&lt;-c(&quot;Group&quot;, &quot;Everyone&quot;, &quot;All&quot;)
+blacklist_character &lt;- c(&quot;Group&quot;, &quot;Everyone&quot;, &quot;All&quot;)
 
-transcript_words&lt;-office_transcripts %&gt;%
+transcript_words &lt;- office_transcripts %&gt;%
   group_by(character) %&gt;%
-  filter(n()&gt;= 100,
-         n_distinct(episode_name)&gt;2)%&gt;%
-  ungroup()%&gt;%
+  filter(
+    n() &gt;= 100,
+    n_distinct(episode_name) &gt; 2
+  ) %&gt;%
+  ungroup() %&gt;%
   select(-text_w_direction) %&gt;%
-  unnest_tokens(word,text) %&gt;%
+  unnest_tokens(word, text) %&gt;%
   anti_join(stop_words, by = &quot;word&quot;) %&gt;%
-  filter(!word %in% blacklist,
-         !character %in% blacklist_character)
+  filter(
+    !word %in% blacklist,
+    !character %in% blacklist_character
+  )
 
-character_tf_idf&lt;-transcript_words %&gt;%
-  add_count(word)%&gt;%
-  filter(n&gt;20)%&gt;%
+character_tf_idf &lt;- transcript_words %&gt;%
+  add_count(word) %&gt;%
+  filter(n &gt; 20) %&gt;%
   count(word, character) %&gt;%
   bind_tf_idf(word, character, n) %&gt;%
-  arrange(desc(tf_idf))
-
-character_tf_idf</code></pre>
-<pre><code># A tibble: 17,686 x 6
-   word     character     n     tf   idf tf_idf
-   &lt;chr&gt;    &lt;chr&gt;     &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
- 1 pum      Angela       27 0.0110 2.71  0.0298
- 2 andrew   Robert       15 0.0147 1.79  0.0263
- 3 mike     Darryl       46 0.0218 1.00  0.0219
- 4 printers Jo            8 0.0162 1.32  0.0214
- 5 michael  Jan         159 0.115  0.182 0.0210
- 6 hank     Charles       4 0.0118 1.61  0.0190
- 7 michael  David        67 0.0914 0.182 0.0167
- 8 michael  Charles      28 0.0828 0.182 0.0151
- 9 halpert  Roy           7 0.0211 0.693 0.0147
-10 woah     Charles       4 0.0118 1.20  0.0142
-# ... with 17,676 more rows</code></pre>
+  arrange(desc(tf_idf))</code></pre>
 <p>Let’s explore the content of Dwight’s and Jim’s lines. What words are most characteristic, or specific, to the character, with a high term frequency and low overall IDF.</p>
 <pre class="r"><code>character_tf_idf %&gt;%
   filter(character == &quot;Dwight&quot;) %&gt;%
   mutate(word = fct_reorder(word, tf_idf)) %&gt;%
   head(20) %&gt;%
-  ggplot(aes(word, tf_idf))+
-  geom_col()+
-  coord_flip()+  
-  labs(title = &quot;Dwight&#39;s Lines in The Office&quot;,
-       subtitle = &quot;Highest Tf-IDF words&quot;, 
-       caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()))+
+  ggplot(aes(word, tf_idf)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = &quot;Dwight&#39;s Lines in The Office&quot;,
+    subtitle = &quot;Highest Tf-IDF words&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+  ) +
   theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>character_tf_idf %&gt;%
   filter(character == &quot;Jim&quot;) %&gt;%
   mutate(word = fct_reorder(word, tf_idf)) %&gt;%
   head(20) %&gt;%
-  ggplot(aes(word, tf_idf))+
-  geom_col()+
-  coord_flip()+  
-  labs(title = &quot;Jim&#39;s Lines in The Office&quot;,
-       subtitle = &quot;Highest Tf-IDF words&quot;, 
-       caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()))+
+  ggplot(aes(word, tf_idf)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = &quot;Jim&#39;s Lines in The Office&quot;,
+    subtitle = &quot;Highest Tf-IDF words&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+  ) +
   theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-2.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>character_tf_idf %&gt;%
-  filter(character %in% c(&quot;Jim&quot;,&quot;Dwight&quot;,&quot;Michael&quot;,&quot;Meredith&quot;)) %&gt;%
-  group_by(character)%&gt;%
-  top_n(10, tf_idf)%&gt;%
-  ungroup()%&gt;%
+  filter(character %in% c(&quot;Jim&quot;, &quot;Dwight&quot;, &quot;Michael&quot;, &quot;Meredith&quot;)) %&gt;%
+  group_by(character) %&gt;%
+  top_n(10, tf_idf) %&gt;%
+  ungroup() %&gt;%
   mutate(word = reorder_within(word, tf_idf, character)) %&gt;%
-  ggplot(aes(word, tf_idf))+
-  geom_col()+
-  coord_flip()+  
-  scale_x_reordered()+
-  facet_wrap(~ character, scales = &quot;free&quot;)+
-  labs(title = &quot;Character Lines in The Office&quot;,
-       subtitle = &quot;Words most specific to a character&quot;, 
-       caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
-       x=&quot;&quot;, y=&quot;TF-IDF of character-word pairs&quot;)+
+  ggplot(aes(word, tf_idf)) +
+  geom_col() +
+  coord_flip() +
+  scale_x_reordered() +
+  facet_wrap(~character, scales = &quot;free&quot;) +
+  labs(
+    title = &quot;Character Lines in The Office&quot;,
+    subtitle = &quot;Words most specific to a character&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
+    x = &quot;&quot;, y = &quot;TF-IDF of character-word pairs&quot;
+  ) +
   theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-3.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>We are going to use several different kinds of features for modeling. Let’s find out how many times characters speak per episode.</p>
 <pre class="r"><code>characters &lt;- office_info %&gt;%
   count(episode_name, character) %&gt;%
@@ -759,24 +770,7 @@ character_tf_idf</code></pre>
     names_from = character,
     values_from = n,
     values_fill = list(n = 0)
-  )
-
-characters</code></pre>
-<pre><code># A tibble: 185 x 16
-   episode_name  Andy Angela Darryl Dwight   Jim Kelly Kevin Michael Oscar   Pam
-   &lt;chr&gt;        &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;
- 1 a benihana ~    28     37      3     61    44     5    14     108     1    57
- 2 aarm            44     39     30     87    89     0    30       0    28    34
- 3 after hours     20     11     14     60    55     8     4       0    10    15
- 4 alliance         0      7      0     47    49     0     3      68    14    22
- 5 angry y         53      7      5     16    19    13     9       0     7    29
- 6 baby shower     13     13      9     35    27     2     4      79     3    25
- 7 back from v~     3      4      6     22    25     0     5      70     0    33
- 8 banker           1      2      0     17     0     0     2      44     0     5
- 9 basketball       0      3     15     25    21     0     1     104     2    14
-10 beach games     18      8      0     38    22     9     5     105     5    23
-# ... with 175 more rows, and 5 more variables: Phyllis &lt;int&gt;, Ryan &lt;int&gt;,
-#   Toby &lt;int&gt;, Erin &lt;int&gt;, Jan &lt;int&gt;</code></pre>
+  )</code></pre>
 <p>And, let’s find which directors and writers are involved in each episode. I’m choosing here to combine this into one category in modeling, for a simpler model, since these are often the same individuals. And we will only model on creators that were involved in at least 15 distinct episodes.</p>
 <pre class="r"><code>creators &lt;- office_info %&gt;%
   distinct(episode_name, director, writer) %&gt;%
@@ -790,65 +784,28 @@ characters</code></pre>
     names_from = person,
     values_from = person_value,
     values_fill = list(person_value = 0)
-  )
-
-creators</code></pre>
-<pre><code># A tibble: 90 x 7
-   episode_name `Greg Daniels` `B.J. Novak` `Paul Lieberste~ `Mindy Kaling`
-   &lt;chr&gt;                 &lt;dbl&gt;        &lt;dbl&gt;            &lt;dbl&gt;          &lt;dbl&gt;
- 1 pilot                     1            0                0              0
- 2 diversity d~              0            1                0              0
- 3 health care               0            0                1              0
- 4 basketball                1            0                0              0
- 5 hot girl                  0            0                0              1
- 6 dundies                   1            0                0              1
- 7 sexual hara~              0            1                0              0
- 8 fire                      0            1                0              0
- 9 halloween                 1            0                0              0
-10 fight                     0            0                0              0
-# ... with 80 more rows, and 2 more variables: `Gene Stupnitsky` &lt;dbl&gt;, `Lee
-#   Eisenberg` &lt;dbl&gt;</code></pre>
+  )</code></pre>
 <p>Next, let’s find the season and episode number for each episode, and then finally put it all together into one dataset for modeling.</p>
 <pre class="r"><code>office &lt;- office_info %&gt;%
   distinct(season, episode, episode_name) %&gt;%
   inner_join(characters) %&gt;%
   inner_join(creators) %&gt;%
   inner_join(office_ratings %&gt;%
-               select(episode_name, imdb_rating)) %&gt;%
+    select(episode_name, imdb_rating)) %&gt;%
   janitor::clean_names()</code></pre>
-<pre><code>Joining, by = &quot;episode_name&quot;
-Joining, by = &quot;episode_name&quot;
-Joining, by = &quot;episode_name&quot;</code></pre>
-<pre class="r"><code>office</code></pre>
-<pre><code># A tibble: 94 x 25
-   season episode episode_name  andy angela darryl dwight   jim kelly kevin
-    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;        &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
- 1      1       1 pilot            0      1      0     29    36     0     1
- 2      1       2 diversity d~     0      4      0     17    25     2     8
- 3      1       3 health care      0      5      0     62    42     0     6
- 4      1       5 basketball       0      3     15     25    21     0     1
- 5      1       6 hot girl         0      3      0     28    55     0     5
- 6      2       1 dundies          0      1      1     32    32     7     1
- 7      2       2 sexual hara~     0      2      9     11    16     0     6
- 8      2       4 fire             0     17      0     65    51     4     5
- 9      2       5 halloween        0     13      0     33    30     3     2
-10      2       6 fight            0      3      0     64    49     3     3
-# ... with 84 more rows, and 15 more variables: michael &lt;int&gt;, oscar &lt;int&gt;,
-#   pam &lt;int&gt;, phyllis &lt;int&gt;, ryan &lt;int&gt;, toby &lt;int&gt;, erin &lt;int&gt;, jan &lt;int&gt;,
-#   greg_daniels &lt;dbl&gt;, b_j_novak &lt;dbl&gt;, paul_lieberstein &lt;dbl&gt;,
-#   mindy_kaling &lt;dbl&gt;, gene_stupnitsky &lt;dbl&gt;, lee_eisenberg &lt;dbl&gt;,
-#   imdb_rating &lt;dbl&gt;</code></pre>
 <p>One more quick peek into the dataset. This time, across all seasons, do the ratings of the episodes follow a pattern through the course of the season? Ratings appear to be higher for episodes later in the season. What else is associated with higher ratings? Let’s use LASSO regression to find out!</p>
 <pre class="r"><code>office %&gt;%
   ggplot(aes(episode, imdb_rating, fill = as.factor(episode))) +
-  geom_boxplot(show.legend = FALSE)+
-  scale_x_continuous(breaks = 1:28)+
-  labs(title = &quot;The Office Ratings&quot;,
-       subtitle = &quot;IMDB, by episode, across all seasons&quot;, 
-       caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
-       x=&quot;&quot;, y=&quot;IMDB Rating&quot;)+
+  geom_boxplot(show.legend = FALSE) +
+  scale_x_continuous(breaks = 1:28) +
+  labs(
+    title = &quot;The Office Ratings&quot;,
+    subtitle = &quot;IMDB, by episode, across all seasons&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
+    x = &quot;&quot;, y = &quot;IMDB Rating&quot;
+  ) +
   theme(plot.title.position = &quot;plot&quot;)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-10-1.png" width="3600" style="display: block; margin: auto;" /></p>
 </div>
 <div id="train-a-model" class="section level2">
 <h2>Train a Model</h2>
@@ -882,39 +839,148 @@ lasso_fit &lt;- wf %&gt;%
 
 lasso_fit %&gt;%
   pull_workflow_fit() %&gt;%
-  tidy()</code></pre>
-<pre><code>Warning: package &#39;glmnet&#39; was built under R version 4.0.2</code></pre>
-<pre><code>Loading required package: Matrix</code></pre>
-<pre><code>
-Attaching package: &#39;Matrix&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:tidyr&#39;:
-
-    expand, pack, unpack</code></pre>
-<pre><code>Loaded glmnet 4.0-2</code></pre>
-<pre><code># A tibble: 24 x 3
-   term        estimate penalty
-   &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
- 1 (Intercept)  8.41        0.1
- 2 season       0           0.1
- 3 episode      0.00460     0.1
- 4 andy         0           0.1
- 5 angela       0.00159     0.1
- 6 darryl       0           0.1
- 7 dwight       0           0.1
- 8 jim          0.0493      0.1
- 9 kelly        0           0.1
-10 kevin        0           0.1
-# ... with 14 more rows</code></pre>
+  tidy() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">penalty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">8.4126761</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">season</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">episode</td>
+<td align="right">0.0045966</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">andy</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">angela</td>
+<td align="right">0.0015868</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">darryl</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">dwight</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">jim</td>
+<td align="right">0.0492882</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">kelly</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">kevin</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">michael</td>
+<td align="right">0.0985417</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">oscar</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">pam</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">phyllis</td>
+<td align="right">0.0132647</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">ryan</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">toby</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">erin</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">jan</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">greg_daniels</td>
+<td align="right">0.0007649</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">b_j_novak</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">paul_lieberstein</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">mindy_kaling</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="odd">
+<td align="left">gene_stupnitsky</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+<tr class="even">
+<td align="left">lee_eisenberg</td>
+<td align="right">0.0000000</td>
+<td align="right">0.1</td>
+</tr>
+</tbody>
+</table>
 <p>If you have used <code>glmnet</code> before, this is the familiar output where we can see (here, for the most regularized examples) the features that contribute to higher IMDB ratings.</p>
 </div>
 <div id="tune-lasso-parameters" class="section level2">
 <h2>Tune LASSO parameters</h2>
 <p>So we managed to fit one LASSO model, but how do we know the right regularization parameter penalty? We can figure that out using resampling and tuning the model. Let’s build a set of bootstrap resamples, and set <code>penalty = tune()</code> instead of to a single value. We can use a function <code>penalty()</code> to set up an appropriate grid for this kind of regularization model.</p>
 <pre class="r"><code>set.seed(42)
-office_boot &lt;- bootstraps(office_train, strata = season)</code></pre>
-<pre><code>Warning: The number of observations in each quantile is below the recommended
-threshold of 20. Stratification will be done with 3 breaks instead.</code></pre>
-<pre class="r"><code>tune_spec &lt;- linear_reg(penalty = tune(), mixture = 1) %&gt;%
+office_boot &lt;- bootstraps(office_train, strata = season)
+
+tune_spec &lt;- linear_reg(penalty = tune(), mixture = 1) %&gt;%
   set_engine(&quot;glmnet&quot;)
 
 lambda_grid &lt;- grid_regular(penalty(), levels = 40)</code></pre>
@@ -927,24 +993,7 @@ lasso_grid &lt;- tune_grid(
   resamples = office_boot,
   grid = lambda_grid
 )</code></pre>
-<p>And the results?</p>
-<pre class="r"><code>lasso_grid %&gt;%
-  collect_metrics()</code></pre>
-<pre><code># A tibble: 80 x 7
-    penalty .metric .estimator  mean     n std_err .config
-      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
- 1 1.00e-10 rmse    standard   0.603    25  0.0224 Model01
- 2 1.00e-10 rsq     standard   0.138    25  0.0225 Model01
- 3 1.80e-10 rmse    standard   0.603    25  0.0224 Model02
- 4 1.80e-10 rsq     standard   0.138    25  0.0225 Model02
- 5 3.26e-10 rmse    standard   0.603    25  0.0224 Model03
- 6 3.26e-10 rsq     standard   0.138    25  0.0225 Model03
- 7 5.88e-10 rmse    standard   0.603    25  0.0224 Model04
- 8 5.88e-10 rsq     standard   0.138    25  0.0225 Model04
- 9 1.06e- 9 rmse    standard   0.603    25  0.0224 Model05
-10 1.06e- 9 rsq     standard   0.138    25  0.0225 Model05
-# ... with 70 more rows</code></pre>
-<p>That’s nice, but I would rather see a visualization of performance with the regularization parameter.</p>
+<p>Let’s take a look at a visualization of performance with the regularization parameter.</p>
 <pre class="r"><code>lasso_grid %&gt;%
   collect_metrics() %&gt;%
   ggplot(aes(penalty, mean, color = .metric)) +
@@ -958,8 +1007,7 @@ lasso_grid &lt;- tune_grid(
   facet_wrap(~.metric, scales = &quot;free&quot;, nrow = 2) +
   scale_x_log10() +
   theme(legend.position = &quot;none&quot;)</code></pre>
-<pre><code>Warning: Removed 2 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-16-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>This is a great way to see that regularization helps this modeling a lot. We have a couple of options for choosing our final parameter, such as <code>select_by_pct_loss()</code> or <code>select_by_one_std_err()</code>, but for now let’s stick with just picking the lowest RMSE. After we have that parameter, we can finalize our workflow, i.e. update it with this value.</p>
 <pre class="r"><code>lowest_rmse &lt;- lasso_grid %&gt;%
   select_best(&quot;rmse&quot;)
@@ -970,17 +1018,17 @@ final_lasso &lt;- finalize_workflow(
 )
 
 final_lasso</code></pre>
-<pre><code>== Workflow =====================================
+<pre><code>== Workflow ==============================================================
 Preprocessor: Recipe
 Model: linear_reg()
 
--- Preprocessor ---------------------------------
+-- Preprocessor ----------------------------------------------------------
 2 Recipe Steps
 
 * step_zv()
 * step_normalize()
 
--- Model ----------------------------------------
+-- Model -----------------------------------------------------------------
 Linear Regression Model Specification (regression)
 
 Main Arguments:
@@ -1002,19 +1050,36 @@ Computational engine: glmnet </code></pre>
   geom_col() +
   scale_x_continuous(expand = c(0, 0)) +
   labs(y = NULL)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-18-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Clearly, the features with the greatest importance in predicting IMDB rating include the presence of Greg Daniels, Michael, the episode itself, B J Novak, and Jan.</p>
 <p>And then, finally, let’s return to our test data. The <code>tune</code> package has a function <code>last_fit()</code> which is nice for situations when you have tuned and finalized a model or workflow and want to fit it one last time on your training data and evaluate it on your testing data. You only have to pass this function your finalized model/workflow and your split.</p>
 <pre class="r"><code>last_fit(
   final_lasso,
   office_split
 ) %&gt;%
-  collect_metrics()</code></pre>
-<pre><code># A tibble: 2 x 3
-  .metric .estimator .estimate
-  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard       0.358
-2 rsq     standard       0.338</code></pre>
+  collect_metrics() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.3581279</td>
+</tr>
+<tr class="even">
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.3379067</td>
+</tr>
+</tbody>
+</table>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1023,7 +1088,7 @@ Computational engine: glmnet </code></pre>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19041)
 
@@ -1042,37 +1107,47 @@ attached base packages:
 other attached packages:
  [1] glmnet_4.0-2     Matrix_1.2-18    vip_0.2.2        tidytext_0.2.6  
  [5] forcats_0.5.0    stringr_1.4.0    readr_1.4.0      tidyverse_1.3.0 
- [9] yardstick_0.0.7  workflows_0.2.0  tune_0.1.1       tidyr_1.1.2     
+ [9] yardstick_0.0.7  workflows_0.2.1  tune_0.1.1       tidyr_1.1.2     
 [13] tibble_3.0.3     rsample_0.0.8    recipes_0.1.13   purrr_0.3.4     
 [17] parsnip_0.1.3    modeldata_0.0.2  infer_0.5.3      ggplot2_3.3.2   
 [21] dplyr_1.0.2      dials_0.0.9      scales_1.1.1     broom_0.7.1     
 [25] tidymodels_0.1.1 workflowr_1.6.2 
 
 loaded via a namespace (and not attached):
- [1] colorspace_1.4-1   ellipsis_0.3.1     class_7.3-17       rprojroot_1.3-2   
- [5] snakecase_0.11.0   fs_1.5.0           rstudioapi_0.11    farver_2.0.3      
- [9] listenv_0.8.0      furrr_0.1.0        SnowballC_0.7.0    prodlim_2019.11.13
-[13] fansi_0.4.1        lubridate_1.7.9    xml2_1.3.2         codetools_0.2-16  
-[17] splines_4.0.0      doParallel_1.0.15  knitr_1.30         schrute_0.2.2     
-[21] jsonlite_1.7.1     pROC_1.16.2        dbplyr_1.4.4       compiler_4.0.0    
-[25] httr_1.4.2         backports_1.1.10   assertthat_0.2.1   cli_2.0.2         
-[29] later_1.1.0.1      htmltools_0.5.0    tools_4.0.0        gtable_0.3.0      
-[33] glue_1.4.2         Rcpp_1.0.5         cellranger_1.1.0   DiceDesign_1.8-1  
-[37] vctrs_0.3.4        nlme_3.1-149       iterators_1.0.12   timeDate_3043.102 
-[41] gower_0.2.2        xfun_0.18          globals_0.13.0     rvest_0.3.6       
-[45] lifecycle_0.2.0    future_1.19.1      MASS_7.3-53        ipred_0.9-9       
-[49] hms_0.5.3          promises_1.1.1     parallel_4.0.0     yaml_2.2.1        
-[53] curl_4.3           gridExtra_2.3      rpart_4.1-15       stringi_1.5.3     
-[57] tokenizers_0.2.1   foreach_1.5.0      lhs_1.1.1          hardhat_0.1.4     
-[61] shape_1.4.5        lava_1.6.8         rlang_0.4.7        pkgconfig_2.0.3   
-[65] evaluate_0.14      lattice_0.20-41    labeling_0.3       tidyselect_1.1.0  
-[69] plyr_1.8.6         magrittr_1.5       R6_2.4.1           generics_0.0.2    
-[73] DBI_1.1.0          mgcv_1.8-33        pillar_1.4.6       haven_2.3.1       
-[77] whisker_0.4        withr_2.3.0        survival_3.2-7     nnet_7.3-14       
-[81] janitor_2.0.1      janeaustenr_0.1.5  modelr_0.1.8       crayon_1.3.4      
-[85] utf8_1.1.4         rmarkdown_2.4      grid_4.0.0         readxl_1.3.1      
-[89] blob_1.2.1         git2r_0.27.1       reprex_0.3.0       digest_0.6.25     
-[93] httpuv_1.5.4       GPfit_1.0-8        munsell_0.5.0     </code></pre>
+  [1] colorspace_1.4-1   ellipsis_0.3.1     class_7.3-17      
+  [4] rprojroot_1.3-2    snakecase_0.11.0   fs_1.5.0          
+  [7] rstudioapi_0.11    farver_2.0.3       listenv_0.8.0     
+ [10] furrr_0.1.0        SnowballC_0.7.0    prodlim_2019.11.13
+ [13] fansi_0.4.1        lubridate_1.7.9    xml2_1.3.2        
+ [16] codetools_0.2-16   splines_4.0.3      R.methodsS3_1.8.1 
+ [19] doParallel_1.0.15  knitr_1.30         schrute_0.2.2     
+ [22] jsonlite_1.7.1     pROC_1.16.2        dbplyr_1.4.4      
+ [25] R.oo_1.24.0        compiler_4.0.3     httr_1.4.2        
+ [28] backports_1.1.10   assertthat_0.2.1   cli_2.0.2         
+ [31] later_1.1.0.1      htmltools_0.5.0    tools_4.0.3       
+ [34] gtable_0.3.0       glue_1.4.2         Rcpp_1.0.5        
+ [37] cellranger_1.1.0   styler_1.3.2       DiceDesign_1.8-1  
+ [40] vctrs_0.3.4        nlme_3.1-149       iterators_1.0.12  
+ [43] timeDate_3043.102  gower_0.2.2        xfun_0.18         
+ [46] globals_0.13.0     rvest_0.3.6        lifecycle_0.2.0   
+ [49] future_1.19.1      MASS_7.3-53        ipred_0.9-9       
+ [52] hms_0.5.3          promises_1.1.1     parallel_4.0.3    
+ [55] rematch2_2.1.2     curl_4.3           yaml_2.2.1        
+ [58] gridExtra_2.3      rpart_4.1-15       stringi_1.5.3     
+ [61] highr_0.8          tokenizers_0.2.1   foreach_1.5.0     
+ [64] lhs_1.1.1          hardhat_0.1.4      shape_1.4.5       
+ [67] lava_1.6.8         rlang_0.4.8        pkgconfig_2.0.3   
+ [70] evaluate_0.14      lattice_0.20-41    labeling_0.3      
+ [73] tidyselect_1.1.0   plyr_1.8.6         magrittr_1.5      
+ [76] R6_2.4.1           generics_0.0.2     DBI_1.1.0         
+ [79] mgcv_1.8-33        pillar_1.4.6       haven_2.3.1       
+ [82] whisker_0.4        withr_2.3.0        survival_3.2-7    
+ [85] nnet_7.3-14        janitor_2.0.1      janeaustenr_0.1.5 
+ [88] modelr_0.1.8       crayon_1.3.4       rmarkdown_2.4     
+ [91] grid_4.0.3         readxl_1.3.1       blob_1.2.1        
+ [94] git2r_0.27.1       reprex_0.3.0       digest_0.6.25     
+ [97] R.cache_0.14.0     httpuv_1.5.4       R.utils_2.10.1    
+[100] GPfit_1.0-8        munsell_0.5.0     </code></pre>
 </div>
 </div>
 </div>
@@ -1122,6 +1197,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

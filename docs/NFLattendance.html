@@ -17,12 +17,13 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
@@ -266,6 +267,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -317,6 +321,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">NFL attendance</h1>
@@ -346,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-10
+<strong>Last updated:</strong> 2020-10-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -437,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree467d8cfbf4ab18f959c6cc96e5319e5418135522targetblank467d8cfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9a61ca86f951fb5cd24379a3258da701356ee345targetblank9a61ca8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/467d8cfbf4ab18f959c6cc96e5319e5418135522" target="_blank">467d8cf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9a61ca86f951fb5cd24379a3258da701356ee345" target="_blank">9a61ca8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -496,6 +508,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9a61ca86f951fb5cd24379a3258da701356ee345/analysis/NFLattendance.Rmd" target="_blank">9a61ca8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-11
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/23f838130a3109ef6b43b04e4c5eaeef7b09147f/docs/NFLattendance.html" target="_blank">23f8381</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -575,202 +621,723 @@ wflow_publish(“analysis/NFLattendance.Rmd”)
 <div id="explore-data" class="section level2">
 <h2>Explore data</h2>
 <p>Load the attendance and team standings data from Github</p>
-<pre class="r"><code>attendance &lt;- read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-04/attendance.csv&#39;)
+<pre class="r"><code>attendance &lt;- read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-04/attendance.csv&quot;)
 
-standings &lt;- read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-04/standings.csv&#39;)
+standings &lt;- read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-04/standings.csv&quot;)
 
-attendance_joined&lt;-attendance %&gt;%
+attendance_joined &lt;- attendance %&gt;%
   left_join(standings, by = c(&quot;year&quot;, &quot;team_name&quot;, &quot;team&quot;))</code></pre>
 <p>Explore the files and look for trends. In this boxplot visual, some teams certainly expect higher weekly attendance.</p>
 <pre class="r"><code>attendance_joined %&gt;%
-  filter(!is.na(weekly_attendance))%&gt;%
- ggplot(aes(fct_reorder(team_name, weekly_attendance), 
-            weekly_attendance, 
-            fill = playoffs))+
- geom_boxplot(outlier.alpha = 0.5)+
- scale_y_continuous(labels = scales::label_comma())+
-  labs(title = &quot;NFL Weekly Attendance&quot;,
-      caption = paste0(&quot;Jim Gruman &quot;,Sys.Date()),
-      x = &quot;&quot;, y = &quot;Weekly Attendance&quot;)+
-  theme(plot.title.position = &quot;plot&quot;,
-        legend.position = &quot;bottom&quot;)+
-    coord_flip()</code></pre>
-<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-2-1.png" width="864" style="display: block; margin: auto;" /></p>
+  filter(!is.na(weekly_attendance)) %&gt;%
+  ggplot(aes(fct_reorder(team_name, weekly_attendance),
+    weekly_attendance,
+    fill = playoffs
+  )) +
+  geom_boxplot(outlier.alpha = 0.5) +
+  scale_y_continuous(labels = scales::label_comma()) +
+  labs(
+    title = &quot;NFL Weekly Attendance&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
+    x = &quot;&quot;, y = &quot;Weekly Attendance&quot;
+  ) +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    legend.position = &quot;bottom&quot;
+  ) +
+  coord_flip()</code></pre>
+<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-2-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>In this histogram, playoff-bound teams generally have higher point spread margins over the course of many games.</p>
 <pre class="r"><code>attendance_joined %&gt;%
-  distinct(team_name, year, margin_of_victory, playoffs)%&gt;%
-  ggplot(aes(margin_of_victory, fill = playoffs))+
-  geom_histogram(position = &quot;identity&quot;, alpha = 0.7)+
-  labs(title = &quot;NFL Team Margin of Victory&quot;,
-      caption = paste0(&quot;Jim Gruman &quot;,Sys.Date()),
-      x = &quot;Point Spread&quot;, y = &quot;Game Count&quot;)+
-  theme(plot.title.position = &quot;plot&quot;,
-        legend.position = &quot;bottom&quot;)</code></pre>
-<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-3-1.png" width="864" style="display: block; margin: auto;" /></p>
+  distinct(team_name, year, margin_of_victory, playoffs) %&gt;%
+  ggplot(aes(margin_of_victory, fill = playoffs)) +
+  geom_histogram(position = &quot;identity&quot;, alpha = 0.7) +
+  labs(
+    title = &quot;NFL Team Margin of Victory&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
+    x = &quot;Point Spread&quot;, y = &quot;Game Count&quot;
+  ) +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-3-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Across the weeks of the season, this data visualization shows the distribution of attendance by week number.</p>
 <pre class="r"><code>attendance_joined %&gt;%
-  mutate(week = factor(week))%&gt;%
-  ggplot(aes(week, weekly_attendance, fill = &quot;blue&quot;))+
-  geom_boxplot(show.legend = FALSE, outlier.alpha = 0.4)+
-  labs(title = &quot;NFL Weekly Game Attendance&quot;,
-      caption = paste0(&quot;Jim Gruman &quot;,Sys.Date()),
-      x = &quot;Week of Season&quot;, y = &quot;Attendance&quot;)+
-  theme(plot.title.position = &quot;plot&quot;,
-        legend.position = &quot;bottom&quot;)+
+  mutate(week = factor(week)) %&gt;%
+  ggplot(aes(week, weekly_attendance, fill = &quot;blue&quot;)) +
+  geom_boxplot(show.legend = FALSE, outlier.alpha = 0.4) +
+  labs(
+    title = &quot;NFL Weekly Game Attendance&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
+    x = &quot;Week of Season&quot;, y = &quot;Attendance&quot;
+  ) +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    legend.position = &quot;bottom&quot;
+  ) +
   scale_y_continuous(labels = scales::label_comma())</code></pre>
-<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-4-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-4-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>To build models for the prediction of weekly attendance, we will select for features arbitrarily on the team_name, the year, the week of the game, and the margin of victory.</p>
-<pre class="r"><code>attendance_df&lt;-attendance_joined  %&gt;%
-  filter(!is.na(weekly_attendance))%&gt;%
-  dplyr::select(weekly_attendance, team_name, year, week, 
-         margin_of_victory, strength_of_schedule, playoffs)</code></pre>
+<pre class="r"><code>attendance_df &lt;- attendance_joined %&gt;%
+  filter(!is.na(weekly_attendance)) %&gt;%
+  dplyr::select(
+    weekly_attendance, team_name, year, week,
+    margin_of_victory, strength_of_schedule, playoffs
+  )</code></pre>
 </div>
 <div id="train-a-model" class="section level2">
 <h2>Train a Model</h2>
 <p>First, the data are split into training and testing sets at about 75/25, stratifying for similar playoff outcomes in both.</p>
 <pre class="r"><code>library(tidymodels)
 
-attendance_split&lt;-attendance_df %&gt;%
+attendance_split &lt;- attendance_df %&gt;%
   initial_split(strata = playoffs)
 
-nfl_train &lt;-training(attendance_split)
+nfl_train &lt;- training(attendance_split)
 nfl_test &lt;- testing(attendance_split)</code></pre>
 <p>A simple linear model is specified and fit, and the estimates of coefficients are shown here:</p>
-<pre class="r"><code>lm_spec&lt;- linear_reg(mode = &quot;regression&quot;)%&gt;%
+<pre class="r"><code>lm_spec &lt;- linear_reg(mode = &quot;regression&quot;) %&gt;%
   set_engine(engine = &quot;lm&quot;)
 
-lm_fit&lt;-lm_spec %&gt;%
+lm_fit &lt;- lm_spec %&gt;%
   fit(weekly_attendance ~ ., data = nfl_train)
 
-tidy(lm_fit) %&gt;% arrange(-estimate)</code></pre>
-<pre><code># A tibble: 37 x 5
-   term              estimate std.error statistic  p.value
-   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
- 1 team_nameRedskins    7142.      759.      9.41 6.23e-21
- 2 team_nameCowboys     6939.      756.      9.18 5.57e-20
- 3 team_nameGiants      6709.      763.      8.80 1.74e-18
- 4 team_nameJets        4956.      776.      6.38 1.82e-10
- 5 team_nameBroncos     3441.      754.      4.56 5.11e- 6
- 6 team_nameChiefs      2614.      759.      3.44 5.74e- 4
- 7 team_nameEagles      1941.      763.      2.55 1.09e- 2
- 8 team_namePanthers    1700.      768.      2.21 2.70e- 2
- 9 team_namePackers     1674.      766.      2.19 2.89e- 2
-10 team_nameSaints       992.      769.      1.29 1.97e- 1
-# ... with 27 more rows</code></pre>
-<pre class="r"><code>tidy(lm_fit) %&gt;% arrange(-p.value) %&gt;% filter(p.value &lt; 0.05)</code></pre>
-<pre><code># A tibble: 26 x 5
-   term              estimate std.error statistic  p.value
-   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
- 1 team_namePackers    1674.      766.       2.19 0.0289  
- 2 team_namePanthers   1700.      768.       2.21 0.0270  
- 3 (Intercept)       -74257.    33474.      -2.22 0.0266  
- 4 team_nameEagles     1941.      763.       2.55 0.0109  
- 5 team_nameRams      -1983.      763.      -2.60 0.00938 
- 6 team_nameVikings   -2201.      759.      -2.90 0.00375 
- 7 team_nameBears     -2317.      755.      -3.07 0.00216 
- 8 team_nameLions     -2513.      771.      -3.26 0.00112 
- 9 week                 -64.1      19.2     -3.33 0.000863
-10 team_nameChiefs     2614.      759.       3.44 0.000574
-# ... with 16 more rows</code></pre>
+tidy(lm_fit) %&gt;%
+  arrange(-p.value) %&gt;%
+  filter(p.value &lt; 0.05) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">team_namePackers</td>
+<td align="right">1674.29526</td>
+<td align="right">766.00558</td>
+<td align="right">2.185748</td>
+<td align="right">0.0288644</td>
+</tr>
+<tr class="even">
+<td align="left">team_namePanthers</td>
+<td align="right">1699.55953</td>
+<td align="right">768.41575</td>
+<td align="right">2.211771</td>
+<td align="right">0.0270121</td>
+</tr>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-74257.20894</td>
+<td align="right">33474.47827</td>
+<td align="right">-2.218323</td>
+<td align="right">0.0265622</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameEagles</td>
+<td align="right">1941.48937</td>
+<td align="right">762.73556</td>
+<td align="right">2.545429</td>
+<td align="right">0.0109339</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameRams</td>
+<td align="right">-1983.40425</td>
+<td align="right">763.28879</td>
+<td align="right">-2.598498</td>
+<td align="right">0.0093813</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameVikings</td>
+<td align="right">-2200.92980</td>
+<td align="right">759.13752</td>
+<td align="right">-2.899250</td>
+<td align="right">0.0037512</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameBears</td>
+<td align="right">-2317.34128</td>
+<td align="right">755.16116</td>
+<td align="right">-3.068671</td>
+<td align="right">0.0021577</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameLions</td>
+<td align="right">-2512.66492</td>
+<td align="right">771.06073</td>
+<td align="right">-3.258712</td>
+<td align="right">0.0011241</td>
+</tr>
+<tr class="odd">
+<td align="left">week</td>
+<td align="right">-64.07119</td>
+<td align="right">19.22194</td>
+<td align="right">-3.333232</td>
+<td align="right">0.0008625</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameChiefs</td>
+<td align="right">2613.62259</td>
+<td align="right">758.69534</td>
+<td align="right">3.444891</td>
+<td align="right">0.0005744</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameBuccaneers</td>
+<td align="right">-2627.35491</td>
+<td align="right">758.18129</td>
+<td align="right">-3.465339</td>
+<td align="right">0.0005325</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameJaguars</td>
+<td align="right">-2696.75600</td>
+<td align="right">752.07298</td>
+<td align="right">-3.585764</td>
+<td align="right">0.0003382</td>
+</tr>
+<tr class="odd">
+<td align="left">strength_of_schedule</td>
+<td align="right">225.72838</td>
+<td align="right">61.43446</td>
+<td align="right">3.674296</td>
+<td align="right">0.0002401</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameSteelers</td>
+<td align="right">-2916.28980</td>
+<td align="right">766.67779</td>
+<td align="right">-3.803801</td>
+<td align="right">0.0001436</td>
+</tr>
+<tr class="odd">
+<td align="left">year</td>
+<td align="right">70.94132</td>
+<td align="right">16.65473</td>
+<td align="right">4.259529</td>
+<td align="right">0.0000207</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameColts</td>
+<td align="right">-3328.65800</td>
+<td align="right">768.92001</td>
+<td align="right">-4.329004</td>
+<td align="right">0.0000152</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameBroncos</td>
+<td align="right">3440.68652</td>
+<td align="right">753.98942</td>
+<td align="right">4.563309</td>
+<td align="right">0.0000051</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameBengals</td>
+<td align="right">-4710.78079</td>
+<td align="right">764.27198</td>
+<td align="right">-6.163749</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameRaiders</td>
+<td align="right">-4724.52537</td>
+<td align="right">765.77109</td>
+<td align="right">-6.169631</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">margin_of_victory</td>
+<td align="right">147.40053</td>
+<td align="right">23.21000</td>
+<td align="right">6.350735</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameJets</td>
+<td align="right">4956.49570</td>
+<td align="right">776.27851</td>
+<td align="right">6.384945</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameChargers</td>
+<td align="right">-5863.70020</td>
+<td align="right">778.40873</td>
+<td align="right">-7.532932</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameCardinals</td>
+<td align="right">-5994.78180</td>
+<td align="right">772.64204</td>
+<td align="right">-7.758809</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameGiants</td>
+<td align="right">6709.19480</td>
+<td align="right">762.80241</td>
+<td align="right">8.795456</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameCowboys</td>
+<td align="right">6938.61840</td>
+<td align="right">756.00873</td>
+<td align="right">9.177961</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameRedskins</td>
+<td align="right">7142.31822</td>
+<td align="right">758.73115</td>
+<td align="right">9.413503</td>
+<td align="right">0.0000000</td>
+</tr>
+</tbody>
+</table>
 <p>A comparable random forest regression is specified and fit here:</p>
-<pre class="r"><code>rf_spec&lt;- rand_forest(mode = &quot;regression&quot;) %&gt;%
+<pre class="r"><code>rf_spec &lt;- rand_forest(mode = &quot;regression&quot;) %&gt;%
   set_engine(engine = &quot;ranger&quot;)
 
-rf_fit&lt;-rf_spec %&gt;%
+rf_fit &lt;- rf_spec %&gt;%
   fit(weekly_attendance ~ ., data = nfl_train)
 
-tidy(lm_fit) %&gt;% arrange(-estimate)</code></pre>
-<pre><code># A tibble: 37 x 5
-   term              estimate std.error statistic  p.value
-   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
- 1 team_nameRedskins    7142.      759.      9.41 6.23e-21
- 2 team_nameCowboys     6939.      756.      9.18 5.57e-20
- 3 team_nameGiants      6709.      763.      8.80 1.74e-18
- 4 team_nameJets        4956.      776.      6.38 1.82e-10
- 5 team_nameBroncos     3441.      754.      4.56 5.11e- 6
- 6 team_nameChiefs      2614.      759.      3.44 5.74e- 4
- 7 team_nameEagles      1941.      763.      2.55 1.09e- 2
- 8 team_namePanthers    1700.      768.      2.21 2.70e- 2
- 9 team_namePackers     1674.      766.      2.19 2.89e- 2
-10 team_nameSaints       992.      769.      1.29 1.97e- 1
-# ... with 27 more rows</code></pre>
+tidy(lm_fit) %&gt;%
+  arrange(-estimate) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">team_nameRedskins</td>
+<td align="right">7142.31822</td>
+<td align="right">758.73115</td>
+<td align="right">9.4135034</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameCowboys</td>
+<td align="right">6938.61840</td>
+<td align="right">756.00873</td>
+<td align="right">9.1779607</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameGiants</td>
+<td align="right">6709.19480</td>
+<td align="right">762.80241</td>
+<td align="right">8.7954556</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameJets</td>
+<td align="right">4956.49570</td>
+<td align="right">776.27851</td>
+<td align="right">6.3849452</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameBroncos</td>
+<td align="right">3440.68652</td>
+<td align="right">753.98942</td>
+<td align="right">4.5633087</td>
+<td align="right">0.0000051</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameChiefs</td>
+<td align="right">2613.62259</td>
+<td align="right">758.69534</td>
+<td align="right">3.4448908</td>
+<td align="right">0.0005744</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameEagles</td>
+<td align="right">1941.48937</td>
+<td align="right">762.73556</td>
+<td align="right">2.5454292</td>
+<td align="right">0.0109339</td>
+</tr>
+<tr class="even">
+<td align="left">team_namePanthers</td>
+<td align="right">1699.55953</td>
+<td align="right">768.41575</td>
+<td align="right">2.2117708</td>
+<td align="right">0.0270121</td>
+</tr>
+<tr class="odd">
+<td align="left">team_namePackers</td>
+<td align="right">1674.29526</td>
+<td align="right">766.00558</td>
+<td align="right">2.1857481</td>
+<td align="right">0.0288644</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameSaints</td>
+<td align="right">991.92968</td>
+<td align="right">768.53111</td>
+<td align="right">1.2906825</td>
+<td align="right">0.1968530</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameTexans</td>
+<td align="right">909.75472</td>
+<td align="right">789.23906</td>
+<td align="right">1.1526985</td>
+<td align="right">0.2490703</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameDolphins</td>
+<td align="right">907.13089</td>
+<td align="right">763.01176</td>
+<td align="right">1.1888819</td>
+<td align="right">0.2345232</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameBills</td>
+<td align="right">841.74820</td>
+<td align="right">762.60011</td>
+<td align="right">1.1037871</td>
+<td align="right">0.2697203</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameFalcons</td>
+<td align="right">740.30274</td>
+<td align="right">764.18756</td>
+<td align="right">0.9687448</td>
+<td align="right">0.3327033</td>
+</tr>
+<tr class="odd">
+<td align="left">strength_of_schedule</td>
+<td align="right">225.72838</td>
+<td align="right">61.43446</td>
+<td align="right">3.6742957</td>
+<td align="right">0.0002401</td>
+</tr>
+<tr class="even">
+<td align="left">margin_of_victory</td>
+<td align="right">147.40053</td>
+<td align="right">23.21000</td>
+<td align="right">6.3507346</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">year</td>
+<td align="right">70.94132</td>
+<td align="right">16.65473</td>
+<td align="right">4.2595292</td>
+<td align="right">0.0000207</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameRavens</td>
+<td align="right">41.96004</td>
+<td align="right">757.66446</td>
+<td align="right">0.0553808</td>
+<td align="right">0.9558366</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameBrowns</td>
+<td align="right">-15.17392</td>
+<td align="right">755.80327</td>
+<td align="right">-0.0200765</td>
+<td align="right">0.9839828</td>
+</tr>
+<tr class="even">
+<td align="left">week</td>
+<td align="right">-64.07119</td>
+<td align="right">19.22194</td>
+<td align="right">-3.3332320</td>
+<td align="right">0.0008625</td>
+</tr>
+<tr class="odd">
+<td align="left">team_namePatriots</td>
+<td align="right">-192.81741</td>
+<td align="right">790.53545</td>
+<td align="right">-0.2439074</td>
+<td align="right">0.8073091</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameTitans</td>
+<td align="right">-289.20343</td>
+<td align="right">753.63545</td>
+<td align="right">-0.3837445</td>
+<td align="right">0.7011786</td>
+</tr>
+<tr class="odd">
+<td align="left">playoffsPlayoffs</td>
+<td align="right">-314.97343</td>
+<td align="right">287.70492</td>
+<td align="right">-1.0947794</td>
+<td align="right">0.2736479</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameSeahawks</td>
+<td align="right">-1015.10909</td>
+<td align="right">763.09127</td>
+<td align="right">-1.3302591</td>
+<td align="right">0.1834727</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameRams</td>
+<td align="right">-1983.40425</td>
+<td align="right">763.28879</td>
+<td align="right">-2.5984978</td>
+<td align="right">0.0093813</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameVikings</td>
+<td align="right">-2200.92980</td>
+<td align="right">759.13752</td>
+<td align="right">-2.8992505</td>
+<td align="right">0.0037512</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameBears</td>
+<td align="right">-2317.34128</td>
+<td align="right">755.16116</td>
+<td align="right">-3.0686712</td>
+<td align="right">0.0021577</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameLions</td>
+<td align="right">-2512.66492</td>
+<td align="right">771.06073</td>
+<td align="right">-3.2587121</td>
+<td align="right">0.0011241</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameBuccaneers</td>
+<td align="right">-2627.35491</td>
+<td align="right">758.18129</td>
+<td align="right">-3.4653386</td>
+<td align="right">0.0005325</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameJaguars</td>
+<td align="right">-2696.75600</td>
+<td align="right">752.07298</td>
+<td align="right">-3.5857637</td>
+<td align="right">0.0003382</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameSteelers</td>
+<td align="right">-2916.28980</td>
+<td align="right">766.67779</td>
+<td align="right">-3.8038011</td>
+<td align="right">0.0001436</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameColts</td>
+<td align="right">-3328.65800</td>
+<td align="right">768.92001</td>
+<td align="right">-4.3290043</td>
+<td align="right">0.0000152</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameBengals</td>
+<td align="right">-4710.78079</td>
+<td align="right">764.27198</td>
+<td align="right">-6.1637492</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameRaiders</td>
+<td align="right">-4724.52537</td>
+<td align="right">765.77109</td>
+<td align="right">-6.1696314</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">team_nameChargers</td>
+<td align="right">-5863.70020</td>
+<td align="right">778.40873</td>
+<td align="right">-7.5329322</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">team_nameCardinals</td>
+<td align="right">-5994.78180</td>
+<td align="right">772.64204</td>
+<td align="right">-7.7588088</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-74257.20894</td>
+<td align="right">33474.47827</td>
+<td align="right">-2.2183231</td>
+<td align="right">0.0265622</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="evaluate-models" class="section level2">
 <h2>Evaluate Models</h2>
-<pre class="r"><code>results_train&lt;-lm_fit %&gt;%
+<pre class="r"><code>results_train &lt;- lm_fit %&gt;%
   predict(new_data = nfl_train) %&gt;%
-  mutate(truth = nfl_train$weekly_attendance,
-         model = &quot;lm&quot;)%&gt;%
+  mutate(
+    truth = nfl_train$weekly_attendance,
+    model = &quot;lm&quot;
+  ) %&gt;%
   bind_rows(rf_fit %&gt;%
-      predict(new_data = nfl_train) %&gt;%
-      mutate(truth = nfl_train$weekly_attendance,
-         model = &quot;rf&quot;))
+    predict(new_data = nfl_train) %&gt;%
+    mutate(
+      truth = nfl_train$weekly_attendance,
+      model = &quot;rf&quot;
+    ))
 
-results_test&lt;-lm_fit %&gt;%
+results_test &lt;- lm_fit %&gt;%
   predict(new_data = nfl_test) %&gt;%
-  mutate(truth = nfl_test$weekly_attendance,
-         model = &quot;lm&quot;)%&gt;%
+  mutate(
+    truth = nfl_test$weekly_attendance,
+    model = &quot;lm&quot;
+  ) %&gt;%
   bind_rows(rf_fit %&gt;%
-      predict(new_data = nfl_test) %&gt;%
-      mutate(truth = nfl_test$weekly_attendance,
-         model = &quot;rf&quot;))</code></pre>
+    predict(new_data = nfl_test) %&gt;%
+    mutate(
+      truth = nfl_test$weekly_attendance,
+      model = &quot;rf&quot;
+    ))</code></pre>
+<p>On the training dataset</p>
 <pre class="r"><code>results_train %&gt;%
-  group_by(model)%&gt;%
-  rmse(truth = truth, estimate = .pred)</code></pre>
-<pre><code># A tibble: 2 x 4
-  model .metric .estimator .estimate
-  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 lm    rmse    standard       8344.
-2 rf    rmse    standard       6070.</code></pre>
+  group_by(model) %&gt;%
+  rmse(truth = truth, estimate = .pred) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">lm</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">8344.478</td>
+</tr>
+<tr class="even">
+<td align="left">rf</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">6070.373</td>
+</tr>
+</tbody>
+</table>
+<p>On the testing data:</p>
 <pre class="r"><code>results_test %&gt;%
-  group_by(model)%&gt;%
-  rmse(truth = truth, estimate = .pred)</code></pre>
-<pre><code># A tibble: 2 x 4
-  model .metric .estimator .estimate
-  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 lm    rmse    standard       8240.
-2 rf    rmse    standard       8681.</code></pre>
+  group_by(model) %&gt;%
+  rmse(truth = truth, estimate = .pred) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">lm</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">8240.025</td>
+</tr>
+<tr class="even">
+<td align="left">rf</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">8681.251</td>
+</tr>
+</tbody>
+</table>
 <p>The random forest model here appears to overfit the training data set, with disappointing results on new data.</p>
 <pre class="r"><code>results_test %&gt;%
   mutate(train = &quot;testing&quot;) %&gt;%
   bind_rows(results_train %&gt;%
-              mutate(train = &quot;training&quot;)) %&gt;%
-  ggplot(aes(truth, .pred, color = model))+
-  geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5)+
-  geom_point(alpha = 0.5)+
+    mutate(train = &quot;training&quot;)) %&gt;%
+  ggplot(aes(truth, .pred, color = model)) +
+  geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
+  geom_point(alpha = 0.5) +
   facet_wrap(~train)</code></pre>
-<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;" /> ### Lets try again, with resampling on the training</p>
+<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-12-1.png" width="3600" style="display: block; margin: auto;" /> ### Lets try again, with resampling on the training</p>
 <pre class="r"><code>library(furrr)
 
-nfl_folds&lt;- vfold_cv(nfl_train, strata = playoffs)
+nfl_folds &lt;- vfold_cv(nfl_train, strata = playoffs)
 
-rf_res&lt;-fit_resamples(
+rf_res &lt;- fit_resamples(
   weekly_attendance ~ .,
   rf_spec,
   nfl_folds,
   control = control_resamples(save_pred = TRUE)
 )
 
-rf_res %&gt;% 
-  collect_metrics()</code></pre>
-<pre><code># A tibble: 2 x 5
-  .metric .estimator     mean     n  std_err
-  &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt;
-1 rmse    standard   8585.       10 125.    
-2 rsq     standard      0.133    10   0.0104</code></pre>
+rf_res %&gt;%
+  collect_metrics() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">8584.8576180</td>
+<td align="right">10</td>
+<td align="right">125.072000</td>
+</tr>
+<tr class="even">
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.1326692</td>
+<td align="right">10</td>
+<td align="right">0.010389</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>rf_res %&gt;%
   unnest(.predictions) %&gt;%
-  ggplot(aes(weekly_attendance, .pred, color = id))+
-  geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5)+
-  geom_point(alpha = 0.5)+
-  labs(title = &quot;Model Accuracy&quot;,
-      caption = paste0(&quot;Jim Gruman &quot;,Sys.Date()),
-      x = &quot;Attendance Truth&quot;, y = &quot;Attendance Prediction&quot;)+
-  theme(plot.title.position = &quot;plot&quot;,
-        legend.position = &quot;bottom&quot;)+
-  scale_y_continuous(labels = scales::label_comma())+
+  ggplot(aes(weekly_attendance, .pred, color = id)) +
+  geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = &quot;Model Accuracy&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
+    x = &quot;Attendance Truth&quot;, y = &quot;Attendance Prediction&quot;
+  ) +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    legend.position = &quot;bottom&quot;
+  ) +
+  scale_y_continuous(labels = scales::label_comma()) +
   scale_x_continuous(labels = scales::label_comma())</code></pre>
-<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-14-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/NFLattendance.Rmd/unnamed-chunk-14-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>After resampling, the root mean squared error of the random forest model on test data is improved marginally, compared to the conventional linear model.</p>
 <p>Credits: Julia Silge, RStudio Thomas Mock, RStudio</p>
 <br>
@@ -781,7 +1348,7 @@ rf_res %&gt;%
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19041)
 
@@ -798,7 +1365,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] furrr_0.1.0      future_1.19.1    yardstick_0.0.7  workflows_0.2.0 
+ [1] furrr_0.1.0      future_1.19.1    yardstick_0.0.7  workflows_0.2.1 
  [5] tune_0.1.1       rsample_0.0.8    recipes_0.1.13   parsnip_0.1.3   
  [9] modeldata_0.0.2  infer_0.5.3      dials_0.0.9      scales_1.1.1    
 [13] broom_0.7.1      tidymodels_0.1.1 forcats_0.5.0    stringr_1.4.0   
@@ -806,30 +1373,30 @@ other attached packages:
 [21] tibble_3.0.3     ggplot2_3.3.2    tidyverse_1.3.0  workflowr_1.6.2 
 
 loaded via a namespace (and not attached):
- [1] colorspace_1.4-1   ellipsis_0.3.1     class_7.3-17       showtext_0.9      
- [5] rprojroot_1.3-2    fs_1.5.0           rstudioapi_0.11    showtextdb_3.0    
- [9] listenv_0.8.0      farver_2.0.3       prodlim_2019.11.13 fansi_0.4.1       
-[13] lubridate_1.7.9    ranger_0.12.1      xml2_1.3.2         codetools_0.2-16  
-[17] splines_4.0.0      extrafont_0.17     knitr_1.30         jsonlite_1.7.1    
-[21] pROC_1.16.2        Rttf2pt1_1.3.8     dbplyr_1.4.4       compiler_4.0.0    
+ [1] colorspace_1.4-1   ellipsis_0.3.1     class_7.3-17       rprojroot_1.3-2   
+ [5] fs_1.5.0           rstudioapi_0.11    listenv_0.8.0      farver_2.0.3      
+ [9] prodlim_2019.11.13 fansi_0.4.1        lubridate_1.7.9    ranger_0.12.1     
+[13] xml2_1.3.2         codetools_0.2-16   splines_4.0.3      R.methodsS3_1.8.1 
+[17] extrafont_0.17     knitr_1.30         jsonlite_1.7.1     pROC_1.16.2       
+[21] Rttf2pt1_1.3.8     dbplyr_1.4.4       R.oo_1.24.0        compiler_4.0.3    
 [25] httr_1.4.2         backports_1.1.10   assertthat_0.2.1   Matrix_1.2-18     
-[29] cli_2.0.2          later_1.1.0.1      hrbrthemes_0.8.0   htmltools_0.5.0   
-[33] tools_4.0.0        gtable_0.3.0       glue_1.4.2         Rcpp_1.0.5        
-[37] cellranger_1.1.0   DiceDesign_1.8-1   vctrs_0.3.4        extrafontdb_1.0   
-[41] iterators_1.0.12   timeDate_3043.102  gower_0.2.2        xfun_0.18         
-[45] globals_0.13.0     rvest_0.3.6        lifecycle_0.2.0    MASS_7.3-53       
-[49] ipred_0.9-9        hms_0.5.3          promises_1.1.1     parallel_4.0.0    
-[53] yaml_2.2.1         curl_4.3           gdtools_0.2.2      rpart_4.1-15      
-[57] stringi_1.5.3      foreach_1.5.0      lhs_1.1.1          hardhat_0.1.4     
-[61] lava_1.6.8         rlang_0.4.7        pkgconfig_2.0.3    systemfonts_0.3.2 
-[65] evaluate_0.14      lattice_0.20-41    labeling_0.3       tidyselect_1.1.0  
-[69] plyr_1.8.6         magrittr_1.5       R6_2.4.1           generics_0.0.2    
-[73] DBI_1.1.0          pillar_1.4.6       haven_2.3.1        whisker_0.4       
-[77] withr_2.3.0        survival_3.2-7     nnet_7.3-14        modelr_0.1.8      
-[81] crayon_1.3.4       utf8_1.1.4         rmarkdown_2.4      sysfonts_0.8.1    
-[85] grid_4.0.0         readxl_1.3.1       blob_1.2.1         git2r_0.27.1      
-[89] reprex_0.3.0       digest_0.6.25      httpuv_1.5.4       munsell_0.5.0     
-[93] GPfit_1.0-8       </code></pre>
+[29] cli_2.0.2          later_1.1.0.1      hrbrthemes_0.8.6   htmltools_0.5.0   
+[33] tools_4.0.3        gtable_0.3.0       glue_1.4.2         Rcpp_1.0.5        
+[37] cellranger_1.1.0   styler_1.3.2       DiceDesign_1.8-1   vctrs_0.3.4       
+[41] extrafontdb_1.0    iterators_1.0.12   timeDate_3043.102  xfun_0.18         
+[45] gower_0.2.2        globals_0.13.0     rvest_0.3.6        lifecycle_0.2.0   
+[49] MASS_7.3-53        ipred_0.9-9        hms_0.5.3          promises_1.1.1    
+[53] parallel_4.0.3     yaml_2.2.1         curl_4.3           gdtools_0.2.2     
+[57] rpart_4.1-15       stringi_1.5.3      highr_0.8          foreach_1.5.0     
+[61] lhs_1.1.1          hardhat_0.1.4      lava_1.6.8         rlang_0.4.8       
+[65] pkgconfig_2.0.3    systemfonts_0.3.2  evaluate_0.14      lattice_0.20-41   
+[69] labeling_0.3       tidyselect_1.1.0   plyr_1.8.6         magrittr_1.5      
+[73] R6_2.4.1           generics_0.0.2     DBI_1.1.0          pillar_1.4.6      
+[77] haven_2.3.1        whisker_0.4        withr_2.3.0        survival_3.2-7    
+[81] nnet_7.3-14        modelr_0.1.8       crayon_1.3.4       rmarkdown_2.4     
+[85] grid_4.0.3         readxl_1.3.1       blob_1.2.1         git2r_0.27.1      
+[89] reprex_0.3.0       digest_0.6.25      R.cache_0.14.0     httpuv_1.5.4      
+[93] R.utils_2.10.1     munsell_0.5.0      GPfit_1.0-8       </code></pre>
 </div>
 </div>
 
@@ -878,6 +1445,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
