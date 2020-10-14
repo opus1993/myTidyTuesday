@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-10-14" />
+
+<title>Datasaurus</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Datasaurus</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">October 14, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-14
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree73fd14b2cc1b1a814162697208b65a458fc5bb0ctargetblank73fd14ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/73fd14b2cc1b1a814162697208b65a458fc5bb0c" target="_blank">73fd14b</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree73fd14b2cc1b1a814162697208b65a458fc5bb0ctargetblank73fd14ba" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/73fd14b2cc1b1a814162697208b65a458fc5bb0c" target="_blank">73fd14b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/Datasaurus.Rmd</code>) and HTML (<code>docs/Datasaurus.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/73fd14b2cc1b1a814162697208b65a458fc5bb0c/analysis/Datasaurus.Rmd" target="_blank">73fd14b</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-14
+</td>
+<td>
+wflow_publish(“analysis/Datasaurus.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>This week’s <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-10-13/readme.md">Tidy Tuesday</a> speaks to the importance of visualization in data exploration. Alberto Cairo created this simulated data set in order to demonstrate how misleading summary statistics can be and to show how useful visualization is in uncovering patterns in data. In this spirit, let’s start exploring this data set to see what we find.</p>
+<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2020-10-13&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `datasaurus.csv`</code></pre>
+<p>We have 1,846 sets of x and y coordinates divided up into thirteen named descriptive data sets.</p>
+<pre class="r"><code>datasaurus &lt;- tt$datasaurus
+
+datasaurus %&gt;%
+  group_by(dataset) %&gt;%
+  summarize(
+    Mean_X = mean(x),
+    Mean_Y = mean(y),
+    SD_X = sd(x),
+    SD_Y = sd(y),
+    Corr = cor(x, y)
+  ) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dataset</th>
+<th align="right">Mean_X</th>
+<th align="right">Mean_Y</th>
+<th align="right">SD_X</th>
+<th align="right">SD_Y</th>
+<th align="right">Corr</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">away</td>
+<td align="right">54.26610</td>
+<td align="right">47.83472</td>
+<td align="right">16.76983</td>
+<td align="right">26.93974</td>
+<td align="right">-0.0641284</td>
+</tr>
+<tr class="even">
+<td align="left">bullseye</td>
+<td align="right">54.26873</td>
+<td align="right">47.83082</td>
+<td align="right">16.76924</td>
+<td align="right">26.93573</td>
+<td align="right">-0.0685864</td>
+</tr>
+<tr class="odd">
+<td align="left">circle</td>
+<td align="right">54.26732</td>
+<td align="right">47.83772</td>
+<td align="right">16.76001</td>
+<td align="right">26.93004</td>
+<td align="right">-0.0683434</td>
+</tr>
+<tr class="even">
+<td align="left">dino</td>
+<td align="right">54.26327</td>
+<td align="right">47.83225</td>
+<td align="right">16.76514</td>
+<td align="right">26.93540</td>
+<td align="right">-0.0644719</td>
+</tr>
+<tr class="odd">
+<td align="left">dots</td>
+<td align="right">54.26030</td>
+<td align="right">47.83983</td>
+<td align="right">16.76774</td>
+<td align="right">26.93019</td>
+<td align="right">-0.0603414</td>
+</tr>
+<tr class="even">
+<td align="left">h_lines</td>
+<td align="right">54.26144</td>
+<td align="right">47.83025</td>
+<td align="right">16.76590</td>
+<td align="right">26.93988</td>
+<td align="right">-0.0617148</td>
+</tr>
+<tr class="odd">
+<td align="left">high_lines</td>
+<td align="right">54.26881</td>
+<td align="right">47.83545</td>
+<td align="right">16.76670</td>
+<td align="right">26.94000</td>
+<td align="right">-0.0685042</td>
+</tr>
+<tr class="even">
+<td align="left">slant_down</td>
+<td align="right">54.26785</td>
+<td align="right">47.83590</td>
+<td align="right">16.76676</td>
+<td align="right">26.93610</td>
+<td align="right">-0.0689797</td>
+</tr>
+<tr class="odd">
+<td align="left">slant_up</td>
+<td align="right">54.26588</td>
+<td align="right">47.83150</td>
+<td align="right">16.76885</td>
+<td align="right">26.93861</td>
+<td align="right">-0.0686092</td>
+</tr>
+<tr class="even">
+<td align="left">star</td>
+<td align="right">54.26734</td>
+<td align="right">47.83955</td>
+<td align="right">16.76896</td>
+<td align="right">26.93027</td>
+<td align="right">-0.0629611</td>
+</tr>
+<tr class="odd">
+<td align="left">v_lines</td>
+<td align="right">54.26993</td>
+<td align="right">47.83699</td>
+<td align="right">16.76996</td>
+<td align="right">26.93768</td>
+<td align="right">-0.0694456</td>
+</tr>
+<tr class="even">
+<td align="left">wide_lines</td>
+<td align="right">54.26692</td>
+<td align="right">47.83160</td>
+<td align="right">16.77000</td>
+<td align="right">26.93790</td>
+<td align="right">-0.0665752</td>
+</tr>
+<tr class="odd">
+<td align="left">x_shape</td>
+<td align="right">54.26015</td>
+<td align="right">47.83972</td>
+<td align="right">16.76996</td>
+<td align="right">26.93000</td>
+<td align="right">-0.0655833</td>
+</tr>
+</tbody>
+</table>
+<p>These data sets have a lot in common. Specifically the x and y means, x and y standard deviations, and Pearson’s correlation coefficients are nearly identical.</p>
+<p>Let’s try fitting each data set to a linear model to each:</p>
+<pre class="r"><code>datasaurus %&gt;%
+  nest(data = -dataset) %&gt;%
+  mutate(
+    model = map(data, ~ lm(y ~ x, data = .)),
+    tidied = map(model, broom::tidy)
+  ) %&gt;%
+  unnest(tidied) %&gt;%
+  select(-data, -model) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dataset</th>
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">dino</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.4529784</td>
+<td align="right">7.6933924</td>
+<td align="right">6.9479075</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">dino</td>
+<td align="left">x</td>
+<td align="right">-0.1035825</td>
+<td align="right">0.1355026</td>
+<td align="right">-0.7644316</td>
+<td align="right">0.4458966</td>
+</tr>
+<tr class="odd">
+<td align="left">away</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.4251300</td>
+<td align="right">7.6932059</td>
+<td align="right">6.9444560</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">away</td>
+<td align="left">x</td>
+<td align="right">-0.1030184</td>
+<td align="right">0.1354896</td>
+<td align="right">-0.7603419</td>
+<td align="right">0.4483288</td>
+</tr>
+<tr class="odd">
+<td align="left">h_lines</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.2110872</td>
+<td align="right">7.6954597</td>
+<td align="right">6.9146080</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">h_lines</td>
+<td align="left">x</td>
+<td align="right">-0.0991650</td>
+<td align="right">0.1355427</td>
+<td align="right">-0.7316144</td>
+<td align="right">0.4656268</td>
+</tr>
+<tr class="odd">
+<td align="left">v_lines</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.8908434</td>
+<td align="right">7.6903136</td>
+<td align="right">7.0076262</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">v_lines</td>
+<td align="left">x</td>
+<td align="right">-0.1115508</td>
+<td align="right">0.1354299</td>
+<td align="right">-0.8236796</td>
+<td align="right">0.4115226</td>
+</tr>
+<tr class="odd">
+<td align="left">x_shape</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.5542263</td>
+<td align="right">7.6888696</td>
+<td align="right">6.9651625</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">x_shape</td>
+<td align="left">x</td>
+<td align="right">-0.1053169</td>
+<td align="right">0.1354267</td>
+<td align="right">-0.7776668</td>
+<td align="right">0.4380777</td>
+</tr>
+<tr class="odd">
+<td align="left">star</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.3266787</td>
+<td align="right">7.6915981</td>
+<td align="right">6.9331078</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">star</td>
+<td align="left">x</td>
+<td align="right">-0.1011130</td>
+<td align="right">0.1354591</td>
+<td align="right">-0.7464467</td>
+<td align="right">0.4566492</td>
+</tr>
+<tr class="odd">
+<td align="left">high_lines</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.8087932</td>
+<td align="right">7.6926945</td>
+<td align="right">6.9947914</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">high_lines</td>
+<td align="left">x</td>
+<td align="right">-0.1100695</td>
+<td align="right">0.1354766</td>
+<td align="right">-0.8124615</td>
+<td align="right">0.4179063</td>
+</tr>
+<tr class="odd">
+<td align="left">dots</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.0983419</td>
+<td align="right">7.6924229</td>
+<td align="right">6.9026811</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">dots</td>
+<td align="left">x</td>
+<td align="right">-0.0969127</td>
+<td align="right">0.1354905</td>
+<td align="right">-0.7152729</td>
+<td align="right">0.4756316</td>
+</tr>
+<tr class="odd">
+<td align="left">circle</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.7970450</td>
+<td align="right">7.6925470</td>
+<td align="right">6.9933983</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">circle</td>
+<td align="left">x</td>
+<td align="right">-0.1098143</td>
+<td align="right">0.1354821</td>
+<td align="right">-0.8105447</td>
+<td align="right">0.4190029</td>
+</tr>
+<tr class="odd">
+<td align="left">bullseye</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.8094708</td>
+<td align="right">7.6903593</td>
+<td align="right">6.9970035</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">bullseye</td>
+<td align="left">x</td>
+<td align="right">-0.1101675</td>
+<td align="right">0.1354339</td>
+<td align="right">-0.8134407</td>
+<td align="right">0.4173467</td>
+</tr>
+<tr class="odd">
+<td align="left">slant_up</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.8125956</td>
+<td align="right">7.6909632</td>
+<td align="right">6.9968604</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">slant_up</td>
+<td align="left">x</td>
+<td align="right">-0.1102184</td>
+<td align="right">0.1354513</td>
+<td align="right">-0.8137125</td>
+<td align="right">0.4171915</td>
+</tr>
+<tr class="odd">
+<td align="left">slant_down</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.8497077</td>
+<td align="right">7.6911834</td>
+<td align="right">7.0014853</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">slant_down</td>
+<td align="left">x</td>
+<td align="right">-0.1108172</td>
+<td align="right">0.1354522</td>
+<td align="right">-0.8181280</td>
+<td align="right">0.4146744</td>
+</tr>
+<tr class="odd">
+<td align="left">wide_lines</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.6349489</td>
+<td align="right">7.6914773</td>
+<td align="right">6.9732961</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">wide_lines</td>
+<td align="left">x</td>
+<td align="right">-0.1069408</td>
+<td align="right">0.1354572</td>
+<td align="right">-0.7894803</td>
+<td align="right">0.4311664</td>
+</tr>
+</tbody>
+</table>
+<p>The intercept, slope and standard errors are all pretty much identical to each other. Let’s plot these models and take a look.</p>
+<pre class="r"><code>datasaurus %&gt;%
+  ggplot(aes(x, y, color = dataset)) +
+  geom_point() +
+  geom_smooth(
+    method = &quot;lm&quot;,
+    formula = y ~ x,
+    se = FALSE,
+    color = &quot;black&quot;
+  ) +
+  labs(
+    title = &quot;Best Linear Fit Line&quot;,
+    caption = &quot;Simulated Data: Alberto Cairo&quot;
+  )</code></pre>
+<p><img src="figure/Datasaurus.Rmd/unnamed-chunk-4-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>The models match up nicely, but there’s a lot of noise and there seem to be some strong unexplained patterns in the underlying data. Let’s look at each data set individually.</p>
+<pre class="r"><code>left_plot &lt;- datasaurus %&gt;%
+  filter(dataset == &quot;dino&quot;) %&gt;%
+  ggplot(aes(x, y)) +
+  geom_point(show.legend = FALSE) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = &quot;Each Dataset Has Nearly Identical Summary Statistics&quot;,
+    subtitle = &quot;Visualization is an essential component of data exploration&quot;,
+    caption = &quot;&quot;
+  )
+
+right_plot &lt;- datasaurus %&gt;%
+  filter(dataset != &quot;dino&quot;) %&gt;%
+  ggplot(aes(x, y, color = dataset)) +
+  geom_point(show.legend = FALSE) +
+  facet_wrap(~dataset) +
+  theme(
+    strip.text = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = &quot;&quot;,
+    subtitle = &quot;&quot;,
+    caption = &quot;Simulated Data: Alberto Cairo&quot;
+  )
+
+grid.arrange(left_plot, right_plot, ncol = 2)</code></pre>
+<p><img src="figure/Datasaurus.Rmd/unnamed-chunk-5-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>These plots are much more different than the summary statistics alone would suggest!</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] gridExtra_2.3   broom_0.7.1     forcats_0.5.0   stringr_1.4.0  
+ [5] dplyr_1.0.2     purrr_0.3.4     readr_1.4.0     tidyr_1.1.2    
+ [9] tibble_3.0.3    ggplot2_3.3.2   tidyverse_1.3.0 workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] nlme_3.1-149       fs_1.5.0           usethis_1.6.3      lubridate_1.7.9   
+ [5] httr_1.4.2         rprojroot_1.3-2    R.cache_0.14.0     tools_4.0.3       
+ [9] backports_1.1.10   R6_2.4.1           DBI_1.1.0          mgcv_1.8-33       
+[13] colorspace_1.4-1   withr_2.3.0        tidyselect_1.1.0   curl_4.3          
+[17] compiler_4.0.3     git2r_0.27.1       extrafontdb_1.0    cli_2.1.0         
+[21] rvest_0.3.6        xml2_1.3.2         labeling_0.3       scales_1.1.1      
+[25] systemfonts_0.3.2  digest_0.6.25      rmarkdown_2.4      R.utils_2.10.1    
+[29] tidytuesdayR_1.0.1 pkgconfig_2.0.3    htmltools_0.5.0    extrafont_0.17    
+[33] styler_1.3.2       dbplyr_1.4.4       highr_0.8          rlang_0.4.8       
+[37] readxl_1.3.1       rstudioapi_0.11    farver_2.0.3       generics_0.0.2    
+[41] jsonlite_1.7.1     R.oo_1.24.0        magrittr_1.5       Matrix_1.2-18     
+[45] Rcpp_1.0.5         munsell_0.5.0      fansi_0.4.1        gdtools_0.2.2     
+[49] lifecycle_0.2.0    R.methodsS3_1.8.1  stringi_1.5.3      whisker_0.4       
+[53] yaml_2.2.1         grid_4.0.3         hrbrthemes_0.8.6   blob_1.2.1        
+[57] promises_1.1.1     crayon_1.3.4       lattice_0.20-41    haven_2.3.1       
+[61] splines_4.0.3      hms_0.5.3          knitr_1.30         ps_1.4.0          
+[65] pillar_1.4.6       reprex_0.3.0       glue_1.4.2         evaluate_0.14     
+[69] modelr_0.1.8       vctrs_0.3.4        httpuv_1.5.4       selectr_0.4-2     
+[73] Rttf2pt1_1.3.8     cellranger_1.1.0   gtable_0.3.0       assertthat_0.2.1  
+[77] xfun_0.18          later_1.1.0.1      ellipsis_0.3.1    </code></pre>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
