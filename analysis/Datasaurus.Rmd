@@ -1,0 +1,112 @@
+---
+title: "Datasaurus"
+author: "Jim Gruman"
+date: "October 14, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+This week’s [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-10-13/readme.md) speaks to the importance of visualization in data exploration. Alberto Cairo created this simulated data set in order to demonstrate how misleading summary statistics can be and to show how useful visualization is in uncovering patterns in data. In this spirit, let’s start exploring this data set to see what we find.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402)
+
+library(tidyverse)
+extrafont::loadfonts()
+library(broom)
+library(gridExtra)
+library(purrr)
+
+theme_set(hrbrthemes::theme_ipsum_ps() +
+            theme(plot.title.position = "plot"))
+```
+
+```{r}
+tt <- tidytuesdayR::tt_load("2020-10-13")
+
+```
+We have 1,846 sets of x and y coordinates divided up into thirteen named descriptive data sets. 
+
+```{r}
+datasaurus <- tt$datasaurus
+
+datasaurus %>%
+        group_by(dataset) %>% 
+        summarize(Mean_X = mean(x),
+                  Mean_Y = mean(y),
+                  SD_X = sd(x),
+                  SD_Y = sd(y),
+                  Corr = cor(x, y)
+                  ) %>% 
+  knitr::kable()
+```
+
+These data sets have a lot in common. Specifically the x and y means, x and y standard deviations, and Pearson's correlation coefficients are nearly identical.
+
+Let's try fitting each data set to a linear model to each:
+
+```{r}
+datasaurus %>%
+        nest(data = -dataset) %>% 
+        mutate(model = map(data, ~ lm(y ~ x, data = .)),
+               tidied = map(model, broom::tidy)
+        ) %>% 
+        unnest(tidied) %>% 
+        select(-data, -model) %>% knitr::kable()
+```
+The intercept, slope and standard errors are all pretty much identical to each other. Let's plot these models and take a look.
+
+```{r }
+datasaurus %>% 
+        ggplot(aes(x, y, color = dataset)) +
+        geom_point() +
+        geom_smooth(method = "lm", 
+                    formula = y ~ x,
+                    se = FALSE,
+                    color = "black") +
+  labs(title = "Best Linear Fit Line",
+       caption = "Simulated Data: Alberto Cairo")
+```
+
+The models match up nicely, but there's a lot of noise and there seem to be some strong unexplained patterns in the underlying data. Let's look at each data set individually.
+
+```{r}
+left_plot <- datasaurus %>%
+        filter(dataset == "dino") %>%
+        ggplot(aes(x, y)) +
+        geom_point(show.legend = FALSE) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+        labs(title = "Each Dataset Has Nearly Identical Summary Statistics",
+             subtitle = "Visualization is an essential component of data exploration",
+             caption = "")
+
+right_plot <- datasaurus %>%
+        filter(dataset != "dino") %>%
+        ggplot(aes(x, y, color = dataset)) +
+        geom_point(show.legend = FALSE) +
+        facet_wrap( ~ dataset) +
+        theme(strip.text = element_blank(),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank()) +
+        labs(title = "",
+             subtitle = "",
+             caption = "Simulated Data: Alberto Cairo")
+
+grid.arrange(left_plot, right_plot, ncol = 2)
+```
+
+
+These plots are much more different than the summary statistics alone would suggest!
