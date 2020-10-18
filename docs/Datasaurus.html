@@ -358,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-14
+<strong>Last updated:</strong> 2020-10-18
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -449,16 +449,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree73fd14b2cc1b1a814162697208b65a458fc5bb0ctargetblank73fd14ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/73fd14b2cc1b1a814162697208b65a458fc5bb0c" target="_blank">73fd14b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee94e1ded537feee6d724f2c54374f45584df6360targetblanke94e1dea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/e94e1ded537feee6d724f2c54374f45584df6360" target="_blank">e94e1de</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree73fd14b2cc1b1a814162697208b65a458fc5bb0ctargetblank73fd14ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee94e1ded537feee6d724f2c54374f45584df6360targetblanke94e1dea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/73fd14b2cc1b1a814162697208b65a458fc5bb0c" target="_blank">73fd14b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/e94e1ded537feee6d724f2c54374f45584df6360" target="_blank">e94e1de</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -510,6 +510,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/e94e1ded537feee6d724f2c54374f45584df6360/analysis/Datasaurus.Rmd" target="_blank">e94e1de</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-18
+</td>
+<td>
+wflow_publish(“analysis/Datasaurus.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/83fdaf83f1a9ef6299ffd6592e1df0825b58a92c/docs/Datasaurus.html" target="_blank">83fdaf8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/opus1993/myTidyTuesday/blob/73fd14b2cc1b1a814162697208b65a458fc5bb0c/analysis/Datasaurus.Rmd" target="_blank">73fd14b</a>
 </td>
 <td>
@@ -538,129 +572,128 @@ wflow_publish(“analysis/Datasaurus.Rmd”)
 
 datasaurus %&gt;%
   group_by(dataset) %&gt;%
-  summarize(
-    Mean_X = mean(x),
-    Mean_Y = mean(y),
-    SD_X = sd(x),
-    SD_Y = sd(y),
-    Corr = cor(x, y)
+  summarise(across(
+    c(x, y),
+    list(mean = mean, sd = sd)
+  ),
+  x_y_cor = cor(x, y)
   ) %&gt;%
-  knitr::kable()</code></pre>
+  knitr::kable(digits = c(0, 2, 2, 2, 2, 2))</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">dataset</th>
-<th align="right">Mean_X</th>
-<th align="right">Mean_Y</th>
-<th align="right">SD_X</th>
-<th align="right">SD_Y</th>
-<th align="right">Corr</th>
+<th align="right">x_mean</th>
+<th align="right">x_sd</th>
+<th align="right">y_mean</th>
+<th align="right">y_sd</th>
+<th align="right">x_y_cor</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">away</td>
-<td align="right">54.26610</td>
-<td align="right">47.83472</td>
-<td align="right">16.76983</td>
-<td align="right">26.93974</td>
-<td align="right">-0.0641284</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.06</td>
 </tr>
 <tr class="even">
 <td align="left">bullseye</td>
-<td align="right">54.26873</td>
-<td align="right">47.83082</td>
-<td align="right">16.76924</td>
-<td align="right">26.93573</td>
-<td align="right">-0.0685864</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
 </tr>
 <tr class="odd">
 <td align="left">circle</td>
-<td align="right">54.26732</td>
-<td align="right">47.83772</td>
-<td align="right">16.76001</td>
-<td align="right">26.93004</td>
-<td align="right">-0.0683434</td>
+<td align="right">54.27</td>
+<td align="right">16.76</td>
+<td align="right">47.84</td>
+<td align="right">26.93</td>
+<td align="right">-0.07</td>
 </tr>
 <tr class="even">
 <td align="left">dino</td>
-<td align="right">54.26327</td>
-<td align="right">47.83225</td>
-<td align="right">16.76514</td>
-<td align="right">26.93540</td>
-<td align="right">-0.0644719</td>
+<td align="right">54.26</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.06</td>
 </tr>
 <tr class="odd">
 <td align="left">dots</td>
-<td align="right">54.26030</td>
-<td align="right">47.83983</td>
-<td align="right">16.76774</td>
-<td align="right">26.93019</td>
-<td align="right">-0.0603414</td>
+<td align="right">54.26</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.93</td>
+<td align="right">-0.06</td>
 </tr>
 <tr class="even">
 <td align="left">h_lines</td>
-<td align="right">54.26144</td>
-<td align="right">47.83025</td>
-<td align="right">16.76590</td>
-<td align="right">26.93988</td>
-<td align="right">-0.0617148</td>
+<td align="right">54.26</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.06</td>
 </tr>
 <tr class="odd">
 <td align="left">high_lines</td>
-<td align="right">54.26881</td>
-<td align="right">47.83545</td>
-<td align="right">16.76670</td>
-<td align="right">26.94000</td>
-<td align="right">-0.0685042</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
 </tr>
 <tr class="even">
 <td align="left">slant_down</td>
-<td align="right">54.26785</td>
-<td align="right">47.83590</td>
-<td align="right">16.76676</td>
-<td align="right">26.93610</td>
-<td align="right">-0.0689797</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
 </tr>
 <tr class="odd">
 <td align="left">slant_up</td>
-<td align="right">54.26588</td>
-<td align="right">47.83150</td>
-<td align="right">16.76885</td>
-<td align="right">26.93861</td>
-<td align="right">-0.0686092</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
 </tr>
 <tr class="even">
 <td align="left">star</td>
-<td align="right">54.26734</td>
-<td align="right">47.83955</td>
-<td align="right">16.76896</td>
-<td align="right">26.93027</td>
-<td align="right">-0.0629611</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.93</td>
+<td align="right">-0.06</td>
 </tr>
 <tr class="odd">
 <td align="left">v_lines</td>
-<td align="right">54.26993</td>
-<td align="right">47.83699</td>
-<td align="right">16.76996</td>
-<td align="right">26.93768</td>
-<td align="right">-0.0694456</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
 </tr>
 <tr class="even">
 <td align="left">wide_lines</td>
-<td align="right">54.26692</td>
-<td align="right">47.83160</td>
-<td align="right">16.77000</td>
-<td align="right">26.93790</td>
-<td align="right">-0.0665752</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
 </tr>
 <tr class="odd">
 <td align="left">x_shape</td>
-<td align="right">54.26015</td>
-<td align="right">47.83972</td>
-<td align="right">16.76996</td>
-<td align="right">26.93000</td>
-<td align="right">-0.0655833</td>
+<td align="right">54.26</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.93</td>
+<td align="right">-0.07</td>
 </tr>
 </tbody>
 </table>
@@ -674,7 +707,7 @@ datasaurus %&gt;%
   ) %&gt;%
   unnest(tidied) %&gt;%
   select(-data, -model) %&gt;%
-  knitr::kable()</code></pre>
+  knitr::kable(digits = c(0, 0, 2, 2, 2, 2))</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -690,210 +723,210 @@ datasaurus %&gt;%
 <tr class="odd">
 <td align="left">dino</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.4529784</td>
-<td align="right">7.6933924</td>
-<td align="right">6.9479075</td>
-<td align="right">0.0000000</td>
+<td align="right">53.45</td>
+<td align="right">7.69</td>
+<td align="right">6.95</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">dino</td>
 <td align="left">x</td>
-<td align="right">-0.1035825</td>
-<td align="right">0.1355026</td>
-<td align="right">-0.7644316</td>
-<td align="right">0.4458966</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.76</td>
+<td align="right">0.45</td>
 </tr>
 <tr class="odd">
 <td align="left">away</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.4251300</td>
-<td align="right">7.6932059</td>
-<td align="right">6.9444560</td>
-<td align="right">0.0000000</td>
+<td align="right">53.43</td>
+<td align="right">7.69</td>
+<td align="right">6.94</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">away</td>
 <td align="left">x</td>
-<td align="right">-0.1030184</td>
-<td align="right">0.1354896</td>
-<td align="right">-0.7603419</td>
-<td align="right">0.4483288</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.76</td>
+<td align="right">0.45</td>
 </tr>
 <tr class="odd">
 <td align="left">h_lines</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.2110872</td>
-<td align="right">7.6954597</td>
-<td align="right">6.9146080</td>
-<td align="right">0.0000000</td>
+<td align="right">53.21</td>
+<td align="right">7.70</td>
+<td align="right">6.91</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">h_lines</td>
 <td align="left">x</td>
-<td align="right">-0.0991650</td>
-<td align="right">0.1355427</td>
-<td align="right">-0.7316144</td>
-<td align="right">0.4656268</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.73</td>
+<td align="right">0.47</td>
 </tr>
 <tr class="odd">
 <td align="left">v_lines</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.8908434</td>
-<td align="right">7.6903136</td>
-<td align="right">7.0076262</td>
-<td align="right">0.0000000</td>
+<td align="right">53.89</td>
+<td align="right">7.69</td>
+<td align="right">7.01</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">v_lines</td>
 <td align="left">x</td>
-<td align="right">-0.1115508</td>
-<td align="right">0.1354299</td>
-<td align="right">-0.8236796</td>
-<td align="right">0.4115226</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.82</td>
+<td align="right">0.41</td>
 </tr>
 <tr class="odd">
 <td align="left">x_shape</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.5542263</td>
-<td align="right">7.6888696</td>
-<td align="right">6.9651625</td>
-<td align="right">0.0000000</td>
+<td align="right">53.55</td>
+<td align="right">7.69</td>
+<td align="right">6.97</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">x_shape</td>
 <td align="left">x</td>
-<td align="right">-0.1053169</td>
-<td align="right">0.1354267</td>
-<td align="right">-0.7776668</td>
-<td align="right">0.4380777</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.78</td>
+<td align="right">0.44</td>
 </tr>
 <tr class="odd">
 <td align="left">star</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.3266787</td>
-<td align="right">7.6915981</td>
-<td align="right">6.9331078</td>
-<td align="right">0.0000000</td>
+<td align="right">53.33</td>
+<td align="right">7.69</td>
+<td align="right">6.93</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">star</td>
 <td align="left">x</td>
-<td align="right">-0.1011130</td>
-<td align="right">0.1354591</td>
-<td align="right">-0.7464467</td>
-<td align="right">0.4566492</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.75</td>
+<td align="right">0.46</td>
 </tr>
 <tr class="odd">
 <td align="left">high_lines</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.8087932</td>
-<td align="right">7.6926945</td>
-<td align="right">6.9947914</td>
-<td align="right">0.0000000</td>
+<td align="right">53.81</td>
+<td align="right">7.69</td>
+<td align="right">6.99</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">high_lines</td>
 <td align="left">x</td>
-<td align="right">-0.1100695</td>
-<td align="right">0.1354766</td>
-<td align="right">-0.8124615</td>
-<td align="right">0.4179063</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.81</td>
+<td align="right">0.42</td>
 </tr>
 <tr class="odd">
 <td align="left">dots</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.0983419</td>
-<td align="right">7.6924229</td>
-<td align="right">6.9026811</td>
-<td align="right">0.0000000</td>
+<td align="right">53.10</td>
+<td align="right">7.69</td>
+<td align="right">6.90</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">dots</td>
 <td align="left">x</td>
-<td align="right">-0.0969127</td>
-<td align="right">0.1354905</td>
-<td align="right">-0.7152729</td>
-<td align="right">0.4756316</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.72</td>
+<td align="right">0.48</td>
 </tr>
 <tr class="odd">
 <td align="left">circle</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.7970450</td>
-<td align="right">7.6925470</td>
-<td align="right">6.9933983</td>
-<td align="right">0.0000000</td>
+<td align="right">53.80</td>
+<td align="right">7.69</td>
+<td align="right">6.99</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">circle</td>
 <td align="left">x</td>
-<td align="right">-0.1098143</td>
-<td align="right">0.1354821</td>
-<td align="right">-0.8105447</td>
-<td align="right">0.4190029</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.81</td>
+<td align="right">0.42</td>
 </tr>
 <tr class="odd">
 <td align="left">bullseye</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.8094708</td>
-<td align="right">7.6903593</td>
-<td align="right">6.9970035</td>
-<td align="right">0.0000000</td>
+<td align="right">53.81</td>
+<td align="right">7.69</td>
+<td align="right">7.00</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">bullseye</td>
 <td align="left">x</td>
-<td align="right">-0.1101675</td>
-<td align="right">0.1354339</td>
-<td align="right">-0.8134407</td>
-<td align="right">0.4173467</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.81</td>
+<td align="right">0.42</td>
 </tr>
 <tr class="odd">
 <td align="left">slant_up</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.8125956</td>
-<td align="right">7.6909632</td>
-<td align="right">6.9968604</td>
-<td align="right">0.0000000</td>
+<td align="right">53.81</td>
+<td align="right">7.69</td>
+<td align="right">7.00</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">slant_up</td>
 <td align="left">x</td>
-<td align="right">-0.1102184</td>
-<td align="right">0.1354513</td>
-<td align="right">-0.8137125</td>
-<td align="right">0.4171915</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.81</td>
+<td align="right">0.42</td>
 </tr>
 <tr class="odd">
 <td align="left">slant_down</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.8497077</td>
-<td align="right">7.6911834</td>
-<td align="right">7.0014853</td>
-<td align="right">0.0000000</td>
+<td align="right">53.85</td>
+<td align="right">7.69</td>
+<td align="right">7.00</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">slant_down</td>
 <td align="left">x</td>
-<td align="right">-0.1108172</td>
-<td align="right">0.1354522</td>
-<td align="right">-0.8181280</td>
-<td align="right">0.4146744</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.82</td>
+<td align="right">0.41</td>
 </tr>
 <tr class="odd">
 <td align="left">wide_lines</td>
 <td align="left">(Intercept)</td>
-<td align="right">53.6349489</td>
-<td align="right">7.6914773</td>
-<td align="right">6.9732961</td>
-<td align="right">0.0000000</td>
+<td align="right">53.63</td>
+<td align="right">7.69</td>
+<td align="right">6.97</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">wide_lines</td>
 <td align="left">x</td>
-<td align="right">-0.1069408</td>
-<td align="right">0.1354572</td>
-<td align="right">-0.7894803</td>
-<td align="right">0.4311664</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.79</td>
+<td align="right">0.43</td>
 </tr>
 </tbody>
 </table>
@@ -908,7 +941,7 @@ datasaurus %&gt;%
     color = &quot;black&quot;
   ) +
   labs(
-    title = &quot;Best Linear Fit Line&quot;,
+    title = &quot;Best Linear Fit Lines for every dataset&quot;,
     caption = &quot;Simulated Data: Alberto Cairo&quot;
   )</code></pre>
 <p><img src="figure/Datasaurus.Rmd/unnamed-chunk-4-1.png" width="3600" style="display: block; margin: auto;" /></p>
@@ -946,6 +979,256 @@ right_plot &lt;- datasaurus %&gt;%
 grid.arrange(left_plot, right_plot, ncol = 2)</code></pre>
 <p><img src="figure/Datasaurus.Rmd/unnamed-chunk-5-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>These plots are much more different than the summary statistics alone would suggest!</p>
+<hr />
+<div id="predicting-class-membership" class="section level1">
+<h1>Predicting class membership</h1>
+<blockquote>
+<p>Based largely on <span class="citation">@juliasilge</span>’s work at <a href="https://juliasilge.com/blog/datasaurus-multiclass/">Datasaurus Multiclass</a></p>
+</blockquote>
+<p>Let’s explore whether we can use modeling to predict which dataset a point belongs to. This is not a large dataset compared to the number of classes (13!) so this will not be a tutorial for best practices for a predictive modeling workflow overall, but it does demonstrate how to evaluate a multiclass model, as well as a bit about how random forest models work.</p>
+<div id="build-a-model" class="section level2">
+<h2>Build a model</h2>
+<p>Let’s start out by creating bootstrap resamples of the Datasaurus Dozen. Notice that we aren’t splitting into testing and training sets, so we won’t have an unbiased estimate of performance on new data. Instead, we will use these resamples to understand the dataset and multiclass models better.</p>
+<pre class="r"><code>dino_folds &lt;- datasaurus %&gt;%
+  mutate(dataset = factor(dataset)) %&gt;%
+  bootstraps()</code></pre>
+<p>Let’s create a random forest model and set up a model workflow with the model and a formula preprocessor. We are predicting the <code>dataset</code> class (dino vs. circle vs. bullseye vs. …) from x and y. A random forest model can often do a good job of learning complex interactions in predictors.</p>
+<pre class="r"><code>rf_spec &lt;- rand_forest(trees = 1000) %&gt;%
+  set_mode(&quot;classification&quot;) %&gt;%
+  set_engine(&quot;ranger&quot;)
+
+dino_wf &lt;- workflow() %&gt;%
+  add_formula(dataset ~ x + y) %&gt;%
+  add_model(rf_spec)</code></pre>
+<p>Let’s fit the random forest model to the bootstrap resamples.</p>
+<pre class="r"><code>doParallel::registerDoParallel()
+dino_rs &lt;- fit_resamples(
+  dino_wf,
+  resamples = dino_folds,
+  control = control_resamples(save_pred = TRUE)
+)</code></pre>
+</div>
+</div>
+<div id="evaluate-the-model" class="section level1">
+<h1>Evaluate the model</h1>
+<p>How did these models do overall?</p>
+<pre class="r"><code>collect_metrics(dino_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">multiclass</td>
+<td align="right">0.4415738</td>
+<td align="right">25</td>
+<td align="right">0.0027946</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">hand_till</td>
+<td align="right">0.8417101</td>
+<td align="right">25</td>
+<td align="right">0.0017558</td>
+</tr>
+</tbody>
+</table>
+<p>The accuracy is not great; a multiclass problem like this, especially one with so many classes, is harder than a binary classification problem. There are so many possible wrong answers!</p>
+<p>Since we saved the predictions with <code>save_pred = TRUE</code> we can compute other performance metrics. Notice that by default the positive predictive value (like accuracy) is macro-weighted for multiclass problems.</p>
+<pre class="r"><code>dino_rs %&gt;%
+  collect_predictions() %&gt;%
+  group_by(id) %&gt;%
+  ppv(dataset, .pred_class) %&gt;%
+  knitr::kable(digits = c(0, 0, 0, 3))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">id</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bootstrap01</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.411</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap02</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.419</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap03</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.418</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap04</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.443</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap05</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.445</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap06</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.425</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap07</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.425</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap08</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.413</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap09</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.415</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap10</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.430</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap11</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.421</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap12</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.403</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap13</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.433</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap14</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.433</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap15</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.398</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap16</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.386</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap17</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.426</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap18</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.424</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap19</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.419</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap20</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.435</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap21</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.407</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap22</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.447</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap23</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.427</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap24</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.437</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap25</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.413</td>
+</tr>
+</tbody>
+</table>
+<p>Next, let’s compute ROC curves for each class.</p>
+<pre class="r"><code>dino_rs %&gt;%
+  collect_predictions() %&gt;%
+  group_by(id) %&gt;%
+  roc_curve(dataset, .pred_away:.pred_x_shape) %&gt;%
+  ggplot(aes(1 - specificity, sensitivity, color = id)) +
+  geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
+  geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
+  facet_wrap(~.level, ncol = 5) +
+  coord_equal()</code></pre>
+<p><img src="figure/Datasaurus.Rmd/unnamed-chunk-11-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>We have an ROC curve for each class and each resample in this plot. Notice that the points dataset was easy for the model to identify while the dino dataset was very difficult. The model barely did better than guessing for the dino!</p>
+<p>We can also compute a confusion matrix. We could use <code>tune::conf_mat_resampled()</code> but since there are so few examples per class and the classes were balanced, let’s just look at all the resamples together.</p>
+<pre class="r"><code>dino_rs %&gt;%
+  collect_predictions() %&gt;%
+  conf_mat(dataset, .pred_class) %&gt;%
+  autoplot(type = &quot;heatmap&quot;)</code></pre>
+<p><img src="figure/Datasaurus.Rmd/unnamed-chunk-12-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>There is some real variability on the diagonal, with a factor of 10 difference from dinos to dots.</p>
+<p>The dino dataset was confused with many of the other datasets, and `<code>wide_lines</code> was often confused with both <code>slant_up</code> and <code>away</code>.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -971,31 +1254,50 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] gridExtra_2.3   broom_0.7.1     forcats_0.5.0   stringr_1.4.0  
- [5] dplyr_1.0.2     purrr_0.3.4     readr_1.4.0     tidyr_1.1.2    
- [9] tibble_3.0.3    ggplot2_3.3.2   tidyverse_1.3.0 workflowr_1.6.2
+ [1] yardstick_0.0.7  workflows_0.2.1  tune_0.1.1       rsample_0.0.8   
+ [5] recipes_0.1.13   parsnip_0.1.3    modeldata_0.0.2  infer_0.5.3     
+ [9] dials_0.0.9      scales_1.1.1     tidymodels_0.1.1 gridExtra_2.3   
+[13] broom_0.7.1      forcats_0.5.0    stringr_1.4.0    dplyr_1.0.2     
+[17] purrr_0.3.4      readr_1.4.0      tidyr_1.1.2      tibble_3.0.3    
+[21] ggplot2_3.3.2    tidyverse_1.3.0  workflowr_1.6.2 
 
 loaded via a namespace (and not attached):
- [1] nlme_3.1-149       fs_1.5.0           usethis_1.6.3      lubridate_1.7.9   
- [5] httr_1.4.2         rprojroot_1.3-2    R.cache_0.14.0     tools_4.0.3       
- [9] backports_1.1.10   R6_2.4.1           DBI_1.1.0          mgcv_1.8-33       
-[13] colorspace_1.4-1   withr_2.3.0        tidyselect_1.1.0   curl_4.3          
-[17] compiler_4.0.3     git2r_0.27.1       extrafontdb_1.0    cli_2.1.0         
-[21] rvest_0.3.6        xml2_1.3.2         labeling_0.3       scales_1.1.1      
-[25] systemfonts_0.3.2  digest_0.6.25      rmarkdown_2.4      R.utils_2.10.1    
-[29] tidytuesdayR_1.0.1 pkgconfig_2.0.3    htmltools_0.5.0    extrafont_0.17    
-[33] styler_1.3.2       dbplyr_1.4.4       highr_0.8          rlang_0.4.8       
-[37] readxl_1.3.1       rstudioapi_0.11    farver_2.0.3       generics_0.0.2    
-[41] jsonlite_1.7.1     R.oo_1.24.0        magrittr_1.5       Matrix_1.2-18     
-[45] Rcpp_1.0.5         munsell_0.5.0      fansi_0.4.1        gdtools_0.2.2     
-[49] lifecycle_0.2.0    R.methodsS3_1.8.1  stringi_1.5.3      whisker_0.4       
-[53] yaml_2.2.1         grid_4.0.3         hrbrthemes_0.8.6   blob_1.2.1        
-[57] promises_1.1.1     crayon_1.3.4       lattice_0.20-41    haven_2.3.1       
-[61] splines_4.0.3      hms_0.5.3          knitr_1.30         ps_1.4.0          
-[65] pillar_1.4.6       reprex_0.3.0       glue_1.4.2         evaluate_0.14     
-[69] modelr_0.1.8       vctrs_0.3.4        httpuv_1.5.4       selectr_0.4-2     
-[73] Rttf2pt1_1.3.8     cellranger_1.1.0   gtable_0.3.0       assertthat_0.2.1  
-[77] xfun_0.18          later_1.1.0.1      ellipsis_0.3.1    </code></pre>
+  [1] colorspace_1.4-1   selectr_0.4-2      ellipsis_0.3.1    
+  [4] class_7.3-17       rprojroot_1.3-2    fs_1.5.0          
+  [7] rstudioapi_0.11    farver_2.0.3       listenv_0.8.0     
+ [10] furrr_0.2.0        prodlim_2019.11.13 fansi_0.4.1       
+ [13] lubridate_1.7.9    ranger_0.12.1      xml2_1.3.2        
+ [16] R.methodsS3_1.8.1  codetools_0.2-16   splines_4.0.3     
+ [19] doParallel_1.0.15  extrafont_0.17     knitr_1.30        
+ [22] jsonlite_1.7.1     pROC_1.16.2        Rttf2pt1_1.3.8    
+ [25] dbplyr_1.4.4       R.oo_1.24.0        compiler_4.0.3    
+ [28] httr_1.4.2         backports_1.1.10   assertthat_0.2.1  
+ [31] Matrix_1.2-18      cli_2.1.0          later_1.1.0.1     
+ [34] hrbrthemes_0.8.6   htmltools_0.5.0    tools_4.0.3       
+ [37] gtable_0.3.0       glue_1.4.2         Rcpp_1.0.5        
+ [40] styler_1.3.2       cellranger_1.1.0   DiceDesign_1.8-1  
+ [43] vctrs_0.3.4        nlme_3.1-149       extrafontdb_1.0   
+ [46] iterators_1.0.12   timeDate_3043.102  gower_0.2.2       
+ [49] xfun_0.18          globals_0.13.1     ps_1.4.0          
+ [52] rvest_0.3.6        lifecycle_0.2.0    future_1.19.1     
+ [55] MASS_7.3-53        ipred_0.9-9        hms_0.5.3         
+ [58] promises_1.1.1     parallel_4.0.3     curl_4.3          
+ [61] yaml_2.2.1         gdtools_0.2.2      rpart_4.1-15      
+ [64] stringi_1.5.3      highr_0.8          foreach_1.5.0     
+ [67] lhs_1.1.1          lava_1.6.8         systemfonts_0.3.2 
+ [70] rlang_0.4.8        pkgconfig_2.0.3    evaluate_0.14     
+ [73] lattice_0.20-41    labeling_0.3       tidyselect_1.1.0  
+ [76] tidytuesdayR_1.0.1 plyr_1.8.6         magrittr_1.5      
+ [79] R6_2.4.1           generics_0.0.2     DBI_1.1.0         
+ [82] mgcv_1.8-33        pillar_1.4.6       haven_2.3.1       
+ [85] whisker_0.4        withr_2.3.0        survival_3.2-7    
+ [88] nnet_7.3-14        modelr_0.1.8       crayon_1.3.4      
+ [91] rmarkdown_2.4      usethis_1.6.3      grid_4.0.3        
+ [94] readxl_1.3.1       blob_1.2.1         git2r_0.27.1      
+ [97] reprex_0.3.0       digest_0.6.25      R.cache_0.14.0    
+[100] httpuv_1.5.4       R.utils_2.10.1     munsell_0.5.0     
+[103] GPfit_1.0-8       </code></pre>
+</div>
 </div>
 
 
