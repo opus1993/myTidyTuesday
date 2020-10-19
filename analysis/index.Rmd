@@ -83,15 +83,6 @@ articles %>%
   
 ```
 
+----
 
-
-
-
-
-
-
-
-
-
-
-
+I have made notes of my sources for code and content. Please be sure to reach out, acknowledge, and cite their contributions directly.
