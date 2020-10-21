@@ -451,16 +451,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreed2f768aa07b86f49c1bfb4d8a1499bacd66d7324targetblankd2f768aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/d2f768aa07b86f49c1bfb4d8a1499bacd66d7324" target="_blank">d2f768a</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree96bdae88cc4fe68512e163637212975739aba81ctargetblank96bdae8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/96bdae88cc4fe68512e163637212975739aba81c" target="_blank">96bdae8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreed2f768aa07b86f49c1bfb4d8a1499bacd66d7324targetblankd2f768aa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree96bdae88cc4fe68512e163637212975739aba81ctargetblank96bdae8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/d2f768aa07b86f49c1bfb4d8a1499bacd66d7324" target="_blank">d2f768a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/96bdae88cc4fe68512e163637212975739aba81c" target="_blank">96bdae8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -507,6 +507,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/96bdae88cc4fe68512e163637212975739aba81c/analysis/BeerAwards.Rmd" target="_blank">96bdae8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-21
+</td>
+<td>
+wflow_publish(“analysis/BeerAwards.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/b346badbf341c3485049caa1deb8b7d299b57a8f/docs/BeerAwards.html" target="_blank">b346bad</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-10-21
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -691,8 +725,9 @@ beer_counts %&gt;%
   mutate(total = Bronze + Silver + Gold) %&gt;%
   slice_max(order_by = total, n = 10) %&gt;%
   arrange(desc(total)) %&gt;%
-  knitr::kable(caption = &quot;Top 10 Beers&quot;)</code></pre>
-<table>
+  knitr::kable(caption = &quot;Top 10 Beers&quot;) %&gt;%
+  kable_minimal(c(&quot;striped&quot;, &quot;hover&quot;, &quot;responsive&quot;))</code></pre>
+<table class=" lightable-minimal lightable-striped lightable-hover" style='font-family: "Trebuchet MS", verdana, sans-serif; margin-left: auto; margin-right: auto;'>
 <caption>
 Top 10 Beers
 </caption>
@@ -1222,7 +1257,7 @@ by_year_state %&gt;%
   facet_geo(~state, grid = &quot;us_state_grid2&quot;) +
   labs(
     title = &quot;Beer awards proportion by year for all states&quot;,
-    subtitle = &quot;The West coast is strong. Colorado and Virginia are growing most quickly.&quot;,
+    subtitle = &quot;The West coast is strong. North Carolina and Virginia are growing most quickly.&quot;,
     fill = &quot;&quot;, y = &quot;&quot;, x = &quot;&quot;,
     caption = &quot;Data Source: Great American Beer Festival&quot;
   ) +
@@ -1253,7 +1288,7 @@ state_words &lt;- word_counts %&gt;%
   slice_max(order_by = log_odds_weighted, n = 3) %&gt;%
   ungroup() %&gt;%
   select(state, word, log_odds_weighted)</code></pre>
-<pre class="r"><code>state_words %&gt;%
+<pre class="r"><code>p1 &lt;- state_words %&gt;%
   mutate(log_odds_weighted = scales::rescale(log_odds_weighted, to = c(3, 10))) %&gt;%
   ggplot(aes(
     label = word,
@@ -1261,23 +1296,44 @@ state_words &lt;- word_counts %&gt;%
     color = log_odds_weighted
   )) +
   geom_text_wordcloud_area(shape = &quot;triangle-upright&quot;) +
-  scale_color_steps2(
-    low = hrbrthemes::ipsum_pal()(9)[[4]],
-    mid = hrbrthemes::ipsum_pal()(9)[[3]],
-    high = hrbrthemes::ipsum_pal()(9)[[8]]
+  scale_color_steps(
+    low = &quot;#255E82&quot;,
+    high = &quot;#C58F40&quot;
   ) +
   facet_geo(~state, grid = &quot;us_state_grid2&quot;) +
   labs(
-    title = &quot;Beer award winner category distinctive word usage across each state by weighted log odds&quot;,
+    title = &quot;Beer award winner category distinctive word usage by weighted log odds&quot;,
     subtitle = &quot;Who would have guessed Kolsch in Kentucky and Kellerbier in North Dakota?&quot;,
     fill = &quot;&quot;, y = &quot;&quot;, x = &quot;&quot;,
     caption = &quot;Data Source: Great American Beer Festival&quot;
   ) +
   theme(
-    strip.text.x = element_text(size = 8),
-    panel.spacing = unit(0, &quot;lines&quot;)
-  )</code></pre>
-<p><img src="figure/BeerAwards.Rmd/unnamed-chunk-11-1.png" width="3600" style="display: block; margin: auto;" /></p>
+    panel.spacing = unit(0, &quot;lines&quot;),
+    title = element_text(family = &quot;Tw Cen MT&quot;),
+    plot.title = element_text(
+      size = 24,
+      face = &quot;bold&quot;,
+      color = &quot;#255E82&quot;
+    ),
+    plot.subtitle = element_text(
+      size = 16,
+      face = &quot;bold&quot;,
+      color = &quot;#C58F40&quot;,
+      family = &quot;Tw Cen MT&quot;
+    ),
+    strip.text.x = element_text(
+      size = 8,
+      color = &quot;#000000&quot;,
+      family = &quot;Tw Cen MT&quot;
+    )
+  )
+
+logo_file &lt;- &quot;https://camo.githubusercontent.com/f1141fa07f075a4186f5d71efab61012617a2ca8/68747470733a2f2f69322e77702e636f6d2f7468656265657274726176656c67756964652e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031382f30372f47726561742d416d65726963616e2d426565722d466573746976616c2d4c6f676f2e6a70673f73736c3d31&quot;
+
+ggdraw() +
+  draw_plot(p1) +
+  draw_image(logo_file, x = 0.37, y = -0.2, scale = .2)</code></pre>
+<p><img src="figure/BeerAwards.Rmd/p1-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1303,11 +1359,11 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] ggwordcloud_0.5.0 tidylo_0.1.0      tidytext_0.2.6    geofacet_0.2.0   
- [5] broom_0.7.2       kableExtra_1.2.1  hrbrthemes_0.8.6  forcats_0.5.0    
- [9] stringr_1.4.0     dplyr_1.0.2       purrr_0.3.4       readr_1.4.0      
-[13] tidyr_1.1.2       tibble_3.0.3      ggplot2_3.3.2     tidyverse_1.3.0  
-[17] workflowr_1.6.2  
+ [1] cowplot_1.1.0     ggwordcloud_0.5.0 tidylo_0.1.0      tidytext_0.2.6   
+ [5] geofacet_0.2.0    broom_0.7.2       kableExtra_1.2.1  hrbrthemes_0.8.6 
+ [9] forcats_0.5.0     stringr_1.4.0     dplyr_1.0.2       purrr_0.3.4      
+[13] readr_1.4.0       tidyr_1.1.2       tibble_3.0.3      ggplot2_3.3.2    
+[17] tidyverse_1.3.0   workflowr_1.6.2  
 
 loaded via a namespace (and not attached):
  [1] colorspace_1.4-1    selectr_0.4-2       ellipsis_0.3.1     
@@ -1332,17 +1388,17 @@ loaded via a namespace (and not attached):
 [58] pkgconfig_2.0.3     systemfonts_0.3.2   geogrid_0.1.1      
 [61] evaluate_0.14       lattice_0.20-41     sf_0.9-6           
 [64] labeling_0.4.2      tidyselect_1.1.0    magrittr_1.5       
-[67] tidytuesdayR_1.0.1  R6_2.4.1            generics_0.0.2     
-[70] DBI_1.1.0           pillar_1.4.6        haven_2.3.1        
-[73] whisker_0.4         withr_2.3.0         units_0.6-7        
-[76] sp_1.4-4            janeaustenr_0.1.5   modelr_0.1.8       
-[79] crayon_1.3.4        KernSmooth_2.23-17  rmarkdown_2.4      
-[82] jpeg_0.1-8.1        usethis_1.6.3       rnaturalearth_0.1.0
-[85] grid_4.0.3          readxl_1.3.1        blob_1.2.1         
-[88] git2r_0.27.1        reprex_0.3.0        digest_0.6.25      
-[91] classInt_0.4-3      webshot_0.5.2       R.cache_0.14.0     
-[94] httpuv_1.5.4        R.utils_2.10.1      munsell_0.5.0      
-[97] viridisLite_0.3.0  </code></pre>
+[67] tidytuesdayR_1.0.1  R6_2.4.1            magick_2.5.0       
+[70] generics_0.0.2      DBI_1.1.0           pillar_1.4.6       
+[73] haven_2.3.1         whisker_0.4         withr_2.3.0        
+[76] units_0.6-7         sp_1.4-4            janeaustenr_0.1.5  
+[79] modelr_0.1.8        crayon_1.3.4        KernSmooth_2.23-17 
+[82] rmarkdown_2.4       jpeg_0.1-8.1        usethis_1.6.3      
+[85] rnaturalearth_0.1.0 grid_4.0.3          readxl_1.3.1       
+[88] blob_1.2.1          git2r_0.27.1        reprex_0.3.0       
+[91] digest_0.6.25       classInt_0.4-3      webshot_0.5.2      
+[94] R.cache_0.14.0      httpuv_1.5.4        R.utils_2.10.1     
+[97] munsell_0.5.0       viridisLite_0.3.0  </code></pre>
 </div>
 </div>
 
