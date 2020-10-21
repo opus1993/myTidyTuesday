@@ -270,7 +270,7 @@ state_words %>%
                      high = hrbrthemes::ipsum_pal()(9)[[8]]) +
   facet_geo(~ state, grid = "us_state_grid2") +
   labs(title = "Beer award winner category distinctive word usage across each state by weighted log odds",
-       subtitle = "Who would have guessed Kolch in Kentucky and Kellerbier in North Dakota?",
+       subtitle = "Who would have guessed Kolsch in Kentucky and Kellerbier in North Dakota?",
        fill = "", y = "", x = "",
        caption = "Data Source: Great American Beer Festival") +
   theme(strip.text.x = element_text(size = 8),
