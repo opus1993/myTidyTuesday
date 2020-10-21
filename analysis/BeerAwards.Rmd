@@ -36,6 +36,7 @@ library(tidytext)
 library(tidylo)
 
 library(ggwordcloud)
+library(cowplot)
 
 theme_set(hrbrthemes::theme_ipsum_ps() +
             theme(plot.title.position = "plot"))
@@ -123,7 +124,9 @@ beer_counts %>%
               values_fill = list(n = 0)) %>%
   mutate(total = Bronze + Silver + Gold) %>%
   slice_max(order_by = total, n = 10) %>% 
-  arrange(desc(total)) %>% knitr::kable(caption = "Top 10 Beers")
+  arrange(desc(total)) %>% 
+  knitr::kable(caption = "Top 10 Beers") %>% 
+  kable_minimal(c("striped", "hover", "responsive"))
 ```
 
 What breweries have won the most awards?
@@ -224,7 +227,7 @@ by_year_state %>%
   scale_fill_ipsum() +
   facet_geo(~ state, grid = "us_state_grid2") +
   labs(title = "Beer awards proportion by year for all states",
-       subtitle = "The West coast is strong. Colorado and Virginia are growing most quickly.",
+       subtitle = "The West coast is strong. North Carolina and Virginia are growing most quickly.",
        fill = "", y = "", x = "",
        caption = "Data Source: Great American Beer Festival") +
   theme(legend.position = c(0.9, 0.3),
@@ -258,22 +261,38 @@ state_words <- word_counts %>%
     select(state, word, log_odds_weighted)
 ```
 
-```{r}
-state_words %>% 
+```{r p1}
+p1 <- state_words %>% 
   mutate(log_odds_weighted = scales::rescale(log_odds_weighted, to = c(3,10))) %>% 
   ggplot(aes(label = word, 
              size = log_odds_weighted,
              color = log_odds_weighted)) +
   geom_text_wordcloud_area(shape = "triangle-upright") +
-  scale_color_steps2(low = hrbrthemes::ipsum_pal()(9)[[4]],
-                     mid = hrbrthemes::ipsum_pal()(9)[[3]],
-                     high = hrbrthemes::ipsum_pal()(9)[[8]]) +
+  scale_color_steps(low = "#255E82",
+                     high = "#C58F40") +
   facet_geo(~ state, grid = "us_state_grid2") +
-  labs(title = "Beer award winner category distinctive word usage across each state by weighted log odds",
+  labs(title = "Beer award winner category distinctive word usage by weighted log odds",
        subtitle = "Who would have guessed Kolsch in Kentucky and Kellerbier in North Dakota?",
        fill = "", y = "", x = "",
        caption = "Data Source: Great American Beer Festival") +
-  theme(strip.text.x = element_text(size = 8),
-        panel.spacing = unit(0, "lines"))
+  theme(panel.spacing = unit(0, "lines"),
+        title = element_text(family = "Tw Cen MT"),
+        plot.title = element_text(size = 24,  
+                                  face = "bold", 
+                                  color = "#255E82"),
+        plot.subtitle = element_text(size = 16,  
+                                     face = "bold", 
+                                     color = "#C58F40", 
+                                     family = "Tw Cen MT"),
+        strip.text.x = element_text(size = 8, 
+                            color = "#000000", 
+                            family = "Tw Cen MT"))
+
+logo_file <- "https://camo.githubusercontent.com/f1141fa07f075a4186f5d71efab61012617a2ca8/68747470733a2f2f69322e77702e636f6d2f7468656265657274726176656c67756964652e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031382f30372f47726561742d416d65726963616e2d426565722d466573746976616c2d4c6f676f2e6a70673f73736c3d31"
+
+ggdraw() +
+  draw_plot(p1) +
+  draw_image(logo_file,  x = 0.37, y = -0.2, scale = .2)
+
 ```
 
