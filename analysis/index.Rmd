@@ -16,6 +16,7 @@ library(purrr)
 library(dplyr)
 library(knitr)
 library(kableExtra)
+library(stringr)
 
 knitr::opts_chunk$set(cache = FALSE, 
                       warning = FALSE, 
@@ -56,11 +57,16 @@ articles <- articles %>%
   mutate(dateline = map_chr(file, ~ date_f(.))) %>% 
   mutate(libraries = map(file, ~ library_f(.))) %>%
   tidyr::unnest_longer(col = libraries) %>% 
-  mutate(title = stringr::str_sub(title, start = 9L,
-                                  stringr::str_length(title) - 1L)) %>% mutate(dateline = stringr::str_sub(dateline, start = 8L,
-                                  stringr::str_length(dateline) - 1L)) %>% 
-  mutate(libraries = stringr::str_sub(libraries, start = 9L,
-                                  stringr::str_length(libraries) - 1L)) %>%  filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate") ) %>% 
+  mutate(title = str_sub(title, 
+                         start = 9L,
+                        end = str_length(title) - 1L)) %>% 
+  mutate(dateline = str_sub(dateline, 
+                            start = 8L,
+                            end = str_length(dateline) - 1L)) %>% 
+  mutate(libraries = str_sub(libraries, 
+                             start = str_locate(libraries, "\\(")[,1] + 1,
+                             end = str_locate(libraries, "\\)")[,1] - 1 )) %>%
+  filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate") ) %>% 
   tidyr::nest(package = libraries) 
 
 df_url <- articles %>% 
