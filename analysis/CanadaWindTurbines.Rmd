@@ -1,0 +1,195 @@
+---
+title: "Canadian Wind Turbines"
+date: "October 27, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+The data this week comes from the [Government of Canada](https://open.canada.ca/data/en/dataset/79fdad93-9025-49ad-ba16-c26d718cc070).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402,
+                      df_print = "paged")
+
+library(tidyverse)
+library(hrbrthemes)    # shortcuts for fonts and color palettes
+extrafont::loadfonts()
+library(tidytuesdayR) 
+
+library(naniar)        # missing data exploration and imputation
+library(visdat)        # handy missing data visuals
+
+library(stringr)       # parse text nicely
+library(kableExtra)    # features for nice table rendering
+ 
+library(osmdata)       # Openstreetmap resources, like highways
+library(sf)            # shapefile functions
+library(rnaturalearth) # source of shapefile boundaries
+
+library(ggtext)     # color annotations and plot labels
+library(cowplot)   # combine plots into one graphic
+
+theme_set(theme_ft_rc() +
+            theme(plot.title.position = "plot"))
+
+```
+
+# Load the weekly Data
+
+Download the weekly data and make available in the `tt` object.
+
+```{r Load}
+
+tt <- tt_load("2020-10-27")
+
+```
+
+```{r Readme, eval = interactive(), include=FALSE}
+
+tt
+
+```
+
+## Glimpse the Data
+
+Let's take an initial look at the format of the data available. There is a single table this week. Some records appear to be missing.
+
+```{r Glimpse}
+
+tt$`wind-turbine`
+
+tt$`wind-turbine` %>% 
+      vis_miss()
+```
+
+The turbine identifier and year of `objectid` 1451 is consistent with the other St. Lawrence `project_name` turbines. We will impute the missing value to the dataset as St. Lawrence.
+
+Where turbine rated capacity is missing, the total rated capacity will be assumed to be spread uniformly across all turbines in a project if the model of the turbine is the same. This is the case for Armow Wind Project, South Kent Wind Farm, and Skyway8.
+
+Commissioning_dates are spread in some cases across two or three or even as many as seven years. for the purposes of this analysis, I am going to parse out the right-most, last, date as the `allOnlineDate` as an integer.
+
+
+```{r}
+windTurbine <- tt$`wind-turbine` %>% 
+   mutate(project_name = if_else(objectid == 1451,
+                                 "St. Lawrence",
+                                 project_name)) %>% 
+  group_by(project_name) %>% 
+  mutate(turbine_rated_capacity_k_w = 
+              if_else(is.na(turbine_rated_capacity_k_w),
+                      total_project_capacity_mw*1000/n(),
+                      turbine_rated_capacity_k_w)) %>% 
+  ungroup() %>% 
+  mutate(allOnlineDate =  as.integer(str_sub(commissioning_date,
+                          str_length(commissioning_date) - 3,
+                          str_length(commissioning_date)))) %>% 
+  mutate(manufacturer = if_else(str_detect(manufacturer, "Acciona"),
+                                "Acciona",
+                                manufacturer))
+
+vis_dat(windTurbine)
+
+```
+
+# Visualize
+
+The notes contain valuable insights. Some specifications may have changed since installation. In other cases, the dataset presented here has other technical assumptions.
+
+```{r Visualize}
+windTurbine %>% 
+  filter(!is.na(notes)) %>% 
+  distinct(project_name, notes, province_territory) %>% 
+  knitr::kable(caption = "Canada Wind Farm Data Notes") %>% 
+  kable_minimal(c("striped", "hover", "responsive"))
+```
+
+A count of turbines by manufacturer.
+
+```{r manufacturers}
+
+windTurbine %>% 
+  group_by(manufacturer) %>% 
+  summarize(Turbines = n(),
+            `Total Installed Capacity in kW` = sum(turbine_rated_capacity_k_w)) %>% 
+  arrange(desc(Turbines)) %>% 
+  knitr::kable(caption = "Canada Wind Power Turbine Manufacturers") %>% 
+  kable_minimal(c("striped", "hover", "responsive"))
+
+```
+
+Lets build an area chart showing the growth in capacity with an inset map:
+
+```{r}
+western_turbines <- filter(windTurbine, province_territory %in% c("Alberta", "British Columbia", "Manitoba", "Saskatchewan")) 
+
+p1 <- western_turbines %>% 
+  select(province_territory, allOnlineDate, turbine_rated_capacity_k_w) %>% 
+   complete(allOnlineDate, province_territory, fill = list(turbine_rated_capacity_k_w = 0))  %>% 
+  group_by(province_territory, allOnlineDate) %>% 
+  summarize(sumCapacity = sum(turbine_rated_capacity_k_w)) %>% 
+  mutate(CumSumCapacity = cumsum(sumCapacity)) %>%  
+  ggplot() +
+  geom_area(aes(allOnlineDate, CumSumCapacity/1000, fill = province_territory), show.legend = FALSE) +
+  scale_y_continuous(labels = scales::comma_format(), position = "right") +
+  scale_fill_ipsum() +
+  labs(y = "", x = "", fill = "",
+  title = "Wind Power in Canada's Western Provinces",
+  subtitle = "Cumulative sum of MW of power capacity installed at project completion",
+  caption = "Data: Government of Canada | Visualization: @jim_gruman") 
+  
+```
+
+Where are these turbines?
+
+Can we take a look at turbines in the western provinces?
+
+> adapted from Jake Kaupp's TidyTuesday submission this week on the Maritime provinces
+
+```{r}
+western_provinces <- ne_states("Canada", returnclass = "sf") %>% 
+  filter(name %in% c("Alberta", "British Columbia", "Manitoba", "Saskatchewan"))
+
+wp_box <- st_bbox(western_provinces) 
+
+western_bbox <- matrix(c(wp_box[1], wp_box[3], wp_box[2], max(western_turbines$latitude) + 1), nrow = 2, ncol = 2)
+
+western_hwy <- western_bbox %>% 
+  opq(timeout = 6000) %>% 
+  add_osm_feature(key = "highway", 
+                  value = c("primary", "secondary", "tertiary", "secondary_link", "tertiary_link")) %>% 
+  osmdata_sf()
+
+western_hwy_clipped <- st_intersection(western_hwy$osm_lines, western_provinces)
+
+p2 <- ggplot() +
+  geom_sf(data = western_provinces, inherit.aes = FALSE, color = "#2F394D", fill = "white") +
+  geom_sf(data = western_hwy_clipped, inherit.aes = FALSE, color = "#403d58", size = 0.1) +
+  geom_point(data = western_turbines, aes(x = longitude, y = latitude, color = province_territory), alpha = 0.4, size = 4, show.legend = FALSE) +
+  scale_color_ipsum() +
+  geom_richtext(aes(x = -130, y = 58.5,
+                    label = "The wind turbines built since 1995 as part of<br>larger wind farm projects in <span style='color:#8fd175'>British Columbia</span>,<br> <span style='color:#d18975'>Alberta</span>, <span style='color:#3f2d54'>Saskatchewan</span> and <span style='color:#75b8d1'>Manitoba</span>."), fill = "white", hjust = 0, label.color = NA, size = 5, color = "#464950", family = "Roboto Condensed") +
+  labs(x = "", y = "") +
+  scale_size_area(max_size = 6) +
+  theme_map() 
+
+```
+
+```{r cowplot}
+ggdraw(p1) +
+  draw_plot(p2, 0, .3, .7, .7) 
+
+```
+
+
