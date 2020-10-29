@@ -179,7 +179,7 @@ p2 <- ggplot() +
   geom_point(data = western_turbines, aes(x = longitude, y = latitude, color = province_territory), alpha = 0.4, size = 4, show.legend = FALSE) +
   scale_color_ipsum() +
   geom_richtext(aes(x = -130, y = 58.5,
-                    label = "The wind turbines built since 1995 as part of<br>larger wind farm projects in <span style='color:#8fd175'>British Columbia</span>,<br> <span style='color:#d18975'>Alberta</span>, <span style='color:#3f2d54'>Saskatchewan</span> and <span style='color:#75b8d1'>Manitoba</span>."), fill = "white", hjust = 0, label.color = NA, size = 5, color = "#464950", family = "Roboto Condensed") +
+                    label = "The wind turbines built since 1995 as part of<br>larger wind farm projects in <span style='color:#8fd175'>British Columbia</span>,<br> <span style='color:#d18975'>Alberta</span>, <span style='color:#75b8d1'>Saskatchewan</span> and <span style='color:#3f2d54'>Manitoba</span>."), fill = "white", hjust = 0, label.color = NA, size = 5, color = "#464950", family = "Roboto Condensed") +
   labs(x = "", y = "") +
   scale_size_area(max_size = 6) +
   theme_map() 
@@ -191,5 +191,15 @@ ggdraw(p1) +
   draw_plot(p2, 0, .3, .7, .7) 
 
 ```
+
+
+
+
+
+
+
+
+
+
 
 
