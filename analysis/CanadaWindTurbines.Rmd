@@ -142,7 +142,11 @@ p1 <- western_turbines %>%
   mutate(CumSumCapacity = cumsum(sumCapacity)) %>%  
   ggplot() +
   geom_area(aes(allOnlineDate, CumSumCapacity/1000, fill = province_territory), show.legend = FALSE) +
-  scale_y_continuous(labels = scales::comma_format(), position = "right") +
+  scale_y_continuous(labels = scales::comma_format(), 
+                     position = "right",
+                     expand = c(0,0)) +
+  scale_x_continuous(limits = c(1995, 2019),
+                     expand = c(0,0))+
   scale_fill_ipsum() +
   labs(y = "", x = "", fill = "",
   title = "Wind Power in Canada's Western Provinces",
