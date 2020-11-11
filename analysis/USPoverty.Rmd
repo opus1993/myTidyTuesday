@@ -1,0 +1,114 @@
+---
+title: "US Poverty"
+date: "November 11, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+The data here comes from the [US Census American Community Survey](https://www.census.gov/library/visualizations/interactive/2014-2018-poverty-rate-by-county.html) 2014-2018 5-year dataset.
+
+Our goal is to recreate this beautiful Tableau [graphic](https://public.tableau.com/views/18_5yr_Poverty/2018Poverty?:embed=y&:embed_code_version=3&:loadOrderID=0&:display_count=y&:origin=viz_share_link), but to represent the population size better.
+
+```{r setup}
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402,
+                      df_print = "paged")
+
+suppressPackageStartupMessages(library(tidyverse))
+library(hrbrthemes)    # shortcuts for fonts and color palettes
+suppressMessages(extrafont::loadfonts())
+
+library(cartogram)
+library(sf)
+library(tmap)
+
+library(tidycensus)
+
+theme_set(theme_ft_rc() +
+            theme(plot.title.position = "plot"))
+
+
+# v18 <- load_variables(2018, "acs5", cache = TRUE)
+
+```
+
+
+```{r getData, message=FALSE, warning=FALSE}
+poverty <- suppressMessages(tidycensus::get_acs(geography = "county",
+                    variables = c(poverty = "B17013_001"),
+                    geometry = TRUE,
+                    year = 2018) %>% 
+  select(GEOID, NAME, estimate, moe, geometry))
+
+population <- suppressMessages(tidycensus::get_acs(geography = "county",
+                    variables = c(population = "B01003_001"),
+                    geometry = FALSE,
+                    year = 2018) %>% 
+  select(GEOID, estimate))
+```
+
+The bubbles are generated on top of the shapefile centroids, and then adjusted to fit through iterations with the cartogram package.
+
+```{r}
+counties_sf <- poverty %>% 
+  left_join(population, by = "GEOID", suffix = c(".pov",".pop")) %>% 
+  mutate(rate = round(estimate.pov/estimate.pop,2),
+         moe_rate = round(moe/estimate.pop,3)) %>% 
+  st_transform(crs = 2163)
+
+county_dorling <-
+  cartogram_dorling(
+    x = counties_sf,
+    weight = "estimate.pop",
+    k = 0.2,
+    itermax = 100
+  )
+```
+
+## A tmap 
+(not run, could be improved)
+
+```{r tmap, eval=FALSE}
+tmap_mode("view")
+
+map_limits <- st_bbox(county_dorling)
+
+tm_basemap() +
+  tm_shape(county_dorling, bbox = map_limits) +
+  tm_polygons(
+    col = "rate", palette = "Blues",
+    style = "jenks",
+    border.col = "grey60"
+  ) +
+  labs(col = "Poverty Rate")
+  
+```
+
+## A ggplot
+
+```{r ggplot}
+county_dorling %>% 
+  filter(!str_detect(NAME, "Alaska|Hawaii|Puerto|Guam")) %>% 
+  ggplot(aes(fill = rate)) +
+  geom_sf(color = "grey10") +
+  coord_sf(crs = 2163, datum = NA) +
+  scale_fill_stepsn(colors = c('#eff3ff','#bdd7e7','#6baed6','#3182bd','#08519c')) +
+  labs(title = "2014-2018 Poverty Rate in the United States by County",
+       caption = "US Census American Community Survey | jim_gruman")
+
+
+```
+
+
+
