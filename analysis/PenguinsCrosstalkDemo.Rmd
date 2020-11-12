@@ -1,0 +1,96 @@
+---
+title: "Reactable Plotly Crosstalk Demo"
+author: "Jim Gruman"
+date: "11/13/2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+RMarkdown is a fantastic resource for creating self-documenting, version controlled, human readable content. All together a total of 52 programmming language engines are provided by `knitr`. The ultimate goal is a final output for non-programmming users to consume.
+
+One example of consumable content is this Demo application:
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402,
+                      df_print = "paged")
+
+library(tidyverse)
+library(reactable)
+library(plotly)
+library(crosstalk)
+library(htmltools)
+
+```
+
+```{r echo = FALSE}
+small_df <- palmerpenguins::penguins %>% 
+  select(species, sex, flipper_length_mm, body_mass_g) %>% 
+  na.omit()
+
+pen_df <- SharedData$new(small_df)
+```
+
+```{r echo = FALSE}
+x <- list(title = "Flipper Length (mm)", range = c(170,240))
+y <- list(title = "Body Mass (g)", range = c(2500,6500))
+
+plotly_graphic <- plot_ly(
+  pen_df,
+  x = ~flipper_length_mm,
+  y = ~body_mass_g,
+  color = ~species,
+  text = ~species) %>% 
+  add_markers() %>% 
+  layout(xaxis = x, yaxis = y) %>% 
+  highlight(on = "plotly_selected",
+            off = "plotly_doubleclick",
+            persistent = FALSE)
+
+reactable_table <- reactable(
+  pen_df,
+  columns = list(
+    species = colDef("Species"),
+    sex = colDef("Sex", cell = function(value){
+      if (value == "male") "Male" else "Female"
+    }),
+    flipper_length_mm = colDef("Flipper Length"),
+    body_mass_g = colDef("Mody Mass")
+  )
+)
+  
+```
+
+```{r echo = FALSE, warning=FALSE, message = FALSE}
+
+htmltools::div(
+  h1("The Penguin Dataset"),
+  h3("Filtered by: Sex, Species, or Body Mass"),
+  br(),
+  bscols(
+    widths = c(2,10),
+    list(
+      filter_checkbox("sex", "Sex", pen_df, ~sex),
+      filter_checkbox("species", "Species", pen_df, ~species),
+      filter_slider("mass", "Body Mass (g)", pen_df, ~body_mass_g)
+    ),
+    plotly_graphic,
+    br(),
+    reactable_table
+  )
+)
+
+
+```
+
