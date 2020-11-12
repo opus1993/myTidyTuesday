@@ -1,7 +1,7 @@
 ---
 title: "Reactable Plotly Crosstalk Demo"
 author: "Jim Gruman"
-date: "11/13/2020"
+date: "November 13, 2020"
 output:
   workflowr::wflow_html:
     toc: no
@@ -14,7 +14,7 @@ RMarkdown is a fantastic resource for creating self-documenting, version control
 
 One example of consumable content is this Demo application:
 
-```{r setup, include=FALSE}
+```{r setup}
 knitr::opts_chunk$set(cache = FALSE, 
                       warning = FALSE, 
                       message = FALSE, 
@@ -25,16 +25,17 @@ knitr::opts_chunk$set(cache = FALSE,
                       fig.width = 12, 
                       fig.height = 7.402,
                       df_print = "paged")
-
-library(tidyverse)
+suppressPackageStartupMessages(
+library(tidyverse))
 library(reactable)
-library(plotly)
+suppressPackageStartupMessages(
+library(plotly))
 library(crosstalk)
 library(htmltools)
 
 ```
 
-```{r echo = FALSE}
+```{r}
 small_df <- palmerpenguins::penguins %>% 
   select(species, sex, flipper_length_mm, body_mass_g) %>% 
   na.omit()
@@ -42,7 +43,7 @@ small_df <- palmerpenguins::penguins %>%
 pen_df <- SharedData$new(small_df)
 ```
 
-```{r echo = FALSE}
+```{r}
 x <- list(title = "Flipper Length (mm)", range = c(170,240))
 y <- list(title = "Body Mass (g)", range = c(2500,6500))
 
@@ -72,7 +73,7 @@ reactable_table <- reactable(
   
 ```
 
-```{r echo = FALSE, warning=FALSE, message = FALSE}
+```{r}
 
 htmltools::div(
   h1("The Penguin Dataset"),
