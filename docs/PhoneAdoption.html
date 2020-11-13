@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2020-11-10" />
+
+<title>Historical Phone Usage</title>
+
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Historical Phone Usage</h1>
+<h4 class="date">November 10, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-11-12
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree2c909a56b9d16cf9952744c4247a9391867e1060targetblank2c909a5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/2c909a56b9d16cf9952744c4247a9391867e1060" target="_blank">2c909a5</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree2c909a56b9d16cf9952744c4247a9391867e1060targetblank2c909a5a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/2c909a56b9d16cf9952744c4247a9391867e1060" target="_blank">2c909a5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  2020_11_03_tidy_tuesday.Rmd
+    Untracked:  figure/2020_10_27_tidy_tuesday.Rmd/
+    Untracked:  tmap_style_previews/
+
+Unstaged changes:
+    Modified:   analysis/USPoverty.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/PhoneAdoption.Rmd</code>) and HTML (<code>docs/PhoneAdoption.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/2c909a56b9d16cf9952744c4247a9391867e1060/analysis/PhoneAdoption.Rmd" target="_blank">2c909a5</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-11-12
+</td>
+<td>
+wflow_publish(“analysis/PhoneAdoption.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The data this week comes from <a href="https://ourworldindata.org/technology-adoption">OurWorldInData.org</a> and is related to telephone subscriptions, mobile and landline, as part of the <strong>Adoption of technologies around the world</strong> series.</p>
+<p>Their web page presents high quality interactive javascript visuals of time series line charts and map chloropleths as</p>
+<pre class="r"><code>htmltools::includeHTML(&quot;https://ourworldindata.org/grapher/fixed-telephone-subscriptions-per-100-people?tab=chart&quot;)</code></pre>
+<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Fixed telephone subscriptions - Our World in Data</title><meta name="description" content="The number of fixed (landline) telephone subscriptions, measured per 100 people."/><link rel="canonical" href="https://ourworldindata.org/grapher/fixed-telephone-subscriptions-per-100-people"/><link rel="alternate" type="application/atom+xml" href="/atom.xml"/><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/><meta property="fb:app_id" content="1149943818390250"/><meta property="og:url" content="https://ourworldindata.org/grapher/fixed-telephone-subscriptions-per-100-people"/><meta property="og:title" content="Fixed telephone subscriptions"/><meta property="og:description" content="The number of fixed (landline) telephone subscriptions, measured per 100 people."/><meta property="og:image" content="https://ourworldindata.org/grapher/exports/fixed-telephone-subscriptions-per-100-people.png?v=4"/><meta property="og:site_name" content="Our World in Data"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@OurWorldInData"/><meta name="twitter:creator" content="@OurWorldInData"/><meta name="twitter:title" content="Fixed telephone subscriptions"/><meta name="twitter:description" content="The number of fixed (landline) telephone subscriptions, measured per 100 people."/><meta name="twitter:image" content="https://ourworldindata.org/grapher/exports/fixed-telephone-subscriptions-per-100-people.png?v=4"/><link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,700i|Playfair+Display:400,700&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="https://ourworldindata.org/assets/css/commons.css"/><link rel="stylesheet" href="https://ourworldindata.org/assets/css/owid.css"/><meta property="og:image:width" content="850"/><meta property="og:image:height" content="600"/><script>if (window != window.top) document.documentElement.classList.add('iframe')</script><noscript><style>
+                    figure { display: none !important; }
+                </style></noscript><link rel="preload" href="/grapher/data/variables/2676.json?v=4" as="fetch" crossorigin="anonymous"/><!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N2D4V8S');</script>
+<!-- End Google Tag Manager --></head><body class="ChartPage"><header class="site-header"><div class="wrapper site-navigation-bar"><div class="site-logo"><a href="/">Our World<br/> in Data</a></div><nav class="site-navigation"><div class="topics-button-wrapper"><a href="/#entries" class="topics-button"><div class="label">Articles <br/><strong>by topic</strong></div><div class="icon"><svg width="12" height="6"><path d="M0,0 L12,0 L6,6 Z" fill="currentColor"></path></svg></div></a></div><div><div class="site-primary-navigation"><form class="HeaderSearch" action="/search" method="GET"><input type="search" name="q" placeholder="Search..."/><div class="icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></div></form><ul class="site-primary-links"><li><a href="/blog" data-track-note="header-navigation">Latest</a></li><li><a href="/about" data-track-note="header-navigation">About</a></li><li><a href="/donate" data-track-note="header-navigation">Donate</a></li></ul></div><div class="site-secondary-navigation"><ul class="site-secondary-links"><li><a href="/charts" data-track-note="header-navigation">All charts</a></li><li><a href="https://sdg-tracker.org" data-track-note="header-navigation">Sustainable Development Goals Tracker</a></li></ul></div></div></nav><div class="header-logos-wrapper"><a href="https://www.oxfordmartin.ox.ac.uk/global-development" class="oxford-logo"><img src="https://ourworldindata.org/oms-logo.svg" alt="Oxford Martin School logo"/></a><a href="https://global-change-data-lab.org/" class="gcdl-logo"><img src="https://ourworldindata.org/gcdl-logo-narrow.png" alt="Global Change Data Lab logo"/></a></div><div class="mobile-site-navigation"><button data-track-note="mobile-search-button"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></button><button data-track-note="mobile-newsletter-button"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="envelope-open-text" class="svg-inline--fa fa-envelope-open-text fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M176 216h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16H176c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16zm-16 80c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16H176c-8.84 0-16 7.16-16 16v16zm96 121.13c-16.42 0-32.84-5.06-46.86-15.19L0 250.86V464c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V250.86L302.86 401.94c-14.02 10.12-30.44 15.19-46.86 15.19zm237.61-254.18c-8.85-6.94-17.24-13.47-29.61-22.81V96c0-26.51-21.49-48-48-48h-77.55c-3.04-2.2-5.87-4.26-9.04-6.56C312.6 29.17 279.2-.35 256 0c-23.2-.35-56.59 29.17-73.41 41.44-3.17 2.3-6 4.36-9.04 6.56H96c-26.51 0-48 21.49-48 48v44.14c-12.37 9.33-20.76 15.87-29.61 22.81A47.995 47.995 0 0 0 0 200.72v10.65l96 69.35V96h320v184.72l96-69.35v-10.65c0-14.74-6.78-28.67-18.39-37.77z"></path></svg></button><button data-track-note="mobile-hamburger-button"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" class="svg-inline--fa fa-bars fa-w-14 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path></svg></button></div></div></header><div class="alert-banner"><div class="content"><div class="text"><strong>Coronavirus pandemic</strong>: daily updated research and data.</div><a href="/coronavirus" data-track-note="covid-banner-click">Read more</a></div></div><main><figure data-grapher-src="/grapher/fixed-telephone-subscriptions-per-100-people"><div class="loading-indicator"><span style="border-color:#333"></span></div></figure><noscript id="fallback"><img src="https://ourworldindata.org/grapher/exports/fixed-telephone-subscriptions-per-100-people.svg"/><p>Interactive visualization requires JavaScript</p></noscript><div class="related-research-data"><h2>All our research and data on Technology Adoption</h2><div class="research"><a href="/technology-adoption"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-alt" class="svg-inline--fa fa-file-alt fa-w-12 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg>Read the article</a></div><h3>Charts</h3><ul><li><a href="/grapher/fixed-landline-telephone-subscriptions-vs-gdp-per-capita">Fixed (landline) telephone subscriptions vs. GDP per capita</a></li><li><a href="/grapher/fixed-broadband-subscriptions-per-100-people">Fixed broadband subscriptions (per 100 people)</a></li><li><a href="/grapher/mobile-and-fixed-landline-telephone-subscriptions">Mobile and fixed landline telephone subscriptions</a></li><li><a href="/grapher/mobile-cellular-subscriptions-per-100-people">Mobile cellular subscriptions</a></li><li><a href="/grapher/mobile-phone-subscriptions-vs-gdp-per-capita">Mobile phone subscriptions vs. GDP per capita</a></li><li><a href="/grapher/motor-vehicle-ownership-per-1000-inhabitants">Motor vehicle ownership, per 1000 inhabitants</a></li><li><a href="/grapher/road-vehicles-per-1000-inhabitants-vs-gdp-per-capita">Motor vehicles per 1000 inhabitants vs GDP per capita</a></li><li><a href="/grapher/registered-mobile-money-accounts">Registered Mobile Money Accounts</a></li><li><a href="/grapher/registered-mobile-money-accounts-by-region">Registered Mobile Money Accounts by Region</a></li><li><a href="/grapher/secure-internet-servers-per-1-million-people">Secure Internet servers</a></li><li><a href="/grapher/share-of-us-households-with-basic-electrical-appliances">Share of US households with basic electrical appliances</a></li><li><a href="/grapher/share-of-individuals-using-the-internet">Share of the population using the Internet</a></li><li><a href="/grapher/technology-adoption-by-households-in-the-united-states">Technology adoption in US households</a></li><li><a href="/grapher/technology-and-infrastructure-diffusion-in-the-us">Technology and infrastructure diffusion in the US</a></li></ul></div></main><section class="donate-footer"><div class="wrapper"><div class="owid-row flex-align-center"><div class="owid-col owid-col--lg-3 owid-padding-bottom--sm-3"><p>Our World in Data is free and accessible for everyone.</p><p>Help us do this work by making a donation.</p></div><div class="owid-col owid-col--lg-1"><a href="/donate" class="owid-button donate-button" data-track-note="donate-footer"><span class="label">Donate now</span><span class="icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" class="svg-inline--fa fa-angle-right fa-w-8 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg></span></a></div></div></div></section><footer class="site-footer"><div class="wrapper"><div class="owid-row"><div class="owid-col owid-col--lg-1"><ul><li><a href="/about" data-track-note="footer-navigation">About</a></li><li><a href="/about#contact" data-track-note="footer-navigation">Contact</a></li><li><a href="/feedback" data-track-note="footer-navigation">Feedback</a></li><li><a href="/jobs" data-track-note="footer-navigation">Jobs</a></li><li><a href="/supporters" data-track-note="footer-navigation">Supporters</a></li><li><a href="/about/how-to-use-our-world-in-data" data-track-note="footer-navigation">How to use</a></li><li><a href="/donate" data-track-note="footer-navigation">Donate</a></li><li><a href="/privacy-policy" data-track-note="footer-navigation">Privacy policy</a></li></ul></div><div class="owid-col owid-col--lg-1"><ul><li><a href="/blog" data-track-note="footer-navigation">Latest publications</a></li><li><a href="/charts" data-track-note="footer-navigation">All charts</a></li></ul><ul><li><a href="https://twitter.com/OurWorldInData" data-track-note="footer-navigation">Twitter</a></li><li><a href="https://www.facebook.com/OurWorldinData" data-track-note="footer-navigation">Facebook</a></li><li><a href="https://github.com/owid" data-track-note="footer-navigation">GitHub</a></li><li><a href="/feed" data-track-note="footer-navigation">RSS Feed</a></li></ul></div><div class="owid-col owid-col--lg-1"><div class="logos"><a href="https://www.oxfordmartin.ox.ac.uk/research/programmes/global-development" class="partner-logo" data-track-note="footer-navigation"><img src="https://ourworldindata.org/oms-logo.svg" alt="Oxford Martin School logo" loading="lazy"/></a><a href="/owid-at-ycombinator" class="partner-logo" data-track-note="footer-navigation"><img src="https://ourworldindata.org/yc-logo.png" alt="Y Combinator logo" loading="lazy"/></a></div></div><div class="owid-col flex-2"><div class="legal"><p>License: All of Our World in Data is completely open access and all work is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons BY license</a>. You have the permission to use, distribute, and reproduce in any medium, provided the source and authors are credited.</p><p>Please consult our full <a href="/about#legal">legal disclaimer</a>.</p><p><a href="https://global-change-data-lab.org/" class="partner-logo gcdl-logo" data-track-note="footer-navigation"><img src="https://ourworldindata.org/gcdl-logo-narrow.png" alt="Global Change Data Lab logo" loading="lazy"/></a>Our World In Data is a project of the <a href="https://global-change-data-lab.org/">Global Change Data Lab</a>, a registered charity in England and Wales (Charity Number 1186433).</p></div></div></div></div><div class="site-tools"></div><script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=es6,fetch"></script><script src="https://ourworldindata.org/assets/js/commons.js"></script><script src="https://ourworldindata.org/assets/js/owid.js"></script><script>
+                runHeaderMenus();
+                runBlocks();
+                runLightbox();
+                runSiteTools();
+                runCookiePreferencesManager();
+                runCovid();
+                runFootnotes();
+                if (!document.querySelector(".ChartPage")) {
+                    GrapherPageUtils.embedAll();
+                    runGlobalEntityControl(GrapherPageUtils.globalEntitySelection);
+                }
+            </script></footer><script>const jsonConfig = 
+//EMBEDDED_JSON
+{
+  "id": 1262,
+  "map": {
+    "colorScale": {
+      "baseColorScheme": "YlOrRd",
+      "binningStrategy": "manual",
+      "customNumericColors": [],
+      "customNumericLabels": [],
+      "customNumericValues": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        80,
+        100,
+        120,
+        140
+      ],
+      "customCategoryColors": {},
+      "customCategoryLabels": {},
+      "customHiddenCategories": {}
+    },
+    "projection": "World",
+    "targetYear": 2017,
+    "variableId": 2676
+  },
+  "tab": "map",
+  "data": {
+    "availableEntities": [
+      "Afghanistan",
+      "Albania",
+      "Algeria",
+      "American Samoa",
+      "Andorra",
+      "Angola",
+      "Antigua and Barbuda",
+      "Arab World",
+      "Argentina",
+      "Armenia",
+      "Aruba",
+      "Australia",
+      "Austria",
+      "Azerbaijan",
+      "Bahamas",
+      "Bahrain",
+      "Bangladesh",
+      "Barbados",
+      "Belarus",
+      "Belgium",
+      "Belize",
+      "Benin",
+      "Bermuda",
+      "Bhutan",
+      "Bolivia",
+      "Bosnia and Herzegovina",
+      "Botswana",
+      "Brazil",
+      "British Virgin Islands",
+      "Brunei",
+      "Bulgaria",
+      "Burkina Faso",
+      "Burundi",
+      "Cambodia",
+      "Cameroon",
+      "Canada",
+      "Cape Verde",
+      "Caribbean small states",
+      "Cayman Islands",
+      "Central African Republic",
+      "Central Europe and the Baltics",
+      "Chad",
+      "Chile",
+      "China",
+      "Colombia",
+      "Comoros",
+      "Congo",
+      "Costa Rica",
+      "Cote d'Ivoire",
+      "Croatia",
+      "Cuba",
+      "Curacao",
+      "Cyprus",
+      "Czech Republic",
+      "Democratic Republic of Congo",
+      "Denmark",
+      "Djibouti",
+      "Dominica",
+      "Dominican Republic",
+      "Early-demographic dividend",
+      "East Asia & Pacific (IDA & IBRD)",
+      "East Asia & Pacific (excluding high income)",
+      "East Asia & Pacific",
+      "Ecuador",
+      "Egypt",
+      "El Salvador",
+      "Equatorial Guinea",
+      "Eritrea",
+      "Estonia",
+      "Ethiopia",
+      "Euro area",
+      "Europe & Central Asia (IDA & IBRD)",
+      "Europe & Central Asia (excluding high income)",
+      "Europe & Central Asia",
+      "European Union",
+      "Faeroe Islands",
+      "Fiji",
+      "Finland",
+      "Fragile and conflict affected situations",
+      "France",
+      "French Polynesia",
+      "Gabon",
+      "Gambia",
+      "Georgia",
+      "Germany",
+      "Ghana",
+      "Gibraltar",
+      "Greece",
+      "Greenland",
+      "Grenada",
+      "Guam",
+      "Guatemala",
+      "Guinea-Bissau",
+      "Guinea",
+      "Guyana",
+      "Haiti",
+      "Heavily indebted poor countries (HIPC)",
+      "High income",
+      "Honduras",
+      "Hong Kong",
+      "Hungary",
+      "IBRD only",
+      "IDA & IBRD total",
+      "IDA blend",
+      "IDA only",
+      "IDA total",
+      "Iceland",
+      "India",
+      "Indonesia",
+      "Iran",
+      "Iraq",
+      "Ireland",
+      "Israel",
+      "Italy",
+      "Jamaica",
+      "Japan",
+      "Jordan",
+      "Kazakhstan",
+      "Kenya",
+      "Kiribati",
+      "Kosovo",
+      "Kuwait",
+      "Kyrgyzstan",
+      "Laos",
+      "Late-demographic dividend",
+      "Latin America & Caribbean (IDA & IBRD)",
+      "Latin America & Caribbean (excluding high income)",
+      "Latin America & Caribbean",
+      "Latvia",
+      "Least developed countries: UN classification",
+      "Lebanon",
+      "Lesotho",
+      "Liberia",
+      "Libya",
+      "Liechtenstein",
+      "Lithuania",
+      "Low & middle income",
+      "Low income",
+      "Lower middle income",
+      "Luxembourg",
+      "Macao",
+      "Macedonia",
+      "Madagascar",
+      "Malawi",
+      "Malaysia",
+      "Maldives",
+      "Mali",
+      "Malta",
+      "Marshall Islands",
+      "Mauritania",
+      "Mauritius",
+      "Mexico",
+      "Micronesia (country)",
+      "Middle East & North Africa (IDA & IBRD)",
+      "Middle East & North Africa (excluding high income)",
+      "Middle East & North Africa",
+      "Middle income",
+      "Moldova",
+      "Monaco",
+      "Mongolia",
+      "Montenegro",
+      "Morocco",
+      "Mozambique",
+      "Myanmar",
+      "Namibia",
+      "Nauru",
+      "Nepal",
+      "Netherlands",
+      "New Caledonia",
+      "New Zealand",
+      "Nicaragua",
+      "Niger",
+      "Nigeria",
+      "North America",
+      "North Korea",
+      "Northern Mariana Islands",
+      "Norway",
+      "OECD members",
+      "Oman",
+      "Other small states",
+      "Pacific island small states",
+      "Pakistan",
+      "Palau",
+      "Palestine",
+      "Panama",
+      "Papua New Guinea",
+      "Paraguay",
+      "Peru",
+      "Philippines",
+      "Poland",
+      "Portugal",
+      "Post-demographic dividend",
+      "Pre-demographic dividend",
+      "Puerto Rico",
+      "Qatar",
+      "Romania",
+      "Russia",
+      "Rwanda",
+      "Saint Kitts and Nevis",
+      "Saint Lucia",
+      "Saint Vincent and the Grenadines",
+      "Samoa",
+      "San Marino",
+      "Sao Tome and Principe",
+      "Saudi Arabia",
+      "Senegal",
+      "Serbia",
+      "Seychelles",
+      "Sierra Leone",
+      "Singapore",
+      "Slovakia",
+      "Slovenia",
+      "Small states",
+      "Solomon Islands",
+      "Somalia",
+      "South Africa",
+      "South Asia (IDA & IBRD)",
+      "South Asia",
+      "South Korea",
+      "South Sudan",
+      "Spain",
+      "Sri Lanka",
+      "Sub-Saharan Africa (IDA & IBRD)",
+      "Sub-Saharan Africa (excluding high income)",
+      "Sub-Saharan Africa",
+      "Sudan",
+      "Suriname",
+      "Swaziland",
+      "Sweden",
+      "Switzerland",
+      "Syrian Arab Republic",
+      "Tajikistan",
+      "Tanzania",
+      "Thailand",
+      "Timor",
+      "Togo",
+      "Tonga",
+      "Trinidad and Tobago",
+      "Tunisia",
+      "Turkey",
+      "Turkmenistan",
+      "Turks and Caicos Islands",
+      "Tuvalu",
+      "Uganda",
+      "Ukraine",
+      "United Arab Emirates",
+      "United Kingdom",
+      "United States Virgin Islands",
+      "United States",
+      "Upper middle income",
+      "Uruguay",
+      "Uzbekistan",
+      "Vanuatu",
+      "Venezuela",
+      "Vietnam",
+      "World",
+      "Yemen",
+      "Zambia",
+      "Zimbabwe"
+    ]
+  },
+  "slug": "fixed-telephone-subscriptions-per-100-people",
+  "type": "LineChart",
+  "title": "Fixed telephone subscriptions",
+  "xAxis": {
+    "scaleType": "linear"
+  },
+  "yAxis": {
+    "min": 0,
+    "scaleType": "linear"
+  },
+  "version": 4,
+  "subtitle": "The number of fixed (landline) telephone subscriptions, measured per 100 people.",
+  "hasMapTab": true,
+  "originUrl": "https://ourworldindata.org/technology-adoption/",
+  "stackMode": "absolute",
+  "dimensions": [
+    {
+      "display": {
+        "unit": "per 100 people"
+      },
+      "property": "y",
+      "variableId": 2676
+    }
+  ],
+  "sourceDesc": "International Telecommunication Union",
+  "hasChartTab": true,
+  "isPublished": true,
+  "selectedData": [
+    {
+      "index": 0,
+      "entityId": 23
+    },
+    {
+      "index": 0,
+      "entityId": 171
+    },
+    {
+      "index": 0,
+      "entityId": 1
+    },
+    {
+      "index": 0,
+      "entityId": 13
+    },
+    {
+      "index": 0,
+      "entityId": 355
+    },
+    {
+      "index": 0,
+      "entityId": 36
+    },
+    {
+      "index": 0,
+      "entityId": 137
+    }
+  ],
+  "internalNotes": "",
+  "addCountryMode": "add-country",
+  "hideRelativeToggle": true
+}
+//EMBEDDED_JSON
+
+const figure = document.getElementsByTagName("figure")[0];
+try {
+    const view = window.GrapherView.bootstrap({
+        jsonConfig: jsonConfig,
+        containerNode: figure,
+        queryStr: window.location.search
+    });
+    view.bindToWindow();
+} catch (err) {
+    figure.innerHTML = "<img src=\"/grapher/exports/fixed-telephone-subscriptions-per-100-people.svg\"/><p>Unable to load interactive visualization</p>";
+    figure.setAttribute("id", "fallback");
+    throw err;
+}
+</script><!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N2D4V8S"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) --></body></html>
+<p>and</p>
+<pre class="r"><code>htmltools::includeHTML(&quot;https://ourworldindata.org/grapher/mobile-cellular-subscriptions-per-100-people?tab=chart&quot;)</code></pre>
+<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Mobile cellular subscriptions - Our World in Data</title><meta name="description" content="Mobile phone subscriptions, measured as the number per 100 people."/><link rel="canonical" href="https://ourworldindata.org/grapher/mobile-cellular-subscriptions-per-100-people"/><link rel="alternate" type="application/atom+xml" href="/atom.xml"/><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/><meta property="fb:app_id" content="1149943818390250"/><meta property="og:url" content="https://ourworldindata.org/grapher/mobile-cellular-subscriptions-per-100-people"/><meta property="og:title" content="Mobile cellular subscriptions"/><meta property="og:description" content="Mobile phone subscriptions, measured as the number per 100 people."/><meta property="og:image" content="https://ourworldindata.org/grapher/exports/mobile-cellular-subscriptions-per-100-people.png?v=4"/><meta property="og:site_name" content="Our World in Data"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@OurWorldInData"/><meta name="twitter:creator" content="@OurWorldInData"/><meta name="twitter:title" content="Mobile cellular subscriptions"/><meta name="twitter:description" content="Mobile phone subscriptions, measured as the number per 100 people."/><meta name="twitter:image" content="https://ourworldindata.org/grapher/exports/mobile-cellular-subscriptions-per-100-people.png?v=4"/><link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,700i|Playfair+Display:400,700&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="https://ourworldindata.org/assets/css/commons.css"/><link rel="stylesheet" href="https://ourworldindata.org/assets/css/owid.css"/><meta property="og:image:width" content="850"/><meta property="og:image:height" content="600"/><script>if (window != window.top) document.documentElement.classList.add('iframe')</script><noscript><style>
+                    figure { display: none !important; }
+                </style></noscript><link rel="preload" href="/grapher/data/variables/2687.json?v=4" as="fetch" crossorigin="anonymous"/><!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N2D4V8S');</script>
+<!-- End Google Tag Manager --></head><body class="ChartPage"><header class="site-header"><div class="wrapper site-navigation-bar"><div class="site-logo"><a href="/">Our World<br/> in Data</a></div><nav class="site-navigation"><div class="topics-button-wrapper"><a href="/#entries" class="topics-button"><div class="label">Articles <br/><strong>by topic</strong></div><div class="icon"><svg width="12" height="6"><path d="M0,0 L12,0 L6,6 Z" fill="currentColor"></path></svg></div></a></div><div><div class="site-primary-navigation"><form class="HeaderSearch" action="/search" method="GET"><input type="search" name="q" placeholder="Search..."/><div class="icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></div></form><ul class="site-primary-links"><li><a href="/blog" data-track-note="header-navigation">Latest</a></li><li><a href="/about" data-track-note="header-navigation">About</a></li><li><a href="/donate" data-track-note="header-navigation">Donate</a></li></ul></div><div class="site-secondary-navigation"><ul class="site-secondary-links"><li><a href="/charts" data-track-note="header-navigation">All charts</a></li><li><a href="https://sdg-tracker.org" data-track-note="header-navigation">Sustainable Development Goals Tracker</a></li></ul></div></div></nav><div class="header-logos-wrapper"><a href="https://www.oxfordmartin.ox.ac.uk/global-development" class="oxford-logo"><img src="https://ourworldindata.org/oms-logo.svg" alt="Oxford Martin School logo"/></a><a href="https://global-change-data-lab.org/" class="gcdl-logo"><img src="https://ourworldindata.org/gcdl-logo-narrow.png" alt="Global Change Data Lab logo"/></a></div><div class="mobile-site-navigation"><button data-track-note="mobile-search-button"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></button><button data-track-note="mobile-newsletter-button"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="envelope-open-text" class="svg-inline--fa fa-envelope-open-text fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M176 216h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16H176c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16zm-16 80c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16H176c-8.84 0-16 7.16-16 16v16zm96 121.13c-16.42 0-32.84-5.06-46.86-15.19L0 250.86V464c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V250.86L302.86 401.94c-14.02 10.12-30.44 15.19-46.86 15.19zm237.61-254.18c-8.85-6.94-17.24-13.47-29.61-22.81V96c0-26.51-21.49-48-48-48h-77.55c-3.04-2.2-5.87-4.26-9.04-6.56C312.6 29.17 279.2-.35 256 0c-23.2-.35-56.59 29.17-73.41 41.44-3.17 2.3-6 4.36-9.04 6.56H96c-26.51 0-48 21.49-48 48v44.14c-12.37 9.33-20.76 15.87-29.61 22.81A47.995 47.995 0 0 0 0 200.72v10.65l96 69.35V96h320v184.72l96-69.35v-10.65c0-14.74-6.78-28.67-18.39-37.77z"></path></svg></button><button data-track-note="mobile-hamburger-button"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" class="svg-inline--fa fa-bars fa-w-14 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path></svg></button></div></div></header><div class="alert-banner"><div class="content"><div class="text"><strong>Coronavirus pandemic</strong>: daily updated research and data.</div><a href="/coronavirus" data-track-note="covid-banner-click">Read more</a></div></div><main><figure data-grapher-src="/grapher/mobile-cellular-subscriptions-per-100-people"><div class="loading-indicator"><span style="border-color:#333"></span></div></figure><noscript id="fallback"><img src="https://ourworldindata.org/grapher/exports/mobile-cellular-subscriptions-per-100-people.svg"/><p>Interactive visualization requires JavaScript</p></noscript><div class="related-research-data"><h2>All our research and data on Technology Adoption</h2><div class="research"><a href="/technology-adoption"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-alt" class="svg-inline--fa fa-file-alt fa-w-12 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg>Read the article</a></div><h3>Charts</h3><ul><li><a href="/grapher/fixed-landline-telephone-subscriptions-vs-gdp-per-capita">Fixed (landline) telephone subscriptions vs. GDP per capita</a></li><li><a href="/grapher/fixed-broadband-subscriptions-per-100-people">Fixed broadband subscriptions (per 100 people)</a></li><li><a href="/grapher/fixed-telephone-subscriptions-per-100-people">Fixed telephone subscriptions</a></li><li><a href="/grapher/mobile-and-fixed-landline-telephone-subscriptions">Mobile and fixed landline telephone subscriptions</a></li><li><a href="/grapher/mobile-phone-subscriptions-vs-gdp-per-capita">Mobile phone subscriptions vs. GDP per capita</a></li><li><a href="/grapher/motor-vehicle-ownership-per-1000-inhabitants">Motor vehicle ownership, per 1000 inhabitants</a></li><li><a href="/grapher/road-vehicles-per-1000-inhabitants-vs-gdp-per-capita">Motor vehicles per 1000 inhabitants vs GDP per capita</a></li><li><a href="/grapher/registered-mobile-money-accounts">Registered Mobile Money Accounts</a></li><li><a href="/grapher/registered-mobile-money-accounts-by-region">Registered Mobile Money Accounts by Region</a></li><li><a href="/grapher/secure-internet-servers-per-1-million-people">Secure Internet servers</a></li><li><a href="/grapher/share-of-us-households-with-basic-electrical-appliances">Share of US households with basic electrical appliances</a></li><li><a href="/grapher/share-of-individuals-using-the-internet">Share of the population using the Internet</a></li><li><a href="/grapher/technology-adoption-by-households-in-the-united-states">Technology adoption in US households</a></li><li><a href="/grapher/technology-and-infrastructure-diffusion-in-the-us">Technology and infrastructure diffusion in the US</a></li></ul></div></main><section class="donate-footer"><div class="wrapper"><div class="owid-row flex-align-center"><div class="owid-col owid-col--lg-3 owid-padding-bottom--sm-3"><p>Our World in Data is free and accessible for everyone.</p><p>Help us do this work by making a donation.</p></div><div class="owid-col owid-col--lg-1"><a href="/donate" class="owid-button donate-button" data-track-note="donate-footer"><span class="label">Donate now</span><span class="icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" class="svg-inline--fa fa-angle-right fa-w-8 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg></span></a></div></div></div></section><footer class="site-footer"><div class="wrapper"><div class="owid-row"><div class="owid-col owid-col--lg-1"><ul><li><a href="/about" data-track-note="footer-navigation">About</a></li><li><a href="/about#contact" data-track-note="footer-navigation">Contact</a></li><li><a href="/feedback" data-track-note="footer-navigation">Feedback</a></li><li><a href="/jobs" data-track-note="footer-navigation">Jobs</a></li><li><a href="/supporters" data-track-note="footer-navigation">Supporters</a></li><li><a href="/about/how-to-use-our-world-in-data" data-track-note="footer-navigation">How to use</a></li><li><a href="/donate" data-track-note="footer-navigation">Donate</a></li><li><a href="/privacy-policy" data-track-note="footer-navigation">Privacy policy</a></li></ul></div><div class="owid-col owid-col--lg-1"><ul><li><a href="/blog" data-track-note="footer-navigation">Latest publications</a></li><li><a href="/charts" data-track-note="footer-navigation">All charts</a></li></ul><ul><li><a href="https://twitter.com/OurWorldInData" data-track-note="footer-navigation">Twitter</a></li><li><a href="https://www.facebook.com/OurWorldinData" data-track-note="footer-navigation">Facebook</a></li><li><a href="https://github.com/owid" data-track-note="footer-navigation">GitHub</a></li><li><a href="/feed" data-track-note="footer-navigation">RSS Feed</a></li></ul></div><div class="owid-col owid-col--lg-1"><div class="logos"><a href="https://www.oxfordmartin.ox.ac.uk/research/programmes/global-development" class="partner-logo" data-track-note="footer-navigation"><img src="https://ourworldindata.org/oms-logo.svg" alt="Oxford Martin School logo" loading="lazy"/></a><a href="/owid-at-ycombinator" class="partner-logo" data-track-note="footer-navigation"><img src="https://ourworldindata.org/yc-logo.png" alt="Y Combinator logo" loading="lazy"/></a></div></div><div class="owid-col flex-2"><div class="legal"><p>License: All of Our World in Data is completely open access and all work is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons BY license</a>. You have the permission to use, distribute, and reproduce in any medium, provided the source and authors are credited.</p><p>Please consult our full <a href="/about#legal">legal disclaimer</a>.</p><p><a href="https://global-change-data-lab.org/" class="partner-logo gcdl-logo" data-track-note="footer-navigation"><img src="https://ourworldindata.org/gcdl-logo-narrow.png" alt="Global Change Data Lab logo" loading="lazy"/></a>Our World In Data is a project of the <a href="https://global-change-data-lab.org/">Global Change Data Lab</a>, a registered charity in England and Wales (Charity Number 1186433).</p></div></div></div></div><div class="site-tools"></div><script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=es6,fetch"></script><script src="https://ourworldindata.org/assets/js/commons.js"></script><script src="https://ourworldindata.org/assets/js/owid.js"></script><script>
+                runHeaderMenus();
+                runBlocks();
+                runLightbox();
+                runSiteTools();
+                runCookiePreferencesManager();
+                runCovid();
+                runFootnotes();
+                if (!document.querySelector(".ChartPage")) {
+                    GrapherPageUtils.embedAll();
+                    runGlobalEntityControl(GrapherPageUtils.globalEntitySelection);
+                }
+            </script></footer><script>const jsonConfig = 
+//EMBEDDED_JSON
+{
+  "id": 1263,
+  "map": {
+    "colorScale": {
+      "baseColorScheme": "PuBu",
+      "binningStrategy": "manual",
+      "customNumericColors": [],
+      "customNumericLabels": [],
+      "customNumericValues": [
+        10,
+        25,
+        50,
+        75,
+        100,
+        125,
+        150,
+        200,
+        250,
+        350
+      ],
+      "customCategoryColors": {},
+      "customCategoryLabels": {},
+      "customNumericMinValue": 0,
+      "customHiddenCategories": {}
+    },
+    "projection": "World",
+    "targetYear": 2017,
+    "variableId": 2687
+  },
+  "tab": "map",
+  "data": {
+    "availableEntities": [
+      "Afghanistan",
+      "Albania",
+      "Algeria",
+      "American Samoa",
+      "Andorra",
+      "Angola",
+      "Antigua and Barbuda",
+      "Arab World",
+      "Argentina",
+      "Armenia",
+      "Aruba",
+      "Australia",
+      "Austria",
+      "Azerbaijan",
+      "Bahamas",
+      "Bahrain",
+      "Bangladesh",
+      "Barbados",
+      "Belarus",
+      "Belgium",
+      "Belize",
+      "Benin",
+      "Bermuda",
+      "Bhutan",
+      "Bolivia",
+      "Bosnia and Herzegovina",
+      "Botswana",
+      "Brazil",
+      "British Virgin Islands",
+      "Brunei",
+      "Bulgaria",
+      "Burkina Faso",
+      "Burundi",
+      "Cambodia",
+      "Cameroon",
+      "Canada",
+      "Cape Verde",
+      "Caribbean small states",
+      "Cayman Islands",
+      "Central African Republic",
+      "Central Europe and the Baltics",
+      "Chad",
+      "Chile",
+      "China",
+      "Colombia",
+      "Comoros",
+      "Congo",
+      "Costa Rica",
+      "Cote d'Ivoire",
+      "Croatia",
+      "Cuba",
+      "Curacao",
+      "Cyprus",
+      "Czech Republic",
+      "Democratic Republic of Congo",
+      "Denmark",
+      "Djibouti",
+      "Dominica",
+      "Dominican Republic",
+      "Early-demographic dividend",
+      "East Asia & Pacific (IDA & IBRD)",
+      "East Asia & Pacific (excluding high income)",
+      "East Asia & Pacific",
+      "Ecuador",
+      "Egypt",
+      "El Salvador",
+      "Equatorial Guinea",
+      "Eritrea",
+      "Estonia",
+      "Ethiopia",
+      "Euro area",
+      "Europe & Central Asia (IDA & IBRD)",
+      "Europe & Central Asia (excluding high income)",
+      "Europe & Central Asia",
+      "European Union",
+      "Faeroe Islands",
+      "Fiji",
+      "Finland",
+      "Fragile and conflict affected situations",
+      "France",
+      "French Polynesia",
+      "Gabon",
+      "Gambia",
+      "Georgia",
+      "Germany",
+      "Ghana",
+      "Gibraltar",
+      "Greece",
+      "Greenland",
+      "Grenada",
+      "Guam",
+      "Guatemala",
+      "Guinea-Bissau",
+      "Guinea",
+      "Guyana",
+      "Haiti",
+      "Heavily indebted poor countries (HIPC)",
+      "High income",
+      "Honduras",
+      "Hong Kong",
+      "Hungary",
+      "IBRD only",
+      "IDA & IBRD total",
+      "IDA blend",
+      "IDA only",
+      "IDA total",
+      "Iceland",
+      "India",
+      "Indonesia",
+      "Iran",
+      "Iraq",
+      "Ireland",
+      "Israel",
+      "Italy",
+      "Jamaica",
+      "Japan",
+      "Jordan",
+      "Kazakhstan",
+      "Kenya",
+      "Kiribati",
+      "Kosovo",
+      "Kuwait",
+      "Kyrgyzstan",
+      "Laos",
+      "Late-demographic dividend",
+      "Latin America & Caribbean (IDA & IBRD)",
+      "Latin America & Caribbean (excluding high income)",
+      "Latin America & Caribbean",
+      "Latvia",
+      "Least developed countries: UN classification",
+      "Lebanon",
+      "Lesotho",
+      "Liberia",
+      "Libya",
+      "Liechtenstein",
+      "Lithuania",
+      "Low & middle income",
+      "Low income",
+      "Lower middle income",
+      "Luxembourg",
+      "Macao",
+      "Macedonia",
+      "Madagascar",
+      "Malawi",
+      "Malaysia",
+      "Maldives",
+      "Mali",
+      "Malta",
+      "Marshall Islands",
+      "Mauritania",
+      "Mauritius",
+      "Mexico",
+      "Micronesia (country)",
+      "Middle East & North Africa (IDA & IBRD)",
+      "Middle East & North Africa (excluding high income)",
+      "Middle East & North Africa",
+      "Middle income",
+      "Moldova",
+      "Monaco",
+      "Mongolia",
+      "Montenegro",
+      "Morocco",
+      "Mozambique",
+      "Myanmar",
+      "Namibia",
+      "Nauru",
+      "Nepal",
+      "Netherlands",
+      "New Caledonia",
+      "New Zealand",
+      "Nicaragua",
+      "Niger",
+      "Nigeria",
+      "North America",
+      "North Korea",
+      "Northern Mariana Islands",
+      "Norway",
+      "OECD members",
+      "Oman",
+      "Other small states",
+      "Pacific island small states",
+      "Pakistan",
+      "Palau",
+      "Palestine",
+      "Panama",
+      "Papua New Guinea",
+      "Paraguay",
+      "Peru",
+      "Philippines",
+      "Poland",
+      "Portugal",
+      "Post-demographic dividend",
+      "Pre-demographic dividend",
+      "Puerto Rico",
+      "Qatar",
+      "Romania",
+      "Russia",
+      "Rwanda",
+      "Saint Kitts and Nevis",
+      "Saint Lucia",
+      "Saint Vincent and the Grenadines",
+      "Samoa",
+      "San Marino",
+      "Sao Tome and Principe",
+      "Saudi Arabia",
+      "Senegal",
+      "Serbia",
+      "Seychelles",
+      "Sierra Leone",
+      "Singapore",
+      "Sint Maarten (Dutch part)",
+      "Slovakia",
+      "Slovenia",
+      "Small states",
+      "Solomon Islands",
+      "Somalia",
+      "South Africa",
+      "South Asia (IDA & IBRD)",
+      "South Asia",
+      "South Korea",
+      "South Sudan",
+      "Spain",
+      "Sri Lanka",
+      "Sub-Saharan Africa (IDA & IBRD)",
+      "Sub-Saharan Africa (excluding high income)",
+      "Sub-Saharan Africa",
+      "Sudan",
+      "Suriname",
+      "Swaziland",
+      "Sweden",
+      "Switzerland",
+      "Syrian Arab Republic",
+      "Tajikistan",
+      "Tanzania",
+      "Thailand",
+      "Timor",
+      "Togo",
+      "Tonga",
+      "Trinidad and Tobago",
+      "Tunisia",
+      "Turkey",
+      "Turkmenistan",
+      "Turks and Caicos Islands",
+      "Tuvalu",
+      "Uganda",
+      "Ukraine",
+      "United Arab Emirates",
+      "United Kingdom",
+      "United States Virgin Islands",
+      "United States",
+      "Upper middle income",
+      "Uruguay",
+      "Uzbekistan",
+      "Vanuatu",
+      "Venezuela",
+      "Vietnam",
+      "World",
+      "Yemen",
+      "Zambia",
+      "Zimbabwe"
+    ]
+  },
+  "slug": "mobile-cellular-subscriptions-per-100-people",
+  "type": "LineChart",
+  "title": "Mobile cellular subscriptions",
+  "xAxis": {
+    "scaleType": "linear"
+  },
+  "yAxis": {
+    "min": 0,
+    "scaleType": "linear"
+  },
+  "maxTime": 2017,
+  "minTime": 1960,
+  "version": 4,
+  "subtitle": "Mobile phone subscriptions, measured as the number per 100 people.",
+  "hasMapTab": true,
+  "originUrl": "https://ourworldindata.org/technology-adoption/",
+  "stackMode": "absolute",
+  "dimensions": [
+    {
+      "display": {},
+      "property": "y",
+      "variableId": 2687
+    }
+  ],
+  "sourceDesc": "International Telecommunication Union",
+  "hasChartTab": true,
+  "isPublished": true,
+  "selectedData": [
+    {
+      "index": 0,
+      "entityId": 13
+    },
+    {
+      "index": 0,
+      "entityId": 355
+    },
+    {
+      "index": 0,
+      "entityId": 171
+    },
+    {
+      "index": 0,
+      "entityId": 137
+    },
+    {
+      "index": 0,
+      "entityId": 33
+    },
+    {
+      "index": 0,
+      "entityId": 167
+    }
+  ],
+  "internalNotes": "",
+  "addCountryMode": "add-country",
+  "hideRelativeToggle": true
+}
+//EMBEDDED_JSON
+
+const figure = document.getElementsByTagName("figure")[0];
+try {
+    const view = window.GrapherView.bootstrap({
+        jsonConfig: jsonConfig,
+        containerNode: figure,
+        queryStr: window.location.search
+    });
+    view.bindToWindow();
+} catch (err) {
+    figure.innerHTML = "<img src=\"/grapher/exports/mobile-cellular-subscriptions-per-100-people.svg\"/><p>Unable to load interactive visualization</p>";
+    figure.setAttribute("id", "fallback");
+    throw err;
+}
+</script><!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N2D4V8S"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) --></body></html>
+<p>Our mission is to discover other insights with the dataset</p>
+<div id="load-the-weekly-data" class="section level1">
+<h1>Load the weekly Data</h1>
+<p>Download the weekly data and make available in the <code>tt</code> object.</p>
+<pre class="r"><code>tt &lt;- tt_load(&quot;2020-11-10&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 2: `mobile.csv`
+    Downloading file 2 of 2: `landline.csv`</code></pre>
+<p>Let’s take an initial look at the format of the data available. There are two tables included. Some of the gdp data is missing</p>
+<p>The subs figure is a rate of subscriptions per 100 population</p>
+<p>Mobile data is only available to 2017. To make meaningful comparisons, we will stack the datasets and trim to 2017</p>
+<pre class="r"><code>phones &lt;- bind_rows(
+  tt$mobile %&gt;%
+    rename(subscriptions = mobile_subs) %&gt;%
+    mutate(type = &quot;Mobile&quot;),
+  tt$landline %&gt;%
+    rename(subscriptions = landline_subs) %&gt;%
+    mutate(type = &quot;Landline&quot;)
+) %&gt;%
+  rename(country = entity) %&gt;%
+  mutate(
+    type = fct_relevel(type, c(&quot;Mobile&quot;, &quot;Landline&quot;)),
+    year = as.integer(year)
+  ) %&gt;%
+  filter(year &lt;= 2017L, !str_detect(country, &quot;Serbia&quot;)) %&gt;%
+  complete(type,
+    nesting(continent, country),
+    year = 1990L:2017L
+  ) %&gt;%
+  group_by(country) %&gt;%
+  tidyr::fill(subscriptions) %&gt;%
+  ungroup() %&gt;%
+  tidyr::replace_na(list(subscriptions = 0))</code></pre>
+<p>For the United States:</p>
+<pre class="r"><code>phones %&gt;%
+  filter(country == &quot;United States&quot;, !is.na(subscriptions)) %&gt;%
+  ggplot(aes(year, subscriptions, color = type)) +
+  geom_line(size = 2) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0, 0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL
+  ) +
+  scale_linetype_manual(guide = guide_legend(reverse = FALSE)) +
+  scale_color_manual(values = hrbrthemes::ipsum_pal()(8)[7:8]) +
+  labs(
+    title = &quot;Telephone subscriptions in the United States&quot;,
+    subtitle = &quot;Rate / 100 Population&quot;, x = &quot;&quot;, y = &quot;&quot;, color = &quot;&quot;
+  ) +
+  theme(
+    legend.position = c(0.9, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;),
+    axis.line.x = element_blank()
+  )</code></pre>
+<p><img src="figure/PhoneAdoption.Rmd/unnamed-chunk-4-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>For the single nation of Sudan:</p>
+<pre class="r"><code>phones %&gt;%
+  filter(country == &quot;Sudan&quot;, !is.na(subscriptions)) %&gt;%
+  ggplot(aes(year, subscriptions, color = type)) +
+  geom_line(size = 2) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0, 0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL
+  ) +
+  scale_linetype_manual(guide = guide_legend(reverse = FALSE)) +
+  scale_color_manual(values = hrbrthemes::ipsum_pal()(8)[7:8]) +
+  labs(
+    title = &quot;Telephone subscriptions in Sudan&quot;,
+    subtitle = &quot;Rate / 100 Population&quot;, x = &quot;&quot;, y = &quot;&quot;, color = &quot;&quot;
+  ) +
+  annotate(&quot;text&quot;,
+    x = 2002, y = 20,
+    label = &quot;Sudan skipped landline \ninfrastructure development&quot;,
+    size = 4,
+    color = &quot;black&quot;
+  ) +
+  theme(
+    legend.position = c(0.9, 0.3),
+    legend.background = element_rect(color = &quot;white&quot;),
+    axis.line.x = element_blank()
+  )</code></pre>
+<p><img src="figure/PhoneAdoption.Rmd/unnamed-chunk-5-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>For the single nation of Luxembourg:</p>
+<pre class="r"><code>phones %&gt;%
+  filter(country == &quot;Luxembourg&quot;, !is.na(subscriptions)) %&gt;%
+  ggplot(aes(year, subscriptions, color = type)) +
+  geom_line(size = 2) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0, 0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL
+  ) +
+  scale_linetype_manual(guide = guide_legend(reverse = FALSE)) +
+  scale_color_manual(values = hrbrthemes::ipsum_pal()(8)[7:8]) +
+  labs(
+    title = &quot;Telephone subscriptions in Luxembourg&quot;,
+    subtitle = &quot;Rate / 100 Population&quot;, x = &quot;&quot;, y = &quot;&quot;, color = &quot;&quot;
+  ) +
+  annotate(&quot;text&quot;,
+    x = 1995, y = 43,
+    label = &quot;Around 50 of 100 people \n retain landlines&quot;,
+    size = 4,
+    color = &quot;black&quot;
+  ) +
+  annotate(&quot;text&quot;,
+    x = 2010, y = 120,
+    label = &quot;There are more moble subscriptions \nthan there are people&quot;,
+    size = 4,
+    color = &quot;black&quot;
+  ) +
+  theme(
+    legend.position = c(0.9, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;),
+    axis.line.x = element_blank()
+  )</code></pre>
+<p><img src="figure/PhoneAdoption.Rmd/unnamed-chunk-6-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>For the single nation of North Korea:</p>
+<pre class="r"><code>phones %&gt;%
+  filter(country == &quot;North Korea&quot;, !is.na(subscriptions)) %&gt;%
+  ggplot(aes(year, subscriptions, color = type)) +
+  geom_line(size = 2) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0, 0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL
+  ) +
+  scale_linetype_manual(guide = guide_legend(reverse = FALSE)) +
+  scale_color_manual(values = hrbrthemes::ipsum_pal()(8)[7:8]) +
+  annotate(&quot;text&quot;,
+    x = 2010, y = 11,
+    label = &quot;2017 is unknown&quot;,
+    size = 4,
+    color = &quot;black&quot;
+  ) +
+  labs(
+    title = &quot;Telephone Subscribers in North Korea&quot;,
+    subtitle = &quot;Rate / 100 Population&quot;, x = &quot;&quot;, y = &quot;&quot;, color = &quot;&quot;
+  ) +
+  theme(
+    legend.position = c(0.9, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;),
+    axis.line.x = element_blank()
+  )</code></pre>
+<p><img src="figure/PhoneAdoption.Rmd/unnamed-chunk-7-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>Descriptive statistics across continents and by national income:</p>
+<pre class="r"><code>summarize_subscriptions &lt;- . %&gt;% # making the summary re-usable
+  filter(!is.na(subscriptions)) %&gt;%
+  summarize(
+    avg_subscriptions = mean(subscriptions),
+    median_subscriptions = median(subscriptions),
+    q25 = quantile(subscriptions, .25),
+    q75 = quantile(subscriptions, .75)
+  )
+
+phones %&gt;%
+  filter(!is.na(subscriptions)) %&gt;%
+  group_by(year, continent, type) %&gt;%
+  summarize_subscriptions() %&gt;%
+  ggplot(aes(year,
+    avg_subscriptions,
+    color = type
+  )) +
+  geom_line(size = 2) +
+  geom_ribbon(aes(ymin = q25, ymax = q75), alpha = .2, show.legend = FALSE) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0, 0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL
+  ) +
+  scale_color_manual(values = hrbrthemes::ipsum_pal()(8)[7:8]) +
+  facet_wrap(~continent) +
+  theme(legend.position = c(0.8, 0.2)) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Median subscriptions per person&quot;,
+    color = &quot;&quot;,
+    title = &quot;How do mobile and landline adoption differ between continents?&quot;,
+    subtitle = &quot;Ribbon shows the 25th-75th percentile range of all countries&quot;,
+    caption = &quot;Data: OurWorldInData.org | Visual: @jim_gruman&quot;
+  )</code></pre>
+<p><img src="figure/PhoneAdoption.Rmd/unnamed-chunk-8-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>country_incomes &lt;- WDI(
+  indicator = c(
+    gdp_per_capita = &quot;NY.GDP.PCAP.PP.KD&quot;,
+    pop = &quot;SP.POP.TOTL&quot;
+  ),
+  start = 2005,
+  end = 2005,
+  extra = TRUE
+) %&gt;%
+  as_tibble() %&gt;%
+  select(code = iso3c, income, gdp_per_capita, pop) %&gt;%
+  filter(!is.na(income)) %&gt;%
+  mutate(income = as_factor(income)) %&gt;%
+  mutate(income = fct_relevel(
+    income,
+    &quot;Aggregates&quot;,
+    &quot;Low income&quot;,
+    &quot;Lower middle income&quot;,
+    &quot;Upper middle income&quot;
+  ))
+
+by_year_income &lt;- phones %&gt;%
+  inner_join(country_incomes, by = &quot;code&quot;) %&gt;%
+  group_by(year, income, type) %&gt;%
+  summarize_subscriptions()
+
+by_year_income %&gt;%
+  ggplot(aes(year,
+    median_subscriptions,
+    color = type
+  )) +
+  geom_line(size = 2) +
+  geom_ribbon(aes(ymin = q25, ymax = q75),
+    alpha = .2, show.legend = FALSE
+  ) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0, 0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL
+  ) +
+  scale_color_manual(values = hrbrthemes::ipsum_pal()(8)[7:8]) +
+  facet_wrap(~income) +
+  labs(
+    y = &quot;Median subscriptions per person&quot;, x = &quot;&quot;,
+    color = &quot;&quot;,
+    title = &quot;How do mobile and landline adoption differ between national income categories?&quot;,
+    subtitle = &quot;Ribbon shows the 25th-75th percentile range of all countries&quot;,
+    caption = &quot;Data: OurWorldInData.org and World Bank | Visual: @jim_gruman&quot;
+  ) +
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="figure/PhoneAdoption.Rmd/unnamed-chunk-9-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>What are ways we could summarize stats for each country?</p>
+<pre class="r"><code>country_sizes &lt;- phones %&gt;%
+  group_by(country) %&gt;%
+  summarize(
+    avg_population = mean(total_pop, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  slice_max(order_by = avg_population, n = 52)
+
+phones %&gt;%
+  semi_join(country_sizes, by = &quot;country&quot;) %&gt;%
+  ggplot(aes(year,
+    subscriptions,
+    color = type,
+    group = interaction(type, country)
+  )) +
+  geom_line(size = 1.5) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0, 0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL
+  ) +
+  scale_color_manual(values = hrbrthemes::ipsum_pal()(8)[7:8]) +
+  facet_wrap(~continent) +
+  geom_hline(yintercept = 70, lty = 2) +
+  labs(
+    y = &quot;Subscriptions per 100 population&quot;,
+    x = &quot;&quot;,
+    title = &quot;Mobile phone technology penetration and the race to 70 subscriptions per 100 people&quot;,
+    subtitle = &quot;In the largest 50 nations, the US, Canada, and Europe replaced landlines. Africa started from scratch with mobile&quot;,
+    color = &quot;&quot;,
+    caption = &quot;Data: OurWorldInData.org and World Bank | Visual: @jim_gruman&quot;
+  ) +
+  theme(legend.position = c(0.9, 0.2))</code></pre>
+<p><img src="figure/PhoneAdoption.Rmd/unnamed-chunk-10-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>countries_summarized &lt;- phones %&gt;%
+  filter(!is.na(subscriptions)) %&gt;%
+  select(-total_pop, gdp_per_cap) %&gt;%
+  pivot_wider(names_from = type, values_from = subscriptions) %&gt;%
+  group_by(continent, country, code) %&gt;%
+  summarize(
+    year_past_70_mobile = na_if(min(year[Mobile &gt;= 70]), Inf),
+    peak_landline = max(Landline, na.rm = TRUE),
+    peak_mobile = max(Mobile),
+    n_mobile = sum(!is.na(Mobile))
+  ) %&gt;%
+  ungroup() %&gt;%
+  inner_join(country_incomes, by = &quot;code&quot;) %&gt;%
+  filter(n_mobile &gt;= 25) %&gt;%
+  arrange(desc(year_past_70_mobile))
+
+countries_summarized %&gt;%
+  tidyr::drop_na() %&gt;%
+  ggplot(aes(year_past_70_mobile,
+    gdp_per_capita,
+    color = continent,
+    size = pop
+  )) +
+  geom_point(alpha = 0.6) +
+  geom_text_repel(aes(label = country), show.legend = FALSE) +
+  scale_y_log10(labels = dollar) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0.05, 0.05)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = seq(1990, 2019, 1)
+  ) +
+  scale_color_discrete(guide = guide_legend(override.aes = list(size = 10))) +
+  scale_size_continuous(
+    labels = comma,
+    range = c(3, 8)
+  ) +
+  labs(
+    y = &quot;GDP per capita (in 2005)&quot;,
+    x = &quot;Year mobile subscriptions passed 70/100 people&quot;,
+    title = &quot;Wealthy countries in Europe had early mobile phone technology penetration&quot;,
+    subtitle = &quot;The year that each nation first exceeded 70 subscribers per 100 population&quot;,
+    size = &quot;National \nPopulation&quot;,
+    color = &quot;&quot;,
+    caption = &quot;Data: OurWorldInData.org and World Bank | Visual: @jim_gruman&quot;
+  ) +
+  theme(
+    legend.position = c(0.95, 0.8),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/PhoneAdoption.Rmd/unnamed-chunk-11-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggrepel_0.8.2      ggtext_0.1.0.9000  visdat_0.5.3       naniar_0.6.0      
+ [5] WDI_2.7.1          scales_1.1.1       tidytuesdayR_1.0.1 hrbrthemes_0.8.6  
+ [9] forcats_0.5.0      stringr_1.4.0      dplyr_1.0.2        purrr_0.3.4       
+[13] readr_1.4.0        tidyr_1.1.2        tibble_3.0.4       ggplot2_3.3.2     
+[17] tidyverse_1.3.0    workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+ [1] fs_1.5.0          usethis_1.6.3     lubridate_1.7.9   httr_1.4.2       
+ [5] rprojroot_1.3-2   R.cache_0.14.0    tools_4.0.3       backports_1.2.0  
+ [9] R6_2.5.0          DBI_1.1.0         colorspace_2.0-0  withr_2.3.0      
+[13] tidyselect_1.1.0  curl_4.3          compiler_4.0.3    git2r_0.27.1     
+[17] extrafontdb_1.0   cli_2.1.0         rvest_0.3.6       xml2_1.3.2       
+[21] labeling_0.4.2    systemfonts_0.3.2 digest_0.6.27     rmarkdown_2.5    
+[25] R.utils_2.10.1    pkgconfig_2.0.3   htmltools_0.5.0   extrafont_0.17   
+[29] styler_1.3.2      dbplyr_2.0.0      rlang_0.4.8       readxl_1.3.1     
+[33] rstudioapi_0.13   generics_0.1.0    farver_2.0.3      jsonlite_1.7.1   
+[37] R.oo_1.24.0       magrittr_1.5      Rcpp_1.0.5        munsell_0.5.0    
+[41] fansi_0.4.1       gdtools_0.2.2     lifecycle_0.2.0   R.methodsS3_1.8.1
+[45] stringi_1.5.3     whisker_0.4       yaml_2.2.1        RJSONIO_1.3-1.4  
+[49] grid_4.0.3        promises_1.1.1    crayon_1.3.4      haven_2.3.1      
+[53] gridtext_0.1.1    hms_0.5.3         knitr_1.30        ps_1.4.0         
+[57] pillar_1.4.6      reprex_0.3.0      glue_1.4.2        evaluate_0.14    
+[61] memuse_4.1-0      modelr_0.1.8      vctrs_0.3.4       httpuv_1.5.4     
+[65] selectr_0.4-2     Rttf2pt1_1.3.8    cellranger_1.1.0  gtable_0.3.0     
+[69] rematch2_2.1.2    assertthat_0.2.1  xfun_0.19         broom_0.7.2      
+[73] later_1.1.0.1     ellipsis_0.3.1   </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
