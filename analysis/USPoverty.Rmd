@@ -38,18 +38,22 @@ library(tidycensus)
 theme_set(theme_ft_rc() +
             theme(plot.title.position = "plot"))
 
-
-# v18 <- load_variables(2018, "acs5", cache = TRUE)
-
 ```
 
 
 ```{r getData, message=FALSE, warning=FALSE}
-poverty <- suppressMessages(tidycensus::get_acs(geography = "county",
+
+if (file.exists("data/acs_poverty.rds")) {
+  poverty <- read_rds("data/acs_poverty.rds")
+} else {
+  poverty <- tidycensus::get_acs(geography = "county",
                     variables = c(poverty = "B17013_001"),
                     geometry = TRUE,
                     year = 2018) %>% 
-  select(GEOID, NAME, estimate, moe, geometry))
+  select(GEOID, NAME, estimate, moe, geometry)
+
+write_rds(poverty, "data/acs_poverty.rds")
+}
 
 population <- suppressMessages(tidycensus::get_acs(geography = "county",
                     variables = c(population = "B01003_001"),
@@ -104,7 +108,7 @@ county_dorling %>%
   geom_sf(color = "grey10") +
   coord_sf(crs = 2163, datum = NA) +
   scale_fill_stepsn(colors = c('#eff3ff','#bdd7e7','#6baed6','#3182bd','#08519c')) +
-  labs(title = "2014-2018 Poverty Rate in the United States by County",
+  labs(title = "2014-2018 Poverty Rate in the United States by County", subtitle = "Bubble size corresponds to County Population",
        caption = "US Census American Community Survey | jim_gruman")
 
 
