@@ -13,6 +13,9 @@ The data here comes from the [US Census American Community Survey](https://www.c
 
 Our goal is to recreate this beautiful Tableau [graphic](https://public.tableau.com/views/18_5yr_Poverty/2018Poverty?:embed=y&:embed_code_version=3&:loadOrderID=0&:display_count=y&:origin=viz_share_link), but to represent the population size better.
 
+<iframe src="https://public.tableau.com/views/18_5yr_Poverty/2018Poverty?:language=en&:display_count=y&:origin=viz_share_link" loading="lazy" style="width: 100%; height: 600px; border: 0px none;"></iframe>
+
+
 ```{r setup}
 knitr::opts_chunk$set(cache = FALSE, 
                       warning = FALSE, 
