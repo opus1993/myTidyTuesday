@@ -361,7 +361,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-12
+<strong>Last updated:</strong> 2020-11-13
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -452,16 +452,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreefa069732d4f101b2bceaa6b8cd1075683b8f28c2targetblankfa06973a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/fa069732d4f101b2bceaa6b8cd1075683b8f28c2" target="_blank">fa06973</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea4a66cd18f6d245de6e0a6f5033ed5160ccc7872targetblanka4a66cda"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a4a66cd18f6d245de6e0a6f5033ed5160ccc7872" target="_blank">a4a66cd</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreefa069732d4f101b2bceaa6b8cd1075683b8f28c2targetblankfa06973a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea4a66cd18f6d245de6e0a6f5033ed5160ccc7872targetblanka4a66cda" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/fa069732d4f101b2bceaa6b8cd1075683b8f28c2" target="_blank">fa06973</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a4a66cd18f6d245de6e0a6f5033ed5160ccc7872" target="_blank">a4a66cd</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -470,12 +470,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  2020_11_03_tidy_tuesday.Rmd
-    Untracked:  data/acs_poverty.rds
-    Untracked:  figure/2020_10_27_tidy_tuesday.Rmd/
-    Untracked:  tmap_style_previews/
+    Ignored:    data/acs_poverty.rds
 
 </code></pre>
 <p>
@@ -514,6 +509,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/a4a66cd18f6d245de6e0a6f5033ed5160ccc7872/analysis/USPoverty.Rmd" target="_blank">a4a66cd</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-11-13
+</td>
+<td>
+wflow_publish(“analysis/USPoverty.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/e38a47299f25fed1ec13abd9dc1ff2b0241d0654/docs/USPoverty.html" target="_blank">e38a472</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-11-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -591,6 +620,8 @@ wflow_publish(“analysis/USPoverty.Rmd”)
 </div>
 <p>The data here comes from the <a href="https://www.census.gov/library/visualizations/interactive/2014-2018-poverty-rate-by-county.html">US Census American Community Survey</a> 2014-2018 5-year dataset.</p>
 <p>Our goal is to recreate this beautiful Tableau <a href="https://public.tableau.com/views/18_5yr_Poverty/2018Poverty?:embed=y&amp;:embed_code_version=3&amp;:loadOrderID=0&amp;:display_count=y&amp;:origin=viz_share_link">graphic</a>, but to represent the population size better.</p>
+<iframe src="https://public.tableau.com/views/18_5yr_Poverty/2018Poverty?:language=en&amp;:display_count=y&amp;:origin=viz_share_link" loading="lazy" style="width: 100%; height: 600px; border: 0px none;">
+</iframe>
 <pre class="r"><code>knitr::opts_chunk$set(cache = FALSE, 
                       warning = FALSE, 
                       message = FALSE, 
