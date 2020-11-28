@@ -316,7 +316,7 @@ bar_chart <- function(value, color = "#DFB37D"){
 hike_data %>% 
   group_by(region) %>% 
   arrange(desc(rating)) %>% 
-  slice(1:5) %>% 
+  slice(1:4) %>% 
   ungroup() %>% 
   select(-description, -gain, -highpoint, -latitude, -longitude,
          -hike_page, -subregion, -length_total) %>%
@@ -355,10 +355,10 @@ hike_data %>%
   ) %>% 
   tab_header(
     title = "Top Hiking Trails to visit in Washington",
-    subtitle = "The table below shows the 5 top rated trails in each of the 11 locations in Washington"
+    subtitle = "The 4 top rated trails in each of the 11 major regions of Washington State"
   ) %>% 
   tab_source_note(
-    source_note = md("**Data:** Washington Trails Association | **Table:** Kaustav Sen")
+    source_note = md("**Data:** Washington Trails Association | **Table:** Jim Gruman")
   ) %>% 
   tab_style(
     style = cell_text(
@@ -398,7 +398,7 @@ hike_data %>%
   ) %>% 
   tab_style(
     style = cell_text(
-      size = "large"
+      size = "medium"
     ),
     locations = cells_body(columns = 4:last_col())
   ) %>%
