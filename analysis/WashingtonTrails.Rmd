@@ -12,9 +12,7 @@ editor_options:
 
 The data this week comes from [Washington Trails Association](https://www.wta.org/go-outside/hikes?b_start:int=1) courtesy of the [TidyX crew](https://github.com/thebioengineer/TidyX/tree/master/TidyTuesday_Explained/035-Rectangles), [Ellis Hughes](https://twitter.com/Ellis_hughes) and [Patrick Ward](https://twitter.com/OSPpatrick)!
 
-A video going through this data can be found on [YouTube](https://bit.ly/TidyX_Ep35). Their original scraping code can be found on [GitHub](https://github.com/thebioengineer/TidyX/blob/master/TidyTuesday_Explained/035-Rectangles/Washington-hikes.R). The Washington Trails Assocation website includes this leaflet-style map visual:
-
-<iframe src="https://www.wta.org/go-outside/map" loading="lazy" style="width: 100%; height: 600px; border: 0px none;"></iframe>
+A video going through this data can be found on [YouTube](https://bit.ly/TidyX_Ep35). Their original scraping code can be found on [GitHub](https://github.com/thebioengineer/TidyX/blob/master/TidyTuesday_Explained/035-Rectangles/Washington-hikes.R). The Washington Trails Assocation website includes [this leaflet-style map visual](https://www.wta.org/go-outside/map)
 
 Let's setup with the `tidyverse`, a theming package `hrbrthemes`, some web scraping tools, and table building tools.
 
@@ -319,7 +317,7 @@ hike_data %>%
   slice(1:4) %>% 
   ungroup() %>% 
   select(-description, -gain, -highpoint, -latitude, -longitude,
-         -hike_page, -subregion, -length_total) %>%
+         -hike_page, -subregion, -length_total, -trip) %>%
   mutate(rating = if_else(is.na(rating),0,rating), 
     length_bar = map(length, bar_chart),
     rating = map(rating, rating_stars),
