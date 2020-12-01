@@ -13,7 +13,6 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(cache = FALSE, 
                       warning = FALSE, 
-                      collapse = TRUE,
                       message = FALSE, 
                       echo = TRUE, 
                       dpi = 300, 
@@ -36,9 +35,11 @@ theme_set(hrbrthemes::theme_ipsum() +
 
 # Introduction
 
-ZedStatistics episode 1 is a quick video introduction to comparable material:
+Survival analysis is one of the oldest [subfields of statistics](https://www.amazon.com/Emergence-Probability-Philosophical-Statistical-Probabilistic/dp/0521685575). Basic life-table methods, including techniques for dealing with censored data, were discovered [before 1700](http://www.pauldickman.com/survival/handouts/21%20-%20EoB%20Survival%20analysis%20overview.pdf), and in the early eighteenth century, the old masters - de Moivre working on annuities, and Daniel Bernoulli studying competing risks for the analysis of smallpox inoculation - developed the modern foundations of the field. Today, survival analysis models are important in Engineering, Insurance, Marketing, Medicine, and many more application areas. It is not surprising that R is rich in survival analysis functions. 
 
-<iframe src="https://youtu.be/v1QqpG0rR1k" loading="lazy" style="width: 100%; height: 600px; border: 0px none;"></iframe>
+ZedStatistics episode 1 is a quick video introduction illustration:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/v1QqpG0rR1k" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## What is Survival Analysis?
 
@@ -58,6 +59,8 @@ A study subject may be censored due to:
 - Withdrawal from study
 - No event of interest by the end of the fixed study period
 
+Censored subjects still provide information so must be appropriately included in the analysis. Ignoring censoring leads to an overestimate of the overall survival probability, because the censored subjects only contribute information for part of the follow-up time, and then fall out of the risk set, thus pulling down the cumulative probability of survival.
+
 In industry it is common to track component warranty claims and cost on machines sold. Warranty datasets are heavily censored because the study period rarely aligns with the warranty period for each machine delivered. The study time period and fleet population membership must be carefully considered and explicitly defined. In most cases, **exposure** is aligned to zero at the warranty start date. 
 
 The survival **rate** is proportion of the study population that has NOT (yet) experienced the event of interest divided by the whole study population membership within the study timeframe.
@@ -68,7 +71,9 @@ The survival **rate** is proportion of the study population that has NOT (yet) e
 
 First, duration times are always positive. Recall that traditional linear regression models make a number of assumptions for independence and normality that would no longer be valid in this space. There are distributions, like Weibull, that better represent the problem space.
 
-Let's look at a quick manual example graphically before moving on. In this case, the variable `time` is vector of durations, and the variable `event` is a binary vector of 1's for the event of interest and 0's for lack of event at the end of the study period (censored).
+The `survival` package is the cornerstone of the entire R survival analysis edifice. Not only is the package itself rich in features, but the object created by the `Surv()` function, which contains failure time and censoring information, is the basic survival analysis data structure in R. Dr. Terry Therneau, the package author, began working on the survival package in 1986. The first public release, in late 1989, used the Statlib service hosted by Carnegie Mellon University. Thereafter, the package was incorporated directly into Splus, and subsequently into R.
+
+Let's look at a quick manual example graphically before moving on. The first thing to do is to use `Surv()` to build the standard survival object.  In this case, the variable `time` is vector of durations, and the variable `event` is a binary vector of 1's for the event of interest and 0's for lack of event at the end of the study period (censored).
 
 ```{r}
 time <- c(5,6,2,4,4)
@@ -87,6 +92,14 @@ km <- survfit(Surv(time, event) ~ 1, data = sobj)    # the survfit object builds
 ggsurvplot(fit = km, conf.int = FALSE,
            risk.table = "nrisk_cumevents",
            legend = "none")  +
+  labs(title = "Kaplan-Meier (KM) Curve",
+       subtitle = "Each step down represents an event of interest")
+```
+
+The `ggfortify` package also contains methods for autoplotting simple survival plots.
+
+```{r}
+ggfortify:::autoplot.survfit(km) +
   labs(title = "Kaplan-Meier (KM) Curve",
        subtitle = "Each step down represents an event of interest")
 ```
@@ -121,19 +134,10 @@ Let's take a closer look at a German Breast Cancer dataset to explore how to ans
 ```{r}
 data(GBSG2, package = "TH.data")     # breast cancer patients, time to death
 
-# Count censored and uncensored data
-num_cens <- table(GBSG2$cens)
-
-# Create barplot of censored and uncensored data
 ggplot(GBSG2, aes(factor(cens))) +
   geom_bar(fill = hrbrthemes::ipsum_pal()(1)) +
   labs(title = "German Breast Cancer Study Group 2",
   caption = "source: GBSG2 dataset")
-
-# Use help() to look at cens
-# help(GBSG2, package = "TH.data")
-
-# in the help docs,   when cens == 1, the patient died
 ```
 
 As noted above, with a large enough sample size, the KM curve approaches the true survival function for that population. We will return to this dataset to explore the impact of the study participants features on survival rates.
@@ -179,10 +183,12 @@ ggsurvplot_df(fit = surv_wb, surv.geom = geom_line, legend = "none") +
 
 ```
 
-The base Weibull model curve is a smoothed parametric form of the stepped Kaplan-Meier curve that we saw earlier. The power of the parametric approach becomes apparent when we model on the differences in features within the dataset. Recall in the German Breast Cancer dataset that it includes patient attributes including classifications for the size of the tumor `tsize` and whether hormonal therapy was applied as `horTh`. 
+The base Weibull model curve is a smoothed parametric form of the stepped Kaplan-Meier curve that we saw earlier. The power of the parametric approach becomes apparent when we model on the differences in features within the dataset for inference. Recall in the German Breast Cancer dataset that it includes patient attributes including classifications for the size of the tumor `tsize` and whether hormonal therapy was applied as `horTh`. 
 
 ```{r}
-glimpse(GBSG2)
+GBSG2 %>% 
+  head() %>% 
+  knitr::kable()
 ```
 
 Because the tumor size `tsize` is numeric, we will project the 25th, 50th, and 75th quantile to understand the effect. Survival for each combination of features, or covariates, are modeled as `survreg(Surv(time, cens) ~ horTh + tsize, data = GBSG2)`. Generally speaking, the steps to crafting the visualization are
@@ -233,13 +239,23 @@ ggsurvplot_df(surv_wbmod,
 
 In addition to Weibull, the `surveg()` function will model exponential, lognormal, gaussian, logistic, and loglogistic as parametric distributions on the data provided. These may be more suitable for small samples where prior information is known about the survival characteristics of the larger population.
 
-## The Cox model, also known as the proportional hazards model
+## The Cox regression model, also known as the proportional hazards model
 
-The semi-parametric Cox model makes fewer strict distributional assumptions and is capable of breaking out the effect of covariate features while retaining much of the stepped detail of the Kaplan–Meier estimators.
+In many applications of survival analysis, the interest focuses on how covariates may affect the outcome; in clinical trials, adjustment of treatment effects for effects of other explanatory variables may be crucial if the randomized groups are unbalanced with respect to important prognostic factors, and in epidemiological cohort studies, reliable effects of exposure may
+be obtained only if some adjustment is made for confounding variables. In these situations, a regression model is useful and the most important model for survival data is the [Cox proportional hazards](http://www.medicine.mcgill.ca/epidemiology/hanley/bios601/Encyclopedia%20of%20Biostatistics2ndEd2005.pdf) regression model. The semi-parametric Cox model makes fewer strict distributional assumptions and is capable of breaking out the effect of covariate features while retaining much of the stepped detail of the Kaplan–Meier estimators.
 
 ```{r}
 cxmod <- coxph(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
 
+broom::tidy(cxmod, exp = TRUE) %>% 
+  knitr::kable()
+```
+
+Note that the model flags both horTh and tsize as significant. However, some caution needs to be exercised in interpreting these results. While the Cox Proportional Hazard’s model is thought to be “robust”, a careful analysis would check the assumptions underlying the model. For example, the Cox model assumes that the covariates do not vary with time. In a vignette that accompanies the survival package Therneau, Crowson and Atkinson demonstrate that the Karnofsky score (karno) is, in fact, time-dependent so the assumptions for the Cox model are not met. The vignette authors go on to present a strategy for dealing with time dependent covariates.
+
+Data scientists who are accustomed to computing ROC curves to assess model performance should be interested in the Concordance statistic. The documentation for the `survConcordance()` function in the `survival` package defines concordance as “the probability of agreement for any two randomly chosen observations, where in this case agreement means that the observation with the shorter survival time of the two also has the larger risk score. The predictor (or risk score) will often be the result of a Cox model or other regression” and notes that: “For continuous covariates concordance is equivalent to Kendall’s tau, and for logistic regression is is equivalent to the area under the ROC curve.”
+
+```{r}
 newdat <- expand.grid(
   horTh = levels(GBSG2$horTh),
   tsize = quantile(GBSG2$tsize, probs = c(0.25, 0.5, 0.75))
@@ -248,7 +264,6 @@ newdat <- expand.grid(
 rownames(newdat) <- letters[1:6]
 
 cxsf <- survfit(cxmod, data = GBSG2, newdata = newdat, conf.type = "none")
-
 surv_cxmod0 <- surv_summary(cxsf)
 
 surv_cxmod <- cbind(surv_cxmod0, newdat[surv_cxmod0$strata, ])
@@ -264,13 +279,25 @@ ggsurvplot_df(surv_cxmod,
 
 ```
 
+The quantity of interest from a Cox regression model is a hazard ratio (HR). The HR represents the ratio of hazards between two groups at any particular point in time. The HR is interpreted as the instantaneous rate of occurrence of the event of interest in those who are still at risk for the event. It is not a risk, though it is commonly interpreted as such.
+
+If you have a regression parameter $$\beta$$ (from column estimate in our coxph) then HR = $$e^\beta$$. Thus, a HR < 1 indicates reduced hazard of death whereas a HR > 1 indicates an increased hazard of death.
+
 ----
 
 Additional resources
 
-The `survival` package also includes robust methods for adjusting survival models for confounding variables, multi-state models (i.e. healthy-illness-death), population contrasts, and validation. Much more material can be found in the Vignettes.
+The `survival` package also includes robust methods for adjusting survival models for confounding variables, multi-state models (i.e. healthy-illness-death), population contrasts, competing risks, and validation. Much more material can be found in the Vignettes.
+
+> [Emily C. Zabor](https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#Part_1:_Introduction_to_Survival_Analysis)
 
 > `browseVignettes(package = "survival")`
+
+> [Joe Rickert on RViews](https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/)
+
+> [Andersen PK, Keiding N. Survival analysis, overview](http://www.pauldickman.com/survival/handouts/21%20-%20EoB%20Survival%20analysis%20overview.pdf)
+
+> [OpenIntro Survival Analysis in R](https://www.openintro.org/download.php?file=survival_analysis_in_R&referrer=/stat/surv.php)
 
 > [CRAN task view on Survival Analysis](https://cran.r-project.org/web/views/Survival.html)
 
