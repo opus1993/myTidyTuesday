@@ -454,16 +454,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree987243dfbf436bbdc925aba1c630fc2f789d0de7targetblank987243da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/987243dfbf436bbdc925aba1c630fc2f789d0de7" target="_blank">987243d</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea5f9137ae6a152f95fab68ebd95de0441ee9e445targetblanka5f9137a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a5f9137ae6a152f95fab68ebd95de0441ee9e445" target="_blank">a5f9137</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree987243dfbf436bbdc925aba1c630fc2f789d0de7targetblank987243da" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea5f9137ae6a152f95fab68ebd95de0441ee9e445targetblanka5f9137a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/987243dfbf436bbdc925aba1c630fc2f789d0de7" target="_blank">987243d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a5f9137ae6a152f95fab68ebd95de0441ee9e445" target="_blank">a5f9137</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -518,6 +518,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/a5f9137ae6a152f95fab68ebd95de0441ee9e445/analysis/Survival.Rmd" target="_blank">a5f9137</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-11-30
+</td>
+<td>
+wflow_publish(“analysis/Survival.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/cb9fad9d087cd1f8418a3dc77dc96b020851786f/docs/Survival.html" target="_blank">cb9fad9</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-11-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -885,7 +919,7 @@ ggsurvplot_df(surv_wbmod,
 </div>
 <div id="the-cox-regression-model-also-known-as-the-proportional-hazards-model" class="section level2">
 <h2>The Cox regression model, also known as the proportional hazards model</h2>
-<p>In many applications of survival analysis, the interest focuses on how covariates may affect the outcome; in clinical trials, adjustment of treatment effects for effects of other explanatory variables may be crucial if the randomized groups are unbalanced with respect to important prognostic factors, and in epidemiological cohort studies, reliable effects of exposure may be obtained only if some adjustment is made for confounding variables. In these situations, a regression model is useful and the most important model for survival data is the <a href="http://www.medicine.mcgill.ca/epidemiology/hanley/bios601/Encyclopedia%20of%20Biostatistics2ndEd2005.pdf">Cox proportional hazards</a> regression model. The semi-parametric Cox model makes fewer strict distributional assumptions and is capable of breaking out the effect of covariate features while retaining much of the stepped detail of the Kaplan–Meier estimators.</p>
+<p>In many applications of survival analysis, the interest focuses on how covariates may affect the outcome; in clinical trials, adjustment of treatment effects for effects of other explanatory variables may be crucial if the randomized groups are unbalanced with respect to important prognostic factors, and in epidemiological cohort studies, reliable effects of exposure may be obtained only if some adjustment is made for confounding variables. In these situations, a regression model is useful and the most important model for survival data is the <a href="http://www.medicine.mcgill.ca/epidemiology/hanley/bios601/Encyclopedia%20of%20Biostatistics2ndEd2005.pdf">Cox proportional hazards</a> regression model.</p>
 <pre class="r"><code>cxmod &lt;- coxph(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
 
 broom::tidy(cxmod, exp = TRUE) %&gt;%
@@ -917,7 +951,7 @@ broom::tidy(cxmod, exp = TRUE) %&gt;%
 </tr>
 </tbody>
 </table>
-<p>Note that the model flags both horTh and tsize as significant. However, some caution needs to be exercised in interpreting these results. While the Cox Proportional Hazard’s model is thought to be “robust”, a careful analysis would check the assumptions underlying the model. For example, the Cox model assumes that the covariates do not vary with time. In a vignette that accompanies the survival package Therneau, Crowson and Atkinson demonstrate that the Karnofsky score (karno) is, in fact, time-dependent so the assumptions for the Cox model are not met. The vignette authors go on to present a strategy for dealing with time dependent covariates.</p>
+<p>Note that the model flags both horTh and tsize features as significant. However, some caution needs to be exercised in interpreting these results. While the Cox Proportional Hazard’s model is thought to be “robust”, a careful analysis would check the assumptions underlying the model. For example, the Cox model assumes that the covariates do not vary with time. In a vignette that accompanies the survival package Therneau, Crowson and Atkinson demonstrate that the Karnofsky score (karno) is, in fact, time-dependent so the assumptions for the Cox model are not met. The vignette authors go on to present a strategy for dealing with time dependent covariates.</p>
 <p>Data scientists who are accustomed to computing ROC curves to assess model performance should be interested in the Concordance statistic. The documentation for the <code>survConcordance()</code> function in the <code>survival</code> package defines concordance as “the probability of agreement for any two randomly chosen observations, where in this case agreement means that the observation with the shorter survival time of the two also has the larger risk score. The predictor (or risk score) will often be the result of a Cox model or other regression” and notes that: “For continuous covariates concordance is equivalent to Kendall’s tau, and for logistic regression is is equivalent to the area under the ROC curve.”</p>
 <pre class="r"><code>newdat &lt;- expand.grid(
   horTh = levels(GBSG2$horTh),
