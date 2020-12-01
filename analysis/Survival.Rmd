@@ -242,7 +242,7 @@ In addition to Weibull, the `surveg()` function will model exponential, lognorma
 ## The Cox regression model, also known as the proportional hazards model
 
 In many applications of survival analysis, the interest focuses on how covariates may affect the outcome; in clinical trials, adjustment of treatment effects for effects of other explanatory variables may be crucial if the randomized groups are unbalanced with respect to important prognostic factors, and in epidemiological cohort studies, reliable effects of exposure may
-be obtained only if some adjustment is made for confounding variables. In these situations, a regression model is useful and the most important model for survival data is the [Cox proportional hazards](http://www.medicine.mcgill.ca/epidemiology/hanley/bios601/Encyclopedia%20of%20Biostatistics2ndEd2005.pdf) regression model. The semi-parametric Cox model makes fewer strict distributional assumptions and is capable of breaking out the effect of covariate features while retaining much of the stepped detail of the Kaplan–Meier estimators.
+be obtained only if some adjustment is made for confounding variables. In these situations, a regression model is useful and the most important model for survival data is the [Cox proportional hazards](http://www.medicine.mcgill.ca/epidemiology/hanley/bios601/Encyclopedia%20of%20Biostatistics2ndEd2005.pdf) regression model. 
 
 ```{r}
 cxmod <- coxph(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
@@ -251,7 +251,7 @@ broom::tidy(cxmod, exp = TRUE) %>%
   knitr::kable()
 ```
 
-Note that the model flags both horTh and tsize as significant. However, some caution needs to be exercised in interpreting these results. While the Cox Proportional Hazard’s model is thought to be “robust”, a careful analysis would check the assumptions underlying the model. For example, the Cox model assumes that the covariates do not vary with time. In a vignette that accompanies the survival package Therneau, Crowson and Atkinson demonstrate that the Karnofsky score (karno) is, in fact, time-dependent so the assumptions for the Cox model are not met. The vignette authors go on to present a strategy for dealing with time dependent covariates.
+Note that the model flags both horTh and tsize features as significant. However, some caution needs to be exercised in interpreting these results. While the Cox Proportional Hazard’s model is thought to be “robust”, a careful analysis would check the assumptions underlying the model. For example, the Cox model assumes that the covariates do not vary with time. In a vignette that accompanies the survival package Therneau, Crowson and Atkinson demonstrate that the Karnofsky score (karno) is, in fact, time-dependent so the assumptions for the Cox model are not met. The vignette authors go on to present a strategy for dealing with time dependent covariates.
 
 Data scientists who are accustomed to computing ROC curves to assess model performance should be interested in the Concordance statistic. The documentation for the `survConcordance()` function in the `survival` package defines concordance as “the probability of agreement for any two randomly chosen observations, where in this case agreement means that the observation with the shorter survival time of the two also has the larger risk score. The predictor (or risk score) will often be the result of a Cox model or other regression” and notes that: “For continuous covariates concordance is equivalent to Kendall’s tau, and for logistic regression is is equivalent to the area under the ROC curve.”
 
