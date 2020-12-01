@@ -1,0 +1,279 @@
+---
+title: "Survival Curves"
+author: "Jim Gruman"
+date: "November 30, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, 
+                      warning = FALSE, 
+                      collapse = TRUE,
+                      message = FALSE, 
+                      echo = TRUE, 
+                      dpi = 300, 
+                      cache.lazy = FALSE,
+                      tidy = "styler", 
+                      fig.width = 12, 
+                      fig.height = 7.402,
+                      df_print = "paged")
+library(tidyverse)
+suppressMessages(extrafont::loadfonts())
+library(splines)
+library(broom)
+
+library(survival)
+library(survminer)
+
+theme_set(hrbrthemes::theme_ipsum() +
+            theme(plot.title.position = "plot"))
+```
+
+# Introduction
+
+ZedStatistics episode 1 is a quick video introduction to comparable material:
+
+<iframe src="https://youtu.be/v1QqpG0rR1k" loading="lazy" style="width: 100%; height: 600px; border: 0px none;"></iframe>
+
+## What is Survival Analysis?
+
+A simpler characterization might be *time-to-event* analysis. These are use cases where we are concerned with the time it takes for an **event** to occur after an **exposure**. As an example, an exposure might be the date of a medical diagnosis. Or it could be the moment of childbirth. Or the date of delivery of a new tractor to a customer. Survival analysis data is aligned for all participants to zero at each participant's exposure time.
+
+```{r}
+knitr::include_graphics("assets/periodofstudy.png", error = FALSE)
+```
+
+The event of interest could be death or the failure of a component of the tractor. Time-to-event data always consist of the distinct **exposure** start and distinct **event** end for each study participant. The use cases are common in a wide variety of applications and go by other names, including reliability analysis.
+
+## What is censoring?
+
+A study subject may be censored due to:
+
+- Loss to follow-up (i.e. undocumented, not recorded)
+- Withdrawal from study
+- No event of interest by the end of the fixed study period
+
+In industry it is common to track component warranty claims and cost on machines sold. Warranty datasets are heavily censored because the study period rarely aligns with the warranty period for each machine delivered. The study time period and fleet population membership must be carefully considered and explicitly defined. In most cases, **exposure** is aligned to zero at the warranty start date. 
+
+The survival **rate** is proportion of the study population that has NOT (yet) experienced the event of interest divided by the whole study population membership within the study timeframe.
+
+----
+
+## Why do we need special methods for time to event data?
+
+First, duration times are always positive. Recall that traditional linear regression models make a number of assumptions for independence and normality that would no longer be valid in this space. There are distributions, like Weibull, that better represent the problem space.
+
+Let's look at a quick manual example graphically before moving on. In this case, the variable `time` is vector of durations, and the variable `event` is a binary vector of 1's for the event of interest and 0's for lack of event at the end of the study period (censored).
+
+```{r}
+time <- c(5,6,2,4,4)
+event <- c(1,0,0,1,1)
+
+Surv(time, event)
+
+```
+
+A simple way of depicting the survival rate of the population Kaplan-Meier estimator, or product limit estimator chart. A plot of the Kaplan–Meier estimator is a series of declining horizontal steps which, with a large enough sample size, approaches the true survival function for that population. The value of the survival function between successive distinct sampled observations ("clicks") is assumed to be constant. Note that there is no drop denoted at the time points of censoring.
+
+```{r}
+sobj = data.frame(time = time, event = event)
+
+km <- survfit(Surv(time, event) ~ 1, data = sobj)    # the survfit object builds the kaplan-meier est
+ggsurvplot(fit = km, conf.int = FALSE,
+           risk.table = "nrisk_cumevents",
+           legend = "none")  +
+  labs(title = "Kaplan-Meier (KM) Curve",
+       subtitle = "Each step down represents an event of interest")
+```
+
+It is important to note here that the KM curve is a non-parametric curve. That is, the curve is simply a description of the underlying data and that there are no parameters involved. Most use cases in this problem space ask that we model to predict the behavior of a population, or the behavior of a change in a treatment of the population. To do so will require that we introduce other concepts, like the `hazard` parameter. More on this later.
+
+----
+
+## What are good survival analysis questions?
+
+- What is the probability that a breast cancer patient survives longer than 5 years?
+- What is the typical waiting time for a cab in Chicago?
+- What is the typical time required for patent approval?
+- Out of 100 unemployed people, how many do we expect to have a job again after 2
+months?
+- What is the human resources staff turnover churn rate?
+- What is the portion of a T8 tractor population that will experience a water pump failure within the first year?
+- How does the insertion of a pacemaker treatment improve the survival probability over time for patients with heart disease? 
+- What is the typical time to re-admission after a patient is discharged from the hospital?
+- What is the typical number of pitches for a starting pitcher in a baseball game?
+
+All of the questions are expressed along the dimensions of the Survival Probability and the duration time to reach that threshold. In many cases, Survival quartiles convey a reasonable sense of the distribution of outcomes. 
+
+The survival function can be expressed mathematically as the Probability that the duration is longer than *t*, or as 1 minus the probability of Failure for a duration longer than *t*.
+
+$$S(t)=1-F(t)=P(T>t)$$
+
+Let's pause here and consider what the x-axis duration units can be. It would be easy to see how the duration would be calendar time in years, months, or even days. But survival problems can also be modeled in hours or minutes. And in some cases, series like a sequence of pitches in baseball or engine operating hours are suitable for survival analysis. A pitcher that is not pitching and an engine that is not running will not likely experience events of interest.
+
+Let's take a closer look at a German Breast Cancer dataset to explore how to answer the question "What is the probability that a breast cancer patient survives longer than 5 years?"  The set includes 686 women tracked in a study along with characteristics of each patient. The censoring indicator `cens` equals 1 for death and 0 for no death within the study timeframe (censored) and the time unit is in days.
+
+```{r}
+data(GBSG2, package = "TH.data")     # breast cancer patients, time to death
+
+# Count censored and uncensored data
+num_cens <- table(GBSG2$cens)
+
+# Create barplot of censored and uncensored data
+ggplot(GBSG2, aes(factor(cens))) +
+  geom_bar(fill = hrbrthemes::ipsum_pal()(1)) +
+  labs(title = "German Breast Cancer Study Group 2",
+  caption = "source: GBSG2 dataset")
+
+# Use help() to look at cens
+# help(GBSG2, package = "TH.data")
+
+# in the help docs,   when cens == 1, the patient died
+```
+
+As noted above, with a large enough sample size, the KM curve approaches the true survival function for that population. We will return to this dataset to explore the impact of the study participants features on survival rates.
+
+```{r}
+sobj <- Surv(GBSG2$time, GBSG2$cens)
+
+km <- survfit(sobj ~ 1, data = sobj)    # the survfit object builds the kaplan-meier est
+
+ggsurvplot(fit = km, conf.int = FALSE,
+           risk.table = "nrisk_cumevents",
+           legend = "none") +  # when there is only one curve of all patients
+  labs(title = "German Breast Cancer Study Group 2",
+  caption = "source: GBSG2 dataset",
+  x = "Time in days")
+```
+
+----
+
+## The Weibull model
+
+To create a parametric survival model, the survival object from above is fed into the `survreg()` function of the `{survival}` package. As a first pass, we will use formula notation to model on none of the data features with `~ 1`. Model probabilities between 0.01 and 0.99 are fed into the model to predict the time at each, and the associated plot is shown here:
+
+```{r}
+# Weibull model
+wb <- survival::survreg(Surv(time, cens) ~ 1, GBSG2)
+
+# Retrieve survival curve from model probabilities 
+surv <- seq(.99, .01, by = -.01)
+
+# Get time for each probability
+t <- predict(wb, type = "quantile", p = 1 - surv, newdata = data.frame(1))
+
+# Create data frame with the information
+surv_wb <- data.frame(time = t, surv = surv, 
+                      upper = NA, lower = NA, std.err = NA)
+
+ggsurvplot_df(fit = surv_wb, surv.geom = geom_line, legend = "none") +
+  labs(title = "German Breast Cancer Study Group 2",
+       subtitle = "Weibull model",
+  caption = "source: GBSG2 dataset",
+  x = "Time in days")
+
+```
+
+The base Weibull model curve is a smoothed parametric form of the stepped Kaplan-Meier curve that we saw earlier. The power of the parametric approach becomes apparent when we model on the differences in features within the dataset. Recall in the German Breast Cancer dataset that it includes patient attributes including classifications for the size of the tumor `tsize` and whether hormonal therapy was applied as `horTh`. 
+
+```{r}
+glimpse(GBSG2)
+```
+
+Because the tumor size `tsize` is numeric, we will project the 25th, 50th, and 75th quantile to understand the effect. Survival for each combination of features, or covariates, are modeled as `survreg(Surv(time, cens) ~ horTh + tsize, data = GBSG2)`. Generally speaking, the steps to crafting the visualization are
+
+1. Compute the Weibull model
+1. Decide on the array of "imaginary patients" (quantiles in this case)
+1. Predict durations for each survival rate to build curves
+1. Bind a data.frame with all survival curve information for each covariate
+1. Plot
+
+```{r}
+wbmod <- survreg(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
+
+newdat <- expand.grid(
+  horTh = levels(GBSG2$horTh),
+  tsize = quantile(GBSG2$tsize, probs = c(0.25, 0.5, 0.75))
+)
+
+surv <- seq(0.99, 0.01, by = -0.01)
+
+t <- predict(wbmod, type = "quantile", p = 1 - surv, newdata = newdat)
+
+surv_wbmod_wide <- cbind(newdat, t)
+
+# transpose the data frame
+surv_wbmod <- reshape2::melt(surv_wbmod_wide,
+  id.vars = c("horTh", "tsize"),
+  variable.name = "surv_id", value.name = "time"
+)
+
+surv_wbmod$surv <- surv[as.numeric(surv_wbmod$surv_id)]
+
+# add variables required by the plotting function
+surv_wbmod[, c("upper", "lower", "std.err", "strata")] <- NA
+
+ggsurvplot_df(surv_wbmod,
+  surv.geom = geom_line,
+  linetype = "horTh", color = "tsize", legend.title = NULL
+) +
+  labs(title = "German Breast Cancer Study Group 2",
+       subtitle = "Weibull models",
+  caption = "source: GBSG2 dataset",
+  x = "Time in days")
+
+```
+
+### Other distributions beyond Weibull
+
+In addition to Weibull, the `surveg()` function will model exponential, lognormal, gaussian, logistic, and loglogistic as parametric distributions on the data provided. These may be more suitable for small samples where prior information is known about the survival characteristics of the larger population.
+
+## The Cox model, also known as the proportional hazards model
+
+The semi-parametric Cox model makes fewer strict distributional assumptions and is capable of breaking out the effect of covariate features while retaining much of the stepped detail of the Kaplan–Meier estimators.
+
+```{r}
+cxmod <- coxph(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
+
+newdat <- expand.grid(
+  horTh = levels(GBSG2$horTh),
+  tsize = quantile(GBSG2$tsize, probs = c(0.25, 0.5, 0.75))
+)
+
+rownames(newdat) <- letters[1:6]
+
+cxsf <- survfit(cxmod, data = GBSG2, newdata = newdat, conf.type = "none")
+
+surv_cxmod0 <- surv_summary(cxsf)
+
+surv_cxmod <- cbind(surv_cxmod0, newdat[surv_cxmod0$strata, ])
+
+ggsurvplot_df(surv_cxmod,
+  surv.geom = geom_line,
+  linetype = "horTh", color = "tsize", legend.title = NULL, censor = FALSE
+) +
+  labs(title = "German Breast Cancer Study Group 2",
+       subtitle = "Cox Proportional Hazard models",
+  caption = "source: GBSG2 dataset",
+  x = "Time in days")
+
+```
+
+----
+
+Additional resources
+
+The `survival` package also includes robust methods for adjusting survival models for confounding variables, multi-state models (i.e. healthy-illness-death), population contrasts, and validation. Much more material can be found in the Vignettes.
+
+> `browseVignettes(package = "survival")`
+
+> [CRAN task view on Survival Analysis](https://cran.r-project.org/web/views/Survival.html)
+
+> [Survival Analysis in R for Public Health](https://www.coursera.org/learn/survival-analysis-r-public-health)
+
+> [Survival Analysis in R](https://learn.datacamp.com/courses/survival-analysis-in-r#!)
