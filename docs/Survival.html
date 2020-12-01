@@ -454,16 +454,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree4894c528a96877704574ac10c7ab993a09c310a8targetblank4894c52a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/4894c528a96877704574ac10c7ab993a09c310a8" target="_blank">4894c52</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree987243dfbf436bbdc925aba1c630fc2f789d0de7targetblank987243da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/987243dfbf436bbdc925aba1c630fc2f789d0de7" target="_blank">987243d</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree4894c528a96877704574ac10c7ab993a09c310a8targetblank4894c52a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree987243dfbf436bbdc925aba1c630fc2f789d0de7targetblank987243da" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/4894c528a96877704574ac10c7ab993a09c310a8" target="_blank">4894c52</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/987243dfbf436bbdc925aba1c630fc2f789d0de7" target="_blank">987243d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -518,6 +518,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/987243dfbf436bbdc925aba1c630fc2f789d0de7/analysis/Survival.Rmd" target="_blank">987243d</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-11-30
+</td>
+<td>
+wflow_publish(“analysis/Survival.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/1a7a854099c2a1e46f27f5e3edb6c86f082131ef/docs/Survival.html" target="_blank">1a7a854</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-11-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -898,8 +932,12 @@ surv_cxmod0 &lt;- surv_summary(cxsf)
 surv_cxmod &lt;- cbind(surv_cxmod0, newdat[surv_cxmod0$strata, ])
 
 ggsurvplot_df(surv_cxmod,
+  fun = &quot;cumhaz&quot;,
   surv.geom = geom_line,
-  linetype = &quot;horTh&quot;, color = &quot;tsize&quot;, legend.title = NULL, censor = FALSE
+  linetype = &quot;horTh&quot;,
+  color = &quot;tsize&quot;,
+  legend.title = NULL,
+  censor = FALSE
 ) +
   labs(
     title = &quot;German Breast Cancer Study Group 2&quot;,
@@ -909,7 +947,7 @@ ggsurvplot_df(surv_cxmod,
   )</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-11-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>The quantity of interest from a Cox regression model is a hazard ratio (HR). The HR represents the ratio of hazards between two groups at any particular point in time. The HR is interpreted as the instantaneous rate of occurrence of the event of interest in those who are still at risk for the event. It is not a risk, though it is commonly interpreted as such.</p>
-<p>If you have a regression parameter <span class="math display">\[\beta\]</span> (from column estimate in our coxph) then HR = <span class="math display">\[e^\beta\]</span>. Thus, a HR &lt; 1 indicates reduced hazard of death whereas a HR &gt; 1 indicates an increased hazard of death.</p>
+<p>If you have a regression parameter <span class="math inline">\(\beta\)</span> (from column estimate in our coxph) then HR = <span class="math inline">\(e^\beta\)</span>. Thus, a HR &lt; 1 indicates reduced hazard of death whereas a HR &gt; 1 indicates an increased hazard of death.</p>
 <hr />
 <p>Additional resources</p>
 <p>The <code>survival</code> package also includes robust methods for adjusting survival models for confounding variables, multi-state models (i.e. healthy-illness-death), population contrasts, competing risks, and validation. Much more material can be found in the Vignettes.</p>
