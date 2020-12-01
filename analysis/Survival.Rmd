@@ -295,8 +295,6 @@ The `survival` package also includes robust methods for adjusting survival model
 
 > [Emily C. Zabor](https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#Part_1:_Introduction_to_Survival_Analysis)
 
-> `browseVignettes(package = "survival")`
-
 > [Joe Rickert on RViews](https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/)
 
 > [Andersen PK, Keiding N. Survival analysis, overview](http://www.pauldickman.com/survival/handouts/21%20-%20EoB%20Survival%20analysis%20overview.pdf)
