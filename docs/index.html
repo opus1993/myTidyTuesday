@@ -361,7 +361,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-12
+<strong>Last updated:</strong> 2020-11-30
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -452,16 +452,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree173751df30ff60338e9dd5e89f18ea326d1a3eb9targetblank173751da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/173751df30ff60338e9dd5e89f18ea326d1a3eb9" target="_blank">173751d</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreecb9fad9d087cd1f8418a3dc77dc96b020851786ftargetblankcb9fad9a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/cb9fad9d087cd1f8418a3dc77dc96b020851786f" target="_blank">cb9fad9</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree173751df30ff60338e9dd5e89f18ea326d1a3eb9targetblank173751da" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreecb9fad9d087cd1f8418a3dc77dc96b020851786ftargetblankcb9fad9a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/173751df30ff60338e9dd5e89f18ea326d1a3eb9" target="_blank">173751d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/cb9fad9d087cd1f8418a3dc77dc96b020851786f" target="_blank">cb9fad9</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -470,14 +470,14 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
 
 Untracked files:
-    Untracked:  2020_11_03_tidy_tuesday.Rmd
-    Untracked:  figure/2020_10_27_tidy_tuesday.Rmd/
-    Untracked:  tmap_style_previews/
-
-Unstaged changes:
-    Modified:   analysis/USPoverty.Rmd
+    Untracked:  analysis/satellite.Rmd
+    Untracked:  content/
+    Untracked:  data/geospatial/
 
 </code></pre>
 <p>
@@ -516,6 +516,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/ac72539e39336d7b2a4888303f767326b3aa1d3e/docs/index.html" target="_blank">ac72539</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-11-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1160,6 +1177,39 @@ Packages
 <tbody>
 <tr>
 <td style="text-align:left;">
+<a href="https://opus1993.github.io/myTidyTuesday/satellite.html" style="     ">Satellite Imagery Analysis</a>
+</td>
+<td style="text-align:left;">
+December 1, 2020
+</td>
+<td style="text-align:left;">
+getSpatialData, raster , RStoolbox , tidyr , dplyr , rlang , readr , ggplot2 , here
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://opus1993.github.io/myTidyTuesday/Survival.html" style="     ">Survival Curves</a>
+</td>
+<td style="text-align:left;">
+November 30, 2020
+</td>
+<td style="text-align:left;">
+splines , broom , survival , survminer
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://opus1993.github.io/myTidyTuesday/WashingtonTrails.html" style="     ">Washington State Trails</a>
+</td>
+<td style="text-align:left;">
+November 27, 2020
+</td>
+<td style="text-align:left;">
+hrbrthemes , rvest , here , gt , fontawesome, htmltools , ggridges
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 <a href="https://opus1993.github.io/myTidyTuesday/PenguinsCrosstalkDemo.html" style="     ">Reactable Plotly Crosstalk Demo</a>
 </td>
 <td style="text-align:left;">
@@ -1177,7 +1227,7 @@ reactable, plotly , crosstalk, htmltools
 November 11, 2020
 </td>
 <td style="text-align:left;">
-hrbrthemes, cartogram , sf , tmap , tidycensus
+hrbrthemes, cartogram , sf , tmap , tigris , tidycensus
 </td>
 </tr>
 <tr>
@@ -1466,16 +1516,16 @@ other attached packages:
 [5] purrr_0.3.4      workflowr_1.6.2 
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.5        pillar_1.4.6      compiler_4.0.3    later_1.1.0.1    
+ [1] Rcpp_1.0.5        pillar_1.4.7      compiler_4.0.3    later_1.1.0.1    
  [5] git2r_0.27.1      R.utils_2.10.1    R.methodsS3_1.8.1 tools_4.0.3      
- [9] digest_0.6.27     lubridate_1.7.9   R.cache_0.14.0    viridisLite_0.3.0
+ [9] digest_0.6.27     lubridate_1.7.9.2 R.cache_0.14.0    viridisLite_0.3.0
 [13] evaluate_0.14     lifecycle_0.2.0   tibble_3.0.4      pkgconfig_2.0.3  
-[17] rlang_0.4.8       rstudioapi_0.13   yaml_2.2.1        xfun_0.19        
+[17] rlang_0.4.9       rstudioapi_0.13   yaml_2.2.1        xfun_0.19        
 [21] styler_1.3.2      httr_1.4.2        xml2_1.3.2        generics_0.1.0   
-[25] fs_1.5.0          vctrs_0.3.4       webshot_0.5.2     rprojroot_1.3-2  
+[25] fs_1.5.0          vctrs_0.3.5       webshot_0.5.2     rprojroot_2.0.2  
 [29] tidyselect_1.1.0  glue_1.4.2        R6_2.5.0          rmarkdown_2.5    
-[33] tidyr_1.1.2       magrittr_1.5      whisker_0.4       scales_1.1.1     
-[37] backports_1.2.0   promises_1.1.1    ellipsis_0.3.1    htmltools_0.5.0  
+[33] tidyr_1.1.2       magrittr_2.0.1    whisker_0.4       backports_1.2.0  
+[37] scales_1.1.1      promises_1.1.1    ellipsis_0.3.1    htmltools_0.5.0  
 [41] rvest_0.3.6       memuse_4.1-0      colorspace_2.0-0  httpuv_1.5.4     
 [45] stringi_1.5.3     munsell_0.5.0     crayon_1.3.4      R.oo_1.24.0      </code></pre>
 </div>
