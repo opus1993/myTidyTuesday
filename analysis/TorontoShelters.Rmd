@@ -234,15 +234,16 @@ shelters %>%
   filter(year != "2017", avg_occupancy > 0) %>% 
   mutate(mean_rate = avg_occupancy/avg_cap) %>% 
   ggplot(aes(month, mean_rate, group = month)) +
-  geom_boxplot() +
+  geom_boxplot(outlier.alpha = 0.001) +
+  geom_jitter(aes(color = month), alpha = 0.5, show.legend = FALSE) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   scale_x_discrete(expand = c(0,0)) +
   annotate("text", 
-           x = 7.8, 
-           y = 1.63, 
-           label = "Family Residence - Main Building") +
+           x = 8, 
+           y = 1.64, 
+           label = "Family Residence \nMain Building") +
   labs(
-    title = "Mean Occupancy Rate for each facility in Toronto's Homeless Shelter System",
+    title = "Mean Occupancy Rate for each Facility in Toronto's Homeless Shelter System",
     subtitle = "Across the network, each month",
     y = NULL,
     x = NULL,
@@ -253,7 +254,7 @@ shelters %>%
 
 ```
 
-Some facilities are nearly always over capacity every month.
+Some facilities are nearly always over capacity every month. Many report exactly 100% occupancy every month.
 
 How many facilities are managed by each organization?
 
@@ -317,7 +318,7 @@ shelters %>%
   ggplot(aes(month, rate, color = factor(year,
                                          levels = c("2019","2018")))) +
   geom_line(size = 2) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = .1))+
+  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
   labs(
     title = "Monthly Average Occupancy Rate across Toronto's Homeless Shelter System", y = NULL, x = NULL,
     subtitle = "Average Occupancy Rate",
@@ -422,7 +423,7 @@ shelterWeather %>%
 
 Lets build a model of Over-Capacity events at each facility with features for the weekday, month, temperature, precipitation, and the two level org identifying the city shelters to make some inferences about what might be drivers of overcrowding.
 
-Setting the breakpoint for over capacity at 0.999 yields a set that is largely balanced between response classes.
+Setting the breakpoint for over capacity at 0.999 could be argued because every shelter should have 1 empty bed for newcomers. It yields a data set that is largely balanced between response classes.
 
 ```{r}
 shelter_df <- shelterWeather %>% 
