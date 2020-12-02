@@ -133,6 +133,29 @@ shelters %>%
   )
 ```
 
+```{r}
+library(treemap)
+
+shelter_cap <- shelters %>% 
+  filter(capacity > 0) %>% 
+  group_by(organization_name, shelter_name, facility_name) %>% 
+  summarize(capacity = max(capacity, na.rm = TRUE),
+            .groups = "drop")
+
+treemap(shelter_cap,
+        index = c("organization_name",
+                  "shelter_name",
+                  "facility_name"),
+        vSize = "capacity", type = "index",
+        fontsize.labels = c(9,6,4),
+        fontcolor.labels = c("white","black","black"),
+        bg.labels = c("transparent"),
+        palette = "Set1",
+        title = "Capacity of Toronto's Homeless Shelter System"
+        ) 
+
+```
+
 Let's look at capacity across the network, by month, over time:
 
 ```{r}
