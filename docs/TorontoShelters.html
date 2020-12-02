@@ -456,16 +456,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea08334f1316ea03a3d5bef25dc6aa6eadff9925etargetblanka08334fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a08334f1316ea03a3d5bef25dc6aa6eadff9925e" target="_blank">a08334f</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreebdefca6979f38f035722c97268b7b198b9a86b12targetblankbdefca6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/bdefca6979f38f035722c97268b7b198b9a86b12" target="_blank">bdefca6</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea08334f1316ea03a3d5bef25dc6aa6eadff9925etargetblanka08334fa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreebdefca6979f38f035722c97268b7b198b9a86b12targetblankbdefca6a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a08334f1316ea03a3d5bef25dc6aa6eadff9925e" target="_blank">a08334f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/bdefca6979f38f035722c97268b7b198b9a86b12" target="_blank">bdefca6</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,6 +523,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/bdefca6979f38f035722c97268b7b198b9a86b12/analysis/TorontoShelters.Rmd" target="_blank">bdefca6</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-02
+</td>
+<td>
+wflow_publish(“analysis/TorontoShelters.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/12cc83288c677df95dfe4eac33af9a0b7b5bf03a/docs/TorontoShelters.html" target="_blank">12cc832</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -817,7 +851,7 @@ $ capacity            &lt;dbl&gt; 16, 17, 63, 70, 60, 160, 150, 28, 0, 40, NA, 0
     year = factor(year(occupancy_date),
       levels = c(&quot;2019&quot;, &quot;2018&quot;, &quot;2017&quot;)
     ),
-    facility_name
+    organization_name, facility_name
   ) %&gt;%
   summarize(
     avg_occupancy = mean(occupancy, na.rm = TRUE),
@@ -825,26 +859,26 @@ $ capacity            &lt;dbl&gt; 16, 17, 63, 70, 60, 160, 150, 28, 0, 40, NA, 0
     .groups = &quot;drop_last&quot;
   ) %&gt;%
   filter(year != &quot;2017&quot;, avg_occupancy &gt; 0) %&gt;%
-  mutate(mean_rate = avg_occupancy / avg_cap) %&gt;%
+  mutate(
+    mean_rate = avg_occupancy / avg_cap,
+    CityShelter = if_else(organization_name == &quot;City of Toronto&quot;, &quot;City Shelter&quot;, &quot;All Others&quot;)
+  ) %&gt;%
   ggplot(aes(month, mean_rate, group = month)) +
   geom_boxplot(outlier.alpha = 0.001) +
-  geom_jitter(aes(color = month), alpha = 0.5, show.legend = FALSE) +
+  geom_jitter(aes(shape = CityShelter),
+    alpha = 0.7, size = 2, color = ipsum_pal()(2)[2]
+  ) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   scale_x_discrete(expand = c(0, 0)) +
-  annotate(&quot;text&quot;,
-    x = 8,
-    y = 1.64,
-    label = &quot;Family Residence \nMain Building&quot;
-  ) +
   labs(
     title = &quot;Mean Occupancy Rate for each Facility in Toronto&#39;s Homeless Shelter System&quot;,
     subtitle = &quot;Across the network, each month&quot;,
     y = NULL,
-    x = NULL,
+    x = NULL, shape = NULL,
     caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
   ) +
   theme(
-    legend.position = c(0.9, 0.1),
+    legend.position = c(0.9, 0.9),
     legend.background = element_rect(color = &quot;white&quot;)
   )</code></pre>
 <p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-9-1.png" width="3600" style="display: block; margin: auto;" /></p>
@@ -1666,8 +1700,8 @@ loaded via a namespace (and not attached):
  [94] grid_4.0.3         readxl_1.3.1       git2r_0.27.1      
  [97] webshot_0.5.2      reprex_0.3.0       digest_0.6.27     
 [100] R.cache_0.14.0     httpuv_1.5.4       R.utils_2.10.1    
-[103] munsell_0.5.0      GPfit_1.0-8        kableExtra_1.3.1  
-[106] viridisLite_0.3.0 </code></pre>
+[103] munsell_0.5.0      GPfit_1.0-8        viridisLite_0.3.0 
+[106] kableExtra_1.3.1  </code></pre>
 </div>
 </div>
 
