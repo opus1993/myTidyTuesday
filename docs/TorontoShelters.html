@@ -456,16 +456,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree641b23149f9926c43f8dcf6ffffbb485dbca17b1targetblank641b231a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/641b23149f9926c43f8dcf6ffffbb485dbca17b1" target="_blank">641b231</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea08334f1316ea03a3d5bef25dc6aa6eadff9925etargetblanka08334fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a08334f1316ea03a3d5bef25dc6aa6eadff9925e" target="_blank">a08334f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree641b23149f9926c43f8dcf6ffffbb485dbca17b1targetblank641b231a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea08334f1316ea03a3d5bef25dc6aa6eadff9925etargetblanka08334fa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/641b23149f9926c43f8dcf6ffffbb485dbca17b1" target="_blank">641b231</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a08334f1316ea03a3d5bef25dc6aa6eadff9925e" target="_blank">a08334f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,6 +523,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/a08334f1316ea03a3d5bef25dc6aa6eadff9925e/analysis/TorontoShelters.Rmd" target="_blank">a08334f</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-02
+</td>
+<td>
+wflow_publish(“analysis/TorontoShelters.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/fb3d449a0f1974469da5f25874811664cb21e0a8/docs/TorontoShelters.html" target="_blank">fb3d449</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -793,16 +827,17 @@ $ capacity            &lt;dbl&gt; 16, 17, 63, 70, 60, 160, 150, 28, 0, 40, NA, 0
   filter(year != &quot;2017&quot;, avg_occupancy &gt; 0) %&gt;%
   mutate(mean_rate = avg_occupancy / avg_cap) %&gt;%
   ggplot(aes(month, mean_rate, group = month)) +
-  geom_boxplot() +
+  geom_boxplot(outlier.alpha = 0.001) +
+  geom_jitter(aes(color = month), alpha = 0.5, show.legend = FALSE) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   scale_x_discrete(expand = c(0, 0)) +
   annotate(&quot;text&quot;,
-    x = 7.8,
-    y = 1.63,
-    label = &quot;Family Residence - Main Building&quot;
+    x = 8,
+    y = 1.64,
+    label = &quot;Family Residence \nMain Building&quot;
   ) +
   labs(
-    title = &quot;Mean Occupancy Rate for each facility in Toronto&#39;s Homeless Shelter System&quot;,
+    title = &quot;Mean Occupancy Rate for each Facility in Toronto&#39;s Homeless Shelter System&quot;,
     subtitle = &quot;Across the network, each month&quot;,
     y = NULL,
     x = NULL,
@@ -813,7 +848,7 @@ $ capacity            &lt;dbl&gt; 16, 17, 63, 70, 60, 160, 150, 28, 0, 40, NA, 0
     legend.background = element_rect(color = &quot;white&quot;)
   )</code></pre>
 <p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-9-1.png" width="3600" style="display: block; margin: auto;" /></p>
-<p>Some facilities are nearly always over capacity every month.</p>
+<p>Some facilities are nearly always over capacity every month. Many report exactly 100% occupancy every month.</p>
 <p>How many facilities are managed by each organization?</p>
 <pre class="r"><code>shelters %&gt;%
   select(organization_name, facility_name) %&gt;%
@@ -986,7 +1021,7 @@ $ capacity            &lt;dbl&gt; 16, 17, 63, 70, 60, 160, 150, 28, 0, 40, NA, 0
   )</code></pre>
 <p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-15-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Lets build a model of Over-Capacity events at each facility with features for the weekday, month, temperature, precipitation, and the two level org identifying the city shelters to make some inferences about what might be drivers of overcrowding.</p>
-<p>Setting the breakpoint for over capacity at 0.999 yields a set that is largely balanced between response classes.</p>
+<p>Setting the breakpoint for over capacity at 0.999 could be argued because every shelter should have 1 empty bed for newcomers. It yields a data set that is largely balanced between response classes.</p>
 <pre class="r"><code>shelter_df &lt;- shelterWeather %&gt;%
   mutate(over_cap = factor(if_else(rate &gt; 0.9999, &quot;Yes&quot;, &quot;No&quot;))) %&gt;%
   select(
@@ -1631,8 +1666,8 @@ loaded via a namespace (and not attached):
  [94] grid_4.0.3         readxl_1.3.1       git2r_0.27.1      
  [97] webshot_0.5.2      reprex_0.3.0       digest_0.6.27     
 [100] R.cache_0.14.0     httpuv_1.5.4       R.utils_2.10.1    
-[103] munsell_0.5.0      GPfit_1.0-8        viridisLite_0.3.0 
-[106] kableExtra_1.3.1  </code></pre>
+[103] munsell_0.5.0      GPfit_1.0-8        kableExtra_1.3.1  
+[106] viridisLite_0.3.0 </code></pre>
 </div>
 </div>
 
