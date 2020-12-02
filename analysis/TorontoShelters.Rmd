@@ -185,7 +185,7 @@ shelters %>%
 
 ```
 
-Let's take a similar approach and sum up the facility occupancy
+Let's take a similar approach and sum up the facility occupancy each month
 
 ```{r}
 shelters %>% 
@@ -211,6 +211,8 @@ shelters %>%
         legend.background = element_rect(color = "white"))
 
 ```
+
+Essentially dividing the occupancy by the capacity, this is the aggregated result as a percentage rate:
 
 ```{r}
 shelters %>% 
@@ -241,7 +243,39 @@ shelters %>%
 
 ```
 
-What is the distribution of rates across the network each month?
+What about by day of the week ?
+
+```{r}
+shelters %>%
+  mutate(wday = wday(occupancy_date, 
+                     label = TRUE,
+                     abbr = TRUE), 
+           year = year(occupancy_date)) %>%
+  group_by(year, wday) %>% 
+  summarise(
+    occupancy = sum(occupancy, na.rm = TRUE),
+    capacity = sum(capacity, na.rm = TRUE),
+    rate = occupancy/capacity,
+    .groups = "drop"
+  ) %>% 
+  filter(year %in% c(2018,2019)) %>% 
+  ggplot(aes(wday, rate, 
+             color = factor(year,
+                            levels = c("2019","2018")),
+             group = year)) +
+  geom_line(size = 2) +
+  scale_x_discrete(expand = c(0,0)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
+  labs(
+    title = "Day of Week Average Occupancy Rate across Toronto's Homeless Shelter System", y = NULL, x = NULL,
+    subtitle = "Average Occupancy Rate",
+    caption = "Data: open.toronto.ca | Visual: jim_gruman", color = NULL
+  ) +
+  theme(legend.position = c(0.9, 0.2),
+        legend.background = element_rect(color = "white"))
+```
+
+The aggregate like might be misleading. What is the distribution of rates across the network each month?
 
 ```{r}
 shelters %>% 
@@ -322,71 +356,9 @@ shelterWeather <- shelters %>%
   ))
 ```
 
-What patterns do we see by month?
+What other patterns do we see each day? 
 
-```{r}
-shelters %>%
-  mutate(month = month(occupancy_date, abbr = TRUE), 
-           year=year(occupancy_date)) %>%
-  group_by(year, month) %>% 
-  summarise(
-    occupancy = sum(occupancy, na.rm = TRUE),
-    capacity = sum(capacity, na.rm = TRUE),
-    rate = occupancy/capacity,
-    .groups = "drop"
-  ) %>% 
-  filter(year %in% c(2018,2019)) %>% 
-  ggplot(aes(month, rate, color = factor(year,
-                                         levels = c("2019","2018")))) +
-  geom_line(size = 2) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
-  labs(
-    title = "Monthly Average Occupancy Rate across Toronto's Homeless Shelter System", y = NULL, x = NULL,
-    subtitle = "Average Occupancy Rate",
-    caption = "Data: open.toronto.ca | Visual: jim_gruman", color = NULL
-  ) +
-  scale_x_continuous(breaks = 1:12,
-                     labels = month.abb,
-                     limits = c(1,12),
-                     minor_breaks = NULL,
-                     expand = c(0,0)) +
-  theme(legend.position = c(0.9, 0.9),
-        legend.background = element_rect(color = "white"))
-```
-
-What about by day of the week ?
-
-```{r}
-shelters %>%
-  mutate(wday = wday(occupancy_date, 
-                     label = TRUE,
-                     abbr = TRUE), 
-           year = year(occupancy_date)) %>%
-  group_by(year, wday) %>% 
-  summarise(
-    occupancy = sum(occupancy, na.rm = TRUE),
-    capacity = sum(capacity, na.rm = TRUE),
-    rate = occupancy/capacity,
-    .groups = "drop"
-  ) %>% 
-  filter(year %in% c(2018,2019)) %>% 
-  ggplot(aes(wday, rate, 
-             color = factor(year,
-                            levels = c("2019","2018")),
-             group = year)) +
-  geom_line(size = 2) +
-  scale_x_discrete(expand = c(0,0)) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
-  labs(
-    title = "Day of Week Average Occupancy Rate across Toronto's Homeless Shelter System", y = NULL, x = NULL,
-    subtitle = "Average Occupancy Rate",
-    caption = "Data: open.toronto.ca | Visual: jim_gruman", color = NULL
-  ) +
-  theme(legend.position = c(0.9, 0.2),
-        legend.background = element_rect(color = "white"))
-```
-
-What other patterns do we see each day? Start with the minimum temperature. Note that the weather file earliest data is March of 2018.
+Let's start with the minimum temperature. Note that the weather file earliest data is March of 2018.
 
 ```{r}
 shelterWeather %>%
