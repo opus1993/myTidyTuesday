@@ -456,16 +456,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree5e29be4e01ba56046ca2dfa21c2a459ee5da09c5targetblank5e29be4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/5e29be4e01ba56046ca2dfa21c2a459ee5da09c5" target="_blank">5e29be4</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree0cd9fc24aa56fb618b90947e7846350be5d66919targetblank0cd9fc2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/0cd9fc24aa56fb618b90947e7846350be5d66919" target="_blank">0cd9fc2</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree5e29be4e01ba56046ca2dfa21c2a459ee5da09c5targetblank5e29be4a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree0cd9fc24aa56fb618b90947e7846350be5d66919targetblank0cd9fc2a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/5e29be4e01ba56046ca2dfa21c2a459ee5da09c5" target="_blank">5e29be4</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/0cd9fc24aa56fb618b90947e7846350be5d66919" target="_blank">0cd9fc2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,6 +523,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/0cd9fc24aa56fb618b90947e7846350be5d66919/analysis/TorontoShelters.Rmd" target="_blank">0cd9fc2</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-02
+</td>
+<td>
+wflow_publish(“analysis/TorontoShelters.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/bea000262ab545f33af4537498670115c0f9f65b/docs/TorontoShelters.html" target="_blank">bea0002</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -834,7 +868,7 @@ treemap(shelter_cap,
     legend.background = element_rect(color = &quot;white&quot;)
   )</code></pre>
 <p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-7-1.png" width="3600" style="display: block; margin: auto;" /></p>
-<p>Let’s take a similar approach and sum up the facility occupancy</p>
+<p>Let’s take a similar approach and sum up the facility occupancy each month</p>
 <pre class="r"><code>shelters %&gt;%
   group_by(
     month = month(occupancy_date,
@@ -865,6 +899,7 @@ treemap(shelter_cap,
     legend.background = element_rect(color = &quot;white&quot;)
   )</code></pre>
 <p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-8-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>Essentially dividing the occupancy by the capacity, this is the aggregated result as a percentage rate:</p>
 <pre class="r"><code>shelters %&gt;%
   group_by(
     month = month(occupancy_date,
@@ -899,7 +934,43 @@ treemap(shelter_cap,
     legend.background = element_rect(color = &quot;white&quot;)
   )</code></pre>
 <p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-9-1.png" width="3600" style="display: block; margin: auto;" /></p>
-<p>What is the distribution of rates across the network each month?</p>
+<p>What about by day of the week ?</p>
+<pre class="r"><code>shelters %&gt;%
+  mutate(
+    wday = wday(occupancy_date,
+      label = TRUE,
+      abbr = TRUE
+    ),
+    year = year(occupancy_date)
+  ) %&gt;%
+  group_by(year, wday) %&gt;%
+  summarise(
+    occupancy = sum(occupancy, na.rm = TRUE),
+    capacity = sum(capacity, na.rm = TRUE),
+    rate = occupancy / capacity,
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  filter(year %in% c(2018, 2019)) %&gt;%
+  ggplot(aes(wday, rate,
+    color = factor(year,
+      levels = c(&quot;2019&quot;, &quot;2018&quot;)
+    ),
+    group = year
+  )) +
+  geom_line(size = 2) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
+  labs(
+    title = &quot;Day of Week Average Occupancy Rate across Toronto&#39;s Homeless Shelter System&quot;, y = NULL, x = NULL,
+    subtitle = &quot;Average Occupancy Rate&quot;,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;, color = NULL
+  ) +
+  theme(
+    legend.position = c(0.9, 0.2),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-10-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>The aggregate like might be misleading. What is the distribution of rates across the network each month?</p>
 <pre class="r"><code>shelters %&gt;%
   group_by(
     month = month(occupancy_date,
@@ -939,7 +1010,7 @@ treemap(shelter_cap,
     legend.position = c(0.9, 0.9),
     legend.background = element_rect(color = &quot;white&quot;)
   )</code></pre>
-<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-10-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-11-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Some facilities are nearly always over capacity every month. Many report exactly 100% occupancy every month.</p>
 <p>How many facilities are managed by each organization?</p>
 <pre class="r"><code>shelters %&gt;%
@@ -957,7 +1028,7 @@ treemap(shelter_cap,
     caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
   ) +
   theme(panel.grid.major.y = element_blank())</code></pre>
-<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-11-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-12-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Let’s join the data frames of the weather with the shelter occupancy data by date</p>
 <pre class="r"><code>shelterWeather &lt;- shelters %&gt;%
   filter(!is.na(occupancy)) %&gt;%
@@ -985,79 +1056,8 @@ treemap(shelter_cap,
       TRUE ~ &quot;All Others&quot;
     )
   )</code></pre>
-<p>What patterns do we see by month?</p>
-<pre class="r"><code>shelters %&gt;%
-  mutate(
-    month = month(occupancy_date, abbr = TRUE),
-    year = year(occupancy_date)
-  ) %&gt;%
-  group_by(year, month) %&gt;%
-  summarise(
-    occupancy = sum(occupancy, na.rm = TRUE),
-    capacity = sum(capacity, na.rm = TRUE),
-    rate = occupancy / capacity,
-    .groups = &quot;drop&quot;
-  ) %&gt;%
-  filter(year %in% c(2018, 2019)) %&gt;%
-  ggplot(aes(month, rate, color = factor(year,
-    levels = c(&quot;2019&quot;, &quot;2018&quot;)
-  ))) +
-  geom_line(size = 2) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
-  labs(
-    title = &quot;Monthly Average Occupancy Rate across Toronto&#39;s Homeless Shelter System&quot;, y = NULL, x = NULL,
-    subtitle = &quot;Average Occupancy Rate&quot;,
-    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;, color = NULL
-  ) +
-  scale_x_continuous(
-    breaks = 1:12,
-    labels = month.abb,
-    limits = c(1, 12),
-    minor_breaks = NULL,
-    expand = c(0, 0)
-  ) +
-  theme(
-    legend.position = c(0.9, 0.9),
-    legend.background = element_rect(color = &quot;white&quot;)
-  )</code></pre>
-<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-13-1.png" width="3600" style="display: block; margin: auto;" /></p>
-<p>What about by day of the week ?</p>
-<pre class="r"><code>shelters %&gt;%
-  mutate(
-    wday = wday(occupancy_date,
-      label = TRUE,
-      abbr = TRUE
-    ),
-    year = year(occupancy_date)
-  ) %&gt;%
-  group_by(year, wday) %&gt;%
-  summarise(
-    occupancy = sum(occupancy, na.rm = TRUE),
-    capacity = sum(capacity, na.rm = TRUE),
-    rate = occupancy / capacity,
-    .groups = &quot;drop&quot;
-  ) %&gt;%
-  filter(year %in% c(2018, 2019)) %&gt;%
-  ggplot(aes(wday, rate,
-    color = factor(year,
-      levels = c(&quot;2019&quot;, &quot;2018&quot;)
-    ),
-    group = year
-  )) +
-  geom_line(size = 2) +
-  scale_x_discrete(expand = c(0, 0)) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
-  labs(
-    title = &quot;Day of Week Average Occupancy Rate across Toronto&#39;s Homeless Shelter System&quot;, y = NULL, x = NULL,
-    subtitle = &quot;Average Occupancy Rate&quot;,
-    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;, color = NULL
-  ) +
-  theme(
-    legend.position = c(0.9, 0.2),
-    legend.background = element_rect(color = &quot;white&quot;)
-  )</code></pre>
-<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-14-1.png" width="3600" style="display: block; margin: auto;" /></p>
-<p>What other patterns do we see each day? Start with the minimum temperature. Note that the weather file earliest data is March of 2018.</p>
+<p>What other patterns do we see each day?</p>
+<p>Let’s start with the minimum temperature. Note that the weather file earliest data is March of 2018.</p>
 <pre class="r"><code>shelterWeather %&gt;%
   group_by(
     day = day(occupancy_date),
@@ -1083,7 +1083,7 @@ treemap(shelter_cap,
     x = &quot;Average Temperature (Celsius)&quot;,
     caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
   )</code></pre>
-<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-15-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-14-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>shelterWeather %&gt;%
   filter(precipitation &gt; 0) %&gt;%
   group_by(
@@ -1111,7 +1111,7 @@ treemap(shelter_cap,
     x = &quot;Average Precipitation (mm) on Log Scale&quot;,
     caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
   )</code></pre>
-<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-16-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-15-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Lets build a model of Over-Capacity events at each facility with features for the weekday, month, temperature, precipitation, and the two level org identifying the city shelters to make some inferences about what might be drivers of overcrowding.</p>
 <p>Setting the breakpoint for over capacity at 0.999 could be argued because every shelter should have 1 empty bed for newcomers. It yields a data set that is largely balanced between response classes.</p>
 <pre class="r"><code>shelter_df &lt;- shelterWeather %&gt;%
@@ -1689,7 +1689,7 @@ occupancy_date_month_Dec
     caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;,
     x = &quot;Exponentiated estimate for log odds&quot;, y = NULL
   )</code></pre>
-<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-21-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-20-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>There is some evidence in this dataset that the months of December, (January), February, March, April, May, and June drive over occupancy over capacity. Also, the City of Toronto facilities themselves are over capacity.</p>
 <br>
 <p>
