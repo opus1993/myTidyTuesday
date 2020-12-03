@@ -454,16 +454,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea0d4cc75663cd19d46e36d77d0698671605ce6batargetblanka0d4cc7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a0d4cc75663cd19d46e36d77d0698671605ce6ba" target="_blank">a0d4cc7</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreece40bd903c8744d01ecbd91fd0b70bd4dd8cb8c6targetblankce40bd9a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/ce40bd903c8744d01ecbd91fd0b70bd4dd8cb8c6" target="_blank">ce40bd9</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea0d4cc75663cd19d46e36d77d0698671605ce6batargetblanka0d4cc7a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreece40bd903c8744d01ecbd91fd0b70bd4dd8cb8c6targetblankce40bd9a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a0d4cc75663cd19d46e36d77d0698671605ce6ba" target="_blank">a0d4cc7</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/ce40bd903c8744d01ecbd91fd0b70bd4dd8cb8c6" target="_blank">ce40bd9</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,6 +521,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/ce40bd903c8744d01ecbd91fd0b70bd4dd8cb8c6/analysis/Survival.Rmd" target="_blank">ce40bd9</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-03
+</td>
+<td>
+wflow_publish(“analysis/Survival.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/972e44fb7f4584964681a4e0ff3941d952d1eb09/docs/Survival.html" target="_blank">972e44f</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-03
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -857,7 +891,7 @@ ggsurvplot(
 </div>
 <div id="the-hazard-function" class="section level1">
 <h1>The Hazard Function</h1>
-<p>Survival analysis encompasses two complementary quantitative views, the survivor function, denoted by <span class="math inline">\(S()t\)</span>, and the hazard function, denoted by <span class="math inline">\(h()t\)</span>. The survivor function <span class="math inline">\(S(t)\)</span> gives the probability that a person survives longer than some specified time <span class="math inline">\(t\)</span>: that is, <span class="math inline">\(S(t)\)</span> gives the probability that the random variable <span class="math inline">\(T\)</span> exceeds the specified time <span class="math inline">\(t\)</span>. The survivor function is fundamental to a survival analysis, because obtaining survival probabilities for different values of <span class="math inline">\(t\)</span> provides crucial summary information from survival data.</p>
+<p>Survival analysis encompasses two complementary quantitative views, the survivor function, denoted by <span class="math inline">\(S(t)\)</span>, and the hazard function, denoted by <span class="math inline">\(h(t)\)</span>. The survivor function <span class="math inline">\(S(t)\)</span> gives the probability that a person survives longer than some specified time <span class="math inline">\(t\)</span>: that is, <span class="math inline">\(S(t)\)</span> gives the probability that the random variable <span class="math inline">\(T\)</span> exceeds the specified time <span class="math inline">\(t\)</span>. The survivor function is fundamental to a survival analysis, because obtaining survival probabilities for different values of <span class="math inline">\(t\)</span> provides crucial summary information from survival data.</p>
 <p>The hazard function, denoted by <span class="math inline">\(h(t)\)</span>, is given by the formula: <span class="math inline">\(h(t)\)</span> equals the limit, as <span class="math inline">\(\Delta{t}\)</span> approaches zero, of a probability statement about survival, divided by <span class="math inline">\(\Delta{t}\)</span>, where <span class="math inline">\(\Delta{t}\)</span> denotes a small interval of time. This mathematical formula is difficult to explain in practical terms.</p>
 <p>Before getting into the specifics of the formula, let’s consider a conceptual interpretation. The hazard function <span class="math inline">\(h(t)\)</span> gives the instantaneous potential per unit time for the event to occur, given that the individual has survived up to time <span class="math inline">\(t\)</span>. Note that, in contrast to the survivor function, which focuses on not failing, the hazard function focuses on failing, that is, on the event occurring. Thus, in some sense, the hazard function can be considered as giving the opposite side of the information given by the survivor function.</p>
 <p>To get an idea of what we mean by instantaneous potential, consider the concept of velocity. If, for example, you are driving in your car and you see that your speedometer is registering 60 mph, what does this reading mean? It means that if in the next hour, you continue to drive this way, with the speedometer exactly on 60, you would cover 60 miles. This reading gives the potential, at the moment you have looked at your speedometer, for how many miles you will travel in the next hour. However, because you may slow down or speed up or even stop during the next hour, the 60-mph speedometer reading does not tell you the number of miles you really will cover in the next hour. The speedometer tells you only how fast you are going at a given moment; that is, the instrument gives your instantaneous potential or velocity.</p>
@@ -865,7 +899,7 @@ ggsurvplot(
 <p><span class="math display">\[
 h(t)=\lim_{\Delta{t}\to{0}}\frac{P(t\le T &lt; t + \Delta{t} | T \ge t)}{\Delta{t}}
 \]</span> In mathematical terms, the given part of the formula for the hazard function is found in the probability statement in the numerator to the right of the limit sign. This statement is a conditional probability because it is of the form, “P of A, given B,” where the P denotes probability and where the long vertical line separating A from B denotes “given.” In the hazard formula, the conditional probability gives the probability that a person’s survival time, <span class="math inline">\(T\)</span>, will lie in the time interval between <span class="math inline">\(t\)</span> and <span class="math inline">\(t + \Delta{t}\)</span>, given that the survival time is greater than or equal to <span class="math inline">\(t\)</span>. Because of the given sign here, the hazard function is sometimes called a <strong>conditional failure rate</strong>.</p>
-<p>Be careful to note that the hazard is a <strong>rate</strong> rather than a probability. Note that in the hazard function formula, the expression to the rightof the limit sign gives the ratio of two quantities. The numerator is the conditional probability we just discussed. The denominator is <span class="math inline">\(\Delta{t}\)</span>, which denotes a small time interval. By this division, we obtain a probability per unit time, which is no longer a probability but a rate. In particular, the scale for this ratio is not 0 to 1, as for a probability, but rather ranges between 0 and infinity, and depends on whether time is measured in days, weeks, months, or years, etc.</p>
+<p>Be careful to note that the hazard is a <strong>rate</strong> rather than a probability. Note that in the hazard function formula, the expression to the right of the limit sign gives the ratio of two quantities. The numerator is the conditional probability we just discussed. The denominator is <span class="math inline">\(\Delta{t}\)</span>, which denotes a small time interval. By this division, we obtain a probability per unit time, which is no longer a probability but a rate. In particular, the scale for this ratio is not 0 to 1, as for a probability, but rather ranges between 0 and infinity, and depends on whether time is measured in days, weeks, months, or years, etc.</p>
 <p>When we take the limit of the right-side expression as the time interval approaches zero, we are essentially getting an expression for the instantaneous probability of failing at time <span class="math inline">\(t\)</span> per unit time. Another way of saying this is that the conditional failure rate or hazard function <span class="math inline">\(h(t)\)</span> gives the instantaneous potential for failing at time <span class="math inline">\(t\)</span> per unit time, given survival up to time <span class="math inline">\(t\)</span>.</p>
 <p>As with a survivor function, the hazard function <span class="math inline">\(h(t)\)</span> can be graphed as <span class="math inline">\(t\)</span> ranges over various values. In contrast to a survivor function, the graph of <span class="math inline">\(h(t)\)</span> does not have to start at 1 and go down to zero, but rather can start anywhere and go up and down in any direction over time. In particular, for a specified value of <span class="math inline">\(t\)</span>, the hazard function <span class="math inline">\(h(t)\)</span> has the following characteristics:</p>
 <ul>
@@ -1083,25 +1117,8 @@ broom::tidy(cxmod, exp = TRUE) %&gt;%
 </tr>
 </tbody>
 </table>
-<p>And a data visual:</p>
-<pre class="r"><code>fit.test &lt;- cox.zph(cxmod)
-
-ggcoxzph(fit.test)</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-11-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>Note that the model flags both horTh and tsize features as significant. However, some caution needs to be exercised in interpreting these results. While the Cox Proportional Hazard’s model is thought to be “robust”, a careful analysis would check the assumptions underlying the model. For example, the Cox model assumes that the covariates do not vary with time. In a vignette that accompanies the survival package Therneau, Crowson and Atkinson demonstrate that the Karnofsky score (karno) is, in fact, time-dependent so the assumptions for the Cox model are not met. The vignette authors go on to present a strategy for dealing with time dependent covariates.</p>
-<pre class="r"><code>ggcoxdiagnostics(cxmod,
-  type = &quot;deviance&quot;,
-  ax.scale = &quot;linear.predictions&quot;
-)</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-12-1.png" width="3600" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>ggcoxdiagnostics(cxmod,
-  type = &quot;schoenfeld&quot;,
-  ax.scale = &quot;time&quot;
-)</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-13-1.png" width="3600" style="display: block; margin: auto;" /></p>
-<p>Data scientists who are accustomed to computing ROC curves to assess model performance should be interested in the Concordance statistic. The documentation for the <code>survConcordance()</code> function in the <code>survival</code> package defines concordance as “the probability of agreement for any two randomly chosen observations, where in this case agreement means that the observation with the shorter survival time of the two also has the larger risk score. The predictor (or risk score) will often be the result of a Cox model or other regression” and notes that: “For continuous covariates concordance is equivalent to Kendall’s tau, and for logistic regression is is equivalent to the area under the ROC curve.”</p>
-<pre class="r"><code>ggforest(cxmod, data = GBSG2)</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-14-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>And a data visual:</p>
 <pre class="r"><code>newdat &lt;- expand.grid(
   horTh = levels(GBSG2$horTh),
   tsize = quantile(GBSG2$tsize, probs = c(0.25, 0.5, 0.75))
@@ -1128,6 +1145,23 @@ ggsurvplot_df(surv_cxmod,
     caption = &quot;source: GBSG2 dataset&quot;,
     x = &quot;Time in days&quot;
   )</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-11-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>Data scientists who are accustomed to computing ROC curves to assess model performance should be interested in the Concordance statistic. The documentation for the <code>survConcordance()</code> function in the <code>survival</code> package defines concordance as “the probability of agreement for any two randomly chosen observations, where in this case agreement means that the observation with the shorter survival time of the two also has the larger risk score. The predictor (or risk score) will often be the result of a Cox model or other regression” and notes that: “For continuous covariates concordance is equivalent to Kendall’s tau, and for logistic regression is is equivalent to the area under the ROC curve.”</p>
+<pre class="r"><code>fit.test &lt;- cox.zph(cxmod)
+
+ggcoxzph(fit.test)</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-12-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggcoxdiagnostics(cxmod,
+  type = &quot;deviance&quot;,
+  ax.scale = &quot;linear.predictions&quot;
+)</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-13-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggcoxdiagnostics(cxmod,
+  type = &quot;schoenfeld&quot;,
+  ax.scale = &quot;time&quot;
+)</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-14-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggforest(cxmod, data = GBSG2)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-15-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>The quantity of interest from a Cox regression model is a hazard ratio (HR). The HR represents the ratio of hazards between two groups at any particular point in time. The HR is interpreted as the instantaneous rate of occurrence of the event of interest in those who are still at risk for the event. It is not a risk, though it is commonly interpreted as such.</p>
 <p>If you have a regression parameter <span class="math inline">\(\beta\)</span> (from column estimate in our coxph) then HR = <span class="math inline">\(e^\beta\)</span>. Thus, a HR &lt; 1 indicates reduced hazard of death whereas a HR &gt; 1 indicates an increased hazard of death.</p>
