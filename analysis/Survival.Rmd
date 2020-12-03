@@ -1,7 +1,7 @@
 ---
-title: "Survival Curves"
+title: "Survival Analysis"
 author: "Jim Gruman"
-date: "November 30, 2020"
+date: "December 4, 2020"
 output:
   workflowr::wflow_html:
     toc: no
@@ -35,9 +35,9 @@ theme_set(hrbrthemes::theme_ipsum() +
 
 # Introduction
 
-Survival analysis is one of the oldest [subfields of statistics](https://www.amazon.com/Emergence-Probability-Philosophical-Statistical-Probabilistic/dp/0521685575). Basic life-table methods, including techniques for dealing with censored data, were discovered [before 1700](http://www.pauldickman.com/survival/handouts/21%20-%20EoB%20Survival%20analysis%20overview.pdf), and in the early eighteenth century, the old masters - de Moivre working on annuities, and Daniel Bernoulli studying competing risks for the analysis of smallpox inoculation - developed the modern foundations of the field. Today, survival analysis models are important in Engineering, Insurance, Marketing, Medicine, and many more application areas. It is not surprising that R is rich in survival analysis functions. 
+Survival analysis is one of the oldest [subfields of statistics](https://www.amazon.com/Emergence-Probability-Philosophical-Statistical-Probabilistic/dp/0521685575). Basic life-table methods, including techniques for dealing with censored data, were discovered [before 1700](http://www.pauldickman.com/survival/handouts/21%20-%20EoB%20Survival%20analysis%20overview.pdf), and in the early eighteenth century, the old masters - de Moivre working on annuities, and Daniel Bernoulli studying competing risks for the analysis of smallpox inoculation - developed the modern foundations of the field. Today survival analysis models are important in **Engineering**, Insurance, **Marketing**, Medicine, Econometrics, and many other application areas. 
 
-ZedStatistics episode 1 is a quick video introduction:
+ZedStatistics episode 1 is a quick no-code, no-math video introduction:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/v1QqpG0rR1k" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -161,11 +161,13 @@ ggsurvplot(fit = km, conf.int = FALSE,
 
 Survival analysis encompasses two complementary quantitative views, the survivor function, denoted by $S(t)$, and the hazard function, denoted by $h(t)$. The survivor function $S(t)$ gives the probability that a person survives longer than some specified time $t$: that is, $S(t)$ gives the probability that the random variable $T$ exceeds the specified time $t$. The survivor function is fundamental to a survival analysis, because obtaining survival probabilities for different values of $t$ provides crucial summary information from survival data.
 
-The hazard function, denoted by $h(t)$, is given by the formula: $h(t)$ equals the limit, as $\Delta{t}$ approaches zero, of a probability statement about survival, divided by $\Delta{t}$, where $\Delta{t}$ denotes a small interval of time. This mathematical formula is difficult to explain in practical terms.
+The hazard function, denoted by $h(t)$, is given by the formula: $h(t)$ equals the limit, as $\Delta{t}$ approaches zero, of a probability statement about survival, divided by $\Delta{t}$, where $\Delta{t}$ denotes a small interval of time. 
 
-Before getting into the specifics of the formula, let's consider a conceptual interpretation. The hazard function $h(t)$ gives the instantaneous potential per unit time for the event to occur, given that the individual has survived up to time $t$. Note that, in contrast to the survivor function, which focuses on not failing, the
-hazard function focuses on failing, that is, on the event occurring. Thus, in some sense, the hazard function can be considered as giving
-the opposite side of the information given by the survivor function.
+$$
+h(t)=\lim_{\Delta{t}\to{0}}\frac{P(t\le T < t + \Delta{t} | T \ge t)}{\Delta{t}}
+$$
+
+Before getting into the specifics of the formula, let's consider a conceptual interpretation. The hazard function $h(t)$ gives the instantaneous potential per unit time for the event to occur, given that the individual has survived up to time $t$. Note that, in contrast to the survivor function, which focuses on not failing, the hazard function focuses on failing, that is, on the event occurring. Thus, in some sense, the hazard function can be considered as giving the opposite side of the information given by the survivor function.
 
 To get an idea of what we mean by instantaneous potential, consider the concept of velocity. If, for example, you are driving in your car and you see that your speedometer is registering 60 mph, what does this reading mean? It means that if in the next hour, you continue to drive this way, with the speedometer exactly on 60, you would cover 60 miles. This reading
 gives the potential, at the moment you have looked at your speedometer, for how many miles you will travel in the next hour. However, because you may slow down or speed up or even stop during the next hour, the 60-mph
@@ -175,9 +177,6 @@ Similar to the idea of velocity, a hazard function $h(t)$ gives the instantaneou
 disease of interest, given survival up to time $t$. The “given” part, that is, surviving up to time $t$, is analogous to recognizing in the velocity
 example that the speedometer reading at a point in time inherently assumes that you have already traveled some distance (i.e., survived) up to the time of the reading.
 
-$$
-h(t)=\lim_{\Delta{t}\to{0}}\frac{P(t\le T < t + \Delta{t} | T \ge t)}{\Delta{t}}
-$$
 In mathematical terms, the given part of the formula for the hazard function is found in the probability statement in the numerator to the right of the limit sign. This statement is a conditional probability because it is of the
 form, “P of A, given B,” where the P denotes probability and where the long vertical line separating A from B denotes “given.” In the hazard formula, the conditional probability gives the probability that a person’s survival
 time, $T$, will lie in the time interval between $t$ and $t + \Delta{t}$, given that the survival time is greater than or equal to $t$. Because of the
@@ -205,13 +204,13 @@ simply because $S(t)$ directly describes the survival experience of a study coho
 
 Regardless of which function $S(t)$ or $h(t)$ one prefers, there is a clearly defined relationship between the two. In fact, if one knows the form of $S(t)$, one can derive the corresponding $h(t)$, and vice versa. 
 
-In any actual data analysis, R or Stata or SAS or Matlab can make the numerical transformation from $S(t)$ to $h(t)$, or vice versa, without the user ever having to use either formula. The point here is simply that if you know either $S(t)$ or $h(t)$, you can get the other directly.
+In any actual data analysis, R / Stata / SAS / Matlab can make the numerical transformation from $S(t)$ to $h(t)$, or vice versa, without the user ever having to use either formula. The point here is simply that if you know either $S(t)$ or $h(t)$, you can get the other directly.
 
 ----
 
 ## The Weibull model
 
-To create a parametric survival model, the survival object from above is fed into the `survreg()` function of the `{survival}` package. As a first pass, we will use formula notation to model on none of the data features with `~ 1`. Model probabilities between 0.01 and 0.99 are fed into the model to predict the time at each, and the associated plot is shown here:
+To create a parametric survival model in R, the survival object from above is simply fed into the `survreg()` function of the `{survival}` package. As a first pass demonstration here, we will use formula notation to model on none of the data features with `~ 1`. Model probabilities between 0.01 and 0.99 are fed into the model to predict the time at each, and the associated plot is shown here:
 
 ```{r}
 # Weibull model
