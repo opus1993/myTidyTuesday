@@ -43,13 +43,13 @@ ZedStatistics episode 1 is a quick no-code, no-math video introduction:
 
 ## What is Survival Analysis?
 
-A simpler characterization might be *time-to-event* analysis. These are use cases where we are concerned with the time it takes for an **event** to occur after an **exposure**. As an example, an exposure might be the date of a medical diagnosis. Or it could be the moment of childbirth. Or the date of delivery of a new tractor to a customer. Survival analysis data is aligned for all participants to zero at each participant's exposure time.
+A simpler characterization might be *time-to-event* analysis. These are use cases where we are concerned with the time it takes for an **event** to occur after an **exposure**. As an example, an exposure might be the date of a medical diagnosis. Or it could be the moment of childbirth. Or the date of delivery of a new tractor to a customer. 
 
 ```{r}
 knitr::include_graphics("assets/periodofstudy.png", error = FALSE)
 ```
 
-The event of interest could be death or the failure of a component of the tractor. Time-to-event data always consist of the distinct **exposure** start and distinct **event** end for each study participant. The use cases are common in a wide variety of applications and go by other names, including reliability analysis.
+Survival analysis data is aligned for all participants to zero at each participant's exposure time. The event of interest could be death or the failure of a component of the tractor. Time-to-event data always consist of the distinct **exposure** start and distinct **event** end for each study participant. 
 
 ## What is censoring?
 
