@@ -454,16 +454,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree39b4560576e6e01ca23c6d16d85bc99c4df11cb4targetblank39b4560a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/39b4560576e6e01ca23c6d16d85bc99c4df11cb4" target="_blank">39b4560</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreefbfa31ca54a06bf224a8b9c90c2aa735247df739targetblankfbfa31ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/fbfa31ca54a06bf224a8b9c90c2aa735247df739" target="_blank">fbfa31c</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree39b4560576e6e01ca23c6d16d85bc99c4df11cb4targetblank39b4560a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreefbfa31ca54a06bf224a8b9c90c2aa735247df739targetblankfbfa31ca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/39b4560576e6e01ca23c6d16d85bc99c4df11cb4" target="_blank">39b4560</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/fbfa31ca54a06bf224a8b9c90c2aa735247df739" target="_blank">fbfa31c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,6 +521,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/fbfa31ca54a06bf224a8b9c90c2aa735247df739/analysis/Survival.Rmd" target="_blank">fbfa31c</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-03
+</td>
+<td>
+wflow_publish(“analysis/Survival.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/aa8899ebdf9359e8022d9bf94caf2c5f3c18e00b/docs/Survival.html" target="_blank">aa8899e</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-03
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -825,10 +859,10 @@ wflow_publish(“analysis/Survival.Rmd”)
 </iframe>
 <div id="what-is-survival-analysis" class="section level2">
 <h2>What is Survival Analysis?</h2>
-<p>A simpler characterization might be <em>time-to-event</em> analysis. These are use cases where we are concerned with the time it takes for an <strong>event</strong> to occur after an <strong>exposure</strong>. As an example, an exposure might be the date of a medical diagnosis. Or it could be the moment of childbirth. Or the date of delivery of a new tractor to a customer. Survival analysis data is aligned for all participants to zero at each participant’s exposure time.</p>
+<p>A simpler characterization might be <em>time-to-event</em> analysis. These are use cases where we are concerned with the time it takes for an <strong>event</strong> to occur after an <strong>exposure</strong>. As an example, an exposure might be the date of a medical diagnosis. Or it could be the moment of childbirth. Or the date of delivery of a new tractor to a customer.</p>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/periodofstudy.png&quot;, error = FALSE)</code></pre>
 <p><img src="assets/periodofstudy.png" style="display: block; margin: auto;" /></p>
-<p>The event of interest could be death or the failure of a component of the tractor. Time-to-event data always consist of the distinct <strong>exposure</strong> start and distinct <strong>event</strong> end for each study participant. The use cases are common in a wide variety of applications and go by other names, including reliability analysis.</p>
+<p>Survival analysis data is aligned for all participants to zero at each participant’s exposure time. The event of interest could be death or the failure of a component of the tractor. Time-to-event data always consist of the distinct <strong>exposure</strong> start and distinct <strong>event</strong> end for each study participant.</p>
 </div>
 <div id="what-is-censoring" class="section level2">
 <h2>What is censoring?</h2>
