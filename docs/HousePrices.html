@@ -454,16 +454,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree96634e23788a97fe231f060e999f6bb3aa9d2b2ctargetblank96634e2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/96634e23788a97fe231f060e999f6bb3aa9d2b2c" target="_blank">96634e2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec10e1acd87416ce2c71d535b853842c8a26cc380targetblankc10e1aca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/c10e1acd87416ce2c71d535b853842c8a26cc380" target="_blank">c10e1ac</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree96634e23788a97fe231f060e999f6bb3aa9d2b2ctargetblank96634e2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec10e1acd87416ce2c71d535b853842c8a26cc380targetblankc10e1aca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/96634e23788a97fe231f060e999f6bb3aa9d2b2c" target="_blank">96634e2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/c10e1acd87416ce2c71d535b853842c8a26cc380" target="_blank">c10e1ac</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -484,6 +484,7 @@ Untracked files:
     Untracked:  data/geospatial/
     Untracked:  data/geospatial_cloud_masks/
     Untracked:  data/geospatial_previews/
+    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -522,6 +523,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/c10e1acd87416ce2c71d535b853842c8a26cc380/analysis/HousePrices.Rmd" target="_blank">c10e1ac</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-04
+</td>
+<td>
+wflow_publish(“analysis/HousePrices.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/5bb1c9cebcd28b39da196f74e789967718754e77/docs/HousePrices.html" target="_blank">5bb1c9c</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-04
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -772,6 +807,9 @@ mychart(2020, 2)</code></pre>
 
 animate(a + transition_states(date), nframes = 184, end_pause = 30, width = 740, height = 1000, fps = 15)</code></pre>
 <p><img src="figure/HousePrices.Rmd/unnamed-chunk-6-1.gif" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>gganimate::anim_save(here(&quot;docs/assets/fmhpi_allstates.gif&quot;))</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/fmhpi_allstates.gif&quot;, error = FALSE)</code></pre>
+<p><img src="assets/fmhpi_allstates.gif" style="display: block; margin: auto;" /></p>
 <p>Finally, we can go back to our original bar chart, and cycle through states. We’ve sorted states from the slowest growing in October 2020 (Hawaii HI) to the fastest (Idaho ID).</p>
 <pre class="r"><code>dts3 &lt;- dt %&gt;%
   filter(GEO_Type %in% c(&quot;State&quot;, &quot;US&quot;), Year &gt; 2017) %&gt;%
@@ -818,7 +856,10 @@ ac &lt;- dts3 %&gt;%
 animate(ac + transition_states(statef),
   nframes = 176 * 3, end_pause = 20, width = 740, height = 500
 )</code></pre>
-<p><img src="figure/HousePrices.Rmd/unnamed-chunk-7-1.gif" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-8-1.gif" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>gganimate::anim_save(here(&quot;docs/assets/fmhpi_bars.gif&quot;))</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/fmhpi_bars.gif&quot;, error = FALSE)</code></pre>
+<p><img src="assets/fmhpi_bars.gif" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
