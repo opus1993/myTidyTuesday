@@ -226,6 +226,12 @@ a <- ggplot(data = dts, aes(x = hpa3,
 
 animate(a + transition_states(date), nframes = 184, end_pause = 30, width = 740, height = 1000, fps = 15)
 
+gganimate::anim_save(here("docs/assets/fmhpi_allstates.gif"))
+
+```
+
+```{r}
+knitr::include_graphics("assets/fmhpi_allstates.gif", error = FALSE)
 ```
 
 Finally, we can go back to our original bar chart, and cycle through states. We've sorted states from the slowest growing in October 2020 (Hawaii HI) to the fastest (Idaho ID).
@@ -263,7 +269,11 @@ ac <- dts3 %>%
 
 animate(ac + transition_states(statef),
         nframes = 176*3, end_pause = 20, width = 740, height = 500)
+
+gganimate::anim_save(here("docs/assets/fmhpi_bars.gif"))
 ```
 
-
+```{r}
+knitr::include_graphics("assets/fmhpi_bars.gif", error = FALSE)
+```
 
