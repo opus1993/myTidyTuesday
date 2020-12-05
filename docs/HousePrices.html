@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-12-04" />
+
+<title>FreddieMacHousePrices</title>
+
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">FreddieMacHousePrices</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">December 4, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-12-04
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree96634e23788a97fe231f060e999f6bb3aa9d2b2ctargetblank96634e2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/96634e23788a97fe231f060e999f6bb3aa9d2b2c" target="_blank">96634e2</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree96634e23788a97fe231f060e999f6bb3aa9d2b2ctargetblank96634e2a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/96634e23788a97fe231f060e999f6bb3aa9d2b2c" target="_blank">96634e2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  My TidyTuesday Plot.png
+    Untracked:  content/
+    Untracked:  data/geospatial/
+    Untracked:  data/geospatial_cloud_masks/
+    Untracked:  data/geospatial_previews/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/HousePrices.Rmd</code>) and HTML (<code>docs/HousePrices.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/96634e23788a97fe231f060e999f6bb3aa9d2b2c/analysis/HousePrices.Rmd" target="_blank">96634e2</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-04
+</td>
+<td>
+wflow_publish(“analysis/HousePrices.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<blockquote>
+<p>Derived from Len Kiefer’s excellent post at <a href="http://lenkiefer.com/2020/11/30/visual-meditations-on-house-prices-2020-edition/">Visual Meditations on House Prices 2020 Edition</a></p>
+</blockquote>
+<p>Our goal here is to explore several ways of visualizing current aggregated housing prices, using the <a href="http://www.freddiemac.com/research/indices/house-price-index.page">Freddie Mac House Price Index</a>. We’ll be looking at the annualized rate of change over 3-month sliding windows. For example, the latest data is through October 2020, so the rate of change we’re looking at is from July to October (growth in August, September, October).</p>
+<pre class="r"><code>knitr::opts_chunk$set(
+    echo = TRUE,
+    fig.height = 7.402,
+    fig.width = 12,
+    message = FALSE,
+    warning = FALSE,
+    cache = FALSE,
+    cache.lazy = FALSE,
+    df_print = &quot;paged&quot;,
+    dpi = 300,
+    tidy = &quot;styler&quot;
+)</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(lubridate)
+library(hrbrthemes)
+suppressMessages(extrafont::loadfonts())
+
+theme_set(hrbrthemes::theme_modern_rc() +
+  theme(plot.title.position = &quot;plot&quot;))
+
+library(geofacet)
+library(gganimate)
+library(here)</code></pre>
+<p>We will load the latest data directly from the web site and cache it in a local data folder.</p>
+<pre class="r"><code>fmhpi_file &lt;- here(&quot;data/fmhpi.rds&quot;)
+
+if (!file.exists(fmhpi_file)) {
+  write_rds(read_csv(&quot;http://www.freddiemac.com/fmac-resources/research/docs/fmhpi_master_file.csv&quot;), fmhpi_file)
+}
+
+dt &lt;- read_rds(fmhpi_file) %&gt;%
+  group_by(GEO_Type, GEO_Name) %&gt;%
+  mutate(
+    hpa12 = Index_SA / lag(Index_SA, 12) - 1,
+    hpa3 = (Index_SA / lag(Index_SA, 3))**4 - 1,
+    date = as_date(ISOdate(Year, Month, 1)),
+    hpa3_lag3 = lag(hpa3, 3)
+  )
+
+dts &lt;- dt %&gt;%
+  filter(Year &gt; 2017, GEO_Type == &quot;State&quot;)
+
+yy &lt;- 2020
+mm &lt;- 10</code></pre>
+<p>The graph below shows that after slowing in spring, US house prices accelerated to a nearly 20 percent annualized growth rate over the past three months.</p>
+<pre class="r"><code>dt %&gt;%
+  filter(Year &gt; yy - 3, GEO_Name == &quot;USA&quot;) %&gt;%
+  ggplot(aes(y = hpa3, x = date, color = hpa3, fill = hpa3)) +
+  geom_col(alpha = 0.5) +
+  geom_path() +
+  geom_point() +
+  geom_text(
+    data = . %&gt;% filter(date == max(date)),
+    nudge_y = 0.01, fontface = &quot;bold&quot;, size = 4,
+    aes(y = hpa3, x = date, label = GEO_Name)
+  ) +
+  scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    position = &quot;right&quot;
+  ) +
+  labs(
+    x = NULL,
+    y = &quot;3-month annualized % change&quot;,
+    title = &quot;House Price Growth (USA)&quot;,
+    caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;,
+    subtitle = paste0(format(ISOdate(yy - 2, 1, 1), &quot;%b %Y&quot;), &quot;-&quot;, format(max(dt$date), &quot;%b %Y&quot;))
+  ) +
+  theme(
+    legend.position = &quot;top&quot;, legend.direction = &quot;horizontal&quot;,
+    legend.key.width = unit(2, &quot;cm&quot;)
+  ) +
+  scale_color_viridis_c(option = &quot;inferno&quot;) +
+  scale_fill_viridis_c(option = &quot;inferno&quot;)</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-2-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>But that national trend masks a lot of variations across states. Let’s map it out:</p>
+<pre class="r"><code>dts %&gt;%
+  ggplot(aes(date, hpa3, group = GEO_Name, fill = hpa3)) +
+  geom_col(color = &quot;gray10&quot;) +
+  scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    limits = c(-0.1, 0.4), breaks = seq(-0.1, 0.4, 0.1)
+  ) +
+  labs(
+    y = NULL,
+    x = &quot;3-month annualized % change&quot;,
+    title = &quot;House Price Growth by State&quot;,
+    caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;,
+    subtitle = paste0(format(ISOdate(yy - 2, 1, 1), &quot;%b %Y&quot;), &quot;-&quot;, format(max(dts$date), &quot;%b %Y&quot;))
+  ) +
+  theme(
+    legend.position = &quot;top&quot;,
+    legend.key.width = unit(2, &quot;cm&quot;),
+    plot.title = element_text(size = rel(1.75), face = &quot;bold&quot;),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.text.x = element_text(
+      size = rel(0.5),
+      color = &quot;gray50&quot;
+    ),
+    axis.text.y = element_text(
+      size = rel(0.5),
+      color = &quot;gray50&quot;
+    ),
+    strip.background = element_rect(fill = &quot;gray15&quot;),
+    strip.text = element_text(
+      color = &quot;gray90&quot;,
+      size = rel(0.7)
+    ),
+    panel.spacing.x = unit(0.01, &quot;cm&quot;),
+    panel.spacing.y = unit(0.1, &quot;cm&quot;)
+  ) +
+  scale_fill_viridis_c(
+    option = &quot;inferno&quot;,
+    limits = c(-0.05, 0.38),
+    label = scales::percent,
+    name = &quot;3-month annualized (annualized rate)&quot;
+  ) +
+  facet_geo(~GEO_Name)</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-3-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>We can see that the acceleration is much higher in states like Idaho (ID) and Vermont (VT). Idaho’s house price growth rate is nearly double the US rate.</p>
+<p>As another view, instead of using geo facets we could plot each state on the y axis and compare them vertically, with house price growth on the x axis. We’ll add a line segment that reached back 3 months and shows the relative trend. If the segment extends left, that means the state had slower growth 3 months ago and house price have accelerated. If the segment extends right, the opposite.</p>
+<p>Let’s consider February of 2020, just before the COVID-19 pandemic hit the US economy.</p>
+<pre class="r"><code>mychart &lt;- function(yy = 2020, mm = 4) {
+  dts2 &lt;- dts %&gt;%
+    filter(Year == yy &amp; Month == mm)
+
+  ggplot(data = dts2, aes(
+    x = hpa3,
+    y = fct_reorder(GEO_Name, hpa3),
+    color = hpa3
+  )) +
+    geom_point() +
+    geom_segment(aes(xend = hpa3_lag3, yend = GEO_Name)) +
+    geom_label(aes(label = GEO_Name),
+      size = rel(2),
+      label.padding = unit(0.1, &quot;lines&quot;),
+      fontface = &quot;bold&quot;,
+      fill = &quot;gray10&quot;
+    ) +
+    scale_x_continuous(
+      labels = scales::percent_format(accuracy = 1),
+      limits = c(-0.1, 0.4),
+      breaks = seq(-0.1, 0.4, 0.1)
+    ) +
+    labs(
+      y = NULL,
+      x = &quot;3-month annualized % change, line extends to 3 months prior&quot;,
+      title = &quot;House Price Growth by State&quot;,
+      caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;,
+      subtitle = format(max(dts2$date), &quot;%b %Y&quot;)
+    ) +
+    theme(
+      legend.position = &quot;top&quot;,
+      legend.direction = &quot;horizontal&quot;,
+      legend.key.width = unit(2, &quot;cm&quot;),
+      plot.title = element_text(size = rel(1.75), face = &quot;bold&quot;),
+      panel.grid.major.y = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank()
+    ) +
+    scale_color_viridis_c(
+      option = &quot;inferno&quot;,
+      limits = c(-0.05, 0.38),
+      label = scales::percent,
+      name = &quot;3-month annualized (annualized rate)&quot;
+    )
+}
+
+mychart(2020, 2)</code></pre>
+<p><img src="figure/HousePrices.Rmd/segment%20charts-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>For most, but not all states, the segment extends left, meaning price growth from December 2019 to February 2020 was higher than from October to December 2019.</p>
+<p>Let’s roll foward 3 months to the period covering February 2020 to May 2020 compared to December 2019 to February 2020.</p>
+<pre class="r"><code>mychart(2020, 5)</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-4-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>Here we see that many states were slowing down. At that point, it was reasonable to be concerned that the housing market would falter. But it did not. Thanks to low mortgage interest rate and policies like forbearance and foreclosure moratoria, the housing market rebounded. The latest data, as of October:</p>
+<pre class="r"><code>mychart(2020, 10)</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-5-1.png" width="3600" style="display: block; margin: auto;" /></p>
+<p>In October 2020, most states are experiencing a rapid acceleration in house prices. WIth Idaho (ID) leading the way.</p>
+<p>Now that we’ve build individual frames, let’s watch the animation unfold:</p>
+<pre class="r"><code>a &lt;- ggplot(data = dts, aes(
+  x = hpa3,
+  y = fct_reorder(GEO_Name, hpa3),
+  color = hpa3
+)) +
+  geom_point() +
+  geom_segment(aes(xend = hpa3_lag3, yend = GEO_Name)) +
+  geom_label(aes(label = GEO_Name),
+    size = rel(2),
+    label.padding = unit(0.1, &quot;lines&quot;),
+    fontface = &quot;bold&quot;,
+    fill = &quot;gray10&quot;
+  ) +
+  scale_x_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    limits = c(-0.1, 0.4),
+    breaks = seq(-0.1, 0.4, 0.1)
+  ) +
+  labs(
+    y = NULL,
+    x = &quot;3-month annualized % change, line extends to 3 months prior&quot;,
+    title = &quot;House Price Growth by State&quot;,
+    subtitle = &quot;{closest_state}&quot;,
+    caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;
+  ) +
+  theme(
+    legend.position = &quot;top&quot;,
+    legend.direction = &quot;horizontal&quot;,
+    legend.key.width = unit(2, &quot;cm&quot;),
+    plot.title = element_text(size = rel(1.75), face = &quot;bold&quot;),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  ) +
+  scale_color_viridis_c(
+    option = &quot;inferno&quot;,
+    limits = c(-0.05, 0.38),
+    label = scales::percent,
+    name = &quot;3-month annualized (annualized rate)&quot;
+  )
+
+animate(a + transition_states(date), nframes = 184, end_pause = 30, width = 740, height = 1000, fps = 15)</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-6-1.gif" style="display: block; margin: auto;" /></p>
+<p>Finally, we can go back to our original bar chart, and cycle through states. We’ve sorted states from the slowest growing in October 2020 (Hawaii HI) to the fastest (Idaho ID).</p>
+<pre class="r"><code>dts3 &lt;- dt %&gt;%
+  filter(GEO_Type %in% c(&quot;State&quot;, &quot;US&quot;), Year &gt; 2017) %&gt;%
+  mutate(statef = fct_reorder2(
+    .f = GEO_Name,
+    .x = date,
+    .y = hpa3
+  ))
+
+ac &lt;- dts3 %&gt;%
+  ggplot(aes(y = hpa3, x = date, fill = hpa3)) +
+  geom_col(alpha = 0.5) +
+  geom_path() +
+  geom_point() +
+  geom_text(
+    data = . %&gt;% filter(date == max(date)),
+    nudge_y = 0.02, fontface = &quot;bold&quot;, size = 4,
+    aes(label = GEO_Name)
+  ) +
+  scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    limits = c(-0.1, 0.4),
+    breaks = c(-0.1, 0.4, 0.1),
+    position = &quot;right&quot;
+  ) +
+  labs(
+    x = NULL,
+    y = &quot;3-month annualized % change&quot;,
+    title = &quot;House Price Growth (USA)&quot;,
+    caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;,
+    subtitle = &quot;{closest_state}&quot;
+  ) +
+  theme(
+    legend.position = &quot;top&quot;,
+    legend.direction = &quot;horizontal&quot;,
+    legend.key.width = unit(2, &quot;cm&quot;)
+  ) +
+  scale_color_viridis_c(option = &quot;inferno&quot;) +
+  scale_fill_viridis_c(
+    option = &quot;inferno&quot;,
+    name = &quot;3-month growth (annualized rate)&quot;
+  )
+
+animate(ac + transition_states(statef),
+  nframes = 176 * 3, end_pause = 20, width = 740, height = 500
+)</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-7-1.gif" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] here_1.0.0        gganimate_1.0.7   geofacet_0.2.0    hrbrthemes_0.8.6 
+ [5] lubridate_1.7.9.2 forcats_0.5.0     stringr_1.4.0     dplyr_1.0.2      
+ [9] purrr_0.3.4       readr_1.4.0       tidyr_1.1.2       tibble_3.0.4     
+[13] ggplot2_3.3.2     tidyverse_1.3.0   workflowr_1.6.2  
+
+loaded via a namespace (and not attached):
+ [1] colorspace_2.0-0    ellipsis_0.3.1      class_7.3-17       
+ [4] rprojroot_2.0.2     fs_1.5.0            rstudioapi_0.13    
+ [7] farver_2.0.3        ggrepel_0.8.2       fansi_0.4.1        
+[10] xml2_1.3.2          R.methodsS3_1.8.1   extrafont_0.17     
+[13] memuse_4.1-0        knitr_1.30          jsonlite_1.7.1     
+[16] broom_0.7.2         Rttf2pt1_1.3.8      dbplyr_2.0.0       
+[19] png_0.1-7           R.oo_1.24.0         rgeos_0.5-5        
+[22] compiler_4.0.3      httr_1.4.2          backports_1.2.0    
+[25] assertthat_0.2.1    cli_2.2.0           later_1.1.0.1      
+[28] tweenr_1.0.1        htmltools_0.5.0     prettyunits_1.1.1  
+[31] tools_4.0.3         gtable_0.3.0        glue_1.4.2         
+[34] Rcpp_1.0.5          cellranger_1.1.0    imguR_1.0.3        
+[37] styler_1.3.2        vctrs_0.3.5         transformr_0.1.3   
+[40] extrafontdb_1.0     xfun_0.19           ps_1.4.0           
+[43] rvest_0.3.6         lpSolve_5.6.15      lifecycle_0.2.0    
+[46] scales_1.1.1        hms_0.5.3           promises_1.1.1     
+[49] yaml_2.2.1          gridExtra_2.3       gdtools_0.2.2      
+[52] stringi_1.5.3       e1071_1.7-4         gifski_0.8.6       
+[55] rlang_0.4.9         pkgconfig_2.0.3     systemfonts_0.3.2  
+[58] geogrid_0.1.1       evaluate_0.14       lattice_0.20-41    
+[61] sf_0.9-6            labeling_0.4.2      tidyselect_1.1.0   
+[64] plyr_1.8.6          magrittr_2.0.1      R6_2.5.0           
+[67] generics_0.1.0      DBI_1.1.0           pillar_1.4.7       
+[70] haven_2.3.1         whisker_0.4         withr_2.3.0        
+[73] units_0.6-7         sp_1.4-4            modelr_0.1.8       
+[76] crayon_1.3.4        KernSmooth_2.23-18  rmarkdown_2.5      
+[79] jpeg_0.1-8.1        progress_1.2.2      rnaturalearth_0.1.0
+[82] grid_4.0.3          readxl_1.3.1        git2r_0.27.1       
+[85] reprex_0.3.0        digest_0.6.27       classInt_0.4-3     
+[88] R.cache_0.14.0      httpuv_1.5.4        R.utils_2.10.1     
+[91] munsell_0.5.0       viridisLite_0.3.0  </code></pre>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
