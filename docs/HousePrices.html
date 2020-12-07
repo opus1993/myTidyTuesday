@@ -454,16 +454,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea979418ca567dba5efb4f62b78edf08c2b096919targetblanka979418a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a979418ca567dba5efb4f62b78edf08c2b096919" target="_blank">a979418</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec45c11d42fa385e910aa3dae3c4113ae5ac0cb1dtargetblankc45c11da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/c45c11d42fa385e910aa3dae3c4113ae5ac0cb1d" target="_blank">c45c11d</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea979418ca567dba5efb4f62b78edf08c2b096919targetblanka979418a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec45c11d42fa385e910aa3dae3c4113ae5ac0cb1dtargetblankc45c11da" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a979418ca567dba5efb4f62b78edf08c2b096919" target="_blank">a979418</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/c45c11d42fa385e910aa3dae3c4113ae5ac0cb1d" target="_blank">c45c11d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -477,11 +477,6 @@ Ignored files:
     Ignored:    data/hike_data.rds
     Ignored:    data/us_states.rds
     Ignored:    data/weatherstats_toronto_daily.csv
-
-Untracked files:
-    Untracked:  My TidyTuesday Plot.png
-    Untracked:  content/
-    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -520,6 +515,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/c45c11d42fa385e910aa3dae3c4113ae5ac0cb1d/analysis/HousePrices.Rmd" target="_blank">c45c11d</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-07
+</td>
+<td>
+wflow_publish(“analysis/HousePrices.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/9d3a4419916483551f5b66e4dffc0174fd0fc791/docs/HousePrices.html" target="_blank">9d3a441</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -838,96 +867,9 @@ mychart(2020, 2)</code></pre>
 <p><img src="figure/HousePrices.Rmd/unnamed-chunk-5-1.png" width="3600" style="display: block; margin: auto;" /></p>
 <p>In October 2020, most states are experiencing a rapid acceleration in house prices. WIth Idaho (ID) leading the way.</p>
 <p>Now that we’ve build individual frames, let’s watch the animation unfold:</p>
-<pre class="r"><code>a &lt;- ggplot(data = dts, aes(
-  x = hpa3,
-  y = fct_reorder(GEO_Name, hpa3),
-  color = hpa3
-)) +
-  geom_point() +
-  geom_segment(aes(xend = hpa3_lag3, yend = GEO_Name)) +
-  geom_label(aes(label = GEO_Name),
-    size = rel(3),
-    label.padding = unit(0.15, &quot;lines&quot;),
-    fontface = &quot;bold&quot;,
-    fill = &quot;gray10&quot;
-  ) +
-  scale_x_continuous(
-    labels = scales::percent_format(accuracy = 1),
-    limits = c(-0.1, 0.4),
-    breaks = seq(-0.1, 0.4, 0.1)
-  ) +
-  labs(
-    y = NULL,
-    x = &quot;3-month annualized % change, line extends to 3 months prior&quot;,
-    title = &quot;House Price Growth by State&quot;,
-    subtitle = &quot;{closest_state}&quot;,
-    caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;
-  ) +
-  theme(
-    legend.position = &quot;top&quot;,
-    legend.direction = &quot;horizontal&quot;,
-    legend.key.width = unit(2, &quot;cm&quot;),
-    plot.title = element_text(size = rel(1.75), face = &quot;bold&quot;),
-    panel.grid.major.y = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank()
-  ) +
-  scale_fill_gradientn(
-    colors = pal,
-    aesthetics = c(&quot;color&quot;, &quot;fill&quot;),
-    limits = c(-0.05, 0.38),
-    label = scales::percent,
-    name = &quot;3-month annualized rate&quot;
-  )
-
-animate(a + transition_states(date), nframes = 184, end_pause = 60, width = 740, height = 1000, fps = 15)</code></pre>
-<p><img src="figure/HousePrices.Rmd/unnamed-chunk-6-1.gif" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>gganimate::anim_save(here(&quot;docs/assets/fmhpi_allstates.gif&quot;))</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/fmhpi_allstates.gif&quot;, error = FALSE)</code></pre>
 <p><img src="assets/fmhpi_allstates.gif" style="display: block; margin: auto;" /></p>
 <p>Finally, we can go back to our original bar chart, and cycle through states. We’ve sorted states from the slowest growing in October 2020 (Hawaii HI) to the fastest (Idaho ID).</p>
-<pre class="r"><code>dts3 &lt;- dt %&gt;%
-  filter(GEO_Type %in% c(&quot;State&quot;, &quot;US&quot;), Year &gt; 2017) %&gt;%
-  mutate(statef = fct_reorder2(
-    .f = GEO_Name,
-    .x = date,
-    .y = hpa3
-  ))
-
-ac &lt;- dts3 %&gt;%
-  ggplot(aes(y = hpa3, x = date, fill = hpa3)) +
-  geom_col(alpha = 0.5, show.legend = FALSE) +
-  geom_path(show.legend = FALSE) +
-  geom_point(show.legend = FALSE) +
-  geom_text(
-    data = . %&gt;% filter(date == max(date)),
-    nudge_y = 0.02, fontface = &quot;bold&quot;, size = 4,
-    aes(label = GEO_Name)
-  ) +
-  scale_y_continuous(
-    labels = scales::percent_format(accuracy = 1),
-    limits = c(-0.1, 0.4),
-    breaks = c(-0.1, 0.4, 0.05),
-    position = &quot;right&quot;
-  ) +
-  scale_fill_gradientn(
-    colors = pal,
-    aesthetics = c(&quot;color&quot;, &quot;fill&quot;),
-    limits = c(-0.05, 0.38)
-  ) +
-  labs(
-    x = NULL, y = NULL,
-    title = &quot;House Price Growth, Each US State&quot;,
-    caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;,
-    subtitle = paste0(&quot;{closest_state}&quot;, &quot; 3-month annualized % change&quot;)
-  ) +
-  theme(axis.ticks.x = element_blank())
-
-animate(ac + transition_states(statef),
-  nframes = 176 * 3, end_pause = 20, width = 740, height = 500
-)</code></pre>
-<p><img src="figure/HousePrices.Rmd/unnamed-chunk-8-1.gif" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>gganimate::anim_save(here(&quot;docs/assets/fmhpi_bars.gif&quot;))</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/fmhpi_bars.gif&quot;, error = FALSE)</code></pre>
 <p><img src="assets/fmhpi_bars.gif" style="display: block; margin: auto;" /></p>
 <br>
