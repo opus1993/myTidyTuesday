@@ -33,10 +33,12 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(lubridate)
 library(hrbrthemes)
-suppressMessages(extrafont::loadfonts())
+extrafont::loadfonts(quiet = TRUE)
 
 theme_set(hrbrthemes::theme_modern_rc() +
             theme(plot.title.position = "plot"))
+
+pal <- wesanderson::wes_palette("Zissou1", 21, type = "continuous")
 
 library(geofacet)
 library(gganimate)
@@ -88,8 +90,11 @@ dt %>%
        subtitle = paste0(format(ISOdate(yy - 2,1,1),"%b %Y"), "-" , format(max(dt$date),"%b %Y"))) +
   theme(legend.position = "top", legend.direction = "horizontal",
         legend.key.width = unit(2, "cm")) +
-  scale_color_viridis_c(option = "inferno") +
-  scale_fill_viridis_c(option = "inferno")
+  scale_fill_gradientn(colors = pal,
+                       aesthetics = c("color","fill"),
+                       limits = c(-0.05,0.38),
+                       label = scales::percent,
+                       name = "3-month annualized rate")
   
 ```
 
@@ -120,10 +125,11 @@ ggplot(aes(date, hpa3, group = GEO_Name, fill = hpa3)) +
                                   size = rel(0.7)),
         panel.spacing.x = unit(0.01, "cm"),
         panel.spacing.y = unit(0.1, "cm")) +
-  scale_fill_viridis_c(option = "inferno",
+  scale_fill_gradientn(colors = pal,
+                       aesthetics = c("color","fill"),
                        limits = c(-0.05,0.38),
-                       label = scales::percent, 
-                       name = "3-month annualized (annualized rate)") +
+                       label = scales::percent,
+                       name = "3-month annualized rate") +
   facet_geo(~GEO_Name)
 ```
 
@@ -146,8 +152,8 @@ mychart <- function(yy = 2020, mm = 4){
     geom_point() +
     geom_segment(aes(xend = hpa3_lag3, yend = GEO_Name)) +
     geom_label(aes(label = GEO_Name), 
-               size = rel(2), 
-               label.padding = unit(0.1,"lines"),
+               size = rel(3), 
+               label.padding = unit(0.15,"lines"),
                fontface = "bold",
                fill = "gray10") +
     scale_x_continuous(labels = scales::percent_format(accuracy = 1),
@@ -165,10 +171,11 @@ mychart <- function(yy = 2020, mm = 4){
         panel.grid.major.y = element_blank(),
         axis.text.y =  element_blank(),
         axis.ticks.y = element_blank()) +
-    scale_color_viridis_c(option = "inferno",
+  scale_fill_gradientn(colors = pal,
+                       aesthetics = c("color","fill"),
                        limits = c(-0.05,0.38),
-                       label = scales::percent, 
-                       name = "3-month annualized (annualized rate)")
+                       label = scales::percent,
+                       name = "3-month annualized rate")
  
 }
 
@@ -200,8 +207,8 @@ a <- ggplot(data = dts, aes(x = hpa3,
     geom_point() +
     geom_segment(aes(xend = hpa3_lag3, yend = GEO_Name)) +
     geom_label(aes(label = GEO_Name), 
-               size = rel(2), 
-               label.padding = unit(0.1,"lines"),
+               size = rel(3), 
+               label.padding = unit(0.15,"lines"),
                fontface = "bold",
                fill = "gray10") +
     scale_x_continuous(labels = scales::percent_format(accuracy = 1),
@@ -219,12 +226,13 @@ a <- ggplot(data = dts, aes(x = hpa3,
         panel.grid.major.y = element_blank(),
         axis.text.y =  element_blank(),
         axis.ticks.y = element_blank()) +
-    scale_color_viridis_c(option = "inferno",
+  scale_fill_gradientn(colors = pal,
+                       aesthetics = c("color","fill"),
                        limits = c(-0.05,0.38),
-                       label = scales::percent, 
-                       name = "3-month annualized (annualized rate)")
+                       label = scales::percent,
+                       name = "3-month annualized rate")
 
-animate(a + transition_states(date), nframes = 184, end_pause = 30, width = 740, height = 1000, fps = 15)
+animate(a + transition_states(date), nframes = 184, end_pause = 60, width = 740, height = 1000, fps = 15)
 
 gganimate::anim_save(here("docs/assets/fmhpi_allstates.gif"))
 
@@ -245,27 +253,24 @@ dts3 <- dt %>%
 
 ac <- dts3 %>% 
   ggplot(aes(y = hpa3, x = date, fill =  hpa3)) +
-  geom_col(alpha = 0.5) +
-  geom_path() +
-  geom_point() +
+  geom_col(alpha = 0.5, show.legend = FALSE) +
+  geom_path(show.legend = FALSE) +
+  geom_point(show.legend = FALSE) +
   geom_text(data = . %>% filter(date == max(date)),
             nudge_y = 0.02, fontface = "bold", size = 4,
             aes(label = GEO_Name)) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1),
                      limits = c(-0.1, 0.4), 
-                     breaks = c(-0.1, 0.4, 0.1),
+                     breaks = c(-0.1, 0.4, 0.05),
                      position = "right") +
-  labs(x = NULL,
-       y = "3-month annualized % change",
-       title = "House Price Growth (USA)",
-       caption = "Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman",
-       subtitle = "{closest_state}") +
-  theme(legend.position = "top", 
-        legend.direction = "horizontal",
-        legend.key.width = unit(2, "cm")) +
-  scale_color_viridis_c(option = "inferno") +
-  scale_fill_viridis_c(option = "inferno",
-                       name = "3-month growth (annualized rate)")
+  scale_fill_gradientn(colors = pal,
+                       aesthetics = c("color","fill"),
+                       limits = c(-0.05,0.38)) +
+  labs(x = NULL, y = NULL,
+       title = "House Price Growth, Each US State",
+       caption = "Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman"
+       ,subtitle = paste0("{closest_state}", " 3-month annualized % change")) +
+  theme(axis.ticks.x = element_blank())
 
 animate(ac + transition_states(statef),
         nframes = 176*3, end_pause = 20, width = 740, height = 500)
