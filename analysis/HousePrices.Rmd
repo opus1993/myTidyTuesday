@@ -200,7 +200,7 @@ In October 2020, most states are experiencing a rapid acceleration in house pric
 
 Now that we’ve build individual frames, let’s watch the animation unfold:
 
-```{r}
+```{r animatedPoints, include=FALSE}
 a <- ggplot(data = dts, aes(x = hpa3,
                             y = fct_reorder(GEO_Name, hpa3), 
                             color = hpa3)) +
@@ -244,7 +244,7 @@ knitr::include_graphics("assets/fmhpi_allstates.gif", error = FALSE)
 
 Finally, we can go back to our original bar chart, and cycle through states. We've sorted states from the slowest growing in October 2020 (Hawaii HI) to the fastest (Idaho ID).
 
-```{r}
+```{r animatedBar, include=FALSE}
 dts3 <- dt %>% 
   filter(GEO_Type %in% c("State", "US"), Year > 2017) %>% 
   mutate(statef = fct_reorder2(.f = GEO_Name,
