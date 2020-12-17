@@ -1,0 +1,183 @@
+---
+title: "BackboneWatershed"
+author: "Jim Gruman"
+date: "December 16, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+David Blodgett has a growing set of tools coming together for manipulation of hydrographic data over at the `nhdplusTools` R package that accesses the US National Hydrography Dataset. In place of #TidyTuesday this week, I thought I'd explore the functions available and datasets through the vignettes that he provides at the [package website](https://usgs-r.github.io/nhdplusTools/index.html).
+
+We are going to take a closer look at Iowa's Backbone State Park, which is marking it's 100th year in 2020.
+
+```{r setup}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	fig.height = 7.402,
+	fig.width = 12,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	cache.lazy = FALSE,
+	df_print = "paged",
+	dpi = 300,
+	tidy = "styler"
+)
+```
+
+As of today, the published CRAN version of `nhdplusTools` is 0.3.16. I'm going to load the 0.4.0 dev version at the open github repo.
+
+```{r eval = FALSE}
+remotes::install_github("USGS-R/nhdplusTools")
+```
+
+As always, let's load the required packages into the namespace. My windows machine has GDAL 3.0.4 installed.
+
+```{r }
+suppressPackageStartupMessages({
+library(sf)
+library(ggspatial)
+library(cowplot)
+library(tidyverse)
+library(here)
+library(tigris)
+library(nhdplusTools)
+library(hrbrthemes)
+})
+extrafont::loadfonts(quiet = TRUE)
+
+theme_set(theme_ipsum() +
+            theme(plot.title.position = "plot"))
+
+pal <- RColorBrewer::brewer.pal(5, "Accent")
+
+```
+
+First, we will select a location of interest and query data for download. This particular point is close to [Iowa's Backbone State Park](https://www.iowadnr.gov/Places-to-Go/State-Parks/Iowa-State-Parks/ParkDetails/ParkID/610105) and the village of Dundee, Iowa.
+
+```{r}
+backbone <- st_sfc(st_point(c(-91.536627, 42.602156 )), crs = 4326)
+
+start_comid <- discover_nhdplus_id(backbone)
+```
+
+The following definitions have been used as much as possible throughout the `nhdplusTools` package:
+
+**Flowline**: The NHD name for a geometric representation of a flowing body of water, including a river or a creek.
+
+**Catchment**: A physiographic unit with zero or one inlets and one outlet, as a basin culminating in a flowpath, divide, and networks of flowpaths and divides.
+
+Let's find the nearest flowlines, and then subset by bounding box for the related catchments.
+
+```{r}
+flowline <- navigate_nldi(list(featureSource = "comid", 
+                               featureID = start_comid), 
+                          mode = "upstreamTributaries", 
+                          distance_km = 1000)
+
+subset_file <- tempfile(fileext = ".gpkg")
+
+subset <- subset_nhdplus(comids = flowline$UT$nhdplus_comid,
+                         output_file = subset_file,
+                         nhdplus_data = "download", 
+                         flowline_only = FALSE,
+                         return_data = TRUE)
+
+flowline <- subset$NHDFlowline_Network
+catchment <- subset$CatchmentSP
+waterbody <- subset$NHDWaterbody
+```
+
+The Maquoketa River rises in southeastern Fayette County just southwest of Arlington. It flows briefly northeastward, then generally southeastward through Clayton into Delaware County, through Backbone State Park and the town of Dundee. The river and its tributaries mark the border of the Driftless Area of Iowa, with the areas east of it not having been covered by ice during the last ice age. Its name derives from Maquaw-Autaw, which means "Bear River" in [Meskwaki](https://en.wikipedia.org/wiki/Fox_language).
+
+```{r}
+if (file.exists("data/ia_counties.rds")) {
+IA <-  read_rds("data/ia_counties.rds")
+} else {
+IA <- counties(state = "IA", cb = TRUE) 
+write_rds(IA, "data/ia_counties.rds")
+}
+
+sites_box <- st_make_grid(st_bbox(catchment), n = 1) 
+
+ia_map <- ggplot() +
+  geom_sf(data = IA, fill = NA, color = "gray80") +
+  geom_sf(data = sites_box, col = "black", fill = "gray60") +
+  coord_sf(datum = NA) + 
+    theme_nothing() + 
+    labs(x = NULL, y = NULL) +
+    theme(
+      panel.background = element_rect(color = "black", size=1, linetype = 1))
+```
+
+```{r}
+nicemap <- ggplot(data = flowline, aes()) +
+  annotation_map_tile(type = "osm", zoom = 10, forcedownload = FALSE) +
+  annotation_map_tile(type = "hillshade", zoom = 10, forcedownload = FALSE, alpha = 0.3) +
+  geom_sf(col = pal[5]) +
+  geom_sf(data = catchment, aes(), alpha = 0.3, color = pal[1], fill = NA) +
+  geom_sf(data = waterbody, aes(), fill = pal[2], color = pal[5]) +
+  coord_sf() +
+  labs(title = "Upper Maquoketa River Watershed", x = NULL, y = NULL,
+       caption = "Source: U.S. Geological Survey, U.S. Census Bureau \nOpenStreetMap") +
+  annotation_scale(location = "bl",style = "ticks") +
+  annotation_north_arrow(width = unit(.3,"in"), 
+                           pad_y = unit(.1, "in"),location = "br", 
+                           which_north = "true") +
+  annotate("text",
+           x = -91.51,
+           y = 42.61,
+           label = "Backbone Lake",
+           size = 4) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank()) 
+
+```
+
+```{r}
+(map_with_inset <-
+    ggdraw(nicemap) +
+    draw_plot(ia_map, x = 0.58, y = 0.7, width = .2, height = .2))
+```
+
+Let's add the school district boundary polygon and the nearby towns:
+
+```{r}
+if (file.exists("data/Starmont.rds") & file.exists("data/landmarks.rds")) {
+Starmont <- read_rds("data/Starmont.rds")
+landmarks <- read_rds("data/landmarks.rds")
+} else {
+Starmont <- school_districts(state = "IA") %>% 
+  filter(stringr::str_detect(NAME, "Starmont"))
+
+landmarks <- st_crop(landmarks(state = "IA", type = "point"), st_bbox(catchment)) %>% 
+  filter(FULLNAME %in% c("Lamont", "Dundee", "Strawberry Pt",                          "Arlington"))
+write_rds(Starmont, "data/Starmont.rds")
+write_rds(landmarks, "data/landmarks.rds")
+}
+
+nicemap +
+    geom_sf(data = Starmont, aes(), fill = pal[4], color = pal[3], alpha = 0.2) +
+  geom_sf(data = landmarks, aes()) +
+  geom_sf_label(data = landmarks, aes(label = FULLNAME), nudge_y = 0.01) +
+  labs(subtitle = "Starmont Community School District")
+
+```
+
+Adding
+
+soil types
+
+waste management permit hold
+
+elevations / topography
+
+rayshading
+
+NVDI satellite imagery
+
+
