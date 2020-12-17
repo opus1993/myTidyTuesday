@@ -1,5 +1,5 @@
 ---
-title: "BackboneWatershed"
+title: "Backbone Watershed"
 author: "Jim Gruman"
 date: "December 16, 2020"
 output:
@@ -10,7 +10,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-David Blodgett has a growing set of tools coming together for manipulation of hydrographic data over at the `nhdplusTools` R package that accesses the US National Hydrography Dataset. In place of #TidyTuesday this week, I thought I'd explore the functions available and datasets through the vignettes that he provides at the [package website](https://usgs-r.github.io/nhdplusTools/index.html).
+David Blodgett has a growing set of tools coming together for manipulation of hydrographic data in the `nhdplusTools` R package that accesses the US National Hydrography Dataset. In place of #TidyTuesday this week, I thought I'd explore the functions available and datasets through the vignettes that he provides at the [package website](https://usgs-r.github.io/nhdplusTools/index.html).
 
 We are going to take a closer look at Iowa's Backbone State Park, which is marking it's 100th year in 2020.
 
