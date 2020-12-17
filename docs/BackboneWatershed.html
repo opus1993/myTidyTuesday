@@ -13,7 +13,7 @@
 
 <meta name="date" content="2020-12-16" />
 
-<title>BackboneWatershed</title>
+<title>Backbone Watershed</title>
 
 <script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -335,7 +335,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">BackboneWatershed</h1>
+<h1 class="title toc-ignore">Backbone Watershed</h1>
 <h4 class="author">Jim Gruman</h4>
 <h4 class="date">December 16, 2020</h4>
 
@@ -453,16 +453,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreefb26c93a863f3dcc70515a55434aa58165c5bed4targetblankfb26c93a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/fb26c93a863f3dcc70515a55434aa58165c5bed4" target="_blank">fb26c93</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree7bf2aeb05be84d674d7f5d03ed8aef28f9ba6209targetblank7bf2aeba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/7bf2aeb05be84d674d7f5d03ed8aef28f9ba6209" target="_blank">7bf2aeb</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreefb26c93a863f3dcc70515a55434aa58165c5bed4targetblankfb26c93a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree7bf2aeb05be84d674d7f5d03ed8aef28f9ba6209targetblank7bf2aeba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/fb26c93a863f3dcc70515a55434aa58165c5bed4" target="_blank">fb26c93</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/7bf2aeb05be84d674d7f5d03ed8aef28f9ba6209" target="_blank">7bf2aeb</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -528,6 +528,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/7bf2aeb05be84d674d7f5d03ed8aef28f9ba6209/analysis/BackboneWatershed.Rmd" target="_blank">7bf2aeb</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-16
+</td>
+<td>
+wflow_publish(“analysis/BackboneWatershed.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/b909a9899fe9448d0f399e32fdf49bc13bdf4cdc/docs/BackboneWatershed.html" target="_blank">b909a98</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/opus1993/myTidyTuesday/blob/fb26c93a863f3dcc70515a55434aa58165c5bed4/analysis/BackboneWatershed.Rmd" target="_blank">fb26c93</a>
 </td>
 <td>
@@ -547,7 +581,7 @@ wflow_publish(“analysis/BackboneWatershed.Rmd”)
 </div>
 </div>
 </div>
-<p>David Blodgett has a growing set of tools coming together for manipulation of hydrographic data over at the <code>nhdplusTools</code> R package that accesses the US National Hydrography Dataset. In place of #TidyTuesday this week, I thought I’d explore the functions available and datasets through the vignettes that he provides at the <a href="https://usgs-r.github.io/nhdplusTools/index.html">package website</a>.</p>
+<p>David Blodgett has a growing set of tools coming together for manipulation of hydrographic data in the <code>nhdplusTools</code> R package that accesses the US National Hydrography Dataset. In place of #TidyTuesday this week, I thought I’d explore the functions available and datasets through the vignettes that he provides at the <a href="https://usgs-r.github.io/nhdplusTools/index.html">package website</a>.</p>
 <p>We are going to take a closer look at Iowa’s Backbone State Park, which is marking it’s 100th year in 2020.</p>
 <pre class="r"><code>knitr::opts_chunk$set(
     echo = TRUE,
