@@ -10,9 +10,16 @@ editor_options:
   chunk_output_type: console
 ---
 
+We are going to take a close look at Iowa's Backbone State Park, which is marking it's [100th year in 2020](https://www.iaenvironment.org/blog/iowa-environmental-voice/celebrating-iowas-state-park-legacy?fbclid=IwAR0RadWYWj-vryjPhScG74H9GeKYRD7M5xDNDc4ac700aQhME6hdHeXhkjQ), and exploring publicly available datasets available related to it. 
+
+The Maquoketa River rises in southeastern Fayette County just southwest of Arlington. It flows briefly northeastward, then generally southeastward through Clayton into Delaware County, through Backbone State Park and the town of Dundee. The river and its tributaries mark the border of the Driftless Area of Iowa, with the areas east of it not having been covered by ice during the last ice age. Its name derives from Maquaw-Autaw, which means "Bear River" in [Meskwaki](https://en.wikipedia.org/wiki/Fox_language).
+
 David Blodgett has a growing set of tools coming together for manipulation of hydrographic data in the `nhdplusTools` R package that accesses the US National Hydrography Dataset. In place of #TidyTuesday this week, I thought I'd explore the functions available and datasets through the vignettes that he provides at the [package website](https://usgs-r.github.io/nhdplusTools/index.html).
 
-We are going to take a closer look at Iowa's Backbone State Park, which is marking it's 100th year in 2020.
+[A (very) Short Introduction to R, AQP, and soilDB](http://ncss-tech.github.io/aqp/docs/)
+
+https://casoilresource.lawr.ucdavis.edu/gmap/?loc=42.66973,-91.47618,z13
+
 
 ```{r setup}
 knitr::opts_chunk$set(
@@ -29,10 +36,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-As of today, the published CRAN version of `nhdplusTools` is 0.3.16. I'm going to load the 0.4.0 dev version at the open github repo.
+As of today, the published CRAN version of `nhdplusTools` is 0.3.16. I'm going to load the 0.4.0 dev version at the open github repo. I'm also going to load the latest development version of the USGS `dataRetrieval` package.
 
 ```{r eval = FALSE}
 remotes::install_github("USGS-R/nhdplusTools")
+
+remotes::install_github("USGS-R/dataRetrieval", 
+               build_opts = c("--no-resave-data", "--no-manual"),
+               build_vignettes = TRUE)
 ```
 
 As always, let's load the required packages into the namespace. My windows machine has GDAL 3.0.4 installed.
@@ -45,8 +56,11 @@ library(cowplot)
 library(tidyverse)
 library(here)
 library(tigris)
+library(tmap)
+library(dataRetrieval)
 library(nhdplusTools)
 library(hrbrthemes)
+library(ggtext)  # for colored labels
 })
 extrafont::loadfonts(quiet = TRUE)
 
@@ -57,12 +71,29 @@ pal <- RColorBrewer::brewer.pal(5, "Accent")
 
 ```
 
-First, we will select a location of interest and query data for download. This particular point is close to [Iowa's Backbone State Park](https://www.iowadnr.gov/Places-to-Go/State-Parks/Iowa-State-Parks/ParkDetails/ParkID/610105) and the village of Dundee, Iowa.
+First, we will select a location of interest and query data for download at a [hydro-network linked data index](https://labs.waterdata.usgs.gov/about-nldi/index.html). This particular point is close to [Iowa's Backbone State Park](https://www.iowadnr.gov/Places-to-Go/State-Parks/Iowa-State-Parks/ParkDetails/ParkID/610105) and the village of Dundee, Iowa.
 
-```{r}
+```{r, warning=FALSE}
 backbone <- st_sfc(st_point(c(-91.536627, 42.602156 )), crs = 4326)
 
-start_comid <- discover_nhdplus_id(backbone)
+discover_nhdplus_id <- function(point = NULL, nldi_feature = NULL) {
+      if (!is.null(point)) {
+        coords = sf::st_coordinates(backbone)
+        comid = dataRetrieval::findNLDI(location = c(X = coords[1], 
+            Y = coords[2]))$identifier #removed origin from function
+        return(as.integer(comid))
+    }
+    else if (!is.null(nldi_feature)) {
+        nldi <- get_nldi_feature(nldi_feature)
+        return(as.integer(nldi$comid))
+    }
+    else {
+        stop("Must provide point or nldi_feature input.")
+    }
+}
+
+start_comid <- discover_nhdplus_id(point = backbone)
+
 ```
 
 The following definitions have been used as much as possible throughout the `nhdplusTools` package:
@@ -87,12 +118,13 @@ subset <- subset_nhdplus(comids = flowline$UT$nhdplus_comid,
                          flowline_only = FALSE,
                          return_data = TRUE)
 
-flowline <- subset$NHDFlowline_Network
-catchment <- subset$CatchmentSP
-waterbody <- subset$NHDWaterbody
+flowline <- subset$NHDFlowline_Network %>% st_transform(4326)
+catchment <- subset$CatchmentSP %>% st_transform(4326)
+waterbody <- subset$NHDWaterbody %>% st_transform(4326)
+
 ```
 
-The Maquoketa River rises in southeastern Fayette County just southwest of Arlington. It flows briefly northeastward, then generally southeastward through Clayton into Delaware County, through Backbone State Park and the town of Dundee. The river and its tributaries mark the border of the Driftless Area of Iowa, with the areas east of it not having been covered by ice during the last ice age. Its name derives from Maquaw-Autaw, which means "Bear River" in [Meskwaki](https://en.wikipedia.org/wiki/Fox_language).
+
 
 ```{r}
 if (file.exists("data/ia_counties.rds")) {
@@ -102,7 +134,7 @@ IA <- counties(state = "IA", cb = TRUE)
 write_rds(IA, "data/ia_counties.rds")
 }
 
-sites_box <- st_make_grid(st_bbox(catchment), n = 1) 
+sites_box <- st_make_grid(st_bbox(catchment), n = 1, crs = 4326) 
 
 ia_map <- ggplot() +
   geom_sf(data = IA, fill = NA, color = "gray80") +
@@ -110,9 +142,21 @@ ia_map <- ggplot() +
   coord_sf(datum = NA) + 
     theme_nothing() + 
     labs(x = NULL, y = NULL) +
-    theme(
-      panel.background = element_rect(color = "black", size=1, linetype = 1))
+    theme(panel.background = element_rect(color = "black", size = 1, linetype = 1))
 ```
+
+USGS survey locations for streamflow and water quality measures since the late 1930s
+
+```{r}
+sf_NWIS_IA <- whatNWISdata(stateCd = "IA")  %>% 
+  filter(!is.na(dec_long_va), !is.na(dec_lat_va)) %>%
+  st_as_sf(coords = c("dec_long_va","dec_lat_va"),
+           crs = 4326)  %>% 
+  st_intersection(st_union(catchment))
+
+
+```
+
 
 ```{r}
 nicemap <- ggplot(data = flowline, aes()) +
@@ -121,8 +165,10 @@ nicemap <- ggplot(data = flowline, aes()) +
   geom_sf(col = pal[5]) +
   geom_sf(data = catchment, aes(), alpha = 0.3, color = pal[1], fill = NA) +
   geom_sf(data = waterbody, aes(), fill = pal[2], color = pal[5]) +
+  geom_sf(data = sf_NWIS_IA, aes(), color = "red", size = 2) + 
   coord_sf() +
-  labs(title = "Upper Maquoketa River Watershed", x = NULL, y = NULL,
+  labs(title = "Backbone State Park Watershed Area", x = NULL, y = NULL,
+       subtitle = "USGS National Water Information System <span style = 'color:red;'>Survey Sites</span>",
        caption = "Source: U.S. Geological Survey, U.S. Census Bureau \nOpenStreetMap") +
   annotation_scale(location = "bl",style = "ticks") +
   annotation_north_arrow(width = unit(.3,"in"), 
@@ -134,15 +180,41 @@ nicemap <- ggplot(data = flowline, aes()) +
            label = "Backbone Lake",
            size = 4) +
   theme(axis.text.x = element_blank(),
-        axis.text.y = element_blank()) 
+        axis.text.y = element_blank(),
+        plot.subtitle = element_textbox_simple(
+      size = 13,
+      lineheight = 1
+    )) 
 
 ```
 
 ```{r}
 (map_with_inset <-
     ggdraw(nicemap) +
-    draw_plot(ia_map, x = 0.58, y = 0.7, width = .2, height = .2))
+    draw_plot(ia_map, x = 0.58, y = 0.7, width = .15, height = .15))
 ```
+
+```{r fig.height=2.5, fig.width=4}
+tmap_mode("view")
+
+tm <- tmap_options(basemaps = "Esri.WorldTopoMap") +
+tm_shape(st_union(catchment)) +
+   tm_borders("black", lwd = 0.5) +
+tm_shape(select(sf_NWIS_IA, station_nm, Source = site_tp_cd,
+                begin_date, end_date, count_nu),
+         name =  "USGS NWIS Locations") +   
+  tm_symbols(col = "Source", 
+             labels = c("Wells","Springs","Streams"),
+             popup.vars = c("station_nm","begin_date","end_date","count_nu")) 
+
+tmap::tmap_leaflet(tm) 
+
+```
+
+
+Starmont
+households
+family demographics / school age kids
 
 Let's add the school district boundary polygon and the nearby towns:
 
@@ -152,10 +224,13 @@ Starmont <- read_rds("data/Starmont.rds")
 landmarks <- read_rds("data/landmarks.rds")
 } else {
 Starmont <- school_districts(state = "IA") %>% 
+  st_transform(crs = 4326) %>% 
   filter(stringr::str_detect(NAME, "Starmont"))
 
-landmarks <- st_crop(landmarks(state = "IA", type = "point"), st_bbox(catchment)) %>% 
-  filter(FULLNAME %in% c("Lamont", "Dundee", "Strawberry Pt",                          "Arlington"))
+landmarks <- landmarks(state = "IA", type = "point") %>% 
+  st_transform(crs = 4326) %>% 
+  st_crop(st_union(catchment)) %>% 
+  filter(FULLNAME %in% c("Lamont", "Dundee", "Strawberry Pt",                          "Arlington", "Aurora"))
 write_rds(Starmont, "data/Starmont.rds")
 write_rds(landmarks, "data/landmarks.rds")
 }
@@ -164,13 +239,28 @@ nicemap +
     geom_sf(data = Starmont, aes(), fill = pal[4], color = pal[3], alpha = 0.2) +
   geom_sf(data = landmarks, aes()) +
   geom_sf_label(data = landmarks, aes(label = FULLNAME), nudge_y = 0.01) +
-  labs(subtitle = "Starmont Community School District")
+  labs(title = "Starmont Community School District",
+       subtitle = "with Backbone State Park Watershed Area")
 
 ```
 
+
+```{r eval=FALSE}
+sf_NWIS_IA %>% 
+waterquality <-  readWQPdata(siteid = "USGS-424057091320001")
+
+
+```
+
+
 Adding
 
-soil types
+soil types 
+  [limestone karst](https://en.wikipedia.org/wiki/Karst) features
+
+Karst formations are cavernous and therefore have high rates of permeability, resulting in reduced opportunity for contaminants to be filtered. Groundwater in karst areas is just as easily polluted as surface streams. Water supplies from wells in karst topography may be unsafe, as the water may have run unimpeded from a sinkhole in a cattle pasture, through a cave and to the well, bypassing the normal filtering that occurs in a porous aquifer. In the past, sinkholes were often used as farmstead or community trash dumps. Overloaded or malfunctioning septic tanks in karst landscapes may dump raw sewage directly into underground channels.
+
+[National Register of Historic Places application](https://npgallery.nps.gov/NRHP/GetAsset/NRHP/64500146_text?fbclid=IwAR1TXw9qmmqs5K7QfJ05dP2PQHyEKmwAuDGq7M3kkM_ms3wILdHaQ217FgA)
 
 waste management permit hold
 
@@ -180,4 +270,39 @@ rayshading
 
 NVDI satellite imagery
 
+Highway 3 roundabout / roads from 
 
+Property Tax Assessments
+https://iowalandrecords.org/
+
+
+
+Soils
+
+[UC Davis Soil Resource](https://casoilresource.lawr.ucdavis.edu/)
+
+Iframe version
+<iframe width="560" height="315" src="https://casoilresource.lawr.ucdavis.edu/gmap/?loc=42.66973,-91.47618,z13" frameborder="0" allowfullscreen></iframe>
+
+Soils triangle
+
+https://en.wikipedia.org/wiki/Soil_texture
+
+https://www.nrcs.usda.gov/Internet/FSE_DOCUMENTS/nrcs142p2_051232.pdf
+
+https://en.wikipedia.org/wiki/USDA_soil_taxonomy
+
+https://www.researchgate.net/profile/Alberto_Lazaro-Lopez/publication/306410569/figure/fig1/AS:398574551617537@1472038986790/Soil-texture-triangle-with-BEI-values-obtained-from-the-clay-silt-sand-fractions.png
+
+Markdown tag version
+![UC Davis Soil Resource](https://casoilresource.lawr.ucdavis.edu/gmap/?loc=42.66973,-91.47618,z13)
+
+
+University of Iowa well locations
+
+
+----
+
+
+
+[USGS R Packages Training Course](https://owi.usgs.gov/R/training-curriculum/usgs-packages/) by [Lindsay Platt](https://twitter.com/LindsayRCPlatt)
