@@ -362,7 +362,7 @@ backbone_rgb_contrast <- scales::rescale(backbone_rgb_array,to = c(0,1))
 
 WORK ON THE MASK --- WILL A RASTER MERGE WORK WITH SP OBJECTS?
 
-
+Can i make blue lakes?  add the flow lines?  add a park boundary?
 
 
 

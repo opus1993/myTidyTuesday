@@ -5,5 +5,7 @@
 *.rds
 *.zip
 *.csv
-*/data/*
-/rosm.cache/*
+/data
+/rosm.cache
+*.TIF
+*.hgt
