@@ -25,7 +25,7 @@ https://casoilresource.lawr.ucdavis.edu/gmap/?loc=42.66973,-91.47618,z13
 knitr::opts_chunk$set(
 	echo = TRUE,
 	fig.height = 7.402,
-	fig.width = 12,
+#	fig.width = 12,
 	message = FALSE,
 	warning = FALSE,
 	cache = FALSE,
@@ -38,7 +38,7 @@ knitr::opts_chunk$set(
 
 As of today, the published CRAN version of `nhdplusTools` is 0.3.16. I'm going to load the 0.4.0 dev version at the open github repo. I'm also going to load the latest development version of the USGS `dataRetrieval` package.
 
-```{r eval = FALSE}
+```{r install_from_github, eval = FALSE}
 remotes::install_github("USGS-R/nhdplusTools")
 
 remotes::install_github("USGS-R/dataRetrieval", 
@@ -48,7 +48,7 @@ remotes::install_github("USGS-R/dataRetrieval",
 
 As always, let's load the required packages into the namespace. My windows machine has GDAL 3.0.4 installed.
 
-```{r }
+```{r packages}
 suppressPackageStartupMessages({
 library(sf)
 library(ggspatial)
@@ -60,6 +60,7 @@ library(tmap)
 library(dataRetrieval)
 library(nhdplusTools)
 library(hrbrthemes)
+library(scales)
 library(ggtext)  # for colored labels
 })
 extrafont::loadfonts(quiet = TRUE)
@@ -73,7 +74,7 @@ pal <- RColorBrewer::brewer.pal(5, "Accent")
 
 First, we will select a location of interest and query data for download at a [hydro-network linked data index](https://labs.waterdata.usgs.gov/about-nldi/index.html). This particular point is close to [Iowa's Backbone State Park](https://www.iowadnr.gov/Places-to-Go/State-Parks/Iowa-State-Parks/ParkDetails/ParkID/610105) and the village of Dundee, Iowa.
 
-```{r, warning=FALSE}
+```{r set_comid, warning=FALSE}
 backbone <- st_sfc(st_point(c(-91.536627, 42.602156 )), crs = 4326)
 
 discover_nhdplus_id <- function(point = NULL, nldi_feature = NULL) {
@@ -104,7 +105,7 @@ The following definitions have been used as much as possible throughout the `nhd
 
 Let's find the nearest flowlines, and then subset by bounding box for the related catchments.
 
-```{r}
+```{r set_catchment_flowline_waterbody}
 flowline <- navigate_nldi(list(featureSource = "comid", 
                                featureID = start_comid), 
                           mode = "upstreamTributaries", 
@@ -126,7 +127,7 @@ waterbody <- subset$NHDWaterbody %>% st_transform(4326)
 
 
 
-```{r}
+```{r ia_map}
 if (file.exists("data/ia_counties.rds")) {
 IA <-  read_rds("data/ia_counties.rds")
 } else {
@@ -147,7 +148,7 @@ ia_map <- ggplot() +
 
 USGS survey locations for streamflow and water quality measures since the late 1930s
 
-```{r}
+```{r survey_points}
 sf_NWIS_IA <- whatNWISdata(stateCd = "IA")  %>% 
   filter(!is.na(dec_long_va), !is.na(dec_lat_va)) %>%
   st_as_sf(coords = c("dec_long_va","dec_lat_va"),
@@ -158,19 +159,17 @@ sf_NWIS_IA <- whatNWISdata(stateCd = "IA")  %>%
 ```
 
 
-```{r}
+```{r nicemap1}
 nicemap <- ggplot(data = flowline, aes()) +
-  annotation_map_tile(type = "osm", zoom = 10, forcedownload = FALSE) +
-  annotation_map_tile(type = "hillshade", zoom = 10, forcedownload = FALSE, alpha = 0.3) +
+  annotation_map_tile(type = "hikebike", zoom = 10, forcedownload = FALSE) +
   geom_sf(col = pal[5]) +
   geom_sf(data = catchment, aes(), alpha = 0.3, color = pal[1], fill = NA) +
   geom_sf(data = waterbody, aes(), fill = pal[2], color = pal[5]) +
-  geom_sf(data = sf_NWIS_IA, aes(), color = "red", size = 2) + 
-  coord_sf() +
-  labs(title = "Backbone State Park Watershed Area", x = NULL, y = NULL,
-       subtitle = "USGS National Water Information System <span style = 'color:red;'>Survey Sites</span>",
-       caption = "Source: U.S. Geological Survey, U.S. Census Bureau \nOpenStreetMap") +
-  annotation_scale(location = "bl",style = "ticks") +
+  coord_sf(expand = FALSE, label_axes = "----") +
+  labs(title = "Headwaters of the Maquoketa River", x = NULL, y = NULL,
+       subtitle = "<span style = 'color:#386CB0;'>Flowlines</span> and <span style = 'color:#7FC97F;'>Catchments</span> at
+       <span style = 'color:#ffffbf;'>Iowa Highways 3, 13, and 187 </span>",
+       caption = "Source: U.S. Geological Survey, U.S. Census Bureau, OpenStreetMap \nVisual: @jim_gruman") +
   annotation_north_arrow(width = unit(.3,"in"), 
                            pad_y = unit(.1, "in"),location = "br", 
                            which_north = "true") +
@@ -179,31 +178,32 @@ nicemap <- ggplot(data = flowline, aes()) +
            y = 42.61,
            label = "Backbone Lake",
            size = 4) +
-  theme(axis.text.x = element_blank(),
+  theme(plot.background = element_rect(fill = "black"),
+        text = element_text(color = "white"),
+        axis.text.x = element_blank(),
         axis.text.y = element_blank(),
         plot.subtitle = element_textbox_simple(
-      size = 13,
+      size = 13, family = hrbrthemes::font_an, face = "bold",
       lineheight = 1
     )) 
 
 ```
 
-```{r}
+```{r nicemap_w_inset}
 (map_with_inset <-
     ggdraw(nicemap) +
-    draw_plot(ia_map, x = 0.58, y = 0.7, width = .15, height = .15))
+    draw_plot(ia_map, x = 0.59, y = 0.7, width = .15, height = .15))
 ```
 
-```{r fig.height=2.5, fig.width=4}
+```{r tmap, fig.height=2.5, fig.width=4, fig.cap="USGS NWIS Data Survey Locations 1937-today"}
 tmap_mode("view")
 
 tm <- tmap_options(basemaps = "Esri.WorldTopoMap") +
 tm_shape(st_union(catchment)) +
    tm_borders("black", lwd = 0.5) +
 tm_shape(select(sf_NWIS_IA, station_nm, Source = site_tp_cd,
-                begin_date, end_date, count_nu),
-         name =  "USGS NWIS Locations") +   
-  tm_symbols(col = "Source", 
+                begin_date, end_date, count_nu)) +   
+  tm_symbols(col = "Source", size = 0.5,
              labels = c("Wells","Springs","Streams"),
              popup.vars = c("station_nm","begin_date","end_date","count_nu")) 
 
@@ -218,10 +218,17 @@ family demographics / school age kids
 
 Let's add the school district boundary polygon and the nearby towns:
 
-```{r}
-if (file.exists("data/Starmont.rds") & file.exists("data/landmarks.rds")) {
+[Iowa Public Lands](https://geodata.iowa.gov/datasets/iowadnr::public-lands-used-for-conservation-and-recreation-in-iowa)
+
+
+```{r Starmont_nicemap}
+if (file.exists("data/Starmont.rds") &
+    file.exists("data/landmarks.rds") &
+    file.exists("data/Backbone_sf.rds")
+    ) {
 Starmont <- read_rds("data/Starmont.rds")
 landmarks <- read_rds("data/landmarks.rds")
+backbone_sf <- read_rds("data/Backbone_sf.rds")
 } else {
 Starmont <- school_districts(state = "IA") %>% 
   st_transform(crs = 4326) %>% 
@@ -231,24 +238,164 @@ landmarks <- landmarks(state = "IA", type = "point") %>%
   st_transform(crs = 4326) %>% 
   st_crop(st_union(catchment)) %>% 
   filter(FULLNAME %in% c("Lamont", "Dundee", "Strawberry Pt",                          "Arlington", "Aurora"))
+
+data_url <- "https://opendata.arcgis.com/datasets/2e8be3c67288413f903276eea17cea43_0.geojson?where=TYPE%20%3D%20'State%20Park'%20AND%20NameUnit%20%3D%20'Backbone%20State%20Park'"
+
+backbone_sf <- rgdal::readOGR(data_url) %>% 
+  st_as_sf(crs = 4326)
+
 write_rds(Starmont, "data/Starmont.rds")
 write_rds(landmarks, "data/landmarks.rds")
+write_rds(backbone_sf, "data/Backbone_sf.rds")
 }
 
 nicemap +
-    geom_sf(data = Starmont, aes(), fill = pal[4], color = pal[3], alpha = 0.2) +
+  geom_sf(data = Starmont, aes(), fill = pal[4], color = pal[3], alpha = 0.2) +
+  geom_sf(data = backbone_sf, aes(), fill = NA, color = pal[2]) +
   geom_sf(data = landmarks, aes()) +
   geom_sf_label(data = landmarks, aes(label = FULLNAME), nudge_y = 0.01) +
-  labs(title = "Starmont Community School District",
-       subtitle = "with Backbone State Park Watershed Area")
+  labs(title = "Starmont Community School District") 
 
 ```
 
 
-```{r eval=FALSE}
-sf_NWIS_IA %>% 
-waterquality <-  readWQPdata(siteid = "USGS-424057091320001")
+Classic Topographic Map of Backbone, hosted by **Iowa State University's Iowa Geographic Map Server**
 
+<iframe width="300" height="200" frameborder="0" scrolling="no" allowfullscreen src="https://arcg.is/0jn89G1"></iframe>
+
+Headwaters of the Maquoketa River, w/ Fenchel Creek,  Lamont Creek, Bruce Creek, 
+
+Lineated Inlier, Lineated Ridges, Sinkholes
+
+<iframe width="300" height="200" frameborder="0" scrolling="no" allowfullscreen src="https://arcg.is/1CvyyO"></iframe>
+
+[Fishing in the area](https://www.iowadnr.gov/Portals/idnr/uploads/fish/maps/trs28.pdf)
+
+Topography download and visualize with Raster Elevation Data via `elevatr` package
+
+```{r elevations}
+library(raster)
+library(sp)
+library(elevatr)
+
+if (file.exists(here("data/backbone_elevations.rds"))) {
+backbone_elevations <- read_rds(here("data/backbone_elevations.rds"))
+} else {
+backbone_elevations <- backbone_sf %>% 
+   as("Spatial") %>% 
+   get_elev_raster(locations = ., z = 14, clip = "bbox", expand = 0.02) 
+write_rds(backbone_elevations, here("data/backbone_elevations.rds"))
+}
+
+bb_df <- as.data.frame(as(backbone_elevations, "Raster"), xy = TRUE) %>% na.omit() 
+
+ggplot(bb_df) +
+  geom_raster(aes(x = x, y = y, fill = bb_df[,3]*3.28084)) +
+  geom_sf(data = flowline, col = pal[5]) +
+  geom_sf(data = st_union(catchment), aes(), color = "gray10", fill = NA) +
+  geom_sf(data = waterbody, aes(), fill = pal[2], color = pal[5]) +
+  geom_sf(data = landmarks, aes(), color = "gray10") +
+  geom_sf_label(data = landmarks, aes(label = FULLNAME)) +
+  scale_fill_distiller(palette = "BrBG", direction = -1,
+                       values = c(0,0.65,1)) +
+  coord_sf(label_axes = "----", expand = FALSE) +
+  labs(title = "Backbone State Park Watershed Area", fill = "",
+       subtitle = "Elevation in feet", x = NULL, y = NULL,
+       caption = "3DEP data courtesy of the U.S. Geological Survey") +
+  theme(legend.position = c(0.9,0.25),
+        legend.background = element_rect(color = "white")) +
+  annotation_scale(location = "bl",style = "ticks", plot_unit = "m") +
+  annotation_north_arrow(width = unit(.3,"in"), 
+                           pad_y = unit(.1, "in"),location = "br", 
+                           which_north = "true") 
+
+```
+
+
+Overlay satellite image onto 3d Rendering of backbone
+https://earthexplorer.usgs.gov/
+
+Tyler Morgan Wall's step by step instructions
+https://www.tylermw.com/a-step-by-step-guide-to-making-3d-maps-with-satellite-imagery-in-r/
+
+30-meter [Shuttle Radar Topography Mission](https://www2.jpl.nasa.gov/srtm/)
+
+Should we consider downloading Sentinel imagery instead for a better image?
+
+```{r }
+library(rayshader)
+library(rayrender)
+
+backbone_r <- raster::raster(here("data/LC08_L1TP_025031_20200905_20200918_01_T1_B4.TIF"))
+backbone_g <- raster::raster(here("data/LC08_L1TP_025031_20200905_20200918_01_T1_B3.TIF"))
+backbone_b <- raster::raster(here("data/LC08_L1TP_025031_20200905_20200918_01_T1_B2.TIF"))
+
+backbone_rgb <- sqrt(raster::stack(backbone_r, backbone_g, backbone_b))
+
+backbone_elevations_utm <- raster::projectRaster(backbone_elevations, crs = crs(backbone_r), method = "bilinear")
+
+backbone_rgb_crop <- raster::crop(backbone_rgb, raster::extent(backbone_elevations_utm))
+
+names(backbone_rgb_crop) <- c("r","g","b")
+
+backbone_r_crop <- rayshader::raster_to_matrix(backbone_rgb_crop$r)
+backbone_g_crop <- rayshader::raster_to_matrix(backbone_rgb_crop$g)
+backbone_b_crop <- rayshader::raster_to_matrix(backbone_rgb_crop$b)
+
+elmat <- raster_to_matrix(backbone_elevations)
+
+plot(backbone_elevations)
+
+####
+
+backbone_rgb_array <- array(0, dim = c(nrow(backbone_r_crop),ncol(backbone_r_crop),3))
+
+backbone_rgb_array[,,1] <- backbone_r_crop/255 # Red Layer
+backbone_rgb_array[,,2] <- backbone_g_crop/255 # Green Layer
+backbone_rgb_array[,,3] <- backbone_b_crop/255 # Blue Layer
+
+backbone_rgb_array = aperm(backbone_rgb_array, c(2,1,3))
+
+backbone_rgb_contrast <- scales::rescale(backbone_rgb_array,to = c(0,1))
+
+```
+
+WORK ON THE MASK --- WILL A RASTER MERGE WORK WITH SP OBJECTS?
+
+
+
+
+
+```{r eval=FALSE}
+plot_3d(backbone_rgb_contrast, elmat, windowsize = c(1100,900),
+        zscale = 0.5, shadowdepth = -50, zoom = 0.4, phi = 45,
+        theta = -30, fov = 70, background = "#F2E1D0",
+        shadowcolor = "#523E2B")
+
+render_snapshot(title_text = "Backbone State Park, Iowa | Imagery: Landsat 8 | DEM: 10m SRTM",
+                  title_bar_color = "#1f5214", 
+                  title_color = "white", 
+                  title_bar_alpha = 1)
+```
+
+
+```{r eval = FALSE}
+
+angles <- seq(0,360,length.out = 1441)[-1]
+
+for (i in 1:1440) {
+  render_camera(theta = -30 + angles[i])
+  render_snapshot(filename = sprintf("backbone%i.png", i), 
+                  title_text = "Backbone State Park, Iowa | Imagery: Landsat 8 | DEM: 10m SRTM",
+                  title_bar_color = "#1f5214", title_color = "white", title_bar_alpha = 1)
+}
+
+rgl::rgl.close()
+
+system("ffmpeg -framerate 60 -i backbone%d.png -pix_fmt yuv420p backbone.mp4")
+
+# cleanup
+file.remove(list.files(pattern = "png$", full.names = TRUE))
 
 ```
 
@@ -260,39 +407,34 @@ soil types
 
 Karst formations are cavernous and therefore have high rates of permeability, resulting in reduced opportunity for contaminants to be filtered. Groundwater in karst areas is just as easily polluted as surface streams. Water supplies from wells in karst topography may be unsafe, as the water may have run unimpeded from a sinkhole in a cattle pasture, through a cave and to the well, bypassing the normal filtering that occurs in a porous aquifer. In the past, sinkholes were often used as farmstead or community trash dumps. Overloaded or malfunctioning septic tanks in karst landscapes may dump raw sewage directly into underground channels.
 
+[USDA NRCS Soil Survey](https://websoilsurvey.sc.egov.usda.gov/App/WebSoilSurvey.aspx)
+
 [National Register of Historic Places application](https://npgallery.nps.gov/NRHP/GetAsset/NRHP/64500146_text?fbclid=IwAR1TXw9qmmqs5K7QfJ05dP2PQHyEKmwAuDGq7M3kkM_ms3wILdHaQ217FgA)
 
 waste management permit hold
-
-elevations / topography
-
-rayshading
 
 NVDI satellite imagery
 
 Highway 3 roundabout / roads from 
 
 Property Tax Assessments
-https://iowalandrecords.org/
+
+[Iowa Land Records](https://iowalandrecords.org/)
 
 
 
 Soils
 
+![Soil Triangle](https://www.researchgate.net/profile/Alberto_Lazaro-Lopez/publication/306410569/figure/fig1/AS:398574551617537@1472038986790/Soil-texture-triangle-with-BEI-values-obtained-from-the-clay-silt-sand-fractions.png)
+
 [UC Davis Soil Resource](https://casoilresource.lawr.ucdavis.edu/)
 
-Iframe version
 <iframe width="560" height="315" src="https://casoilresource.lawr.ucdavis.edu/gmap/?loc=42.66973,-91.47618,z13" frameborder="0" allowfullscreen></iframe>
 
-Soils triangle
+[Soils triangle](https://en.wikipedia.org/wiki/Soil_texture)
 
-https://en.wikipedia.org/wiki/Soil_texture
+[USDA NRCS Soils Guidebook](https://www.nrcs.usda.gov/Internet/FSE_DOCUMENTS/nrcs142p2_051232.pdf)
 
-https://www.nrcs.usda.gov/Internet/FSE_DOCUMENTS/nrcs142p2_051232.pdf
-
-https://en.wikipedia.org/wiki/USDA_soil_taxonomy
-
-https://www.researchgate.net/profile/Alberto_Lazaro-Lopez/publication/306410569/figure/fig1/AS:398574551617537@1472038986790/Soil-texture-triangle-with-BEI-values-obtained-from-the-clay-silt-sand-fractions.png
 
 Markdown tag version
 ![UC Davis Soil Resource](https://casoilresource.lawr.ucdavis.edu/gmap/?loc=42.66973,-91.47618,z13)
@@ -300,9 +442,6 @@ Markdown tag version
 
 University of Iowa well locations
 
-
 ----
-
-
 
 [USGS R Packages Training Course](https://owi.usgs.gov/R/training-curriculum/usgs-packages/) by [Lindsay Platt](https://twitter.com/LindsayRCPlatt)
