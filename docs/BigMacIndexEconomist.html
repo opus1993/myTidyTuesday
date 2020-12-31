@@ -453,16 +453,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec2f429c64a3e1efc5ce9c07953eeda7ec58eb9dftargetblankc2f429ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/c2f429c64a3e1efc5ce9c07953eeda7ec58eb9df" target="_blank">c2f429c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree48d6a80f3fd3ddfc28875c1c601830760d278c38targetblank48d6a80a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/48d6a80f3fd3ddfc28875c1c601830760d278c38" target="_blank">48d6a80</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec2f429c64a3e1efc5ce9c07953eeda7ec58eb9dftargetblankc2f429ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree48d6a80f3fd3ddfc28875c1c601830760d278c38targetblank48d6a80a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/c2f429c64a3e1efc5ce9c07953eeda7ec58eb9df" target="_blank">c2f429c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/48d6a80f3fd3ddfc28875c1c601830760d278c38" target="_blank">48d6a80</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -472,6 +472,9 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    rosm.cache/
+
+Untracked files:
+    Untracked:  figure/
 
 Unstaged changes:
     Modified:   analysis/BackboneWatershed.Rmd
@@ -513,6 +516,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/48d6a80f3fd3ddfc28875c1c601830760d278c38/analysis/BigMacIndexEconomist.Rmd" target="_blank">48d6a80</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-31
+</td>
+<td>
+wflow_publish(“analysis/BigMacIndexEconomist.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/aff0b0ae5bd924766a3904b8b07831d27b3f39ab/docs/BigMacIndexEconomist.html" target="_blank">aff0b0a</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-31
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -738,14 +775,20 @@ df_mac_index_refs &lt;- map_df(2000:2019, ~ index_it(.x))</code></pre>
     legend.position = &quot;none&quot;
   )
 
-animate(index_plots,
+index_anim &lt;- animate(index_plots,
   nframes = 150,
   fps = 5, detail = 5, end_pause = 25,
   width = 1150, height = 740,
   device = &quot;png&quot;, type = &quot;cairo&quot;,
   renderer = gifski_renderer()
+)
+
+anim_save(
+  filename = &quot;BigMacIndex.gif&quot;,
+  path = here::here(&quot;docs&quot;, &quot;assets&quot;)
 )</code></pre>
-<p><img src="figure/BigMacIndexEconomist.Rmd/plot-and-animation-1.gif" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/BigMacIndex.gif&quot;, error = FALSE)</code></pre>
+<p><img src="assets/BigMacIndex.gif" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
