@@ -1,0 +1,221 @@
+---
+title: "Big Mac Index"
+author: "Jim Gruman"
+date: "December 31, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+> Derived from [Cedric Scherer's excellent post](https://github.com/Z3tt/TidyTuesday/tree/master/plots/2020_52) which in turn was inspired by [Robert Kosara](https://twitter.com/eagereyes)'s [eagereyes YouTube video](https://t.co/Nm6MdcBOyp?amp=1)
+
+Our goal here is to explore *The Economist's* data behind their recurring [Big Mac Index story on global currencies](https://www.economist.com/news/2020/07/15/the-big-mac-index).
+
+<iframe height="NaN" src="https://infographics.economist.com/2018/big-mac/index.html" data-size="full-width" style="height: 766px;"></iframe>
+
+```{r setup}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	fig.height = 7.402,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	cache.lazy = FALSE,
+	df_print = "paged",
+	dpi = 300,
+	tidy = "styler"
+)
+```
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ggrepel)
+library(ggtext)
+library(hrbrthemes)
+extrafont::loadfonts(quiet = TRUE)
+
+theme_set(hrbrthemes::theme_modern_rc() +
+            theme(plot.title.position = "plot", 
+                  plot.caption.position = "plot"))
+
+library(gganimate)
+library(here)
+```
+
+We will load the latest data directly from the #TidyTuesday github repo.
+
+```{r load_data}
+source_page  <- tidytuesdayR::tt_load("2020-12-22")
+
+df_mac_raw <- source_page$`big-mac`
+```
+
+```{r prep-data}
+df_mac <- 
+  df_mac_raw %>% 
+  mutate(year = year(date)) %>% 
+  select(date, year, iso_a3, currency_code, name, dollar_price) %>% 
+  group_by(iso_a3, name, year) %>% 
+  summarize(price = mean(dollar_price)) %>% 
+  group_by(iso_a3) %>% 
+  filter(n() == 21)  # use only countries with complete data sets
+
+highlights <- c("EUZ", "CHE", "CAN", "MEX", "BRA", "ARG", "GBR", "USA")
+n <- length(highlights)
+```
+
+## Animation
+
+```{r prep-index-plots-animation}
+index_it <- function(y) {
+  countries <- 
+    df_mac %>% 
+    filter(year == y) %>% 
+    pull(iso_a3)
+  
+df_mac_indexed <- 
+    df_mac %>% 
+    group_by(iso_a3) %>%
+    filter(iso_a3 %in% countries) %>% 
+    mutate(
+      ref_year = y,
+      price_index = price[which(year == y)],
+      price_rel = price - price_index,
+      group = if_else(iso_a3 %in% highlights, iso_a3, "other"),
+      group = as.factor(group)
+    ) %>% 
+    mutate(
+      group = fct_relevel(group, "other", after = Inf),
+      name_lab = if_else(year == 2020, name, NA_character_)
+    ) %>% 
+    ungroup()
+}
+
+df_mac_index_refs <- map_df(2000:2019, ~ index_it(.x))
+```
+
+```{r plot-and-animation}
+index_plots <- 
+  ggplot(df_mac_index_refs %>% filter(group != "other"), 
+         aes(year, price_rel, group = iso_a3), show.legend = FALSE) + 
+  geom_vline(
+    xintercept = seq(2000, 2020, by = 5),
+    color = "grey91", 
+    size = .6
+  ) +
+  geom_segment(
+    data = tibble(y = seq(-6, 6, by = 2), x1 = 2000, x2 = 2020),
+    aes(x = x1, xend = x2, y = y, yend = y),
+    inherit.aes = FALSE,
+    color = "grey91",
+    size = .6
+  ) +
+  geom_segment(
+    data = tibble(y = 0, x1 = 2000, x2 = 2020),
+    aes(x = x1, xend = x2, y = y, yend = y),
+    inherit.aes = FALSE,
+    color = "grey40",
+    size = .5
+  ) +
+  geom_hline(
+    aes(yintercept = 0), 
+    color = "grey90",
+    linetype = "dotted"
+  ) + 
+  geom_vline(
+    aes(xintercept = ref_year), 
+    color = "grey40",
+    linetype = "dotted"
+  ) +
+  geom_line(
+    data = df_mac_index_refs %>% filter(group == "other"),
+    color = "grey70",
+    size = .6,
+    alpha = .5
+  ) +
+  geom_line(
+    aes(color = group),
+    size = .9
+  ) +
+  geom_text(
+    aes(x = ref_year, y = 5.2, 
+        label = as.character(ref_year)),
+    stat = "unique",
+    size = 8,
+    color = "grey60",
+    hjust = 0,
+    nudge_x = .3
+  ) +
+  geom_text_repel(
+    aes(color = group,
+        label = name_lab),
+    fontface = "bold",
+    max.overlaps = 20,
+    size = 6.7,
+    direction = "y",
+    xlim = c(2020.8, NA),
+    hjust = 0,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = "dotted",
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20
+  ) +
+  coord_cartesian(
+    clip = "off",
+    xlim = c(2000, 2024), 
+    ylim = c(-6, 6)
+  ) +
+  scale_x_continuous(
+    expand = c(0, 0),
+    breaks = seq(2000, 2020, by = 5)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    breaks = seq(-6, 6, by = 2),
+    labels = scales::label_dollar(accuracy = 2, negative_parens = TRUE)
+  ) +
+  scale_color_manual(
+    values = c(rcartocolor::carto_pal(n = n, name = "Vivid")[1:n - 1], "grey50")
+  ) +
+  labs(
+    title = "Compared to {closest_state}, how much more or less do you have to pay for a Big Mac today?", x = NULL, y = NULL,
+    subtitle = "The animated series of <i>index charts</i> visualizes the price changes (in USD) of a Big Mac based on a selected index year. The <b>Big Mac Index</b> is published<br>by The Economist as an informal way to provide a test of the extent to which market exchange rates result in goods costing the same in<br>different countries. It <i>seeks to make exchange-rate theory a bit more digestible</i> and takes its name from the Big Mac, a hamburger sold at McDonald's restaurants.",
+    caption = "The 27 countries that provide Big mac prices for all years from 2000 to 2020. For countries that reported twice per year, the mean value is shown.\nVisualization by @jim_gruman  •  Data by The Economist"
+  ) +
+  ## animation settings
+  transition_states(ref_year, 5, 25, wrap = FALSE) +
+  ease_aes('quadratic-in-out') +
+  theme(axis.title = element_blank(),
+  axis.text = element_text(color = "grey40"),
+  axis.text.x = element_text(size = 20, margin = margin(t = 5)),
+  axis.text.y = element_text(size = 17, margin = margin(r = 5)),
+  axis.ticks = element_line(color = "grey91", size = .5),
+  axis.ticks.length.x = unit(1.3, "lines"),
+  axis.ticks.length.y = unit(.7, "lines"),
+  panel.grid = element_blank(),
+  plot.margin = margin(20, 40, 20, 40),
+  plot.title = element_text(color = "grey95", size = 32, face = "bold",
+                            margin = margin(t = 15)),
+  plot.subtitle = element_markdown(color = "grey60", size = 17, 
+                                   lineheight = 1.35,
+                                   margin = margin(t = 15, b = 40, r = 15)),
+  plot.caption = element_text(color = "grey60", size = 15,
+                              lineheight = 1.2, hjust = 0, 
+                              margin = margin(t = 40)),
+  legend.position = "none"
+)
+
+animate(index_plots, nframes = 150, 
+          fps = 5, detail = 5, end_pause = 25,
+          width = 1150, height = 740, 
+          device = "png", type = "cairo", 
+          renderer = gifski_renderer())
+
+```
