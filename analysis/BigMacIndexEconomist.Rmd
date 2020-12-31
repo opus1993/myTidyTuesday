@@ -14,7 +14,7 @@ editor_options:
 
 Our goal here is to explore *The Economist's* data behind their recurring [Big Mac Index story on global currencies](https://www.economist.com/news/2020/07/15/the-big-mac-index).
 
-<iframe height="NaN" src="https://infographics.economist.com/2018/big-mac/index.html" data-size="full-width" style="height: 766px;"></iframe>
+<iframe width="560" height="315" src="https://infographics.economist.com/2018/big-mac/index.html" data-size="full-width" ></iframe>
 
 ```{r setup}
 knitr::opts_chunk$set(
