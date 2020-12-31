@@ -98,7 +98,7 @@ df_mac_indexed <-
 df_mac_index_refs <- map_df(2000:2019, ~ index_it(.x))
 ```
 
-```{r plot-and-animation}
+```{r plot-and-animation, warnings = FALSE}
 index_plots <- 
   ggplot(df_mac_index_refs %>% filter(group != "other"), 
          aes(year, price_rel, group = iso_a3), show.legend = FALSE) + 
@@ -212,7 +212,7 @@ index_plots <-
   legend.position = "none"
 )
 
-index_anim <- animate(index_plots, nframes = 150, 
+index_anim <- animate(index_plots, nframes = 100, 
           fps = 5, detail = 5, end_pause = 25,
           width = 1150, height = 740, 
           device = "png", type = "cairo", 
