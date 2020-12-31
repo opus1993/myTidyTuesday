@@ -212,10 +212,16 @@ index_plots <-
   legend.position = "none"
 )
 
-animate(index_plots, nframes = 150, 
+index_anim <- animate(index_plots, nframes = 150, 
           fps = 5, detail = 5, end_pause = 25,
           width = 1150, height = 740, 
           device = "png", type = "cairo", 
           renderer = gifski_renderer())
 
+anim_save(filename = "BigMacIndex.gif", 
+          path = here::here("docs", "assets"))
+```
+
+```{r}
+knitr::include_graphics("assets/BigMacIndex.gif", error = FALSE)
 ```
