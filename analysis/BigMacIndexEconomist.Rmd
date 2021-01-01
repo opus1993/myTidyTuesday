@@ -10,7 +10,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-> Derived from [Cedric Scherer's excellent post](https://github.com/Z3tt/TidyTuesday/tree/master/plots/2020_52) which in turn was inspired by [Robert Kosara](https://twitter.com/eagereyes)'s [eagereyes YouTube video](https://t.co/Nm6MdcBOyp?amp=1)
+> Derived from [Cedric Scherer's excellent post](https://github.com/Z3tt/TidyTuesday/tree/master/plots/2020_52) which in turn was inspired by [Robert Kosara](https://twitter.com/eagereyes)'s [eagereyes YouTube video](https://t.co/Nm6MdcBOyp?amp=1). Also, Alex Cookson's [Building an animation step-by-step with gganimate](https://www.alexcookson.com/post/2020-10-18-building-an-animation-step-by-step-with-gganimate/) was immensely helpful.
 
 Our goal here is to explore *The Economist's* data behind their recurring [Big Mac Index story on global currencies](https://www.economist.com/news/2020/07/15/the-big-mac-index).
 
@@ -135,6 +135,7 @@ index_plots <-
     aes(x = x1, xend = x2, y = y, yend = y),
     inherit.aes = FALSE,
     color = "grey40",
+    linetype = "dotted",
     size = .5
   ) +
   geom_vline(
@@ -192,58 +193,53 @@ index_plots <-
   scale_y_continuous(
     expand = c(0, 0),
     breaks = seq(-6, 6, by = 2),
-    labels = scales::label_dollar(accuracy = 2, negative_parens = TRUE)
+    labels = scales::label_dollar(accuracy = 0.01, negative_parens = TRUE)
   ) +
   scale_color_manual(
     values = c(rcartocolor::carto_pal(n = n, name = "Vivid")[1:n - 1], "grey50")
   ) +
   labs(
-    title = "Compared to {closest_state}, how much more or less do we pay for a <span style='font-family: mclawsui; color:#db1020; font-size: 32px; font-weight: bold'>BIG MAC</span> today?", x = NULL, y = NULL,
-    subtitle = "Visualizes the price changes (in USD) of a Big Mac based on a selected index year. The <b>Big Mac Index</b> is published<br>by The Economist as an informal way to provide a test of the extent to which market exchange rates result in goods costing the same in different<br>countries. It seeks to make exchange-rate theory a bit more digestible and takes its name from the Big Mac, a hamburger sold at McDonald's restaurants.",
+    title = "<span style='font-family: futura; color:#ffd700; font-size: 30px; font-weight: bold'>Compared to {closest_state}, how much more or less do we pay for a </span><span style='font-family: mclawsui; color:#db1020; font-size: 32px; font-weight: bold'> BIG MAC </span><span style='font-family: futura; color:#ffd700; font-size: 30px; font-weight: bold'>  today?</span>", x = NULL, y = NULL,
+    subtitle = "<span style='font-family: Atkinson Hyperlegible; font-size: 20px'>The price changes (in USD) of a Big Mac based on a selected index year. The <b>Big Mac Index</b> is published by <b>The Economist</b> as an informal way to test the extent to which market exchange rates result in goods costing the same in different countries. It seeks to make exchange-rate theory a bit more digestible and takes its name from the Big Mac, a hamburger sold at McDonald's restaurants.</span>",
     caption = "Includes the 27 countries that provide Big mac prices for all years from 2000 to 2020. For countries that reported twice per year, the mean value is shown.\nVisualization by @jim_gruman  •  Data by The Economist"
   ) +
   ## animation settings
   transition_states(ref_year, 5, 25, wrap = FALSE) +
   ease_aes('quadratic-in-out') +
-  theme(axis.title = element_blank(),
+  theme(text = element_text(family = "Atkinson Hyperlegible", color = "grey60"),
+  axis.title = element_blank(),
   axis.text = element_text(color = "grey40"),
-  axis.text.x = element_text(family = "Atkinson Hyperlegible",size = 15, margin = margin(t = 5)),
-  axis.text.y = element_text(family = "Atkinson Hyperlegible",size = 15, margin = margin(r = 5)),
+  axis.text.x = element_text(size = 15, margin = margin(t = 5)),
+  axis.text.y = element_text(size = 15, margin = margin(r = 5)),
   axis.ticks = element_line(color = "grey91", size = .5),
   axis.ticks.length.x = unit(1.3, "lines"),
   axis.ticks.length.y = unit(.7, "lines"),
   panel.grid = element_blank(),
   plot.margin = margin(20, 40, 20, 40),
-  plot.title = element_markdown(family = "futura",
-                                color = "#ffd700", size = 20, 
-                                face = "bold",
-                                margin = margin(t = 15)),
-  plot.subtitle = element_markdown(family = "Atkinson Hyperlegible",
-                                   color = "grey60", size = 15, 
-                                   lineheight = 1.35,
-                                   margin = margin(t = 15, b = 40)),
-  plot.caption = element_text(family = "Atkinson Hyperlegible",
-                              color = "grey60", size = 15,
-                              lineheight = 1.2, hjust = 0, 
-                              margin = margin(t = 40)),
+  plot.title = element_textbox_simple(margin = margin(t = 15)),
+  plot.subtitle = element_textbox_simple(lineheight = 2,
+                                         margin = margin(t = 15, b = 30)),
+  plot.caption = element_text(size = 12,
+                              lineheight = 1.2, 
+                              hjust = 0, 
+                              margin = margin(t = 30)),
   legend.position = "none"
 )
 
 index_anim <- animate(index_plots, nframes = 150, 
-          fps = 5, detail = 5, end_pause = 25,
+          fps = 5, detail = 5, 
+          start_pause = 15, end_pause = 25,
           width = 1150, height = 740, 
-          device = "png", type = "cairo", 
+          device = "ragg_png", 
           renderer = gifski_renderer())
 
-anim_save(filename = "BigMacIndex2.gif", 
+anim_save(index_anim, filename = "BigMacIndex.gif", 
           path = here::here("docs", "assets"))
 ```
 
 ```{r}
-knitr::include_graphics("assets/BigMacIndex2.gif", error = FALSE)
+knitr::include_graphics("assets/BigMacIndex.gif", error = FALSE)
 ```
-
-### Static Plot
 
 ```{r static, fig.width=20, fig.height=12}
 countries <- 
@@ -268,7 +264,7 @@ df_mac_indexed_2008 <-
   ) %>% 
   ungroup()
 
-ggplot(df_mac_indexed_2008 %>% filter(group != "other"), 
+plot1 <- ggplot(df_mac_indexed_2008 %>% filter(group != "other"), 
        aes(year, price_rel, group = iso_a3)) + 
   geom_vline(
     xintercept = seq(2000, 2020, by = 5),
@@ -286,7 +282,8 @@ ggplot(df_mac_indexed_2008 %>% filter(group != "other"),
     data = tibble(y = 0, x1 = 2000, x2 = 2020),
     aes(x = x1, xend = x2, y = y, yend = y),
     inherit.aes = FALSE,
-    color = "grey60",
+    color = "grey40",
+    linetype = "dotted",
     size = .8
   ) +
   geom_vline(
@@ -319,7 +316,7 @@ ggplot(df_mac_indexed_2008 %>% filter(group != "other"),
         label = name_lab),
     family = "Atkinson Hyperlegible",
     fontface = "bold",
-    size = 8,
+    size = 6,
     direction = "y",
     xlim = c(2020.8, NA),
     hjust = 0,
@@ -343,13 +340,13 @@ ggplot(df_mac_indexed_2008 %>% filter(group != "other"),
   scale_y_continuous(
     expand = c(0, 0),
     breaks = seq(-4, 3, by = 1),
-    labels = scales::label_dollar(accuracy = 2, negative_parens = TRUE)
+    labels = scales::label_dollar(accuracy = 0.01, negative_parens = TRUE)
   ) +
   scale_color_manual(
     values = c(rcartocolor::carto_pal(n = n, name = "Bold")[1:n - 1], "grey50")
   ) +
   labs(title = "Compared to 2008, how much more or less do we pay for a <span style='font-family: mclawsui; color:#db1020; font-size: 32px; font-weight: bold'>BIG MAC</span> today?", x = NULL, y = NULL,
-    subtitle = "Price changes (in USD) of a Big Mac based on 2008 as index year. The <b>Big Mac Index</b> is published by The Economist as an informal way to provide a test of the<br>extent to which market exchange rates result in goods costing the same in different countries. It <i>seeks to make exchange-rate theory a bit more digestible</i> and takes<br>its name from the Big Mac, a hamburger sold at McDonald's restaurants.",
+    subtitle = "Price changes (in USD) of a Big Mac based on 2008 as index year. The <b>Big Mac Index</b> is published by The Economist as an informal way<br>to test the extent to which market exchange rates result in goods costing the same in different countries. It seeks to make<br>exchange-rate theory a bit more digestible and takes its name from the Big Mac, a hamburger sold at McDonald's restaurants.",
     caption = "Includes the 27 countries that provide Big mac prices for all years from 2000 to 2020. For countries that reported twice per year, the mean value is shown.\nVisualization by @jim_gruman  •  Data by The Economist"
   ) +
   theme(axis.title = element_blank(),
@@ -370,11 +367,19 @@ ggplot(df_mac_indexed_2008 %>% filter(group != "other"),
                                    lineheight = 1.35,
                                    margin = margin(t = 15, b = 40)),
   plot.caption = element_text(family = "Atkinson Hyperlegible",
-                              color = "grey60", size = 15,
+                              color = "grey60", size = 12,
                               lineheight = 1.2, hjust = 0, 
                               margin = margin(t = 40)),
   legend.position = "none"
 )
+
+ggsave(plot1, filename = here::here("docs", "assets", "BigMacIndex.pdf"), width = 14, height = 9, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  pdf = here::here("docs", "assets", "BigMacIndex.pdf"),
+  filenames = here::here("docs", "assets", "BigMacIndex.png"),
+  dpi = 100
+) 
 ```
 
 
