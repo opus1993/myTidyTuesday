@@ -453,16 +453,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree713dccf9c08201082c989b0bc9d8d4104753f65ctargetblank713dccfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/713dccf9c08201082c989b0bc9d8d4104753f65c" target="_blank">713dccf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree154ddad01249e31caa47e6bbc1b45519056d829btargetblank154ddada"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/154ddad01249e31caa47e6bbc1b45519056d829b" target="_blank">154ddad</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree713dccf9c08201082c989b0bc9d8d4104753f65ctargetblank713dccfa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree154ddad01249e31caa47e6bbc1b45519056d829btargetblank154ddada" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/713dccf9c08201082c989b0bc9d8d4104753f65c" target="_blank">713dccf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/154ddad01249e31caa47e6bbc1b45519056d829b" target="_blank">154ddad</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -518,6 +518,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/154ddad01249e31caa47e6bbc1b45519056d829b/analysis/BigMacIndexEconomist.Rmd" target="_blank">154ddad</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-31
+</td>
+<td>
+wflow_publish(“analysis/BigMacIndexEconomist.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/4b0c9c51b26bcf32dabc3ebd251a1b53a04a35f7/docs/BigMacIndexEconomist.html" target="_blank">4b0c9c5</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2020-12-31
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -679,7 +713,7 @@ wflow_publish(“analysis/BigMacIndexEconomist.Rmd”)
 </div>
 </div>
 <blockquote>
-<p>Derived from <a href="https://github.com/Z3tt/TidyTuesday/tree/master/plots/2020_52">Cedric Scherer’s excellent post</a> which in turn was inspired by <a href="https://twitter.com/eagereyes">Robert Kosara</a>’s <a href="https://t.co/Nm6MdcBOyp?amp=1">eagereyes YouTube video</a></p>
+<p>Derived from <a href="https://github.com/Z3tt/TidyTuesday/tree/master/plots/2020_52">Cedric Scherer’s excellent post</a> which in turn was inspired by <a href="https://twitter.com/eagereyes">Robert Kosara</a>’s <a href="https://t.co/Nm6MdcBOyp?amp=1">eagereyes YouTube video</a>. Also, Alex Cookson’s <a href="https://www.alexcookson.com/post/2020-10-18-building-an-animation-step-by-step-with-gganimate/">Building an animation step-by-step with gganimate</a> was immensely helpful.</p>
 </blockquote>
 <p>Our goal here is to explore <em>The Economist’s</em> data behind their recurring <a href="https://www.economist.com/news/2020/07/15/the-big-mac-index">Big Mac Index story on global currencies</a>.</p>
 <iframe width="660" height="315" src="https://infographics.economist.com/2018/big-mac/index.html" data-size="full-width">
@@ -788,6 +822,7 @@ df_mac_index_refs &lt;- map_df(2000:2019, ~ index_it(.x))</code></pre>
     aes(x = x1, xend = x2, y = y, yend = y),
     inherit.aes = FALSE,
     color = &quot;grey40&quot;,
+    linetype = &quot;dotted&quot;,
     size = .5
   ) +
   geom_vline(
@@ -849,66 +884,59 @@ df_mac_index_refs &lt;- map_df(2000:2019, ~ index_it(.x))</code></pre>
   scale_y_continuous(
     expand = c(0, 0),
     breaks = seq(-6, 6, by = 2),
-    labels = scales::label_dollar(accuracy = 2, negative_parens = TRUE)
+    labels = scales::label_dollar(accuracy = 0.01, negative_parens = TRUE)
   ) +
   scale_color_manual(
     values = c(rcartocolor::carto_pal(n = n, name = &quot;Vivid&quot;)[1:n - 1], &quot;grey50&quot;)
   ) +
   labs(
-    title = &quot;Compared to {closest_state}, how much more or less do we pay for a &lt;span style=&#39;font-family: mclawsui; color:#db1020; font-size: 32px; font-weight: bold&#39;&gt;BIG MAC&lt;/span&gt; today?&quot;, x = NULL, y = NULL,
-    subtitle = &quot;Visualizes the price changes (in USD) of a Big Mac based on a selected index year. The &lt;b&gt;Big Mac Index&lt;/b&gt; is published&lt;br&gt;by The Economist as an informal way to provide a test of the extent to which market exchange rates result in goods costing the same in different&lt;br&gt;countries. It seeks to make exchange-rate theory a bit more digestible and takes its name from the Big Mac, a hamburger sold at McDonald&#39;s restaurants.&quot;,
+    title = &quot;&lt;span style=&#39;font-family: futura; color:#ffd700; font-size: 30px; font-weight: bold&#39;&gt;Compared to {closest_state}, how much more or less do we pay for a &lt;/span&gt;&lt;span style=&#39;font-family: mclawsui; color:#db1020; font-size: 32px; font-weight: bold&#39;&gt; BIG MAC &lt;/span&gt;&lt;span style=&#39;font-family: futura; color:#ffd700; font-size: 30px; font-weight: bold&#39;&gt;  today?&lt;/span&gt;&quot;, x = NULL, y = NULL,
+    subtitle = &quot;&lt;span style=&#39;font-family: Atkinson Hyperlegible; font-size: 20px&#39;&gt;The price changes (in USD) of a Big Mac based on a selected index year. The &lt;b&gt;Big Mac Index&lt;/b&gt; is published by &lt;b&gt;The Economist&lt;/b&gt; as an informal way to test the extent to which market exchange rates result in goods costing the same in different countries. It seeks to make exchange-rate theory a bit more digestible and takes its name from the Big Mac, a hamburger sold at McDonald&#39;s restaurants.&lt;/span&gt;&quot;,
     caption = &quot;Includes the 27 countries that provide Big mac prices for all years from 2000 to 2020. For countries that reported twice per year, the mean value is shown.\nVisualization by @jim_gruman  •  Data by The Economist&quot;
   ) +
   ## animation settings
   transition_states(ref_year, 5, 25, wrap = FALSE) +
   ease_aes(&quot;quadratic-in-out&quot;) +
   theme(
+    text = element_text(family = &quot;Atkinson Hyperlegible&quot;, color = &quot;grey60&quot;),
     axis.title = element_blank(),
     axis.text = element_text(color = &quot;grey40&quot;),
-    axis.text.x = element_text(family = &quot;Atkinson Hyperlegible&quot;, size = 15, margin = margin(t = 5)),
-    axis.text.y = element_text(family = &quot;Atkinson Hyperlegible&quot;, size = 15, margin = margin(r = 5)),
+    axis.text.x = element_text(size = 15, margin = margin(t = 5)),
+    axis.text.y = element_text(size = 15, margin = margin(r = 5)),
     axis.ticks = element_line(color = &quot;grey91&quot;, size = .5),
     axis.ticks.length.x = unit(1.3, &quot;lines&quot;),
     axis.ticks.length.y = unit(.7, &quot;lines&quot;),
     panel.grid = element_blank(),
     plot.margin = margin(20, 40, 20, 40),
-    plot.title = element_markdown(
-      family = &quot;futura&quot;,
-      color = &quot;#ffd700&quot;, size = 20,
-      face = &quot;bold&quot;,
-      margin = margin(t = 15)
-    ),
-    plot.subtitle = element_markdown(
-      family = &quot;Atkinson Hyperlegible&quot;,
-      color = &quot;grey60&quot;, size = 15,
-      lineheight = 1.35,
-      margin = margin(t = 15, b = 40)
+    plot.title = element_textbox_simple(margin = margin(t = 15)),
+    plot.subtitle = element_textbox_simple(
+      lineheight = 2,
+      margin = margin(t = 15, b = 30)
     ),
     plot.caption = element_text(
-      family = &quot;Atkinson Hyperlegible&quot;,
-      color = &quot;grey60&quot;, size = 15,
-      lineheight = 1.2, hjust = 0,
-      margin = margin(t = 40)
+      size = 12,
+      lineheight = 1.2,
+      hjust = 0,
+      margin = margin(t = 30)
     ),
     legend.position = &quot;none&quot;
   )
 
 index_anim &lt;- animate(index_plots,
   nframes = 150,
-  fps = 5, detail = 5, end_pause = 25,
+  fps = 5, detail = 5,
+  start_pause = 15, end_pause = 25,
   width = 1150, height = 740,
-  device = &quot;png&quot;, type = &quot;cairo&quot;,
+  device = &quot;ragg_png&quot;,
   renderer = gifski_renderer()
 )
 
-anim_save(
-  filename = &quot;BigMacIndex2.gif&quot;,
+anim_save(index_anim,
+  filename = &quot;BigMacIndex.gif&quot;,
   path = here::here(&quot;docs&quot;, &quot;assets&quot;)
 )</code></pre>
-<pre class="r"><code>knitr::include_graphics(&quot;assets/BigMacIndex2.gif&quot;, error = FALSE)</code></pre>
-<p><img src="assets/BigMacIndex2.gif" style="display: block; margin: auto;" /></p>
-<div id="static-plot" class="section level3">
-<h3>Static Plot</h3>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/BigMacIndex.gif&quot;, error = FALSE)</code></pre>
+<p><img src="assets/BigMacIndex.gif" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>countries &lt;-
   df_mac %&gt;%
   filter(year == 2008) %&gt;%
@@ -931,7 +959,7 @@ df_mac_indexed_2008 &lt;-
   ) %&gt;%
   ungroup()
 
-ggplot(
+plot1 &lt;- ggplot(
   df_mac_indexed_2008 %&gt;% filter(group != &quot;other&quot;),
   aes(year, price_rel, group = iso_a3)
 ) +
@@ -951,7 +979,8 @@ ggplot(
     data = tibble(y = 0, x1 = 2000, x2 = 2020),
     aes(x = x1, xend = x2, y = y, yend = y),
     inherit.aes = FALSE,
-    color = &quot;grey60&quot;,
+    color = &quot;grey40&quot;,
+    linetype = &quot;dotted&quot;,
     size = .8
   ) +
   geom_vline(
@@ -987,7 +1016,7 @@ ggplot(
     ),
     family = &quot;Atkinson Hyperlegible&quot;,
     fontface = &quot;bold&quot;,
-    size = 8,
+    size = 6,
     direction = &quot;y&quot;,
     xlim = c(2020.8, NA),
     hjust = 0,
@@ -1011,14 +1040,14 @@ ggplot(
   scale_y_continuous(
     expand = c(0, 0),
     breaks = seq(-4, 3, by = 1),
-    labels = scales::label_dollar(accuracy = 2, negative_parens = TRUE)
+    labels = scales::label_dollar(accuracy = 0.01, negative_parens = TRUE)
   ) +
   scale_color_manual(
     values = c(rcartocolor::carto_pal(n = n, name = &quot;Bold&quot;)[1:n - 1], &quot;grey50&quot;)
   ) +
   labs(
     title = &quot;Compared to 2008, how much more or less do we pay for a &lt;span style=&#39;font-family: mclawsui; color:#db1020; font-size: 32px; font-weight: bold&#39;&gt;BIG MAC&lt;/span&gt; today?&quot;, x = NULL, y = NULL,
-    subtitle = &quot;Price changes (in USD) of a Big Mac based on 2008 as index year. The &lt;b&gt;Big Mac Index&lt;/b&gt; is published by The Economist as an informal way to provide a test of the&lt;br&gt;extent to which market exchange rates result in goods costing the same in different countries. It &lt;i&gt;seeks to make exchange-rate theory a bit more digestible&lt;/i&gt; and takes&lt;br&gt;its name from the Big Mac, a hamburger sold at McDonald&#39;s restaurants.&quot;,
+    subtitle = &quot;Price changes (in USD) of a Big Mac based on 2008 as index year. The &lt;b&gt;Big Mac Index&lt;/b&gt; is published by The Economist as an informal way&lt;br&gt;to test the extent to which market exchange rates result in goods costing the same in different countries. It seeks to make&lt;br&gt;exchange-rate theory a bit more digestible and takes its name from the Big Mac, a hamburger sold at McDonald&#39;s restaurants.&quot;,
     caption = &quot;Includes the 27 countries that provide Big mac prices for all years from 2000 to 2020. For countries that reported twice per year, the mean value is shown.\nVisualization by @jim_gruman  •  Data by The Economist&quot;
   ) +
   theme(
@@ -1045,13 +1074,22 @@ ggplot(
     ),
     plot.caption = element_text(
       family = &quot;Atkinson Hyperlegible&quot;,
-      color = &quot;grey60&quot;, size = 15,
+      color = &quot;grey60&quot;, size = 12,
       lineheight = 1.2, hjust = 0,
       margin = margin(t = 40)
     ),
     legend.position = &quot;none&quot;
-  )</code></pre>
-<p><img src="figure/BigMacIndexEconomist.Rmd/static-1.png" width="6000" style="display: block; margin: auto;" /></p>
+  )
+
+ggsave(plot1, filename = here::here(&quot;docs&quot;, &quot;assets&quot;, &quot;BigMacIndex.pdf&quot;), width = 14, height = 9, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  pdf = here::here(&quot;docs&quot;, &quot;assets&quot;, &quot;BigMacIndex.pdf&quot;),
+  filenames = here::here(&quot;docs&quot;, &quot;assets&quot;, &quot;BigMacIndex.png&quot;),
+  dpi = 100
+)</code></pre>
+<pre><code>Converting page 1 to D:/myTidyTuesday/docs/assets/BigMacIndex.png... done!</code></pre>
+<pre><code>[1] &quot;D:/myTidyTuesday/docs/assets/BigMacIndex.png&quot;</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1083,38 +1121,38 @@ other attached packages:
 [13] tibble_3.0.4      ggplot2_3.3.2     tidyverse_1.3.0   workflowr_1.6.2  
 
 loaded via a namespace (and not attached):
- [1] fs_1.5.0               sf_0.9-6               usethis_2.0.0         
- [4] progress_1.2.2         httr_1.4.2             rprojroot_2.0.2       
- [7] R.cache_0.14.0         tools_4.0.3            backports_1.2.1       
-[10] R6_2.5.0               KernSmooth_2.23-18     DBI_1.1.0             
-[13] colorspace_2.0-0       withr_2.3.0            tidyselect_1.1.0      
-[16] prettyunits_1.1.1      curl_4.3               compiler_4.0.3        
-[19] git2r_0.27.1           extrafontdb_1.0        cli_2.2.0             
-[22] rvest_0.3.6            xml2_1.3.2             scales_1.1.1          
-[25] classInt_0.4-3         systemfonts_0.3.2.9000 digest_0.6.27         
-[28] rmarkdown_2.6.4        R.utils_2.10.1         tidytuesdayR_1.0.1    
-[31] showtext_0.9-1         pkgconfig_2.0.3        htmltools_0.5.0       
-[34] extrafont_0.17         styler_1.3.2           dbplyr_2.0.0          
-[37] rlang_0.4.9            readxl_1.3.1           rstudioapi_0.13       
-[40] sysfonts_0.8.2         generics_0.1.0         farver_2.0.3          
-[43] jsonlite_1.7.2         R.oo_1.24.0            magrittr_2.0.1        
-[46] Rcpp_1.0.5             munsell_0.5.0          fansi_0.4.1           
-[49] gdtools_0.2.2          lifecycle_0.2.0        R.methodsS3_1.8.1     
-[52] stringi_1.5.3          whisker_0.4            yaml_2.2.1            
-[55] plyr_1.8.6             grid_4.0.3             promises_1.1.1        
-[58] crayon_1.3.4           haven_2.3.1            gridtext_0.1.4        
-[61] transformr_0.1.3       hms_0.5.3              knitr_1.30            
-[64] ps_1.5.0               pillar_1.4.7           markdown_1.1          
-[67] lpSolve_5.6.15         reprex_0.3.0           glue_1.4.2            
-[70] rcartocolor_2.0.0      evaluate_0.14          gifski_0.8.6          
-[73] memuse_4.1-0           modelr_0.1.8           selectr_0.4-2         
-[76] vctrs_0.3.6            tweenr_1.0.1           httpuv_1.5.4          
-[79] Rttf2pt1_1.3.8         cellranger_1.1.0       gtable_0.3.0          
-[82] rematch2_2.1.2         assertthat_0.2.1       xfun_0.19             
-[85] broom_0.7.3            e1071_1.7-4            later_1.1.0.1         
-[88] class_7.3-17           showtextdb_3.0         units_0.6-7           
-[91] ellipsis_0.3.1        </code></pre>
-</div>
+ [1] colorspace_2.0-0       selectr_0.4-2          ellipsis_0.3.1        
+ [4] class_7.3-17           showtext_0.9-1         rprojroot_2.0.2       
+ [7] markdown_1.1           fs_1.5.0               gridtext_0.1.4        
+[10] rstudioapi_0.13        showtextdb_3.0         farver_2.0.3          
+[13] fansi_0.4.1            rcartocolor_2.0.0      xml2_1.3.2            
+[16] R.methodsS3_1.8.1      extrafont_0.17         memuse_4.1-0          
+[19] knitr_1.30             jsonlite_1.7.2         broom_0.7.3           
+[22] Rttf2pt1_1.3.8         dbplyr_2.0.0           R.oo_1.24.0           
+[25] compiler_4.0.3         httr_1.4.2             backports_1.2.1       
+[28] assertthat_0.2.1       cli_2.2.0              later_1.1.0.1         
+[31] tweenr_1.0.1           htmltools_0.5.0        prettyunits_1.1.1     
+[34] tools_4.0.3            gtable_0.3.0           glue_1.4.2            
+[37] Rcpp_1.0.5             cellranger_1.1.0       styler_1.3.2          
+[40] vctrs_0.3.6            pdftools_2.3.1         transformr_0.1.3      
+[43] extrafontdb_1.0        xfun_0.19              ps_1.5.0              
+[46] rvest_0.3.6            lpSolve_5.6.15         lifecycle_0.2.0       
+[49] scales_1.1.1           ragg_1.0.0.9000        hms_0.5.3             
+[52] promises_1.1.1         rematch2_2.1.2         yaml_2.2.1            
+[55] curl_4.3               gdtools_0.2.2          stringi_1.5.3         
+[58] e1071_1.7-4            gifski_0.8.6           rlang_0.4.9           
+[61] pkgconfig_2.0.3        systemfonts_0.3.2.9000 evaluate_0.14         
+[64] sf_0.9-6               tidyselect_1.1.0       plyr_1.8.6            
+[67] magrittr_2.0.1         tidytuesdayR_1.0.1     R6_2.5.0              
+[70] generics_0.1.0         DBI_1.1.0              pillar_1.4.7          
+[73] haven_2.3.1            whisker_0.4            withr_2.3.0           
+[76] units_0.6-7            modelr_0.1.8           crayon_1.3.4          
+[79] KernSmooth_2.23-18     rmarkdown_2.6.4        sysfonts_0.8.2        
+[82] progress_1.2.2         usethis_2.0.0          grid_4.0.3            
+[85] readxl_1.3.1           qpdf_1.1               git2r_0.27.1          
+[88] reprex_0.3.0           digest_0.6.27          classInt_0.4-3        
+[91] R.cache_0.14.0         httpuv_1.5.4           R.utils_2.10.1        
+[94] textshaping_0.2.1.9000 munsell_0.5.0          askpass_1.1           </code></pre>
 </div>
 </div>
 
