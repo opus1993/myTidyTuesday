@@ -453,16 +453,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee59e031a796bbe2326cd36881b7baf1689a0e6c3targetblanke59e031a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/e59e031a796bbe2326cd36881b7baf1689a0e6c3" target="_blank">e59e031</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree325ee4d04ea1f9b53b4128e605e248380edab9e1targetblank325ee4da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/325ee4d04ea1f9b53b4128e605e248380edab9e1" target="_blank">325ee4d</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee59e031a796bbe2326cd36881b7baf1689a0e6c3targetblanke59e031a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree325ee4d04ea1f9b53b4128e605e248380edab9e1targetblank325ee4da" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/e59e031a796bbe2326cd36881b7baf1689a0e6c3" target="_blank">e59e031</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/325ee4d04ea1f9b53b4128e605e248380edab9e1" target="_blank">325ee4d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -519,6 +519,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/325ee4d04ea1f9b53b4128e605e248380edab9e1/analysis/ChicagoTrafficInjuries.Rmd" target="_blank">325ee4d</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-04
+</td>
+<td>
+wflow_publish(“analysis/ChicagoTrafficInjuries.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/b95346f1ceca43b5cfc48bda0872ee52dd7979ac/docs/ChicagoTrafficInjuries.html" target="_blank">b95346f</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-04
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -598,26 +632,7 @@ crash_raw &lt;- as_tibble(read.socrata(crash_url))</code></pre>
     prim_contributory_cause,
     latitude, longitude
   ) %&gt;%
-  na.omit()
-
-crash</code></pre>
-<pre><code># A tibble: 325,201 x 14
-   injuries crash_date          crash_hour report_type num_units trafficway_type
-   &lt;chr&gt;    &lt;dttm&gt;                   &lt;int&gt; &lt;chr&gt;           &lt;int&gt; &lt;chr&gt;          
- 1 noninju~ 2021-01-04 02:04:00          2 ON SCENE            2 FOUR WAY       
- 2 noninju~ 2021-01-04 01:03:00          1 ON SCENE            3 NOT DIVIDED    
- 3 noninju~ 2021-01-03 23:42:00         23 ON SCENE            1 NOT DIVIDED    
- 4 noninju~ 2021-01-03 22:11:00         22 NOT ON SCE~         2 PARKING LOT    
- 5 injuries 2021-01-03 21:38:00         21 ON SCENE            2 FOUR WAY       
- 6 injuries 2021-01-03 20:30:00         20 NOT ON SCE~         3 NOT DIVIDED    
- 7 noninju~ 2021-01-03 20:25:00         20 NOT ON SCE~         2 DIVIDED - W/ME~
- 8 noninju~ 2021-01-03 19:44:00         19 ON SCENE            2 DIVIDED - W/ME~
- 9 noninju~ 2021-01-03 19:40:00         19 ON SCENE            2 DIVIDED - W/ME~
-10 noninju~ 2021-01-03 19:11:00         19 ON SCENE            2 NOT DIVIDED    
-# ... with 325,191 more rows, and 8 more variables: posted_speed_limit &lt;int&gt;,
-#   weather_condition &lt;chr&gt;, lighting_condition &lt;chr&gt;,
-#   roadway_surface_cond &lt;chr&gt;, first_crash_type &lt;chr&gt;,
-#   prim_contributory_cause &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;</code></pre>
+  na.omit()</code></pre>
 <pre class="r"><code>crash %&gt;%
   mutate(crash_date = as_date(floor_date(crash_date, unit = &quot;week&quot;))) %&gt;%
   count(crash_date, injuries) %&gt;%
@@ -664,6 +679,7 @@ crash</code></pre>
   ) +
   theme(legend.position = &quot;&quot;)</code></pre>
 <p><img src="figure/ChicagoTrafficInjuries.Rmd/unnamed-chunk-3-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>This is not a balanced dataset, in that the injuries are a small portion of traffic incidents. Let’s look at the percentage.</p>
 <pre class="r"><code>crash %&gt;%
   mutate(crash_date = floor_date(crash_date, unit = &quot;week&quot;)) %&gt;%
   count(crash_date, injuries) %&gt;%
@@ -852,7 +868,9 @@ crash_imp$fit$imp %&gt;%
 </div>
 <div id="save-the-model" class="section level2">
 <h2>Save the model</h2>
-<pre class="r"><code>crash_wf_model &lt;- crash_fit$.workflow[[1]]</code></pre>
+<pre class="r"><code>crash_wf_model &lt;- crash_fit$.workflow[[1]]
+
+# crash_wf_model &lt;- butcher::butcher(crash_fit$.workflow[[1]])</code></pre>
 <p>This is an object we can make predictions with. For example, is this particular crash predicted to have any injuries?</p>
 <pre class="r"><code>predict(crash_wf_model, crash_test[222, ])</code></pre>
 <pre><code># A tibble: 1 x 1
