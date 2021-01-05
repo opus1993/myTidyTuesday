@@ -1,0 +1,274 @@
+---
+title: "Global Transit Costs"
+author: "Jim Gruman"
+date: "January 6, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+Our goal here is to explore data from the [Transit Costs Project](https://transitcosts.com/). The organization has created a database that spans more than 50 countries and totals more than 11,000 km of urban rail built since the late 1990s. 
+
+Why do transit-infrastructure projects in New York cost 20 times more on a per kilometer basis than in Seoul? Let's look for insights into what the cost drivers are.
+
+```{r setup}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	fig.height = 7.402,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	cache.lazy = FALSE,
+	df_print = "paged",
+	dpi = 300,
+	tidy = "styler"
+)
+```
+
+```{r load-packages}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(lubridate)
+library(here)
+library(WDI)
+library(tidymodels)
+library(baguette)
+library(themis)
+})
+```
+
+```{r load-fonts}
+extrafont::loadfonts(quiet = TRUE)
+
+theme_set(hrbrthemes::theme_ipsum_gs() +
+            theme(plot.title.position = "plot", 
+                  plot.caption.position = "plot"))
+```
+
+We will load the latest data directly from the #TidyTuesday github repo.
+
+```{r load_data}
+raw  <- tidytuesdayR::tt_load("2021-01-05")
+
+transit_cost <- raw$transit_cost
+```
+
+Let's also bring in a recent GDP per capita figure:
+
+```{r}
+missing <- tibble(country = "TW",
+       income = "High income",
+       gdp_per_capita = 54020,
+       pop = 23340000)
+
+country_incomes <- WDI(
+  indicator = c(
+    gdp_per_capita = "NY.GDP.PCAP.PP.KD",
+    pop = "SP.POP.TOTL"
+  ),
+  start = 2019,
+  end = 2019,
+  extra = TRUE
+) %>% 
+  as_tibble() %>%
+  select(country = iso2c, income, gdp_per_capita, pop) %>%
+  filter(!is.na(income)) %>%
+  bind_rows(missing) %>%  
+  mutate(income = as_factor(income)) %>%
+  mutate(country = if_else(country == "GB","UK",country)) %>% 
+  mutate(income = fct_relevel(
+    income,
+    "Aggregates",
+    "Low income",
+    "Lower middle income",
+    "Upper middle income"
+  )) 
+
+```
+
+Prepare the data 
+
+```{r}
+transit_df <- transit_cost %>% 
+  filter(!is.na(real_cost), !is.na(year), end_year != "X", real_cost > 0) %>% 
+  left_join(country_incomes, by = "country" ) %>% 
+  mutate(build_year = case_when(
+            start_year == "5 years" ~ "2021",
+            start_year == "4 years" ~ "2021",
+            start_year == "not start" ~ "2022",
+            !is.na(start_year) ~ start_year,
+            !is.na(year) ~ as.character(year),
+            TRUE ~ "Look"),
+         build_year = as.integer(build_year),
+         build_time = as.integer(end_year) - build_year,
+         length = if_else(is.na(length),0,length),
+         tunnel = if_else(is.na(tunnel),0,tunnel),
+         nonTunnelLength = length - tunnel,
+         build_year = as.integer(build_year),
+         stations = if_else(is.na(stations),0,stations),
+         rr = if_else(is.na(rr),0,rr),
+         regional = factor(rr, labels = c("urban", "intracity")),
+         location = fct_lump(glue::glue("{city}, {country}"), 25),
+         cost = as.numeric(real_cost)) %>% 
+  rename(TunnelLength = tunnel) %>% 
+  select(cost, build_year, location, regional, nonTunnelLength, TunnelLength, stations, income, build_time) 
+
+
+```
+
+Let's look at the distributions of the independent variables:
+
+```{r}
+transit_df %>% 
+  select(-cost) %>% 
+  keep(is.numeric) %>%
+  gather() %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = value, fill = key), color = "black") +
+  facet_wrap(~ key, scales = "free") +
+  scale_x_continuous(n.breaks = 3) +
+  theme(legend.position = "",
+        plot.title.position = "plot") +
+  labs(title = "Global Transit Costs Numeric Variable Histogram Distributions")
+```
+
+The lengths and stations both skew right. What happens if we look at the same with an log function applied to x?
+
+```{r}
+transit_df %>% 
+  select(-cost, -build_year) %>% 
+  keep(is.numeric) %>%
+  gather() %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = value, fill = key), color = "black", show.legend = FALSE) +
+  scale_x_continuous(n.breaks = 3, trans = "log2") +
+  facet_wrap(~ key, scales = "free") +
+  labs(title = "Global Transit Costs Numeric Variable Histogram Distributions")
+```
+
+Another data visualization showing the relationships between the numeric features and cost:
+
+```{r}
+transit_df %>%
+  keep(is.numeric) %>%
+  pivot_longer(-cost, names_to = "Feature", values_to = "Value") %>%
+  ggplot() +
+  geom_point(aes(x = Value, y = cost, color = Feature), show.legend = FALSE) + 
+  scale_y_continuous(labels = scales::comma) +
+  facet_wrap(~ Feature, scales = "free") +
+  scale_x_continuous(n.breaks = 3, trans = "log2") +
+  labs(x = "Numeric Feature Value",
+       title = "Global Transit Costs Numeric Variable versus Cost")
+```
+
+Applying log transformations to length, station, and tunnel could be helpful.
+
+What are the numeric variable correlations?
+
+```{r}
+transit_df %>%
+  keep(is.numeric) %>%
+  corrr::correlate() %>%
+  corrr::network_plot(min_cor = 0.2)
+```
+
+There is a risk that there will be hidden interactions between numeric features.
+
+Let's explore the categorical variables.
+
+```{r}
+transit_factors <- transit_df %>% keep(is.factor) %>% colnames()
+
+chart <- c(transit_factors, "cost")
+
+transit_df %>%
+  select_at(vars(chart)) %>%
+  pivot_longer(-cost, names_to = "Factor", values_to = "Level") %>%
+  mutate(Factor = fct_reorder(Factor, cost),
+         Level = fct_reorder(Level, cost)) %>% 
+  ggplot() +
+  geom_boxplot(aes(x = Level, y = cost, fill = Factor), show.legend = FALSE) + 
+  scale_y_continuous(labels = scales::comma) +
+  coord_flip() +
+  facet_wrap(~ Factor, scales = "free") +
+  labs(x = "Categorical Feature Value",
+       title = "Global Transit Categorical Variable versus Cost")
+
+```
+
+Paris, France and Doha (the costly "Other") may be cost outliers. I wonder if the numeric variables will fully explain the true cost. Out of curiosity, what is the dataset implying about the length of a regional train?
+
+```{r}
+transit_df %>% 
+  ggplot() +
+  geom_boxplot(aes(y = regional, 
+                   x = TunnelLength + nonTunnelLength, 
+                   fill = regional), show.legend = FALSE) +
+  scale_x_continuous(trans = "log2", labels = scales::comma_format()) +
+  labs(title = "Regional train projects are not necessarily of longer length.")
+
+```
+
+
+## Setup for modeling
+
+split the data into training and testing sets
+
+```{r}
+transit_split <- initial_split(transit_df)
+
+transit_split
+```
+
+```{r}
+transit_train <- training(transit_split)
+transit_test <- testing(transit_split)
+```
+
+At some point we’re going to want to do some parameter tuning, so we’re going to use cross-validation. We can create a cross-validated version of the training set in preparation for that moment using `vfold_cv()`.
+
+```{r}
+transit_folds  <- vfold_cv(transit_train, v = 10, strata = "cost")
+```
+
+Let's craft a recipe
+
+```{r}
+transit_rec <- recipe(cost ~ ., data = transit_train) %>% 
+  step_normalize(all_numeric()) %>% 
+  step_BoxCox(nonTunnelLength,stations,TunnelLength) %>% 
+  step_dummy(all_nominal()) %>% 
+  step_interact( ~ stations:nonTunnelLength)
+
+transit_prep <- prep(transit_rec)
+
+```
+
+## Specify a model
+
+```{r}
+linear_spec <- linear_reg() %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+
+transit_wflow <- workflow() %>%
+  add_model(linear_spec) %>% 
+  add_recipe(transit_rec)
+  
+transit_wflow
+```
+
+
+```{r eval = FALSE}
+doParallel::registerDoParallel()
+
+crash_res <- fit_resamples(
+  transit_wflow,
+  transit_folds
+)
+
+```
+
