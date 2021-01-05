@@ -80,8 +80,6 @@ crash <- crash_raw %>%
     latitude, longitude
   ) %>%
   na.omit()
-
-crash
 ```
 
 ```{r}
@@ -128,6 +126,7 @@ crash %>%
   theme(legend.position = "")
 ```
 
+This is not a balanced dataset, in that the injuries are a small portion of traffic incidents. Let's look at the percentage.
 
 ```{r}
 crash %>%
@@ -311,12 +310,15 @@ collect_predictions(crash_fit) %>%
 
 ```{r}
 crash_wf_model <- crash_fit$.workflow[[1]]
+
+# crash_wf_model <- butcher::butcher(crash_fit$.workflow[[1]])
 ```
 
 This is an object we can make predictions with. For example, is this particular crash predicted to have any injuries?
 
 ```{r}
 predict(crash_wf_model, crash_test[222, ])
+
 ```
 
 Now let’s save this model and the metrics to be used later in our model.
