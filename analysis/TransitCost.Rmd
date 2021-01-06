@@ -1,0 +1,120 @@
+---
+title: "Global Transit Costs"
+author: "Jim Gruman"
+date: "1/5/2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE)
+```
+
+```{r, results = FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+library(ggrepel)
+library(ggtext)
+library(countrycode)
+library(shiny)
+library(glue)
+})
+
+suppressMessages(
+tt <- tt_load("2021-01-05")
+)
+
+theme_set(hrbrthemes::theme_ipsum_gs() +
+          theme(plot.title.position = "plot", 
+                plot.caption.position = "plot"))
+```
+
+```{r echo=FALSE}
+transit_cost <- tt$transit_cost %>%
+  filter(!is.na(e)) %>%
+  mutate(real_cost = as.numeric(real_cost)/1000,
+         country_code = ifelse(country == "UK", "GB", country),
+         country = countrycode(country_code, "iso2c", "country.name"),
+         tunnel_per = tunnel / length,
+         rr = ifelse(rr, "Railroad", "Not Railroad"),
+         station_density = stations / length) %>%
+  mutate(country = fct_infreq(country))
+metrics <- c("Track Length (km)" = "length",
+             "Tunnel Length (km)" = "tunnel",
+             "Stations" = "stations")
+
+inputPanel(
+  selectizeInput("country", label = "Country:",
+                 choices = str_remove(levels(transit_cost$country), "United States"), 
+                 selected = "China"),
+  selectInput("metric", label = "Metric:", choices = metrics,
+              selected = metrics[1])
+)
+
+transit_cost_country <- reactive({
+  transit_cost %>%
+    filter(country %in% c(input$country,"United States"))
+})
+
+renderPlotly({
+  us_color <- hrbrthemes::ft_pal()(8)[3]
+  other_color <- hrbrthemes::ft_pal()(8)[2]
+
+  metric <- input$metric
+  x_axis_lab <- names(metrics)[metrics == metric]
+  
+transit_cost_country() %>%
+    mutate(countrycolor = case_when(
+      country == "United States" ~ us_color,
+      country == input$country ~ other_color,
+      TRUE ~ "gray50"
+    ),
+    suffix = case_when(
+      metric == "length" ~ paste0(round(cost_km_millions)),
+      metric == "stations" ~ paste0(round(station_density)),
+      TRUE ~ NA_character_
+    ),
+    label = case_when(
+      country == "United States" ~ glue("{city} {suffix}"),
+      country == input$country ~ glue("{city} {suffix}"),
+      TRUE ~ NA_character_
+    )) %>% 
+    ggplot(aes(!!sym(metric), 
+               real_cost, 
+               color = countrycolor,
+               label = label)) +
+    geom_point() +
+    geom_text_repel(size = 3.5, 
+                    segment.color = "#f8f8f2", 
+                    segment.alpha = 0.7) +
+    scale_y_continuous(labels = dollar) +
+    labs(x = x_axis_lab,
+         y = "Billion USD",
+         color = "Country") +
+    theme(legend.position = "",
+          plot.title = element_markdown(size = 22,
+                                        margin = margin(0, 0, 0.5, 0, unit = "line")),
+    plot.subtitle = element_markdown(size = 14, 
+                                     lineheight = 1.2, 
+                                     margin = margin(0, 0, 1, 0, unit = "line")),
+    plot.margin = margin(1.5, 1.5, 1, 1.5, unit = "line"),
+    axis.title.x = element_text(margin = margin(1, 0, 0.5, 0, unit = "line")),
+    panel.grid.major.y = element_line(color = "#44475a", size = 0.3),
+    panel.grid.major.x = element_line(color = "#44475a", size = 0.3),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.minor.x = element_blank()
+          ) +
+    labs(title = "Investment in Mass Transit in the 21<sup>st</sup> Century",
+         subtitle = glue::glue("The <span style='color:{us_color};'>United States</span> has allocated $57B to 13 urban rail projects, mostly in New York and<br />California. No project exceeds 10 km and the most expensive project costs $11B for 2.8<br />km of railway. In comparison, <span style='color:{other_color};'>{input$country}</span> has allocated over ${ format(sum(transit_cost$real_cost[transit_cost$country == input$country]), digits = 0) }Bn to {sum(transit_cost$country == input$country)} urban rail projects,<br />the longest of which runs {max(transit_cost$length[transit_cost$country == input$country])} km and costs ${round(max(transit_cost$real_cost[transit_cost$country == input$country]),1)}Bn."), 
+    y = "Billions of $ US", x = x_axis_lab,
+    caption = "Data from transitcosts.com | @jim_gruman")
+})
+
+```
