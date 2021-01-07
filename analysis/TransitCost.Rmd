@@ -1,7 +1,7 @@
 ---
 title: "Global Transit Costs"
 author: "Jim Gruman"
-date: "January 5, 2021"
+date: "January 6, 2021"
 output: 
   workflowr::wflow_html:
     toc: no
@@ -44,12 +44,10 @@ transit_cost <- readr::read_csv('https://raw.githubusercontent.com/rfordatascien
 ```
 
 ```{r preparation2}
-transit_cost <- transit_cost[transit_cost$e > 0,] 
-```
+# transit_cost <- transit_cost[transit_cost$e > 0,] 
 
-
-```{r preparation3}
 transit_cost <- transit_cost %>%
+  dplyr::filter(!is.na(`e`)) %>% 
   dplyr::mutate(real_cost = as.numeric(real_cost)/1000,
          country_code = dplyr::if_else(country == "UK", "GB", country),
          country = countrycode(country_code, "iso2c", "country.name"),
