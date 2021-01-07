@@ -214,13 +214,13 @@ pprices2000
 
 Smith goes on to say that commodity prices rise because some quantity has been, or is expected to be, removed from the market. It may be removed by bad weather that reduces production or a new buyer who increases purchases. His rule of thumb for US major grains is that the percentage price change is similar to, or a little larger than, the quantity removed as a percent of production. 
 
-In [paper](https://doi.org/10.1093/ajae/aas032) that Aaron Smith published in 2012 with Mike Adjemian, they estimated how much corn and soybean futures change when the USDA changes its production estimates. They found that a 1% decline in expected corn production raises prices by 1.35% on average, and that a 1% decline in expected soybean production raises prices by 1% on average. The price response is larger when the markets are tight such as when inventories are low or during the ethanol boom and when the quantity decline is expected to be repeated for multiple years.
+In [this paper](https://doi.org/10.1093/ajae/aas032) that Aaron Smith published in 2012 with Mike Adjemian, they estimated how much corn and soybean futures change when the USDA changes its production estimates. They found that a 1% decline in expected corn production raises prices by 1.35% on average, and that a 1% decline in expected soybean production raises prices by 1% on average. The price response is larger when the markets are tight such as when inventories are low or during the ethanol boom and when the quantity decline is expected to be repeated for multiple years.
 
 For example, the 2012 drought in the US midwest reduced corn production by about 27% and increased prices by about 39%. In May of that year, [USDA projected](https://downloads.usda.library.cornell.edu/usda-esmis/files/3t945q76s/db78tc299/rv042t388/wasde-05-10-2012.pdf) a 14.8b bushel harvest, but actual US production was 10.8b, a loss of 27%. During the growing season, as markets became aware of the poor weather, the December futures price rose from \$5.39 on May 1 to \$7.49 on December 3, an increase of 39%.  So, the 39% price increase came from a 27% quantity loss. 
 
-To explain 2020's 50% increase in prices, we are looking for 50/1.35 = 37% of corn production being removed from the market, or about **5.5b bushels**. We're also looking for about 2b bushels of soybeans (50% of production) and about 0.9b bushels of wheat (50% of production). 
+To explain 2020's 50% increase in prices, we are looking for 50/1.35 = 37% of corn production being removed from the market, or about 5.5b bushels. We're also looking for about 2b bushels of soybeans (50% of production) and about 0.9b bushels of wheat (50% of production). 
 
-These are huge numbers.
+**These are huge numbers.**
 
 One possibility is the recent surge in US exports to China. We're only a third of the way through the crop year, but we're not going to get anywhere close to 5.5b of corn exported to China.
 
