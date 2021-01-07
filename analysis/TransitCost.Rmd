@@ -144,6 +144,4 @@ height = 1100
 
 ```
 
-```{r shiny-app}
-knitr::include_app("https://jimgruman.shinyapps.io/transitcost/")
-```
+<iframe width="800" height="1200" src="https://jimgruman.shinyapps.io/transitcost/" data-size="full-width" ></iframe>
