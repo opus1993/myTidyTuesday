@@ -144,4 +144,4 @@ height = 1100
 
 ```
 
-<iframe width="900" height="1200" src="https://jimgruman.shinyapps.io/transitcost/" data-size="full-width" ></iframe>
+<iframe width="1000" height="1200" src="https://jimgruman.shinyapps.io/transitcost/" data-size="full-width" ></iframe>
