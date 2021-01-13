@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-The data this week comes from the [Tate Art Museum](https://github.com/tategallery/collection). It consists of metadata for around 70,000 artworks that Tate owns or jointly owns with the National Galleries of Scotland as part of [ARTIST ROOMS](http://www.tate.org.uk/artist-rooms). Metadata for around 3,500 associated artists is also included.
+The data this week comes from the [Tate Art Collections](https://github.com/tategallery/collection). It consists of metadata for around 70,000 artworks that Tate owns or jointly owns with the National Galleries of Scotland as part of [ARTIST ROOMS](http://www.tate.org.uk/artist-rooms). Metadata for around 3,500 associated artists is also included.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
