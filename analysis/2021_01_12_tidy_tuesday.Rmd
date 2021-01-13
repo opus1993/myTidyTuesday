@@ -87,7 +87,7 @@ art %>%
   scale_fill_fermenter(palette = "YlOrRd", direction = -1,
                        guide = "colorsteps") +
   labs(fill = NULL, title = "The Tate Collection's Artists by birth year (Non-Turner)",
-       subtitle = "Born in 1775, Joseph Mallord William Turner's works account for 57% alone. The size of the box corresponds to the \nnumber of pieces of each non-Turner artist in the collection.",
+       subtitle = "Born in 1775, Joseph Mallord William Turner's works account for 57% alone. The size of\nthe box corresponds to the number of pieces of each non-Turner artist in the collection.",
        caption = "Data Source: Tate Art Museum at the National Galleries of Scotland")
   
 ```
