@@ -28,6 +28,7 @@ library(tidytuesdayR)
 library(treemapify)
 library(hrbrthemes)
 library(countrycode)
+library(tweetrmd)
 
 extrafont::loadfonts(quiet = TRUE)
 
@@ -95,6 +96,6 @@ art %>%
 And the Tidytuesday tweet:
 
 ```{r echo=FALSE}
-blogdown::shortcode('tweet', '1349150540610076673')
+tweet_embed('https://twitter.com/alexpghayes/status/1349150540610076673')
 ```
 
