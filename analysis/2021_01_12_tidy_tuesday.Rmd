@@ -1,0 +1,102 @@
+---
+title: "Tate Art Collection"
+date: "January 12, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+The data this week comes from the [Tate Art Museum](https://github.com/tategallery/collection). It consists of metadata for around 70,000 artworks that Tate owns or jointly owns with the National Galleries of Scotland as part of [ARTIST ROOMS](http://www.tate.org.uk/artist-rooms). Metadata for around 3,500 associated artists is also included.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	cache.lazy = FALSE,
+	df_print = "paged",
+	dpi = 300,
+	tidy = "styler"
+)
+
+library(tidyverse)
+library(tidytuesdayR)
+library(treemapify)
+library(hrbrthemes)
+library(countrycode)
+
+extrafont::loadfonts(quiet = TRUE)
+
+theme_set(hrbrthemes::theme_ft_rc() +
+            theme(plot.title.position = "plot",
+                  plot.caption.position = "plot"))
+
+
+```
+
+# Load the weekly Data
+
+Dowload the weekly data and make available in the `tt` object.
+
+```{r Load}
+
+tt <- tt_load("2021-01-12")
+
+```
+# Readme
+
+Take a look at the readme for the weekly data to get insight on the dataset.
+This includes a data dictionary, source, and a link to an article on the data.
+
+```{r Readme, eval = interactive()}
+
+tt
+
+```
+
+
+```{r prepare}
+
+
+art <- tt$artwork %>% 
+  rename(art_url = url) %>% 
+  left_join(tt$artists, by = c("artistId" = "id")) %>% 
+  mutate(gender = factor(gender),
+         on = str_sub(medium, start = str_locate(medium, " on ")[,2])) 
+
+```
+
+
+# Visualize
+
+Treemap of Artists
+
+```{r Visualize}
+
+art %>% 
+  mutate(birthDecade = yearOfBirth %/% 10 * 10) %>% 
+  count(artist, birthDecade) %>% 
+  slice_max(order_by = n, n = 60) %>% 
+  filter(!is.na(birthDecade), artist != "Turner, Joseph Mallord William") %>% 
+  ggplot(aes(area = n, fill = birthDecade, label = artist, subgroup = birthDecade)) +
+  geom_treemap() +
+  geom_treemap_subgroup_border() +
+  geom_treemap_text(color = "black", place = "top", reflow = TRUE) +
+  geom_treemap_subgroup_text(color = "gray40", place = "bottomright", 
+                             fontface = "italic", min.size = 0, alpha = 0.3) +
+  scale_fill_fermenter(palette = "YlOrRd", direction = -1,
+                       guide = "colorsteps") +
+  labs(fill = NULL, title = "The Tate Collection's Artists by birth year (Non-Turner)",
+       subtitle = "Born in 1775, Joseph Mallord William Turner's works account for 57% alone. The size of the box corresponds to the \nnumber of pieces of each non-Turner artist in the collection.",
+       caption = "Data Source: Tate Art Museum at the National Galleries of Scotland")
+  
+```
+
+
+
+
+
