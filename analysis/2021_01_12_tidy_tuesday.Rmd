@@ -94,6 +94,7 @@ art %>%
 
 And the Tidytuesday tweet:
 
-<iframe width="600" height="600" src="https://twitter.com/jim_gruman/status/1349150540610076673" data-size="full-width" ></iframe>
-
+```{r echo=FALSE}
+blogdown::shortcode('tweet', '1349150540610076673')
+```
 
