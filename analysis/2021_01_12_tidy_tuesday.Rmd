@@ -82,7 +82,7 @@ What is the distribution of artwork over creation year?
 art %>%
   ggplot(aes(year)) +
   geom_histogram(alpha = 0.8) +
-  labs(title = "The Tate Collection pieces in time are bimodally distributed")
+  labs(title = "The Tate Collection acquisitions are bimodally distributed")
 ```
 
 
@@ -117,8 +117,6 @@ tweet_embed('https://twitter.com/alexpghayes/status/1349150540610076673')
 
 ----
 # A machine learning model 
-
-Exploring art media over time in the #TidyTuesday Tate collection dataset
 
 Let’s focus on just a couple of variables for modeling, and at least focus on just the art created after 1750.
 
@@ -172,7 +170,7 @@ Let’s walk through the steps in this recipe, which are what are sensible defau
 
 - Next, we remove stop words (just the default set, to remove “on” and “and”).
 
-- Next, we stem words to a similar base word. In this case, I am going to leave stemming out, as the medium works are mostly technical materials.
+- Next, we stem words to a similar base word. In this case, I am going to leave stemming out, as the medium words are mostly technical materials.
 
 - Next, we form ngram combinations back. In this case, "acrylic paint paper" results in features for *acrylic*, *paint*, *paper*, *acrylic paint*, *paint paper*, *acrylic paper*, and *arylic paint paper*.
 
@@ -225,7 +223,7 @@ Now we can do what we really came here for, which is to talk about how we can ev
 autoplot(lasso_rs)
 ```
 
-The best $ (R^2) $ is around 0.80, and is a measure of how well the model fits the training data. The best RMSE is around 31.5 or so, and is on the scale of the original outcome, i.e. years. What are some of the best penalty values, in terms of RMSE?
+The best $ R^2 $ is around 0.80, and is a measure of how well the model fits the training data. The best RMSE is around 31.5 or so, and is on the scale of the original outcome, i.e. years. What are some of the best penalty values, in terms of RMSE?
 
 ```{r}
 show_best(lasso_rs, "rmse")
@@ -265,7 +263,7 @@ art_vip %>%
     Variable = str_remove(Variable, "tfidf_medium_"),
     Importance = abs(Importance),
     Variable = fct_reorder(Variable, Importance),
-    Sign = if_else(Sign == "POS", "More in later art", "More in earlier art")
+    Sign = if_else(Sign == "POS", "in later art", "in earlier art")
   ) %>%
   ggplot(aes(Importance, Variable, fill = Sign)) +
   geom_col(show.legend = FALSE) +
