@@ -323,7 +323,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-01-12
+<strong>Last updated:</strong> 2021-01-15
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -414,16 +414,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree81b1ab8daa56cc4e5c4329e08ad186ac9db8590etargetblank81b1ab8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/81b1ab8daa56cc4e5c4329e08ad186ac9db8590e" target="_blank">81b1ab8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree81d98f5938ac1fcfafb2826f14616fde5cb528c1targetblank81d98f5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/81d98f5938ac1fcfafb2826f14616fde5cb528c1" target="_blank">81d98f5</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree81b1ab8daa56cc4e5c4329e08ad186ac9db8590etargetblank81b1ab8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree81d98f5938ac1fcfafb2826f14616fde5cb528c1targetblank81d98f5a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/81b1ab8daa56cc4e5c4329e08ad186ac9db8590e" target="_blank">81b1ab8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/81d98f5938ac1fcfafb2826f14616fde5cb528c1" target="_blank">81d98f5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -477,6 +477,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/81d98f5938ac1fcfafb2826f14616fde5cb528c1/analysis/2021_01_12_tidy_tuesday.Rmd" target="_blank">81d98f5</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-15
+</td>
+<td>
+wflow_publish(“analysis/2021_01_12_tidy_tuesday.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/027eb6c45488cba1a78ac0262b3736e32c84685d/docs/2021_01_12_tidy_tuesday.html" target="_blank">027eb6c</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -706,9 +740,10 @@ wflow_publish(“analysis/2021_01_12_tidy_tuesday.Rmd”)
 </div>
 </div>
 <p>The data this week comes from the <a href="https://github.com/tategallery/collection">Tate Art Collections</a>. It consists of metadata for around 70,000 artworks that Tate owns or jointly owns with the National Galleries of Scotland as part of <a href="http://www.tate.org.uk/artist-rooms">ARTIST ROOMS</a>. Metadata for around 3,500 associated artists is also included.</p>
-<div id="load-the-weekly-data" class="section level1">
-<h1>Load the weekly Data</h1>
-<p>Dowload the weekly data and make available in the <code>tt</code> object.</p>
+<p>The post will be in two sections. The first is an exploration of the content of the dataset and a submission to Twitter. The second is a machine learning model that helps us better understand the importance of changes in art materials over time.</p>
+<div id="load-the-weekly-data" class="section level2">
+<h2>Load the weekly Data</h2>
+<p>Download from the R4DS github website and make available in the <code>tt</code> object.</p>
 <pre class="r"><code>tt &lt;- tt_load(&quot;2021-01-12&quot;)</code></pre>
 <pre><code>
     Downloading file 1 of 2: `artists.csv`
@@ -722,9 +757,15 @@ wflow_publish(“analysis/2021_01_12_tidy_tuesday.Rmd”)
     on = str_sub(medium, start = str_locate(medium, &quot; on &quot;)[, 2])
   )</code></pre>
 </div>
-<div id="visualize" class="section level1">
-<h1>Visualize</h1>
-<p>Treemap of Artists</p>
+<div id="visualize" class="section level2">
+<h2>Visualize</h2>
+<p>What is the distribution of artwork over creation year?</p>
+<pre class="r"><code>art %&gt;%
+  ggplot(aes(year)) +
+  geom_histogram(alpha = 0.8) +
+  labs(title = &quot;The Tate Collection pieces in time are bimodally distributed&quot;)</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-1-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>A treemap of Artists</p>
 <pre class="r"><code>art %&gt;%
   mutate(birthDecade = yearOfBirth %/% 10 * 10) %&gt;%
   count(artist, birthDecade) %&gt;%
@@ -751,6 +792,261 @@ wflow_publish(“analysis/2021_01_12_tidy_tuesday.Rmd”)
 <p>And the Tidytuesday tweet:</p>
 <blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">A quick shot on this <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> displaying Artists birth decade and the number of works in the <a href="https://twitter.com/Tate?ref_src=twsrc%5Etfw">@Tate</a> collection <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a><a href="https://t.co/cKOY5zVGQC">https://t.co/cKOY5zVGQC</a> <a href="https://t.co/4SP27wHK0z">pic.twitter.com/4SP27wHK0z</a></p>&mdash; Jim Gruman (@jim_gruman) <a href="https://twitter.com/jim_gruman/status/1349150540610076673?ref_src=twsrc%5Etfw">January 13, 2021</a></blockquote>
 
+<hr />
+</div>
+<div id="a-machine-learning-model" class="section level1">
+<h1>A machine learning model</h1>
+<p>Exploring art media over time in the #TidyTuesday Tate collection dataset</p>
+<p>Let’s focus on just a couple of variables for modeling, and at least focus on just the art created after 1750.</p>
+<pre class="r"><code>tate_df &lt;- art %&gt;%
+  filter(year &gt; 1750) %&gt;%
+  select(year, medium, width, height) %&gt;%
+  na.omit() %&gt;%
+  arrange(year)</code></pre>
+<p>What are the most common words used in describing the media?</p>
+<pre class="r"><code>tate_df %&gt;%
+  unnest_tokens(word, medium) %&gt;%
+  count(word, sort = TRUE)</code></pre>
+<pre><code># A tibble: 1,122 x 2
+   word            n
+   &lt;chr&gt;       &lt;int&gt;
+ 1 on          53651
+ 2 paper       48645
+ 3 graphite    29279
+ 4 and          9668
+ 5 watercolour  5216
+ 6 paint        4856
+ 7 oil          4318
+ 8 canvas       3622
+ 9 screenprint  3366
+10 lithograph   2987
+# ... with 1,112 more rows</code></pre>
+<p>Lots of paper, graphite, oil and watercolour paints.</p>
+<p>We can start by splitting our data into training and testing sets, and creating resamples.</p>
+<pre class="r"><code>art_split &lt;- initial_split(tate_df, strata = year)
+art_train &lt;- training(art_split)
+art_test &lt;- testing(art_split)
+
+art_folds &lt;- vfold_cv(art_train, strata = year)</code></pre>
+<p>Next, let’s preprocess to get it ready for modeling. We can use specialized steps from <code>textrecipes</code>, along with the general recipe steps.</p>
+<pre class="r"><code>art_rec &lt;- recipe(year ~ ., data = art_train) %&gt;%
+  step_tokenize(medium) %&gt;%
+  step_stopwords(medium) %&gt;%
+  #  step_stem(medium) %&gt;%
+  step_ngram(medium, num_tokens = 3, min_num_tokens = 1) %&gt;%
+  step_tokenfilter(medium, max_tokens = 700) %&gt;%
+  step_tfidf(medium) # a normalized input is required for regularized regression
+
+art_rec</code></pre>
+<pre><code>Data Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor          3
+
+Operations:
+
+Tokenization for medium
+Stop word removal for medium
+ngramming for medium
+Text filtering for medium
+Term frequency-inverse document frequency with medium</code></pre>
+<p>Let’s walk through the steps in this recipe, which are what are sensible defaults for training a model with text features.</p>
+<ul>
+<li><p>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what data we are using.</p></li>
+<li><p>Next, we tokenize our text, with the default tokenization into single words.</p></li>
+<li><p>Next, we remove stop words (just the default set, to remove “on” and “and”).</p></li>
+<li><p>Next, we stem words to a similar base word. In this case, I am going to leave stemming out, as the medium works are mostly technical materials.</p></li>
+<li><p>Next, we form ngram combinations back. In this case, “acrylic paint paper” results in features for <em>acrylic</em>, <em>paint</em>, <em>paper</em>, <em>acrylic paint</em>, <em>paint paper</em>, <em>acrylic paper</em>, and <em>arylic paint paper</em>.</p></li>
+<li><p>It wouldn’t be practical to keep all the tokens from this whole dataset in our model, so we can filter down to only keep, in this case, the top 700 most-used tokens (after removing stop words).</p></li>
+<li><p>We need to decide on some kind of weighting for these tokens next, either something like term frequency or, what we used here, tf-idf.</p></li>
+</ul>
+<p>Next, it’s time to specify our model and put it together with our recipe into a workflow. To use a fast, compact sparse data structure, we will create a hardhat blueprint with <code>composition = "dgCMatrix"</code>.</p>
+<pre class="r"><code>sparse_bp &lt;- hardhat::default_recipe_blueprint(composition = &quot;dgCMatrix&quot;)
+
+lasso_spec &lt;- linear_reg(penalty = tune(), mixture = 1) %&gt;%
+  set_engine(&quot;glmnet&quot;)
+
+art_wf &lt;- workflow() %&gt;%
+  add_recipe(art_rec, blueprint = sparse_bp) %&gt;%
+  add_model(lasso_spec)
+
+art_wf</code></pre>
+<pre><code>== Workflow ====================================================================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ----------------------------------------------------------------
+5 Recipe Steps
+
+* step_tokenize()
+* step_stopwords()
+* step_ngram()
+* step_tokenfilter()
+* step_tfidf()
+
+-- Model -----------------------------------------------------------------------
+Linear Regression Model Specification (regression)
+
+Main Arguments:
+  penalty = tune()
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+<p>The only other piece we need to get ready for model fitting is values for the regularization penalty to try. The default goes down to very tiny penalties and I don’t think we’ll need that, so let’s change the <code>range()</code>.</p>
+<pre class="r"><code>lambda_grid &lt;- grid_regular(penalty(range = c(-3, 0)), levels = 20)</code></pre>
+<p>Now let’s tune the lasso model on the resampled datasets we created.</p>
+<pre class="r"><code>doParallel::registerDoParallel()
+
+lasso_rs &lt;- tune_grid(
+  art_wf,
+  resamples = art_folds,
+  grid = lambda_grid
+)
+
+lasso_rs</code></pre>
+<pre><code># Tuning results
+# 10-fold cross-validation using stratification 
+# A tibble: 10 x 4
+   splits               id     .metrics          .notes          
+   &lt;list&gt;               &lt;chr&gt;  &lt;list&gt;            &lt;list&gt;          
+ 1 &lt;split [37.2K/4.1K]&gt; Fold01 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;
+ 2 &lt;split [37.2K/4.1K]&gt; Fold02 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;
+ 3 &lt;split [37.2K/4.1K]&gt; Fold03 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;
+ 4 &lt;split [37.2K/4.1K]&gt; Fold04 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;
+ 5 &lt;split [37.2K/4.1K]&gt; Fold05 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;
+ 6 &lt;split [37.2K/4.1K]&gt; Fold06 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;
+ 7 &lt;split [37.2K/4.1K]&gt; Fold07 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;
+ 8 &lt;split [37.2K/4.1K]&gt; Fold08 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;
+ 9 &lt;split [37.2K/4.1K]&gt; Fold09 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;
+10 &lt;split [37.2K/4.1K]&gt; Fold10 &lt;tibble [40 x 5]&gt; &lt;tibble [0 x 1]&gt;</code></pre>
+<p>That was quite fast, because it’s a linear model and we used the sparse data structure.</p>
+<div id="evaluate-model" class="section level2">
+<h2>Evaluate model</h2>
+<p>Now we can do what we really came here for, which is to talk about how we can evaluate a model like this and see if it was a good idea. How do the results look?</p>
+<pre class="r"><code>autoplot(lasso_rs)</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-10-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>The best $ (R^2) $ is around 0.80, and is a measure of how well the model fits the training data. The best RMSE is around 31.5 or so, and is on the scale of the original outcome, i.e. years. What are some of the best penalty values, in terms of RMSE?</p>
+<pre class="r"><code>show_best(lasso_rs, &quot;rmse&quot;)</code></pre>
+<pre><code># A tibble: 5 x 7
+  penalty .metric .estimator  mean     n std_err .config              
+    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
+1  0.0546 rmse    standard    31.7    10   0.123 Preprocessor1_Model12
+2  0.0379 rmse    standard    31.7    10   0.125 Preprocessor1_Model11
+3  0.0264 rmse    standard    31.8    10   0.126 Preprocessor1_Model10
+4  0.0785 rmse    standard    31.8    10   0.123 Preprocessor1_Model13
+5  0.0183 rmse    standard    31.8    10   0.127 Preprocessor1_Model09</code></pre>
+<p>We can select the best penalty, and finalize the workflow with it.</p>
+<pre class="r"><code>best_rmse &lt;- select_best(lasso_rs, &quot;rmse&quot;)
+
+final_lasso &lt;- finalize_workflow(art_wf, best_rmse)
+final_lasso</code></pre>
+<pre><code>== Workflow ====================================================================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ----------------------------------------------------------------
+5 Recipe Steps
+
+* step_tokenize()
+* step_stopwords()
+* step_ngram()
+* step_tokenfilter()
+* step_tfidf()
+
+-- Model -----------------------------------------------------------------------
+Linear Regression Model Specification (regression)
+
+Main Arguments:
+  penalty = 0.0545559478116852
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+<p>The function <code>last_fit()</code> fits this finalized lasso model one last time to the training data and evaluates one last time on the testing data. The metrics are computed on the testing data.</p>
+<pre class="r"><code>art_final &lt;- last_fit(final_lasso, art_split)
+collect_metrics(art_final)</code></pre>
+<pre><code># A tibble: 2 x 4
+  .metric .estimator .estimate .config             
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard      31.7   Preprocessor1_Model1
+2 rsq     standard       0.805 Preprocessor1_Model1</code></pre>
+<p>We can use the fitted workflow in art_final to explore variable importance using the vip package.</p>
+<pre class="r"><code>art_vip &lt;- pull_workflow_fit(art_final$.workflow[[1]]) %&gt;%
+  vi()</code></pre>
+<p>another visualization, this time of variable importance in ascertaining the year of the artwork:</p>
+<pre class="r"><code>art_vip %&gt;%
+  group_by(Sign) %&gt;%
+  slice_max(abs(Importance), n = 20) %&gt;%
+  ungroup() %&gt;%
+  mutate(
+    Variable = str_remove(Variable, &quot;tfidf_medium_&quot;),
+    Importance = abs(Importance),
+    Variable = fct_reorder(Variable, Importance),
+    Sign = if_else(Sign == &quot;POS&quot;, &quot;More in later art&quot;, &quot;More in earlier art&quot;)
+  ) %&gt;%
+  ggplot(aes(Importance, Variable, fill = Sign)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~Sign, scales = &quot;free&quot;) +
+  labs(y = NULL)</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-15-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>This tells quite a story about what predictors are most important in pushing the prediction for an observation up or down the most.</p>
+<p>How well does the model actually do, though? Let’s plot true and predicted values for years, for the testing data.</p>
+<pre class="r"><code>collect_predictions(art_final) %&gt;%
+  ggplot(aes(year, .pred)) +
+  geom_abline(lty = 2, color = &quot;gray50&quot;, size = 1.2) +
+  geom_point(size = 1.5, alpha = 0.3) +
+  coord_fixed()</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-16-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>There are clumps of artwork that are predicted well at the high and low end, but notice that prominent horizontal line of observations that are all predicted to be created at about ~1900. Let’s dig more into misclassifications.</p>
+<pre class="r"><code>misclassified &lt;- collect_predictions(art_final) %&gt;%
+  bind_cols(art_test %&gt;% select(medium)) %&gt;%
+  filter(abs(year - .pred) &gt; 100)
+
+misclassified %&gt;%
+  arrange(year)</code></pre>
+<pre><code># A tibble: 351 x 6
+   id               .pred  .row  year .config              medium             
+   &lt;chr&gt;            &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt;              
+ 1 train/test split 1887.     1  1751 Preprocessor1_Model1 Oil paint on canvas
+ 2 train/test split 1891.    12  1753 Preprocessor1_Model1 Oil paint on canvas
+ 3 train/test split 1887.    13  1753 Preprocessor1_Model1 Oil paint on canvas
+ 4 train/test split 1897.    15  1753 Preprocessor1_Model1 Oil paint on canvas
+ 5 train/test split 1897.    41  1759 Preprocessor1_Model1 Oil paint on canvas
+ 6 train/test split 1886.    45  1760 Preprocessor1_Model1 Oil paint on canvas
+ 7 train/test split 1891.    52  1760 Preprocessor1_Model1 Oil paint on canvas
+ 8 train/test split 1891.    55  1760 Preprocessor1_Model1 Oil paint on canvas
+ 9 train/test split 1889.    59  1760 Preprocessor1_Model1 Oil paint on canvas
+10 train/test split 1944.    67  1761 Preprocessor1_Model1 Etching on paper   
+# ... with 341 more rows</code></pre>
+<p>These are pieces of art that were created very early but predicted much later. In fact, notice that “Oil paint on canvas” also predicts to 1886 (with small influence of width and height features); that is about the mean or median of this whole dataset, that was one of the most common media, and this is how a linear model works!</p>
+<pre class="r"><code>misclassified %&gt;%
+  arrange(-year)</code></pre>
+<pre><code># A tibble: 351 x 6
+   id              .pred  .row  year .config           medium                   
+   &lt;chr&gt;           &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;             &lt;chr&gt;                    
+ 1 train/test spl~ 1867. 54974  2010 Preprocessor1_Mo~ Mezzotint on paper       
+ 2 train/test spl~ 1867. 54975  2010 Preprocessor1_Mo~ Mezzotint on paper       
+ 3 train/test spl~ 1871. 54979  2010 Preprocessor1_Mo~ Mezzotint on paper       
+ 4 train/test spl~ 1857. 54837  2008 Preprocessor1_Mo~ Etching and graphite on ~
+ 5 train/test spl~ 1837. 54880  2008 Preprocessor1_Mo~ Graphite on paper        
+ 6 train/test spl~ 1900. 54886  2008 Preprocessor1_Mo~ Oil paint on canvas      
+ 7 train/test spl~ 1833. 54801  2007 Preprocessor1_Mo~ Graphite on paper        
+ 8 train/test spl~ 1896. 54815  2007 Preprocessor1_Mo~ Oil paint on canvas      
+ 9 train/test spl~ 1896. 54816  2007 Preprocessor1_Mo~ Oil paint on canvas      
+10 train/test spl~ 1835. 54542  2005 Preprocessor1_Mo~ Graphite on paper        
+# ... with 341 more rows</code></pre>
+<p>These are pieces of art that were created very recently but predicted much earlier. Notice that they have used what we might think of as antique or traditional techniques.</p>
+<p>Now, finally, it is time for the residuals. We can compute residuals for the test set with the <code>augment()</code> function.</p>
+<pre class="r"><code>augment(art_final) %&gt;%
+  ggplot(aes(.pred, .resid)) +
+  geom_hline(yintercept = 0, lty = 2, color = &quot;gray50&quot;, size = 1.2) +
+  geom_point(size = 1.5, alpha = 0.3) +
+  geom_smooth(color = &quot;midnightblue&quot;) +
+  labs(title = &quot;Residuals of Regularized Regression show significant heterscedasticity&quot;)</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-19-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>This plot exhibits significant heteroscedasticity, with lower variance for recent artwork and higher variance for artwork in other time periods. If the model predicts a recent year, we can be more confident that it is right than if the model predicts an older year, and there is basically no time information in the fact that an artwork was created with a medium like oil on canvas. So is this model bad and not useful? It’s not great, for most goals I can think of, but it’s interesting to notice how much we can learn about our data even from such a model.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -776,38 +1072,55 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] tweetrmd_0.0.8     countrycode_1.2.0  hrbrthemes_0.8.6   treemapify_2.5.5  
- [5] tidytuesdayR_1.0.1 forcats_0.5.0      stringr_1.4.0      dplyr_1.0.2       
- [9] purrr_0.3.4        readr_1.4.0        tidyr_1.1.2        tibble_3.0.4      
-[13] ggplot2_3.3.3      tidyverse_1.3.0    workflowr_1.6.2   
+ [1] vip_0.3.2          textrecipes_0.4.0  yardstick_0.0.7    workflows_0.2.1   
+ [5] tune_0.1.2         rsample_0.0.8      recipes_0.1.15     parsnip_0.1.4     
+ [9] modeldata_0.1.0    infer_0.5.3        dials_0.0.9        scales_1.1.1      
+[13] broom_0.7.3        tidymodels_0.1.2   tidytext_0.3.0     tweetrmd_0.0.8    
+[17] countrycode_1.2.0  hrbrthemes_0.8.6   treemapify_2.5.5   tidytuesdayR_1.0.1
+[21] forcats_0.5.0      stringr_1.4.0      dplyr_1.0.2        purrr_0.3.4       
+[25] readr_1.4.0        tidyr_1.1.2        tibble_3.0.4       ggplot2_3.3.3     
+[29] tidyverse_1.3.0    workflowr_1.6.2   
 
 loaded via a namespace (and not attached):
- [1] fs_1.5.0               usethis_2.0.0          lubridate_1.7.9.2     
- [4] RColorBrewer_1.1-2     httr_1.4.2             rprojroot_2.0.2       
- [7] R.cache_0.14.0         tools_4.0.3            backports_1.2.1       
-[10] bslib_0.2.3.9000       R6_2.5.0               DBI_1.1.0             
-[13] colorspace_2.0-0       withr_2.3.0            tidyselect_1.1.0      
-[16] curl_4.3               compiler_4.0.3         git2r_0.27.1          
-[19] extrafontdb_1.0        cli_2.2.0              rvest_0.3.6           
-[22] xml2_1.3.2             labeling_0.4.2         sass_0.2.0.9005       
-[25] scales_1.1.1           systemfonts_0.3.2.9000 digest_0.6.27         
-[28] rmarkdown_2.6.0        R.utils_2.10.1         pkgconfig_2.0.3       
-[31] htmltools_0.5.0.9003   extrafont_0.17         styler_1.3.2          
-[34] dbplyr_2.0.0           rlang_0.4.9            readxl_1.3.1          
-[37] rstudioapi_0.13        farver_2.0.3           jquerylib_0.1.3       
-[40] generics_0.1.0         jsonlite_1.7.2         R.oo_1.24.0           
-[43] magrittr_2.0.1         Rcpp_1.0.5             munsell_0.5.0         
-[46] fansi_0.4.1            ggfittext_0.9.0        gdtools_0.2.2         
-[49] lifecycle_0.2.0        R.methodsS3_1.8.1      stringi_1.5.3         
-[52] whisker_0.4            yaml_2.2.1             grid_4.0.3            
-[55] promises_1.1.1.9001    crayon_1.3.4           haven_2.3.1           
-[58] hms_0.5.3              knitr_1.30             ps_1.5.0              
-[61] pillar_1.4.7           reprex_0.3.0           glue_1.4.2            
-[64] evaluate_0.14          memuse_4.1-0           modelr_0.1.8          
-[67] vctrs_0.3.6            httpuv_1.5.4           selectr_0.4-2         
-[70] Rttf2pt1_1.3.8         cellranger_1.1.0       gtable_0.3.0          
-[73] assertthat_0.2.1       xfun_0.19              broom_0.7.3           
-[76] later_1.1.0.1          ellipsis_0.3.1        </code></pre>
+  [1] readxl_1.3.1           backports_1.2.1        systemfonts_0.3.2.9000
+  [4] plyr_1.8.6             selectr_0.4-2          splines_4.0.3         
+  [7] listenv_0.8.0          SnowballC_0.7.0        usethis_2.0.0         
+ [10] digest_0.6.27          foreach_1.5.1          htmltools_0.5.1       
+ [13] fansi_0.4.1            magrittr_2.0.1         doParallel_1.0.16     
+ [16] globals_0.14.0         ggfittext_0.9.0        modelr_0.1.8          
+ [19] gower_0.2.2            extrafont_0.17         R.utils_2.10.1        
+ [22] extrafontdb_1.0        hardhat_0.1.5          colorspace_2.0-0      
+ [25] rvest_0.3.6            haven_2.3.1            xfun_0.20             
+ [28] crayon_1.3.4           jsonlite_1.7.2         survival_3.2-7        
+ [31] iterators_1.0.13       glue_1.4.2             gtable_0.3.0          
+ [34] ipred_0.9-9            R.cache_0.14.0         Rttf2pt1_1.3.8        
+ [37] shape_1.4.5            DBI_1.1.0              Rcpp_1.0.5            
+ [40] GPfit_1.0-8            lava_1.6.8.1           prodlim_2019.11.13    
+ [43] glmnet_4.1             httr_1.4.2             RColorBrewer_1.1-2    
+ [46] ellipsis_0.3.1         pkgconfig_2.0.3        R.methodsS3_1.8.1     
+ [49] farver_2.0.3           nnet_7.3-14            sass_0.3.0            
+ [52] dbplyr_2.0.0           utf8_1.1.4             tidyselect_1.1.0      
+ [55] labeling_0.4.2         rlang_0.4.10           DiceDesign_1.8-1      
+ [58] later_1.1.0.1          munsell_0.5.0          cellranger_1.1.0      
+ [61] tools_4.0.3            cli_2.2.0              generics_0.1.0        
+ [64] evaluate_0.14          yaml_2.2.1             rematch2_2.1.2        
+ [67] knitr_1.30             fs_1.5.0               nlme_3.1-151          
+ [70] future_1.21.0          whisker_0.4            R.oo_1.24.0           
+ [73] xml2_1.3.2             tokenizers_0.2.1       compiler_4.0.3        
+ [76] rstudioapi_0.13        curl_4.3               reprex_0.3.0          
+ [79] lhs_1.1.1              bslib_0.2.3.9000       stringi_1.5.3         
+ [82] ps_1.5.0               gdtools_0.2.3          memuse_4.1-0          
+ [85] lattice_0.20-41        Matrix_1.3-2           styler_1.3.2          
+ [88] vctrs_0.3.6            pillar_1.4.7           lifecycle_0.2.0       
+ [91] furrr_0.2.1            jquerylib_0.1.3        httpuv_1.5.5          
+ [94] R6_2.5.0               promises_1.1.1.9001    gridExtra_2.3         
+ [97] janeaustenr_0.1.5      parallelly_1.23.0      codetools_0.2-18      
+[100] MASS_7.3-53            assertthat_0.2.1       rprojroot_2.0.2       
+[103] withr_2.3.0            mgcv_1.8-33            parallel_4.0.3        
+[106] hms_0.5.3              grid_4.0.3             rpart_4.1-15          
+[109] timeDate_3043.102      class_7.3-17           rmarkdown_2.6.0       
+[112] git2r_0.28.0           pROC_1.17.0.1          lubridate_1.7.9.2     </code></pre>
+</div>
 </div>
 </div>
 
