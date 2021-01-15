@@ -414,16 +414,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree81d98f5938ac1fcfafb2826f14616fde5cb528c1targetblank81d98f5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/81d98f5938ac1fcfafb2826f14616fde5cb528c1" target="_blank">81d98f5</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree390f451eb7762f54d655d5f8202b97839c899c9ftargetblank390f451a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/390f451eb7762f54d655d5f8202b97839c899c9f" target="_blank">390f451</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree81d98f5938ac1fcfafb2826f14616fde5cb528c1targetblank81d98f5a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree390f451eb7762f54d655d5f8202b97839c899c9ftargetblank390f451a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/81d98f5938ac1fcfafb2826f14616fde5cb528c1" target="_blank">81d98f5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/390f451eb7762f54d655d5f8202b97839c899c9f" target="_blank">390f451</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -477,6 +477,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/390f451eb7762f54d655d5f8202b97839c899c9f/analysis/2021_01_12_tidy_tuesday.Rmd" target="_blank">390f451</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-15
+</td>
+<td>
+wflow_publish(“analysis/2021_01_12_tidy_tuesday.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/7a624b13655aa0f5b8e95264acfbd79f200ede5d/docs/2021_01_12_tidy_tuesday.html" target="_blank">7a624b1</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-15
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -763,7 +797,7 @@ wflow_publish(“analysis/2021_01_12_tidy_tuesday.Rmd”)
 <pre class="r"><code>art %&gt;%
   ggplot(aes(year)) +
   geom_histogram(alpha = 0.8) +
-  labs(title = &quot;The Tate Collection pieces in time are bimodally distributed&quot;)</code></pre>
+  labs(title = &quot;The Tate Collection acquisitions are bimodally distributed&quot;)</code></pre>
 <p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-1-1.png" width="2100" style="display: block; margin: auto;" /></p>
 <p>A treemap of Artists</p>
 <pre class="r"><code>art %&gt;%
@@ -796,7 +830,6 @@ wflow_publish(“analysis/2021_01_12_tidy_tuesday.Rmd”)
 </div>
 <div id="a-machine-learning-model" class="section level1">
 <h1>A machine learning model</h1>
-<p>Exploring art media over time in the #TidyTuesday Tate collection dataset</p>
 <p>Let’s focus on just a couple of variables for modeling, and at least focus on just the art created after 1750.</p>
 <pre class="r"><code>tate_df &lt;- art %&gt;%
   filter(year &gt; 1750) %&gt;%
@@ -858,7 +891,7 @@ Term frequency-inverse document frequency with medium</code></pre>
 <li><p>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what data we are using.</p></li>
 <li><p>Next, we tokenize our text, with the default tokenization into single words.</p></li>
 <li><p>Next, we remove stop words (just the default set, to remove “on” and “and”).</p></li>
-<li><p>Next, we stem words to a similar base word. In this case, I am going to leave stemming out, as the medium works are mostly technical materials.</p></li>
+<li><p>Next, we stem words to a similar base word. In this case, I am going to leave stemming out, as the medium words are mostly technical materials.</p></li>
 <li><p>Next, we form ngram combinations back. In this case, “acrylic paint paper” results in features for <em>acrylic</em>, <em>paint</em>, <em>paper</em>, <em>acrylic paint</em>, <em>paint paper</em>, <em>acrylic paper</em>, and <em>arylic paint paper</em>.</p></li>
 <li><p>It wouldn’t be practical to keep all the tokens from this whole dataset in our model, so we can filter down to only keep, in this case, the top 700 most-used tokens (after removing stop words).</p></li>
 <li><p>We need to decide on some kind of weighting for these tokens next, either something like term frequency or, what we used here, tf-idf.</p></li>
@@ -928,7 +961,7 @@ lasso_rs</code></pre>
 <p>Now we can do what we really came here for, which is to talk about how we can evaluate a model like this and see if it was a good idea. How do the results look?</p>
 <pre class="r"><code>autoplot(lasso_rs)</code></pre>
 <p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-10-1.png" width="2100" style="display: block; margin: auto;" /></p>
-<p>The best $ (R^2) $ is around 0.80, and is a measure of how well the model fits the training data. The best RMSE is around 31.5 or so, and is on the scale of the original outcome, i.e. years. What are some of the best penalty values, in terms of RMSE?</p>
+<p>The best $ R^2 $ is around 0.80, and is a measure of how well the model fits the training data. The best RMSE is around 31.5 or so, and is on the scale of the original outcome, i.e. years. What are some of the best penalty values, in terms of RMSE?</p>
 <pre class="r"><code>show_best(lasso_rs, &quot;rmse&quot;)</code></pre>
 <pre><code># A tibble: 5 x 7
   penalty .metric .estimator  mean     n std_err .config              
@@ -984,7 +1017,7 @@ collect_metrics(art_final)</code></pre>
     Variable = str_remove(Variable, &quot;tfidf_medium_&quot;),
     Importance = abs(Importance),
     Variable = fct_reorder(Variable, Importance),
-    Sign = if_else(Sign == &quot;POS&quot;, &quot;More in later art&quot;, &quot;More in earlier art&quot;)
+    Sign = if_else(Sign == &quot;POS&quot;, &quot;in later art&quot;, &quot;in earlier art&quot;)
   ) %&gt;%
   ggplot(aes(Importance, Variable, fill = Sign)) +
   geom_col(show.legend = FALSE) +
