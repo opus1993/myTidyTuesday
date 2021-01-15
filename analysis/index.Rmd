@@ -66,7 +66,7 @@ articles <- articles %>%
   mutate(libraries = str_sub(libraries, 
                              start = str_locate(libraries, "\\(")[,1] + 1,
                              end = str_locate(libraries, "\\)")[,1] - 1 )) %>%
-  filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate","here","hrbrthemes") ) %>% 
+  filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate","here","hrbrthemes", "tweetrmd") ) %>% 
   tidyr::nest(package = libraries) 
 
 df_url <- articles %>% 
