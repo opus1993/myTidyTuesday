@@ -112,7 +112,7 @@ art %>%
 And the Tidytuesday tweet:
 
 ```{r echo=FALSE}
-tweet_embed('https://twitter.com/alexpghayes/status/1349150540610076673')
+tweet_embed('https://twitter.com/jim_gruman/status/1349150540610076673')
 ```
 
 ----
