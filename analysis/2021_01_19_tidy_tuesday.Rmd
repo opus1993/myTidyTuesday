@@ -1,6 +1,6 @@
 ---
 title: "Kenya Census"
-date: "`r Sys.setlocale('LC_TIME', 'C'); paste('Last Update:', format(Sys.time(), '%B %e, %Y'))`"
+date: "January 19, 2021"
 output:
   workflowr::wflow_html:
     toc: no
