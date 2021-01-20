@@ -408,16 +408,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee6d9b4bb127039f62edb64399bd5a663975e92d9targetblanke6d9b4ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/e6d9b4bb127039f62edb64399bd5a663975e92d9" target="_blank">e6d9b4b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee2a48241c7255a9474dab5bc647dd163e145a6ectargetblanke2a4824a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/e2a48241c7255a9474dab5bc647dd163e145a6ec" target="_blank">e2a4824</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee6d9b4bb127039f62edb64399bd5a663975e92d9targetblanke6d9b4ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee2a48241c7255a9474dab5bc647dd163e145a6ectargetblanke2a4824a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/e6d9b4bb127039f62edb64399bd5a663975e92d9" target="_blank">e6d9b4b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/e2a48241c7255a9474dab5bc647dd163e145a6ec" target="_blank">e2a4824</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -426,6 +426,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
     Ignored:    analysis/rsconnect/
     Ignored:    data/03/
     Ignored:    fonts/
@@ -476,6 +477,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/e2a48241c7255a9474dab5bc647dd163e145a6ec/analysis/2021_01_19_tidy_tuesday.Rmd" target="_blank">e2a4824</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-20
+</td>
+<td>
+wflow_publish(“analysis/2021_01_19_tidy_tuesday.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/063e320225d0d13799602636e611beeb62165f25/docs/2021_01_19_tidy_tuesday.html" target="_blank">063e320</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -912,8 +947,8 @@ ggsave(p1,
   filename = here::here(&quot;docs&quot;, &quot;assets&quot;, &quot;PoultryWaffle.png&quot;),
   device = &quot;png&quot;
 )</code></pre>
-<pre class="r"><code>knitr::include_graphics(here::here(&quot;docs&quot;, &quot;assets&quot;, &quot;PoultryWaffle.png&quot;), error = FALSE)</code></pre>
-<p><img src="D:/myTidyTuesday/docs/assets/PoultryWaffle.png" width="336" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/PoultryWaffle.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/PoultryWaffle.png" style="display: block; margin: auto;" /></p>
 <p>At this point in the data exploration, I couldn’t help but ask what the relationship might be between commercial farming and the types of livestock. The patterns exhibited on the maps seem to infer a relationship, but let’s see what we can do to quantify it with spatial autocorrelation tests.</p>
 <p>Pick any two counties that are neighbors - with a shared border - and the chances are they’ll be more similar than any two random counties. This could be a problem when using statistical models that assume, conditional on the model, that the data points are independent.</p>
 <p>The <code>spdep</code> package has functions for measures of spatial correlation, also known as spatial dependency. Computing these measures first requires we to work out which regions are neighbors via the <code>poly2nb()</code> function, short for “polygons to neighbors”. The result is an object of class <code>nb</code>. Then we can compute the test statistic and run a significance test on the null hypothesis of no spatial correlation. The significance test can either be done by Monte-Carlo or theoretical models.</p>
@@ -1012,34 +1047,34 @@ loaded via a namespace (and not attached):
  [13] lubridate_1.7.9.2      xml2_1.3.2             R.methodsS3_1.8.1     
  [16] codetools_0.2-18       splines_4.0.3          memuse_4.1-0          
  [19] knitr_1.30             jsonlite_1.7.2         broom_0.7.3           
- [22] Rttf2pt1_1.3.8         dbplyr_2.0.0           png_0.1-7             
- [25] R.oo_1.24.0            compiler_4.0.3         httr_1.4.2            
- [28] backports_1.2.1        assertthat_0.2.1       Matrix_1.3-2          
- [31] cli_2.2.0              later_1.1.0.1          htmltools_0.5.1       
- [34] tools_4.0.3            coda_0.19-4            gtable_0.3.0          
- [37] glue_1.4.2             gmodels_2.18.1         Rcpp_1.0.6            
- [40] styler_1.3.2           cellranger_1.1.0       jquerylib_0.1.3       
- [43] raster_3.4-5           vctrs_0.3.6            gdata_2.18.0          
- [46] nlme_3.1-151           extrafontdb_1.0        xfun_0.20             
- [49] ps_1.5.0               rvest_0.3.6            lifecycle_0.2.0       
- [52] gtools_3.8.2           packcircles_0.3.4      LearnBayes_2.15.1     
- [55] MASS_7.3-53            scales_1.1.1           hms_1.0.0             
- [58] promises_1.1.1.9001    expm_0.999-6           rematch2_2.1.2        
- [61] RColorBrewer_1.1-2     yaml_2.2.1             curl_4.3              
- [64] gridExtra_2.3          gdtools_0.2.3          sass_0.3.0            
- [67] stringi_1.5.3          e1071_1.7-4            boot_1.3-25           
- [70] rlang_0.4.10           pkgconfig_2.0.3        systemfonts_0.3.2.9000
- [73] evaluate_0.14          lattice_0.20-41        labeling_0.4.2        
- [76] htmlwidgets_1.5.3      tidyselect_1.1.0       here_1.0.1            
- [79] plyr_1.8.6             magrittr_2.0.1         R6_2.5.0              
- [82] generics_0.1.0         DBI_1.1.1              pillar_1.4.7          
- [85] haven_2.3.1            whisker_0.4            withr_2.4.0           
- [88] units_0.6-7            modelr_0.1.8           crayon_1.3.4          
- [91] KernSmooth_2.23-18     rmarkdown_2.6.6        usethis_2.0.0         
- [94] grid_4.0.3             readxl_1.3.1           git2r_0.28.0          
- [97] reprex_0.3.0           digest_0.6.27          classInt_0.4-3        
-[100] R.cache_0.14.0         httpuv_1.5.5           R.utils_2.10.1        
-[103] munsell_0.5.0          bslib_0.2.3.9000      </code></pre>
+ [22] Rttf2pt1_1.3.8         dbplyr_2.0.0           R.oo_1.24.0           
+ [25] compiler_4.0.3         httr_1.4.2             backports_1.2.1       
+ [28] assertthat_0.2.1       Matrix_1.3-2           cli_2.2.0             
+ [31] later_1.1.0.1          htmltools_0.5.1        tools_4.0.3           
+ [34] coda_0.19-4            gtable_0.3.0           glue_1.4.2            
+ [37] gmodels_2.18.1         Rcpp_1.0.6             styler_1.3.2          
+ [40] cellranger_1.1.0       jquerylib_0.1.3        raster_3.4-5          
+ [43] vctrs_0.3.6            gdata_2.18.0           nlme_3.1-151          
+ [46] extrafontdb_1.0        xfun_0.20              ps_1.5.0              
+ [49] rvest_0.3.6            lifecycle_0.2.0        gtools_3.8.2          
+ [52] packcircles_0.3.4      LearnBayes_2.15.1      MASS_7.3-53           
+ [55] scales_1.1.1           hms_1.0.0              promises_1.1.1.9001   
+ [58] expm_0.999-6           rematch2_2.1.2         RColorBrewer_1.1-2    
+ [61] yaml_2.2.1             curl_4.3               gridExtra_2.3         
+ [64] gdtools_0.2.3          sass_0.3.0             stringi_1.5.3         
+ [67] e1071_1.7-4            boot_1.3-25            rlang_0.4.10          
+ [70] pkgconfig_2.0.3        systemfonts_0.3.2.9000 evaluate_0.14         
+ [73] lattice_0.20-41        labeling_0.4.2         htmlwidgets_1.5.3     
+ [76] tidyselect_1.1.0       here_1.0.1             plyr_1.8.6            
+ [79] magrittr_2.0.1         R6_2.5.0               generics_0.1.0        
+ [82] DBI_1.1.1              pillar_1.4.7           haven_2.3.1           
+ [85] whisker_0.4            withr_2.4.0            units_0.6-7           
+ [88] modelr_0.1.8           crayon_1.3.4           KernSmooth_2.23-18    
+ [91] rmarkdown_2.6.6        usethis_2.0.0          grid_4.0.3            
+ [94] readxl_1.3.1           git2r_0.28.0           reprex_0.3.0          
+ [97] digest_0.6.27          classInt_0.4-3         R.cache_0.14.0        
+[100] httpuv_1.5.5           R.utils_2.10.1         munsell_0.5.0         
+[103] bslib_0.2.3.9000      </code></pre>
 </div>
 </div>
 
