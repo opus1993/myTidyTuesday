@@ -346,7 +346,7 @@ ggsave(p1,
 ```
 
 ```{r}
-knitr::include_graphics(here::here("docs","assets","PoultryWaffle.png"), error = FALSE)
+knitr::include_graphics("assets/PoultryWaffle.png", error = FALSE)
 ```
 
 
