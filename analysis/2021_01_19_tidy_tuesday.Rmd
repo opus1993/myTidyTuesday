@@ -372,6 +372,10 @@ county_centers <- coordinates(rKenyaCensus::KenyaCounties_SHP)
 plot(rKenyaCensus::KenyaCounties_SHP); plot(county_nb, county_centers, add = TRUE)
 ```
 
+The hypothesis we are testing states that “the income values are randomly distributed across counties following a completely random process”. There are two methods to testing this hypothesis: an analytical method and a Monte Carlo method. We’ll explore both approaches in the following examples.
+
+First, the analytical method:
+
 ```{r}
 livestock_sp <- sf::as_Spatial(shapefiles %>% 
                    inner_join(livestock, by = "County") %>% 
@@ -381,23 +385,51 @@ livestock_sp <- sf::as_Spatial(shapefiles %>%
 # Run a Moran I test on total egg laying chickens
 moran.test(
   x = livestock_sp$stock, 
-  listw = nb2listw(county_nb, style = "W") # spatial weights for neighbors lists
+  listw = nb2listw(county_nb, style = "W", zero.policy = TRUE), # spatial weights for neighbors lists
+  alternative = "greater"
 )
 ```
 
-Moran's I values range from -1 to 1, and 1 indicates a strong spatial autocorrelation. In our example, we have a Moran's I value 0.424 and p-value of 0.0000001 which is considered statistically significant. Therefore, we would reject the null hypothesis of global spatial randomness and in favor of spatial autocorrelation in listing prices.
+Moran's I values range from -1 to 1, and 1 indicates a strong spatial autocorrelation. In our example, we have a Moran's I value 0.476. Usually, when the p-value is very small it’s common practice to report it as < 0.001, which is considered statistically significant. Therefore, we would reject the null hypothesis of global spatial randomness and in favor of spatial autocorrelation in listing prices. Note that the approach above is a one-sided statistical test, and that ArcMap and other software apply the two-sided variety by default.
+
+Second, the Monte Carlo method:
+
+The analytical approach to the Moran’s I analysis benefits from being fast. But it may be sensitive to irregularly distributed polygons. A safer approach to hypothesis testing is to run an MC simulation using the moran.mc() function. The moran.mc function takes an extra argument n, the number of simulations.
 
 ```{r }
-# Run a Moran I MC test on commercial crop farms, as a percentage of County area
-commercial_sp <- shapefiles %>% 
-  inner_join(rKenyaCensus::V4_T2.25 , by = "County") %>%
-  filter(AdminArea == "County") %>% 
-  mutate(pct_land = LandSize_Commercial / LandSize) %>% 
-  sf::as_Spatial()
-
-moran.mc(
-  commercial_sp$pct_land, 
-  nb2listw(county_nb), 
+MC <- moran.mc(  x = livestock_sp$stock, 
+  listw = nb2listw(county_nb, style = "W", zero.policy = TRUE), # spatial weights for neighbors lists
+  alternative = "greater",
   nsim = 999
-)
+  )
+
+MC
 ```
+
+The MC simulation generates a very small p-value, 0.001. This is not surprising given that the values are strongly clustered. We can see the results graphically by passing the Moran’s I model to the plot function:
+
+```{r}
+plot(MC)
+```
+
+The curve shows the distribution of Moran I values we could expect had the incomes been randomly distributed across the counties. Note that our observed statistic, 0.425, falls way to the right of the distribution suggesting that the values are clustered (a positive Moran’s I value suggests clustering whereas a negative Moran’s I value suggests dispersion).
+
+Now, had the Moran’s I statistic been negative (suggesting a dispersed pattern), you would probably want to set the alternative argument to less thus giving you the fraction of simulated I values more dispersed than your observed I value.
+
+A visual exercise that you can perform to assess how “typical” or “atypical” your pattern may be relative to a randomly distributed pattern is to plot your observed pattern alongside a few simulated patterns generated under the null hypothesis.
+
+```{r}
+set.seed(131)
+livestock_sp$rand1 <- sample(livestock_sp$stock, length(livestock_sp$stock), replace = FALSE)
+livestock_sp$rand2 <- sample(livestock_sp$stock, length(livestock_sp$stock), replace = FALSE)
+livestock_sp$rand3 <- sample(livestock_sp$stock, length(livestock_sp$stock), replace = FALSE)
+
+tmap::tm_shape(livestock_sp) + 
+  tmap::tm_fill(col = c("stock", "rand1", "rand2", "rand3"),
+          style = "quantile", n=8, palette="Greens", 
+          legend.show = FALSE) + 
+  tmap::tm_facets( nrow=1)
+```
+
+Can you tell the difference between our observed chicken population distribution and those generated from a completely random process? The map on the left is our observed distribution. The three maps on the right are realizations of a completely random process.
+
