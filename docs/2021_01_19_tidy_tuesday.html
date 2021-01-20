@@ -408,16 +408,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee2a48241c7255a9474dab5bc647dd163e145a6ectargetblanke2a4824a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/e2a48241c7255a9474dab5bc647dd163e145a6ec" target="_blank">e2a4824</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreecb85568328acd5d58d7eb78a85197ab537fafa9ftargetblankcb85568a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/cb85568328acd5d58d7eb78a85197ab537fafa9f" target="_blank">cb85568</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreee2a48241c7255a9474dab5bc647dd163e145a6ectargetblanke2a4824a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreecb85568328acd5d58d7eb78a85197ab537fafa9ftargetblankcb85568a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/e2a48241c7255a9474dab5bc647dd163e145a6ec" target="_blank">e2a4824</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/cb85568328acd5d58d7eb78a85197ab537fafa9f" target="_blank">cb85568</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -426,7 +426,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
     Ignored:    analysis/rsconnect/
     Ignored:    data/03/
     Ignored:    fonts/
@@ -477,6 +476,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/cb85568328acd5d58d7eb78a85197ab537fafa9f/analysis/2021_01_19_tidy_tuesday.Rmd" target="_blank">cb85568</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-20
+</td>
+<td>
+wflow_publish(“analysis/2021_01_19_tidy_tuesday.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/be895afe563d95855ad80ef2ae02706d07bb2ba8/docs/2021_01_19_tidy_tuesday.html" target="_blank">be895af</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-01-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -945,7 +978,9 @@ shapefiles %&gt;%
 
 ggsave(p1,
   filename = here::here(&quot;docs&quot;, &quot;assets&quot;, &quot;PoultryWaffle.png&quot;),
-  device = &quot;png&quot;
+  device = &quot;png&quot;,
+  width = 12,
+  height = 7
 )</code></pre>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/PoultryWaffle.png&quot;, error = FALSE)</code></pre>
 <p><img src="assets/PoultryWaffle.png" style="display: block; margin: auto;" /></p>
