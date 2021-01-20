@@ -341,7 +341,9 @@ p1 <- livestock %>%
 
 ggsave(p1,
        filename = here::here("docs","assets","PoultryWaffle.png"),
-       device = "png")
+       device = "png",
+       width = 12,
+       height = 7)
 
 ```
 
