@@ -32,8 +32,7 @@ knitr::opts_chunk$set(
 	tidy = "styler"
 )
 
-library(extrafont)  
-loadfonts(quiet = TRUE)
+library(systemfonts)
 
 suppressPackageStartupMessages({
 library(waffle)
@@ -128,7 +127,8 @@ landsize_dorling %>%
         size = 4,
         min.segment.length = 0,
         color = "gray50",
-        segment.color = "gray50"
+        segment.color = "gray50",
+        na.rm = TRUE
       ) +
       coord_sf(label_axes = "----") +
   geom_text(aes(label = paste0(scales::comma_format()(Total), " ha")),
@@ -173,7 +173,8 @@ families_dorling %>%
     size = 4,
     min.segment.length = 0,
     colour = "gray50",
-    segment.colour = "gray50"
+    segment.colour = "gray50",
+    na.rm = TRUE
   ) +
   coord_sf(label_axes = "----") +
   geom_text(aes(label = paste0(scales::comma_format()(Total), " households")),
@@ -212,7 +213,8 @@ ag_area_sf %>%
     size = 4,
     min.segment.length = 0,
     colour = "black",
-    segment.colour = "black"
+    segment.colour = "black",
+    na.rm = TRUE
   ) +
   coord_sf(label_axes = "----") +
   facet_wrap(~ FarmType) +
