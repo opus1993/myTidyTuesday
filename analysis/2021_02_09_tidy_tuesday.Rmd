@@ -183,11 +183,11 @@ fitted_model <- read_rds(here::here("data","saved_tabnet_model1.rds"))
 }
 ```
 
-`[Epoch 001] Loss: 0.851965`                               
-`[Epoch 002] Loss: 0.637281`                               
-`[Epoch 003] Loss: 0.605421  `
+`[Epoch 001] Loss: 0.856910`                               
+`[Epoch 002] Loss: 0.634729`                               
+`[Epoch 003] Loss: 0.620880`
 
-After just three epochs, my loss was 0.605. My model run time was `r fitted_model$fit$fit$elapsed[[3]]/60/60` hours, and the saved model file is `r file.info(here::here("data","saved_tabnet_model1.rds"))$size/1e6` Mb.
+After just three epochs, my loss was 0.62. My model run time was `r fitted_model$fit$fit$elapsed[[3]]/60/60` hours, and the saved model file is `r file.info(here::here("data","saved_tabnet_model1.rds"))$size/1e6` Mb.
 
 Finally, we ask the model for test-set predictions and compute performance metrics.
 
@@ -201,6 +201,10 @@ bind_cols(test, predict(fitted_model, test)) %>%
 We didn’t quite arrive at the accuracy reported in the TabNet paper (0.783), but then, we only trained for a tiny fraction of the time.
 
 Let's see how much we can improve with some hyperparameter tuning.
+
+```{r include = FALSE}
+rm(fitted_model, wf, mod)
+```
 
 ## Tabnet tuning
 
@@ -237,10 +241,10 @@ Next, we specify the hyperparameter ranges we’re interested in, and call one o
 grid <- wf %>%
   parameters() %>%
   update(
-    decision_width = decision_width(range = c(20, 30)),
-    attention_width = attention_width(range = c(30, 40)),
+    decision_width = decision_width(range = c(20, 40)),
+    attention_width = attention_width(range = c(20, 40)),
     num_steps = num_steps(range = c(4, 6)),
-    learn_rate = learn_rate(range = c(-2.5, -0.8),
+    learn_rate = learn_rate(range = c(-3, -0.8),
                             trans = log10_trans())
   ) %>%
   grid_max_entropy(size = 8)
@@ -250,15 +254,117 @@ grid
 
 To search the space, we use `tune_race_anova()` from the new `finetune` package, making use of five-fold cross-validation:
 
-```{r}
+```{r }
 ctrl <- control_race(verbose_elim = TRUE)
 folds <- vfold_cv(train, v = 5)
 
-res <- wf %>% 
+higgs_tune_result <- wf %>% 
     tune_race_anova(
     resamples = folds, 
     grid = grid,
     control = ctrl
   )
 ```
+
+We can now extract the best hyperparameter combinations for each position on the grid:
+
+```{r}
+higgs_tune_result %>% 
+  show_best("accuracy") %>% 
+  select(-c(.estimator, .config))
+```
+
+Let's re-fit the final best tuned model on both the training and the testing datasets.
+
+```{r}
+final_higgs <- wf %>%
+  finalize_workflow(select_best(higgs_tune_result))
+
+higgs_fit <- last_fit(final_higgs, split)
+
+collect_metrics(higgs_fit)
+```
+
+Now, let's inspect TabNet’s interpretability features. TabNet’s most prominent characteristic is the way – inspired by decision trees – it executes in distinct steps. At each step, it again looks at the original input features, and decides which of those to consider based on lessons learned in prior steps. Concretely, it uses an attention mechanism to learn sparse masks which are then applied to the features.
+
+Now, these masks being “just” model weights means we can extract them and draw conclusions about feature importance. Depending on how we proceed, we can either
+
+- aggregate mask weights over steps, resulting in global per-feature importance;
+
+- run the model on a few test samples and aggregate over steps, resulting in observation-wise feature importance; or
+
+- run the model on a few test samples and extract individual weights.
+
+### PER-FEATURE IMPORTANCES
+
+With `tabnet`, `vip::vip` is able to display feature importance directly from the parsnip model:
+
+```{r}
+vip(higgs_fit)
+```
+
+Together, two high-level features dominate, accounting for nearly 50% of overall attention. Along with a third high-level feature, ranked in place four, they occupy about 60% of “importance space”.
+
+### OBSERVATION-LEVEL FEATURE IMPORTANCES
+
+We choose the first hundred observations in the test set to extract feature importance. Due to the way TabNet enforces sparsity, we see that many features have not been made use of:
+
+```{r}
+ex_fit <- tabnet_explain(higgs_fit$fit, test[1:100, ])
+
+ex_fit$M_explain %>%
+  mutate(observation = row_number()) %>%
+  pivot_longer(-observation, names_to = "variable", values_to = "m_agg") %>%
+  ggplot(aes(x = observation, y = variable, fill = m_agg)) +
+  geom_tile() 
+```
+
+### PER-STEP, OBSERVATION-LEVEL FEATURE IMPORTANCES
+
+Finally and on the same selection of observations, we again inspect the masks, but this time, per decision step:
+
+```{r}
+ex_fit$masks %>% 
+  imap_dfr(~mutate(
+    .x, 
+    step = sprintf("Step %d", .y),
+    observation = row_number()
+  )) %>% 
+  pivot_longer(-c(observation, step), names_to = "variable", values_to = "m_agg") %>% 
+  ggplot(aes(x = observation, y = variable, fill = m_agg)) +
+  geom_tile() +
+  theme(axis.text = element_text(size = 5)) +
+  facet_wrap(~step)
+```
+
+We clearly see how TabNet makes use of different features at different times. So what do we make of this? It depends. Given the enormous societal importance of this topic – call it interpretability, explainability, or whatever – let’s finish this post with a short discussion.
+
+## What makes the model interpretable or explainable?
+
+An internet search for “interpretable vs. explainable ML” immediately turns up a number of sites confidently stating “interpretable ML is …” and “explainable ML is …”, as though there were no arbitrariness in the definitions. Going deeper, you find articles such as Cynthia Rudin’s “Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead” (Rudin ([2018](https://blogs.rstudio.com/ai/posts/2021-02-11-tabnet/#ref-rudin2018stop))) that present us with a clear-cut, deliberate, instrumentalizable distinction that can actually be used in real-world scenarios.
+
+In a nutshell, what she decides to call explainability is: approximate a black-box model by a simpler (e.g., linear) model and, starting from the simple model, make inferences about how the black-box model works. One of the examples she gives for how this could fail is striking:
+
+> Even an explanation model that performs almost identically to a black box model might use completely different features, and is thus not faithful to the computation of the black box. Consider a black box model for criminal recidivism prediction, where the goal is to predict whether someone will be arrested within a certain time after being released from jail/prison. Most recidivism prediction models depend explicitly on age and criminal history, but do not explicitly depend on race. Since criminal history and age are correlated with race in all of our datasets, a fairly accurate explanation model could construct a rule such as “This person is predicted to be arrested because they are black.” This might be an accurate explanation model since it correctly mimics the predictions of the original model, but it would not be faithful to what the original model computes.
+
+What she calls interpretability, in contrast, is deeply related to domain knowledge:
+
+> Interpretability is a domain-specific notion […] Usually, however, an interpretable machine learning model is constrained in model form so that it is either useful to someone, or obeys structural knowledge of the domain, such as monotonicity [e.g.,8], causality, structural (generative) constraints, additivity [9], or physical constraints that come from domain knowledge. Often for structured data, sparsity is a useful measure of interpretability […]. Sparse models allow a view of how variables interact jointly rather than individually. […] e.g., in some domains, sparsity is useful,and in others is it not.
+
+If we accept these well-thought-out definitions, what can we say about TabNet? Is looking at attention masks more like constructing a post-hoc model or more like having domain knowledge incorporated? Rudin might argue the former, since
+
+- the image-classification example she uses to point out weaknesses of explainability techniques employs saliency maps, a technical device comparable, in some ontological sense, to attention masks;
+
+- the sparsity enforced by TabNet is a technical, not a domain-related constraint;
+
+- we only know what features were used by TabNet, not how it used them.
+
+On the other hand, one could disagree with Rudin. Do explanations have to be modeled after human cognition to be considered valid? 
+
+From a post by Keith O’Rourke on the topic of interpretability:
+
+> As with any critically-thinking inquirer, the views behind these deliberations are always subject to rethinking and revision at any time.
+
+In any case, we can be sure that this topic’s importance will only grow with time. In the very early days of the GDPR (the EU General Data Protection Regulation) it was said that Article 22 (on automated decision-making) would have [significant impact on how ML is used](http://www.odbms.org/2018/07/ai-machine-learning-and-the-gdpr-are-the-wild-west-days-of-advanced-analytics-over/), unfortunately the current view seems to be that the wording is still too vague to have immediate consequences.
+
 
