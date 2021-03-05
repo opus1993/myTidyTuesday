@@ -1,0 +1,149 @@
+---
+title: "SuperBowl Commercials"
+date: "March 2, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+This week’s #TidyTuesday dataset is on Super Bowl commercials 🏈 with data curated by the folks at 538. 
+
+Our modeling goal is to estimate how the characteristics of Super Bowl commercials have changed over time. There aren’t a lot of observations in this data set, and this is an approach that can be used for robust estimates in such situations.
+
+The general outline of this post follows Julia Silge's work at [Bootstrap confidence intervals for #TidyTuesday Super Bowl commercials](https://juliasilge.com/blog/superbowl-conf-int/)
+
+```{r setup}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	cache.lazy = FALSE,
+	df_print = "paged",
+	dpi = 300,
+	tidy = "styler"
+)
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(tidytuesdayR)
+library(hrbrthemes)
+library(tidymodels)
+})
+
+theme_set(hrbrthemes::theme_ft_rc() +
+            theme(plot.title.position = "plot",
+                  plot.caption.position = "plot"))
+
+```
+
+Let’s start by reading in the data.
+
+```{r}
+tt <- tidytuesdayR::tt_load("2021-03-02")
+```
+
+# Readme
+
+Take a look at the readme for the weekly data to get insight on the dataset.
+This includes a data dictionary, source, and a link to an article on the data.
+
+```{r Readme, eval = interactive()}
+
+tt
+
+```
+
+Let’s make one exploratory plot to see how the characteristics of the commercials change over time.
+
+```{r}
+youtube <- tt$youtube
+
+youtube %>%
+  select(year, funny:use_sex) %>%
+  pivot_longer(funny:use_sex) %>%
+  group_by(year, name) %>%
+  summarise(prop = mean(value)) %>%
+  ungroup() %>%
+  ggplot(aes(year, prop, color = name)) +
+  geom_line(size = 1.2, show.legend = FALSE) +
+  facet_wrap(vars(name)) +
+  scale_y_continuous(labels = scales::percent, n.breaks = 3) +
+  scale_x_continuous(n.breaks = 3) +
+  labs(x = NULL, y = "% of commercials",
+       title = "Super Bowl Commercials:  Themes Over Time",
+       caption = "Data Source: FiveThirtyEight")
+```
+
+## Fit a simple model
+
+Although those relationships don’t look linear, we can use a linear model to estimate if and how much these characteristics are changing with time.
+
+```{r}
+
+linear_rec <- recipe(year ~ funny + show_product_quickly +
+  patriotic + celebrity + danger + animals + use_sex,
+data = youtube)
+
+linear_rec
+```
+
+```{r}
+mod <- linear_reg() %>% 
+  set_engine("lm") %>%
+  set_mode("regression")
+
+wf <-
+  workflow() %>% 
+  add_model(mod) %>% 
+  add_recipe(linear_rec)
+
+wf
+```
+
+```{r}
+fit(wf, data = youtube) %>% 
+  tidy()
+```
+
+We get statistical properties from this linear model, but we can use bootstrap resampling to get an estimate of the variance in our quantities. In tidymodels, the rsample package has functions to create resamples such as bootstraps.
+
+In a recent release of `rsample`, the `tidymodels` authors added a new function `reg_intervals()` that finds confidence intervals for models like `lm()` and `glm()` as well as models from the survival package.
+
+```{r}
+set.seed(123)
+youtube_intervals <- reg_intervals(year ~ funny + show_product_quickly +
+  patriotic + celebrity + danger + animals + use_sex,
+  model_fn = "lm",
+  data = youtube,
+  type = "percentile",
+  keep_reps = TRUE
+)
+
+youtube_intervals
+```
+
+## Explore bootstrap results
+
+We can use visualization to explore these results.
+
+```{r}
+youtube_intervals %>%
+  mutate(
+    term = str_remove(term, "TRUE"),
+    term = fct_reorder(term, .estimate)
+  ) %>%
+  unnest(.replicates) %>%
+  ggplot(aes(estimate, fill = term)) +
+  geom_vline(xintercept = 0, size = 1.5, lty = 2, color = "gray50") +
+  geom_histogram(alpha = 0.8, show.legend = FALSE) +
+  facet_wrap(~term) +
+  labs(title = "Superbowl Commercials: Rate of theme Change over time",
+       caption = "Confidence estimated with 1000 bootstrap resamples",
+       x = NULL)
+```
+We have evidence that Super Bowl commericals (at least the ones including in this FiveThirtyEight sample) are including less humor and sexual content and more celebrities and patriotic themes.
