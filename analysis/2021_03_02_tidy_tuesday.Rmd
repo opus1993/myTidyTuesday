@@ -142,8 +142,8 @@ youtube_intervals %>%
   geom_vline(xintercept = 0, size = 1.5, lty = 2, color = "gray50") +
   geom_histogram(alpha = 0.8, show.legend = FALSE) +
   facet_wrap(~term) +
-  labs(title = "Superbowl Commercials: Rate of theme Change over time",
+  labs(title = "Rate of theme Change over time",
        caption = "Confidence estimated with 1000 bootstrap resamples",
-       x = NULL)
+       x = NULL, y = NULL)
 ```
 We have evidence that Super Bowl commericals (at least the ones including in this FiveThirtyEight sample) are including less humor and sexual content and more celebrities and patriotic themes.
