@@ -142,7 +142,7 @@ base_map
 
 ## The animation
 
-These two layers draw richtext labels and curved arrows in sequence.
+The two layers of plot elements in the animation draw richtext labels and curved arrows in sequence.
 
 ```{r}
 anim <- base_map +
