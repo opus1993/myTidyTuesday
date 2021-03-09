@@ -412,16 +412,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree4efa718e7a60f3e7790cb21e8760fd0c70a1acd0targetblank4efa718a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/4efa718e7a60f3e7790cb21e8760fd0c70a1acd0" target="_blank">4efa718</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreed0fa7ef16cf8ed2e8e64a09e9cf003816347516etargetblankd0fa7efa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/d0fa7ef16cf8ed2e8e64a09e9cf003816347516e" target="_blank">d0fa7ef</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree4efa718e7a60f3e7790cb21e8760fd0c70a1acd0targetblank4efa718a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreed0fa7ef16cf8ed2e8e64a09e9cf003816347516etargetblankd0fa7efa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/4efa718e7a60f3e7790cb21e8760fd0c70a1acd0" target="_blank">4efa718</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/d0fa7ef16cf8ed2e8e64a09e9cf003816347516e" target="_blank">d0fa7ef</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -438,7 +438,8 @@ Ignored files:
 
 Untracked files:
     Untracked:  analysis/.vscode/
-    Untracked:  analysis/tabnet_vignette.R
+    Untracked:  animation.gif
+    Untracked:  figure/
 
 Unstaged changes:
     Modified:   analysis/2021_02_09_tidy_tuesday.Rmd
@@ -481,6 +482,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/d0fa7ef16cf8ed2e8e64a09e9cf003816347516e/analysis/2021_03_07_geographic_animated_introduction.Rmd" target="_blank">d0fa7ef</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-03-09
+</td>
+<td>
+wflow_publish(“analysis/2021_03_07_geographic_animated_introduction.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/0c70c82adb13e661fdde7ef7527afe7521273e61/docs/2021_03_07_geographic_animated_introduction.html" target="_blank">0c70c82</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-03-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -603,8 +638,8 @@ residences &lt;- tribble(
   ~city, ~state, ~long, ~lat, ~years, ~description,
   &quot;Lamont&quot;, &quot;IA&quot;, -91.6476, 42.59999, 18, &quot;Childhood&quot;,
   &quot;Ames&quot;, &quot;IA&quot;, -93.62018, 42.026802, 4, &quot;Engineering Undergrad&quot;,
-  &quot;Muscatine&quot;, &quot;IA&quot;, -91.04485, 41.42045, 3, &quot;HON Chairs&quot;,
-  &quot;Racine&quot;, &quot;WI&quot;, -87.791916, 42.72062, 3, &quot;Case Corporation&lt;br&gt;Magnum Engineering&quot;,
+  &quot;Muscatine&quot;, &quot;IA&quot;, -91.04485, 41.42045, 2, &quot;HON Chairs&quot;,
+  &quot;Racine&quot;, &quot;WI&quot;, -87.791916, 42.72062, 5, &quot;Case Corporation&lt;br&gt;Magnum Engineering&quot;,
   &quot;Kenosha&quot;, &quot;WI&quot;, -87.821185, 42.5847425, 2, &quot;UW Parkside MBA&quot;,
   &quot;Racine&quot;, &quot;WI&quot;, -87.791916, 42.72062, 6, &quot;CNH Industrial&lt;br&gt;Strategic Sourcing&quot;,
   &quot;Burr Ridge&quot;, &quot;IL&quot;, -87.9155, 41.74993, 8, &quot;CNH Industrial&lt;br&gt;4WD Tractor&quot;,
@@ -645,7 +680,7 @@ residences &lt;- tribble(
 residence_connections</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["city_order"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["lat"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["long"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["lat_next"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["long_next"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["label_next"],"name":[6],"type":["glue"],"align":["right"]}],"data":[{"1":"1","2":"42.59999","3":"-91.64760","4":"42.59999","5":"-91.64760","6":"**Lamont, IA** (18 yrs)<br>*Childhood*"},{"1":"2","2":"42.59999","3":"-91.64760","4":"42.02680","5":"-93.62018","6":"**Ames, IA** (4 yrs)<br>*Engineering Undergrad*"},{"1":"3","2":"42.02680","3":"-93.62018","4":"41.42045","5":"-91.04485","6":"**Muscatine, IA** (3 yrs)<br>*HON Chairs*"},{"1":"4","2":"41.42045","3":"-91.04485","4":"42.72062","5":"-87.79192","6":"**Racine, WI** (3 yrs)<br>*Case Corporation<br>Magnum Engineering*"},{"1":"5","2":"42.72062","3":"-87.79192","4":"42.58474","5":"-87.82118","6":"**Kenosha, WI** (2 yrs)<br>*UW Parkside MBA*"},{"1":"6","2":"42.58474","3":"-87.82118","4":"42.72062","5":"-87.79192","6":"**Racine, WI** (6 yrs)<br>*CNH Industrial<br>Strategic Sourcing*"},{"1":"7","2":"42.72062","3":"-87.79192","4":"41.74993","5":"-87.91550","6":"**Burr Ridge, IL** (8 yrs)<br>*CNH Industrial<br>4WD Tractor*"},{"1":"8","2":"41.74993","3":"-87.91550","4":"41.88183","5":"-87.62318","6":"**Chicago, IL** (1 yrs)<br>*Notre Dame Mendoza*"},{"1":"9","2":"41.88183","3":"-87.62318","4":"41.74993","5":"-87.91550","6":"**Burr Ridge, IL** (3 yrs)<br>*CNH Industrial<br>Digital Operations*"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["city_order"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["lat"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["long"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["lat_next"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["long_next"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["label_next"],"name":[6],"type":["glue"],"align":["right"]}],"data":[{"1":"1","2":"42.59999","3":"-91.64760","4":"42.59999","5":"-91.64760","6":"**Lamont, IA** (18 yrs)<br>*Childhood*"},{"1":"2","2":"42.59999","3":"-91.64760","4":"42.02680","5":"-93.62018","6":"**Ames, IA** (4 yrs)<br>*Engineering Undergrad*"},{"1":"3","2":"42.02680","3":"-93.62018","4":"41.42045","5":"-91.04485","6":"**Muscatine, IA** (2 yrs)<br>*HON Chairs*"},{"1":"4","2":"41.42045","3":"-91.04485","4":"42.72062","5":"-87.79192","6":"**Racine, WI** (5 yrs)<br>*Case Corporation<br>Magnum Engineering*"},{"1":"5","2":"42.72062","3":"-87.79192","4":"42.58474","5":"-87.82118","6":"**Kenosha, WI** (2 yrs)<br>*UW Parkside MBA*"},{"1":"6","2":"42.58474","3":"-87.82118","4":"42.72062","5":"-87.79192","6":"**Racine, WI** (6 yrs)<br>*CNH Industrial<br>Strategic Sourcing*"},{"1":"7","2":"42.72062","3":"-87.79192","4":"41.74993","5":"-87.91550","6":"**Burr Ridge, IL** (8 yrs)<br>*CNH Industrial<br>4WD Tractor*"},{"1":"8","2":"41.74993","3":"-87.91550","4":"41.88183","5":"-87.62318","6":"**Chicago, IL** (1 yrs)<br>*Notre Dame Mendoza*"},{"1":"9","2":"41.88183","3":"-87.62318","4":"41.74993","5":"-87.91550","6":"**Burr Ridge, IL** (3 yrs)<br>*CNH Industrial<br>Digital Operations*"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <div id="base-map" class="section level2">
@@ -754,13 +789,13 @@ base_map</code></pre>
   renderer = magick_renderer()
 )
 
-
 anim_save(
-  filename = here::here(&quot;docs&quot;, &quot;assets&quot;, &quot;introduction_animation.gif&quot;),
+  filename = &quot;introduction_animation.gif&quot;,
+  path = here::here(&quot;docs&quot;, &quot;assets&quot;),
   animation = animation
 )</code></pre>
-<pre class="r"><code>knitr::include_graphics(here::here(&quot;assets&quot;, &quot;introduction_animation.gif&quot;), error = FALSE)</code></pre>
-<p><img src="D:/myTidyTuesday/assets/introduction_animation.gif" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/introduction_animation.gif&quot;, error = FALSE)</code></pre>
+<p><img src="assets/introduction_animation.gif" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
