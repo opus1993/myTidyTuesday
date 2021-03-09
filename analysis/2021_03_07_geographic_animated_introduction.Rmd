@@ -44,8 +44,8 @@ residences <- tribble(
   ~city, ~state, ~long, ~lat, ~years, ~description,
   "Lamont", "IA", -91.6476, 42.59999, 18, "Childhood",
   "Ames", "IA", -93.62018, 42.026802, 4, "Engineering Undergrad",
-  "Muscatine", "IA", -91.04485, 41.42045, 3, "HON Chairs",
-  "Racine", "WI", -87.791916, 42.72062, 3, "Case Corporation<br>Magnum Engineering",
+  "Muscatine", "IA", -91.04485, 41.42045, 2, "HON Chairs",
+  "Racine", "WI", -87.791916, 42.72062, 5, "Case Corporation<br>Magnum Engineering",
   "Kenosha", "WI", -87.821185, 42.5847425, 2, "UW Parkside MBA",
   "Racine", "WI", -87.791916, 42.72062, 6, "CNH Industrial<br>Strategic Sourcing",
   "Burr Ridge", "IL", -87.9155, 41.74993, 8, "CNH Industrial<br>4WD Tractor",
@@ -194,7 +194,7 @@ anim <- base_map +
 
 The options for gganimate that work for me include the use of the new `ragg_png` device and the `magick_renderer`.
 
-```{r}
+```{r animation}
 animation <- animate(anim, 
                      nframes = 30, 
                      height = 2, 
@@ -205,12 +205,12 @@ animation <- animate(anim,
                      res = 150,
                      renderer = magick_renderer())
 
-
-anim_save(filename = here::here("docs","assets","introduction_animation.gif"),
+anim_save(filename = "introduction_animation.gif",
+          path = here::here("docs","assets"),
           animation = animation)
 ```
 ```{r}
-knitr::include_graphics(here::here("assets","introduction_animation.gif"), error = FALSE)
+knitr::include_graphics("assets/introduction_animation.gif", error = FALSE)
 ```
 
 
