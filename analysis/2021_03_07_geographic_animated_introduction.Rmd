@@ -210,7 +210,7 @@ anim_save(filename = here::here("docs","assets","introduction_animation.gif"),
           animation = animation)
 ```
 ```{r}
-knitr::include_graphics(here::here("docs","assets","introduction_animation.gif"), error = FALSE)
+knitr::include_graphics(here::here("assets","introduction_animation.gif"), error = FALSE)
 ```
 
 
