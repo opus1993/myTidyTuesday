@@ -32,8 +32,11 @@
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -69,6 +72,11 @@ if (window.hljs) {
 
 
 
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
 
 
 
@@ -288,6 +296,8 @@ $(document).ready(function () {
 <ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
 </ul>
 </div>
 
@@ -319,7 +329,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-03-05
+<strong>Last updated:</strong> 2021-03-15
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -410,16 +420,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea9306c8e3ee05c6aa3347ef16fa8c4073e354aa1targetblanka9306c8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a9306c8e3ee05c6aa3347ef16fa8c4073e354aa1" target="_blank">a9306c8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreede064f7dc0932456c7d62cdbafa6c08702d76ed3targetblankde064f7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/de064f7dc0932456c7d62cdbafa6c08702d76ed3" target="_blank">de064f7</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea9306c8e3ee05c6aa3347ef16fa8c4073e354aa1targetblanka9306c8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreede064f7dc0932456c7d62cdbafa6c08702d76ed3targetblankde064f7a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a9306c8e3ee05c6aa3347ef16fa8c4073e354aa1" target="_blank">a9306c8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/de064f7dc0932456c7d62cdbafa6c08702d76ed3" target="_blank">de064f7</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -428,9 +438,20 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/2021_02_09_tidy_tuesday_cache/
+    Ignored:    analysis/rsconnect/
+    Ignored:    data/03/
+    Ignored:    data/lab_51_torch_tabnet/
+    Ignored:    fonts/
+    Ignored:    rosm.cache/
+
+Untracked files:
+    Untracked:  analysis/.vscode/
+    Untracked:  animation.gif
+    Untracked:  figure/
 
 Unstaged changes:
-    Deleted:    analysis/2021_01_26_tidy_tuesday.Rmd
+    Modified:   analysis/BackboneWatershed.Rmd
 
 </code></pre>
 <p>
@@ -469,6 +490,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/de064f7dc0932456c7d62cdbafa6c08702d76ed3/analysis/2021_03_02_tidy_tuesday.Rmd" target="_blank">de064f7</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-03-15
+</td>
+<td>
+wflow_publish(“analysis/2021_03_02_tidy_tuesday.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/72bc709f3da8cc10060648f33d0b23810987017a/docs/2021_03_02_tidy_tuesday.html" target="_blank">72bc709</a>
+</td>
+<td>
+Jim Gruman
+</td>
+<td>
+2021-03-05
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -551,33 +606,30 @@ wflow_publish(“analysis/2021_03_02_tidy_tuesday.Rmd”)
     echo = TRUE,
     message = FALSE,
     warning = FALSE,
+    autodep = TRUE,
     cache = FALSE,
     cache.lazy = FALSE,
+    dev = &quot;ragg_png&quot;,
     df_print = &quot;paged&quot;,
     dpi = 300,
     tidy = &quot;styler&quot;
-)
+)</code></pre>
+<pre class="r"><code>suppressPackageStartupMessages({
+  library(tidyverse)
+  library(tidytuesdayR)
+  library(hrbrthemes)
+  library(tidymodels)
+})
 
-suppressPackageStartupMessages({
-library(tidyverse)
-library(tidytuesdayR)
-library(hrbrthemes)
-library(tidymodels)
-})</code></pre>
-<pre><code>Warning: package &#39;tibble&#39; was built under R version 4.0.4</code></pre>
-<pre><code>Warning: package &#39;tidytuesdayR&#39; was built under R version 4.0.4</code></pre>
-<pre><code>Warning: package &#39;broom&#39; was built under R version 4.0.4</code></pre>
-<pre class="r"><code>theme_set(hrbrthemes::theme_ft_rc() +
-            theme(plot.title.position = &quot;plot&quot;,
-                  plot.caption.position = &quot;plot&quot;))</code></pre>
+theme_set(hrbrthemes::theme_ft_rc() +
+  theme(
+    plot.title.position = &quot;plot&quot;,
+    plot.caption.position = &quot;plot&quot;
+  ))</code></pre>
 <p>Let’s start by reading in the data.</p>
 <pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2021-03-02&quot;)</code></pre>
 <pre><code>
     Downloading file 1 of 1: `youtube.csv`</code></pre>
-<div id="readme" class="section level1">
-<h1>Readme</h1>
-<p>Take a look at the readme for the weekly data to get insight on the dataset. This includes a data dictionary, source, and a link to an article on the data.</p>
-<pre class="r"><code>tt</code></pre>
 <p>Let’s make one exploratory plot to see how the characteristics of the commercials change over time.</p>
 <pre class="r"><code>youtube &lt;- tt$youtube
 
@@ -585,23 +637,28 @@ youtube %&gt;%
   select(year, funny:use_sex) %&gt;%
   pivot_longer(funny:use_sex) %&gt;%
   group_by(year, name) %&gt;%
-  summarise(prop = mean(value)) %&gt;%
-  ungroup() %&gt;%
+  summarise(
+    prop = mean(value),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
   ggplot(aes(year, prop, color = name)) +
   geom_line(size = 1.2, show.legend = FALSE) +
   facet_wrap(vars(name)) +
   scale_y_continuous(labels = scales::percent, n.breaks = 3) +
   scale_x_continuous(n.breaks = 3) +
-  labs(x = NULL, y = &quot;% of commercials&quot;,
-       title = &quot;Super Bowl Commercials:  Themes Over Time&quot;,
-       caption = &quot;Data Source: FiveThirtyEight&quot;)</code></pre>
+  labs(
+    x = NULL, y = &quot;% of commercials&quot;,
+    title = &quot;Super Bowl Commercials:  Themes Over Time&quot;,
+    caption = &quot;Data Source: FiveThirtyEight&quot;
+  )</code></pre>
 <p><img src="figure/2021_03_02_tidy_tuesday.Rmd/unnamed-chunk-2-1.png" width="2100" style="display: block; margin: auto;" /></p>
 <div id="fit-a-simple-model" class="section level2">
 <h2>Fit a simple model</h2>
 <p>Although those relationships don’t look linear, we can use a linear model to estimate if and how much these characteristics are changing with time.</p>
 <pre class="r"><code>linear_rec &lt;- recipe(year ~ funny + show_product_quickly +
   patriotic + celebrity + danger + animals + use_sex,
-data = youtube)
+data = youtube
+)
 
 linear_rec</code></pre>
 <pre><code>Data Recipe
@@ -611,13 +668,13 @@ Inputs:
       role #variables
    outcome          1
  predictor          7</code></pre>
-<pre class="r"><code>mod &lt;- linear_reg() %&gt;% 
+<pre class="r"><code>mod &lt;- linear_reg() %&gt;%
   set_engine(&quot;lm&quot;) %&gt;%
   set_mode(&quot;regression&quot;)
 
 wf &lt;-
-  workflow() %&gt;% 
-  add_model(mod) %&gt;% 
+  workflow() %&gt;%
+  add_model(mod) %&gt;%
   add_recipe(linear_rec)
 
 wf</code></pre>
@@ -632,45 +689,39 @@ Model: linear_reg()
 Linear Regression Model Specification (regression)
 
 Computational engine: lm </code></pre>
-<pre class="r"><code>fit(wf, data = youtube) %&gt;% 
+<pre class="r"><code>fit(wf, data = youtube) %&gt;%
   tidy()</code></pre>
-<pre><code># A tibble: 8 x 5
-  term                     estimate std.error statistic  p.value
-  &lt;chr&gt;                       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 (Intercept)              2011.        0.931  2160.    0       
-2 funnyTRUE                  -2.90      0.859    -3.37  0.000870
-3 show_product_quicklyTRUE    0.771     0.744     1.04  0.302   
-4 patrioticTRUE               2.05      1.01      2.02  0.0448  
-5 celebrityTRUE               2.44      0.777     3.14  0.00188 
-6 dangerTRUE                  0.481     0.785     0.614 0.540   
-7 animalsTRUE                 0.108     0.733     0.148 0.883   
-8 use_sexTRUE                -2.40      0.817    -2.94  0.00359 </code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"2011.0838111","3":"0.9311658","4":"2159.7482632","5":"0.0000000000"},{"1":"funnyTRUE","2":"-2.8978861","3":"0.8593404","4":"-3.3722214","5":"0.0008695877"},{"1":"show_product_quicklyTRUE","2":"0.7705532","3":"0.7443195","4":"1.0352453","5":"0.3016007256"},{"1":"patrioticTRUE","2":"2.0454503","3":"1.0140477","4":"2.0171145","5":"0.0448017615"},{"1":"celebrityTRUE","2":"2.4416375","3":"0.7766956","4":"3.1436220","5":"0.0018798138"},{"1":"dangerTRUE","2":"0.4814097","3":"0.7845744","4":"0.6135934","5":"0.5400675915"},{"1":"animalsTRUE","2":"0.1082277","3":"0.7329968","4":"0.1476510","5":"0.8827427089"},{"1":"use_sexTRUE","2":"-2.4040713","3":"0.8174732","4":"-2.9408564","5":"0.0035944212"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="explore-bootstrap-results" class="section level2 tabset">
+<h2 class="tabset">Explore bootstrap results</h2>
 <p>We get statistical properties from this linear model, but we can use bootstrap resampling to get an estimate of the variance in our quantities. In tidymodels, the rsample package has functions to create resamples such as bootstraps.</p>
 <p>In a recent release of <code>rsample</code>, the <code>tidymodels</code> authors added a new function <code>reg_intervals()</code> that finds confidence intervals for models like <code>lm()</code> and <code>glm()</code> as well as models from the survival package.</p>
+<div id="intervals" class="section level3">
+<h3>Intervals</h3>
 <pre class="r"><code>set.seed(123)
 youtube_intervals &lt;- reg_intervals(year ~ funny + show_product_quickly +
   patriotic + celebrity + danger + animals + use_sex,
-  model_fn = &quot;lm&quot;,
-  data = youtube,
-  type = &quot;percentile&quot;,
-  keep_reps = TRUE
+model_fn = &quot;lm&quot;,
+data = youtube,
+type = &quot;percentile&quot;,
+keep_reps = TRUE
 )
 
 youtube_intervals</code></pre>
-<pre><code># A tibble: 7 x 7
-  term                   .lower .estimate .upper .alpha .method      .replicates
-  &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;list&lt;tibble&gt;
-1 animalsTRUE            -1.22      0.144  1.51    0.05 percentile   [2,001 x 2]
-2 celebrityTRUE           0.828     2.46   4.06    0.05 percentile   [2,001 x 2]
-3 dangerTRUE             -1.01      0.515  2.09    0.05 percentile   [2,001 x 2]
-4 funnyTRUE              -4.58     -2.91  -1.26    0.05 percentile   [2,001 x 2]
-5 patrioticTRUE           0.112     2.05   3.88    0.05 percentile   [2,001 x 2]
-6 show_product_quicklyT~ -0.839     0.740  2.23    0.05 percentile   [2,001 x 2]
-7 use_sexTRUE            -4.04     -2.43  -0.952   0.05 percentile   [2,001 x 2]</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".lower"],"name":[2],"type":["dbl"],"align":["right"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]},{"label":[".upper"],"name":[4],"type":["dbl"],"align":["right"]},{"label":[".alpha"],"name":[5],"type":["dbl"],"align":["right"]},{"label":[".method"],"name":[6],"type":["chr"],"align":["left"]},{"label":[".replicates"],"name":[7],"type":["list<tibble>"],"align":["right"]}],"data":[{"1":"animalsTRUE","2":"-1.2173189","3":"0.1436783","4":"1.5083007","5":"0.05","6":"percentile","7":"<list<tibble>>"},{"1":"celebrityTRUE","2":"0.8275550","3":"2.4637298","4":"4.0627231","5":"0.05","6":"percentile","7":"<list<tibble>>"},{"1":"dangerTRUE","2":"-1.0144534","3":"0.5154215","4":"2.0933847","5":"0.05","6":"percentile","7":"<list<tibble>>"},{"1":"funnyTRUE","2":"-4.5793796","3":"-2.9100609","4":"-1.2631100","5":"0.05","6":"percentile","7":"<list<tibble>>"},{"1":"patrioticTRUE","2":"0.1122502","3":"2.0541537","4":"3.8750510","5":"0.05","6":"percentile","7":"<list<tibble>>"},{"1":"show_product_quicklyTRUE","2":"-0.8391052","3":"0.7403347","4":"2.2313598","5":"0.05","6":"percentile","7":"<list<tibble>>"},{"1":"use_sexTRUE","2":"-4.0353059","3":"-2.4274045","4":"-0.9520081","5":"0.05","6":"percentile","7":"<list<tibble>>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
-<div id="explore-bootstrap-results" class="section level2">
-<h2>Explore bootstrap results</h2>
 <p>We can use visualization to explore these results.</p>
+</div>
+<div id="plot" class="section level3">
+<h3>Plot</h3>
 <pre class="r"><code>youtube_intervals %&gt;%
   mutate(
     term = str_remove(term, &quot;TRUE&quot;),
@@ -679,12 +730,19 @@ youtube_intervals</code></pre>
   unnest(.replicates) %&gt;%
   ggplot(aes(estimate, fill = term)) +
   geom_vline(xintercept = 0, size = 1.5, lty = 2, color = &quot;gray50&quot;) +
-  geom_histogram(alpha = 0.8, show.legend = FALSE) +
+  geom_histogram(alpha = 0.8, show.legend = FALSE, bins = 30) +
   facet_wrap(~term) +
-  labs(title = &quot;Rate of theme Change over time&quot;,
-       caption = &quot;Confidence estimated with 1000 bootstrap resamples&quot;,
-       x = NULL, y = NULL)</code></pre>
-<p><img src="figure/2021_03_02_tidy_tuesday.Rmd/unnamed-chunk-7-1.png" width="2100" style="display: block; margin: auto;" /> We have evidence that Super Bowl commericals (at least the ones including in this FiveThirtyEight sample) are including less humor and sexual content and more celebrities and patriotic themes.</p>
+  labs(
+    title = &quot;Rate of theme Change over time&quot;,
+    caption = &quot;Confidence estimated with 1000 bootstrap resamples&quot;,
+    x = NULL, y = NULL
+  )</code></pre>
+<p><img src="figure/2021_03_02_tidy_tuesday.Rmd/unnamed-chunk-7-1.png" width="2100" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="section" class="section level2 unnumbered">
+<h2 class="unnumbered"></h2>
+<p>We have evidence that Super Bowl commericals (at least the ones including in this FiveThirtyEight sample) are including less humor and sexual content and more celebrities and patriotic themes.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -695,7 +753,7 @@ youtube_intervals</code></pre>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 10 x64 (build 16299)
+Running under: Windows 10 x64 (build 19042)
 
 Matrix products: default
 
@@ -710,42 +768,54 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] yardstick_0.0.7    workflows_0.2.1    tune_0.1.2         rsample_0.0.9     
+ [1] yardstick_0.0.7    workflows_0.2.2    tune_0.1.3         rsample_0.0.9     
  [5] recipes_0.1.15     parsnip_0.1.5      modeldata_0.1.0    infer_0.5.4       
  [9] dials_0.0.9        scales_1.1.1       broom_0.7.5        tidymodels_0.1.2  
-[13] hrbrthemes_0.8.0   tidytuesdayR_1.0.1 forcats_0.5.1      stringr_1.4.0     
-[17] dplyr_1.0.4        purrr_0.3.4        readr_1.4.0        tidyr_1.1.2       
-[21] tibble_3.0.6       ggplot2_3.3.3      tidyverse_1.3.0    workflowr_1.6.2   
+[13] hrbrthemes_0.8.6   tidytuesdayR_1.0.1 forcats_0.5.1      stringr_1.4.0     
+[17] dplyr_1.0.5        purrr_0.3.4        readr_1.4.0        tidyr_1.1.3       
+[21] tibble_3.1.0       ggplot2_3.3.3      tidyverse_1.3.0    workflowr_1.6.2   
 
 loaded via a namespace (and not attached):
- [1] colorspace_2.0-0   selectr_0.4-2      ellipsis_0.3.1     class_7.3-18      
- [5] rprojroot_2.0.2    fs_1.5.0           rstudioapi_0.13    farver_2.1.0      
- [9] listenv_0.8.0      furrr_0.2.2        prodlim_2019.11.13 fansi_0.4.2       
-[13] lubridate_1.7.10   xml2_1.3.2         codetools_0.2-18   splines_4.0.3     
-[17] extrafont_0.17     knitr_1.31         jsonlite_1.7.2     pROC_1.17.0.1     
-[21] Rttf2pt1_1.3.8     dbplyr_2.1.0       compiler_4.0.3     httr_1.4.2        
-[25] backports_1.2.1    assertthat_0.2.1   Matrix_1.2-18      cli_2.3.1         
-[29] later_1.1.0.1      htmltools_0.5.1.1  tools_4.0.3        gtable_0.3.0      
-[33] glue_1.4.2         Rcpp_1.0.6         cellranger_1.1.0   DiceDesign_1.9    
-[37] vctrs_0.3.6        extrafontdb_1.0    iterators_1.0.13   timeDate_3043.102 
-[41] gower_0.2.2        xfun_0.21          globals_0.14.0     ps_1.6.0          
-[45] rvest_0.3.6        lifecycle_1.0.0    future_1.21.0      MASS_7.3-53.1     
-[49] ipred_0.9-9        hms_1.0.0          promises_1.2.0.1   parallel_4.0.3    
-[53] yaml_2.2.1         curl_4.3           gdtools_0.2.3      rpart_4.1-15      
-[57] stringi_1.5.3      highr_0.8          foreach_1.5.1      lhs_1.1.1         
-[61] hardhat_0.1.5      lava_1.6.8.1       rlang_0.4.10       pkgconfig_2.0.3   
-[65] systemfonts_1.0.1  evaluate_0.14      lattice_0.20-41    labeling_0.4.2    
-[69] tidyselect_1.1.0   parallelly_1.23.0  plyr_1.8.6         magrittr_2.0.1    
-[73] R6_2.5.0           generics_0.1.0     DBI_1.1.1          pillar_1.5.0      
-[77] haven_2.3.1        whisker_0.4        withr_2.4.1        survival_3.2-7    
-[81] nnet_7.3-15        modelr_0.1.8       crayon_1.4.1       utf8_1.1.4        
-[85] rmarkdown_2.7      usethis_2.0.1      grid_4.0.3         readxl_1.3.1      
-[89] git2r_0.28.0       reprex_1.0.0       digest_0.6.27      httpuv_1.5.5      
-[93] munsell_0.5.0      GPfit_1.0-8       </code></pre>
-</div>
+  [1] colorspace_2.0-0   selectr_0.4-2      ellipsis_0.3.1    
+  [4] class_7.3-18       rprojroot_2.0.2    fs_1.5.0          
+  [7] rstudioapi_0.13    farver_2.1.0       listenv_0.8.0     
+ [10] furrr_0.2.2        prodlim_2019.11.13 fansi_0.4.2       
+ [13] lubridate_1.7.10   xml2_1.3.2         codetools_0.2-18  
+ [16] splines_4.0.3      R.methodsS3_1.8.1  extrafont_0.17    
+ [19] memuse_4.1-0       knitr_1.31         jsonlite_1.7.2    
+ [22] pROC_1.17.0.1      Rttf2pt1_1.3.8     dbplyr_2.1.0      
+ [25] R.oo_1.24.0        compiler_4.0.3     httr_1.4.2        
+ [28] backports_1.2.1    assertthat_0.2.1   Matrix_1.3-2      
+ [31] cli_2.3.1          later_1.1.0.1      htmltools_0.5.1.1 
+ [34] tools_4.0.3        gtable_0.3.0       glue_1.4.2        
+ [37] Rcpp_1.0.6         cellranger_1.1.0   jquerylib_0.1.3   
+ [40] styler_1.3.2       DiceDesign_1.9     vctrs_0.3.6       
+ [43] debugme_1.1.0      extrafontdb_1.0    iterators_1.0.13  
+ [46] timeDate_3043.102  xfun_0.22          gower_0.2.2       
+ [49] globals_0.14.0     ps_1.6.0           rvest_1.0.0       
+ [52] lifecycle_1.0.0    future_1.21.0      MASS_7.3-53.1     
+ [55] ipred_0.9-11       ragg_1.1.1         hms_1.0.0         
+ [58] promises_1.2.0.1   parallel_4.0.3     yaml_2.2.1        
+ [61] curl_4.3           gdtools_0.2.3      sass_0.3.1        
+ [64] rpart_4.1-15       stringi_1.5.3      highr_0.8         
+ [67] foreach_1.5.1      lhs_1.1.1          hardhat_0.1.5     
+ [70] lava_1.6.9         rlang_0.4.10       pkgconfig_2.0.3   
+ [73] systemfonts_1.0.1  evaluate_0.14      lattice_0.20-41   
+ [76] labeling_0.4.2     tidyselect_1.1.0   parallelly_1.24.0 
+ [79] plyr_1.8.6         magrittr_2.0.1     R6_2.5.0          
+ [82] generics_0.1.0     DBI_1.1.1          pillar_1.5.1      
+ [85] haven_2.3.1        whisker_0.4        withr_2.4.1       
+ [88] survival_3.2-9     nnet_7.3-15        modelr_0.1.8      
+ [91] crayon_1.4.1       utf8_1.1.4         rmarkdown_2.7     
+ [94] usethis_2.0.1      grid_4.0.3         readxl_1.3.1      
+ [97] git2r_0.28.0       reprex_1.0.0       digest_0.6.27     
+[100] R.cache_0.14.0     httpuv_1.5.5       R.utils_2.10.1    
+[103] textshaping_0.3.2  GPfit_1.0-8        munsell_0.5.0     
+[106] bslib_0.2.4       </code></pre>
 </div>
 </div>
 
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlN1cGVyQm93bCBDb21tZXJjaWFscyINCmRhdGU6ICJNYXJjaCAyLCAyMDIxIg0Kb3V0cHV0Og0KICB3b3JrZmxvd3I6OndmbG93X2h0bWw6DQogICAgdG9jOiBubw0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBkZl9wcmludDogcGFnZWQNCmVkaXRvcl9vcHRpb25zOg0KICBjaHVua19vdXRwdXRfdHlwZTogY29uc29sZQ0KLS0tDQoNClRoaXMgd2Vla+KAmXMgI1RpZHlUdWVzZGF5IGRhdGFzZXQgaXMgb24gU3VwZXIgQm93bCBjb21tZXJjaWFscyDwn4+IIHdpdGggZGF0YSBjdXJhdGVkIGJ5IHRoZSBmb2xrcyBhdCA1MzguIA0KDQpPdXIgbW9kZWxpbmcgZ29hbCBpcyB0byBlc3RpbWF0ZSBob3cgdGhlIGNoYXJhY3RlcmlzdGljcyBvZiBTdXBlciBCb3dsIGNvbW1lcmNpYWxzIGhhdmUgY2hhbmdlZCBvdmVyIHRpbWUuIFRoZXJlIGFyZW7igJl0IGEgbG90IG9mIG9ic2VydmF0aW9ucyBpbiB0aGlzIGRhdGEgc2V0LCBhbmQgdGhpcyBpcyBhbiBhcHByb2FjaCB0aGF0IGNhbiBiZSB1c2VkIGZvciByb2J1c3QgZXN0aW1hdGVzIGluIHN1Y2ggc2l0dWF0aW9ucy4NCg0KVGhlIGdlbmVyYWwgb3V0bGluZSBvZiB0aGlzIHBvc3QgZm9sbG93cyBKdWxpYSBTaWxnZSdzIHdvcmsgYXQgW0Jvb3RzdHJhcCBjb25maWRlbmNlIGludGVydmFscyBmb3IgI1RpZHlUdWVzZGF5IFN1cGVyIEJvd2wgY29tbWVyY2lhbHNdKGh0dHBzOi8vanVsaWFzaWxnZS5jb20vYmxvZy9zdXBlcmJvd2wtY29uZi1pbnQvKQ0KDQpgYGB7ciBzZXR1cH0NCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KA0KCWVjaG8gPSBUUlVFLA0KCW1lc3NhZ2UgPSBGQUxTRSwNCgl3YXJuaW5nID0gRkFMU0UsDQoJYXV0b2RlcCA9IFRSVUUsDQoJY2FjaGUgPSBGQUxTRSwNCgljYWNoZS5sYXp5ID0gRkFMU0UsDQoJZGV2ID0gInJhZ2dfcG5nIiwNCglkZl9wcmludCA9ICJwYWdlZCIsDQoJZHBpID0gMzAwLA0KCXRpZHkgPSAic3R5bGVyIg0KKQ0KYGBgDQoNCmBgYHtyIGxpYnJhcmllcywgd2FybmluZz1GQUxTRX0NCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyh7DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkodGlkeXR1ZXNkYXlSKQ0KbGlicmFyeShocmJydGhlbWVzKQ0KbGlicmFyeSh0aWR5bW9kZWxzKQ0KfSkNCg0KdGhlbWVfc2V0KGhyYnJ0aGVtZXM6OnRoZW1lX2Z0X3JjKCkgKw0KICAgICAgICAgICAgdGhlbWUocGxvdC50aXRsZS5wb3NpdGlvbiA9ICJwbG90IiwNCiAgICAgICAgICAgICAgICAgIHBsb3QuY2FwdGlvbi5wb3NpdGlvbiA9ICJwbG90IikpDQoNCmBgYA0KDQpMZXTigJlzIHN0YXJ0IGJ5IHJlYWRpbmcgaW4gdGhlIGRhdGEuDQoNCmBgYHtyLCBtZXNzYWdlID0gRkFMU0V9DQp0dCA8LSB0aWR5dHVlc2RheVI6OnR0X2xvYWQoIjIwMjEtMDMtMDIiKQ0KYGBgDQoNCkxldOKAmXMgbWFrZSBvbmUgZXhwbG9yYXRvcnkgcGxvdCB0byBzZWUgaG93IHRoZSBjaGFyYWN0ZXJpc3RpY3Mgb2YgdGhlIGNvbW1lcmNpYWxzIGNoYW5nZSBvdmVyIHRpbWUuDQoNCmBgYHtyfQ0KeW91dHViZSA8LSB0dCR5b3V0dWJlDQoNCnlvdXR1YmUgJT4lDQogIHNlbGVjdCh5ZWFyLCBmdW5ueTp1c2Vfc2V4KSAlPiUNCiAgcGl2b3RfbG9uZ2VyKGZ1bm55OnVzZV9zZXgpICU+JQ0KICBncm91cF9ieSh5ZWFyLCBuYW1lKSAlPiUNCiAgc3VtbWFyaXNlKHByb3AgPSBtZWFuKHZhbHVlKSwNCiAgICAgICAgICAgIC5ncm91cHMgPSAiZHJvcCIpICU+JQ0KICBnZ3Bsb3QoYWVzKHllYXIsIHByb3AsIGNvbG9yID0gbmFtZSkpICsNCiAgZ2VvbV9saW5lKHNpemUgPSAxLjIsIHNob3cubGVnZW5kID0gRkFMU0UpICsNCiAgZmFjZXRfd3JhcCh2YXJzKG5hbWUpKSArDQogIHNjYWxlX3lfY29udGludW91cyhsYWJlbHMgPSBzY2FsZXM6OnBlcmNlbnQsIG4uYnJlYWtzID0gMykgKw0KICBzY2FsZV94X2NvbnRpbnVvdXMobi5icmVha3MgPSAzKSArDQogIGxhYnMoeCA9IE5VTEwsIHkgPSAiJSBvZiBjb21tZXJjaWFscyIsDQogICAgICAgdGl0bGUgPSAiU3VwZXIgQm93bCBDb21tZXJjaWFsczogIFRoZW1lcyBPdmVyIFRpbWUiLA0KICAgICAgIGNhcHRpb24gPSAiRGF0YSBTb3VyY2U6IEZpdmVUaGlydHlFaWdodCIpDQpgYGANCg0KIyMgRml0IGEgc2ltcGxlIG1vZGVsDQoNCkFsdGhvdWdoIHRob3NlIHJlbGF0aW9uc2hpcHMgZG9u4oCZdCBsb29rIGxpbmVhciwgd2UgY2FuIHVzZSBhIGxpbmVhciBtb2RlbCB0byBlc3RpbWF0ZSBpZiBhbmQgaG93IG11Y2ggdGhlc2UgY2hhcmFjdGVyaXN0aWNzIGFyZSBjaGFuZ2luZyB3aXRoIHRpbWUuDQoNCmBgYHtyfQ0KDQpsaW5lYXJfcmVjIDwtIHJlY2lwZSh5ZWFyIH4gZnVubnkgKyBzaG93X3Byb2R1Y3RfcXVpY2tseSArDQogIHBhdHJpb3RpYyArIGNlbGVicml0eSArIGRhbmdlciArIGFuaW1hbHMgKyB1c2Vfc2V4LA0KZGF0YSA9IHlvdXR1YmUpDQoNCmxpbmVhcl9yZWMNCmBgYA0KDQpgYGB7cn0NCm1vZCA8LSBsaW5lYXJfcmVnKCkgJT4lIA0KICBzZXRfZW5naW5lKCJsbSIpICU+JQ0KICBzZXRfbW9kZSgicmVncmVzc2lvbiIpDQoNCndmIDwtDQogIHdvcmtmbG93KCkgJT4lIA0KICBhZGRfbW9kZWwobW9kKSAlPiUgDQogIGFkZF9yZWNpcGUobGluZWFyX3JlYykNCg0Kd2YNCmBgYA0KDQpgYGB7cn0NCmZpdCh3ZiwgZGF0YSA9IHlvdXR1YmUpICU+JSANCiAgdGlkeSgpDQpgYGANCg0KIyMgRXhwbG9yZSBib290c3RyYXAgcmVzdWx0cyB7LnRhYnNldH0NCg0KV2UgZ2V0IHN0YXRpc3RpY2FsIHByb3BlcnRpZXMgZnJvbSB0aGlzIGxpbmVhciBtb2RlbCwgYnV0IHdlIGNhbiB1c2UgYm9vdHN0cmFwIHJlc2FtcGxpbmcgdG8gZ2V0IGFuIGVzdGltYXRlIG9mIHRoZSB2YXJpYW5jZSBpbiBvdXIgcXVhbnRpdGllcy4gSW4gdGlkeW1vZGVscywgdGhlIHJzYW1wbGUgcGFja2FnZSBoYXMgZnVuY3Rpb25zIHRvIGNyZWF0ZSByZXNhbXBsZXMgc3VjaCBhcyBib290c3RyYXBzLg0KDQpJbiBhIHJlY2VudCByZWxlYXNlIG9mIGByc2FtcGxlYCwgdGhlIGB0aWR5bW9kZWxzYCBhdXRob3JzIGFkZGVkIGEgbmV3IGZ1bmN0aW9uIGByZWdfaW50ZXJ2YWxzKClgIHRoYXQgZmluZHMgY29uZmlkZW5jZSBpbnRlcnZhbHMgZm9yIG1vZGVscyBsaWtlIGBsbSgpYCBhbmQgYGdsbSgpYCBhcyB3ZWxsIGFzIG1vZGVscyBmcm9tIHRoZSBzdXJ2aXZhbCBwYWNrYWdlLg0KDQojIyMgSW50ZXJ2YWxzDQoNCmBgYHtyfQ0Kc2V0LnNlZWQoMTIzKQ0KeW91dHViZV9pbnRlcnZhbHMgPC0gcmVnX2ludGVydmFscyh5ZWFyIH4gZnVubnkgKyBzaG93X3Byb2R1Y3RfcXVpY2tseSArDQogIHBhdHJpb3RpYyArIGNlbGVicml0eSArIGRhbmdlciArIGFuaW1hbHMgKyB1c2Vfc2V4LA0KICBtb2RlbF9mbiA9ICJsbSIsDQogIGRhdGEgPSB5b3V0dWJlLA0KICB0eXBlID0gInBlcmNlbnRpbGUiLA0KICBrZWVwX3JlcHMgPSBUUlVFDQopDQoNCnlvdXR1YmVfaW50ZXJ2YWxzDQpgYGANCg0KV2UgY2FuIHVzZSB2aXN1YWxpemF0aW9uIHRvIGV4cGxvcmUgdGhlc2UgcmVzdWx0cy4NCg0KIyMjIFBsb3QNCg0KYGBge3J9DQp5b3V0dWJlX2ludGVydmFscyAlPiUNCiAgbXV0YXRlKA0KICAgIHRlcm0gPSBzdHJfcmVtb3ZlKHRlcm0sICJUUlVFIiksDQogICAgdGVybSA9IGZjdF9yZW9yZGVyKHRlcm0sIC5lc3RpbWF0ZSkNCiAgKSAlPiUNCiAgdW5uZXN0KC5yZXBsaWNhdGVzKSAlPiUNCiAgZ2dwbG90KGFlcyhlc3RpbWF0ZSwgZmlsbCA9IHRlcm0pKSArDQogIGdlb21fdmxpbmUoeGludGVyY2VwdCA9IDAsIHNpemUgPSAxLjUsIGx0eSA9IDIsIGNvbG9yID0gImdyYXk1MCIpICsNCiAgZ2VvbV9oaXN0b2dyYW0oYWxwaGEgPSAwLjgsIHNob3cubGVnZW5kID0gRkFMU0UsIGJpbnMgPSAzMCkgKw0KICBmYWNldF93cmFwKH50ZXJtKSArDQogIGxhYnModGl0bGUgPSAiUmF0ZSBvZiB0aGVtZSBDaGFuZ2Ugb3ZlciB0aW1lIiwNCiAgICAgICBjYXB0aW9uID0gIkNvbmZpZGVuY2UgZXN0aW1hdGVkIHdpdGggMTAwMCBib290c3RyYXAgcmVzYW1wbGVzIiwNCiAgICAgICB4ID0gTlVMTCwgeSA9IE5VTEwpDQpgYGANCg0KIyMgey19DQoNCldlIGhhdmUgZXZpZGVuY2UgdGhhdCBTdXBlciBCb3dsIGNvbW1lcmljYWxzIChhdCBsZWFzdCB0aGUgb25lcyBpbmNsdWRpbmcgaW4gdGhpcyBGaXZlVGhpcnR5RWlnaHQgc2FtcGxlKSBhcmUgaW5jbHVkaW5nIGxlc3MgaHVtb3IgYW5kIHNleHVhbCBjb250ZW50IGFuZCBtb3JlIGNlbGVicml0aWVzIGFuZCBwYXRyaW90aWMgdGhlbWVzLg0K</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
@@ -795,6 +865,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
+  window.initializeSourceEmbed("2021_03_02_tidy_tuesday.Rmd");
   window.initializeCodeFolding("hide" === "show");
 });
 </script>
