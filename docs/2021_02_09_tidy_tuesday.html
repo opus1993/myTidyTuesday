@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2021-03-04" />
+
+<title>torch, tidymodels, and Chicago Traffic Injuries</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fas fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">torch, tidymodels, and Chicago Traffic Injuries</h1>
+<h4 class="date">March 4, 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-03-15
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree097f9c9ee6f746956584bf06453b84b0e6e4ee48targetblank097f9c9a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/097f9c9ee6f746956584bf06453b84b0e6e4ee48" target="_blank">097f9c9</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree097f9c9ee6f746956584bf06453b84b0e6e4ee48targetblank097f9c9a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/097f9c9ee6f746956584bf06453b84b0e6e4ee48" target="_blank">097f9c9</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/rsconnect/
+    Ignored:    data/03/
+    Ignored:    data/lab_51_torch_tabnet/
+    Ignored:    fonts/
+    Ignored:    rosm.cache/
+
+Untracked files:
+    Untracked:  analysis/.vscode/
+    Untracked:  animation.gif
+    Untracked:  figure/
+
+Unstaged changes:
+    Modified:   analysis/BackboneWatershed.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2021_02_09_tidy_tuesday.Rmd</code>) and HTML (<code>docs/2021_02_09_tidy_tuesday.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/097f9c9ee6f746956584bf06453b84b0e6e4ee48/analysis/2021_02_09_tidy_tuesday.Rmd" target="_blank">097f9c9</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-03-15
+</td>
+<td>
+wflow_publish(“analysis/2021_02_09_tidy_tuesday.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/8a17cc00afa9681d21262eca8558276adc9fb290/analysis/2021_02_09_tidy_tuesday.Rmd" target="_blank">8a17cc0</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-02-17
+</td>
+<td>
+workflowr::wflow_publish(“analysis/2021_02_09_tidy_tuesday.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/199faa2478d1b30bde09932363768fa6d097f007/analysis/2021_02_09_tidy_tuesday.Rmd" target="_blank">199faa2</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-02-16
+</td>
+<td>
+init commit on home pc
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>I am going to make a departure from the TidyTuesday script this week to explore a Sigrid Keydana article posted at the R-Studio AI Blog as “<a href="https://blogs.rstudio.com/ai/posts/2021-02-11-tabnet/">torch, tidymodels, and high-energy physics</a>,” where they introduce <a href="https://mlverse.github.io/tabnet/"><code>tabnet</code></a>, a torch implementation of the paper “<a href="http://arxiv.org/abs/1908.07442">TabNet: Attentive Interpretable Tabular Learning</a>” that is fully integrated with the <code>tidymodels</code> machine learning framework.</p>
+<pre class="r"><code>knitr::include_url(&quot;https://blogs.rstudio.com/ai/posts/2021-02-11-tabnet/&quot;)</code></pre>
+<iframe src="https://blogs.rstudio.com/ai/posts/2021-02-11-tabnet/" width="672" height="400px">
+</iframe>
+<p>For my demonstration, I am going revisit the wild-caught <a href="https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if">Chicago traffic crashes</a> dataset that I explored <a href="https://opus1993.github.io/myTidyTuesday/ChicagoTrafficInjuries.html">back in January</a>.</p>
+<p>What caught my eye in Sigrid’s post was the claim that TabNet includes interpretability features by design. Let’s give it a try here. First, let’s load package libraries to make the deep learning functions available.</p>
+<pre class="r"><code>knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    cache = FALSE,
+    cache.lazy = FALSE,
+    df_print = &quot;paged&quot;,
+    dpi = 300,
+    tidy = &quot;styler&quot;,
+    dev = &quot;ragg_png&quot;
+)
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(torch)
+library(tabnet)
+library(tidymodels)
+library(themis)
+library(vip)
+library(finetune)
+library(RSocrata)
+library(rlang)
+library(vctrs)
+library(lubridate)
+library(hrbrthemes)
+library(systemfonts)
+ })</code></pre>
+<pre><code>Warning: package &#39;tibble&#39; was built under R version 4.0.4</code></pre>
+<pre><code>Warning: package &#39;tidyr&#39; was built under R version 4.0.4</code></pre>
+<pre><code>Warning: package &#39;dplyr&#39; was built under R version 4.0.4</code></pre>
+<pre><code>Warning: package &#39;broom&#39; was built under R version 4.0.4</code></pre>
+<pre><code>Warning: package &#39;rsample&#39; was built under R version 4.0.4</code></pre>
+<pre><code>Warning: package &#39;tune&#39; was built under R version 4.0.4</code></pre>
+<pre><code>Warning: package &#39;workflows&#39; was built under R version 4.0.4</code></pre>
+<pre><code>Warning: package &#39;lubridate&#39; was built under R version 4.0.4</code></pre>
+<pre class="r"><code>ggplot2::theme_set(hrbrthemes::theme_ipsum_pub() +
+            ggplot2::theme(plot.title.position = &quot;plot&quot;,
+                           plot.caption.position = &quot;plot&quot;))</code></pre>
+<p>I’ve invested some time and effort into making GPU compute available on my Windows laptop.</p>
+<pre class="r"><code>cuda_device_count()</code></pre>
+<pre><code>[1] 1</code></pre>
+<pre class="r"><code>torch_get_num_interop_threads()</code></pre>
+<pre><code>[1] 6</code></pre>
+<pre class="r"><code>torch_get_num_threads()</code></pre>
+<pre><code>[1] 12</code></pre>
+<p>We will load the latest data directly from the Chicago data portal. This dataset covers traffic crashes on city streets within Chicago city limits under the jurisdiction of the Chicago Police Department. The objective here is to predict the crashes that result in injuries.</p>
+<pre class="r"><code>years_ago &lt;- today() - years(3)
+crash_url &lt;- glue::glue(&quot;https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if?$where=CRASH_DATE &gt; &#39;{years_ago}&#39;&quot;)
+
+crash &lt;- as_tibble(read.socrata(crash_url)) %&gt;%
+  arrange(desc(crash_date)) %&gt;%
+  transmute(
+    injuries = factor(if_else(injuries_total &gt; 0, TRUE, FALSE)),
+    crash_date,
+    crash_hour = factor(crash_hour),
+    report_type = if_else(report_type == &quot;&quot;, &quot;UNKNOWN&quot;, report_type),
+    #    num_units,
+    trafficway_type,
+    posted_speed_limit = factor(posted_speed_limit),
+    weather_condition,
+    lighting_condition,
+    roadway_surface_cond,
+    first_crash_type,
+    trafficway_type,
+    prim_contributory_cause,
+    latitude, longitude,
+    covid = factor(if_else(between(date(crash_date), date(&quot;2020-03-01&quot;), date(&quot;2020-06-01&quot;)), TRUE, FALSE))
+  ) %&gt;%
+  na.omit() %&gt;%
+  arrange(crash_date)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<div id="visualize" class="section level2 tabset">
+<h2 class="tabset">Visualize</h2>
+<div id="skim-a-summary" class="section level3">
+<h3>Skim a summary</h3>
+<p>I’ve added a logical feature associated with the COVID pandemic timeframe. Let’s take a glimpse of the dataset with skim:</p>
+<pre class="r"><code>skimr::skim(crash)</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">crash</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">322020</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">14</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">7</td>
+</tr>
+<tr class="odd">
+<td align="left">factor</td>
+<td align="left">4</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">POSIXct</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">report_type</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">26</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">trafficway_type</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">31</td>
+<td align="right">0</td>
+<td align="right">20</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">weather_condition</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">24</td>
+<td align="right">0</td>
+<td align="right">12</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">lighting_condition</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">22</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">roadway_surface_cond</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">15</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">first_crash_type</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">28</td>
+<td align="right">0</td>
+<td align="right">18</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">prim_contributory_cause</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">80</td>
+<td align="right">0</td>
+<td align="right">40</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">injuries</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">FAL: 275817, TRU: 46203</td>
+</tr>
+<tr class="even">
+<td align="left">crash_hour</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">24</td>
+<td align="left">16: 24499, 17: 24127, 15: 24065, 14: 21685</td>
+</tr>
+<tr class="odd">
+<td align="left">posted_speed_limit</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">36</td>
+<td align="left">30: 237297, 35: 22601, 25: 20010, 20: 12896</td>
+</tr>
+<tr class="even">
+<td align="left">covid</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">FAL: 304300, TRU: 17720</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">latitude</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">41.86</td>
+<td align="right">0.32</td>
+<td align="right">0.00</td>
+<td align="right">41.78</td>
+<td align="right">41.88</td>
+<td align="right">41.92</td>
+<td align="right">42.02</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">longitude</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-87.67</td>
+<td align="right">0.66</td>
+<td align="right">-87.93</td>
+<td align="right">-87.72</td>
+<td align="right">-87.67</td>
+<td align="right">-87.63</td>
+<td align="right">0.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: POSIXct</strong></p>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="9%" />
+<col width="13%" />
+<col width="18%" />
+<col width="18%" />
+<col width="18%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">crash_date</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">2018-03-15 00:01:00</td>
+<td align="left">2021-03-15 00:05:00</td>
+<td align="left">2019-07-22 14:20:30</td>
+<td align="right">208591</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="plot" class="section level3">
+<h3>Plot</h3>
+<pre class="r"><code>crash %&gt;%
+  mutate(crash_date = as_date(floor_date(crash_date, unit = &quot;week&quot;))) %&gt;%
+  count(crash_date, injuries) %&gt;%
+  filter(
+    crash_date != last(crash_date),
+    crash_date != first(crash_date)
+  ) %&gt;%
+  mutate(name_lab = if_else(
+    crash_date == last(crash_date),
+    as.logical(injuries),
+    NA
+  )) %&gt;%
+  ggplot() +
+  geom_line(aes(as.Date(crash_date), n, color = injuries),
+    size = 1.5,
+    alpha = 0.7
+  ) +
+  scale_x_date(
+    labels = scales::date_format(&quot;%Y&quot;),
+    expand = c(0, 0),
+    breaks = seq.Date(as_date(&quot;2018-01-01&quot;),
+      as_date(&quot;2021-01-01&quot;),
+      by = &quot;year&quot;
+    ),
+    minor_breaks = &quot;3 months&quot;,
+    limits = c(as_date(&quot;2018-01-01&quot;), as_date(&quot;2021-07-01&quot;))
+  ) +
+  ggrepel::geom_text_repel(
+    data = . %&gt;% filter(!is.na(name_lab)),
+
+    aes(
+      x = crash_date + 1,
+      y = n - 50,
+      label = if_else(name_lab, &quot;Injuries&quot;, &quot;No Injuries&quot;),
+      color = injuries
+    ),
+    fontface = &quot;bold&quot;,
+    size = 4,
+    direction = &quot;y&quot;,
+    xlim = c(2022, NA),
+    hjust = 0,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = &quot;dotted&quot;,
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20
+  ) +
+  scale_y_continuous(limits = (c(0, NA))) +
+  hrbrthemes::scale_color_ipsum() +
+  labs(
+    title = &quot;How have the number of crashes changed over time?&quot;,
+    x = NULL,
+    y = &quot;Number of traffic crashes per week&quot;,
+    color = &quot;Injuries?&quot;,
+    caption = &quot;Data: Chicago Data Portal | Visual: @jim_gruman&quot;
+  ) +
+  theme(legend.position = &quot;&quot;)</code></pre>
+<p><img src="figure/2021_02_09_tidy_tuesday.Rmd/unnamed-chunk-4-1.png" width="2100" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="section" class="section level2 unnumbered">
+<h2 class="unnumbered"></h2>
+<p>This is not a balanced dataset, in that the injuries are a small portion of traffic incidents. The proportion changes over time. For the entire 3 year dataset, the portion of crashes with injuries is:</p>
+<pre class="r"><code>prop.table(table(crash$injuries == TRUE))</code></pre>
+<pre><code>
+    FALSE      TRUE 
+0.8565213 0.1434787 </code></pre>
+</div>
+<div id="build-a-model" class="section level2">
+<h2>Build a Model</h2>
+<p>Let’s split the data and create cross-validation folds from the training set. Here we’ll use an expanding monthly window by setting <code>lookback = Inf</code>, and each assessment set will contain two months of data. To ensure that we have enough data to fit our models, we’ll <code>skip</code> the first 14 expanding windows. Finally, to thin out the results, we’ll <code>step</code> forward by 2 between each resample. This yields 10 cross validation folds.</p>
+<pre class="r"><code>crash_split &lt;- initial_time_split(crash,
+  strata = injuries,
+  prop = 3 / 4
+)
+crash_train &lt;- training(crash_split)
+crash_test &lt;- testing(crash_split)
+
+## Time-based Resampling first breaks up the crash_dates into monthly groups, and then uses that to construct the resampling indices. We expect that each trained model should be assessed by the next two months. To ensure that we have enough data to fit our models, we&#39;ll `skip` the first 4 expanding windows. Finally, to thin out the results, we&#39;ll `step` forward by 3 between each resample.
+crash_folds &lt;- sliding_period(crash_train,
+  index = crash_date,
+  period = &quot;month&quot;,
+  lookback = Inf,
+  assess_stop = 2,
+  skip = 4,
+  step = 3
+)
+
+crash_folds</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["splits"],"name":[1],"type":["list"],"align":["right"]},{"label":["id"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"<S3: sliding_period_split>","2":"Slice1"},{"1":"<S3: sliding_period_split>","2":"Slice2"},{"1":"<S3: sliding_period_split>","2":"Slice3"},{"1":"<S3: sliding_period_split>","2":"Slice4"},{"1":"<S3: sliding_period_split>","2":"Slice5"},{"1":"<S3: sliding_period_split>","2":"Slice6"},{"1":"<S3: sliding_period_split>","2":"Slice7"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Then we will feature engineer a <code>recipe</code>, which includes creating date features such as day of the week, handling the high cardinality of weather conditions, contributing cause, etc, and perhaps most importantly, downsampling to account for the class imbalance.</p>
+<pre class="r"><code>crash_rec &lt;- recipe(injuries ~ ., data = crash_train) %&gt;%
+  step_date(crash_date,
+    features = c(&quot;dow&quot;, &quot;month&quot;)
+  ) %&gt;%
+  step_rm(crash_date) %&gt;%
+  step_geodist(
+    lat = latitude,
+    lon = longitude,
+    ref_lat = 41.887846,
+    ref_lon = -87.620649
+  ) %&gt;%
+  step_other(
+    weather_condition,
+    first_crash_type,
+    trafficway_type,
+    crash_hour,
+    trafficway_type,
+    prim_contributory_cause,
+    other = &quot;OTHER&quot;
+  ) %&gt;%
+  step_normalize(all_numeric()) %&gt;%
+  themis::step_downsample(injuries)</code></pre>
+<p>Next, we will create a <code>parsnip</code> model specification of class <code>tabnet</code>.</p>
+<pre class="r"><code>mod &lt;- tabnet(epochs = 3) %&gt;%
+  set_engine(&quot;torch&quot;, verbose = TRUE) %&gt;%
+  set_mode(&quot;classification&quot;)</code></pre>
+<p>Next, lets bundle the recipe and model into a workflow for training</p>
+<pre class="r"><code>wf &lt;- workflow() %&gt;%
+  add_model(mod) %&gt;%
+  add_recipe(crash_rec)</code></pre>
+<p>Next, train the model. This takes about 4 minutes with the GPU.</p>
+<pre class="r"><code>t0 &lt;- Sys.time()
+fitted_model &lt;- wf %&gt;% fit(data = crash_train)
+t1 &lt;- Sys.time() - t0
+t1</code></pre>
+<pre><code>Time difference of 3.43057 mins</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>For this generic, untuned model, let’s ask the model for test-set predictions and compute its performance metrics.</p>
+<pre class="r"><code>metrics &lt;- metric_set(accuracy, precision, recall)
+
+bind_cols(crash_test, predict(fitted_model, crash_test)) %&gt;%
+  metrics(injuries, estimate = .pred_class)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"accuracy","2":"binary","3":"0.6929756"},{"1":"precision","2":"binary","3":"0.9434824"},{"1":"recall","2":"binary","3":"0.6782300"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Unfortunately, the accuracy of the model on test data is worse than the 85% that would have been arrived at with no model at all on the imbalanced data set.</p>
+<p>Let’s see how much we can improve with some hyperparameter tuning.</p>
+</div>
+<div id="tabnet-tuning" class="section level2">
+<h2>Tabnet tuning</h2>
+<p>For hyperparameter tuning, the <code>tidymodels</code> framework makes use of cross-validation. With a dataset of considerable size, some time and patience is needed; for the purpose of this post, we will use 1/1,000 of the observations.</p>
+<p>Changes to the above workflow start at model specification. Let’s say we’ll leave most settings fixed, but vary the TabNet-specific hyperparameters decision_width, attention_width, and num_steps, as well as the learning rate:</p>
+<pre class="r"><code>mod &lt;- tabnet(
+  epochs = 3,
+  decision_width = tune(),
+  attention_width = tune(),
+  num_steps = tune(),
+  learn_rate = tune()
+) %&gt;%
+  set_engine(&quot;torch&quot;, verbose = TRUE) %&gt;%
+  set_mode(&quot;classification&quot;)</code></pre>
+<p>The workflow is the same as before:</p>
+<pre class="r"><code>wf &lt;- workflow() %&gt;%
+  add_model(mod) %&gt;%
+  add_recipe(crash_rec)</code></pre>
+<p>Next, we specify the hyperparameter ranges we’re interested in, and call one of the grid construction functions from the <code>dials</code> package to build one for us.</p>
+<pre class="r"><code>grid &lt;- wf %&gt;%
+  parameters() %&gt;%
+  update(
+    decision_width = decision_width(range = c(10, 40)),
+    attention_width = attention_width(range = c(10, 40)),
+    num_steps = num_steps(range = c(2, 5)),
+    learn_rate = learn_rate(
+      range = c(-3, -0.4),
+      trans = log10_trans()
+    )
+  ) %&gt;%
+  grid_max_entropy(size = 8)
+
+grid %&gt;%
+  ggplot(aes(x = .panel_x, y = .panel_y)) +
+  geom_point() +
+  geom_blank() +
+  ggforce::facet_matrix(vars(learn_rate, num_steps, decision_width, learn_rate), layer.diag = 2) +
+  labs(title = &quot;Maximum Entropy design with 8 candidates&quot;)</code></pre>
+<p><img src="figure/2021_02_09_tidy_tuesday.Rmd/unnamed-chunk-13-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>To search the space, we use <code>tune_race_anova()</code> from the new <code>finetune</code> package, making use of cross-validation. Expect the ten folds on 8 grid points to run for several hours.</p>
+<pre class="r"><code>ctrl &lt;- control_race(verbose_elim = TRUE)
+
+crash_tune_result &lt;- wf %&gt;%
+  tune_race_anova(
+    resamples = crash_folds,
+    grid = grid,
+    control = ctrl
+  )</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Let’s have a look at the accuracy and area under the curve at the settings for tuned hyperparameters for each of the resamples:</p>
+<pre class="r"><code>crash_tune_result %&gt;%
+  autoplot()</code></pre>
+<p><img src="figure/2021_02_09_tidy_tuesday.Rmd/unnamed-chunk-14-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>We can now extract the best hyperparameter combinations for each position on the grid:</p>
+<pre class="r"><code>crash_tune_result %&gt;%
+  show_best(&quot;roc_auc&quot;) %&gt;%
+  select(-c(.estimator, .config))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["learn_rate"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["decision_width"],"name":[2],"type":["int"],"align":["right"]},{"label":["attention_width"],"name":[3],"type":["int"],"align":["right"]},{"label":["num_steps"],"name":[4],"type":["int"],"align":["right"]},{"label":[".metric"],"name":[5],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[7],"type":["int"],"align":["right"]},{"label":["std_err"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.03943346","2":"11","3":"29","4":"2","5":"roc_auc","6":"0.7819491","7":"7","8":"0.007056106"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Let’s re-fit the final best tuned model on the training dataset and collect the overall metrics.</p>
+<pre class="r"><code>best_params &lt;- select_best(crash_tune_result,
+  metric = &quot;roc_auc&quot;
+)
+
+final_mod &lt;- tabnet(
+  epochs = 3,
+  decision_width = best_params$decision_width,
+  attention_width = best_params$attention_width,
+  num_steps = best_params$num_steps,
+  learn_rate = best_params$learn_rate
+) %&gt;%
+  set_engine(&quot;torch&quot;, verbose = TRUE) %&gt;%
+  set_mode(&quot;classification&quot;)
+
+wf &lt;- workflow() %&gt;%
+  add_model(final_mod) %&gt;%
+  add_recipe(crash_rec)
+
+crash_fit &lt;- wf %&gt;% fit(data = crash_train)
+
+bind_cols(crash_test, predict(crash_fit, crash_test)) %&gt;%
+  metrics(injuries, estimate = .pred_class)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"accuracy","2":"binary","3":"0.7213838"},{"1":"precision","2":"binary","3":"0.9406940"},{"1":"recall","2":"binary","3":"0.7162923"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>bind_cols(crash_test, predict(crash_fit, crash_test, type = &quot;prob&quot;)) %&gt;%
+  roc_auc(injuries, .pred_TRUE)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"roc_auc","2":"binary","3":"0.21868"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Not a great model, but given that this is wild-caught data, it’s not a surprise either.</p>
+<p>Now let’s inspect TabNet’s interpretability features. TabNet’s most prominent characteristic is the way – inspired by decision trees – it executes in distinct steps. At each step, it again looks at the original input features, and decides which of those to consider based on lessons learned in prior steps. Concretely, it uses an attention mechanism to learn sparse masks which are then applied to the features.</p>
+<p>Now, these masks being “just” model weights means we can extract them and draw conclusions about feature importance. Depending on how we proceed, we can either</p>
+<ul>
+<li><p>aggregate mask weights over steps, resulting in global per-feature importance;</p></li>
+<li><p>run the model on a few test samples and aggregate over steps, resulting in observation-wise feature importance; or</p></li>
+<li><p>run the model on a few test samples and extract individual weights.</p></li>
+</ul>
+<div id="per-feature-importances" class="section level3">
+<h3>PER-FEATURE IMPORTANCES</h3>
+<p>With <code>tabnet</code>, <code>vip::vip</code> is able to display feature importance directly from the parsnip model:</p>
+<pre class="r"><code>fit &lt;- pull_workflow_fit(crash_fit)
+
+vip(fit)</code></pre>
+<p><img src="figure/2021_02_09_tidy_tuesday.Rmd/unnamed-chunk-17-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>Now that was super simple. The feature importance metrics are slightly different than the <code>rpart</code> method presented <a href="https://opus1993.github.io/myTidyTuesday/ChicagoTrafficInjuries.html">here</a>.</p>
+</div>
+<div id="observation-level-feature-importances" class="section level3">
+<h3>OBSERVATION-LEVEL FEATURE IMPORTANCES</h3>
+<p>Due to the way TabNet enforces sparsity, we see that many features have not been made use of:</p>
+<pre class="r"><code>ex_fit &lt;- tabnet_explain(fit$fit, prep(crash_rec) %&gt;% bake(crash_test))
+
+ex_fit$M_explain %&gt;%
+  mutate(observation = row_number()) %&gt;%
+  pivot_longer(-observation, names_to = &quot;variable&quot;, values_to = &quot;m_agg&quot;) %&gt;%
+  ggplot(aes(x = observation, y = variable, fill = m_agg)) +
+  geom_tile()</code></pre>
+<p><img src="figure/2021_02_09_tidy_tuesday.Rmd/unnamed-chunk-18-1.png" width="2100" style="display: block; margin: auto;" /></p>
+</div>
+<div id="per-step-observation-level-feature-importances" class="section level3">
+<h3>PER-STEP, OBSERVATION-LEVEL FEATURE IMPORTANCES</h3>
+<p>Finally and on the same selection of observations, we again inspect the masks, but this time, per decision step:</p>
+<pre class="r"><code>ex_fit$masks %&gt;%
+  imap_dfr(~ mutate(
+    .x,
+    step = sprintf(&quot;Step %d&quot;, .y),
+    observation = row_number()
+  )) %&gt;%
+  pivot_longer(-c(observation, step), names_to = &quot;variable&quot;, values_to = &quot;m_agg&quot;) %&gt;%
+  ggplot(aes(x = observation, y = variable, fill = m_agg)) +
+  geom_tile() +
+  theme(axis.text = element_text(size = 5)) +
+  facet_wrap(~step)</code></pre>
+<p><img src="figure/2021_02_09_tidy_tuesday.Rmd/unnamed-chunk-19-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>We clearly see how TabNet makes use of different features at different times. So what do we make of this? It depends. Given the enormous societal importance of this topic – call it interpretability, explainability, or whatever – let’s finish this post with a short discussion.</p>
+</div>
+</div>
+<div id="what-makes-the-model-interpretable-or-explainable" class="section level2">
+<h2>What makes the model interpretable or explainable?</h2>
+<p>An internet search for “interpretable vs. explainable ML” immediately turns up a number of sites confidently stating “interpretable ML is …” and “explainable ML is …”, as though there were no arbitrariness in the definitions. Going deeper, you find articles such as Cynthia Rudin’s “Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead” (Rudin (<a href="https://blogs.rstudio.com/ai/posts/2021-02-11-tabnet/#ref-rudin2018stop">2018</a>)) that present us with a clear-cut, deliberate, instrumentalizable distinction that can actually be used in real-world scenarios.</p>
+<p>In a nutshell, what she decides to call explainability is: approximate a black-box model by a simpler (e.g., linear) model and, starting from the simple model, make inferences about how the black-box model works. One of the examples she gives for how this could fail is striking:</p>
+<blockquote>
+<p>Even an explanation model that performs almost identically to a black box model might use completely different features, and is thus not faithful to the computation of the black box. Consider a black box model for criminal recidivism prediction, where the goal is to predict whether someone will be arrested within a certain time after being released from jail/prison. Most recidivism prediction models depend explicitly on age and criminal history, but do not explicitly depend on race. Since criminal history and age are correlated with race in all of our datasets, a fairly accurate explanation model could construct a rule such as “This person is predicted to be arrested because they are black.” This might be an accurate explanation model since it correctly mimics the predictions of the original model, but it would not be faithful to what the original model computes.</p>
+</blockquote>
+<p>What she calls interpretability, in contrast, is deeply related to domain knowledge:</p>
+<blockquote>
+<p>Interpretability is a domain-specific notion […] Usually, however, an interpretable machine learning model is constrained in model form so that it is either useful to someone, or obeys structural knowledge of the domain, such as monotonicity [e.g.,8], causality, structural (generative) constraints, additivity [9], or physical constraints that come from domain knowledge. Often for structured data, sparsity is a useful measure of interpretability […]. Sparse models allow a view of how variables interact jointly rather than individually. […] e.g., in some domains, sparsity is useful,and in others is it not.</p>
+</blockquote>
+<p>If we accept these well-thought-out definitions, what can we say about TabNet? Is looking at attention masks more like constructing a post-hoc model or more like having domain knowledge incorporated? Rudin might argue the former, since</p>
+<ul>
+<li><p>the image-classification example she uses to point out weaknesses of explainability techniques employs saliency maps, a technical device comparable, in some ontological sense, to attention masks;</p></li>
+<li><p>the sparsity enforced by TabNet is a technical, not a domain-related constraint;</p></li>
+<li><p>we only know what features were used by TabNet, not how it used them.</p></li>
+</ul>
+<p>On the other hand, one could disagree with Rudin. Do explanations have to be modeled after human cognition to be considered valid?</p>
+<p>From a post by Keith O’Rourke on the topic of interpretability:</p>
+<blockquote>
+<p>As with any critically-thinking inquirer, the views behind these deliberations are always subject to rethinking and revision at any time.</p>
+</blockquote>
+<p>In any case, we can be sure that this topic’s importance will only grow with time. In the very early days of the GDPR (the EU General Data Protection Regulation) it was said that Article 22 (on automated decision-making) would have <a href="http://www.odbms.org/2018/07/ai-machine-learning-and-the-gdpr-are-the-wild-west-days-of-advanced-analytics-over/">significant impact on how ML is used</a>, unfortunately the current view seems to be that the wording is still too vague to have immediate consequences.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19042)
+
+Matrix products: default
+
+Random number generation:
+ RNG:     L&#39;Ecuyer-CMRG 
+ Normal:  Inversion 
+ Sample:  Rejection 
+ 
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] systemfonts_1.0.1 hrbrthemes_0.8.6  lubridate_1.7.10  vctrs_0.3.6      
+ [5] rlang_0.4.10      RSocrata_1.7.10-6 finetune_0.0.1    vip_0.3.2        
+ [9] themis_0.1.3      yardstick_0.0.7   workflows_0.2.2   tune_0.1.3       
+[13] rsample_0.0.9     recipes_0.1.15    parsnip_0.1.5     modeldata_0.1.0  
+[17] infer_0.5.4       dials_0.0.9       scales_1.1.1      broom_0.7.5      
+[21] tidymodels_0.1.2  tabnet_0.1.0.9000 torch_0.2.1.9000  forcats_0.5.1    
+[25] stringr_1.4.0     dplyr_1.0.5       purrr_0.3.4       readr_1.4.0      
+[29] tidyr_1.1.3       tibble_3.1.0      ggplot2_3.3.3     tidyverse_1.3.0  
+[33] workflowr_1.6.2  
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.1.4         R.utils_2.10.1     lme4_1.1-26       
+  [4] tidyselect_1.1.0   grid_4.0.3         pROC_1.17.0.1     
+  [7] munsell_0.5.0      codetools_0.2-18   ragg_1.1.1        
+ [10] statmod_1.4.35     future_1.21.0      withr_2.4.1       
+ [13] colorspace_2.0-0   highr_0.8          knitr_1.31        
+ [16] rstudioapi_0.13    Rttf2pt1_1.3.8     listenv_0.8.0     
+ [19] labeling_0.4.2     git2r_0.28.0       repr_1.1.3        
+ [22] polyclip_1.10-0    bit64_4.0.5        DiceDesign_1.9    
+ [25] farver_2.1.0       rprojroot_2.0.2    mlr_2.19.0        
+ [28] parallelly_1.24.0  generics_0.1.0     ipred_0.9-11      
+ [31] xfun_0.22          R6_2.5.0           doParallel_1.0.16 
+ [34] lhs_1.1.1          assertthat_0.2.1   promises_1.2.0.1  
+ [37] nnet_7.3-15        debugme_1.1.0      gtable_0.3.0      
+ [40] globals_0.14.0     processx_3.4.5     timeDate_3043.102 
+ [43] BBmisc_1.11        splines_4.0.3      extrafontdb_1.0   
+ [46] checkmate_2.0.0    yaml_2.2.1         modelr_0.1.8      
+ [49] backports_1.2.1    httpuv_1.5.5       extrafont_0.17    
+ [52] tools_4.0.3        lava_1.6.9         ellipsis_0.3.1    
+ [55] jquerylib_0.1.3    Rcpp_1.0.6         plyr_1.8.6        
+ [58] base64enc_0.1-3    progress_1.2.2     parallelMap_1.5.0 
+ [61] ps_1.6.0           prettyunits_1.1.1  rpart_4.1-15      
+ [64] slider_0.1.5       ParamHelpers_1.14  haven_2.3.1       
+ [67] ggrepel_0.9.1      fs_1.5.0           furrr_0.2.2       
+ [70] unbalanced_2.0     magrittr_2.0.1     data.table_1.14.0 
+ [73] warp_0.2.0         reprex_1.0.0       RANN_2.6.1        
+ [76] GPfit_1.0-8        whisker_0.4        ROSE_0.0-3        
+ [79] R.cache_0.14.0     hms_1.0.0          mime_0.10         
+ [82] evaluate_0.14      readxl_1.3.1       gridExtra_2.3     
+ [85] compiler_4.0.3     crayon_1.4.1       minqa_1.2.4       
+ [88] coro_1.0.1         R.oo_1.24.0        htmltools_0.5.1.1 
+ [91] later_1.1.0.1      DBI_1.1.1          tweenr_1.0.1      
+ [94] dbplyr_2.1.0       MASS_7.3-53.1      boot_1.3-27       
+ [97] Matrix_1.3-2       cli_2.3.1          R.methodsS3_1.8.1 
+[100] parallel_4.0.3     gower_0.2.2        pkgconfig_2.0.3   
+[103] skimr_2.1.3        xml2_1.3.2         foreach_1.5.1     
+[106] memuse_4.1-0       bslib_0.2.4        hardhat_0.1.5     
+[109] prodlim_2019.11.13 rvest_1.0.0        callr_3.5.1       
+[112] digest_0.6.27      rmarkdown_2.7      cellranger_1.1.0  
+[115] fastmatch_1.1-0    gdtools_0.2.3      curl_4.3          
+[118] nloptr_1.2.2.2     nlme_3.1-152       lifecycle_1.0.0   
+[121] jsonlite_1.7.2     fansi_0.4.2        pillar_1.5.1      
+[124] lattice_0.20-41    httr_1.4.2         survival_3.2-9    
+[127] glue_1.4.2         FNN_1.1.3          iterators_1.0.13  
+[130] bit_4.0.4          ggforce_0.3.3      class_7.3-18      
+[133] stringi_1.5.3      sass_0.3.1         rematch2_2.1.2    
+[136] textshaping_0.3.2  styler_1.3.2      </code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogInRvcmNoLCB0aWR5bW9kZWxzLCBhbmQgQ2hpY2FnbyBUcmFmZmljIEluanVyaWVzIg0KZGF0ZTogIk1hcmNoIDQsIDIwMjEiDQpvdXRwdXQ6DQogIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICB0b2M6IG5vDQogICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgIGRmX3ByaW50OiBwYWdlZA0KZWRpdG9yX29wdGlvbnM6DQogIGNodW5rX291dHB1dF90eXBlOiBjb25zb2xlDQotLS0NCg0KSSBhbSBnb2luZyB0byBtYWtlIGEgZGVwYXJ0dXJlIGZyb20gdGhlIFRpZHlUdWVzZGF5IHNjcmlwdCB0aGlzIHdlZWsgdG8gZXhwbG9yZSBhIFNpZ3JpZCBLZXlkYW5hIGFydGljbGUgcG9zdGVkIGF0IHRoZSBSLVN0dWRpbyBBSSBCbG9nIGFzICJbdG9yY2gsIHRpZHltb2RlbHMsIGFuZCBoaWdoLWVuZXJneSBwaHlzaWNzXShodHRwczovL2Jsb2dzLnJzdHVkaW8uY29tL2FpL3Bvc3RzLzIwMjEtMDItMTEtdGFibmV0LyksIiB3aGVyZSB0aGV5IGludHJvZHVjZSBbYHRhYm5ldGBdKGh0dHBzOi8vbWx2ZXJzZS5naXRodWIuaW8vdGFibmV0LyksIGEgdG9yY2ggaW1wbGVtZW50YXRpb24gb2YgdGhlIHBhcGVyIOKAnFtUYWJOZXQ6IEF0dGVudGl2ZSBJbnRlcnByZXRhYmxlIFRhYnVsYXIgTGVhcm5pbmddKGh0dHA6Ly9hcnhpdi5vcmcvYWJzLzE5MDguMDc0NDIp4oCdIHRoYXQgaXMgZnVsbHkgaW50ZWdyYXRlZCB3aXRoIHRoZSBgdGlkeW1vZGVsc2AgbWFjaGluZSBsZWFybmluZyBmcmFtZXdvcmsuIA0KDQpgYGB7cn0NCmtuaXRyOjppbmNsdWRlX3VybCgiaHR0cHM6Ly9ibG9ncy5yc3R1ZGlvLmNvbS9haS9wb3N0cy8yMDIxLTAyLTExLXRhYm5ldC8iKQ0KYGBgDQoNCkZvciBteSBkZW1vbnN0cmF0aW9uLCBJIGFtIGdvaW5nIHJldmlzaXQgdGhlIHdpbGQtY2F1Z2h0IA0KW0NoaWNhZ28gdHJhZmZpYyBjcmFzaGVzXShodHRwczovL2RhdGEuY2l0eW9mY2hpY2Fnby5vcmcvVHJhbnNwb3J0YXRpb24vVHJhZmZpYy1DcmFzaGVzLUNyYXNoZXMvODVjYS10M2lmKSBkYXRhc2V0IHRoYXQgSSBleHBsb3JlZCBbYmFjayBpbiBKYW51YXJ5XShodHRwczovL29wdXMxOTkzLmdpdGh1Yi5pby9teVRpZHlUdWVzZGF5L0NoaWNhZ29UcmFmZmljSW5qdXJpZXMuaHRtbCkuDQoNCldoYXQgY2F1Z2h0IG15IGV5ZSBpbiBTaWdyaWQncyBwb3N0IHdhcyB0aGUgY2xhaW0gdGhhdCBUYWJOZXQgaW5jbHVkZXMgaW50ZXJwcmV0YWJpbGl0eSBmZWF0dXJlcyBieSBkZXNpZ24uIExldCdzIGdpdmUgaXQgYSB0cnkgaGVyZS4gRmlyc3QsIGxldCdzIGxvYWQgcGFja2FnZSBsaWJyYXJpZXMgdG8gbWFrZSB0aGUgZGVlcCBsZWFybmluZyBmdW5jdGlvbnMgYXZhaWxhYmxlLg0KDQpgYGB7ciBzZXR1cCwgbWVzc2FnZT1GQUxTRX0NCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KA0KCWVjaG8gPSBUUlVFLA0KCW1lc3NhZ2UgPSBGQUxTRSwNCgl3YXJuaW5nID0gRkFMU0UsDQoJY2FjaGUgPSBGQUxTRSwNCgljYWNoZS5sYXp5ID0gRkFMU0UsDQoJZGZfcHJpbnQgPSAicGFnZWQiLA0KCWRwaSA9IDMwMCwNCgl0aWR5ID0gInN0eWxlciIsDQoJZGV2ID0gInJhZ2dfcG5nIg0KKQ0KDQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMoew0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KHRvcmNoKQ0KbGlicmFyeSh0YWJuZXQpDQpsaWJyYXJ5KHRpZHltb2RlbHMpDQpsaWJyYXJ5KHRoZW1pcykNCmxpYnJhcnkodmlwKQ0KbGlicmFyeShmaW5ldHVuZSkNCmxpYnJhcnkoUlNvY3JhdGEpDQpsaWJyYXJ5KHJsYW5nKQ0KbGlicmFyeSh2Y3RycykNCmxpYnJhcnkobHVicmlkYXRlKQ0KbGlicmFyeShocmJydGhlbWVzKQ0KbGlicmFyeShzeXN0ZW1mb250cykNCiB9KQ0KDQpnZ3Bsb3QyOjp0aGVtZV9zZXQoaHJicnRoZW1lczo6dGhlbWVfaXBzdW1fcHViKCkgKw0KICAgICAgICAgICAgZ2dwbG90Mjo6dGhlbWUocGxvdC50aXRsZS5wb3NpdGlvbiA9ICJwbG90IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHBsb3QuY2FwdGlvbi5wb3NpdGlvbiA9ICJwbG90IikpDQoNCmBgYA0KDQpJJ3ZlIGludmVzdGVkIHNvbWUgdGltZSBhbmQgZWZmb3J0IGludG8gbWFraW5nIEdQVSBjb21wdXRlIGF2YWlsYWJsZSBvbiBteSBXaW5kb3dzIGxhcHRvcC4NCg0KYGBge3J9DQpjdWRhX2RldmljZV9jb3VudCgpDQp0b3JjaF9nZXRfbnVtX2ludGVyb3BfdGhyZWFkcygpDQp0b3JjaF9nZXRfbnVtX3RocmVhZHMoKQ0KYGBgDQoNCldlIHdpbGwgbG9hZCB0aGUgbGF0ZXN0IGRhdGEgZGlyZWN0bHkgZnJvbSB0aGUgQ2hpY2FnbyBkYXRhIHBvcnRhbC4gVGhpcyBkYXRhc2V0IGNvdmVycyB0cmFmZmljIGNyYXNoZXMgb24gY2l0eSBzdHJlZXRzIHdpdGhpbiBDaGljYWdvIGNpdHkgbGltaXRzIHVuZGVyIHRoZSBqdXJpc2RpY3Rpb24gb2YgdGhlIENoaWNhZ28gUG9saWNlIERlcGFydG1lbnQuIFRoZSBvYmplY3RpdmUgaGVyZSBpcyB0byBwcmVkaWN0IHRoZSBjcmFzaGVzIHRoYXQgcmVzdWx0IGluIGluanVyaWVzLg0KDQpgYGB7ciBsb2FkLCBjYWNoZT1UUlVFfQ0KeWVhcnNfYWdvIDwtIHRvZGF5KCkgLSB5ZWFycygzKQ0KY3Jhc2hfdXJsIDwtIGdsdWU6OmdsdWUoImh0dHBzOi8vZGF0YS5jaXR5b2ZjaGljYWdvLm9yZy9UcmFuc3BvcnRhdGlvbi9UcmFmZmljLUNyYXNoZXMtQ3Jhc2hlcy84NWNhLXQzaWY/JHdoZXJlPUNSQVNIX0RBVEUgPiAne3llYXJzX2Fnb30nIikNCg0KY3Jhc2ggPC0gYXNfdGliYmxlKHJlYWQuc29jcmF0YShjcmFzaF91cmwpKSAlPiUNCiAgYXJyYW5nZShkZXNjKGNyYXNoX2RhdGUpKSAlPiUNCiAgdHJhbnNtdXRlKA0KICAgIGluanVyaWVzID0gZmFjdG9yKGlmX2Vsc2UoaW5qdXJpZXNfdG90YWwgPiAwLFRSVUUsRkFMU0UpKSwNCiAgICBjcmFzaF9kYXRlLA0KICAgIGNyYXNoX2hvdXIgPSBmYWN0b3IoY3Jhc2hfaG91ciksDQogICAgcmVwb3J0X3R5cGUgPSBpZl9lbHNlKHJlcG9ydF90eXBlID09ICIiLCAiVU5LTk9XTiIsIHJlcG9ydF90eXBlKSwNCiMgICAgbnVtX3VuaXRzLA0KICAgIHRyYWZmaWN3YXlfdHlwZSwNCiAgICBwb3N0ZWRfc3BlZWRfbGltaXQgPSBmYWN0b3IocG9zdGVkX3NwZWVkX2xpbWl0KSwNCiAgICB3ZWF0aGVyX2NvbmRpdGlvbiwNCiAgICBsaWdodGluZ19jb25kaXRpb24sDQogICAgcm9hZHdheV9zdXJmYWNlX2NvbmQsDQogICAgZmlyc3RfY3Jhc2hfdHlwZSwNCiAgICB0cmFmZmljd2F5X3R5cGUsDQogICAgcHJpbV9jb250cmlidXRvcnlfY2F1c2UsDQogICAgbGF0aXR1ZGUsIGxvbmdpdHVkZSwNCiAgICBjb3ZpZCA9IGZhY3RvcihpZl9lbHNlKGJldHdlZW4oZGF0ZShjcmFzaF9kYXRlKSwgZGF0ZSgiMjAyMC0wMy0wMSIpLGRhdGUoIjIwMjAtMDYtMDEiKSksVFJVRSwgRkFMU0UpKQ0KICApICU+JQ0KICBuYS5vbWl0KCkgJT4lIA0KICBhcnJhbmdlKGNyYXNoX2RhdGUpDQoNCmBgYA0KDQojIyBWaXN1YWxpemUgey50YWJzZXR9DQoNCiMjIyBTa2ltIGEgc3VtbWFyeQ0KDQpJJ3ZlIGFkZGVkIGEgbG9naWNhbCBmZWF0dXJlIGFzc29jaWF0ZWQgd2l0aCB0aGUgQ09WSUQgcGFuZGVtaWMgdGltZWZyYW1lLiBMZXTigJlzIHRha2UgYSBnbGltcHNlIG9mIHRoZSBkYXRhc2V0IHdpdGggc2tpbToNCg0KYGBge3IgfQ0Kc2tpbXI6OnNraW0oY3Jhc2gpDQoNCmBgYA0KDQojIyMgUGxvdA0KDQpgYGB7cn0NCmNyYXNoICU+JQ0KICBtdXRhdGUoY3Jhc2hfZGF0ZSA9IGFzX2RhdGUoZmxvb3JfZGF0ZShjcmFzaF9kYXRlLCB1bml0ID0gIndlZWsiKSkpICU+JQ0KICBjb3VudChjcmFzaF9kYXRlLCBpbmp1cmllcykgJT4lDQogIGZpbHRlcihjcmFzaF9kYXRlICE9IGxhc3QoY3Jhc2hfZGF0ZSksDQogICAgICAgICBjcmFzaF9kYXRlICE9IGZpcnN0KGNyYXNoX2RhdGUpKSAlPiUNCiAgbXV0YXRlKG5hbWVfbGFiID0gaWZfZWxzZSgNCiAgICBjcmFzaF9kYXRlID09IGxhc3QoY3Jhc2hfZGF0ZSksDQogICAgYXMubG9naWNhbChpbmp1cmllcyksDQogICAgTkENCiAgKSkgJT4lDQogIGdncGxvdCgpICsNCiAgZ2VvbV9saW5lKGFlcyhhcy5EYXRlKGNyYXNoX2RhdGUpLCBuLCBjb2xvciA9IGluanVyaWVzKSwNCiAgICAgICAgICAgIHNpemUgPSAxLjUsDQogICAgICAgICAgICBhbHBoYSA9IDAuNykgKw0KICBzY2FsZV94X2RhdGUoDQogICAgbGFiZWxzID0gc2NhbGVzOjpkYXRlX2Zvcm1hdCgiJVkiKSwNCiAgICBleHBhbmQgPSBjKDAsIDApLA0KICAgIGJyZWFrcyA9IHNlcS5EYXRlKGFzX2RhdGUoIjIwMTgtMDEtMDEiKSwNCiAgICAgICAgICAgICAgICAgICAgICBhc19kYXRlKCIyMDIxLTAxLTAxIiksDQogICAgICAgICAgICAgICAgICAgICAgYnkgPSAieWVhciIpLA0KICAgIG1pbm9yX2JyZWFrcyA9ICIzIG1vbnRocyIsDQogICAgbGltaXRzID0gYyhhc19kYXRlKCIyMDE4LTAxLTAxIiksIGFzX2RhdGUoIjIwMjEtMDctMDEiKSkNCiAgKSArDQogIGdncmVwZWw6Omdlb21fdGV4dF9yZXBlbChkYXRhID0gLiAlPiUgZmlsdGVyKCFpcy5uYShuYW1lX2xhYikpLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgDQogICAgYWVzKA0KICAgICAgeCA9IGNyYXNoX2RhdGUgKyAxLA0KICAgICAgeSA9IG4gLSA1MCwNCiAgICAgIGxhYmVsID0gaWZfZWxzZShuYW1lX2xhYiwgIkluanVyaWVzIiwgIk5vIEluanVyaWVzIiksDQogICAgICBjb2xvciA9IGluanVyaWVzDQogICAgKSwNCiAgICBmb250ZmFjZSA9ICJib2xkIiwNCiAgICBzaXplID0gNCwNCiAgICBkaXJlY3Rpb24gPSAieSIsDQogICAgeGxpbSA9IGMoMjAyMiwgTkEpLA0KICAgIGhqdXN0ID0gMCwNCiAgICBzZWdtZW50LnNpemUgPSAuNywNCiAgICBzZWdtZW50LmFscGhhID0gLjUsDQogICAgc2VnbWVudC5saW5ldHlwZSA9ICJkb3R0ZWQiLA0KICAgIGJveC5wYWRkaW5nID0gLjQsDQogICAgc2VnbWVudC5jdXJ2YXR1cmUgPSAtMC4xLA0KICAgIHNlZ21lbnQubmNwID0gMywNCiAgICBzZWdtZW50LmFuZ2xlID0gMjANCiAgKSArDQogIHNjYWxlX3lfY29udGludW91cyhsaW1pdHMgPSAoYygwLCBOQSkpKSArDQogIGhyYnJ0aGVtZXM6OnNjYWxlX2NvbG9yX2lwc3VtKCkgKw0KICBsYWJzKA0KICAgIHRpdGxlID0gIkhvdyBoYXZlIHRoZSBudW1iZXIgb2YgY3Jhc2hlcyBjaGFuZ2VkIG92ZXIgdGltZT8iLA0KICAgIHggPSBOVUxMLA0KICAgIHkgPSAiTnVtYmVyIG9mIHRyYWZmaWMgY3Jhc2hlcyBwZXIgd2VlayIsDQogICAgY29sb3IgPSAiSW5qdXJpZXM/IiwNCiAgICBjYXB0aW9uID0gIkRhdGE6IENoaWNhZ28gRGF0YSBQb3J0YWwgfCBWaXN1YWw6IEBqaW1fZ3J1bWFuIg0KICApICsNCiAgdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gIiIpDQpgYGANCg0KIyMgey19DQoNClRoaXMgaXMgbm90IGEgYmFsYW5jZWQgZGF0YXNldCwgaW4gdGhhdCB0aGUgaW5qdXJpZXMgYXJlIGEgc21hbGwgcG9ydGlvbiBvZiB0cmFmZmljIGluY2lkZW50cy4gVGhlIHByb3BvcnRpb24gY2hhbmdlcyBvdmVyIHRpbWUuIEZvciB0aGUgZW50aXJlIDMgeWVhciBkYXRhc2V0LCB0aGUgcG9ydGlvbiBvZiBjcmFzaGVzIHdpdGggaW5qdXJpZXMgaXM6DQoNCmBgYHtyfQ0KcHJvcC50YWJsZSh0YWJsZShjcmFzaCRpbmp1cmllcyA9PSBUUlVFKSkNCmBgYA0KDQojIyBCdWlsZCBhIE1vZGVsDQoNCkxldCdzIHNwbGl0IHRoZSBkYXRhIGFuZCBjcmVhdGUgY3Jvc3MtdmFsaWRhdGlvbiBmb2xkcyBmcm9tIHRoZSB0cmFpbmluZyBzZXQuIEhlcmUgd2UnbGwgdXNlIGFuIGV4cGFuZGluZyBtb250aGx5IHdpbmRvdyBieSBzZXR0aW5nIGBsb29rYmFjayA9IEluZmAsIGFuZCBlYWNoIGFzc2Vzc21lbnQgc2V0IHdpbGwgY29udGFpbiB0d28gbW9udGhzIG9mIGRhdGEuIFRvIGVuc3VyZSB0aGF0IHdlIGhhdmUgZW5vdWdoIGRhdGEgdG8gZml0IG91ciBtb2RlbHMsIHdlJ2xsIGBza2lwYCB0aGUgZmlyc3QgMTQgZXhwYW5kaW5nIHdpbmRvd3MuIEZpbmFsbHksIHRvIHRoaW4gb3V0IHRoZSByZXN1bHRzLCB3ZSdsbCBgc3RlcGAgZm9yd2FyZCBieSAyIGJldHdlZW4gZWFjaCByZXNhbXBsZS4gIFRoaXMgeWllbGRzIDEwIGNyb3NzIHZhbGlkYXRpb24gZm9sZHMuDQoNCmBgYHtyfQ0KY3Jhc2hfc3BsaXQgPC0gaW5pdGlhbF90aW1lX3NwbGl0KGNyYXNoLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJhdGEgPSBpbmp1cmllcywNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwcm9wID0gMy80KQ0KY3Jhc2hfdHJhaW4gPC0gdHJhaW5pbmcoY3Jhc2hfc3BsaXQpDQpjcmFzaF90ZXN0IDwtIHRlc3RpbmcoY3Jhc2hfc3BsaXQpDQoNCiMjIFRpbWUtYmFzZWQgUmVzYW1wbGluZyBmaXJzdCBicmVha3MgdXAgdGhlIGNyYXNoX2RhdGVzIGludG8gbW9udGhseSBncm91cHMsIGFuZCB0aGVuIHVzZXMgdGhhdCB0byBjb25zdHJ1Y3QgdGhlIHJlc2FtcGxpbmcgaW5kaWNlcy4gV2UgZXhwZWN0IHRoYXQgZWFjaCB0cmFpbmVkIG1vZGVsIHNob3VsZCBiZSBhc3Nlc3NlZCBieSB0aGUgbmV4dCB0d28gbW9udGhzLiBUbyBlbnN1cmUgdGhhdCB3ZSBoYXZlIGVub3VnaCBkYXRhIHRvIGZpdCBvdXIgbW9kZWxzLCB3ZSdsbCBgc2tpcGAgdGhlIGZpcnN0IDQgZXhwYW5kaW5nIHdpbmRvd3MuIEZpbmFsbHksIHRvIHRoaW4gb3V0IHRoZSByZXN1bHRzLCB3ZSdsbCBgc3RlcGAgZm9yd2FyZCBieSAzIGJldHdlZW4gZWFjaCByZXNhbXBsZS4NCmNyYXNoX2ZvbGRzIDwtICBzbGlkaW5nX3BlcmlvZChjcmFzaF90cmFpbiwgDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaW5kZXggPSBjcmFzaF9kYXRlLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwZXJpb2QgPSAibW9udGgiLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxvb2tiYWNrID0gSW5mLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFzc2Vzc19zdG9wID0gMiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBza2lwID0gNCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdGVwID0gMw0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICkNCg0KY3Jhc2hfZm9sZHMNCg0KYGBgDQoNClRoZW4gd2Ugd2lsbCBmZWF0dXJlIGVuZ2luZWVyIGEgYHJlY2lwZWAsIHdoaWNoIGluY2x1ZGVzIGNyZWF0aW5nIGRhdGUgZmVhdHVyZXMgc3VjaCBhcyBkYXkgb2YgdGhlIHdlZWssIGhhbmRsaW5nIHRoZSBoaWdoIGNhcmRpbmFsaXR5IG9mIHdlYXRoZXIgY29uZGl0aW9ucywgY29udHJpYnV0aW5nIGNhdXNlLCBldGMsIGFuZCBwZXJoYXBzIG1vc3QgaW1wb3J0YW50bHksIGRvd25zYW1wbGluZyB0byBhY2NvdW50IGZvciB0aGUgY2xhc3MgaW1iYWxhbmNlLg0KDQpgYGB7cn0NCmNyYXNoX3JlYyA8LSByZWNpcGUoaW5qdXJpZXMgfiAuLCBkYXRhID0gY3Jhc2hfdHJhaW4pICU+JQ0KICBzdGVwX2RhdGUoY3Jhc2hfZGF0ZSwNCiAgICAgICAgICAgIGZlYXR1cmVzID0gYygiZG93IiwgIm1vbnRoIikpICU+JQ0KICBzdGVwX3JtKGNyYXNoX2RhdGUpICU+JQ0KICBzdGVwX2dlb2Rpc3QoDQogICAgbGF0ID0gbGF0aXR1ZGUsDQogICAgbG9uID0gbG9uZ2l0dWRlLA0KICAgIHJlZl9sYXQgPSA0MS44ODc4NDYsDQogICAgcmVmX2xvbiA9IC04Ny42MjA2NDkNCiAgKSAlPiUNCiAgc3RlcF9vdGhlcigNCiAgICB3ZWF0aGVyX2NvbmRpdGlvbiwNCiAgICBmaXJzdF9jcmFzaF90eXBlLA0KICAgIHRyYWZmaWN3YXlfdHlwZSwNCiAgICBjcmFzaF9ob3VyLA0KICAgIHRyYWZmaWN3YXlfdHlwZSwNCiAgICBwcmltX2NvbnRyaWJ1dG9yeV9jYXVzZSwNCiAgICBvdGhlciA9ICJPVEhFUiINCiAgKSAlPiUNCiAgc3RlcF9ub3JtYWxpemUoYWxsX251bWVyaWMoKSkgJT4lIA0KICB0aGVtaXM6OnN0ZXBfZG93bnNhbXBsZShpbmp1cmllcykNCmBgYA0KDQpOZXh0LCB3ZSB3aWxsIGNyZWF0ZSBhIGBwYXJzbmlwYCBtb2RlbCBzcGVjaWZpY2F0aW9uIG9mIGNsYXNzIGB0YWJuZXRgLiANCg0KYGBge3J9DQoNCm1vZCA8LSB0YWJuZXQoZXBvY2hzID0gMykgJT4lIA0KICBzZXRfZW5naW5lKCJ0b3JjaCIsIHZlcmJvc2UgPSBUUlVFKSAlPiUNCiAgc2V0X21vZGUoImNsYXNzaWZpY2F0aW9uIikNCmBgYA0KDQpOZXh0LCBsZXRzIGJ1bmRsZSB0aGUgcmVjaXBlIGFuZCBtb2RlbCBpbnRvIGEgd29ya2Zsb3cgZm9yIHRyYWluaW5nDQoNCmBgYHtyfQ0Kd2YgPC0gd29ya2Zsb3coKSAlPiUNCiAgYWRkX21vZGVsKG1vZCkgJT4lDQogIGFkZF9yZWNpcGUoY3Jhc2hfcmVjKQ0KYGBgDQoNCk5leHQsIHRyYWluIHRoZSBtb2RlbC4gVGhpcyB0YWtlcyBhYm91dCA0IG1pbnV0ZXMgd2l0aCB0aGUgR1BVLiANCg0KYGBge3IgaW5pdGlhbF9maXQsIGNhY2hlPVRSVUV9DQp0MCA8LSBTeXMudGltZSgpDQpmaXR0ZWRfbW9kZWwgPC0gd2YgJT4lIGZpdChkYXRhID0gY3Jhc2hfdHJhaW4pDQp0MSA8LSBTeXMudGltZSgpIC0gdDANCnQxDQpgYGANCg0KRm9yIHRoaXMgZ2VuZXJpYywgdW50dW5lZCBtb2RlbCwgbGV0J3MgYXNrIHRoZSBtb2RlbCBmb3IgdGVzdC1zZXQgcHJlZGljdGlvbnMgYW5kIGNvbXB1dGUgaXRzIHBlcmZvcm1hbmNlIG1ldHJpY3MuDQoNCmBgYHtyfQ0KbWV0cmljcyA8LSBtZXRyaWNfc2V0KGFjY3VyYWN5LCBwcmVjaXNpb24sIHJlY2FsbCkNCg0KYmluZF9jb2xzKGNyYXNoX3Rlc3QsIHByZWRpY3QoZml0dGVkX21vZGVsLCBjcmFzaF90ZXN0KSkgJT4lIA0KICBtZXRyaWNzKGluanVyaWVzLCBlc3RpbWF0ZSA9IC5wcmVkX2NsYXNzKQ0KYGBgDQoNClVuZm9ydHVuYXRlbHksIHRoZSBhY2N1cmFjeSBvZiB0aGUgbW9kZWwgb24gdGVzdCBkYXRhIGlzIHdvcnNlIHRoYW4gdGhlIDg1JSB0aGF0IHdvdWxkIGhhdmUgYmVlbiBhcnJpdmVkIGF0IHdpdGggbm8gbW9kZWwgYXQgYWxsIG9uIHRoZSBpbWJhbGFuY2VkIGRhdGEgc2V0Lg0KDQpMZXQncyBzZWUgaG93IG11Y2ggd2UgY2FuIGltcHJvdmUgd2l0aCBzb21lIGh5cGVycGFyYW1ldGVyIHR1bmluZy4NCg0KIyMgVGFibmV0IHR1bmluZw0KDQpGb3IgaHlwZXJwYXJhbWV0ZXIgdHVuaW5nLCB0aGUgYHRpZHltb2RlbHNgIGZyYW1ld29yayBtYWtlcyB1c2Ugb2YgY3Jvc3MtdmFsaWRhdGlvbi4gV2l0aCBhIGRhdGFzZXQgb2YgY29uc2lkZXJhYmxlIHNpemUsIHNvbWUgdGltZSBhbmQgcGF0aWVuY2UgaXMgbmVlZGVkOyBmb3IgdGhlIHB1cnBvc2Ugb2YgdGhpcyBwb3N0LCB3ZSB3aWxsIHVzZSAxLzEsMDAwIG9mIHRoZSBvYnNlcnZhdGlvbnMuDQoNCkNoYW5nZXMgdG8gdGhlIGFib3ZlIHdvcmtmbG93IHN0YXJ0IGF0IG1vZGVsIHNwZWNpZmljYXRpb24uIExldOKAmXMgc2F5IHdl4oCZbGwgbGVhdmUgbW9zdCBzZXR0aW5ncyBmaXhlZCwgYnV0IHZhcnkgdGhlIFRhYk5ldC1zcGVjaWZpYyBoeXBlcnBhcmFtZXRlcnMgZGVjaXNpb25fd2lkdGgsIGF0dGVudGlvbl93aWR0aCwgYW5kIG51bV9zdGVwcywgYXMgd2VsbCBhcyB0aGUgbGVhcm5pbmcgcmF0ZToNCg0KYGBge3J9DQptb2QgPC0gdGFibmV0KGVwb2NocyA9IDMsIA0KICAgICAgICAgICAgICBkZWNpc2lvbl93aWR0aCA9IHR1bmUoKSwgDQogICAgICAgICAgICAgIGF0dGVudGlvbl93aWR0aCA9IHR1bmUoKSwNCiAgICAgICAgICAgICAgbnVtX3N0ZXBzID0gdHVuZSgpLCANCiAgICAgICAgICAgICAgbGVhcm5fcmF0ZSA9IHR1bmUoKSkgJT4lDQogIHNldF9lbmdpbmUoInRvcmNoIiwgdmVyYm9zZSA9IFRSVUUpICU+JQ0KICBzZXRfbW9kZSgiY2xhc3NpZmljYXRpb24iKQ0KYGBgDQoNClRoZSB3b3JrZmxvdyBpcyB0aGUgc2FtZSBhcyBiZWZvcmU6DQoNCmBgYHtyfQ0Kd2YgPC0gd29ya2Zsb3coKSAlPiUNCiAgYWRkX21vZGVsKG1vZCkgJT4lDQogIGFkZF9yZWNpcGUoY3Jhc2hfcmVjKQ0KYGBgDQoNCk5leHQsIHdlIHNwZWNpZnkgdGhlIGh5cGVycGFyYW1ldGVyIHJhbmdlcyB3ZeKAmXJlIGludGVyZXN0ZWQgaW4sIGFuZCBjYWxsIG9uZSBvZiB0aGUgZ3JpZCBjb25zdHJ1Y3Rpb24gZnVuY3Rpb25zIGZyb20gdGhlIGBkaWFsc2AgcGFja2FnZSB0byBidWlsZCBvbmUgZm9yIHVzLiANCg0KYGBge3J9DQpncmlkIDwtIHdmICU+JQ0KICBwYXJhbWV0ZXJzKCkgJT4lDQogIHVwZGF0ZSgNCiAgICBkZWNpc2lvbl93aWR0aCA9IGRlY2lzaW9uX3dpZHRoKHJhbmdlID0gYygxMCwgNDApKSwNCiAgICBhdHRlbnRpb25fd2lkdGggPSBhdHRlbnRpb25fd2lkdGgocmFuZ2UgPSBjKDEwLCA0MCkpLA0KICAgIG51bV9zdGVwcyA9IG51bV9zdGVwcyhyYW5nZSA9IGMoMiwgNSkpLA0KICAgIGxlYXJuX3JhdGUgPSBsZWFybl9yYXRlKHJhbmdlID0gYygtMywgLTAuNCksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgdHJhbnMgPSBsb2cxMF90cmFucygpKQ0KICApICU+JQ0KICBncmlkX21heF9lbnRyb3B5KHNpemUgPSA4KQ0KDQpncmlkICU+JSANCiAgZ2dwbG90KGFlcyh4ID0gLnBhbmVsX3gsIHkgPSAucGFuZWxfeSkpICsgDQogIGdlb21fcG9pbnQoKSArDQogIGdlb21fYmxhbmsoKSArDQogIGdnZm9yY2U6OmZhY2V0X21hdHJpeCh2YXJzKGxlYXJuX3JhdGUsIG51bV9zdGVwcywgZGVjaXNpb25fd2lkdGgsIGxlYXJuX3JhdGUpLCBsYXllci5kaWFnID0gMikgKyANCiAgbGFicyh0aXRsZSA9ICJNYXhpbXVtIEVudHJvcHkgZGVzaWduIHdpdGggOCBjYW5kaWRhdGVzIikNCmBgYA0KDQpUbyBzZWFyY2ggdGhlIHNwYWNlLCB3ZSB1c2UgYHR1bmVfcmFjZV9hbm92YSgpYCBmcm9tIHRoZSBuZXcgYGZpbmV0dW5lYCBwYWNrYWdlLCBtYWtpbmcgdXNlIG9mIGNyb3NzLXZhbGlkYXRpb24uIEV4cGVjdCB0aGUgdGVuIGZvbGRzIG9uIDggZ3JpZCBwb2ludHMgdG8gcnVuIGZvciBzZXZlcmFsIGhvdXJzLg0KDQpgYGB7ciBmaXR0ZWRfcnVuMSwgY2FjaGU9VFJVRX0NCmN0cmwgPC0gY29udHJvbF9yYWNlKHZlcmJvc2VfZWxpbSA9IFRSVUUpDQoNCmNyYXNoX3R1bmVfcmVzdWx0IDwtIHdmICU+JSANCiAgICB0dW5lX3JhY2VfYW5vdmEoDQogICAgcmVzYW1wbGVzID0gY3Jhc2hfZm9sZHMsIA0KICAgIGdyaWQgPSBncmlkLA0KICAgIGNvbnRyb2wgPSBjdHJsDQogICkNCmBgYA0KDQpMZXQncyBoYXZlIGEgbG9vayBhdCB0aGUgYWNjdXJhY3kgYW5kIGFyZWEgdW5kZXIgdGhlIGN1cnZlIGF0IHRoZSBzZXR0aW5ncyBmb3IgdHVuZWQgaHlwZXJwYXJhbWV0ZXJzIGZvciBlYWNoIG9mIHRoZSByZXNhbXBsZXM6DQoNCmBgYHtyfQ0KY3Jhc2hfdHVuZV9yZXN1bHQgJT4lIA0KICBhdXRvcGxvdCgpDQpgYGANCg0KV2UgY2FuIG5vdyBleHRyYWN0IHRoZSBiZXN0IGh5cGVycGFyYW1ldGVyIGNvbWJpbmF0aW9ucyBmb3IgZWFjaCBwb3NpdGlvbiBvbiB0aGUgZ3JpZDoNCg0KYGBge3J9DQpjcmFzaF90dW5lX3Jlc3VsdCAlPiUgDQogIHNob3dfYmVzdCgicm9jX2F1YyIpICU+JSANCiAgc2VsZWN0KC1jKC5lc3RpbWF0b3IsIC5jb25maWcpKQ0KYGBgDQoNCkxldCdzIHJlLWZpdCB0aGUgZmluYWwgYmVzdCB0dW5lZCBtb2RlbCBvbiB0aGUgdHJhaW5pbmcgZGF0YXNldCBhbmQgY29sbGVjdCB0aGUgb3ZlcmFsbCBtZXRyaWNzLg0KDQpgYGB7cn0NCmJlc3RfcGFyYW1zIDwtIHNlbGVjdF9iZXN0KGNyYXNoX3R1bmVfcmVzdWx0LA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgbWV0cmljID0gInJvY19hdWMiKQ0KDQpmaW5hbF9tb2QgPC0gdGFibmV0KA0KICBlcG9jaHMgPSAzLA0KICBkZWNpc2lvbl93aWR0aCA9IGJlc3RfcGFyYW1zJGRlY2lzaW9uX3dpZHRoLA0KICBhdHRlbnRpb25fd2lkdGggPSBiZXN0X3BhcmFtcyRhdHRlbnRpb25fd2lkdGgsDQogIG51bV9zdGVwcyA9IGJlc3RfcGFyYW1zJG51bV9zdGVwcywNCiAgbGVhcm5fcmF0ZSA9IGJlc3RfcGFyYW1zJGxlYXJuX3JhdGUNCikgJT4lDQogIHNldF9lbmdpbmUoInRvcmNoIiwgdmVyYm9zZSA9IFRSVUUpICU+JQ0KICBzZXRfbW9kZSgiY2xhc3NpZmljYXRpb24iKQ0KDQp3ZiA8LSB3b3JrZmxvdygpICU+JQ0KICBhZGRfbW9kZWwoZmluYWxfbW9kKSAlPiUNCiAgYWRkX3JlY2lwZShjcmFzaF9yZWMpDQoNCmNyYXNoX2ZpdCA8LSB3ZiAlPiUgZml0KGRhdGEgPSBjcmFzaF90cmFpbikNCg0KYmluZF9jb2xzKGNyYXNoX3Rlc3QsIHByZWRpY3QoY3Jhc2hfZml0LCBjcmFzaF90ZXN0KSkgJT4lDQogIG1ldHJpY3MoaW5qdXJpZXMsIGVzdGltYXRlID0gLnByZWRfY2xhc3MpDQoNCmJpbmRfY29scyhjcmFzaF90ZXN0LCBwcmVkaWN0KGNyYXNoX2ZpdCwgY3Jhc2hfdGVzdCwgdHlwZSA9ICJwcm9iIikpICU+JQ0KICByb2NfYXVjKGluanVyaWVzLCAucHJlZF9UUlVFKQ0KDQpgYGANCg0KTm90IGEgZ3JlYXQgbW9kZWwsIGJ1dCBnaXZlbiB0aGF0IHRoaXMgaXMgd2lsZC1jYXVnaHQgZGF0YSwgaXQncyBub3QgYSBzdXJwcmlzZSBlaXRoZXIuDQoNCk5vdyBsZXQncyBpbnNwZWN0IFRhYk5ldOKAmXMgaW50ZXJwcmV0YWJpbGl0eSBmZWF0dXJlcy4gVGFiTmV04oCZcyBtb3N0IHByb21pbmVudCBjaGFyYWN0ZXJpc3RpYyBpcyB0aGUgd2F5IOKAkyBpbnNwaXJlZCBieSBkZWNpc2lvbiB0cmVlcyDigJMgaXQgZXhlY3V0ZXMgaW4gZGlzdGluY3Qgc3RlcHMuIEF0IGVhY2ggc3RlcCwgaXQgYWdhaW4gbG9va3MgYXQgdGhlIG9yaWdpbmFsIGlucHV0IGZlYXR1cmVzLCBhbmQgZGVjaWRlcyB3aGljaCBvZiB0aG9zZSB0byBjb25zaWRlciBiYXNlZCBvbiBsZXNzb25zIGxlYXJuZWQgaW4gcHJpb3Igc3RlcHMuIENvbmNyZXRlbHksIGl0IHVzZXMgYW4gYXR0ZW50aW9uIG1lY2hhbmlzbSB0byBsZWFybiBzcGFyc2UgbWFza3Mgd2hpY2ggYXJlIHRoZW4gYXBwbGllZCB0byB0aGUgZmVhdHVyZXMuDQoNCk5vdywgdGhlc2UgbWFza3MgYmVpbmcg4oCcanVzdOKAnSBtb2RlbCB3ZWlnaHRzIG1lYW5zIHdlIGNhbiBleHRyYWN0IHRoZW0gYW5kIGRyYXcgY29uY2x1c2lvbnMgYWJvdXQgZmVhdHVyZSBpbXBvcnRhbmNlLiBEZXBlbmRpbmcgb24gaG93IHdlIHByb2NlZWQsIHdlIGNhbiBlaXRoZXINCg0KLSBhZ2dyZWdhdGUgbWFzayB3ZWlnaHRzIG92ZXIgc3RlcHMsIHJlc3VsdGluZyBpbiBnbG9iYWwgcGVyLWZlYXR1cmUgaW1wb3J0YW5jZTsNCg0KLSBydW4gdGhlIG1vZGVsIG9uIGEgZmV3IHRlc3Qgc2FtcGxlcyBhbmQgYWdncmVnYXRlIG92ZXIgc3RlcHMsIHJlc3VsdGluZyBpbiBvYnNlcnZhdGlvbi13aXNlIGZlYXR1cmUgaW1wb3J0YW5jZTsgb3INCg0KLSBydW4gdGhlIG1vZGVsIG9uIGEgZmV3IHRlc3Qgc2FtcGxlcyBhbmQgZXh0cmFjdCBpbmRpdmlkdWFsIHdlaWdodHMuDQoNCiMjIyBQRVItRkVBVFVSRSBJTVBPUlRBTkNFUw0KDQpXaXRoIGB0YWJuZXRgLCBgdmlwOjp2aXBgIGlzIGFibGUgdG8gZGlzcGxheSBmZWF0dXJlIGltcG9ydGFuY2UgZGlyZWN0bHkgZnJvbSB0aGUgcGFyc25pcCBtb2RlbDoNCg0KYGBge3J9DQpmaXQgPC0gcHVsbF93b3JrZmxvd19maXQoY3Jhc2hfZml0KQ0KDQp2aXAoZml0KQ0KYGBgDQoNCk5vdyB0aGF0IHdhcyBzdXBlciBzaW1wbGUuIFRoZSBmZWF0dXJlIGltcG9ydGFuY2UgbWV0cmljcyBhcmUgc2xpZ2h0bHkgZGlmZmVyZW50IHRoYW4gdGhlIGBycGFydGAgbWV0aG9kIHByZXNlbnRlZCBbaGVyZV0oaHR0cHM6Ly9vcHVzMTk5My5naXRodWIuaW8vbXlUaWR5VHVlc2RheS9DaGljYWdvVHJhZmZpY0luanVyaWVzLmh0bWwpLiANCg0KIyMjIE9CU0VSVkFUSU9OLUxFVkVMIEZFQVRVUkUgSU1QT1JUQU5DRVMNCg0KRHVlIHRvIHRoZSB3YXkgVGFiTmV0IGVuZm9yY2VzIHNwYXJzaXR5LCB3ZSBzZWUgdGhhdCBtYW55IGZlYXR1cmVzIGhhdmUgbm90IGJlZW4gbWFkZSB1c2Ugb2Y6DQoNCmBgYHtyfQ0KZXhfZml0IDwtIHRhYm5ldF9leHBsYWluKGZpdCRmaXQsIHByZXAoY3Jhc2hfcmVjKSAlPiUgYmFrZShjcmFzaF90ZXN0KQ0KKQ0KDQpleF9maXQkTV9leHBsYWluICU+JQ0KICBtdXRhdGUob2JzZXJ2YXRpb24gPSByb3dfbnVtYmVyKCkpICU+JQ0KICBwaXZvdF9sb25nZXIoLW9ic2VydmF0aW9uLCBuYW1lc190byA9ICJ2YXJpYWJsZSIsIHZhbHVlc190byA9ICJtX2FnZyIpICU+JQ0KICBnZ3Bsb3QoYWVzKHggPSBvYnNlcnZhdGlvbiwgeSA9IHZhcmlhYmxlLCBmaWxsID0gbV9hZ2cpKSArDQogIGdlb21fdGlsZSgpIA0KYGBgDQoNCiMjIyBQRVItU1RFUCwgT0JTRVJWQVRJT04tTEVWRUwgRkVBVFVSRSBJTVBPUlRBTkNFUw0KDQpGaW5hbGx5IGFuZCBvbiB0aGUgc2FtZSBzZWxlY3Rpb24gb2Ygb2JzZXJ2YXRpb25zLCB3ZSBhZ2FpbiBpbnNwZWN0IHRoZSBtYXNrcywgYnV0IHRoaXMgdGltZSwgcGVyIGRlY2lzaW9uIHN0ZXA6DQoNCmBgYHtyfQ0KZXhfZml0JG1hc2tzICU+JSANCiAgaW1hcF9kZnIofm11dGF0ZSgNCiAgICAueCwgDQogICAgc3RlcCA9IHNwcmludGYoIlN0ZXAgJWQiLCAueSksDQogICAgb2JzZXJ2YXRpb24gPSByb3dfbnVtYmVyKCkNCiAgKSkgJT4lIA0KICBwaXZvdF9sb25nZXIoLWMob2JzZXJ2YXRpb24sIHN0ZXApLCBuYW1lc190byA9ICJ2YXJpYWJsZSIsIHZhbHVlc190byA9ICJtX2FnZyIpICU+JSANCiAgZ2dwbG90KGFlcyh4ID0gb2JzZXJ2YXRpb24sIHkgPSB2YXJpYWJsZSwgZmlsbCA9IG1fYWdnKSkgKw0KICBnZW9tX3RpbGUoKSArDQogIHRoZW1lKGF4aXMudGV4dCA9IGVsZW1lbnRfdGV4dChzaXplID0gNSkpICsNCiAgZmFjZXRfd3JhcCh+c3RlcCkNCmBgYA0KDQpXZSBjbGVhcmx5IHNlZSBob3cgVGFiTmV0IG1ha2VzIHVzZSBvZiBkaWZmZXJlbnQgZmVhdHVyZXMgYXQgZGlmZmVyZW50IHRpbWVzLiBTbyB3aGF0IGRvIHdlIG1ha2Ugb2YgdGhpcz8gSXQgZGVwZW5kcy4gR2l2ZW4gdGhlIGVub3Jtb3VzIHNvY2lldGFsIGltcG9ydGFuY2Ugb2YgdGhpcyB0b3BpYyDigJMgY2FsbCBpdCBpbnRlcnByZXRhYmlsaXR5LCBleHBsYWluYWJpbGl0eSwgb3Igd2hhdGV2ZXIg4oCTIGxldOKAmXMgZmluaXNoIHRoaXMgcG9zdCB3aXRoIGEgc2hvcnQgZGlzY3Vzc2lvbi4NCg0KIyMgV2hhdCBtYWtlcyB0aGUgbW9kZWwgaW50ZXJwcmV0YWJsZSBvciBleHBsYWluYWJsZT8NCg0KQW4gaW50ZXJuZXQgc2VhcmNoIGZvciDigJxpbnRlcnByZXRhYmxlIHZzLiBleHBsYWluYWJsZSBNTOKAnSBpbW1lZGlhdGVseSB0dXJucyB1cCBhIG51bWJlciBvZiBzaXRlcyBjb25maWRlbnRseSBzdGF0aW5nIOKAnGludGVycHJldGFibGUgTUwgaXMg4oCm4oCdIGFuZCDigJxleHBsYWluYWJsZSBNTCBpcyDigKbigJ0sIGFzIHRob3VnaCB0aGVyZSB3ZXJlIG5vIGFyYml0cmFyaW5lc3MgaW4gdGhlIGRlZmluaXRpb25zLiBHb2luZyBkZWVwZXIsIHlvdSBmaW5kIGFydGljbGVzIHN1Y2ggYXMgQ3ludGhpYSBSdWRpbuKAmXMg4oCcU3RvcCBFeHBsYWluaW5nIEJsYWNrIEJveCBNYWNoaW5lIExlYXJuaW5nIE1vZGVscyBmb3IgSGlnaCBTdGFrZXMgRGVjaXNpb25zIGFuZCBVc2UgSW50ZXJwcmV0YWJsZSBNb2RlbHMgSW5zdGVhZOKAnSAoUnVkaW4gKFsyMDE4XShodHRwczovL2Jsb2dzLnJzdHVkaW8uY29tL2FpL3Bvc3RzLzIwMjEtMDItMTEtdGFibmV0LyNyZWYtcnVkaW4yMDE4c3RvcCkpKSB0aGF0IHByZXNlbnQgdXMgd2l0aCBhIGNsZWFyLWN1dCwgZGVsaWJlcmF0ZSwgaW5zdHJ1bWVudGFsaXphYmxlIGRpc3RpbmN0aW9uIHRoYXQgY2FuIGFjdHVhbGx5IGJlIHVzZWQgaW4gcmVhbC13b3JsZCBzY2VuYXJpb3MuDQoNCkluIGEgbnV0c2hlbGwsIHdoYXQgc2hlIGRlY2lkZXMgdG8gY2FsbCBleHBsYWluYWJpbGl0eSBpczogYXBwcm94aW1hdGUgYSBibGFjay1ib3ggbW9kZWwgYnkgYSBzaW1wbGVyIChlLmcuLCBsaW5lYXIpIG1vZGVsIGFuZCwgc3RhcnRpbmcgZnJvbSB0aGUgc2ltcGxlIG1vZGVsLCBtYWtlIGluZmVyZW5jZXMgYWJvdXQgaG93IHRoZSBibGFjay1ib3ggbW9kZWwgd29ya3MuIE9uZSBvZiB0aGUgZXhhbXBsZXMgc2hlIGdpdmVzIGZvciBob3cgdGhpcyBjb3VsZCBmYWlsIGlzIHN0cmlraW5nOg0KDQo+IEV2ZW4gYW4gZXhwbGFuYXRpb24gbW9kZWwgdGhhdCBwZXJmb3JtcyBhbG1vc3QgaWRlbnRpY2FsbHkgdG8gYSBibGFjayBib3ggbW9kZWwgbWlnaHQgdXNlIGNvbXBsZXRlbHkgZGlmZmVyZW50IGZlYXR1cmVzLCBhbmQgaXMgdGh1cyBub3QgZmFpdGhmdWwgdG8gdGhlIGNvbXB1dGF0aW9uIG9mIHRoZSBibGFjayBib3guIENvbnNpZGVyIGEgYmxhY2sgYm94IG1vZGVsIGZvciBjcmltaW5hbCByZWNpZGl2aXNtIHByZWRpY3Rpb24sIHdoZXJlIHRoZSBnb2FsIGlzIHRvIHByZWRpY3Qgd2hldGhlciBzb21lb25lIHdpbGwgYmUgYXJyZXN0ZWQgd2l0aGluIGEgY2VydGFpbiB0aW1lIGFmdGVyIGJlaW5nIHJlbGVhc2VkIGZyb20gamFpbC9wcmlzb24uIE1vc3QgcmVjaWRpdmlzbSBwcmVkaWN0aW9uIG1vZGVscyBkZXBlbmQgZXhwbGljaXRseSBvbiBhZ2UgYW5kIGNyaW1pbmFsIGhpc3RvcnksIGJ1dCBkbyBub3QgZXhwbGljaXRseSBkZXBlbmQgb24gcmFjZS4gU2luY2UgY3JpbWluYWwgaGlzdG9yeSBhbmQgYWdlIGFyZSBjb3JyZWxhdGVkIHdpdGggcmFjZSBpbiBhbGwgb2Ygb3VyIGRhdGFzZXRzLCBhIGZhaXJseSBhY2N1cmF0ZSBleHBsYW5hdGlvbiBtb2RlbCBjb3VsZCBjb25zdHJ1Y3QgYSBydWxlIHN1Y2ggYXMg4oCcVGhpcyBwZXJzb24gaXMgcHJlZGljdGVkIHRvIGJlIGFycmVzdGVkIGJlY2F1c2UgdGhleSBhcmUgYmxhY2su4oCdIFRoaXMgbWlnaHQgYmUgYW4gYWNjdXJhdGUgZXhwbGFuYXRpb24gbW9kZWwgc2luY2UgaXQgY29ycmVjdGx5IG1pbWljcyB0aGUgcHJlZGljdGlvbnMgb2YgdGhlIG9yaWdpbmFsIG1vZGVsLCBidXQgaXQgd291bGQgbm90IGJlIGZhaXRoZnVsIHRvIHdoYXQgdGhlIG9yaWdpbmFsIG1vZGVsIGNvbXB1dGVzLg0KDQpXaGF0IHNoZSBjYWxscyBpbnRlcnByZXRhYmlsaXR5LCBpbiBjb250cmFzdCwgaXMgZGVlcGx5IHJlbGF0ZWQgdG8gZG9tYWluIGtub3dsZWRnZToNCg0KPiBJbnRlcnByZXRhYmlsaXR5IGlzIGEgZG9tYWluLXNwZWNpZmljIG5vdGlvbiBb4oCmXSBVc3VhbGx5LCBob3dldmVyLCBhbiBpbnRlcnByZXRhYmxlIG1hY2hpbmUgbGVhcm5pbmcgbW9kZWwgaXMgY29uc3RyYWluZWQgaW4gbW9kZWwgZm9ybSBzbyB0aGF0IGl0IGlzIGVpdGhlciB1c2VmdWwgdG8gc29tZW9uZSwgb3Igb2JleXMgc3RydWN0dXJhbCBrbm93bGVkZ2Ugb2YgdGhlIGRvbWFpbiwgc3VjaCBhcyBtb25vdG9uaWNpdHkgW2UuZy4sOF0sIGNhdXNhbGl0eSwgc3RydWN0dXJhbCAoZ2VuZXJhdGl2ZSkgY29uc3RyYWludHMsIGFkZGl0aXZpdHkgWzldLCBvciBwaHlzaWNhbCBjb25zdHJhaW50cyB0aGF0IGNvbWUgZnJvbSBkb21haW4ga25vd2xlZGdlLiBPZnRlbiBmb3Igc3RydWN0dXJlZCBkYXRhLCBzcGFyc2l0eSBpcyBhIHVzZWZ1bCBtZWFzdXJlIG9mIGludGVycHJldGFiaWxpdHkgW+KApl0uIFNwYXJzZSBtb2RlbHMgYWxsb3cgYSB2aWV3IG9mIGhvdyB2YXJpYWJsZXMgaW50ZXJhY3Qgam9pbnRseSByYXRoZXIgdGhhbiBpbmRpdmlkdWFsbHkuIFvigKZdIGUuZy4sIGluIHNvbWUgZG9tYWlucywgc3BhcnNpdHkgaXMgdXNlZnVsLGFuZCBpbiBvdGhlcnMgaXMgaXQgbm90Lg0KDQpJZiB3ZSBhY2NlcHQgdGhlc2Ugd2VsbC10aG91Z2h0LW91dCBkZWZpbml0aW9ucywgd2hhdCBjYW4gd2Ugc2F5IGFib3V0IFRhYk5ldD8gSXMgbG9va2luZyBhdCBhdHRlbnRpb24gbWFza3MgbW9yZSBsaWtlIGNvbnN0cnVjdGluZyBhIHBvc3QtaG9jIG1vZGVsIG9yIG1vcmUgbGlrZSBoYXZpbmcgZG9tYWluIGtub3dsZWRnZSBpbmNvcnBvcmF0ZWQ/IFJ1ZGluIG1pZ2h0IGFyZ3VlIHRoZSBmb3JtZXIsIHNpbmNlDQoNCi0gdGhlIGltYWdlLWNsYXNzaWZpY2F0aW9uIGV4YW1wbGUgc2hlIHVzZXMgdG8gcG9pbnQgb3V0IHdlYWtuZXNzZXMgb2YgZXhwbGFpbmFiaWxpdHkgdGVjaG5pcXVlcyBlbXBsb3lzIHNhbGllbmN5IG1hcHMsIGEgdGVjaG5pY2FsIGRldmljZSBjb21wYXJhYmxlLCBpbiBzb21lIG9udG9sb2dpY2FsIHNlbnNlLCB0byBhdHRlbnRpb24gbWFza3M7DQoNCi0gdGhlIHNwYXJzaXR5IGVuZm9yY2VkIGJ5IFRhYk5ldCBpcyBhIHRlY2huaWNhbCwgbm90IGEgZG9tYWluLXJlbGF0ZWQgY29uc3RyYWludDsNCg0KLSB3ZSBvbmx5IGtub3cgd2hhdCBmZWF0dXJlcyB3ZXJlIHVzZWQgYnkgVGFiTmV0LCBub3QgaG93IGl0IHVzZWQgdGhlbS4NCg0KT24gdGhlIG90aGVyIGhhbmQsIG9uZSBjb3VsZCBkaXNhZ3JlZSB3aXRoIFJ1ZGluLiBEbyBleHBsYW5hdGlvbnMgaGF2ZSB0byBiZSBtb2RlbGVkIGFmdGVyIGh1bWFuIGNvZ25pdGlvbiB0byBiZSBjb25zaWRlcmVkIHZhbGlkPyANCg0KRnJvbSBhIHBvc3QgYnkgS2VpdGggT+KAmVJvdXJrZSBvbiB0aGUgdG9waWMgb2YgaW50ZXJwcmV0YWJpbGl0eToNCg0KPiBBcyB3aXRoIGFueSBjcml0aWNhbGx5LXRoaW5raW5nIGlucXVpcmVyLCB0aGUgdmlld3MgYmVoaW5kIHRoZXNlIGRlbGliZXJhdGlvbnMgYXJlIGFsd2F5cyBzdWJqZWN0IHRvIHJldGhpbmtpbmcgYW5kIHJldmlzaW9uIGF0IGFueSB0aW1lLg0KDQpJbiBhbnkgY2FzZSwgd2UgY2FuIGJlIHN1cmUgdGhhdCB0aGlzIHRvcGlj4oCZcyBpbXBvcnRhbmNlIHdpbGwgb25seSBncm93IHdpdGggdGltZS4gSW4gdGhlIHZlcnkgZWFybHkgZGF5cyBvZiB0aGUgR0RQUiAodGhlIEVVIEdlbmVyYWwgRGF0YSBQcm90ZWN0aW9uIFJlZ3VsYXRpb24pIGl0IHdhcyBzYWlkIHRoYXQgQXJ0aWNsZSAyMiAob24gYXV0b21hdGVkIGRlY2lzaW9uLW1ha2luZykgd291bGQgaGF2ZSBbc2lnbmlmaWNhbnQgaW1wYWN0IG9uIGhvdyBNTCBpcyB1c2VkXShodHRwOi8vd3d3Lm9kYm1zLm9yZy8yMDE4LzA3L2FpLW1hY2hpbmUtbGVhcm5pbmctYW5kLXRoZS1nZHByLWFyZS10aGUtd2lsZC13ZXN0LWRheXMtb2YtYWR2YW5jZWQtYW5hbHl0aWNzLW92ZXIvKSwgdW5mb3J0dW5hdGVseSB0aGUgY3VycmVudCB2aWV3IHNlZW1zIHRvIGJlIHRoYXQgdGhlIHdvcmRpbmcgaXMgc3RpbGwgdG9vIHZhZ3VlIHRvIGhhdmUgaW1tZWRpYXRlIGNvbnNlcXVlbmNlcy4NCg0KDQo=</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2021_02_09_tidy_tuesday.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
