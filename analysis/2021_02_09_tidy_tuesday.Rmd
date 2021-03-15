@@ -22,7 +22,7 @@ For my demonstration, I am going revisit the wild-caught
 
 What caught my eye in Sigrid's post was the claim that TabNet includes interpretability features by design. Let's give it a try here. First, let's load package libraries to make the deep learning functions available.
 
-```{r setup, message=FALSE}
+```{r setup, message=FALSE, warning=FALSE}
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -33,7 +33,8 @@ knitr::opts_chunk$set(
 	df_print = "paged",
 	dpi = 300,
 	tidy = "styler",
-	dev = "ragg_png"
+	dev = "ragg_png",
+	autodep = TRUE
 )
 
 suppressPackageStartupMessages({
@@ -195,7 +196,6 @@ crash_folds <-  sliding_period(crash_train,
                                step = 3
                                )
 
-crash_folds
 
 ```
 
