@@ -5,6 +5,8 @@ output:
   workflowr::wflow_html:
     toc: no
     code_folding: hide
+    code_download: true
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
@@ -21,13 +23,17 @@ knitr::opts_chunk$set(
 	echo = TRUE,
 	message = FALSE,
 	warning = FALSE,
+	autodep = TRUE,
 	cache = FALSE,
 	cache.lazy = FALSE,
+	dev = "ragg_png",
 	df_print = "paged",
 	dpi = 300,
 	tidy = "styler"
 )
+```
 
+```{r libraries, warning=FALSE}
 suppressPackageStartupMessages({
 library(tidyverse)
 library(tidytuesdayR)
@@ -43,19 +49,8 @@ theme_set(hrbrthemes::theme_ft_rc() +
 
 Let’s start by reading in the data.
 
-```{r}
+```{r, message = FALSE}
 tt <- tidytuesdayR::tt_load("2021-03-02")
-```
-
-# Readme
-
-Take a look at the readme for the weekly data to get insight on the dataset.
-This includes a data dictionary, source, and a link to an article on the data.
-
-```{r Readme, eval = interactive()}
-
-tt
-
 ```
 
 Let’s make one exploratory plot to see how the characteristics of the commercials change over time.
@@ -67,8 +62,8 @@ youtube %>%
   select(year, funny:use_sex) %>%
   pivot_longer(funny:use_sex) %>%
   group_by(year, name) %>%
-  summarise(prop = mean(value)) %>%
-  ungroup() %>%
+  summarise(prop = mean(value),
+            .groups = "drop") %>%
   ggplot(aes(year, prop, color = name)) +
   geom_line(size = 1.2, show.legend = FALSE) +
   facet_wrap(vars(name)) +
@@ -110,9 +105,13 @@ fit(wf, data = youtube) %>%
   tidy()
 ```
 
+## Explore bootstrap results {.tabset}
+
 We get statistical properties from this linear model, but we can use bootstrap resampling to get an estimate of the variance in our quantities. In tidymodels, the rsample package has functions to create resamples such as bootstraps.
 
 In a recent release of `rsample`, the `tidymodels` authors added a new function `reg_intervals()` that finds confidence intervals for models like `lm()` and `glm()` as well as models from the survival package.
+
+### Intervals
 
 ```{r}
 set.seed(123)
@@ -127,9 +126,9 @@ youtube_intervals <- reg_intervals(year ~ funny + show_product_quickly +
 youtube_intervals
 ```
 
-## Explore bootstrap results
-
 We can use visualization to explore these results.
+
+### Plot
 
 ```{r}
 youtube_intervals %>%
@@ -140,10 +139,13 @@ youtube_intervals %>%
   unnest(.replicates) %>%
   ggplot(aes(estimate, fill = term)) +
   geom_vline(xintercept = 0, size = 1.5, lty = 2, color = "gray50") +
-  geom_histogram(alpha = 0.8, show.legend = FALSE) +
+  geom_histogram(alpha = 0.8, show.legend = FALSE, bins = 30) +
   facet_wrap(~term) +
   labs(title = "Rate of theme Change over time",
        caption = "Confidence estimated with 1000 bootstrap resamples",
        x = NULL, y = NULL)
 ```
+
+## {-}
+
 We have evidence that Super Bowl commericals (at least the ones including in this FiveThirtyEight sample) are including less humor and sexual content and more celebrities and patriotic themes.
