@@ -1,21 +1,28 @@
 ---
-title: "torch, tidymodels, and high-energy physics"
-date: "February 11, 2021"
+title: "torch, tidymodels, and Chicago Traffic Injuries"
+date: "March 4, 2021"
 output:
   workflowr::wflow_html:
     toc: no
     code_folding: hide
+    code_download: true
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
 
 I am going to make a departure from the TidyTuesday script this week to explore a Sigrid Keydana article posted at the R-Studio AI Blog as "[torch, tidymodels, and high-energy physics](https://blogs.rstudio.com/ai/posts/2021-02-11-tabnet/)," where they introduce [`tabnet`](https://mlverse.github.io/tabnet/), a torch implementation of the paper “[TabNet: Attentive Interpretable Tabular Learning](http://arxiv.org/abs/1908.07442)” that is fully integrated with the `tidymodels` machine learning framework. 
 
-To showcase `tabNet`, Sigrid uses the [Higgs dataset (Baldi, Sadowski, and Whiteson (2014))](https://archive.ics.uci.edu/ml/datasets/HIGGS), available at the UCI Machine Learning Repository. The file is 2.6 Gb, zipped.
+```{r}
+knitr::include_url("https://blogs.rstudio.com/ai/posts/2021-02-11-tabnet/")
+```
 
-What caught my eye in her post was the claim that TabNet includes interpretability features by design. Let's give it a try here. First, let's load package libraries to make the deep learning functions available.
+For my demonstration, I am going revisit the wild-caught 
+[Chicago traffic crashes](https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if) dataset that I explored [back in January](https://opus1993.github.io/myTidyTuesday/ChicagoTrafficInjuries.html).
 
-```{r setup}
+What caught my eye in Sigrid's post was the claim that TabNet includes interpretability features by design. Let's give it a try here. First, let's load package libraries to make the deep learning functions available.
+
+```{r setup, message=FALSE}
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -34,12 +41,13 @@ library(tidyverse)
 library(torch)
 library(tabnet)
 library(tidymodels)
+library(themis)
 library(vip)
 library(finetune)
-
+library(RSocrata)
 library(rlang)
 library(vctrs)
-
+library(lubridate)
 library(hrbrthemes)
 library(systemfonts)
  })
@@ -58,102 +66,170 @@ torch_get_num_interop_threads()
 torch_get_num_threads()
 ```
 
-Next, let's load the dataset into memory:
+We will load the latest data directly from the Chicago data portal. This dataset covers traffic crashes on city streets within Chicago city limits under the jurisdiction of the Chicago Police Department. The objective here is to predict the crashes that result in injuries.
 
-```{r load}
-higgs <- read_csv(here::here("data", "HIGGS.csv"),
-  col_names = c("class", 
-                "lepton_pT", 
-                "lepton_eta", 
-                "lepton_phi", 
-                "missing_energy_magnitude",
-                "missing_energy_phi", 
-                "jet_1_pt", 
-                "jet_1_eta", 
-                "jet_1_phi", 
-                "jet_1_b_tag",
-                "jet_2_pt", 
-                "jet_2_eta", 
-                "jet_2_phi", 
-                "jet_2_b_tag", 
-                "jet_3_pt", 
-                "jet_3_eta",
-                "jet_3_phi", 
-                "jet_3_b_tag", 
-                "jet_4_pt", 
-                "jet_4_eta", 
-                "jet_4_phi", 
-                "jet_4_b_tag",
-                "m_jj", 
-                "m_jjj", 
-                "m_lv", 
-                "m_jlv", 
-                "m_bb", 
-                "m_wbb", 
-                "m_wwbb"),
-  col_types = "fdddddddddddddddddddddddddddd"
-  )
+```{r load, cache=TRUE}
+years_ago <- today() - years(3)
+crash_url <- glue::glue("https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if?$where=CRASH_DATE > '{years_ago}'")
 
-levels(higgs$class) <- c(TRUE, FALSE)  # 1 is TRUE, 0 is FALSE
+crash <- as_tibble(read.socrata(crash_url)) %>%
+  arrange(desc(crash_date)) %>%
+  transmute(
+    injuries = factor(if_else(injuries_total > 0,TRUE,FALSE)),
+    crash_date,
+    crash_hour = factor(crash_hour),
+    report_type = if_else(report_type == "", "UNKNOWN", report_type),
+#    num_units,
+    trafficway_type,
+    posted_speed_limit = factor(posted_speed_limit),
+    weather_condition,
+    lighting_condition,
+    roadway_surface_cond,
+    first_crash_type,
+    trafficway_type,
+    prim_contributory_cause,
+    latitude, longitude,
+    covid = factor(if_else(between(date(crash_date), date("2020-03-01"),date("2020-06-01")),TRUE, FALSE))
+  ) %>%
+  na.omit() %>% 
+  arrange(crash_date)
 
 ```
 
-In high-energy physics, the search for new particles takes place at particle accelerators like Fermilab and CERN’s Large Hadron Collider. In addition to the actual experiments, simulation plays a role, synthesized for different underlying hypotheses, resulting in distributions that can be compared.
+## Visualize {.tabset}
 
-The `higgs` dataset (Baldi, Sadowski, and Whiteson (2014)) results from this sort of synthesized simulation. It explores features assuming two different processes. In the first, two gluons collide, and a heavy Higgs boson is produced; this is the signal process, the one we’re interested in. In the second, the collision of the gluons results in a pair of top quarks – this is the background process.
+### Skim a summary
 
-Through different intermediaries, both processes result in the same end products. What the paper authors did was simulate kinematic features of decay products, such as leptons (electrons and protons) and particle jets. In addition they constructed a number of high-level features that presuppose domain knowledge. In the article the show that, in contrast to other machine learning methods, deep neural networks did nearly as well when presented with the low-level features (the momenta) only as with just the high-level features alone.
+I've added a logical feature associated with the COVID pandemic timeframe. Let’s take a glimpse of the dataset with skim:
 
-Certainly, it would be interesting to double-check these results on `tabnet`, and then, look at the respective feature importance. Given the size of the dataset, some significant computing resources could be required.
-
-Let’s take a glimpse:
-
-```{r}
-higgs %>% 
-  glimpse()
-```
-
-```{r}
-prop.table(table(higgs$class))
+```{r }
+skimr::skim(crash)
 
 ```
 
-The first variable, class, is either TRUE or FALSE, depending on whether a Higgs boson was present or not. While in experiments only a tiny fraction of collisions produce one, both classes are about equally frequent in this dataset.
-
-Within the predictors, the last seven are high-level (derived). All others are “measured”.
-
-Let's split the data:
+### Plot
 
 ```{r}
-n_all <- nrow(higgs)
-n_test <- 500000
-test_frac <- n_test / n_all # cleaned up compared to vignette
-
-split <- initial_split(higgs, prop = 1 - test_frac, strata = class) # vignette used initial_time_split
-train <- training(split)
-test  <- testing(split)
+crash %>%
+  mutate(crash_date = as_date(floor_date(crash_date, unit = "week"))) %>%
+  count(crash_date, injuries) %>%
+  filter(crash_date != last(crash_date),
+         crash_date != first(crash_date)) %>%
+  mutate(name_lab = if_else(
+    crash_date == last(crash_date),
+    as.logical(injuries),
+    NA
+  )) %>%
+  ggplot() +
+  geom_line(aes(as.Date(crash_date), n, color = injuries),
+            size = 1.5,
+            alpha = 0.7) +
+  scale_x_date(
+    labels = scales::date_format("%Y"),
+    expand = c(0, 0),
+    breaks = seq.Date(as_date("2018-01-01"),
+                      as_date("2021-01-01"),
+                      by = "year"),
+    minor_breaks = "3 months",
+    limits = c(as_date("2018-01-01"), as_date("2021-07-01"))
+  ) +
+  ggrepel::geom_text_repel(data = . %>% filter(!is.na(name_lab)),
+                           
+    aes(
+      x = crash_date + 1,
+      y = n - 50,
+      label = if_else(name_lab, "Injuries", "No Injuries"),
+      color = injuries
+    ),
+    fontface = "bold",
+    size = 4,
+    direction = "y",
+    xlim = c(2022, NA),
+    hjust = 0,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = "dotted",
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20
+  ) +
+  scale_y_continuous(limits = (c(0, NA))) +
+  hrbrthemes::scale_color_ipsum() +
+  labs(
+    title = "How have the number of crashes changed over time?",
+    x = NULL,
+    y = "Number of traffic crashes per week",
+    color = "Injuries?",
+    caption = "Data: Chicago Data Portal | Visual: @jim_gruman"
+  ) +
+  theme(legend.position = "")
 ```
 
-And then create a `recipe`:
+## {-}
+
+This is not a balanced dataset, in that the injuries are a small portion of traffic incidents. The proportion changes over time. For the entire 3 year dataset, the portion of crashes with injuries is:
 
 ```{r}
-rec <- recipe(class ~ ., train) 
+prop.table(table(crash$injuries == TRUE))
 ```
 
-Next, we will create a `parsnip` model specification of class `tabnet`. The parameters passed are those reported by the TabNet paper, for the S-sized model variant used on this dataset (except for the number of epochs).
+## Build a Model
+
+Let's split the data and create cross-validation folds from the training set. Here we'll use an expanding monthly window by setting `lookback = Inf`, and each assessment set will contain two months of data. To ensure that we have enough data to fit our models, we'll `skip` the first 14 expanding windows. Finally, to thin out the results, we'll `step` forward by 2 between each resample.  This yields 10 cross validation folds.
+
+```{r}
+crash_split <- initial_time_split(crash, 
+                                  strata = injuries,
+                                  prop = 3/4)
+crash_train <- training(crash_split)
+crash_test <- testing(crash_split)
+
+## Time-based Resampling first breaks up the crash_dates into monthly groups, and then uses that to construct the resampling indices. We expect that each trained model should be assessed by the next two months. To ensure that we have enough data to fit our models, we'll `skip` the first 4 expanding windows. Finally, to thin out the results, we'll `step` forward by 3 between each resample.
+crash_folds <-  sliding_period(crash_train, 
+                               index = crash_date, 
+                               period = "month",
+                               lookback = Inf,
+                               assess_stop = 2,
+                               skip = 4,
+                               step = 3
+                               )
+
+crash_folds
+
+```
+
+Then we will feature engineer a `recipe`, which includes creating date features such as day of the week, handling the high cardinality of weather conditions, contributing cause, etc, and perhaps most importantly, downsampling to account for the class imbalance.
+
+```{r}
+crash_rec <- recipe(injuries ~ ., data = crash_train) %>%
+  step_date(crash_date,
+            features = c("dow", "month")) %>%
+  step_rm(crash_date) %>%
+  step_geodist(
+    lat = latitude,
+    lon = longitude,
+    ref_lat = 41.887846,
+    ref_lon = -87.620649
+  ) %>%
+  step_other(
+    weather_condition,
+    first_crash_type,
+    trafficway_type,
+    crash_hour,
+    trafficway_type,
+    prim_contributory_cause,
+    other = "OTHER"
+  ) %>%
+  step_normalize(all_numeric()) %>% 
+  themis::step_downsample(injuries)
+```
+
+Next, we will create a `parsnip` model specification of class `tabnet`. 
 
 ```{r}
 
-mod <- tabnet(epochs = 3,
-              batch_size = 16384,
-              decision_width = 24,
-              attention_width = 26,
-              num_steps = 5,
-              penalty = 0.000001,
-              virtual_batch_size = 512,
-              momentum = 0.6,
-              feature_reusage = 1.5,
-              learn_rate = 0.02) %>% 
+mod <- tabnet(epochs = 3) %>% 
   set_engine("torch", verbose = TRUE) %>%
   set_mode("classification")
 ```
@@ -163,48 +239,30 @@ Next, lets bundle the recipe and model into a workflow for training
 ```{r}
 wf <- workflow() %>%
   add_model(mod) %>%
-  add_recipe(rec)
+  add_recipe(crash_rec)
 ```
 
-Next, train the model. This takes some time, even with the GPU. Training finished, let's save the trained parsnip model so we can reuse it without waiting every time we knit.
+Next, train the model. This takes about 4 minutes with the GPU. 
 
-```{r initial_fit, eval = FALSE}
-fitted_model <- wf %>% fit(data = train)
-
-fitted_model$fit$fit$fit %>% saveRDS(here::here("data","saved_tabnet_model1.rds"))
+```{r initial_fit, cache=TRUE}
+t0 <- Sys.time()
+fitted_model <- wf %>% fit(data = crash_train)
+t1 <- Sys.time() - t0
+t1
 ```
 
-```{r initial_fit_run, include = FALSE}
-if (!file.exists(here::here("data","saved_tabnet_model1.rds"))) {
-fitted_model <- wf %>% fit(train)
-fitted_model$fit$fit$fit %>% saveRDS(here::here("data","saved_tabnet_model1.rds"))
-} else {
-fitted_model <- read_rds(here::here("data","saved_tabnet_model1.rds"))
-}
-```
-
-`[Epoch 001] Loss: 0.856910`                               
-`[Epoch 002] Loss: 0.634729`                               
-`[Epoch 003] Loss: 0.620880`
-
-After just three epochs, my loss was 0.62. My model run time was `r fitted_model$fit$fit$elapsed[[3]]/60/60` hours, and the saved model file is `r file.info(here::here("data","saved_tabnet_model1.rds"))$size/1e6` Mb.
-
-Finally, we ask the model for test-set predictions and compute performance metrics.
+For this generic, untuned model, let's ask the model for test-set predictions and compute its performance metrics.
 
 ```{r}
 metrics <- metric_set(accuracy, precision, recall)
 
-bind_cols(test, predict(fitted_model, test)) %>% 
-  metrics(class, estimate = .pred_class)
+bind_cols(crash_test, predict(fitted_model, crash_test)) %>% 
+  metrics(injuries, estimate = .pred_class)
 ```
 
-We didn’t quite arrive at the accuracy reported in the TabNet paper (0.783), but then, we only trained for a tiny fraction of the time.
+Unfortunately, the accuracy of the model on test data is worse than the 85% that would have been arrived at with no model at all on the imbalanced data set.
 
 Let's see how much we can improve with some hyperparameter tuning.
-
-```{r include = FALSE}
-rm(fitted_model, wf, mod)
-```
 
 ## Tabnet tuning
 
@@ -213,15 +271,10 @@ For hyperparameter tuning, the `tidymodels` framework makes use of cross-validat
 Changes to the above workflow start at model specification. Let’s say we’ll leave most settings fixed, but vary the TabNet-specific hyperparameters decision_width, attention_width, and num_steps, as well as the learning rate:
 
 ```{r}
-mod <- tabnet(epochs = 1, 
-              batch_size = 16384, 
+mod <- tabnet(epochs = 3, 
               decision_width = tune(), 
               attention_width = tune(),
               num_steps = tune(), 
-              penalty = 0.000001, 
-              virtual_batch_size = 512, 
-              momentum = 0.6,
-              feature_reusage = 1.5, 
               learn_rate = tune()) %>%
   set_engine("torch", verbose = TRUE) %>%
   set_mode("classification")
@@ -232,7 +285,7 @@ The workflow is the same as before:
 ```{r}
 wf <- workflow() %>%
   add_model(mod) %>%
-  add_recipe(rec)
+  add_recipe(crash_rec)
 ```
 
 Next, we specify the hyperparameter ranges we’re interested in, and call one of the grid construction functions from the `dials` package to build one for us. 
@@ -241,51 +294,83 @@ Next, we specify the hyperparameter ranges we’re interested in, and call one o
 grid <- wf %>%
   parameters() %>%
   update(
-    decision_width = decision_width(range = c(20, 40)),
-    attention_width = attention_width(range = c(20, 40)),
-    num_steps = num_steps(range = c(4, 6)),
-    learn_rate = learn_rate(range = c(-3, -0.8),
+    decision_width = decision_width(range = c(10, 40)),
+    attention_width = attention_width(range = c(10, 40)),
+    num_steps = num_steps(range = c(2, 5)),
+    learn_rate = learn_rate(range = c(-3, -0.4),
                             trans = log10_trans())
   ) %>%
   grid_max_entropy(size = 8)
 
-grid
+grid %>% 
+  ggplot(aes(x = .panel_x, y = .panel_y)) + 
+  geom_point() +
+  geom_blank() +
+  ggforce::facet_matrix(vars(learn_rate, num_steps, decision_width, learn_rate), layer.diag = 2) + 
+  labs(title = "Maximum Entropy design with 8 candidates")
 ```
 
-To search the space, we use `tune_race_anova()` from the new `finetune` package, making use of five-fold cross-validation:
+To search the space, we use `tune_race_anova()` from the new `finetune` package, making use of cross-validation. Expect the ten folds on 8 grid points to run for several hours.
 
-```{r }
+```{r fitted_run1, cache=TRUE}
 ctrl <- control_race(verbose_elim = TRUE)
-folds <- vfold_cv(train, v = 5)
 
-higgs_tune_result <- wf %>% 
+crash_tune_result <- wf %>% 
     tune_race_anova(
-    resamples = folds, 
+    resamples = crash_folds, 
     grid = grid,
     control = ctrl
   )
 ```
 
+Let's have a look at the accuracy and area under the curve at the settings for tuned hyperparameters for each of the resamples:
+
+```{r}
+crash_tune_result %>% 
+  autoplot()
+```
+
 We can now extract the best hyperparameter combinations for each position on the grid:
 
 ```{r}
-higgs_tune_result %>% 
-  show_best("accuracy") %>% 
+crash_tune_result %>% 
+  show_best("roc_auc") %>% 
   select(-c(.estimator, .config))
 ```
 
-Let's re-fit the final best tuned model on both the training and the testing datasets.
+Let's re-fit the final best tuned model on the training dataset and collect the overall metrics.
 
 ```{r}
-final_higgs <- wf %>%
-  finalize_workflow(select_best(higgs_tune_result))
+best_params <- select_best(crash_tune_result,
+                           metric = "roc_auc")
 
-higgs_fit <- last_fit(final_higgs, split)
+final_mod <- tabnet(
+  epochs = 3,
+  decision_width = best_params$decision_width,
+  attention_width = best_params$attention_width,
+  num_steps = best_params$num_steps,
+  learn_rate = best_params$learn_rate
+) %>%
+  set_engine("torch", verbose = TRUE) %>%
+  set_mode("classification")
 
-collect_metrics(higgs_fit)
+wf <- workflow() %>%
+  add_model(final_mod) %>%
+  add_recipe(crash_rec)
+
+crash_fit <- wf %>% fit(data = crash_train)
+
+bind_cols(crash_test, predict(crash_fit, crash_test)) %>%
+  metrics(injuries, estimate = .pred_class)
+
+bind_cols(crash_test, predict(crash_fit, crash_test, type = "prob")) %>%
+  roc_auc(injuries, .pred_TRUE)
+
 ```
 
-Now, let's inspect TabNet’s interpretability features. TabNet’s most prominent characteristic is the way – inspired by decision trees – it executes in distinct steps. At each step, it again looks at the original input features, and decides which of those to consider based on lessons learned in prior steps. Concretely, it uses an attention mechanism to learn sparse masks which are then applied to the features.
+Not a great model, but given that this is wild-caught data, it's not a surprise either.
+
+Now let's inspect TabNet’s interpretability features. TabNet’s most prominent characteristic is the way – inspired by decision trees – it executes in distinct steps. At each step, it again looks at the original input features, and decides which of those to consider based on lessons learned in prior steps. Concretely, it uses an attention mechanism to learn sparse masks which are then applied to the features.
 
 Now, these masks being “just” model weights means we can extract them and draw conclusions about feature importance. Depending on how we proceed, we can either
 
@@ -300,17 +385,20 @@ Now, these masks being “just” model weights means we can extract them and dr
 With `tabnet`, `vip::vip` is able to display feature importance directly from the parsnip model:
 
 ```{r}
-vip(higgs_fit)
+fit <- pull_workflow_fit(crash_fit)
+
+vip(fit)
 ```
 
-Together, two high-level features dominate, accounting for nearly 50% of overall attention. Along with a third high-level feature, ranked in place four, they occupy about 60% of “importance space”.
+Now that was super simple. The feature importance metrics are slightly different than the `rpart` method presented [here](https://opus1993.github.io/myTidyTuesday/ChicagoTrafficInjuries.html). 
 
 ### OBSERVATION-LEVEL FEATURE IMPORTANCES
 
-We choose the first hundred observations in the test set to extract feature importance. Due to the way TabNet enforces sparsity, we see that many features have not been made use of:
+Due to the way TabNet enforces sparsity, we see that many features have not been made use of:
 
 ```{r}
-ex_fit <- tabnet_explain(higgs_fit$fit, test[1:100, ])
+ex_fit <- tabnet_explain(fit$fit, prep(crash_rec) %>% bake(crash_test)
+)
 
 ex_fit$M_explain %>%
   mutate(observation = row_number()) %>%
