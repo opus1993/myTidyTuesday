@@ -29,6 +29,7 @@ knitr::opts_chunk$set(cache = FALSE,
                       fig.height = 7.402)
 
 articles <- tibble(file = dir(path = "analysis")) %>% 
+  filter(str_detect(file, "\\.Rmd")) %>% 
   filter(!file %in% c("_site.yml","about.Rmd","index.Rmd","license.Rmd","rsconnect"))
 
 title_f <- function(file) {
