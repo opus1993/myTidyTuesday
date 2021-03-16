@@ -53,12 +53,8 @@ tt
 
 ```{r}
 games <- tt$games %>% 
-  transmute(date = ym(paste0(as.character(year), 
-                    month)),
-            name = gamename,
-            avg_players = avg,
-            peak = peak) %>% 
-  complete(nesting(date, name), fill = list(avg_players = 0, peak = 0))
+  mutate(date = ym(paste0(as.character(year), month))) %>% 
+  complete(nesting(date, gamename), fill = list(avg = 0, peak = 0))
 ```
 
 Let's have a look at the games themselves
@@ -69,16 +65,16 @@ Let's have a look at the games themselves
 
 ```{r}
 games %>% 
-  filter(avg_players > 0) %>% 
-  count(name, sort = TRUE)
+  filter(avg > 0) %>% 
+  count(gamename, sort = TRUE)
 ```
 
 ### Plot
 
 ```{r}
 games %>% 
-  filter(avg_players > 0) %>% 
-  count(name, sort = TRUE) %>% 
+  filter(avg > 0) %>% 
+  count(gamename, sort = TRUE) %>% 
   ggplot(aes(n)) +
   geom_histogram(bins = 30) +
   labs(y = "Count of Months in dataset",
@@ -99,7 +95,7 @@ Discoveries:
 ```{r}
 games %>%
   group_by(date) %>%
-  summarise(engagement = sum(avg_players)) %>%
+  summarise(engagement = sum(avg)) %>%
   ggplot(aes(date, engagement)) +
   geom_line() +
   scale_y_continuous(labels = scales::comma) +
@@ -113,8 +109,8 @@ The Sid Meier series:
 
 ```{r}
 games %>%
-  filter(str_detect(name, "Sid Meier")) %>%
-  mutate(name = str_remove(name, "Sid Meier's Civilization"),
+  filter(str_detect(gamename, "Sid Meier")) %>%
+  mutate(name = str_remove(gamename, "Sid Meier's Civilization"),
          name = str_remove(name, "\\: ")) %>% 
   ggplot(aes(date, peak, color = name)) +
   geom_line() +
@@ -135,7 +131,33 @@ games %>%
 ```
 
 
-I wonder if the all of the game engagement has a seasonal peak?
+I wonder if the all of the game engagement has a seasonal peak, like at a given month?
+
+```{r}
+games %>%
+  mutate(month = factor(month, levels = month.name),
+         month = fct_relabel(month, ~ month.abb)) %>%
+  group_by(year, month) %>%
+  summarise(avg = median(avg),
+            .groups = "drop") %>%
+  filter(row_number() != first(row_number())) %>%
+  mutate(pandemic = case_when(year %in% 2020:2021 ~ "pandemic",
+                              TRUE ~ "the before times")) %>%
+  ggplot(aes(month, avg, group = year, color = pandemic)) +
+  geom_line(size = 1.4, alpha = 0.7) +
+  scale_color_brewer(name = NULL,
+                    direction = -1,
+                    palette = "BrBG") +
+  labs(
+    x = NULL,
+    color = NULL,
+    y = "Median concurrent players for all games",
+    title = "Video games on Steam and the pandemic",
+    subtitle = "The overall median number of concurrent players is higher during the pandemic",
+    caption = "Source: Kaggle"
+  ) +
+  theme(legend.position = "top")
+```
 
 
 
