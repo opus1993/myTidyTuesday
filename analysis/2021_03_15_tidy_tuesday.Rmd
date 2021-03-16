@@ -131,6 +131,28 @@ games %>%
 ```
 
 
+```{r}
+games %>%
+  filter(str_detect(gamename, "Sid Meier")) %>%
+  mutate(name = str_remove(gamename, "Sid Meier's Civilization"),
+         name = str_remove(name, "\\: ")) %>% 
+  ggplot(aes(date, peak, color = name)) +
+  geom_line(show.legend = FALSE) +
+  scale_color_brewer(name = NULL,
+                    direction = -1,
+                    palette = "BrBG") +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_date(date_breaks = "year",
+               date_labels = "%Y") +
+  facet_wrap(~ name, scales = "free_y") +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Sid Meier's Civilization Peak Engagement on Steam",
+    caption = paste0("Source: Kaggle")
+  ) 
+```
+
 I wonder if the all of the game engagement has a seasonal peak, like at a given month?
 
 ```{r}
