@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2021-03-16" />
+
+<title>Video Games and Sliced</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fas fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Video Games and Sliced</h1>
+<h4 class="date">March 16, 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-03-15
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree248506d20228f8e9923159176523e2e671a21c2etargetblank248506da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/248506d20228f8e9923159176523e2e671a21c2e" target="_blank">248506d</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree248506d20228f8e9923159176523e2e671a21c2etargetblank248506da" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/248506d20228f8e9923159176523e2e671a21c2e" target="_blank">248506d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/2021_02_09_tidy_tuesday_cache/
+    Ignored:    analysis/rsconnect/
+    Ignored:    data/03/
+    Ignored:    data/lab_51_torch_tabnet/
+    Ignored:    fonts/
+    Ignored:    rosm.cache/
+
+Untracked files:
+    Untracked:  analysis/.vscode/
+    Untracked:  animation.gif
+    Untracked:  figure/
+
+Unstaged changes:
+    Deleted:    analysis/2021_01_26_tidy_tuesday.Rmd
+    Modified:   analysis/BackboneWatershed.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2021_03_15_tidy_tuesday.Rmd</code>) and HTML (<code>docs/2021_03_15_tidy_tuesday.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/248506d20228f8e9923159176523e2e671a21c2e/analysis/2021_03_15_tidy_tuesday.Rmd" target="_blank">248506d</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-03-15
+</td>
+<td>
+wflow_publish(“analysis/2021_03_15_tidy_tuesday.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The #TidyTuesday data this week comes from Steam by way of Kaggle and originally came from SteamCharts. The data was scraped and uploaded to Kaggle.</p>
+<pre class="r"><code>knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    cache = FALSE,
+    cache.lazy = FALSE,
+    df_print = &quot;paged&quot;,
+    dpi = 300,
+    tidy = &quot;styler&quot;,
+    dev = &quot;ragg_png&quot;,
+    autodep = TRUE
+)
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(tidymodels)
+library(lubridate)
+library(hrbrthemes)
+library(systemfonts)
+ })
+
+ggplot2::theme_set(hrbrthemes::theme_ft_rc() +
+            ggplot2::theme(plot.title.position = &quot;plot&quot;,
+                           plot.caption.position = &quot;plot&quot;))</code></pre>
+<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2021-03-16&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `games.csv`</code></pre>
+<pre class="r"><code>tt</code></pre>
+<pre class="r"><code>games &lt;- tt$games %&gt;%
+  transmute(
+    date = ym(paste0(
+      as.character(year),
+      month
+    )),
+    name = gamename,
+    avg_players = avg,
+    peak = peak
+  ) %&gt;%
+  complete(nesting(date, name), fill = list(avg_players = 0, peak = 0))</code></pre>
+<p>Let’s have a look at the games themselves</p>
+<div id="common-games" class="section level2 tabset">
+<h2 class="tabset">Common games</h2>
+<div id="top-games" class="section level3">
+<h3>Top Games</h3>
+<pre class="r"><code>games %&gt;%
+  filter(avg_players &gt; 0) %&gt;%
+  count(name, sort = TRUE)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Age of Empires® III (2007)","2":"104"},{"1":"AirMech Strike","2":"104"},{"1":"Alan Wake","2":"104"},{"1":"Alan Wake's American Nightmare","2":"104"},{"1":"Alien Swarm","2":"104"},{"1":"Aliens vs. Predator","2":"104"},{"1":"Alpha Protocol","2":"104"},{"1":"Amnesia: The Dark Descent","2":"104"},{"1":"Anno 2070","2":"104"},{"1":"Anomaly Warzone Earth","2":"104"},{"1":"APB Reloaded","2":"104"},{"1":"Arma 2: Operation Arrowhead","2":"104"},{"1":"Arma: Cold War Assault","2":"104"},{"1":"Assassin's Creed","2":"104"},{"1":"Assassin's Creed Brotherhood","2":"104"},{"1":"Assassin's Creed II","2":"104"},{"1":"Assassin's Creed Revelations","2":"104"},{"1":"Bad Rats","2":"104"},{"1":"Bastion","2":"104"},{"1":"Batman: Arkham Asylum GOTY Edition","2":"104"},{"1":"Battlefield: Bad Company<U+0099> 2","2":"104"},{"1":"BEEP","2":"104"},{"1":"Binary Domain","2":"104"},{"1":"Botanicula","2":"104"},{"1":"Braid","2":"104"},{"1":"BRINK","2":"104"},{"1":"Bully: Scholarship Edition","2":"104"},{"1":"Burnout Paradise: The Ultimate Box","2":"104"},{"1":"Call of Duty 4: Modern Warfare","2":"104"},{"1":"Call of Duty: Black Ops","2":"104"},{"1":"Call of Duty: Modern Warfare 2","2":"104"},{"1":"Call of Duty: World at War","2":"104"},{"1":"Caster","2":"104"},{"1":"Cave Story+","2":"104"},{"1":"Command and Conquer: Red Alert 3","2":"104"},{"1":"Company of Heroes - Legacy Edition","2":"104"},{"1":"Counter-Strike","2":"104"},{"1":"Counter-Strike: Condition Zero","2":"104"},{"1":"Counter-Strike: Global Offensive","2":"104"},{"1":"Counter-Strike: Source","2":"104"},{"1":"Crusader Kings II","2":"104"},{"1":"Crysis","2":"104"},{"1":"Crysis 2 Maximum Edition","2":"104"},{"1":"Dark Messiah of Might & Magic Single Player","2":"104"},{"1":"Day of Defeat","2":"104"},{"1":"Day of Defeat: Source","2":"104"},{"1":"DC Universe Online","2":"104"},{"1":"Dead Space","2":"104"},{"1":"Dead Space 2","2":"104"},{"1":"Defense Grid: The Awakening","2":"104"},{"1":"Defy Gravity","2":"104"},{"1":"Deus Ex: Game of the Year Edition","2":"104"},{"1":"Dino D-Day","2":"104"},{"1":"Dota 2","2":"104"},{"1":"Dragon Age: Origins","2":"104"},{"1":"Dragon Age: Origins - Ultimate Edition","2":"104"},{"1":"Duke Nukem Forever","2":"104"},{"1":"Dungeon Defenders","2":"104"},{"1":"Dungeons of Dredmor","2":"104"},{"1":"E.Y.E: Divine Cybermancy","2":"104"},{"1":"Endless Space® - Definitive Edition","2":"104"},{"1":"F.E.A.R.","2":"104"},{"1":"F.E.A.R. 2: Project Origin","2":"104"},{"1":"F.E.A.R. 3","2":"104"},{"1":"Fable - The Lost Chapters","2":"104"},{"1":"Fallout","2":"104"},{"1":"Fallout 2","2":"104"},{"1":"Fallout 3","2":"104"},{"1":"Fallout 3 - Game of the Year Edition","2":"104"},{"1":"Fallout: New Vegas","2":"104"},{"1":"Fallout: New Vegas RU","2":"104"},{"1":"Far Cry","2":"104"},{"1":"Far Cry 2","2":"104"},{"1":"FlatOut 2","2":"104"},{"1":"Football Manager 2012","2":"104"},{"1":"Garry's Mod","2":"104"},{"1":"Gothic","2":"104"},{"1":"Gothic II: Gold Edition","2":"104"},{"1":"Grand Theft Auto III","2":"104"},{"1":"Grand Theft Auto IV: The Complete Edition","2":"104"},{"1":"Grand Theft Auto: San Andreas","2":"104"},{"1":"Grand Theft Auto: Vice City","2":"104"},{"1":"Half-Life","2":"104"},{"1":"Half-Life 2","2":"104"},{"1":"Half-Life 2: Deathmatch","2":"104"},{"1":"Half-Life 2: Episode One","2":"104"},{"1":"Half-Life 2: Episode Two","2":"104"},{"1":"Half-Life 2: Lost Coast","2":"104"},{"1":"Half-Life: Blue Shift","2":"104"},{"1":"Half-Life: Opposing Force","2":"104"},{"1":"Half-Life: Source","2":"104"},{"1":"Hard Reset","2":"104"},{"1":"Hearts of Iron III","2":"104"},{"1":"Hitman: Blood Money","2":"104"},{"1":"Homefront","2":"104"},{"1":"Just Cause 2","2":"104"},{"1":"Killing Floor","2":"104"},{"1":"Kingdoms of Amalur: Reckoning<U+0099>","2":"104"},{"1":"L.A. Noire","2":"104"},{"1":"Left 4 Dead","2":"104"},{"1":"Left 4 Dead 2","2":"104"},{"1":"Legend of Grimrock","2":"104"},{"1":"LIMBO","2":"104"},{"1":"Machinarium","2":"104"},{"1":"Mafia II (Classic)","2":"104"},{"1":"Magicka","2":"104"},{"1":"Mass Effect","2":"104"},{"1":"Mass Effect 2","2":"104"},{"1":"Max Payne","2":"104"},{"1":"Max Payne 3","2":"104"},{"1":"Medal of Honor(TM) Single Player","2":"104"},{"1":"Mirror's Edge","2":"104"},{"1":"Moonbase Alpha","2":"104"},{"1":"Mount & Blade","2":"104"},{"1":"Mount & Blade: Warband","2":"104"},{"1":"Mount & Blade: With Fire and Sword","2":"104"},{"1":"Need for Speed: Hot Pursuit","2":"104"},{"1":"Orcs Must Die!","2":"104"},{"1":"ORION: Prelude","2":"104"},{"1":"Overlord","2":"104"},{"1":"PAYDAY: The Heist","2":"104"},{"1":"Pirates, Vikings, & Knights II","2":"104"},{"1":"Plants vs. Zombies: Game of the Year","2":"104"},{"1":"Portal","2":"104"},{"1":"Portal 2","2":"104"},{"1":"Prototype","2":"104"},{"1":"PROTOTYPE 2","2":"104"},{"1":"Psychonauts","2":"104"},{"1":"RAGE","2":"104"},{"1":"Realm of the Mad God Exalt","2":"104"},{"1":"Recettear: An Item Shop's Tale","2":"104"},{"1":"Resident Evil 5","2":"104"},{"1":"RIFT","2":"104"},{"1":"Risen","2":"104"},{"1":"Rising Storm/Red Orchestra 2 Multiplayer","2":"104"},{"1":"Rome: Total War","2":"104"},{"1":"S.T.A.L.K.E.R.: Call of Pripyat","2":"104"},{"1":"S.T.A.L.K.E.R.: Clear Sky","2":"104"},{"1":"S.T.A.L.K.E.R.: Shadow of Chernobyl","2":"104"},{"1":"Saints Row 2","2":"104"},{"1":"Saints Row: The Third","2":"104"},{"1":"Serious Sam 2","2":"104"},{"1":"Serious Sam 3: BFE","2":"104"},{"1":"Serious Sam HD: The First Encounter","2":"104"},{"1":"Sid Meier's Civilization III: Complete","2":"104"},{"1":"Sid Meier's Civilization IV: Beyond the Sword","2":"104"},{"1":"Sid Meier's Civilization V","2":"104"},{"1":"SimCity 4 Deluxe","2":"104"},{"1":"Sins of a Solar Empire: Rebellion","2":"104"},{"1":"Sonic Generations","2":"104"},{"1":"Source Filmmaker","2":"104"},{"1":"SpaceChem","2":"104"},{"1":"Spacewar","2":"104"},{"1":"Spec Ops: The Line","2":"104"},{"1":"Spiral Knights","2":"104"},{"1":"Spore","2":"104"},{"1":"Star Trek Online","2":"104"},{"1":"Star Wars: Battlefront 2 (Classic, 2005)","2":"104"},{"1":"STAR WARS<U+0099> Empire at War: Gold Pack","2":"104"},{"1":"STAR WARS<U+0099> Jedi Knight: Jedi Academy<U+0099>","2":"104"},{"1":"STAR WARS<U+0099> Republic Commando","2":"104"},{"1":"STAR WARS<U+0099>: Knights of the Old Republic<U+0099>","2":"104"},{"1":"Stronghold Crusader HD","2":"104"},{"1":"Stronghold Kingdoms","2":"104"},{"1":"Supreme Commander 2","2":"104"},{"1":"Supreme Commander: Forged Alliance","2":"104"},{"1":"Team Fortress 2","2":"104"},{"1":"Team Fortress Classic","2":"104"},{"1":"Terraria","2":"104"},{"1":"The Binding of Isaac","2":"104"},{"1":"The Darkness II","2":"104"},{"1":"The Elder Scrolls III: Morrowind","2":"104"},{"1":"The Elder Scrolls IV: Oblivion","2":"104"},{"1":"The Lord of the Rings Online<U+0099>","2":"104"},{"1":"The Ship","2":"104"},{"1":"The Sims(TM) 3","2":"104"},{"1":"The Tiny Bang Story","2":"104"},{"1":"The Ultimate DOOM","2":"104"},{"1":"The Witcher 2: Assassins of Kings Enhanced Edition","2":"104"},{"1":"The Witcher: Enhanced Edition","2":"104"},{"1":"Tiny and Big: Grandpa's Leftovers","2":"104"},{"1":"Torchlight","2":"104"},{"1":"Total War: EMPIRE - Definitive Edition","2":"104"},{"1":"Total War: MEDIEVAL II - Definitive Edition","2":"104"},{"1":"Total War: NAPOLEON - Definitive Edition","2":"104"},{"1":"Total War: SHOGUN 2","2":"104"},{"1":"TrackMania Nations Forever","2":"104"},{"1":"Train Simulator","2":"104"},{"1":"Tribes: Ascend","2":"104"},{"1":"Trine","2":"104"},{"1":"Trine 2","2":"104"},{"1":"Tropico 4","2":"104"},{"1":"Ultra Street Fighter IV","2":"104"},{"1":"Vampire: The Masquerade - Bloodlines","2":"104"},{"1":"Victoria II","2":"104"},{"1":"Vindictus","2":"104"},{"1":"VVVVVV","2":"104"},{"1":"Warhammer 40,000: Dawn of War - Game of the Year Edition","2":"104"},{"1":"Warhammer 40,000: Dawn of War - Soulstorm","2":"104"},{"1":"Warhammer 40,000: Dawn of War II","2":"104"},{"1":"Warhammer 40,000: Space Marine","2":"104"},{"1":"World of Goo","2":"104"},{"1":"Zombie Panic! Source","2":"104"},{"1":"Awesomenauts","2":"103"},{"1":"Deponia","2":"103"},{"1":"Gear Up","2":"103"},{"1":"Guns of Icarus Online","2":"103"},{"1":"MapleStory","2":"103"},{"1":"Orcs Must Die! 2","2":"103"},{"1":"Secret World Legends","2":"103"},{"1":"STAR WARS<U+0099> Knights of the Old Republic<U+0099> II: The Sith Lords<U+0099>","2":"103"},{"1":"To the Moon","2":"103"},{"1":"Worms Armageddon","2":"103"},{"1":"Batman: Arkham City GOTY","2":"102"},{"1":"Borderlands 2","2":"102"},{"1":"Chivalry: Medieval Warfare","2":"102"},{"1":"DmC Devil May Cry","2":"102"},{"1":"F1 2012","2":"102"},{"1":"FTL: Faster Than Light","2":"102"},{"1":"Gotham City Impostors: Free To Play","2":"102"},{"1":"Jet Set Radio","2":"102"},{"1":"Natural Selection 2","2":"102"},{"1":"RaceRoom Racing Experience","2":"102"},{"1":"Super Crate Box","2":"102"},{"1":"Torchlight II","2":"102"},{"1":"Castle Crashers","2":"101"},{"1":"Cortex Command","2":"101"},{"1":"DayZ","2":"101"},{"1":"Deadlight","2":"101"},{"1":"Dishonored","2":"101"},{"1":"DOOM 3: BFG Edition","2":"101"},{"1":"Farming Simulator 2013","2":"101"},{"1":"Hotline Miami","2":"101"},{"1":"Insurgency","2":"101"},{"1":"Lucius","2":"101"},{"1":"POSTAL 2","2":"101"},{"1":"Thomas Was Alone","2":"101"},{"1":"Worms Revolution","2":"101"},{"1":"XCOM: Enemy Unknown","2":"101"},{"1":"Antichamber","2":"100"},{"1":"Blade Symphony","2":"100"},{"1":"Brothers - A Tale of Two Sons","2":"100"},{"1":"Call of Duty: Black Ops II","2":"100"},{"1":"Hitman: Absolution","2":"100"},{"1":"Little Inferno","2":"100"},{"1":"PlanetSide 2","2":"100"},{"1":"Primal Carnage","2":"100"},{"1":"RPG Maker VX Ace","2":"100"},{"1":"Scribblenauts Unlimited","2":"100"},{"1":"Sonic Adventure<U+0099> 2","2":"100"},{"1":"Brütal Legend","2":"99"},{"1":"Far Cry® 3","2":"99"},{"1":"Super Hexagon","2":"99"},{"1":"TERA","2":"99"},{"1":"THE KING OF FIGHTERS XIII STEAM EDITION","2":"99"},{"1":"The Stanley Parable","2":"99"},{"1":"Baldur's Gate: Enhanced Edition","2":"98"},{"1":"Don't Starve","2":"98"},{"1":"Euro Truck Simulator 2","2":"98"},{"1":"F1 2014","2":"98"},{"1":"PAYDAY 2","2":"98"},{"1":"Remember Me","2":"98"},{"1":"Sniper Elite: Nazi Zombie Army","2":"98"},{"1":"Defiance","2":"97"},{"1":"Football Manager 2014","2":"97"},{"1":"Stronghold Crusader 2","2":"97"},{"1":"Wreckfest","2":"97"},{"1":"Arma 3","2":"96"},{"1":"BioShock Infinite","2":"96"},{"1":"Castlevania: Lords of Shadow - Ultimate Edition","2":"96"},{"1":"DLC Quest","2":"96"},{"1":"Euro Truck Simulator","2":"96"},{"1":"FEZ","2":"96"},{"1":"Kenshi","2":"96"},{"1":"Kerbal Space Program","2":"96"},{"1":"Prison Architect","2":"96"},{"1":"Resident Evil 6","2":"96"},{"1":"Sniper Ghost Warrior 2","2":"96"},{"1":"Space Rangers HD: A War Apart","2":"96"},{"1":"Star Conflict","2":"96"},{"1":"Surgeon Simulator","2":"96"},{"1":"Tomb Raider","2":"96"},{"1":"Warframe","2":"96"},{"1":"Age of Empires II (2013)","2":"95"},{"1":"Archeblade","2":"95"},{"1":"Company of Heroes","2":"95"},{"1":"Cry of Fear","2":"95"},{"1":"Dust: An Elysian Tail","2":"95"},{"1":"Evoland","2":"95"},{"1":"Far Cry® 3 Blood Dragon","2":"95"},{"1":"Gone Home","2":"95"},{"1":"Monaco","2":"95"},{"1":"Shadowrun Returns","2":"95"},{"1":"Universe Sandbox","2":"95"},{"1":"Resident Evil Revelations","2":"94"},{"1":"Reus","2":"94"},{"1":"Sanctum 2","2":"94"},{"1":"System Shock 2","2":"94"},{"1":"The Incredible Adventures of Van Helsing","2":"94"},{"1":"War for the Overworld","2":"94"},{"1":"War Thunder","2":"94"},{"1":"Wargame: AirLand Battle","2":"94"},{"1":"Company of Heroes 2","2":"93"},{"1":"GRID 2","2":"93"},{"1":"Gunpoint","2":"93"},{"1":"Injustice: Gods Among Us Ultimate Edition","2":"93"},{"1":"Rogue Legacy","2":"93"},{"1":"The Swapper","2":"93"},{"1":"Unepic","2":"93"},{"1":"Audiosurf 2","2":"92"},{"1":"Elsword","2":"92"},{"1":"FINAL FANTASY VII","2":"92"},{"1":"Magic 2014","2":"92"},{"1":"MURDERED: SOUL SUSPECT<U+0099>","2":"92"},{"1":"Project CARS","2":"92"},{"1":"Shadow Warrior","2":"92"},{"1":"Tom Clancy's Splinter Cell Blacklist","2":"92"},{"1":"DCS World Steam Edition","2":"91"},{"1":"DuckTales Remastered","2":"91"},{"1":"Europa Universalis IV","2":"91"},{"1":"Game Dev Tycoon","2":"91"},{"1":"Guacamelee! Gold Edition","2":"91"},{"1":"Hammerwatch","2":"91"},{"1":"Outlast","2":"91"},{"1":"Papers, Please","2":"91"},{"1":"Saints Row IV","2":"91"},{"1":"Skullgirls 2nd Encore","2":"91"},{"1":"The Bureau: XCOM Declassified","2":"91"},{"1":"America's Army: Proving Grounds","2":"90"},{"1":"Amnesia: A Machine for Pigs","2":"90"},{"1":"Door Kickers","2":"90"},{"1":"Killing Floor 2","2":"90"},{"1":"METAL GEAR RISING: REVENGEANCE","2":"90"},{"1":"PAC-MAN Championship Edition DX+","2":"90"},{"1":"Total War: ROME II - Emperor Edition","2":"90"},{"1":"Verdun","2":"90"},{"1":"140","2":"89"},{"1":"Assetto Corsa","2":"89"},{"1":"Banished","2":"89"},{"1":"Batman<U+0099>: Arkham Origins","2":"89"},{"1":"Broken Age","2":"89"},{"1":"Contagion","2":"89"},{"1":"Cook, Serve, Delicious!","2":"89"},{"1":"Democracy 3","2":"89"},{"1":"Deus Ex: Human Revolution - Director's Cut","2":"89"},{"1":"Enclave","2":"89"},{"1":"ENSLAVED<U+0099>: Odyssey to the West<U+0099> Premium Edition","2":"89"},{"1":"How to Survive","2":"89"},{"1":"LEGO® MARVEL Super Heroes","2":"89"},{"1":"NARUTO SHIPPUDEN: Ultimate Ninja STORM 3 Full Burst","2":"89"},{"1":"Nuclear Throne","2":"89"},{"1":"Path of Exile","2":"89"},{"1":"Rocksmith® 2014 Edition - Remastered","2":"89"},{"1":"Slender: The Arrival","2":"89"},{"1":"SNOW","2":"89"},{"1":"Space Engineers","2":"89"},{"1":"The Wolf Among Us","2":"89"},{"1":"Age of Wonders III","2":"88"},{"1":"Baldur's Gate II: Enhanced Edition","2":"88"},{"1":"Call of Duty: Ghosts","2":"88"},{"1":"Craft The World","2":"88"},{"1":"Grim Dawn","2":"88"},{"1":"King Arthur's Gold","2":"88"},{"1":"Long Live The Queen","2":"88"},{"1":"No More Room in Hell","2":"88"},{"1":"OMSI 2","2":"88"},{"1":"Project Zomboid","2":"88"},{"1":"Risk of Rain","2":"88"},{"1":"SpeedRunners","2":"88"},{"1":"Warhammer: End Times - Vermintide","2":"88"},{"1":"7 Days to Die","2":"87"},{"1":"Assassin's Creed IV Black Flag","2":"87"},{"1":"Blockland","2":"87"},{"1":"Dungeon of the Endless<U+0099>","2":"87"},{"1":"FINAL FANTASY VIII","2":"87"},{"1":"Just Cause 2: Multiplayer Mod","2":"87"},{"1":"Marvel Puzzle Quest","2":"87"},{"1":"Neverwinter","2":"87"},{"1":"Octodad: Dadliest Catch","2":"87"},{"1":"Overgrowth","2":"87"},{"1":"Race The Sun","2":"87"},{"1":"Rust","2":"87"},{"1":"Starbound","2":"87"},{"1":"SteamWorld Dig","2":"87"},{"1":"The Banner Saga","2":"87"},{"1":"The Cat Lady","2":"87"},{"1":"Viscera Cleanup Detail: Santa's Rampage","2":"87"},{"1":"Wasteland 2","2":"87"},{"1":"Blood Bowl 2","2":"86"},{"1":"Car Mechanic Simulator 2014","2":"86"},{"1":"Jazzpunk: Director's Cut","2":"86"},{"1":"Kingdom Rush","2":"86"},{"1":"Men of War: Assault Squad 2","2":"86"},{"1":"Nidhogg","2":"86"},{"1":"Resident Evil 4","2":"86"},{"1":"Turbo Dismount","2":"86"},{"1":"CastleMiner Z","2":"85"},{"1":"Dungeon Defenders II","2":"85"},{"1":"FINAL FANTASY XIV Online","2":"85"},{"1":"GunZ 2: The Second Duel","2":"85"},{"1":"Hero Siege","2":"85"},{"1":"Hexcells","2":"85"},{"1":"LUFTRAUSERS","2":"85"},{"1":"Magicite","2":"85"},{"1":"Melody's Escape","2":"85"},{"1":"METAL SLUG 3","2":"85"},{"1":"Plague Inc: Evolved","2":"85"},{"1":"Serena","2":"85"},{"1":"The Plan","2":"85"},{"1":"100% Orange Juice","2":"84"},{"1":"DARK SOULS<U+0099> II","2":"84"},{"1":"Goat Simulator","2":"84"},{"1":"LYNE","2":"84"},{"1":"One Finger Death Punch","2":"84"},{"1":"One Way Heroics","2":"84"},{"1":"Planet Explorers","2":"84"},{"1":"RUNNING WITH RIFLES","2":"84"},{"1":"South Park<U+0099>: The Stick of Truth<U+0099>","2":"84"},{"1":"Subnautica","2":"84"},{"1":"Thief","2":"84"},{"1":"Wargame: Red Dragon","2":"84"},{"1":"Age of Mythology: Extended Edition","2":"83"},{"1":"Among the Sleep","2":"83"},{"1":"Brawlhalla","2":"83"},{"1":"Broforce","2":"83"},{"1":"Child of Light","2":"83"},{"1":"Darkwood","2":"83"},{"1":"Endless Legend<U+0099>","2":"83"},{"1":"Galactic Civilizations III","2":"83"},{"1":"GRID Autosport","2":"83"},{"1":"Killer is Dead","2":"83"},{"1":"Robot Roller-Derby Disco Dodgeball","2":"83"},{"1":"Tabletop Simulator","2":"83"},{"1":"Tropico 5","2":"83"},{"1":"Viscera Cleanup Detail","2":"83"},{"1":"Watch_Dogs","2":"83"},{"1":"Yet Another Zombie Defense","2":"83"},{"1":"A Story About My Uncle","2":"82"},{"1":"BattleBlock Theater","2":"82"},{"1":"DYNASTY WARRIORS 8: Xtreme Legends Complete Edition","2":"82"},{"1":"Fistful of Frags","2":"82"},{"1":"ibb & obb","2":"82"},{"1":"The Forest","2":"82"},{"1":"Toribash","2":"82"},{"1":"Transistor","2":"82"},{"1":"Wolfenstein: The New Order","2":"82"},{"1":"World of Guns: Gun Disassembly","2":"82"},{"1":"Aura Kingdom","2":"81"},{"1":"Blockstorm","2":"81"},{"1":"Dead Bits","2":"81"},{"1":"Dead Rising 3","2":"81"},{"1":"Floating Point","2":"81"},{"1":"Heroes & Generals","2":"81"},{"1":"Rise of Nations: Extended Edition","2":"81"},{"1":"Shovel Knight: Treasure Trove","2":"81"},{"1":"Sniper Elite 3","2":"81"},{"1":"Spintires®","2":"81"},{"1":"Sunless Sea","2":"81"},{"1":"The Escapists","2":"81"},{"1":"The Talos Principle","2":"81"},{"1":"theHunter Classic","2":"81"},{"1":"Unturned","2":"81"},{"1":"Valiant Hearts: The Great War<U+0099> / Soldats Inconnus : Mémoires de la Grande Guerre<U+0099>","2":"81"},{"1":"Woodle Tree Adventures","2":"81"},{"1":"Crawl","2":"80"},{"1":"Crypt of the NecroDancer","2":"80"},{"1":"EVGA Precision X1","2":"80"},{"1":"Freedom Planet","2":"80"},{"1":"Hand of Fate","2":"80"},{"1":"Hatoful Boyfriend","2":"80"},{"1":"Mount Your Friends","2":"80"},{"1":"Murder Miners","2":"80"},{"1":"Robocraft","2":"80"},{"1":"Sakura Spirit","2":"80"},{"1":"The Elder Scrolls Online","2":"80"},{"1":"The Legend of Heroes: Trails in the Sky","2":"80"},{"1":"The Room","2":"80"},{"1":"Warface","2":"80"},{"1":"ArcheAge","2":"79"},{"1":"BeamNG.drive","2":"79"},{"1":"Creativerse","2":"79"},{"1":"Fable Anniversary","2":"79"},{"1":"FaceRig","2":"79"},{"1":"Five Nights at Freddy's","2":"79"},{"1":"From The Depths","2":"79"},{"1":"Invisible, Inc.","2":"79"},{"1":"Lethal League","2":"79"},{"1":"Middle-earth<U+0099>: Shadow of Mordor<U+0099>","2":"79"},{"1":"Mini Metro","2":"79"},{"1":"Morphopolis","2":"79"},{"1":"Mountain","2":"79"},{"1":"NARUTO SHIPPUDEN: Ultimate Ninja STORM Revolution","2":"79"},{"1":"The Crew","2":"79"},{"1":"The Expendabros","2":"79"},{"1":"Construction-Simulator 2015","2":"78"},{"1":"Counter-Strike Nexon: Studio","2":"78"},{"1":"Depth","2":"78"},{"1":"Far Cry 4","2":"78"},{"1":"Farming Simulator 15","2":"78"},{"1":"Gang Beasts","2":"78"},{"1":"Gauntlet<U+0099>","2":"78"},{"1":"Life is Feudal: Your Own","2":"78"},{"1":"Metro 2033 Redux","2":"78"},{"1":"Metro: Last Light Redux","2":"78"},{"1":"Never Alone (Kisima Ingitchuna)","2":"78"},{"1":"Quake Live","2":"78"},{"1":"Resident Evil Revelations 2","2":"78"},{"1":"Road Redemption","2":"78"},{"1":"Ryse: Son of Rome","2":"78"},{"1":"Shadowrun: Dragonfall - Director's Cut","2":"78"},{"1":"Styx: Master of Shadows","2":"78"},{"1":"The Long Dark","2":"78"},{"1":"The Vanishing of Ethan Carter","2":"78"},{"1":"WAKFU","2":"78"},{"1":"Alien: Isolation","2":"77"},{"1":"Borderlands: The Pre-Sequel","2":"77"},{"1":"Double Action: Boogaloo","2":"77"},{"1":"DRAGON BALL XENOVERSE","2":"77"},{"1":"FINAL FANTASY XIII","2":"77"},{"1":"Football Manager 2015","2":"77"},{"1":"Mad Max","2":"77"},{"1":"Resident Evil","2":"77"},{"1":"Sid Meier's Civilization: Beyond Earth","2":"77"},{"1":"Sleeping Dogs: Definitive Edition","2":"77"},{"1":"The Evil Within","2":"77"},{"1":"This War of Mine","2":"77"},{"1":"Titan Souls","2":"77"},{"1":"Assassin's Creed Unity","2":"76"},{"1":"Block N Load","2":"76"},{"1":"Bloons TD5","2":"76"},{"1":"Call of Duty: Advanced Warfare","2":"76"},{"1":"Everlasting Summer","2":"76"},{"1":"Five Nights at Freddy's 2","2":"76"},{"1":"Gems of War","2":"76"},{"1":"Lords Of The Fallen","2":"76"},{"1":"Miscreated","2":"76"},{"1":"Mordheim: City of the Damned","2":"76"},{"1":"Move or Die","2":"76"},{"1":"Polarity","2":"76"},{"1":"The Binding of Isaac: Rebirth","2":"76"},{"1":"Valkyria Chronicles<U+0099>","2":"76"},{"1":"BLOCKADE 3D","2":"75"},{"1":"Darkest Dungeon®","2":"75"},{"1":"Distance","2":"75"},{"1":"Don't Starve Together","2":"75"},{"1":"Geometry Dash","2":"75"},{"1":"I am Bread","2":"75"},{"1":"LISA","2":"75"},{"1":"METAL GEAR SOLID V: GROUND ZEROES","2":"75"},{"1":"Microsoft Flight Simulator X: Steam Edition","2":"75"},{"1":"NEKOPARA Vol. 1","2":"75"},{"1":"Tales from the Borderlands","2":"75"},{"1":"Town of Salem","2":"75"},{"1":"Armello","2":"74"},{"1":"GRAV","2":"74"},{"1":"Grow Home","2":"74"},{"1":"Homeworld Remastered Collection","2":"74"},{"1":"HuniePop","2":"74"},{"1":"Hyperdimension Neptunia Re;Birth1","2":"74"},{"1":"Mad Games Tycoon","2":"74"},{"1":"Saints Row: Gat out of Hell","2":"74"},{"1":"Savage Lands","2":"74"},{"1":"Stranded Deep","2":"74"},{"1":"The Way of Life Free Edition","2":"74"},{"1":"TOXIKK","2":"74"},{"1":"Transformice","2":"74"},{"1":"Assassin's Creed Rogue","2":"73"},{"1":"Besiege","2":"73"},{"1":"Boring Man - Online Tactical Stickman Combat","2":"73"},{"1":"Call to Arms","2":"73"},{"1":"Cities: Skylines","2":"73"},{"1":"Duck Game","2":"73"},{"1":"Dying Light","2":"73"},{"1":"Grim Fandango Remastered","2":"73"},{"1":"Heroes of Might & Magic III - HD Edition","2":"73"},{"1":"Life is Strange<U+0099>","2":"73"},{"1":"Medieval Engineers","2":"73"},{"1":"TerraTech","2":"73"},{"1":"Total War: ATTILA","2":"73"},{"1":"Victor Vran","2":"73"},{"1":"Car Mechanic Simulator 2015","2":"72"},{"1":"Five Nights at Freddy's 3","2":"72"},{"1":"Hatred","2":"72"},{"1":"Hotline Miami 2: Wrong Number","2":"72"},{"1":"Plug & Play","2":"72"},{"1":"Reign Of Kings","2":"72"},{"1":"ShellShock Live","2":"72"},{"1":"Zombie Army Trilogy","2":"72"},{"1":"AdVenture Capitalist","2":"71"},{"1":"Axiom Verge","2":"71"},{"1":"Battle Brothers","2":"71"},{"1":"Blender","2":"71"},{"1":"DARK SOULS<U+0099> II: Scholar of the First Sin","2":"71"},{"1":"Dead or Alive 5 Last Round","2":"71"},{"1":"Devil May Cry 4 Special Edition","2":"71"},{"1":"Dirty Bomb","2":"71"},{"1":"Elite Dangerous","2":"71"},{"1":"Enter the Gungeon","2":"71"},{"1":"F1 2015","2":"71"},{"1":"FreeStyle 2: Street Basketball","2":"71"},{"1":"Grand Theft Auto V","2":"71"},{"1":"Mortal Kombat X","2":"71"},{"1":"Pillars of Eternity","2":"71"},{"1":"Spooky's Jump Scare Mansion","2":"71"},{"1":"State of Decay: Year-One","2":"71"},{"1":"Strife","2":"71"},{"1":"Survarium","2":"71"},{"1":"SURVIVAL: Postapocalypse Now","2":"71"},{"1":"Trine 3: The Artifacts of Power","2":"71"},{"1":"60 Seconds!","2":"70"},{"1":"ARK: Survival Evolved","2":"70"},{"1":"Ballistic Overkill","2":"70"},{"1":"Black Mesa","2":"70"},{"1":"Clicker Heroes","2":"70"},{"1":"CrossCode","2":"70"},{"1":"DiRT Rally","2":"70"},{"1":"Gaokao.Love.100Days","2":"70"},{"1":"S.K.I.L.L. - Special Force 2","2":"70"},{"1":"The Silent Age","2":"70"},{"1":"The Witcher 3: Wild Hunt","2":"70"},{"1":"Tree of Life","2":"70"},{"1":"Turmoil","2":"70"},{"1":"Wolfenstein: The Old Blood","2":"70"},{"1":"American Truck Simulator","2":"69"},{"1":"Batman<U+0099>: Arkham Knight","2":"69"},{"1":"Eternal Senia","2":"69"},{"1":"Her Story","2":"69"},{"1":"LEGO® Worlds","2":"69"},{"1":"Magicka 2","2":"69"},{"1":"ONE PIECE PIRATE WARRIORS 3","2":"69"},{"1":"Poly Bridge","2":"69"},{"1":"Rebel Galaxy","2":"69"},{"1":"Rocket League","2":"69"},{"1":"Stonehearth","2":"69"},{"1":"Tales of Zestiria","2":"69"},{"1":"Trove","2":"69"},{"1":"War Trigger 3","2":"69"},{"1":"Arizona Sunshine","2":"68"},{"1":"Borderless Gaming","2":"68"},{"1":"Card Hunter","2":"68"},{"1":"Codename CURE","2":"68"},{"1":"CPUCores :: Maximize Your FPS","2":"68"},{"1":"Empyrion - Galactic Survival","2":"68"},{"1":"Five Nights at Freddy's 4","2":"68"},{"1":"Hacknet","2":"68"},{"1":"Secrets of Grindea","2":"68"},{"1":"Time Clickers","2":"68"},{"1":"Fishing Planet","2":"67"},{"1":"Fran Bow","2":"67"},{"1":"Homefront: The Revolution","2":"67"},{"1":"Jotun: Valhalla Edition","2":"67"},{"1":"Layers of Fear","2":"67"},{"1":"Magic Duels","2":"67"},{"1":"Mitos.is: The Game","2":"67"},{"1":"NEKOPARA Vol. 0","2":"67"},{"1":"Party Hard","2":"67"},{"1":"Planetary Annihilation: TITANS","2":"67"},{"1":"Relic Hunters Zero: Remix","2":"67"},{"1":"Sakura Clicker","2":"67"},{"1":"SOMA","2":"67"},{"1":"Teeworlds","2":"67"},{"1":"The Flame in the Flood","2":"67"},{"1":"Viridi","2":"67"},{"1":"WARMODE","2":"67"},{"1":"How to Survive 2","2":"66"},{"1":"Lost Lands: A Hidden Object Adventure","2":"66"},{"1":"METAL GEAR SOLID V: THE PHANTOM PAIN","2":"66"},{"1":"Paint the Town Red","2":"66"},{"1":"Planetbase","2":"66"},{"1":"Pro Evolution Soccer 2016","2":"66"},{"1":"Rivals of Aether","2":"66"},{"1":"Shower With Your Dad Simulator 2015: Do You Still Shower With Your Dad","2":"66"},{"1":"SMITE","2":"66"},{"1":"Timberman","2":"66"},{"1":"Ultimate Chicken Horse","2":"66"},{"1":"Undertale","2":"66"},{"1":"Crusaders of the Lost Idols","2":"65"},{"1":"DISTRAINT: Deluxe Edition","2":"65"},{"1":"Downwell","2":"65"},{"1":"Epistory - Typing Chronicles","2":"65"},{"1":"Garfield Kart","2":"65"},{"1":"Gremlins, Inc.","2":"65"},{"1":"Keep Talking and Nobody Explodes","2":"65"},{"1":"Kingdom: Classic","2":"65"},{"1":"Pit People","2":"65"},{"1":"Refunct","2":"65"},{"1":"RPG Maker MV","2":"65"},{"1":"ShareX","2":"65"},{"1":"The Beginner's Guide","2":"65"},{"1":"12 is Better Than 6","2":"64"},{"1":"Assassin's Creed Syndicate","2":"64"},{"1":"ASTRONEER","2":"64"},{"1":"Call of Duty: Black Ops III","2":"64"},{"1":"Darksiders II Deathinitive Edition","2":"64"},{"1":"Divinity: Original Sin Enhanced Edition","2":"64"},{"1":"Emily is Away","2":"64"},{"1":"Endless Sky","2":"64"},{"1":"Fallout 4","2":"64"},{"1":"Football Manager 2016","2":"64"},{"1":"HELLDIVERS<U+0099>","2":"64"},{"1":"Minecraft: Story Mode - A Telltale Games Series","2":"64"},{"1":"rFactor 2","2":"64"},{"1":"Squad","2":"64"},{"1":"Carpe Diem","2":"63"},{"1":"Hurtworld","2":"63"},{"1":"Just Cause 3","2":"63"},{"1":"MechWarrior Online","2":"63"},{"1":"Oxenfree","2":"63"},{"1":"Pony Island","2":"63"},{"1":"Punch Club","2":"63"},{"1":"RWBY: Grimm Eclipse","2":"63"},{"1":"SimplePlanes","2":"63"},{"1":"Stardew Valley","2":"63"},{"1":"The Isle","2":"63"},{"1":"The Mean Greens - Plastic Warfare","2":"63"},{"1":"The Witness","2":"63"},{"1":"Tom Clancy's Rainbow Six Siege","2":"63"},{"1":"Who's Your Daddy?!","2":"63"},{"1":"Bit Blaster XL","2":"62"},{"1":"Danganronpa: Trigger Happy Havoc","2":"62"},{"1":"Dragon's Dogma: Dark Arisen","2":"62"},{"1":"Feed and Grow: Fish","2":"62"},{"1":"Golf With Your Friends","2":"62"},{"1":"Iron Snout","2":"62"},{"1":"Knight Online","2":"62"},{"1":"Naval Action","2":"62"},{"1":"Plantera","2":"62"},{"1":"Rabi-Ribi","2":"62"},{"1":"Scrap Mechanic","2":"62"},{"1":"Slime Rancher","2":"62"},{"1":"Sven Co-op","2":"62"},{"1":"Warhammer 40,000: Eternal Crusade","2":"62"},{"1":"Aseprite","2":"61"},{"1":"Blood and Bacon","2":"61"},{"1":"Devil Daggers","2":"61"},{"1":"Factorio","2":"61"},{"1":"Firewatch","2":"61"},{"1":"Governor of Poker 3","2":"61"},{"1":"Lost Castle","2":"61"},{"1":"Momodora: Reverie Under the Moonlight","2":"61"},{"1":"NARUTO SHIPPUDEN: Ultimate Ninja STORM 4","2":"61"},{"1":"NEKOPARA Vol. 2","2":"61"},{"1":"Portal Knights","2":"61"},{"1":"Rise of the Tomb Raider","2":"61"},{"1":"Shadow Warrior 2","2":"61"},{"1":"Stellaris","2":"61"},{"1":"Street Fighter V","2":"61"},{"1":"SUPERHOT","2":"61"},{"1":"Tower Unite","2":"61"},{"1":"XCOM 2","2":"61"},{"1":"Z1 Battle Royale","2":"61"},{"1":"A Hat in Time","2":"60"},{"1":"Crazy Machines 3","2":"60"},{"1":"Faeria","2":"60"},{"1":"Far Cry Primal","2":"60"},{"1":"Hyper Light Drifter","2":"60"},{"1":"Jalopy","2":"60"},{"1":"Lost Lands: Mahjong","2":"60"},{"1":"Lucy -The Eternity She Wished For-","2":"60"},{"1":"Shakes and Fidget","2":"60"},{"1":"Sniper Elite 4","2":"60"},{"1":"There's Poop In My Soup","2":"60"},{"1":"Tom Clancy's The Division","2":"60"},{"1":"Tree of Savior (English Ver.)","2":"60"},{"1":"Tyranny","2":"60"},{"1":"Wolcen: Lords of Mayhem","2":"60"},{"1":"Aragami","2":"59"},{"1":"Bloons TD Battles","2":"59"},{"1":"Book of Demons","2":"59"},{"1":"Clustertruck","2":"59"},{"1":"Danganronpa 2: Goodbye Despair","2":"59"},{"1":"DARK SOULS<U+0099> III","2":"59"},{"1":"Death Road to Canada","2":"59"},{"1":"FINAL FANTASY IX","2":"59"},{"1":"Hearts of Iron IV","2":"59"},{"1":"HunieCam Studio","2":"59"},{"1":"Shadow Tactics: Blades of the Shogun","2":"59"},{"1":"Stories: The Path of Destinies","2":"59"},{"1":"This Is the Police","2":"59"},{"1":"We Happy Few","2":"59"},{"1":"Crush Crush","2":"58"},{"1":"Dead Island Definitive Edition","2":"58"},{"1":"DOOM","2":"58"},{"1":"FINAL FANTASY X/X-2 HD Remaster","2":"58"},{"1":"Friday the 13th: The Game","2":"58"},{"1":"Furi","2":"58"},{"1":"Idling to Rule the Gods","2":"58"},{"1":"Ori and the Blind Forest: Definitive Edition","2":"58"},{"1":"Overcooked","2":"58"},{"1":"Riders of Icarus","2":"58"},{"1":"RimWorld","2":"58"},{"1":"Salt and Sanctuary","2":"58"},{"1":"The Final Station","2":"58"},{"1":"Total War: WARHAMMER","2":"58"},{"1":"Transport Fever","2":"58"},{"1":"Valley","2":"58"},{"1":"Warhammer 40,000: Dawn of War III","2":"58"},{"1":"Worm.is: The Game","2":"58"},{"1":"Youtubers Life","2":"58"},{"1":"Conan Exiles","2":"57"},{"1":"Day of Infamy","2":"57"},{"1":"Dead by Daylight","2":"57"},{"1":"ELEX","2":"57"},{"1":"F1 2016","2":"57"},{"1":"Home Behind","2":"57"},{"1":"Human: Fall Flat","2":"57"},{"1":"Oxygen Not Included","2":"57"},{"1":"Rec Room","2":"57"},{"1":"Transmissions: Element 120","2":"57"},{"1":"VA-11 Hall-A: Cyberpunk Bartender Action","2":"57"},{"1":"ABZU","2":"56"},{"1":"Atlas Reactor","2":"56"},{"1":"Beholder","2":"56"},{"1":"EARTH DEFENSE FORCE 4.1  The Shadow of New Despair","2":"56"},{"1":"Farming Simulator 17","2":"56"},{"1":"Heat Signature","2":"56"},{"1":"INSIDE","2":"56"},{"1":"klocki","2":"56"},{"1":"Montaro","2":"56"},{"1":"Reigns","2":"56"},{"1":"The Room Two","2":"56"},{"1":"Tricky Towers","2":"56"},{"1":"911 Operator","2":"55"},{"1":"Batman - The Telltale Series","2":"55"},{"1":"Cossacks 3","2":"55"},{"1":"Crossout","2":"55"},{"1":"Deus Ex: Mankind Divided<U+0099>","2":"55"},{"1":"Divinity: Original Sin 2","2":"55"},{"1":"EVERSPACE<U+0099>","2":"55"},{"1":"Football Manager 2017","2":"55"},{"1":"Kingdom: New Lands","2":"55"},{"1":"Line of Sight","2":"55"},{"1":"Mandagon","2":"55"},{"1":"No Man's Sky","2":"55"},{"1":"Orwell","2":"55"},{"1":"Owlboy","2":"55"},{"1":"Planet Coaster","2":"55"},{"1":"Quantum Break","2":"55"},{"1":"STEINS;GATE","2":"55"},{"1":"Battlerite","2":"54"},{"1":"BioShock Remastered","2":"54"},{"1":"Deceit","2":"54"},{"1":"Little Nightmares","2":"54"},{"1":"Meadow","2":"54"},{"1":"NBA 2K17","2":"54"},{"1":"Northgard","2":"54"},{"1":"Osiris: New Dawn","2":"54"},{"1":"Paladins","2":"54"},{"1":"PRICE","2":"54"},{"1":"Pro Evolution Soccer 2017","2":"54"},{"1":"RUINER","2":"54"},{"1":"Titan Quest Anniversary Edition","2":"54"},{"1":"Wallpaper Engine","2":"54"},{"1":"Blameless","2":"53"},{"1":"Business Tour - Online Multiplayer Board Game","2":"53"},{"1":"Digimon Masters Online","2":"53"},{"1":"Endless Space® 2","2":"53"},{"1":"Five Nights at Freddy's: Sister Location","2":"53"},{"1":"Mafia III: Definitive Edition","2":"53"},{"1":"Minion Masters","2":"53"},{"1":"My Summer Car","2":"53"},{"1":"OneShot","2":"53"},{"1":"Shadowverse","2":"53"},{"1":"Sid Meier's Civilization VI","2":"53"},{"1":"Subsistence","2":"53"},{"1":"World of Tanks Blitz","2":"53"},{"1":"Zup!","2":"53"},{"1":"BATTALION 1944","2":"52"},{"1":"Brick Rigs","2":"52"},{"1":"Call of Duty: Infinite Warfare","2":"52"},{"1":"Detention","2":"52"},{"1":"Dishonored 2","2":"52"},{"1":"DRAGON BALL XENOVERSE 2","2":"52"},{"1":"Eternal Card Game","2":"52"},{"1":"Genital Jousting","2":"52"},{"1":"ICEY","2":"52"},{"1":"Infestation: The New Z","2":"52"},{"1":"Motorsport Manager","2":"52"},{"1":"Argo","2":"51"},{"1":"Blackwake","2":"51"},{"1":"Dark and Light","2":"51"},{"1":"Darksiders Warmastered Edition","2":"51"},{"1":"Deep Rock Galactic","2":"51"},{"1":"Hidden Folks","2":"51"},{"1":"Hollow Knight","2":"51"},{"1":"Lobotomy Corporation","2":"51"},{"1":"Resident Evil 7 Teaser: Beginning Hour","2":"51"},{"1":"Soda Dungeon","2":"51"},{"1":"Steep","2":"51"},{"1":"Tales of Berseria","2":"51"},{"1":"The Divine Paradox","2":"51"},{"1":"theHunter: Call of the Wild<U+0099>","2":"51"},{"1":"Watch_Dogs 2","2":"51"},{"1":"Wizard of Legend","2":"51"},{"1":"Zup! 2","2":"51"},{"1":"Absolver","2":"50"},{"1":"Alien Swarm: Reactive Drop","2":"50"},{"1":"Art of War: Red Tides","2":"50"},{"1":"Avorion","2":"50"},{"1":"DiRT 4","2":"50"},{"1":"DUSK","2":"50"},{"1":"For The King","2":"50"},{"1":"Resident Evil 7 Biohazard","2":"50"},{"1":"Streets of Rogue","2":"50"},{"1":"Sword With Sauce","2":"50"},{"1":"VRChat","2":"50"},{"1":"We Were Here","2":"50"},{"1":"What Remains of Edith Finch","2":"50"},{"1":"Zup! 3","2":"50"},{"1":"BRAIN / OUT","2":"49"},{"1":"Dead Cells","2":"49"},{"1":"Domina","2":"49"},{"1":"Dungeons 3","2":"49"},{"1":"For Honor","2":"49"},{"1":"Golf It!","2":"49"},{"1":"Into the Breach","2":"49"},{"1":"Night in the Woods","2":"49"},{"1":"Pavlov VR","2":"49"},{"1":"Railway Empire","2":"49"},{"1":"Clone Drone in the Danger Zone","2":"48"},{"1":"Hellblade: Senua's Sacrifice","2":"48"},{"1":"Holdfast: Nations At War","2":"48"},{"1":"Middle-earth<U+0099>: Shadow of War<U+0099>","2":"48"},{"1":"NieR:Automata<U+0099>","2":"48"},{"1":"PLAYERUNKNOWN'S BATTLEGROUNDS","2":"48"},{"1":"Steel Division: Normandy 44","2":"48"},{"1":"The Surge","2":"48"},{"1":"Tom Clancy's Ghost Recon® Wildlands","2":"48"},{"1":"X-Plane 11","2":"48"},{"1":"Bayonetta","2":"47"},{"1":"Bendy and the Ink Machine","2":"47"},{"1":"Catan Universe","2":"47"},{"1":"Celeste","2":"47"},{"1":"Fallout Shelter","2":"47"},{"1":"Kingdoms and Castles","2":"47"},{"1":"Late Shift","2":"47"},{"1":"NEKOPARA Vol. 3","2":"47"},{"1":"Outlast 2","2":"47"},{"1":"Total War: WARHAMMER II","2":"47"},{"1":"Trailmakers","2":"47"},{"1":"Ultimate Epic Battle Simulator","2":"47"},{"1":"Black Desert Online","2":"46"},{"1":"Black Squad","2":"46"},{"1":"House Flipper","2":"46"},{"1":"Metin2","2":"46"},{"1":"Prey","2":"46"},{"1":"Ravenfield","2":"46"},{"1":"Sonic Mania","2":"46"},{"1":"Stormworks: Build and Rescue","2":"46"},{"1":"Surviving Mars","2":"46"},{"1":"WILL: A Wonderful World","2":"46"},{"1":"Confess My Love","2":"45"},{"1":"Cuphead","2":"45"},{"1":"DEEP SPACE WAIFU","2":"45"},{"1":"Dragonia","2":"45"},{"1":"House Party","2":"45"},{"1":"Life is Strange: Before the Storm","2":"45"},{"1":"Material Girl","2":"45"},{"1":"Realm Grinder","2":"45"},{"1":"Rising Storm 2: Vietnam","2":"45"},{"1":"TEKKEN 7","2":"45"},{"1":"The Elder Scrolls: Legends","2":"45"},{"1":"They Are Billions","2":"45"},{"1":"Car Mechanic Simulator 2018","2":"44"},{"1":"CarX Drift Racing Online","2":"44"},{"1":"Citadel: Forged With Fire","2":"44"},{"1":"Danganronpa V3: Killing Harmony","2":"44"},{"1":"Foxhole","2":"44"},{"1":"GORN","2":"44"},{"1":"Hand Simulator","2":"44"},{"1":"Loading Screen Simulator","2":"44"},{"1":"Next Day: Survival","2":"44"},{"1":"OLDTV","2":"44"},{"1":"Pyre","2":"44"},{"1":"Slay the Spire","2":"44"},{"1":"Stream Avatars","2":"44"},{"1":"The Escapists 2","2":"44"},{"1":"Warhammer 40,000: Inquisitor - Martyr","2":"44"},{"1":"Bomber Crew","2":"43"},{"1":"Comedy Night","2":"43"},{"1":"F1 2017","2":"43"},{"1":"Farm Manager 2018","2":"43"},{"1":"FINAL FANTASY XV WINDOWS EDITION","2":"43"},{"1":"Frostpunk","2":"43"},{"1":"Gorogoa","2":"43"},{"1":"PC Building Simulator","2":"43"},{"1":"Quake Champions","2":"43"},{"1":"Totally Accurate Battle Simulator","2":"43"},{"1":"Vampyr","2":"43"},{"1":"Gold Rush: The Game","2":"42"},{"1":"My Time At Portia","2":"42"},{"1":"NBA 2K18","2":"42"},{"1":"Project CARS 2","2":"42"},{"1":"SCUM","2":"42"},{"1":"Stick Fight: The Game","2":"42"},{"1":"Tactical Monsters Rumble Arena","2":"42"},{"1":"Tricolour Lovestory","2":"42"},{"1":"Warhammer: Vermintide 2","2":"42"},{"1":"Doki Doki Literature Club","2":"41"},{"1":"Eco","2":"41"},{"1":"Getting Over It with Bennett Foddy","2":"41"},{"1":"Granado Espada","2":"41"},{"1":"Hunt: Showdown","2":"41"},{"1":"Nioh: Complete Edition","2":"41"},{"1":"Raft","2":"41"},{"1":"Soundpad","2":"41"},{"1":"Soundpad Demo","2":"41"},{"1":"South Park The Fractured But Whole","2":"41"},{"1":"The Evil Within 2","2":"41"},{"1":"Wolfenstein II: The New Colossus","2":"41"},{"1":"World of Warships","2":"41"},{"1":"<U+6771><U+65B9><U+5929><U+7A7A><U+748B> ~ Hidden Star in Four Seasons.","2":"40"},{"1":"Aim Lab","2":"40"},{"1":"Assassin's Creed Origins","2":"40"},{"1":"Black Desert Online SA","2":"40"},{"1":"Call of Duty: WWII","2":"40"},{"1":"CS2D","2":"40"},{"1":"Football Manager 2018","2":"40"},{"1":"Injustice<U+0099> 2","2":"40"},{"1":"March of Empires","2":"40"},{"1":"Mirror","2":"40"},{"1":"MudRunner","2":"40"},{"1":"Superflight","2":"40"},{"1":"Yu-Gi-Oh! Duel Links","2":"40"},{"1":"Finding Paradise","2":"39"},{"1":"Freddy Fazbear's Pizzeria Simulator","2":"39"},{"1":"Pillars of Eternity II: Deadfire","2":"39"},{"1":"SCP: Secret Laboratory","2":"39"},{"1":"Total War Saga: Thrones of Britannia","2":"39"},{"1":"Will To Live Online","2":"39"},{"1":"BATTLETECH","2":"38"},{"1":"Darwin Project","2":"38"},{"1":"DRAGON BALL FighterZ","2":"38"},{"1":"Kingdom Come: Deliverance","2":"38"},{"1":"Onmyoji","2":"38"},{"1":"Sword Art Online: Fatal Bullet","2":"38"},{"1":"Tracks of Triumph: Industrial Zone","2":"38"},{"1":"Farm Together","2":"37"},{"1":"SYNTHETIK","2":"37"},{"1":"Beat Saber","2":"36"},{"1":"KovaaK 2.0","2":"36"},{"1":"Marie's Room","2":"36"},{"1":"Ni no Kuni<U+0099> II: Revenant Kingdom","2":"36"},{"1":"SoulWorker","2":"36"},{"1":"War Robots","2":"36"},{"1":"Far Cry 5","2":"35"},{"1":"FAR: Lone Sails","2":"35"},{"1":"Albion Online","2":"34"},{"1":"Black Desert","2":"34"},{"1":"DARK SOULS<U+0099>: REMASTERED","2":"34"},{"1":"Post Scriptum","2":"34"},{"1":"X4: Foundations","2":"34"},{"1":"CRSED","2":"33"},{"1":"Jurassic World Evolution","2":"33"},{"1":"Realm Royale","2":"33"},{"1":"Russian Fishing 4","2":"33"},{"1":"Totally Accurate Battlegrounds","2":"33"},{"1":"Two Point Hospital","2":"33"},{"1":"Crash Bandicoot<U+0099> N. Sane Trilogy","2":"32"},{"1":"Soul at Stake - 1v4","2":"32"},{"1":"The Awesome Adventures of Captain Spirit","2":"32"},{"1":"The Crew 2","2":"32"},{"1":"Ultimate Custom Night","2":"32"},{"1":"CreativeDestruction","2":"31"},{"1":"Dead Frontier 2","2":"31"},{"1":"F1 2018","2":"31"},{"1":"Graveyard Keeper","2":"31"},{"1":"Hentai Girl","2":"31"},{"1":"Monster Hunter: World","2":"31"},{"1":"Overcooked! 2","2":"31"},{"1":"Shadow of the Tomb Raider","2":"31"},{"1":"Touhou Luna Nights","2":"31"},{"1":"Yakuza 0","2":"31"},{"1":"<U+592A><U+543E><U+7ED8><U+5377> The Scroll Of Taiwu","2":"30"},{"1":"Assetto Corsa Competizione","2":"30"},{"1":"Chinese Parents","2":"30"},{"1":"DRAGON QUEST® XI: Echoes of an Elusive Age<U+0099>","2":"30"},{"1":"Green Hell","2":"30"},{"1":"NBA 2K19","2":"30"},{"1":"Pathfinder: Kingmaker","2":"30"},{"1":"Ring of Elysium","2":"30"},{"1":"Assassin's Creed Odyssey","2":"29"},{"1":"Bless Online","2":"29"},{"1":"Life is Strange 2","2":"29"},{"1":"MapleStory 2","2":"29"},{"1":"Return of the Obra Dinn","2":"29"},{"1":"Terraforming Mars","2":"29"},{"1":"Tropico 6","2":"29"},{"1":"World War 3","2":"29"},{"1":"Age of History II","2":"28"},{"1":"Darksiders III","2":"28"},{"1":"Farming Simulator 19","2":"28"},{"1":"HITMAN<U+0099> 2","2":"28"},{"1":"Mutant Year Zero: Road to Eden","2":"28"},{"1":"<U+53E4><U+5251><U+5947><U+8C2D><U+4E09>(Gujian3)","2":"27"},{"1":"Artifact","2":"27"},{"1":"ATLAS","2":"27"},{"1":"Beasts of Bermuda","2":"27"},{"1":"Bloons TD 6","2":"27"},{"1":"Cell to Singularity - Evolution Never Ends","2":"27"},{"1":"GRIS","2":"27"},{"1":"Insurgency: Sandstorm","2":"27"},{"1":"Super Animal Royale","2":"27"},{"1":"<U+55DC><U+8840><U+5370> Bloody Spell","2":"26"},{"1":"<U+63A2><U+7075><U+7B14><U+8A18>/<U+62FE><U+9057><U+8BB0>-1v5(Notes of Soul)","2":"26"},{"1":"A Dance of Fire and Ice","2":"26"},{"1":"Amazing Cultivation Simulator","2":"26"},{"1":"Foundation","2":"26"},{"1":"Idle Wizard","2":"26"},{"1":"Resident Evil 2","2":"26"},{"1":"ACE COMBAT<U+0099> 7: SKIES UNKNOWN","2":"25"},{"1":"Far Cry New Dawn","2":"25"},{"1":"Subnautica: Below Zero","2":"25"},{"1":"Dawn of Man","2":"24"},{"1":"DEAD OR ALIVE Xtreme Venus Vacation","2":"24"},{"1":"Devil May Cry 5","2":"24"},{"1":"DiRT Rally 2.0","2":"24"},{"1":"Sekiro<U+0099>: Shadows Die Twice","2":"24"},{"1":"Workers & Resources: Soviet Republic","2":"24"},{"1":"KARDS - The WWII Card Game","2":"23"},{"1":"Mortal Kombat 11","2":"23"},{"1":"Outward","2":"23"},{"1":"Risk of Rain 2","2":"23"},{"1":"Total War: THREE KINGDOMS","2":"23"},{"1":"Unheard","2":"23"},{"1":"Imperator: Rome","2":"22"},{"1":"MORDHAU","2":"22"},{"1":"UBOAT","2":"22"},{"1":"Yakuza Kiwami 2","2":"22"},{"1":"Barotrauma","2":"21"},{"1":"Dota Underlords","2":"21"},{"1":"Hell Let Loose","2":"21"},{"1":"Ironsight","2":"21"},{"1":"Lords Mobile","2":"21"},{"1":"OCTOPATH TRAVELER","2":"21"},{"1":"Steel Division 2","2":"21"},{"1":"Conqueror's Blade","2":"20"},{"1":"F1 2019","2":"20"},{"1":"People Playground","2":"20"},{"1":"Age of Empires: Definitive Edition","2":"19"},{"1":"GTFO","2":"19"},{"1":"Disco Elysium","2":"18"},{"1":"eFootball PES 2020","2":"18"},{"1":"Gears 5","2":"18"},{"1":"NBA 2K20","2":"18"},{"1":"Unrailed!","2":"18"},{"1":"CODE VEIN","2":"17"},{"1":"Destiny 2","2":"17"},{"1":"Digimon Story Cyber Sleuth: Complete Edition","2":"17"},{"1":"Firestone Idle RPG","2":"17"},{"1":"Mindustry","2":"17"},{"1":"NGU IDLE","2":"17"},{"1":"Noita","2":"17"},{"1":"War Selection","2":"17"},{"1":"Age of Empires II: Definitive Edition","2":"16"},{"1":"Fisher Online","2":"16"},{"1":"Football Manager 2020","2":"16"},{"1":"Game of Thrones Winter is Coming","2":"16"},{"1":"Planet Zoo","2":"16"},{"1":"STAR WARS Jedi: Fallen Order<U+0099>","2":"16"},{"1":"DJMAX RESPECT V","2":"15"},{"1":"Hades","2":"15"},{"1":"Sniper Ghost Warrior Contracts","2":"15"},{"1":"Stay Out","2":"15"},{"1":"Transport Fever 2","2":"15"},{"1":"Tree of Savior (Japanese Ver.)","2":"15"},{"1":"DRAGON BALL Z: KAKAROT","2":"14"},{"1":"ROMANCE OF THE THREE KINGDOMS XIV","2":"14"},{"1":"Sands of Salzaar","2":"14"},{"1":"Temtem","2":"14"},{"1":"RISK: Global Domination","2":"13"},{"1":"Skul: The Hero Slayer","2":"13"},{"1":"Borderlands 3","2":"12"},{"1":"DOOM Eternal","2":"12"},{"1":"Half-Life: Alyx","2":"12"},{"1":"Mount & Blade II: Bannerlord","2":"12"},{"1":"Ori and the Will of the Wisps","2":"12"},{"1":"Out of the Park Baseball 21","2":"12"},{"1":"State of Decay 2","2":"12"},{"1":"Bloons Monkey City","2":"11"},{"1":"Deadside","2":"11"},{"1":"Fallout 76","2":"11"},{"1":"Last Oasis","2":"11"},{"1":"OVR Advanced Settings","2":"11"},{"1":"Resident Evil 3","2":"11"},{"1":"<U+4FE0><U+4E4B><U+9053>(PathOfWuxia)","2":"10"},{"1":"Gunfire Reborn","2":"10"},{"1":"Monster Train","2":"10"},{"1":"Shop Titans","2":"10"},{"1":"tModLoader","2":"10"},{"1":"YoloMouse","2":"10"},{"1":"A Way Out","2":"9"},{"1":"Battlefield 1 <U+0099>","2":"9"},{"1":"Battlefield 4<U+0099>","2":"9"},{"1":"Battlefield<U+0099> V","2":"9"},{"1":"Command & Conquer<U+0099> Remastered Collection","2":"9"},{"1":"Curious Expedition 2","2":"9"},{"1":"Cyber Hunter","2":"9"},{"1":"Desperados III","2":"9"},{"1":"Dragon Age<U+0099> Inquisition","2":"9"},{"1":"Mass Effect<U+0099>: Andromeda","2":"9"},{"1":"Need for Speed<U+0099> Heat","2":"9"},{"1":"Persona 4 Golden","2":"9"},{"1":"Plants vs. Zombies: Battle for Neighborville","2":"9"},{"1":"Pro Cycling Manager 2020","2":"9"},{"1":"Satisfactory","2":"9"},{"1":"Sea of Thieves","2":"9"},{"1":"STAR WARS<U+0099> Battlefront<U+0099> II","2":"9"},{"1":"The Sims<U+0099> 4","2":"9"},{"1":"<U+96C0><U+9B42><U+9EBB><U+5C06>(MahjongSoul)","2":"8"},{"1":"DEATH STRANDING","2":"8"},{"1":"STAR WARS<U+0099>: The Old Republic<U+0099>","2":"8"},{"1":"BLEACH Brave Souls - 3D Action","2":"7"},{"1":"DDraceNetwork","2":"7"},{"1":"DEAD OR ALIVE Xtreme Venus Vacation [JP]","2":"7"},{"1":"Fall Guys: Ultimate Knockout","2":"7"},{"1":"Grounded","2":"7"},{"1":"Horizon Zero Dawn","2":"7"},{"1":"PGA TOUR 2K21","2":"7"},{"1":"Phantasy Star Online 2","2":"7"},{"1":"Train Sim World® 2","2":"7"},{"1":"Control Ultimate Edition","2":"6"},{"1":"Craftopia","2":"6"},{"1":"Crusader Kings III","2":"6"},{"1":"eFootball PES 2021 SEASON UPDATE","2":"6"},{"1":"Medieval Dynasty","2":"6"},{"1":"NBA 2K21","2":"6"},{"1":"Wasteland 3","2":"6"},{"1":"Action Taimanin","2":"5"},{"1":"Age of Empires III: Definitive Edition","2":"5"},{"1":"Baldur's Gate 3","2":"5"},{"1":"Blood of Steel","2":"5"},{"1":"EA SPORTS<U+0099> FIFA 21","2":"5"},{"1":"Mafia: Definitive Edition","2":"5"},{"1":"Mr.Mine","2":"5"},{"1":"Phasmophobia","2":"5"},{"1":"RuneScape","2":"5"},{"1":"Soulworker","2":"5"},{"1":"The Outer Worlds","2":"5"},{"1":"Apex Legends","2":"4"},{"1":"Football Manager 2021","2":"4"},{"1":"Kingdoms Reborn","2":"4"},{"1":"Melvor Idle","2":"4"},{"1":"Teardown","2":"4"},{"1":"Yakuza: Like a Dragon","2":"4"},{"1":"Cyberpunk 2077","2":"3"},{"1":"Football Manager 2021 Touch","2":"3"},{"1":"Idle Monster TD","2":"3"},{"1":"Leaf Blower Revolution - Idle Game","2":"3"},{"1":"Phoenix Point: Year One Edition","2":"3"},{"1":"Red Dead Online","2":"3"},{"1":"Soccer Manager 2021","2":"3"},{"1":"Spellbreak","2":"3"},{"1":"<U+4E09><U+56FD><U+7FA4><U+82F1><U+4F20>8 Heroes of the Three Kingdoms 8","2":"2"},{"1":"CosmicBreak Universal","2":"2"},{"1":"Dyson Sphere Program","2":"2"},{"1":"Home Behind 2","2":"2"},{"1":"Timberborn Demo","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="plot" class="section level3">
+<h3>Plot</h3>
+<pre class="r"><code>games %&gt;%
+  filter(avg_players &gt; 0) %&gt;%
+  count(name, sort = TRUE) %&gt;%
+  ggplot(aes(n)) +
+  geom_histogram(bins = 30) +
+  labs(
+    y = &quot;Count of Months in dataset&quot;,
+    x = &quot;Number of Titles&quot;
+  )</code></pre>
+<p><img src="figure/2021_03_15_tidy_tuesday.Rmd/unnamed-chunk-5-1.png" width="2100" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="section" class="section level2 unnumbered">
+<h2 class="unnumbered"></h2>
+<p>Discoveries:</p>
+<ol style="list-style-type: decimal">
+<li><p>There are some non-UTF characters in the game names.</p></li>
+<li><p>There are 1248 distinct game names.</p></li>
+<li><p>About 200 of the games appear in all 104 months of the study(??)</p></li>
+</ol>
+<pre class="r"><code>games %&gt;%
+  group_by(date) %&gt;%
+  summarise(engagement = sum(avg_players)) %&gt;%
+  ggplot(aes(date, engagement)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_date(
+    date_breaks = &quot;year&quot;,
+    date_labels = &quot;%Y&quot;
+  ) +
+  labs(
+    x = NULL, y = NULL, title = &quot;Steam Engagement, Sum of Monthly Avg&quot;,
+    caption = paste0(&quot;Source: Kaggle&quot;)
+  )</code></pre>
+<p><img src="figure/2021_03_15_tidy_tuesday.Rmd/unnamed-chunk-6-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>The Sid Meier series:</p>
+<pre class="r"><code>games %&gt;%
+  filter(str_detect(name, &quot;Sid Meier&quot;)) %&gt;%
+  mutate(
+    name = str_remove(name, &quot;Sid Meier&#39;s Civilization&quot;),
+    name = str_remove(name, &quot;\\: &quot;)
+  ) %&gt;%
+  ggplot(aes(date, peak, color = name)) +
+  geom_line() +
+  scale_color_brewer(
+    name = NULL,
+    direction = -1,
+    palette = &quot;BrBG&quot;
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_date(
+    date_breaks = &quot;year&quot;,
+    date_labels = &quot;%Y&quot;
+  ) +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = &quot;Sid Meier&#39;s Civilization Peak Engagement on Steam&quot;,
+    caption = paste0(&quot;Source: Kaggle&quot;)
+  ) +
+  theme(
+    legend.position = c(0.8, 0.75),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/2021_03_15_tidy_tuesday.Rmd/unnamed-chunk-7-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>I wonder if the all of the game engagement has a seasonal peak?</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19042)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] systemfonts_1.0.1 hrbrthemes_0.8.6  lubridate_1.7.10  yardstick_0.0.7  
+ [5] workflows_0.2.2   tune_0.1.3        rsample_0.0.9     recipes_0.1.15   
+ [9] parsnip_0.1.5     modeldata_0.1.0   infer_0.5.4       dials_0.0.9      
+[13] scales_1.1.1      broom_0.7.5       tidymodels_0.1.2  forcats_0.5.1    
+[17] stringr_1.4.0     dplyr_1.0.5       purrr_0.3.4       readr_1.4.0      
+[21] tidyr_1.1.3       tibble_3.1.0      ggplot2_3.3.3     tidyverse_1.3.0  
+[25] workflowr_1.6.2  
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.2.1    plyr_1.8.6        
+  [4] selectr_0.4-2      tidytuesdayR_1.0.1 splines_4.0.3     
+  [7] listenv_0.8.0      usethis_2.0.1      digest_0.6.27     
+ [10] foreach_1.5.1      htmltools_0.5.1.1  fansi_0.4.2       
+ [13] magrittr_2.0.1     globals_0.14.0     modelr_0.1.8      
+ [16] gower_0.2.2        extrafont_0.17     R.utils_2.10.1    
+ [19] extrafontdb_1.0    colorspace_2.0-0   rvest_1.0.0       
+ [22] textshaping_0.3.2  haven_2.3.1        xfun_0.22         
+ [25] crayon_1.4.1       jsonlite_1.7.2     survival_3.2-9    
+ [28] iterators_1.0.13   glue_1.4.2         gtable_0.3.0      
+ [31] ipred_0.9-11       R.cache_0.14.0     Rttf2pt1_1.3.8    
+ [34] DBI_1.1.1          Rcpp_1.0.6         GPfit_1.0-8       
+ [37] lava_1.6.9         prodlim_2019.11.13 httr_1.4.2        
+ [40] RColorBrewer_1.1-2 ellipsis_0.3.1     pkgconfig_2.0.3   
+ [43] R.methodsS3_1.8.1  farver_2.1.0       nnet_7.3-15       
+ [46] sass_0.3.1         dbplyr_2.1.0       utf8_1.1.4        
+ [49] tidyselect_1.1.0   labeling_0.4.2     rlang_0.4.10      
+ [52] DiceDesign_1.9     later_1.1.0.1      munsell_0.5.0     
+ [55] cellranger_1.1.0   tools_4.0.3        cli_2.3.1         
+ [58] generics_0.1.0     evaluate_0.14      yaml_2.2.1        
+ [61] ragg_1.1.1         knitr_1.31         fs_1.5.0          
+ [64] future_1.21.0      whisker_0.4        R.oo_1.24.0       
+ [67] xml2_1.3.2         debugme_1.1.0      compiler_4.0.3    
+ [70] rstudioapi_0.13    curl_4.3           reprex_1.0.0      
+ [73] lhs_1.1.1          bslib_0.2.4        stringi_1.5.3     
+ [76] highr_0.8          ps_1.6.0           gdtools_0.2.3     
+ [79] memuse_4.1-0       lattice_0.20-41    Matrix_1.3-2      
+ [82] styler_1.3.2       vctrs_0.3.6        pillar_1.5.1      
+ [85] lifecycle_1.0.0    furrr_0.2.2        jquerylib_0.1.3   
+ [88] httpuv_1.5.5       R6_2.5.0           promises_1.2.0.1  
+ [91] parallelly_1.24.0  codetools_0.2-18   MASS_7.3-53.1     
+ [94] assertthat_0.2.1   rprojroot_2.0.2    withr_2.4.1       
+ [97] parallel_4.0.3     hms_1.0.0          grid_4.0.3        
+[100] rpart_4.1-15       timeDate_3043.102  class_7.3-18      
+[103] rmarkdown_2.7      git2r_0.28.0       pROC_1.17.0.1     </code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlZpZGVvIEdhbWVzIGFuZCBTbGljZWQiDQpkYXRlOiAiTWFyY2ggMTYsIDIwMjEiDQpvdXRwdXQ6DQogIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICB0b2M6IG5vDQogICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgIGRmX3ByaW50OiBwYWdlZA0KZWRpdG9yX29wdGlvbnM6DQogIGNodW5rX291dHB1dF90eXBlOiBjb25zb2xlDQotLS0NCg0KVGhlICNUaWR5VHVlc2RheSBkYXRhIHRoaXMgd2VlayBjb21lcyBmcm9tIFN0ZWFtIGJ5IHdheSBvZiBLYWdnbGUgYW5kIG9yaWdpbmFsbHkgY2FtZSBmcm9tIFN0ZWFtQ2hhcnRzLiBUaGUgZGF0YSB3YXMgc2NyYXBlZCBhbmQgdXBsb2FkZWQgdG8gS2FnZ2xlLg0KDQpgYGB7ciBzZXR1cCwgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0NCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KA0KCWVjaG8gPSBUUlVFLA0KCW1lc3NhZ2UgPSBGQUxTRSwNCgl3YXJuaW5nID0gRkFMU0UsDQoJY2FjaGUgPSBGQUxTRSwNCgljYWNoZS5sYXp5ID0gRkFMU0UsDQoJZGZfcHJpbnQgPSAicGFnZWQiLA0KCWRwaSA9IDMwMCwNCgl0aWR5ID0gInN0eWxlciIsDQoJZGV2ID0gInJhZ2dfcG5nIiwNCglhdXRvZGVwID0gVFJVRQ0KKQ0KDQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMoew0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KHRpZHltb2RlbHMpDQpsaWJyYXJ5KGx1YnJpZGF0ZSkNCmxpYnJhcnkoaHJicnRoZW1lcykNCmxpYnJhcnkoc3lzdGVtZm9udHMpDQogfSkNCg0KZ2dwbG90Mjo6dGhlbWVfc2V0KGhyYnJ0aGVtZXM6OnRoZW1lX2Z0X3JjKCkgKw0KICAgICAgICAgICAgZ2dwbG90Mjo6dGhlbWUocGxvdC50aXRsZS5wb3NpdGlvbiA9ICJwbG90IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHBsb3QuY2FwdGlvbi5wb3NpdGlvbiA9ICJwbG90IikpDQoNCmBgYA0KDQpgYGB7cn0NCnR0IDwtIHRpZHl0dWVzZGF5Ujo6dHRfbG9hZCgiMjAyMS0wMy0xNiIpDQpgYGANCg0KDQpgYGB7ciwgZXZhbCA9IGludGVyYWN0aXZlKCl9DQp0dA0KYGBgDQoNCmBgYHtyfQ0KZ2FtZXMgPC0gdHQkZ2FtZXMgJT4lIA0KICB0cmFuc211dGUoZGF0ZSA9IHltKHBhc3RlMChhcy5jaGFyYWN0ZXIoeWVhciksIA0KICAgICAgICAgICAgICAgICAgICBtb250aCkpLA0KICAgICAgICAgICAgbmFtZSA9IGdhbWVuYW1lLA0KICAgICAgICAgICAgYXZnX3BsYXllcnMgPSBhdmcsDQogICAgICAgICAgICBwZWFrID0gcGVhaykgJT4lIA0KICBjb21wbGV0ZShuZXN0aW5nKGRhdGUsIG5hbWUpLCBmaWxsID0gbGlzdChhdmdfcGxheWVycyA9IDAsIHBlYWsgPSAwKSkNCmBgYA0KDQpMZXQncyBoYXZlIGEgbG9vayBhdCB0aGUgZ2FtZXMgdGhlbXNlbHZlcw0KDQojIyBDb21tb24gZ2FtZXMgey50YWJzZXR9DQoNCiMjIyBUb3AgR2FtZXMNCg0KYGBge3J9DQpnYW1lcyAlPiUgDQogIGZpbHRlcihhdmdfcGxheWVycyA+IDApICU+JSANCiAgY291bnQobmFtZSwgc29ydCA9IFRSVUUpDQpgYGANCg0KIyMjIFBsb3QNCg0KYGBge3J9DQpnYW1lcyAlPiUgDQogIGZpbHRlcihhdmdfcGxheWVycyA+IDApICU+JSANCiAgY291bnQobmFtZSwgc29ydCA9IFRSVUUpICU+JSANCiAgZ2dwbG90KGFlcyhuKSkgKw0KICBnZW9tX2hpc3RvZ3JhbShiaW5zID0gMzApICsNCiAgbGFicyh5ID0gIkNvdW50IG9mIE1vbnRocyBpbiBkYXRhc2V0IiwNCiAgICAgICB4ID0gIk51bWJlciBvZiBUaXRsZXMiKQ0KYGBgDQoNCiMjIHstfQ0KDQpEaXNjb3ZlcmllczoNCg0KMS4gVGhlcmUgYXJlIHNvbWUgbm9uLVVURiBjaGFyYWN0ZXJzIGluIHRoZSBnYW1lIG5hbWVzLg0KDQoxLiBUaGVyZSBhcmUgMTI0OCBkaXN0aW5jdCBnYW1lIG5hbWVzLiANCg0KMS4gQWJvdXQgMjAwIG9mIHRoZSBnYW1lcyBhcHBlYXIgaW4gYWxsIDEwNCBtb250aHMgb2YgdGhlIHN0dWR5KD8/KQ0KDQoNCmBgYHtyfQ0KZ2FtZXMgJT4lDQogIGdyb3VwX2J5KGRhdGUpICU+JQ0KICBzdW1tYXJpc2UoZW5nYWdlbWVudCA9IHN1bShhdmdfcGxheWVycykpICU+JQ0KICBnZ3Bsb3QoYWVzKGRhdGUsIGVuZ2FnZW1lbnQpKSArDQogIGdlb21fbGluZSgpICsNCiAgc2NhbGVfeV9jb250aW51b3VzKGxhYmVscyA9IHNjYWxlczo6Y29tbWEpICsNCiAgc2NhbGVfeF9kYXRlKGRhdGVfYnJlYWtzID0gInllYXIiLA0KICAgICAgICAgICAgICAgZGF0ZV9sYWJlbHMgPSAiJVkiKSArDQogIGxhYnMoeCA9IE5VTEwsIHkgPSBOVUxMLCB0aXRsZSA9ICJTdGVhbSBFbmdhZ2VtZW50LCBTdW0gb2YgTW9udGhseSBBdmciLCANCiAgICAgICBjYXB0aW9uID0gcGFzdGUwKCJTb3VyY2U6IEthZ2dsZSIpKQ0KYGBgDQoNClRoZSBTaWQgTWVpZXIgc2VyaWVzOg0KDQpgYGB7cn0NCmdhbWVzICU+JQ0KICBmaWx0ZXIoc3RyX2RldGVjdChuYW1lLCAiU2lkIE1laWVyIikpICU+JQ0KICBtdXRhdGUobmFtZSA9IHN0cl9yZW1vdmUobmFtZSwgIlNpZCBNZWllcidzIENpdmlsaXphdGlvbiIpLA0KICAgICAgICAgbmFtZSA9IHN0cl9yZW1vdmUobmFtZSwgIlxcOiAiKSkgJT4lIA0KICBnZ3Bsb3QoYWVzKGRhdGUsIHBlYWssIGNvbG9yID0gbmFtZSkpICsNCiAgZ2VvbV9saW5lKCkgKw0KICBzY2FsZV9jb2xvcl9icmV3ZXIobmFtZSA9IE5VTEwsDQogICAgICAgICAgICAgICAgICAgIGRpcmVjdGlvbiA9IC0xLA0KICAgICAgICAgICAgICAgICAgICBwYWxldHRlID0gIkJyQkciKSArDQogIHNjYWxlX3lfY29udGludW91cyhsYWJlbHMgPSBzY2FsZXM6OmNvbW1hKSArDQogIHNjYWxlX3hfZGF0ZShkYXRlX2JyZWFrcyA9ICJ5ZWFyIiwNCiAgICAgICAgICAgICAgIGRhdGVfbGFiZWxzID0gIiVZIikgKw0KICBsYWJzKA0KICAgIHggPSBOVUxMLA0KICAgIHkgPSBOVUxMLA0KICAgIHRpdGxlID0gIlNpZCBNZWllcidzIENpdmlsaXphdGlvbiBQZWFrIEVuZ2FnZW1lbnQgb24gU3RlYW0iLA0KICAgIGNhcHRpb24gPSBwYXN0ZTAoIlNvdXJjZTogS2FnZ2xlIikNCiAgKSArDQogIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9IGMoMC44LDAuNzUpLA0KICAgICAgICBsZWdlbmQuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChjb2xvciA9ICJ3aGl0ZSIpKQ0KYGBgDQoNCg0KSSB3b25kZXIgaWYgdGhlIGFsbCBvZiB0aGUgZ2FtZSBlbmdhZ2VtZW50IGhhcyBhIHNlYXNvbmFsIHBlYWs/DQoNCg0KDQoNCg==</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2021_03_15_tidy_tuesday.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
