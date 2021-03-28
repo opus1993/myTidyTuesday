@@ -1,7 +1,7 @@
 ---
 title: "UN Votes"
 author: "Jim Gruman"
-date: "3/24/2021"
+date: "March 24, 2021"
 output:
   workflowr::wflow_html:
     toc: no
