@@ -1,0 +1,305 @@
+---
+title: "US Post Offices"
+author: "Jim Gruman"
+date: "April 13, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+# TidyTuesday this week: United States Post Offices
+
+Credit to Bob Rudis for sharing the idea of working with this dataset.
+
+The authors of the dataset are:
+
+Blevins, Cameron; Helbock, Richard W., 2021, ["US Post Offices",](https://doi.org/10.7910/DVN/NUKCNA)
+, Harvard Dataverse, V1, UNF:6:8ROmiI5/4qA8jHrt62PpyA== [fileUNF]
+
+
+```{r setup, warning=FALSE}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	cache.lazy = FALSE,
+	df_print = "paged",
+	dpi = 300,
+	tidy = "styler",
+	dev = "ragg_png",
+	autodep = TRUE
+)
+
+suppressPackageStartupMessages({
+library(tidyverse)
+
+library(lubridate)
+library(hrbrthemes)
+library(extrafont)
+
+library(ggthemes)
+library(historydata)
+library(gganimate)
+ })
+
+update_geom_font_defaults(font_rc_light)
+
+ggplot2::theme_set(hrbrthemes::theme_ipsum_rc() +
+            ggplot2::theme(plot.title.position = "plot",
+                           plot.caption.position = "plot"))
+
+```
+
+
+```{r load, message=FALSE}
+
+tt <- tidytuesdayR::tt_load("2021-04-13")
+
+post_offices <- tt$post_offices %>%
+  select(
+    name,
+    state,
+    county1,
+    established,
+    discontinued,
+    latitude,
+    longitude
+    ) %>% 
+  mutate(discontinued = case_when(
+    discontinued == 997 ~ 1997,
+    discontinued == 18323 ~ 1832,
+    discontinued == 18903 ~ 1890,
+    discontinued == 19093 ~ 1909,
+    discontinued == 19173 ~ 1917,
+    discontinued == 19223 ~ 1922,
+    discontinued == 4859 ~ 1859,
+    TRUE ~ discontinued),
+    established = if_else(established < 200,
+                               established*10,
+                               established),
+    state = if_else(state == "MI/OH","OH",state)) 
+```
+
+```{r post_office_years}
+post_office_years <- post_offices %>%
+  select(
+    name,
+    state,
+    established,
+    discontinued
+    ) %>% 
+  replace_na(list(discontinued = 2003)) %>% 
+  filter(!is.na(established)) %>%   
+  mutate(year = map2(established, discontinued, seq)) %>% 
+  unnest(year)
+```
+
+```{r states}
+states <- tibble(state = state.abb, 
+                 state.division,
+                 state.area) %>% 
+  bind_rows(tibble(
+    state = "DC",
+    state.division = "South Atlantic",
+    state.area = 68.3
+  ))
+
+post_office_years %>% 
+  inner_join(states) %>% 
+  count(year,
+        region = state.division,
+        name = "n_post_offices") %>% 
+  ggplot(aes(year, n_post_offices, fill = region)) +
+  geom_area() +
+  scale_y_continuous(labels = scales::comma,
+                     position = "right") +
+  scale_fill_viridis_d(option = "inferno",
+                       direction = -1) +
+  labs(y = NULL, x = NULL, fill = NULL,
+       title = "Number of Active US Post Offices",
+       caption = "Data: Blevins, Cameron; Helbock, Richard W., 2021") +
+  theme(legend.position = c(0.1, 0.5),
+        legend.background = element_rect(color = "white"))
+  
+```
+
+```{r regions}
+post_office_years %>% 
+  inner_join(states) %>% 
+  count(year,
+        region = state.division,
+        name = "n_post_offices") %>% 
+  mutate(region = fct_reorder(region, -n_post_offices, sum)) %>% 
+  ggplot(aes(year, n_post_offices, fill = region)) +
+  geom_area(show.legend = FALSE) +
+  geom_text(data = states %>% 
+               group_by(region = state.division) %>% 
+               summarize(area = sum(state.area)),
+            aes(label = paste0(area," sq. miles"),
+                x = 1700,
+                y = 14000
+            )) +
+  scale_y_continuous(labels = scales::comma,
+                     position = "right") +
+  scale_fill_viridis_d(option = "inferno",
+                       direction = -1
+                       ) +
+  facet_wrap(~ region) +
+  labs(y = NULL, x = NULL, fill = NULL,
+       title = "Number of Active US Post Offices by Region",
+       caption = "Data: Blevins, Cameron; Helbock, Richard W., 2021") 
+```
+
+
+```{r closures}
+post_offices %>% 
+  inner_join(states) %>% 
+  filter(!is.na(discontinued)) %>% 
+  count(region = state.division, 
+        decade = 10 * (discontinued %/% 10),
+        name = "n_closures") %>% 
+  ggplot(aes(decade, -n_closures, fill = region)) +
+  geom_area(show.legend = FALSE,
+            color = "black") +
+  scale_fill_viridis_d(option = "inferno",
+                       direction = -1
+                       ) +
+  facet_wrap(~region) +
+  labs(title = "US Post Office Closures by Decade")
+  
+```
+
+```{r openings}
+post_offices %>% 
+  inner_join(states) %>% 
+  count(region = state.division, 
+        decade = 10 * (established %/% 10),
+        name = "n_opening") %>% 
+  filter(decade < 2000) %>% 
+  ggplot(aes(decade, n_opening, fill = region)) +
+  geom_area(show.legend = FALSE,
+            color = "black") +
+  scale_fill_viridis_d(option = "inferno",
+                       direction = -1
+                       ) +
+  facet_wrap(~region) +
+  labs(title = "US Post Office Openings by Decade")
+  
+```
+
+```{r combo}
+post_offices %>% 
+  inner_join(states) %>% 
+  count(region = state.division, 
+        decade = 10 * (established %/% 10),
+        name = "n_opening") %>% 
+  complete(region, decade, fill = list(n_opening = 0)) %>% 
+  inner_join(
+    post_offices %>% 
+      inner_join(states) %>% 
+      filter(!is.na(discontinued)) %>% 
+      count(region = state.division, 
+            decade = 10 * (discontinued %/% 10),
+            name = "n_closures") %>% 
+      complete(region, decade, fill = list(n_closures = 0)),
+    by = c("region", "decade")) %>% 
+  group_by(region) %>% 
+  mutate(total = cumsum(n_opening - n_closures)) %>% 
+  ggplot() +
+  geom_col(aes(decade, n_opening, fill = region),
+    show.legend = FALSE, color = "black") +
+  geom_col(aes(decade, -n_closures, fill = region),
+    show.legend = FALSE, color = "black") +
+  geom_line(aes(decade, total),
+    show.legend = FALSE, color = "black") +
+  scale_fill_viridis_d(option = "inferno",
+                       direction = -1) +
+  annotate("label",
+           x = 1980,
+           y = 10000,
+           label = "Net Total") +
+  facet_wrap(~region) +
+  labs(title = "US Post Office Openings and Closings by Decade",
+       y = NULL, x = NULL,
+       caption = "Data: Blevins, Cameron; Helbock, Richard W., 2021") 
+```
+
+```{r y2k}
+states_map <- map_data("state") %>% 
+  as_tibble() %>% 
+  mutate(state = state.abb[match(region, str_to_lower(state.name))]) %>% 
+  replace_na(list(state = "DC"))
+
+post_office_years %>%
+  filter(year == 2000) %>%
+  count(state, sort  = TRUE) %>%
+  inner_join(
+    us_state_populations %>%
+      filter(year == 2000) %>%
+      mutate(state = state.abb[match(state, state.name)]) %>%
+      replace_na(list(state = "DC")),
+    by = "state"
+  ) %>%
+  mutate(post_office_density = n / (population / 1e6)) %>%
+  inner_join(states_map) %>%
+  ggplot(aes(long, lat, group = group, fill = post_office_density)) +
+  geom_polygon(color = "gray20") +
+  scale_fill_gradient2(low = "yellow",
+                       high = "darkblue",
+                       mid = "orange",
+                       midpoint = 200) +
+  theme_map() +
+  labs(title = "US Post Offices per Million Population in 2000",
+       fill = NULL)
+  
+```
+
+I wonder whether the West Virginia post offices were originally shown as addressed in Virginia?
+
+```{r animation}
+post_offices %>% 
+  inner_join(states) %>% 
+  count(state, 
+        decade = 10 * (established %/% 10),
+        name = "n_opening") %>% 
+  complete(state, decade, fill = list(n_opening = 0)) %>% 
+  inner_join(
+    post_offices %>% 
+      inner_join(states) %>% 
+      filter(!is.na(discontinued)) %>% 
+      count(state,
+            decade = 10 * (discontinued %/% 10),
+            name = "n_closures") %>% 
+      complete(state, decade, fill = list(n_closures = 0)),
+    by = c("state", "decade")) %>% 
+  group_by(state) %>% 
+  mutate(total = cumsum(n_opening - n_closures)) %>% 
+  inner_join(
+    us_state_populations %>%
+      mutate(state = state.abb[match(state, state.name)]) %>%
+      replace_na(list(state = "DC")),
+    by = c("decade" = "year", "state")
+  ) %>%
+  filter(population > 10000) %>% 
+  right_join(states_map, by = "state") %>%
+  ggplot(aes(long, lat, group = group, fill = total)) +
+  geom_polygon(color = "gray20") +
+  scale_fill_gradient2(low = "yellow",
+                       high = "darkblue",
+                       mid = "orange",
+                       midpoint = 1000) +
+  transition_manual(decade) +
+  theme_map() +
+  labs(title = "US Post Offices in { current_frame }",
+       fill = NULL)
+ 
+
+```
+
