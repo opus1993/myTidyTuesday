@@ -264,7 +264,7 @@ post_office_years %>%
 I wonder whether the West Virginia post offices were originally shown as addressed in Virginia?
 
 ```{r animation}
-post_offices %>% 
+anim <- post_offices %>% 
   inner_join(states) %>% 
   count(state, 
         decade = 10 * (established %/% 10),
@@ -301,5 +301,16 @@ post_offices %>%
        fill = NULL)
  
 
+```
+
+
+
+```{r saver}
+anim_save(filename = "postoffice.gif",
+          path = here::here("docs","assets"),
+          animation = anim)
+```
+```{r}
+knitr::include_graphics("assets/postoffice.gif", error = FALSE)
 ```
 
