@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 	echo = TRUE,
 	message = FALSE,
 	warning = FALSE,
-	cache = FALSE,
+	cache = TRUE,
 	cache.lazy = FALSE,
 	df_print = "paged",
 	dpi = 300,
@@ -42,11 +42,14 @@ library(tidyverse)
 
 library(lubridate)
 library(hrbrthemes)
-library(extrafont)
 
 library(ggthemes)
 library(historydata)
 library(gganimate)
+  
+library(tidymodels)
+library(themis)
+library(textrecipes)
  })
 
 update_geom_font_defaults(font_rc_light)
@@ -84,7 +87,10 @@ post_offices <- tt$post_offices %>%
     established = if_else(established < 200,
                                established*10,
                                established),
-    state = if_else(state == "MI/OH","OH",state)) 
+    state = case_when(state == "MI/OH"~"OH",
+                      state == "VAy" ~ "VA",
+                      TRUE ~state)
+    ) 
 ```
 
 ```{r post_office_years}
@@ -139,13 +145,15 @@ post_office_years %>%
   mutate(region = fct_reorder(region, -n_post_offices, sum)) %>% 
   ggplot(aes(year, n_post_offices, fill = region)) +
   geom_area(show.legend = FALSE) +
-  geom_text(data = states %>% 
+  geom_label(data = states %>% 
                group_by(region = state.division) %>% 
                summarize(area = sum(state.area)),
-            aes(label = paste0(area," sq. miles"),
-                x = 1700,
+            aes(label = paste0(scales::comma(area)," sq. miles"),
+                x = 1750,
                 y = 14000
-            )) +
+            ),
+            fill = "white"
+            ) +
   scale_y_continuous(labels = scales::comma,
                      position = "right") +
   scale_fill_viridis_d(option = "inferno",
@@ -168,6 +176,7 @@ post_offices %>%
   ggplot(aes(decade, -n_closures, fill = region)) +
   geom_area(show.legend = FALSE,
             color = "black") +
+  scale_x_continuous(n.breaks = 3) +
   scale_fill_viridis_d(option = "inferno",
                        direction = -1
                        ) +
@@ -186,6 +195,7 @@ post_offices %>%
   ggplot(aes(decade, n_opening, fill = region)) +
   geom_area(show.legend = FALSE,
             color = "black") +
+  scale_x_continuous(n.breaks = 3) +
   scale_fill_viridis_d(option = "inferno",
                        direction = -1
                        ) +
@@ -219,10 +229,11 @@ post_offices %>%
     show.legend = FALSE, color = "black") +
   geom_line(aes(decade, total),
     show.legend = FALSE, color = "black") +
+  scale_x_continuous(n.breaks = 3) +
   scale_fill_viridis_d(option = "inferno",
                        direction = -1) +
   annotate("label",
-           x = 1980,
+           x = 1950,
            y = 10000,
            label = "Net Total") +
   facet_wrap(~region) +
@@ -303,14 +314,168 @@ anim <- post_offices %>%
 
 ```
 
-
-
 ```{r saver}
 anim_save(filename = "postoffice.gif",
           path = here::here("docs","assets"),
           animation = anim)
 ```
-```{r}
+```{r giffer}
 knitr::include_graphics("assets/postoffice.gif", error = FALSE)
 ```
 
+## A subtext predictive model
+
+We will build on Julia Silge's work posted [here](https://juliasilge.com/blog/hawaii-post-offices/)
+
+Our modeling goal is to predict whether a post office is in Hawaii, where many names of the post offices are unique.
+
+We can start by loading the tidymodels metapackage, splitting our data into training and testing sets, and creating cross-validation samples.
+
+```{r po_split}
+po_split <- post_offices %>%
+  mutate(state = case_when(
+    state == "HI" ~ "Hawaii",
+    TRUE ~ "Other"
+  )) %>%
+  select(name, state) %>%
+  initial_split(strata = state)
+
+po_train <- training(po_split)
+po_test <- testing(po_split)
+
+set.seed(234)
+po_folds <- vfold_cv(po_train, strata = state)
+
+```
+
+Next, let’s create our feature engineering recipe. Let’s tokenize using byte pair encoding; this is an algorithm that iteratively merges frequently occurring subword pairs and gets us information in between character-level and word-level. 
+
+```{r po_rec}
+po_rec <- recipe(state ~ name, data = po_train) %>%
+  step_tokenize(name,
+    engine = "tokenizers.bpe",
+    training_options = list(vocab_size = 500)
+  ) %>%
+  step_tokenfilter(name, max_tokens = tune()) %>%
+  step_tf(name) %>%
+  step_normalize(all_predictors()) %>%
+  step_smote(state)
+
+```
+
+We also are upsampling this very imbalanced data set via `step_smote()` from the `themis` package. The results of this data preprocessing show us the subword features.
+
+Next let’s create a model specification for a linear support vector machine. This is a newer model in parsnip, currently in the development version on GitHub. Linear SVMs are often a good starting choice for text models.
+
+```{r svm_spec}
+svm_spec <- svm_linear() %>%
+  set_mode("classification") %>%
+  set_engine("LiblineaR")
+```
+
+Let’s put these together in a workflow.
+
+```{r po_wf}
+po_wf <- workflow() %>%
+  add_recipe(po_rec) %>%
+  add_model(svm_spec)
+```
+
+Let's explore tuning levels of token filtering between 80 and 400.
+
+```{r po_params}
+po_params <- parameters(po_wf) %>% 
+  update(max_tokens = max_tokens(c(80, 500)))
+```
+
+
+Now let’s fit this workflow (that combines feature engineering with the SVM model) to the resamples we created earlier. The linear SVM model does not support class probabilities, so we need to set a custom `metric_set()` that only includes metrics for hard class probabilities.
+
+```{r tune_grid}
+doParallel::registerDoParallel()
+
+po_rs <- 
+  tune_grid(
+  po_wf,
+  po_folds,
+  grid = po_params %>% grid_regular(levels = 4),
+  metrics = metric_set(accuracy, sens, spec)
+)
+```
+
+How did we do?
+
+```{r tune_grid_plot}
+
+autoplot(po_rs)
+```
+
+Not too bad, although you can tell we are doing better on one class than the other as we add more model features. Let's pick the one with the best specificity.
+
+```{r show_best}
+show_best(po_rs, metric = "sens")
+```
+
+### Fit and evaluate final model
+
+Next, let’s fit our model on last time to the whole training set at once (rather than resampled data) and evaluate on the testing set. This is the first time we have touched the testing set.
+
+```{r final_wf}
+final_wf <- po_wf %>% 
+  finalize_workflow(
+    select_best(po_rs, metric = "sens")
+  )
+ 
+final_fit <- last_fit(
+  final_wf,
+  po_split,
+  metrics = metric_set(accuracy, sens, spec)
+)
+
+collect_metrics(final_fit)
+```
+
+Our performance on the testing set is about the same as what we found with our resampled data, which is good.
+
+We can explore how the model is doing for both the positive and negative classes with a confusion matrix.
+
+```{r collect_predictions}
+collect_predictions(final_fit) %>%
+  conf_mat(state, .pred_class)
+```
+
+This just really emphasizes what an imbalanced problem this is, but we can see how well we are doing for the post offices in Hawaii vs. the rest of the country.
+
+```{r po_fit}
+po_fit <- pull_workflow_fit(final_fit$.workflow[[1]])
+
+liblinear_obj <- po_fit$fit$W
+
+liblinear_df <- tibble(
+  term = colnames(liblinear_obj),
+  estimate = liblinear_obj[1, ]
+)
+
+liblinear_df %>%
+  filter(term != "Bias") %>%
+  group_by(estimate > 0) %>%
+  slice_max(abs(estimate), n = 15) %>%
+  ungroup() %>%
+  mutate(term = str_remove(term, "tf_name_")) %>%
+  ggplot(aes(estimate, fct_reorder(term, estimate), fill = estimate > 0)) +
+  geom_col(alpha = 0.6) +
+  geom_text(aes(label = term), 
+            hjust = 1) +
+  scale_fill_discrete(labels = c("More from Hawaii", "Less from Hawaii")) +
+  scale_y_discrete(breaks = NULL) +
+  theme(axis.text.y = element_blank()) +
+  labs(
+    x = "Coefficient from linear SVM",
+    y = NULL,
+    fill = NULL,
+    title = "Which subwords in a US Post Office names are used more in Hawaii?",
+    subtitle = "Subwords like A, _H, U, and O are the strongest predictors of a post office being in Hawaii"
+  )
+```
+
+Credit to Julia Silge for introducing `LiblineaR` and `tokenizers.bpe`, and the predictive workflow shown here.
