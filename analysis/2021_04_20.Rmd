@@ -1,0 +1,391 @@
+---
+title: "Netflix Titles"
+author: "Jim Gruman"
+date: "April 20, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+knitr::include_graphics(here::here("docs","assets","netflix.png"), error = FALSE)
+```
+
+The #TidyTuesday data this week is Netflix's streaming catalog titles with descriptions, genre classifications, actors, directors, dates, and other metadata.
+
+# Introduction
+
+Prior to writing this post, I want to acknowledge that I benefited from the guidance and work of the following:
+
+1. David Robinson's Youtube screencast and code at the [repo here](https://github.com/dgrtwo/data-screencasts/blob/master/2021_04_20_netflix_titles.Rmd).
+
+1. Julia Silge's [Which #TidyTuesday Netflix titles are movies and which are TV shows?](https://juliasilge.com/blog/netflix-titles/)
+
+1. Mark H White, PhD's blog post [EXPLORING THE STAR WARS "PREQUEL RENAISSANCE" USING TIDYMODELS AND WORKFLOWSETS](https://www.markhw.com/blog/prequel-renaissance)
+
+1. Max Kuhn and Julia Silge's in-progrss book Tidy Modeling With R [Chapter 15: Screening Many Models](https://www.tmwr.org/workflow-sets.html)
+
+My goal is to explore and classify using the `tidymodels` framework and `workflowsets` to predict the genre of the titles on the streaming services. Dr. Silge hinted in her broadcast that a multi-class prediction would be possible with a neural net. Let's explore that path.
+
+First, let's load libraries and set a ggplot theme:
+
+```{r setup, warning=FALSE}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	cache.lazy = FALSE,
+	df_print = "paged",
+	dpi = 300,
+	tidy = "styler",
+	dev = "ragg_png",
+	autodep = TRUE
+)
+
+suppressPackageStartupMessages({
+library(tidyverse)
+
+library(lubridate)
+library(hrbrthemes)
+
+library(tidytext)
+
+library(tidymodels)
+library(themis)
+library(textrecipes)
+  
+
+library(discrim) 
+  
+
+library(finetune)
+library(vip)
+
+library(workflowsets)
+library(doParallel)
+  
+library(fastshap)
+ })
+
+update_geom_font_defaults(font_rc_light)
+
+ggplot2::theme_set(hrbrthemes::theme_ipsum_rc() +
+            ggplot2::theme(plot.title.position = "plot",
+                           plot.caption.position = "plot"))
+
+```
+
+Let's load the data and clean up the duration movie field and date_added fields.
+
+```{r load, message=FALSE}
+
+netflix_titles <-
+  tidytuesdayR::tt_load("2021-04-20")$netflix_titles %>%
+  separate(duration,
+           c("duration", "duration_units"),
+           sep = " ",
+           convert = TRUE) %>%
+  mutate(date_added = mdy(date_added),
+         year_added = year(date_added)) 
+
+```
+
+The dataset includes `r scales::comma(nrow(netflix_titles))` titles, both as movies and TV shows. Other summary details of the dataset, as provided by `skimr`
+
+```{r}
+skimr::skim(netflix_titles)
+```
+
+The `listed_in` character field associates individual titles with one or more genres. When separated out, the count of titles in each genre includes:
+
+```{r}
+netflix_titles %>%
+  separate_rows(listed_in, sep = ", ") %>% 
+  count(listed_in)
+```
+
+Let's take a quick peek at the median time duration of only the movies for each genre. Note again that the same title can often be counted in more than one genre grouping.
+
+```{r netflix_titles}
+netflix_titles %>%
+  separate_rows(listed_in, sep = ", ") %>%
+  group_by(type, genre = listed_in) %>%
+  summarize(
+    n = n(),
+    median_duration = median(duration),
+    .groups = "drop"
+  ) %>%
+  mutate(genre = glue::glue("{ genre } ({ n })")) %>%
+  filter(type == "Movie") %>%
+  filter(genre != "Movies") %>%
+  mutate(genre = fct_reorder(genre, median_duration)) %>%
+  ggplot(aes(median_duration, genre)) +
+  geom_col(fill = "red", show.legend = FALSE) +
+  geom_text(
+    aes(x = median_duration - 3,
+        label = median_duration),
+        color = "white") +
+  labs(x = "Media Streaming Netflix Movie Duration (Minutes)",
+           y = NULL
+      )
+```
+
+The median of Netflix titles labeled as Documentaries and Stand-Up Comedy movies are shorter in duration than Dramas and Classic Movies.  
+
+# Feature Engineering
+
+Given the description, cast members, director, and release_year, can we build a useful model to predict the genre?
+
+Unbalanced multi-class problems are especially challenging. And in the Netflix dataset, most movies belong to two or three genres at the same time. To make this problem just a little less complex, we will bundle some genre's into logical groupings. I am also only using the first `listed_in` genre, as the primary. The result is 20 genres.
+
+```{r}
+netflix_df <- netflix_titles %>% 
+  select(genre = listed_in, 
+         show_id, 
+         description, 
+         cast, 
+         director, 
+         release_year) %>% 
+  separate_rows(genre, sep = ", ") %>% 
+  mutate(genre = case_when(
+        str_detect(genre, "International") ~ "International",
+        str_detect(genre, "Romantic") ~ "Romantic",
+        str_detect(genre, "Drama") ~ "Drama",
+        str_detect(genre, "Action") ~ "Action",
+        str_detect(genre, "Comed") ~ "Comedy",
+        str_detect(genre, "Cult") ~ "Cult",
+        str_detect(genre, "Thrill") ~ "Thriller",
+        str_detect(genre, "Teen|Children|Kids") ~ "Children",
+        str_detect(genre, "Science|Docu") ~ "Documentary",
+        str_detect(genre, "Anime") ~ "Anime",
+        str_detect(genre, "Horror") ~ "Horror",
+        str_detect(genre, "Independent") ~ "Independent",
+        str_detect(genre, "Crime") ~ "Crime",
+        str_detect(genre, "Music") ~ "Music",
+        str_detect(genre, "British") ~ "British",
+        str_detect(genre, "Reality") ~ "Reality",
+        str_detect(genre, "Classic") ~ "Classic",
+        str_detect(genre, "Myster") ~ "Mysteries",
+        str_detect(genre, "Faith") ~ "Faith",
+        TRUE ~ "Other"
+      )) %>% 
+    group_by(show_id) %>% 
+    mutate(position = row_number()) %>% 
+    ungroup() %>% 
+    pivot_wider(names_from = position,
+                values_from = genre,
+                names_prefix = "genre") %>% 
+    mutate(genre1 = as.factor(genre1))
+
+```
+
+Let’s split the data using the default 3:1 ratio of training-to-test and resample the training set using 10-fold cross-validation. V-fold cross-validation randomly splits the data into V groups (10) of roughly equal size (called "folds"). A resample of the analysis data consists of V-1 (9) of the folds while the assessment set contains the final fold. In basic V-fold cross-validation (i.e. no repeats), the number of resamples is equal to V.
+
+The strata argument causes the random sampling to be conducted within the stratification variable. 
+
+```{r}
+set.seed(1501)
+netflix_split <- initial_split(netflix_df, strata = genre1)
+netflix_train <- training(netflix_split)
+netflix_test  <- testing(netflix_split)
+
+netflix_folds <- vfold_cv(netflix_train,
+                          v = 5, strata = genre1)
+```
+
+Our dataset will be pre-processed through two different recipes that engineer text features by tokenizing the description, cast, and the director fields.
+
+The first recipe applies filters to use the words, cast members, and director with the 30 highest term frequencies after removing stop words and stemming.
+
+The second filter the description words to remove stopwords and then builds 25 word embeddings with [Glove Twitter 27B](https://www.aclweb.org/anthology/D14-1162/). Learn more about word embeddings and pre-trained model transfer learning [here](https://www.youtube.com/watch?v=oUpuABKoElw). The recipe goes on to hash the cast member and director features into numeric variables with the hashing trick.
+
+Both models are centered and scaled. There are no missing values. With a big multi-class challenge, we need to take action to balance the classes. `downsample` discards members of the majority classes (in the training set only).
+
+```{r}
+smote_rec <- recipe(genre1 ~ description + cast + director, data = netflix_train) %>%
+  step_tokenize(description) %>%
+  step_stopwords(description) %>%
+  step_stem(description) %>% 
+  step_tokenfilter(description, max_tokens = 30) %>% 
+  step_tokenize(cast,
+                token = "regex",
+                options = list(pattern = ", ")) %>%
+  step_tokenfilter(cast, max_tokens = 30) %>% 
+  step_tokenize(director,
+                token = "regex",
+                options = list(pattern = ", ")) %>%
+  step_tokenfilter(director, max_tokens = 30) %>% 
+  step_tf(description) %>%
+  step_tf(cast) %>%
+  step_tf(director) %>% 
+  step_smote(genre1) %>% 
+  step_normalize(all_numeric())
+
+embeddings_rec <- recipe(genre1 ~ description + cast + director, data = netflix_train) %>% 
+   step_tokenize(description) %>% 
+   step_stopwords(description) %>% 
+   textrecipes::step_word_embeddings(description,
+                                     embeddings = textdata::embedding_glove27b()) %>% 
+   step_tokenize(cast,
+                 token = "regex",
+                 options = list(pattern = ", ")) %>% 
+   step_texthash(cast, num_terms = 50) %>% 
+   step_tokenize(director,
+                 token = "regex",
+                 options = list(pattern = ", ")) %>% 
+   step_texthash(director, num_terms = 50) %>% 
+   step_smote(genre1) %>% 
+   step_normalize(all_numeric()) 
+  
+```
+
+A look at the features in the fully pre-processed, "filtered", training set:
+
+```{r}
+smote_rec %>% 
+  prep() %>% 
+  bake(new_data = NULL) %>% 
+  glimpse()
+```
+
+And a look at the features of the "embeddings" recipe:
+
+```{r}
+embeddings_rec %>% 
+  prep() %>% 
+  bake(new_data = NULL) %>% 
+  glimpse()
+```
+
+For the models themselves, we use the the `parsnip` package to create sets of model specifications.  All are setup for classification. For this demonstration, I am interested in the behavior of the SVM Liblinear engine and the naive Bayes engine.
+
+```{r}
+ranger_spec <-
+  rand_forest(trees = 1000) %>%
+  set_mode("classification") %>%
+  set_engine("ranger")
+
+nb_spec <- naive_Bayes() %>%
+  set_mode("classification") %>%
+  set_engine("naivebayes")
+
+```
+
+## Workflowsets 
+
+This is where the cool part comes in: We now define a “workflow set.” We apply `cross = TRUE` to look at all combinations of recipes and models. 
+
+```{r}
+(wfs <- 
+   bind_rows(workflow_set(
+              preproc = list(smote = smote_rec, 
+                             embeddings = embeddings_rec),
+              models = list(nb_spec, ranger_spec),
+              cross = TRUE)
+             )
+)
+```
+
+And we see we have our four different workflows set up. 
+
+## Tuning and Cross Validation
+
+The engines chosen here require no tuning. We will load register a parallel backend to speed the computations across the cross validation folds.
+
+```{r}
+all_cores <- parallel::detectCores(logical = FALSE)
+
+cl <- makePSOCKcluster(all_cores)
+doParallel::registerDoParallel(cl)
+
+system.time(
+
+      cv_res <- wfs %>%
+        workflow_map(fn = "fit_resamples",
+                     seed = 2021,
+                     resamples = netflix_folds,
+                     control = control_resamples(save_pred = TRUE),
+                     verbose = TRUE)
+)
+
+doParallel::stopImplicitCluster()
+
+```
+
+## Compare the models
+
+We can then look at the results. What are the top workflows?
+
+```{r}
+cv_res %>% 
+  rank_results() %>% 
+  filter(.metric == "roc_auc") %>% 
+  select(wflow_id, roc_auc = mean, rank)
+
+autoplot(cv_res, 
+         rank_metric = "roc_auc", 
+         metric = "roc_auc",
+         select_best = TRUE)
+```
+
+The embeddings pre-processor gives a big boost in performance. Bayes is fast, but it falls apart because the model assumes independence of the features and it does not handle interactions.
+
+We can look at ROC curves for the set of 5 cross-validation folds of the best model:
+
+```{r}
+cv_res %>% 
+  pull_workflow_set_result("embeddings_rand_forest") %>% 
+  collect_predictions() %>% 
+  group_by(id) %>%
+  roc_curve(truth = genre1, .pred_Action:.pred_Thriller) %>%
+  autoplot() +
+  labs(
+    color = NULL,
+    title = "ROC curve for Netflix Movie Genre1 Random Forest Predictor",
+    subtitle = "Each resample fold is shown in a different color"
+  )
+```
+
+This model predicts Documentaries and International films very well. On the other extreme, Romantic Movies and "Other" are not predicted well in every cross validation fold.
+
+We can also create a confusion matrix from the resamples using `conf_mat_resampled()`., which computes a separate confusion matrix for each resample then averages the cell counts.
+
+```{r}
+cv_res %>% 
+  pull_workflow_set_result("embeddings_rand_forest") %>% 
+  conf_mat_resampled(tidy = FALSE) 
+```
+
+## Select the best model
+
+```{r}
+best_results <- cv_res %>% 
+  pull_workflow_set_result("embeddings_rand_forest") %>% 
+  select_best(metric = "roc_auc")
+
+test_results <- cv_res %>% 
+  pull_workflow("embeddings_rand_forest") %>% 
+  finalize_workflow(best_results) %>% 
+  last_fit(split = netflix_split)
+
+```
+
+The test results show:
+
+```{r}
+collect_metrics(test_results)
+
+```
+
+This is a good test result, as the model run on unseen data delivers performance comparable to the training figures. This model does not over-fit the training data.
+
+At some later date, I'd like to explore how to extract importance scores from the embeddings.
+
+
