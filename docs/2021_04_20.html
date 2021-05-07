@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2021-04-20" />
+
+<title>Netflix Titles</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">
+    <span class="fas fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Netflix Titles</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">April 20, 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-05-07
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree19e25128ec9be2e8b85f9318abc9ec1322cc3b5ftargetblank19e2512a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/19e25128ec9be2e8b85f9318abc9ec1322cc3b5f" target="_blank">19e2512</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree19e25128ec9be2e8b85f9318abc9ec1322cc3b5ftargetblank19e2512a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/19e25128ec9be2e8b85f9318abc9ec1322cc3b5f" target="_blank">19e2512</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/rsconnect/
+    Ignored:    data/03/
+    Ignored:    data/lab_51_torch_tabnet/
+    Ignored:    fonts/
+    Ignored:    rosm.cache/
+
+Untracked files:
+    Untracked:  analysis/.vscode/
+    Untracked:  analysis/2021_04_20_tidy_tuesday.Rmd
+    Untracked:  analysis/2021_04_20_tidy_tuesday_cache/
+
+Unstaged changes:
+    Modified:   analysis/BackboneWatershed.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2021_04_20.Rmd</code>) and HTML (<code>docs/2021_04_20.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/19e25128ec9be2e8b85f9318abc9ec1322cc3b5f/analysis/2021_04_20.Rmd" target="_blank">19e2512</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-05-07
+</td>
+<td>
+wflow_publish(“analysis/2021_04_20.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>knitr::include_graphics(here::here(&quot;docs&quot;,&quot;assets&quot;,&quot;netflix.png&quot;), error = FALSE)</code></pre>
+<p><img src="D:/myTidyTuesday/docs/assets/netflix.png" width="70" style="display: block; margin: auto;" /></p>
+<p>The #TidyTuesday data this week is Netflix’s streaming catalog titles with descriptions, genre classifications, actors, directors, dates, and other metadata.</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Prior to writing this post, I want to acknowledge that I benefited from the guidance and work of the following:</p>
+<ol style="list-style-type: decimal">
+<li><p>David Robinson’s Youtube screencast and code at the <a href="https://github.com/dgrtwo/data-screencasts/blob/master/2021_04_20_netflix_titles.Rmd">repo here</a>.</p></li>
+<li><p>Julia Silge’s <a href="https://juliasilge.com/blog/netflix-titles/">Which #TidyTuesday Netflix titles are movies and which are TV shows?</a></p></li>
+<li><p>Mark H White, PhD’s blog post <a href="https://www.markhw.com/blog/prequel-renaissance">EXPLORING THE STAR WARS “PREQUEL RENAISSANCE” USING TIDYMODELS AND WORKFLOWSETS</a></p></li>
+<li><p>Max Kuhn and Julia Silge’s in-progrss book Tidy Modeling With R <a href="https://www.tmwr.org/workflow-sets.html">Chapter 15: Screening Many Models</a></p></li>
+</ol>
+<p>My goal is to explore and classify using the <code>tidymodels</code> framework and <code>workflowsets</code> to predict the genre of the titles on the streaming services. Dr. Silge hinted in her broadcast that a multi-class prediction would be possible with a neural net. Let’s explore that path.</p>
+<p>First, let’s load libraries and set a ggplot theme:</p>
+<pre class="r"><code>knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    cache = FALSE,
+    cache.lazy = FALSE,
+    df_print = &quot;paged&quot;,
+    dpi = 300,
+    tidy = &quot;styler&quot;,
+    dev = &quot;ragg_png&quot;,
+    autodep = TRUE
+)
+
+suppressPackageStartupMessages({
+library(tidyverse)
+
+library(lubridate)
+library(hrbrthemes)
+
+library(tidytext)
+
+library(tidymodels)
+library(themis)
+library(textrecipes)
+  
+
+library(discrim) 
+  
+
+library(finetune)
+library(vip)
+
+library(workflowsets)
+library(doParallel)
+  
+library(fastshap)
+ })
+
+update_geom_font_defaults(font_rc_light)
+
+ggplot2::theme_set(hrbrthemes::theme_ipsum_rc() +
+            ggplot2::theme(plot.title.position = &quot;plot&quot;,
+                           plot.caption.position = &quot;plot&quot;))</code></pre>
+<p>Let’s load the data and clean up the duration movie field and date_added fields.</p>
+<pre class="r"><code>netflix_titles &lt;-
+  tidytuesdayR::tt_load(&quot;2021-04-20&quot;)$netflix_titles %&gt;%
+  separate(duration,
+    c(&quot;duration&quot;, &quot;duration_units&quot;),
+    sep = &quot; &quot;,
+    convert = TRUE
+  ) %&gt;%
+  mutate(
+    date_added = mdy(date_added),
+    year_added = year(date_added)
+  )</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `netflix_titles.csv`</code></pre>
+<p>The dataset includes 7,787 titles, both as movies and TV shows. Other summary details of the dataset, as provided by <code>skimr</code></p>
+<pre class="r"><code>skimr::skim(netflix_titles)</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">netflix_titles</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">7787</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">14</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">10</td>
+</tr>
+<tr class="odd">
+<td align="left">Date</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">3</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">show_id</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">7787</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">type</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">5</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">title</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">1</td>
+<td align="right">104</td>
+<td align="right">0</td>
+<td align="right">7787</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">director</td>
+<td align="right">2389</td>
+<td align="right">0.69</td>
+<td align="right">2</td>
+<td align="right">208</td>
+<td align="right">0</td>
+<td align="right">4049</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">cast</td>
+<td align="right">718</td>
+<td align="right">0.91</td>
+<td align="right">3</td>
+<td align="right">771</td>
+<td align="right">0</td>
+<td align="right">6831</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">country</td>
+<td align="right">507</td>
+<td align="right">0.93</td>
+<td align="right">4</td>
+<td align="right">123</td>
+<td align="right">0</td>
+<td align="right">681</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">rating</td>
+<td align="right">7</td>
+<td align="right">1.00</td>
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">14</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">duration_units</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">3</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">listed_in</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">6</td>
+<td align="right">79</td>
+<td align="right">0</td>
+<td align="right">492</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">description</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">61</td>
+<td align="right">248</td>
+<td align="right">0</td>
+<td align="right">7769</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: Date</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">date_added</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="left">2008-01-01</td>
+<td align="left">2021-01-16</td>
+<td align="left">2019-03-08</td>
+<td align="right">1512</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">release_year</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2013.93</td>
+<td align="right">8.76</td>
+<td align="right">1925</td>
+<td align="right">2013</td>
+<td align="right">2017</td>
+<td align="right">2018</td>
+<td align="right">2021</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">duration</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">69.12</td>
+<td align="right">50.95</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">88</td>
+<td align="right">106</td>
+<td align="right">312</td>
+<td align="left">▆▇▂▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">year_added</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">2018.49</td>
+<td align="right">1.39</td>
+<td align="right">2008</td>
+<td align="right">2018</td>
+<td align="right">2019</td>
+<td align="right">2020</td>
+<td align="right">2021</td>
+<td align="left">▁▁▁▆▇</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>listed_in</code> character field associates individual titles with one or more genres. When separated out, the count of titles in each genre includes:</p>
+<pre class="r"><code>netflix_titles %&gt;%
+  separate_rows(listed_in, sep = &quot;, &quot;) %&gt;%
+  count(listed_in)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["listed_in"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Action & Adventure","2":"721"},{"1":"Anime Features","2":"57"},{"1":"Anime Series","2":"148"},{"1":"British TV Shows","2":"232"},{"1":"Children & Family Movies","2":"532"},{"1":"Classic & Cult TV","2":"27"},{"1":"Classic Movies","2":"103"},{"1":"Comedies","2":"1471"},{"1":"Crime TV Shows","2":"427"},{"1":"Cult Movies","2":"59"},{"1":"Documentaries","2":"786"},{"1":"Docuseries","2":"353"},{"1":"Dramas","2":"2106"},{"1":"Faith & Spirituality","2":"57"},{"1":"Horror Movies","2":"312"},{"1":"Independent Movies","2":"673"},{"1":"International Movies","2":"2437"},{"1":"International TV Shows","2":"1199"},{"1":"Kids' TV","2":"414"},{"1":"Korean TV Shows","2":"150"},{"1":"LGBTQ Movies","2":"90"},{"1":"Movies","2":"56"},{"1":"Music & Musicals","2":"321"},{"1":"Reality TV","2":"222"},{"1":"Romantic Movies","2":"531"},{"1":"Romantic TV Shows","2":"333"},{"1":"Sci-Fi & Fantasy","2":"218"},{"1":"Science & Nature TV","2":"85"},{"1":"Spanish-Language TV Shows","2":"147"},{"1":"Sports Movies","2":"196"},{"1":"Stand-Up Comedy","2":"329"},{"1":"Stand-Up Comedy & Talk Shows","2":"52"},{"1":"Teen TV Shows","2":"60"},{"1":"Thrillers","2":"491"},{"1":"TV Action & Adventure","2":"150"},{"1":"TV Comedies","2":"525"},{"1":"TV Dramas","2":"704"},{"1":"TV Horror","2":"69"},{"1":"TV Mysteries","2":"90"},{"1":"TV Sci-Fi & Fantasy","2":"76"},{"1":"TV Shows","2":"12"},{"1":"TV Thrillers","2":"50"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Let’s take a quick peek at the median time duration of only the movies for each genre. Note again that the same title can often be counted in more than one genre grouping.</p>
+<pre class="r"><code>netflix_titles %&gt;%
+  separate_rows(listed_in, sep = &quot;, &quot;) %&gt;%
+  group_by(type, genre = listed_in) %&gt;%
+  summarize(
+    n = n(),
+    median_duration = median(duration),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  mutate(genre = glue::glue(&quot;{ genre } ({ n })&quot;)) %&gt;%
+  filter(type == &quot;Movie&quot;) %&gt;%
+  filter(genre != &quot;Movies&quot;) %&gt;%
+  mutate(genre = fct_reorder(genre, median_duration)) %&gt;%
+  ggplot(aes(median_duration, genre)) +
+  geom_col(fill = &quot;red&quot;, show.legend = FALSE) +
+  geom_text(
+    aes(
+      x = median_duration - 3,
+      label = median_duration
+    ),
+    color = &quot;white&quot;
+  ) +
+  labs(
+    x = &quot;Media Streaming Netflix Movie Duration (Minutes)&quot;,
+    y = NULL
+  )</code></pre>
+<p><img src="figure/2021_04_20.Rmd/netflix_titles-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>The median of Netflix titles labeled as Documentaries and Stand-Up Comedy movies are shorter in duration than Dramas and Classic Movies.</p>
+</div>
+<div id="feature-engineering" class="section level1">
+<h1>Feature Engineering</h1>
+<p>Given the description, cast members, director, and release_year, can we build a useful model to predict the genre?</p>
+<p>Unbalanced multi-class problems are especially challenging. And in the Netflix dataset, most movies belong to two or three genres at the same time. To make this problem just a little less complex, we will bundle some genre’s into logical groupings. I am also only using the first <code>listed_in</code> genre, as the primary. The result is 20 genres.</p>
+<pre class="r"><code>netflix_df &lt;- netflix_titles %&gt;%
+  select(
+    genre = listed_in,
+    show_id,
+    description,
+    cast,
+    director,
+    release_year
+  ) %&gt;%
+  separate_rows(genre, sep = &quot;, &quot;) %&gt;%
+  mutate(genre = case_when(
+    str_detect(genre, &quot;International&quot;) ~ &quot;International&quot;,
+    str_detect(genre, &quot;Romantic&quot;) ~ &quot;Romantic&quot;,
+    str_detect(genre, &quot;Drama&quot;) ~ &quot;Drama&quot;,
+    str_detect(genre, &quot;Action&quot;) ~ &quot;Action&quot;,
+    str_detect(genre, &quot;Comed&quot;) ~ &quot;Comedy&quot;,
+    str_detect(genre, &quot;Cult&quot;) ~ &quot;Cult&quot;,
+    str_detect(genre, &quot;Thrill&quot;) ~ &quot;Thriller&quot;,
+    str_detect(genre, &quot;Teen|Children|Kids&quot;) ~ &quot;Children&quot;,
+    str_detect(genre, &quot;Science|Docu&quot;) ~ &quot;Documentary&quot;,
+    str_detect(genre, &quot;Anime&quot;) ~ &quot;Anime&quot;,
+    str_detect(genre, &quot;Horror&quot;) ~ &quot;Horror&quot;,
+    str_detect(genre, &quot;Independent&quot;) ~ &quot;Independent&quot;,
+    str_detect(genre, &quot;Crime&quot;) ~ &quot;Crime&quot;,
+    str_detect(genre, &quot;Music&quot;) ~ &quot;Music&quot;,
+    str_detect(genre, &quot;British&quot;) ~ &quot;British&quot;,
+    str_detect(genre, &quot;Reality&quot;) ~ &quot;Reality&quot;,
+    str_detect(genre, &quot;Classic&quot;) ~ &quot;Classic&quot;,
+    str_detect(genre, &quot;Myster&quot;) ~ &quot;Mysteries&quot;,
+    str_detect(genre, &quot;Faith&quot;) ~ &quot;Faith&quot;,
+    TRUE ~ &quot;Other&quot;
+  )) %&gt;%
+  group_by(show_id) %&gt;%
+  mutate(position = row_number()) %&gt;%
+  ungroup() %&gt;%
+  pivot_wider(
+    names_from = position,
+    values_from = genre,
+    names_prefix = &quot;genre&quot;
+  ) %&gt;%
+  mutate(genre1 = as.factor(genre1))</code></pre>
+<p>Let’s split the data using the default 3:1 ratio of training-to-test and resample the training set using 10-fold cross-validation. V-fold cross-validation randomly splits the data into V groups (10) of roughly equal size (called “folds”). A resample of the analysis data consists of V-1 (9) of the folds while the assessment set contains the final fold. In basic V-fold cross-validation (i.e. no repeats), the number of resamples is equal to V.</p>
+<p>The strata argument causes the random sampling to be conducted within the stratification variable.</p>
+<pre class="r"><code>set.seed(1501)
+netflix_split &lt;- initial_split(netflix_df, strata = genre1)
+netflix_train &lt;- training(netflix_split)
+netflix_test &lt;- testing(netflix_split)
+
+netflix_folds &lt;- vfold_cv(netflix_train,
+  v = 5, strata = genre1
+)</code></pre>
+<p>Our dataset will be pre-processed through two different recipes that engineer text features by tokenizing the description, cast, and the director fields.</p>
+<p>The first recipe applies filters to use the words, cast members, and director with the 30 highest term frequencies after removing stop words and stemming.</p>
+<p>The second filter the description words to remove stopwords and then builds 25 word embeddings with <a href="https://www.aclweb.org/anthology/D14-1162/">Glove Twitter 27B</a>. Learn more about word embeddings and pre-trained model transfer learning <a href="https://www.youtube.com/watch?v=oUpuABKoElw">here</a>. The recipe goes on to hash the cast member and director features into numeric variables with the hashing trick.</p>
+<p>Both models are centered and scaled. There are no missing values. With a big multi-class challenge, we need to take action to balance the classes. <code>downsample</code> discards members of the majority classes (in the training set only).</p>
+<pre class="r"><code>smote_rec &lt;- recipe(genre1 ~ description + cast + director, data = netflix_train) %&gt;%
+  step_tokenize(description) %&gt;%
+  step_stopwords(description) %&gt;%
+  step_stem(description) %&gt;%
+  step_tokenfilter(description, max_tokens = 30) %&gt;%
+  step_tokenize(cast,
+    token = &quot;regex&quot;,
+    options = list(pattern = &quot;, &quot;)
+  ) %&gt;%
+  step_tokenfilter(cast, max_tokens = 30) %&gt;%
+  step_tokenize(director,
+    token = &quot;regex&quot;,
+    options = list(pattern = &quot;, &quot;)
+  ) %&gt;%
+  step_tokenfilter(director, max_tokens = 30) %&gt;%
+  step_tf(description) %&gt;%
+  step_tf(cast) %&gt;%
+  step_tf(director) %&gt;%
+  step_smote(genre1) %&gt;%
+  step_normalize(all_numeric())
+
+embeddings_rec &lt;- recipe(genre1 ~ description + cast + director, data = netflix_train) %&gt;%
+  step_tokenize(description) %&gt;%
+  step_stopwords(description) %&gt;%
+  textrecipes::step_word_embeddings(description,
+    embeddings = textdata::embedding_glove27b()
+  ) %&gt;%
+  step_tokenize(cast,
+    token = &quot;regex&quot;,
+    options = list(pattern = &quot;, &quot;)
+  ) %&gt;%
+  step_texthash(cast, num_terms = 50) %&gt;%
+  step_tokenize(director,
+    token = &quot;regex&quot;,
+    options = list(pattern = &quot;, &quot;)
+  ) %&gt;%
+  step_texthash(director, num_terms = 50) %&gt;%
+  step_smote(genre1) %&gt;%
+  step_normalize(all_numeric())</code></pre>
+<p>A look at the features in the fully pre-processed, “filtered”, training set:</p>
+<pre class="r"><code>smote_rec %&gt;%
+  prep() %&gt;%
+  bake(new_data = NULL) %&gt;%
+  glimpse()</code></pre>
+<pre><code>Rows: 20,700
+Columns: 91
+$ tf_description_becom                   &lt;dbl&gt; -0.2123557, -0.2123557, -0.2123~
+$ tf_description_documentari             &lt;dbl&gt; -0.1603244, -0.1603244, -0.1603~
+$ tf_description_famili                  &lt;dbl&gt; -0.2618319, -0.2618319, -0.2618~
+$ tf_description_find                    &lt;dbl&gt; -0.2581137, -0.2581137, -0.2581~
+$ tf_description_follow                  &lt;dbl&gt; -0.1583723, -0.1583723, -0.1583~
+$ tf_description_forc                    &lt;dbl&gt; -0.1659733, 6.3570366, -0.16597~
+$ tf_description_friend                  &lt;dbl&gt; -0.2620975, -0.2620975, -0.2620~
+$ tf_description_get                     &lt;dbl&gt; -0.189506, -0.189506, -0.189506~
+$ tf_description_help                    &lt;dbl&gt; -0.2064809, -0.2064809, -0.2064~
+$ tf_description_high                    &lt;dbl&gt; -0.1737931, -0.1737931, -0.1737~
+$ tf_description_home                    &lt;dbl&gt; -0.1999415, -0.1999415, -0.1999~
+$ tf_description_life                    &lt;dbl&gt; 3.6421021, -0.3071616, -0.30716~
+$ tf_description_live                    &lt;dbl&gt; -0.2006165, -0.2006165, -0.2006~
+$ tf_description_love                    &lt;dbl&gt; -0.2396498, -0.2396498, -0.2396~
+$ tf_description_man                     &lt;dbl&gt; -0.230707, -0.230707, -0.230707~
+$ tf_description_must                    &lt;dbl&gt; -0.2122332, -0.2122332, -0.2122~
+$ tf_description_new                     &lt;dbl&gt; -0.2794191, -0.2794191, -0.2794~
+$ tf_description_old                     &lt;dbl&gt; -0.1749864, -0.1749864, -0.1749~
+$ tf_description_on                      &lt;dbl&gt; -0.2104502, -0.2104502, -0.2104~
+$ tf_description_school                  &lt;dbl&gt; -0.1757208, -0.1757208, -0.1757~
+$ tf_description_seri                    &lt;dbl&gt; -0.2384878, -0.2384878, -0.2384~
+$ tf_description_stori                   &lt;dbl&gt; -0.2029183, -0.2029183, -0.2029~
+$ tf_description_take                    &lt;dbl&gt; -0.2424632, -0.2424632, -0.2424~
+$ tf_description_three                   &lt;dbl&gt; -0.1500621, -0.1500621, -0.1500~
+$ tf_description_turn                    &lt;dbl&gt; -0.1833386, -0.1833386, -0.1833~
+$ tf_description_two                     &lt;dbl&gt; -0.2082031, -0.2082031, -0.2082~
+$ tf_description_woman                   &lt;dbl&gt; -0.2141536, -0.2141536, -0.2141~
+$ tf_description_world                   &lt;dbl&gt; -0.2601391, -0.2601391, 4.33586~
+$ tf_description_year                    &lt;dbl&gt; -0.2073761, -0.2073761, -0.2073~
+$ tf_description_young                   &lt;dbl&gt; -0.2654059, -0.2654059, -0.2654~
+$ `tf_cast_Ai Kayano`                    &lt;dbl&gt; -0.07386862, -0.07386862, -0.07~
+$ `tf_cast_Akshay Kumar`                 &lt;dbl&gt; -0.03898276, -0.03898276, -0.03~
+$ `tf_cast_Amitabh Bachchan`             &lt;dbl&gt; -0.04451533, -0.04451533, -0.04~
+$ `tf_cast_Amrish Puri`                  &lt;dbl&gt; -0.03149141, -0.03149141, -0.03~
+$ `tf_cast_Andrea Libman`                &lt;dbl&gt; -0.04737039, -0.04737039, -0.04~
+$ `tf_cast_Anupam Kher`                  &lt;dbl&gt; -0.04738646, -0.04738646, -0.04~
+$ `tf_cast_Ashleigh Ball`                &lt;dbl&gt; -0.0444124, -0.0444124, -0.0444~
+$ tf_cast_Asrani                         &lt;dbl&gt; -0.05522861, -0.05522861, -0.05~
+$ `tf_cast_Boman Irani`                  &lt;dbl&gt; -0.03771069, -0.03771069, -0.03~
+$ `tf_cast_Daisuke Ono`                  &lt;dbl&gt; -0.06772523, -0.06772523, -0.06~
+$ `tf_cast_David Attenborough`           &lt;dbl&gt; -0.06396221, -0.06396221, -0.06~
+$ `tf_cast_Diana Kaarina`                &lt;dbl&gt; -0.03566036, -0.03566036, -0.03~
+$ `tf_cast_Fred Tatasciore`              &lt;dbl&gt; -0.03950155, -0.03950155, 29.94~
+$ `tf_cast_Gulshan Grover`               &lt;dbl&gt; -0.03075218, -0.03075218, -0.03~
+$ `tf_cast_John Cleese`                  &lt;dbl&gt; -0.04861203, -0.04861203, -0.04~
+$ `tf_cast_Kareena Kapoor`               &lt;dbl&gt; -0.03360228, -0.03360228, -0.03~
+$ `tf_cast_Kay Kay Menon`                &lt;dbl&gt; -0.03042367, -0.03042367, -0.03~
+$ `tf_cast_Manoj Joshi`                  &lt;dbl&gt; -0.02846005, -0.02846005, -0.02~
+$ `tf_cast_Naseeruddin Shah`             &lt;dbl&gt; -0.03381638, -0.03381638, -0.03~
+$ `tf_cast_Nawazuddin Siddiqui`          &lt;dbl&gt; -0.03141093, -0.03141093, -0.03~
+$ `tf_cast_Om Puri`                      &lt;dbl&gt; -0.0383351, -0.0383351, -0.0383~
+$ `tf_cast_Paresh Rawal`                 &lt;dbl&gt; -0.03506616, -0.03506616, -0.03~
+$ `tf_cast_Salman Khan`                  &lt;dbl&gt; -0.03967614, -0.03967614, -0.03~
+$ `tf_cast_Samuel L. Jackson`            &lt;dbl&gt; -0.04952877, -0.04952877, -0.04~
+$ `tf_cast_Shah Rukh Khan`               &lt;dbl&gt; -0.04329187, -0.04329187, -0.04~
+$ `tf_cast_Takahiro Sakurai`             &lt;dbl&gt; -0.09147951, -0.09147951, -0.09~
+$ `tf_cast_Tara Strong`                  &lt;dbl&gt; -0.04187086, -0.04187086, -0.04~
+$ `tf_cast_Vincent Tong`                 &lt;dbl&gt; -0.04043866, -0.04043866, -0.04~
+$ `tf_cast_Yashpal Sharma`               &lt;dbl&gt; -0.0313823, -0.0313823, -0.0313~
+$ `tf_cast_Yuki Kaji`                    &lt;dbl&gt; -0.08570653, -0.08570653, -0.08~
+$ `tf_director_Abbas Alibhai Burmawalla` &lt;dbl&gt; -0.01751368, -0.01751368, -0.01~
+$ `tf_director_Anurag Kashyap`           &lt;dbl&gt; -0.02666891, -0.02666891, -0.02~
+$ `tf_director_Cathy Garcia-Molina`      &lt;dbl&gt; -0.0258887, -0.0258887, -0.0258~
+$ `tf_director_David Dhawan`             &lt;dbl&gt; -0.0180263, -0.0180263, -0.0180~
+$ `tf_director_Dibakar Banerjee`         &lt;dbl&gt; -0.02050677, -0.02050677, -0.02~
+$ `tf_director_Don Michael Paul`         &lt;dbl&gt; -0.0249054, -0.0249054, -0.0249~
+$ `tf_director_Fernando Ayllón`          &lt;dbl&gt; -0.01702719, -0.01702719, -0.01~
+$ `tf_director_Hakan Algül`              &lt;dbl&gt; -0.01702719, -0.01702719, -0.01~
+$ `tf_director_Hanung Bramantyo`         &lt;dbl&gt; -0.01702719, -0.01702719, -0.01~
+$ `tf_director_Imtiaz Ali`               &lt;dbl&gt; -0.01756911, -0.01756911, -0.01~
+$ `tf_director_Jan Suter`                &lt;dbl&gt; -0.03030962, -0.03030962, -0.03~
+$ `tf_director_Jay Chapman`              &lt;dbl&gt; -0.01966225, -0.01966225, -0.01~
+$ `tf_director_Jay Karas`                &lt;dbl&gt; -0.02408357, -0.02408357, -0.02~
+$ `tf_director_Justin G. Dyck`           &lt;dbl&gt; -0.08147457, -0.08147457, -0.08~
+$ `tf_director_Karan Johar`              &lt;dbl&gt; -0.02050677, -0.02050677, -0.02~
+$ `tf_director_Leslie Small`             &lt;dbl&gt; -0.01839191, -0.01839191, -0.01~
+$ `tf_director_Marcus Raboy`             &lt;dbl&gt; -0.02506758, -0.02506758, -0.02~
+$ `tf_director_Martin Scorsese`          &lt;dbl&gt; -0.06286531, -0.06286531, -0.06~
+$ `tf_director_Ozan Açiktan`             &lt;dbl&gt; -0.01702719, -0.01702719, -0.01~
+$ `tf_director_Quentin Tarantino`        &lt;dbl&gt; -0.0417779, -0.0417779, -0.0417~
+$ `tf_director_Raúl Campos`              &lt;dbl&gt; -0.02866865, -0.02866865, -0.02~
+$ `tf_director_Riri Riza`                &lt;dbl&gt; -0.01836344, -0.01836344, -0.01~
+$ `tf_director_Ryan Polito`              &lt;dbl&gt; -0.01839191, -0.01839191, -0.01~
+$ `tf_director_S.S. Rajamouli`           &lt;dbl&gt; -0.02319758, -0.02319758, -0.02~
+$ `tf_director_Sameh Abdulaziz`          &lt;dbl&gt; -0.01702719, -0.01702719, -0.01~
+$ `tf_director_Steven Spielberg`         &lt;dbl&gt; -0.02350248, -0.02350248, -0.02~
+$ `tf_director_Umesh Mehra`              &lt;dbl&gt; -0.0229602, -0.0229602, -0.0229~
+$ `tf_director_Wong Jing`                &lt;dbl&gt; -0.02278449, -0.02278449, -0.02~
+$ `tf_director_Yilmaz Erdogan`           &lt;dbl&gt; -0.0195978, -0.0195978, -0.0195~
+$ `tf_director_Youssef Chahine`          &lt;dbl&gt; -0.07088985, -0.07088985, -0.07~
+$ genre1                                 &lt;fct&gt; Drama, Horror, Action, Drama, I~</code></pre>
+<p>And a look at the features of the “embeddings” recipe:</p>
+<pre class="r"><code>embeddings_rec %&gt;%
+  prep() %&gt;%
+  bake(new_data = NULL) %&gt;%
+  glimpse()</code></pre>
+<pre><code>Rows: 20,700
+Columns: 126
+$ director_hash01 &lt;dbl&gt; 0.06485965, 0.06485965, 0.06485965, 0.06485965, 0.0648~
+$ director_hash02 &lt;dbl&gt; -0.02079069, -0.02079069, -0.02079069, -0.02079069, -0~
+$ director_hash03 &lt;dbl&gt; 0.01772551, 0.01772551, 0.01772551, 0.01772551, 0.0177~
+$ director_hash04 &lt;dbl&gt; 0.01347793, 0.01347793, 0.01347793, 0.01347793, 0.0134~
+$ director_hash05 &lt;dbl&gt; -0.07102628, -0.07102628, -0.07102628, -0.07102628, -0~
+$ director_hash06 &lt;dbl&gt; -0.00176303, -0.00176303, -0.00176303, -0.00176303, -0~
+$ director_hash07 &lt;dbl&gt; -0.07369948, -0.07369948, -0.07369948, -0.07369948, -0~
+$ director_hash08 &lt;dbl&gt; -0.00432905, -0.00432905, -0.00432905, -0.00432905, -0~
+$ director_hash09 &lt;dbl&gt; -0.03257164, -0.03257164, -0.03257164, -0.03257164, -0~
+$ director_hash10 &lt;dbl&gt; -0.05016563, -0.05016563, 9.82393795, -0.05016563, -0.~
+$ director_hash11 &lt;dbl&gt; -0.06407444, -0.06407444, -0.06407444, -0.06407444, 9.~
+$ director_hash12 &lt;dbl&gt; -0.003463162, -0.003463162, -0.003463162, -0.003463162~
+$ director_hash13 &lt;dbl&gt; 0.02117464, 8.03069654, 0.02117464, 0.02117464, 0.0211~
+$ director_hash14 &lt;dbl&gt; -0.8486824, -0.8486824, -0.8486824, -0.8486824, -0.848~
+$ director_hash15 &lt;dbl&gt; 0.0230757, 0.0230757, 0.0230757, 0.0230757, 0.0230757,~
+$ director_hash16 &lt;dbl&gt; 0.04300544, 0.04300544, 0.04300544, 0.04300544, 0.0430~
+$ director_hash17 &lt;dbl&gt; 8.18713092, 0.02464269, 0.02464269, 0.02464269, 0.0246~
+$ director_hash18 &lt;dbl&gt; -0.07037995, -0.07037995, -0.07037995, -0.07037995, -0~
+$ director_hash19 &lt;dbl&gt; 0.03179558, 0.03179558, 0.03179558, 0.03179558, 0.0317~
+$ director_hash20 &lt;dbl&gt; 0.01736309, 0.01736309, 0.01736309, 0.01736309, 0.0173~
+$ director_hash21 &lt;dbl&gt; -0.0701628, -0.0701628, -0.0701628, 12.0204630, -0.070~
+$ director_hash22 &lt;dbl&gt; -0.01588469, -0.01588469, -0.01588469, -0.01588469, -0~
+$ director_hash23 &lt;dbl&gt; -0.04091408, -0.04091408, -0.04091408, -0.04091408, -0~
+$ director_hash24 &lt;dbl&gt; 0.03664753, 0.03664753, 0.03664753, 0.03664753, 0.0366~
+$ director_hash25 &lt;dbl&gt; -0.02039321, -0.02039321, -0.02039321, -0.02039321, -0~
+$ director_hash26 &lt;dbl&gt; -0.04403479, -0.04403479, -0.04403479, -0.04403479, -0~
+$ director_hash27 &lt;dbl&gt; 0.05535097, 0.05535097, 0.05535097, 0.05535097, 0.0553~
+$ director_hash28 &lt;dbl&gt; 0.02591982, 0.02591982, 0.02591982, 0.02591982, 0.0259~
+$ director_hash29 &lt;dbl&gt; 0.02114805, 0.02114805, 0.02114805, 0.02114805, 0.0211~
+$ director_hash30 &lt;dbl&gt; -0.05754325, -0.05754325, -0.05754325, -0.05754325, -0~
+$ director_hash31 &lt;dbl&gt; 0.0002146236, 0.0002146236, 0.0002146236, 0.0002146236~
+$ director_hash32 &lt;dbl&gt; -0.01297261, -0.01297261, -0.01297261, -0.01297261, -0~
+$ director_hash33 &lt;dbl&gt; 0.1350161, 0.1350161, 0.1350161, 0.1350161, 0.1350161,~
+$ director_hash34 &lt;dbl&gt; 0.03776435, 0.03776435, 0.03776435, 0.03776435, 0.0377~
+$ director_hash35 &lt;dbl&gt; 0.01283091, 0.01283091, 0.01283091, 0.01283091, 0.0128~
+$ director_hash36 &lt;dbl&gt; 0.01289168, 0.01289168, 0.01289168, 0.01289168, 0.0128~
+$ director_hash37 &lt;dbl&gt; -0.01447217, -0.01447217, -0.01447217, -0.01447217, -0~
+$ director_hash38 &lt;dbl&gt; 0.003522731, 0.003522731, 0.003522731, 0.003522731, 0.~
+$ director_hash39 &lt;dbl&gt; -0.02739365, -0.02739365, -0.02739365, -0.02739365, -0~
+$ director_hash40 &lt;dbl&gt; 0.02695317, 0.02695317, 0.02695317, 0.02695317, 0.0269~
+$ director_hash41 &lt;dbl&gt; -0.03747943, -0.03747943, -0.03747943, -0.03747943, -0~
+$ director_hash42 &lt;dbl&gt; 0.1201035, 0.1201035, 0.1201035, 0.1201035, 0.1201035,~
+$ director_hash43 &lt;dbl&gt; 0.0300742, 0.0300742, 0.0300742, 0.0300742, 0.0300742,~
+$ director_hash44 &lt;dbl&gt; 0.01191643, 0.01191643, 0.01191643, 0.01191643, 0.0119~
+$ director_hash45 &lt;dbl&gt; -0.02799158, -0.02799158, -0.02799158, -0.02799158, -0~
+$ director_hash46 &lt;dbl&gt; 0.02114229, 0.02114229, 0.02114229, 0.02114229, 0.0211~
+$ director_hash47 &lt;dbl&gt; 0.115074, 0.115074, 0.115074, 0.115074, 0.115074, 0.11~
+$ director_hash48 &lt;dbl&gt; -0.08411287, -0.08411287, -0.08411287, -0.08411287, -0~
+$ director_hash49 &lt;dbl&gt; -0.01088959, -0.01088959, -0.01088959, -0.01088959, -0~
+$ director_hash50 &lt;dbl&gt; 0.02295361, 0.02295361, 0.02295361, 0.02295361, 0.0229~
+$ cast_hash01     &lt;dbl&gt; -0.04946202, -0.04946202, -0.04946202, -3.18014496, 3.~
+$ cast_hash02     &lt;dbl&gt; 0.06508635, 0.06508635, 0.06508635, 0.06508635, 0.0650~
+$ cast_hash03     &lt;dbl&gt; -0.02008355, -3.17272909, -0.02008355, -0.02008355, -0~
+$ cast_hash04     &lt;dbl&gt; 0.05308236, 0.05308236, 3.23302033, 0.05308236, 0.0530~
+$ cast_hash05     &lt;dbl&gt; 0.01580089, 0.01580089, 0.01580089, 0.01580089, 0.0158~
+$ cast_hash06     &lt;dbl&gt; -2.99651328, 0.03506544, -2.99651328, -2.99651328, -2.~
+$ cast_hash07     &lt;dbl&gt; -0.02364265, -0.02364265, -0.02364265, -0.02364265, -0~
+$ cast_hash08     &lt;dbl&gt; -0.04994294, -0.04994294, -0.04994294, -0.04994294, -0~
+$ cast_hash09     &lt;dbl&gt; 0.06114628, 0.06114628, 0.06114628, 0.06114628, 0.0611~
+$ cast_hash10     &lt;dbl&gt; -0.006652554, -0.006652554, -0.006652554, -0.006652554~
+$ cast_hash11     &lt;dbl&gt; 2.67751803, 0.02102364, 0.02102364, 0.02102364, 0.0210~
+$ cast_hash12     &lt;dbl&gt; 0.06603336, 0.06603336, -3.12658238, 0.06603336, 0.066~
+$ cast_hash13     &lt;dbl&gt; -3.331376514, -0.009356031, -0.009356031, -0.009356031~
+$ cast_hash14     &lt;dbl&gt; -0.1385747, -0.1385747, -0.1385747, -0.1385747, 2.2298~
+$ cast_hash15     &lt;dbl&gt; -0.009571035, -0.009571035, -0.009571035, -0.009571035~
+$ cast_hash16     &lt;dbl&gt; -0.01935351, -0.01935351, -0.01935351, -0.01935351, -0~
+$ cast_hash17     &lt;dbl&gt; 0.009499248, 0.009499248, 0.009499248, 0.009499248, 0.~
+$ cast_hash18     &lt;dbl&gt; -0.06106883, -0.06106883, -0.06106883, -0.06106883, -0~
+$ cast_hash19     &lt;dbl&gt; 0.01415695, -3.32577652, 0.01415695, 0.01415695, -3.32~
+$ cast_hash20     &lt;dbl&gt; 2.93785806, 0.02186619, 0.02186619, 0.02186619, 0.0218~
+$ cast_hash21     &lt;dbl&gt; -0.08170963, -0.08170963, -0.08170963, -2.98257787, -0~
+$ cast_hash22     &lt;dbl&gt; -0.03485322, -2.86965355, -0.03485322, -2.86965355, -0~
+$ cast_hash23     &lt;dbl&gt; -0.02986398, -0.02986398, -0.02986398, -0.02986398, -0~
+$ cast_hash24     &lt;dbl&gt; -0.01630546, -0.01630546, -0.01630546, 2.59991095, -0.~
+$ cast_hash25     &lt;dbl&gt; -3.05252708, 0.01662983, 0.01662983, 3.08578674, 0.016~
+$ cast_hash26     &lt;dbl&gt; 0.05042665, 0.05042665, 0.05042665, 0.05042665, 0.0504~
+$ cast_hash27     &lt;dbl&gt; 0.0003653237, 0.0003653237, 0.0003653237, 0.0003653237~
+$ cast_hash28     &lt;dbl&gt; 3.195686904, -0.001481891, -0.001481891, 3.195686904, ~
+$ cast_hash29     &lt;dbl&gt; -0.03375254, -2.88584783, 2.81834276, -0.03375254, -0.~
+$ cast_hash30     &lt;dbl&gt; -0.01936798, -0.01936798, -0.01936798, -0.01936798, -0~
+$ cast_hash31     &lt;dbl&gt; -0.01774225, -0.01774225, -0.01774225, -0.01774225, -0~
+$ cast_hash32     &lt;dbl&gt; 0.02783715, 0.02783715, 0.02783715, 0.02783715, 0.0278~
+$ cast_hash33     &lt;dbl&gt; 0.007247518, 0.007247518, -3.336516701, 0.007247518, 0~
+$ cast_hash34     &lt;dbl&gt; 0.03012454, 0.03012454, 0.03012454, 0.03012454, 3.1641~
+$ cast_hash35     &lt;dbl&gt; -0.01231734, -0.01231734, -6.03513751, -0.01231734, -0~
+$ cast_hash36     &lt;dbl&gt; -0.05165836, -0.05165836, -0.05165836, -0.05165836, -0~
+$ cast_hash37     &lt;dbl&gt; 0.02224541, 0.02224541, 0.02224541, 0.02224541, 0.0222~
+$ cast_hash38     &lt;dbl&gt; -0.04201112, -0.04201112, 5.97419014, -0.04201112, -0.~
+$ cast_hash39     &lt;dbl&gt; -0.09466407, -0.09466407, -0.09466407, -0.09466407, -2~
+$ cast_hash40     &lt;dbl&gt; 0.03623504, 0.03623504, 0.03623504, 0.03623504, 0.0362~
+$ cast_hash41     &lt;dbl&gt; 0.0153177, 0.0153177, 0.0153177, 0.0153177, 0.0153177,~
+$ cast_hash42     &lt;dbl&gt; 0.02757188, 0.02757188, 0.02757188, 3.22809398, 0.0275~
+$ cast_hash43     &lt;dbl&gt; -0.05083937, -0.05083937, -0.05083937, 2.84054536, -0.~
+$ cast_hash44     &lt;dbl&gt; -0.03435234, -3.23073129, -0.03435234, -0.03435234, -0~
+$ cast_hash45     &lt;dbl&gt; -0.02789545, -0.02789545, -0.02789545, -0.02789545, -0~
+$ cast_hash46     &lt;dbl&gt; -0.01422415, -0.01422415, -0.01422415, -0.01422415, -0~
+$ cast_hash47     &lt;dbl&gt; -0.03535106, -0.03535106, -0.03535106, -0.03535106, -0~
+$ cast_hash48     &lt;dbl&gt; -0.09031132, -0.09031132, -0.09031132, 2.79745777, -2.~
+$ cast_hash49     &lt;dbl&gt; 0.03875746, 0.03875746, 0.03875746, 0.03875746, 0.0387~
+$ cast_hash50     &lt;dbl&gt; 0.02510084, 0.02510084, 0.02510084, 0.02510084, 2.9220~
+$ w_embed_sum_d1  &lt;dbl&gt; -2.21055223, -0.16271112, 1.18091118, 1.90317074, -1.0~
+$ w_embed_sum_d2  &lt;dbl&gt; 1.13047185, -0.05530537, -0.60211839, 2.23600254, -0.6~
+$ w_embed_sum_d3  &lt;dbl&gt; 0.63115672, -0.47607455, -0.79002760, -0.31170018, -0.~
+$ w_embed_sum_d4  &lt;dbl&gt; -0.6757156, -0.4490402, 0.9805747, -1.8178752, 2.69441~
+$ w_embed_sum_d5  &lt;dbl&gt; -2.84322730, -1.36128345, -0.82343118, -0.08350286, 2.~
+$ w_embed_sum_d6  &lt;dbl&gt; -0.1390960, -0.7408301, -0.3386276, 0.9767545, -0.8714~
+$ w_embed_sum_d7  &lt;dbl&gt; 2.21816514, 0.77261111, -0.05723233, -1.61229274, -0.0~
+$ w_embed_sum_d8  &lt;dbl&gt; 0.5172138705, -0.5332930830, -0.5706652760, -0.5064191~
+$ w_embed_sum_d9  &lt;dbl&gt; -1.38569547, 0.71957640, 0.31146195, -0.63102198, 2.31~
+$ w_embed_sum_d10 &lt;dbl&gt; 2.04192373, 0.15989968, 0.55030167, -1.01523072, 0.281~
+$ w_embed_sum_d11 &lt;dbl&gt; 0.45273331, 0.28582848, 0.18324197, 1.16214833, 1.4499~
+$ w_embed_sum_d12 &lt;dbl&gt; 0.2437332523, 0.0277371954, 0.0993899848, -2.126215147~
+$ w_embed_sum_d13 &lt;dbl&gt; -0.640422578, -0.199169059, 0.961011768, -0.131973658,~
+$ w_embed_sum_d14 &lt;dbl&gt; 2.0676030, 0.7355022, -0.6763367, 0.1665436, -0.638143~
+$ w_embed_sum_d15 &lt;dbl&gt; 0.09511574, 0.49503971, -2.18054290, 1.44840527, 1.920~
+$ w_embed_sum_d16 &lt;dbl&gt; -0.4807757, 0.2978188, 0.5922163, -0.2749848, -0.11684~
+$ w_embed_sum_d17 &lt;dbl&gt; -0.800725289, 0.938485584, -0.424768833, -0.228403378,~
+$ w_embed_sum_d18 &lt;dbl&gt; 0.1622549, 0.1026762, -0.1546875, -0.9175638, 2.744447~
+$ w_embed_sum_d19 &lt;dbl&gt; 0.95504325, -0.22211527, 1.18508512, 1.15134681, 1.504~
+$ w_embed_sum_d20 &lt;dbl&gt; -2.9674890, -0.1260964, 0.8643423, 0.5113264, -1.02779~
+$ w_embed_sum_d21 &lt;dbl&gt; 0.54947736, 0.14899503, 0.11041166, -0.73631641, 0.062~
+$ w_embed_sum_d22 &lt;dbl&gt; -0.53968030, 0.22963672, 0.38811187, -2.71585066, 0.10~
+$ w_embed_sum_d23 &lt;dbl&gt; 2.6710579, -0.5223269, -0.2249317, -1.0567445, -0.8022~
+$ w_embed_sum_d24 &lt;dbl&gt; -0.70129794, -2.36850490, -0.48142801, -0.83128713, 1.~
+$ w_embed_sum_d25 &lt;dbl&gt; 2.15999323, 2.09649013, 1.01392236, -0.38585477, 1.055~
+$ genre1          &lt;fct&gt; Drama, Horror, Action, Drama, International, Horror, D~</code></pre>
+<p>For the models themselves, we use the the <code>parsnip</code> package to create sets of model specifications. All are setup for classification. For this demonstration, I am interested in the behavior of the SVM Liblinear engine and the naive Bayes engine.</p>
+<pre class="r"><code>ranger_spec &lt;-
+  rand_forest(trees = 1000) %&gt;%
+  set_mode(&quot;classification&quot;) %&gt;%
+  set_engine(&quot;ranger&quot;)
+
+nb_spec &lt;- naive_Bayes() %&gt;%
+  set_mode(&quot;classification&quot;) %&gt;%
+  set_engine(&quot;naivebayes&quot;)</code></pre>
+<div id="workflowsets" class="section level2">
+<h2>Workflowsets</h2>
+<p>This is where the cool part comes in: We now define a “workflow set.” We apply <code>cross = TRUE</code> to look at all combinations of recipes and models.</p>
+<pre class="r"><code>(wfs &lt;-
+  bind_rows(workflow_set(
+    preproc = list(
+      smote = smote_rec,
+      embeddings = embeddings_rec
+    ),
+    models = list(nb_spec, ranger_spec),
+    cross = TRUE
+  ))
+)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["wflow_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["info"],"name":[2],"type":["list"],"align":["right"]},{"label":["option"],"name":[3],"type":["list"],"align":["right"]},{"label":["result"],"name":[4],"type":["list"],"align":["right"]}],"data":[{"1":"smote_naive_Bayes","2":"<tibble[,4]>","3":"<wrkflw__>","4":"<list [0]>"},{"1":"smote_rand_forest","2":"<tibble[,4]>","3":"<wrkflw__>","4":"<list [0]>"},{"1":"embeddings_naive_Bayes","2":"<tibble[,4]>","3":"<wrkflw__>","4":"<list [0]>"},{"1":"embeddings_rand_forest","2":"<tibble[,4]>","3":"<wrkflw__>","4":"<list [0]>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>And we see we have our four different workflows set up.</p>
+</div>
+<div id="tuning-and-cross-validation" class="section level2">
+<h2>Tuning and Cross Validation</h2>
+<p>The engines chosen here require no tuning. We will load register a parallel backend to speed the computations across the cross validation folds.</p>
+<pre class="r"><code>all_cores &lt;- parallel::detectCores(logical = FALSE)
+
+cl &lt;- makePSOCKcluster(all_cores)
+doParallel::registerDoParallel(cl)
+
+system.time(
+  cv_res &lt;- wfs %&gt;%
+    workflow_map(
+      fn = &quot;fit_resamples&quot;,
+      seed = 2021,
+      resamples = netflix_folds,
+      control = control_resamples(save_pred = TRUE),
+      verbose = TRUE
+    )
+)</code></pre>
+<pre><code>   user  system elapsed 
+  30.19   36.61 2289.74 </code></pre>
+<pre class="r"><code>doParallel::stopImplicitCluster()</code></pre>
+</div>
+<div id="compare-the-models" class="section level2">
+<h2>Compare the models</h2>
+<p>We can then look at the results. What are the top workflows?</p>
+<pre class="r"><code>cv_res %&gt;%
+  rank_results() %&gt;%
+  filter(.metric == &quot;roc_auc&quot;) %&gt;%
+  select(wflow_id, roc_auc = mean, rank)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["wflow_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["roc_auc"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["rank"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"embeddings_rand_forest","2":"0.8220595","3":"1"},{"1":"embeddings_naive_Bayes","2":"0.6472460","3":"2"},{"1":"smote_rand_forest","2":"0.6300650","3":"3"},{"1":"smote_naive_Bayes","2":"0.5645387","3":"4"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>autoplot(cv_res,
+  rank_metric = &quot;roc_auc&quot;,
+  metric = &quot;roc_auc&quot;,
+  select_best = TRUE
+)</code></pre>
+<p><img src="figure/2021_04_20.Rmd/unnamed-chunk-12-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>The embeddings pre-processor gives a big boost in performance. Bayes is fast, but it falls apart because the model assumes independence of the features and it does not handle interactions.</p>
+<p>We can look at ROC curves for the set of 5 cross-validation folds of the best model:</p>
+<pre class="r"><code>cv_res %&gt;%
+  pull_workflow_set_result(&quot;embeddings_rand_forest&quot;) %&gt;%
+  collect_predictions() %&gt;%
+  group_by(id) %&gt;%
+  roc_curve(truth = genre1, .pred_Action:.pred_Thriller) %&gt;%
+  autoplot() +
+  labs(
+    color = NULL,
+    title = &quot;ROC curve for Netflix Movie Genre1 Random Forest Predictor&quot;,
+    subtitle = &quot;Each resample fold is shown in a different color&quot;
+  )</code></pre>
+<p><img src="figure/2021_04_20.Rmd/unnamed-chunk-13-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>This model predicts Documentaries and International films very well. On the other extreme, Romantic Movies and “Other” are not predicted well in every cross validation fold.</p>
+<p>We can also create a confusion matrix from the resamples using <code>conf_mat_resampled()</code>., which computes a separate confusion matrix for each resample then averages the cell counts.</p>
+<pre class="r"><code>cv_res %&gt;%
+  pull_workflow_set_result(&quot;embeddings_rand_forest&quot;) %&gt;%
+  conf_mat_resampled(tidy = FALSE)</code></pre>
+<pre><code>              Action Anime British Children Classic Comedy Crime  Cult
+Action          37.2   0.8     0.0      4.8     0.6    6.8   0.8   0.2
+Anime            1.2   4.4     0.6      2.2     0.0    0.6   0.4   0.2
+British          1.0   0.6     8.8      5.2     0.0    3.4   2.4   0.2
+Children         3.8   2.6     2.8     40.8     0.0    7.4   1.0   0.2
+Classic          0.6   0.0     0.0      0.0     0.4    0.6   0.0   0.0
+Comedy          15.6   2.0     0.6     31.0     4.2  126.4   1.4   0.4
+Crime            3.0   1.8     5.6      1.6     0.0    2.0  30.0   0.4
+Cult             0.0   0.0     0.0      0.0     0.0    0.0   0.0   0.0
+Documentary      8.2   1.0     4.8      9.4     1.8   17.0   4.6   0.4
+Drama           38.4   0.4     0.8     13.0     4.8   48.2   1.4   0.4
+Horror           1.2   0.4     0.0      1.0     0.0    1.2   0.2   0.2
+Independent      0.0   0.0     0.0      0.0     0.0    0.0   0.0   0.0
+International    3.0  10.0     8.0     16.4     0.0   13.4  14.0   1.4
+Music            0.0   0.0     0.0      0.0     0.0    0.4   0.0   0.0
+Other            0.0   0.0     0.0      0.8     0.0    0.0   0.0   0.0
+Reality          0.0   0.6     2.6      3.8     0.0    2.6   0.2   0.2
+Romantic         0.0   0.0     0.0      0.0     0.0    0.0   0.0   0.0
+Thriller         0.0   0.0     0.0      0.0     0.2    0.0   0.0   0.0
+              Documentary Drama Horror Independent International Music Other
+Action                3.4  21.4    2.4         0.8           2.6   0.0   1.4
+Anime                 0.0   0.8    0.2         0.0           2.2   0.0   0.0
+British               8.2   1.2    0.0         0.0           6.2   0.0   0.4
+Children              1.0   2.6    0.4         0.0           6.4   0.0   3.2
+Classic               0.0   0.4    0.0         0.0           0.0   0.0   0.0
+Comedy               14.4  53.2    8.6         1.4           6.4   0.8   2.4
+Crime                 5.4   3.6    0.8         0.0          12.0   0.0   0.2
+Cult                  0.0   0.0    0.0         0.0           0.0   0.0   0.0
+Documentary          87.0  17.0    1.8         0.0           5.4   1.6   1.8
+Drama                 9.4 106.4   19.0         1.0           9.8   0.2   1.6
+Horror                0.0   3.6    4.2         0.0           0.6   0.0   0.0
+Independent           0.0   0.0    0.0         0.0           0.0   0.0   0.0
+International         7.4   7.2    0.4         0.0          61.2   0.0   1.2
+Music                 0.0   0.0    0.2         0.0           0.0   0.0   0.0
+Other                 0.0   0.0    0.0         0.0           0.0   0.0   0.2
+Reality               5.0   0.2    0.0         0.0           6.8   0.2   0.2
+Romantic              0.0   0.0    0.0         0.0           0.0   0.0   0.0
+Thriller              0.0   0.0    0.0         0.0           0.0   0.0   0.0
+              Reality Romantic Thriller
+Action            0.0      0.0      1.4
+Anime             0.0      0.0      0.0
+British           0.6      0.4      0.0
+Children          1.2      0.4      0.0
+Classic           0.0      0.0      0.0
+Comedy            0.2      0.6      2.0
+Crime             0.6      0.2      0.0
+Cult              0.0      0.0      0.0
+Documentary       1.2      0.2      0.0
+Drama             0.0      0.0      3.6
+Horror            0.0      0.0      0.2
+Independent       0.0      0.0      0.0
+International     2.6      2.8      0.0
+Music             0.0      0.0      0.0
+Other             0.0      0.0      0.0
+Reality           9.8      0.4      0.0
+Romantic          0.0      0.0      0.0
+Thriller          0.0      0.0      0.2</code></pre>
+</div>
+<div id="select-the-best-model" class="section level2">
+<h2>Select the best model</h2>
+<pre class="r"><code>best_results &lt;- cv_res %&gt;%
+  pull_workflow_set_result(&quot;embeddings_rand_forest&quot;) %&gt;%
+  select_best(metric = &quot;roc_auc&quot;)
+
+test_results &lt;- cv_res %&gt;%
+  pull_workflow(&quot;embeddings_rand_forest&quot;) %&gt;%
+  finalize_workflow(best_results) %&gt;%
+  last_fit(split = netflix_split)</code></pre>
+<p>The test results show:</p>
+<pre class="r"><code>collect_metrics(test_results)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"accuracy","2":"multiclass","3":"0.4542181","4":"Preprocessor1_Model1"},{"1":"roc_auc","2":"hand_till","3":"0.8094367","4":"Preprocessor1_Model1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>This is a good test result, as the model run on unseen data delivers performance comparable to the training figures. This model does not over-fit the training data.</p>
+<p>At some later date, I’d like to explore how to extract importance scores from the embeddings.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.5 (2021-03-31)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] fastshap_0.0.5     doParallel_1.0.16  iterators_1.0.13   foreach_1.5.1     
+ [5] vip_0.3.2          finetune_0.0.1     discrim_0.1.1      textrecipes_0.4.0 
+ [9] themis_0.1.3       yardstick_0.0.8    workflowsets_0.0.2 workflows_0.2.2   
+[13] tune_0.1.5.9000    rsample_0.0.9      recipes_0.1.16     parsnip_0.1.5.9002
+[17] modeldata_0.1.0    infer_0.5.4        dials_0.0.9        scales_1.1.1      
+[21] broom_0.7.6.9001   tidymodels_0.1.3   tidytext_0.3.1     hrbrthemes_0.8.6  
+[25] lubridate_1.7.10   forcats_0.5.1      stringr_1.4.0      dplyr_1.0.5       
+[29] purrr_0.3.4        readr_1.4.0        tidyr_1.1.3        tibble_3.1.1      
+[33] ggplot2_3.3.3      tidyverse_1.3.1    workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.1           R.utils_2.10.1       tidyselect_1.1.1    
+  [4] ranger_0.12.1        grid_4.0.5           pROC_1.17.0.1       
+  [7] munsell_0.5.0        codetools_0.2-18     ragg_1.1.2          
+ [10] future_1.21.0        withr_2.4.2          colorspace_2.0-1    
+ [13] highr_0.9            knitr_1.33           rstudioapi_0.13     
+ [16] Rttf2pt1_1.3.8       listenv_0.8.0        labeling_0.4.2      
+ [19] git2r_0.28.0         repr_1.1.3           lgr_0.4.2           
+ [22] DiceDesign_1.9       farver_2.1.0         rprojroot_2.0.2     
+ [25] mlr_2.19.0           parallelly_1.25.0    vctrs_0.3.8         
+ [28] generics_0.1.0       ipred_0.9-11         xfun_0.22           
+ [31] float_0.2-4          R6_2.5.0             lhs_1.1.1           
+ [34] assertthat_0.2.1     promises_1.2.0.1     nnet_7.3-16         
+ [37] gtable_0.3.0         globals_0.14.0       timeDate_3043.102   
+ [40] rlang_0.4.11         BBmisc_1.11          systemfonts_1.0.1   
+ [43] text2vec_0.6         splines_4.0.5        extrafontdb_1.0     
+ [46] stopwords_2.2        selectr_0.4-2        checkmate_2.0.0     
+ [49] yaml_2.2.1           modelr_0.1.8         backports_1.2.1     
+ [52] httpuv_1.6.0         tokenizers_0.2.1     extrafont_0.17      
+ [55] tools_4.0.5          lava_1.6.9           usethis_2.0.1       
+ [58] ellipsis_0.3.2       jquerylib_0.1.4      Rcpp_1.0.6          
+ [61] plyr_1.8.6           base64enc_0.1-3      textdata_0.4.1      
+ [64] parallelMap_1.5.0    prettyunits_1.1.1    ps_1.6.0            
+ [67] rpart_4.1-15         ParamHelpers_1.14    haven_2.4.1         
+ [70] fs_1.5.0             here_1.0.1           furrr_0.2.2         
+ [73] unbalanced_2.0       magrittr_2.0.1       data.table_1.14.0   
+ [76] reprex_2.0.0         RANN_2.6.1           GPfit_1.0-8         
+ [79] mlapi_0.1.0          SnowballC_0.7.0      whisker_0.4         
+ [82] ROSE_0.0-3           R.cache_0.15.0       hms_1.0.0           
+ [85] evaluate_0.14        RhpcBLASctl_0.20-137 readxl_1.3.1        
+ [88] gridExtra_2.3        compiler_4.0.5       crayon_1.4.1        
+ [91] R.oo_1.24.0          htmltools_0.5.1.1    later_1.2.0         
+ [94] DBI_1.1.1            dbplyr_2.1.1         MASS_7.3-54         
+ [97] rappdirs_0.3.3       Matrix_1.3-3         cli_2.5.0           
+[100] R.methodsS3_1.8.1    gower_0.2.2          naivebayes_0.9.7    
+[103] pkgconfig_2.0.3      rsparse_0.4.0        skimr_2.1.3         
+[106] xml2_1.3.2           memuse_4.1-0         hardhat_0.1.5       
+[109] bslib_0.2.4          tidytuesdayR_1.0.1   prodlim_2019.11.13  
+[112] rvest_1.0.0          janeaustenr_0.1.5    digest_0.6.27       
+[115] rmarkdown_2.7        cellranger_1.1.0     fastmatch_1.1-0     
+[118] gdtools_0.2.3        curl_4.3.1           lifecycle_1.0.0     
+[121] jsonlite_1.7.2       fansi_0.4.2          pillar_1.6.0        
+[124] lattice_0.20-44      httr_1.4.2           survival_3.2-11     
+[127] glue_1.4.2           FNN_1.1.3            png_0.1-7           
+[130] class_7.3-19         stringi_1.5.3        sass_0.3.1          
+[133] textshaping_0.3.3    styler_1.4.1        </code></pre>
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIk5ldGZsaXggVGl0bGVzIg0KYXV0aG9yOiAiSmltIEdydW1hbiINCmRhdGU6ICJBcHJpbCAyMCwgMjAyMSINCm91dHB1dDoNCiAgd29ya2Zsb3dyOjp3Zmxvd19odG1sOg0KICAgIHRvYzogbm8NCiAgICBjb2RlX2ZvbGRpbmc6IGhpZGUNCiAgICBjb2RlX2Rvd25sb2FkOiB0cnVlDQogICAgZGZfcHJpbnQ6IHBhZ2VkDQplZGl0b3Jfb3B0aW9uczoNCiAgY2h1bmtfb3V0cHV0X3R5cGU6IGNvbnNvbGUNCi0tLQ0KDQpgYGB7cn0NCmtuaXRyOjppbmNsdWRlX2dyYXBoaWNzKGhlcmU6OmhlcmUoImRvY3MiLCJhc3NldHMiLCJuZXRmbGl4LnBuZyIpLCBlcnJvciA9IEZBTFNFKQ0KYGBgDQoNClRoZSAjVGlkeVR1ZXNkYXkgZGF0YSB0aGlzIHdlZWsgaXMgTmV0ZmxpeCdzIHN0cmVhbWluZyBjYXRhbG9nIHRpdGxlcyB3aXRoIGRlc2NyaXB0aW9ucywgZ2VucmUgY2xhc3NpZmljYXRpb25zLCBhY3RvcnMsIGRpcmVjdG9ycywgZGF0ZXMsIGFuZCBvdGhlciBtZXRhZGF0YS4NCg0KIyBJbnRyb2R1Y3Rpb24NCg0KUHJpb3IgdG8gd3JpdGluZyB0aGlzIHBvc3QsIEkgd2FudCB0byBhY2tub3dsZWRnZSB0aGF0IEkgYmVuZWZpdGVkIGZyb20gdGhlIGd1aWRhbmNlIGFuZCB3b3JrIG9mIHRoZSBmb2xsb3dpbmc6DQoNCjEuIERhdmlkIFJvYmluc29uJ3MgWW91dHViZSBzY3JlZW5jYXN0IGFuZCBjb2RlIGF0IHRoZSBbcmVwbyBoZXJlXShodHRwczovL2dpdGh1Yi5jb20vZGdydHdvL2RhdGEtc2NyZWVuY2FzdHMvYmxvYi9tYXN0ZXIvMjAyMV8wNF8yMF9uZXRmbGl4X3RpdGxlcy5SbWQpLg0KDQoxLiBKdWxpYSBTaWxnZSdzIFtXaGljaCAjVGlkeVR1ZXNkYXkgTmV0ZmxpeCB0aXRsZXMgYXJlIG1vdmllcyBhbmQgd2hpY2ggYXJlIFRWIHNob3dzP10oaHR0cHM6Ly9qdWxpYXNpbGdlLmNvbS9ibG9nL25ldGZsaXgtdGl0bGVzLykNCg0KMS4gTWFyayBIIFdoaXRlLCBQaEQncyBibG9nIHBvc3QgW0VYUExPUklORyBUSEUgU1RBUiBXQVJTICJQUkVRVUVMIFJFTkFJU1NBTkNFIiBVU0lORyBUSURZTU9ERUxTIEFORCBXT1JLRkxPV1NFVFNdKGh0dHBzOi8vd3d3Lm1hcmtody5jb20vYmxvZy9wcmVxdWVsLXJlbmFpc3NhbmNlKQ0KDQoxLiBNYXggS3VobiBhbmQgSnVsaWEgU2lsZ2UncyBpbi1wcm9ncnNzIGJvb2sgVGlkeSBNb2RlbGluZyBXaXRoIFIgW0NoYXB0ZXIgMTU6IFNjcmVlbmluZyBNYW55IE1vZGVsc10oaHR0cHM6Ly93d3cudG13ci5vcmcvd29ya2Zsb3ctc2V0cy5odG1sKQ0KDQpNeSBnb2FsIGlzIHRvIGV4cGxvcmUgYW5kIGNsYXNzaWZ5IHVzaW5nIHRoZSBgdGlkeW1vZGVsc2AgZnJhbWV3b3JrIGFuZCBgd29ya2Zsb3dzZXRzYCB0byBwcmVkaWN0IHRoZSBnZW5yZSBvZiB0aGUgdGl0bGVzIG9uIHRoZSBzdHJlYW1pbmcgc2VydmljZXMuIERyLiBTaWxnZSBoaW50ZWQgaW4gaGVyIGJyb2FkY2FzdCB0aGF0IGEgbXVsdGktY2xhc3MgcHJlZGljdGlvbiB3b3VsZCBiZSBwb3NzaWJsZSB3aXRoIGEgbmV1cmFsIG5ldC4gTGV0J3MgZXhwbG9yZSB0aGF0IHBhdGguDQoNCkZpcnN0LCBsZXQncyBsb2FkIGxpYnJhcmllcyBhbmQgc2V0IGEgZ2dwbG90IHRoZW1lOg0KDQpgYGB7ciBzZXR1cCwgd2FybmluZz1GQUxTRX0NCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KA0KCWVjaG8gPSBUUlVFLA0KCW1lc3NhZ2UgPSBGQUxTRSwNCgl3YXJuaW5nID0gRkFMU0UsDQoJY2FjaGUgPSBGQUxTRSwNCgljYWNoZS5sYXp5ID0gRkFMU0UsDQoJZGZfcHJpbnQgPSAicGFnZWQiLA0KCWRwaSA9IDMwMCwNCgl0aWR5ID0gInN0eWxlciIsDQoJZGV2ID0gInJhZ2dfcG5nIiwNCglhdXRvZGVwID0gVFJVRQ0KKQ0KDQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMoew0KbGlicmFyeSh0aWR5dmVyc2UpDQoNCmxpYnJhcnkobHVicmlkYXRlKQ0KbGlicmFyeShocmJydGhlbWVzKQ0KDQpsaWJyYXJ5KHRpZHl0ZXh0KQ0KDQpsaWJyYXJ5KHRpZHltb2RlbHMpDQpsaWJyYXJ5KHRoZW1pcykNCmxpYnJhcnkodGV4dHJlY2lwZXMpDQogIA0KDQpsaWJyYXJ5KGRpc2NyaW0pIA0KICANCg0KbGlicmFyeShmaW5ldHVuZSkNCmxpYnJhcnkodmlwKQ0KDQpsaWJyYXJ5KHdvcmtmbG93c2V0cykNCmxpYnJhcnkoZG9QYXJhbGxlbCkNCiAgDQpsaWJyYXJ5KGZhc3RzaGFwKQ0KIH0pDQoNCnVwZGF0ZV9nZW9tX2ZvbnRfZGVmYXVsdHMoZm9udF9yY19saWdodCkNCg0KZ2dwbG90Mjo6dGhlbWVfc2V0KGhyYnJ0aGVtZXM6OnRoZW1lX2lwc3VtX3JjKCkgKw0KICAgICAgICAgICAgZ2dwbG90Mjo6dGhlbWUocGxvdC50aXRsZS5wb3NpdGlvbiA9ICJwbG90IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHBsb3QuY2FwdGlvbi5wb3NpdGlvbiA9ICJwbG90IikpDQoNCmBgYA0KDQpMZXQncyBsb2FkIHRoZSBkYXRhIGFuZCBjbGVhbiB1cCB0aGUgZHVyYXRpb24gbW92aWUgZmllbGQgYW5kIGRhdGVfYWRkZWQgZmllbGRzLg0KDQpgYGB7ciBsb2FkLCBtZXNzYWdlPUZBTFNFfQ0KDQpuZXRmbGl4X3RpdGxlcyA8LQ0KICB0aWR5dHVlc2RheVI6OnR0X2xvYWQoIjIwMjEtMDQtMjAiKSRuZXRmbGl4X3RpdGxlcyAlPiUNCiAgc2VwYXJhdGUoZHVyYXRpb24sDQogICAgICAgICAgIGMoImR1cmF0aW9uIiwgImR1cmF0aW9uX3VuaXRzIiksDQogICAgICAgICAgIHNlcCA9ICIgIiwNCiAgICAgICAgICAgY29udmVydCA9IFRSVUUpICU+JQ0KICBtdXRhdGUoZGF0ZV9hZGRlZCA9IG1keShkYXRlX2FkZGVkKSwNCiAgICAgICAgIHllYXJfYWRkZWQgPSB5ZWFyKGRhdGVfYWRkZWQpKSANCg0KYGBgDQoNClRoZSBkYXRhc2V0IGluY2x1ZGVzIGByIHNjYWxlczo6Y29tbWEobnJvdyhuZXRmbGl4X3RpdGxlcykpYCB0aXRsZXMsIGJvdGggYXMgbW92aWVzIGFuZCBUViBzaG93cy4gT3RoZXIgc3VtbWFyeSBkZXRhaWxzIG9mIHRoZSBkYXRhc2V0LCBhcyBwcm92aWRlZCBieSBgc2tpbXJgDQoNCmBgYHtyfQ0Kc2tpbXI6OnNraW0obmV0ZmxpeF90aXRsZXMpDQpgYGANCg0KVGhlIGBsaXN0ZWRfaW5gIGNoYXJhY3RlciBmaWVsZCBhc3NvY2lhdGVzIGluZGl2aWR1YWwgdGl0bGVzIHdpdGggb25lIG9yIG1vcmUgZ2VucmVzLiBXaGVuIHNlcGFyYXRlZCBvdXQsIHRoZSBjb3VudCBvZiB0aXRsZXMgaW4gZWFjaCBnZW5yZSBpbmNsdWRlczoNCg0KYGBge3J9DQpuZXRmbGl4X3RpdGxlcyAlPiUNCiAgc2VwYXJhdGVfcm93cyhsaXN0ZWRfaW4sIHNlcCA9ICIsICIpICU+JSANCiAgY291bnQobGlzdGVkX2luKQ0KYGBgDQoNCkxldCdzIHRha2UgYSBxdWljayBwZWVrIGF0IHRoZSBtZWRpYW4gdGltZSBkdXJhdGlvbiBvZiBvbmx5IHRoZSBtb3ZpZXMgZm9yIGVhY2ggZ2VucmUuIE5vdGUgYWdhaW4gdGhhdCB0aGUgc2FtZSB0aXRsZSBjYW4gb2Z0ZW4gYmUgY291bnRlZCBpbiBtb3JlIHRoYW4gb25lIGdlbnJlIGdyb3VwaW5nLg0KDQpgYGB7ciBuZXRmbGl4X3RpdGxlc30NCm5ldGZsaXhfdGl0bGVzICU+JQ0KICBzZXBhcmF0ZV9yb3dzKGxpc3RlZF9pbiwgc2VwID0gIiwgIikgJT4lDQogIGdyb3VwX2J5KHR5cGUsIGdlbnJlID0gbGlzdGVkX2luKSAlPiUNCiAgc3VtbWFyaXplKA0KICAgIG4gPSBuKCksDQogICAgbWVkaWFuX2R1cmF0aW9uID0gbWVkaWFuKGR1cmF0aW9uKSwNCiAgICAuZ3JvdXBzID0gImRyb3AiDQogICkgJT4lDQogIG11dGF0ZShnZW5yZSA9IGdsdWU6OmdsdWUoInsgZ2VucmUgfSAoeyBuIH0pIikpICU+JQ0KICBmaWx0ZXIodHlwZSA9PSAiTW92aWUiKSAlPiUNCiAgZmlsdGVyKGdlbnJlICE9ICJNb3ZpZXMiKSAlPiUNCiAgbXV0YXRlKGdlbnJlID0gZmN0X3Jlb3JkZXIoZ2VucmUsIG1lZGlhbl9kdXJhdGlvbikpICU+JQ0KICBnZ3Bsb3QoYWVzKG1lZGlhbl9kdXJhdGlvbiwgZ2VucmUpKSArDQogIGdlb21fY29sKGZpbGwgPSAicmVkIiwgc2hvdy5sZWdlbmQgPSBGQUxTRSkgKw0KICBnZW9tX3RleHQoDQogICAgYWVzKHggPSBtZWRpYW5fZHVyYXRpb24gLSAzLA0KICAgICAgICBsYWJlbCA9IG1lZGlhbl9kdXJhdGlvbiksDQogICAgICAgIGNvbG9yID0gIndoaXRlIikgKw0KICBsYWJzKHggPSAiTWVkaWEgU3RyZWFtaW5nIE5ldGZsaXggTW92aWUgRHVyYXRpb24gKE1pbnV0ZXMpIiwNCiAgICAgICAgICAgeSA9IE5VTEwNCiAgICAgICkNCmBgYA0KDQpUaGUgbWVkaWFuIG9mIE5ldGZsaXggdGl0bGVzIGxhYmVsZWQgYXMgRG9jdW1lbnRhcmllcyBhbmQgU3RhbmQtVXAgQ29tZWR5IG1vdmllcyBhcmUgc2hvcnRlciBpbiBkdXJhdGlvbiB0aGFuIERyYW1hcyBhbmQgQ2xhc3NpYyBNb3ZpZXMuICANCg0KIyBGZWF0dXJlIEVuZ2luZWVyaW5nDQoNCkdpdmVuIHRoZSBkZXNjcmlwdGlvbiwgY2FzdCBtZW1iZXJzLCBkaXJlY3RvciwgYW5kIHJlbGVhc2VfeWVhciwgY2FuIHdlIGJ1aWxkIGEgdXNlZnVsIG1vZGVsIHRvIHByZWRpY3QgdGhlIGdlbnJlPw0KDQpVbmJhbGFuY2VkIG11bHRpLWNsYXNzIHByb2JsZW1zIGFyZSBlc3BlY2lhbGx5IGNoYWxsZW5naW5nLiBBbmQgaW4gdGhlIE5ldGZsaXggZGF0YXNldCwgbW9zdCBtb3ZpZXMgYmVsb25nIHRvIHR3byBvciB0aHJlZSBnZW5yZXMgYXQgdGhlIHNhbWUgdGltZS4gVG8gbWFrZSB0aGlzIHByb2JsZW0ganVzdCBhIGxpdHRsZSBsZXNzIGNvbXBsZXgsIHdlIHdpbGwgYnVuZGxlIHNvbWUgZ2VucmUncyBpbnRvIGxvZ2ljYWwgZ3JvdXBpbmdzLiBJIGFtIGFsc28gb25seSB1c2luZyB0aGUgZmlyc3QgYGxpc3RlZF9pbmAgZ2VucmUsIGFzIHRoZSBwcmltYXJ5LiBUaGUgcmVzdWx0IGlzIDIwIGdlbnJlcy4NCg0KYGBge3J9DQpuZXRmbGl4X2RmIDwtIG5ldGZsaXhfdGl0bGVzICU+JSANCiAgc2VsZWN0KGdlbnJlID0gbGlzdGVkX2luLCANCiAgICAgICAgIHNob3dfaWQsIA0KICAgICAgICAgZGVzY3JpcHRpb24sIA0KICAgICAgICAgY2FzdCwgDQogICAgICAgICBkaXJlY3RvciwgDQogICAgICAgICByZWxlYXNlX3llYXIpICU+JSANCiAgc2VwYXJhdGVfcm93cyhnZW5yZSwgc2VwID0gIiwgIikgJT4lIA0KICBtdXRhdGUoZ2VucmUgPSBjYXNlX3doZW4oDQogICAgICAgIHN0cl9kZXRlY3QoZ2VucmUsICJJbnRlcm5hdGlvbmFsIikgfiAiSW50ZXJuYXRpb25hbCIsDQogICAgICAgIHN0cl9kZXRlY3QoZ2VucmUsICJSb21hbnRpYyIpIH4gIlJvbWFudGljIiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIkRyYW1hIikgfiAiRHJhbWEiLA0KICAgICAgICBzdHJfZGV0ZWN0KGdlbnJlLCAiQWN0aW9uIikgfiAiQWN0aW9uIiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIkNvbWVkIikgfiAiQ29tZWR5IiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIkN1bHQiKSB+ICJDdWx0IiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIlRocmlsbCIpIH4gIlRocmlsbGVyIiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIlRlZW58Q2hpbGRyZW58S2lkcyIpIH4gIkNoaWxkcmVuIiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIlNjaWVuY2V8RG9jdSIpIH4gIkRvY3VtZW50YXJ5IiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIkFuaW1lIikgfiAiQW5pbWUiLA0KICAgICAgICBzdHJfZGV0ZWN0KGdlbnJlLCAiSG9ycm9yIikgfiAiSG9ycm9yIiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIkluZGVwZW5kZW50IikgfiAiSW5kZXBlbmRlbnQiLA0KICAgICAgICBzdHJfZGV0ZWN0KGdlbnJlLCAiQ3JpbWUiKSB+ICJDcmltZSIsDQogICAgICAgIHN0cl9kZXRlY3QoZ2VucmUsICJNdXNpYyIpIH4gIk11c2ljIiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIkJyaXRpc2giKSB+ICJCcml0aXNoIiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIlJlYWxpdHkiKSB+ICJSZWFsaXR5IiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIkNsYXNzaWMiKSB+ICJDbGFzc2ljIiwNCiAgICAgICAgc3RyX2RldGVjdChnZW5yZSwgIk15c3RlciIpIH4gIk15c3RlcmllcyIsDQogICAgICAgIHN0cl9kZXRlY3QoZ2VucmUsICJGYWl0aCIpIH4gIkZhaXRoIiwNCiAgICAgICAgVFJVRSB+ICJPdGhlciINCiAgICAgICkpICU+JSANCiAgICBncm91cF9ieShzaG93X2lkKSAlPiUgDQogICAgbXV0YXRlKHBvc2l0aW9uID0gcm93X251bWJlcigpKSAlPiUgDQogICAgdW5ncm91cCgpICU+JSANCiAgICBwaXZvdF93aWRlcihuYW1lc19mcm9tID0gcG9zaXRpb24sDQogICAgICAgICAgICAgICAgdmFsdWVzX2Zyb20gPSBnZW5yZSwNCiAgICAgICAgICAgICAgICBuYW1lc19wcmVmaXggPSAiZ2VucmUiKSAlPiUgDQogICAgbXV0YXRlKGdlbnJlMSA9IGFzLmZhY3RvcihnZW5yZTEpKQ0KDQpgYGANCg0KTGV04oCZcyBzcGxpdCB0aGUgZGF0YSB1c2luZyB0aGUgZGVmYXVsdCAzOjEgcmF0aW8gb2YgdHJhaW5pbmctdG8tdGVzdCBhbmQgcmVzYW1wbGUgdGhlIHRyYWluaW5nIHNldCB1c2luZyAxMC1mb2xkIGNyb3NzLXZhbGlkYXRpb24uIFYtZm9sZCBjcm9zcy12YWxpZGF0aW9uIHJhbmRvbWx5IHNwbGl0cyB0aGUgZGF0YSBpbnRvIFYgZ3JvdXBzICgxMCkgb2Ygcm91Z2hseSBlcXVhbCBzaXplIChjYWxsZWQgImZvbGRzIikuIEEgcmVzYW1wbGUgb2YgdGhlIGFuYWx5c2lzIGRhdGEgY29uc2lzdHMgb2YgVi0xICg5KSBvZiB0aGUgZm9sZHMgd2hpbGUgdGhlIGFzc2Vzc21lbnQgc2V0IGNvbnRhaW5zIHRoZSBmaW5hbCBmb2xkLiBJbiBiYXNpYyBWLWZvbGQgY3Jvc3MtdmFsaWRhdGlvbiAoaS5lLiBubyByZXBlYXRzKSwgdGhlIG51bWJlciBvZiByZXNhbXBsZXMgaXMgZXF1YWwgdG8gVi4NCg0KVGhlIHN0cmF0YSBhcmd1bWVudCBjYXVzZXMgdGhlIHJhbmRvbSBzYW1wbGluZyB0byBiZSBjb25kdWN0ZWQgd2l0aGluIHRoZSBzdHJhdGlmaWNhdGlvbiB2YXJpYWJsZS4gDQoNCmBgYHtyfQ0Kc2V0LnNlZWQoMTUwMSkNCm5ldGZsaXhfc3BsaXQgPC0gaW5pdGlhbF9zcGxpdChuZXRmbGl4X2RmLCBzdHJhdGEgPSBnZW5yZTEpDQpuZXRmbGl4X3RyYWluIDwtIHRyYWluaW5nKG5ldGZsaXhfc3BsaXQpDQpuZXRmbGl4X3Rlc3QgIDwtIHRlc3RpbmcobmV0ZmxpeF9zcGxpdCkNCg0KbmV0ZmxpeF9mb2xkcyA8LSB2Zm9sZF9jdihuZXRmbGl4X3RyYWluLA0KICAgICAgICAgICAgICAgICAgICAgICAgICB2ID0gNSwgc3RyYXRhID0gZ2VucmUxKQ0KYGBgDQoNCk91ciBkYXRhc2V0IHdpbGwgYmUgcHJlLXByb2Nlc3NlZCB0aHJvdWdoIHR3byBkaWZmZXJlbnQgcmVjaXBlcyB0aGF0IGVuZ2luZWVyIHRleHQgZmVhdHVyZXMgYnkgdG9rZW5pemluZyB0aGUgZGVzY3JpcHRpb24sIGNhc3QsIGFuZCB0aGUgZGlyZWN0b3IgZmllbGRzLg0KDQpUaGUgZmlyc3QgcmVjaXBlIGFwcGxpZXMgZmlsdGVycyB0byB1c2UgdGhlIHdvcmRzLCBjYXN0IG1lbWJlcnMsIGFuZCBkaXJlY3RvciB3aXRoIHRoZSAzMCBoaWdoZXN0IHRlcm0gZnJlcXVlbmNpZXMgYWZ0ZXIgcmVtb3Zpbmcgc3RvcCB3b3JkcyBhbmQgc3RlbW1pbmcuDQoNClRoZSBzZWNvbmQgZmlsdGVyIHRoZSBkZXNjcmlwdGlvbiB3b3JkcyB0byByZW1vdmUgc3RvcHdvcmRzIGFuZCB0aGVuIGJ1aWxkcyAyNSB3b3JkIGVtYmVkZGluZ3Mgd2l0aCBbR2xvdmUgVHdpdHRlciAyN0JdKGh0dHBzOi8vd3d3LmFjbHdlYi5vcmcvYW50aG9sb2d5L0QxNC0xMTYyLykuIExlYXJuIG1vcmUgYWJvdXQgd29yZCBlbWJlZGRpbmdzIGFuZCBwcmUtdHJhaW5lZCBtb2RlbCB0cmFuc2ZlciBsZWFybmluZyBbaGVyZV0oaHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1vVXB1QUJLb0VsdykuIFRoZSByZWNpcGUgZ29lcyBvbiB0byBoYXNoIHRoZSBjYXN0IG1lbWJlciBhbmQgZGlyZWN0b3IgZmVhdHVyZXMgaW50byBudW1lcmljIHZhcmlhYmxlcyB3aXRoIHRoZSBoYXNoaW5nIHRyaWNrLg0KDQpCb3RoIG1vZGVscyBhcmUgY2VudGVyZWQgYW5kIHNjYWxlZC4gVGhlcmUgYXJlIG5vIG1pc3NpbmcgdmFsdWVzLiBXaXRoIGEgYmlnIG11bHRpLWNsYXNzIGNoYWxsZW5nZSwgd2UgbmVlZCB0byB0YWtlIGFjdGlvbiB0byBiYWxhbmNlIHRoZSBjbGFzc2VzLiBgZG93bnNhbXBsZWAgZGlzY2FyZHMgbWVtYmVycyBvZiB0aGUgbWFqb3JpdHkgY2xhc3NlcyAoaW4gdGhlIHRyYWluaW5nIHNldCBvbmx5KS4NCg0KYGBge3J9DQpzbW90ZV9yZWMgPC0gcmVjaXBlKGdlbnJlMSB+IGRlc2NyaXB0aW9uICsgY2FzdCArIGRpcmVjdG9yLCBkYXRhID0gbmV0ZmxpeF90cmFpbikgJT4lDQogIHN0ZXBfdG9rZW5pemUoZGVzY3JpcHRpb24pICU+JQ0KICBzdGVwX3N0b3B3b3JkcyhkZXNjcmlwdGlvbikgJT4lDQogIHN0ZXBfc3RlbShkZXNjcmlwdGlvbikgJT4lIA0KICBzdGVwX3Rva2VuZmlsdGVyKGRlc2NyaXB0aW9uLCBtYXhfdG9rZW5zID0gMzApICU+JSANCiAgc3RlcF90b2tlbml6ZShjYXN0LA0KICAgICAgICAgICAgICAgIHRva2VuID0gInJlZ2V4IiwNCiAgICAgICAgICAgICAgICBvcHRpb25zID0gbGlzdChwYXR0ZXJuID0gIiwgIikpICU+JQ0KICBzdGVwX3Rva2VuZmlsdGVyKGNhc3QsIG1heF90b2tlbnMgPSAzMCkgJT4lIA0KICBzdGVwX3Rva2VuaXplKGRpcmVjdG9yLA0KICAgICAgICAgICAgICAgIHRva2VuID0gInJlZ2V4IiwNCiAgICAgICAgICAgICAgICBvcHRpb25zID0gbGlzdChwYXR0ZXJuID0gIiwgIikpICU+JQ0KICBzdGVwX3Rva2VuZmlsdGVyKGRpcmVjdG9yLCBtYXhfdG9rZW5zID0gMzApICU+JSANCiAgc3RlcF90ZihkZXNjcmlwdGlvbikgJT4lDQogIHN0ZXBfdGYoY2FzdCkgJT4lDQogIHN0ZXBfdGYoZGlyZWN0b3IpICU+JSANCiAgc3RlcF9zbW90ZShnZW5yZTEpICU+JSANCiAgc3RlcF9ub3JtYWxpemUoYWxsX251bWVyaWMoKSkNCg0KZW1iZWRkaW5nc19yZWMgPC0gcmVjaXBlKGdlbnJlMSB+IGRlc2NyaXB0aW9uICsgY2FzdCArIGRpcmVjdG9yLCBkYXRhID0gbmV0ZmxpeF90cmFpbikgJT4lIA0KICAgc3RlcF90b2tlbml6ZShkZXNjcmlwdGlvbikgJT4lIA0KICAgc3RlcF9zdG9wd29yZHMoZGVzY3JpcHRpb24pICU+JSANCiAgIHRleHRyZWNpcGVzOjpzdGVwX3dvcmRfZW1iZWRkaW5ncyhkZXNjcmlwdGlvbiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbWJlZGRpbmdzID0gdGV4dGRhdGE6OmVtYmVkZGluZ19nbG92ZTI3YigpKSAlPiUgDQogICBzdGVwX3Rva2VuaXplKGNhc3QsDQogICAgICAgICAgICAgICAgIHRva2VuID0gInJlZ2V4IiwNCiAgICAgICAgICAgICAgICAgb3B0aW9ucyA9IGxpc3QocGF0dGVybiA9ICIsICIpKSAlPiUgDQogICBzdGVwX3RleHRoYXNoKGNhc3QsIG51bV90ZXJtcyA9IDUwKSAlPiUgDQogICBzdGVwX3Rva2VuaXplKGRpcmVjdG9yLA0KICAgICAgICAgICAgICAgICB0b2tlbiA9ICJyZWdleCIsDQogICAgICAgICAgICAgICAgIG9wdGlvbnMgPSBsaXN0KHBhdHRlcm4gPSAiLCAiKSkgJT4lIA0KICAgc3RlcF90ZXh0aGFzaChkaXJlY3RvciwgbnVtX3Rlcm1zID0gNTApICU+JSANCiAgIHN0ZXBfc21vdGUoZ2VucmUxKSAlPiUgDQogICBzdGVwX25vcm1hbGl6ZShhbGxfbnVtZXJpYygpKSANCiAgDQpgYGANCg0KQSBsb29rIGF0IHRoZSBmZWF0dXJlcyBpbiB0aGUgZnVsbHkgcHJlLXByb2Nlc3NlZCwgImZpbHRlcmVkIiwgdHJhaW5pbmcgc2V0Og0KDQpgYGB7cn0NCnNtb3RlX3JlYyAlPiUgDQogIHByZXAoKSAlPiUgDQogIGJha2UobmV3X2RhdGEgPSBOVUxMKSAlPiUgDQogIGdsaW1wc2UoKQ0KYGBgDQoNCkFuZCBhIGxvb2sgYXQgdGhlIGZlYXR1cmVzIG9mIHRoZSAiZW1iZWRkaW5ncyIgcmVjaXBlOg0KDQpgYGB7cn0NCmVtYmVkZGluZ3NfcmVjICU+JSANCiAgcHJlcCgpICU+JSANCiAgYmFrZShuZXdfZGF0YSA9IE5VTEwpICU+JSANCiAgZ2xpbXBzZSgpDQpgYGANCg0KRm9yIHRoZSBtb2RlbHMgdGhlbXNlbHZlcywgd2UgdXNlIHRoZSB0aGUgYHBhcnNuaXBgIHBhY2thZ2UgdG8gY3JlYXRlIHNldHMgb2YgbW9kZWwgc3BlY2lmaWNhdGlvbnMuICBBbGwgYXJlIHNldHVwIGZvciBjbGFzc2lmaWNhdGlvbi4gRm9yIHRoaXMgZGVtb25zdHJhdGlvbiwgSSBhbSBpbnRlcmVzdGVkIGluIHRoZSBiZWhhdmlvciBvZiB0aGUgU1ZNIExpYmxpbmVhciBlbmdpbmUgYW5kIHRoZSBuYWl2ZSBCYXllcyBlbmdpbmUuDQoNCmBgYHtyfQ0KcmFuZ2VyX3NwZWMgPC0NCiAgcmFuZF9mb3Jlc3QodHJlZXMgPSAxMDAwKSAlPiUNCiAgc2V0X21vZGUoImNsYXNzaWZpY2F0aW9uIikgJT4lDQogIHNldF9lbmdpbmUoInJhbmdlciIpDQoNCm5iX3NwZWMgPC0gbmFpdmVfQmF5ZXMoKSAlPiUNCiAgc2V0X21vZGUoImNsYXNzaWZpY2F0aW9uIikgJT4lDQogIHNldF9lbmdpbmUoIm5haXZlYmF5ZXMiKQ0KDQpgYGANCg0KIyMgV29ya2Zsb3dzZXRzIA0KDQpUaGlzIGlzIHdoZXJlIHRoZSBjb29sIHBhcnQgY29tZXMgaW46IFdlIG5vdyBkZWZpbmUgYSDigJx3b3JrZmxvdyBzZXQu4oCdIFdlIGFwcGx5IGBjcm9zcyA9IFRSVUVgIHRvIGxvb2sgYXQgYWxsIGNvbWJpbmF0aW9ucyBvZiByZWNpcGVzIGFuZCBtb2RlbHMuIA0KDQpgYGB7cn0NCih3ZnMgPC0gDQogICBiaW5kX3Jvd3Mod29ya2Zsb3dfc2V0KA0KICAgICAgICAgICAgICBwcmVwcm9jID0gbGlzdChzbW90ZSA9IHNtb3RlX3JlYywgDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVtYmVkZGluZ3MgPSBlbWJlZGRpbmdzX3JlYyksDQogICAgICAgICAgICAgIG1vZGVscyA9IGxpc3QobmJfc3BlYywgcmFuZ2VyX3NwZWMpLA0KICAgICAgICAgICAgICBjcm9zcyA9IFRSVUUpDQogICAgICAgICAgICAgKQ0KKQ0KYGBgDQoNCkFuZCB3ZSBzZWUgd2UgaGF2ZSBvdXIgZm91ciBkaWZmZXJlbnQgd29ya2Zsb3dzIHNldCB1cC4gDQoNCiMjIFR1bmluZyBhbmQgQ3Jvc3MgVmFsaWRhdGlvbg0KDQpUaGUgZW5naW5lcyBjaG9zZW4gaGVyZSByZXF1aXJlIG5vIHR1bmluZy4gV2Ugd2lsbCBsb2FkIHJlZ2lzdGVyIGEgcGFyYWxsZWwgYmFja2VuZCB0byBzcGVlZCB0aGUgY29tcHV0YXRpb25zIGFjcm9zcyB0aGUgY3Jvc3MgdmFsaWRhdGlvbiBmb2xkcy4NCg0KYGBge3J9DQphbGxfY29yZXMgPC0gcGFyYWxsZWw6OmRldGVjdENvcmVzKGxvZ2ljYWwgPSBGQUxTRSkNCg0KY2wgPC0gbWFrZVBTT0NLY2x1c3RlcihhbGxfY29yZXMpDQpkb1BhcmFsbGVsOjpyZWdpc3RlckRvUGFyYWxsZWwoY2wpDQoNCnN5c3RlbS50aW1lKA0KDQogICAgICBjdl9yZXMgPC0gd2ZzICU+JQ0KICAgICAgICB3b3JrZmxvd19tYXAoZm4gPSAiZml0X3Jlc2FtcGxlcyIsDQogICAgICAgICAgICAgICAgICAgICBzZWVkID0gMjAyMSwNCiAgICAgICAgICAgICAgICAgICAgIHJlc2FtcGxlcyA9IG5ldGZsaXhfZm9sZHMsDQogICAgICAgICAgICAgICAgICAgICBjb250cm9sID0gY29udHJvbF9yZXNhbXBsZXMoc2F2ZV9wcmVkID0gVFJVRSksDQogICAgICAgICAgICAgICAgICAgICB2ZXJib3NlID0gVFJVRSkNCikNCg0KZG9QYXJhbGxlbDo6c3RvcEltcGxpY2l0Q2x1c3RlcigpDQoNCmBgYA0KDQojIyBDb21wYXJlIHRoZSBtb2RlbHMNCg0KV2UgY2FuIHRoZW4gbG9vayBhdCB0aGUgcmVzdWx0cy4gV2hhdCBhcmUgdGhlIHRvcCB3b3JrZmxvd3M/DQoNCmBgYHtyfQ0KY3ZfcmVzICU+JSANCiAgcmFua19yZXN1bHRzKCkgJT4lIA0KICBmaWx0ZXIoLm1ldHJpYyA9PSAicm9jX2F1YyIpICU+JSANCiAgc2VsZWN0KHdmbG93X2lkLCByb2NfYXVjID0gbWVhbiwgcmFuaykNCg0KYXV0b3Bsb3QoY3ZfcmVzLCANCiAgICAgICAgIHJhbmtfbWV0cmljID0gInJvY19hdWMiLCANCiAgICAgICAgIG1ldHJpYyA9ICJyb2NfYXVjIiwNCiAgICAgICAgIHNlbGVjdF9iZXN0ID0gVFJVRSkNCmBgYA0KDQpUaGUgZW1iZWRkaW5ncyBwcmUtcHJvY2Vzc29yIGdpdmVzIGEgYmlnIGJvb3N0IGluIHBlcmZvcm1hbmNlLiBCYXllcyBpcyBmYXN0LCBidXQgaXQgZmFsbHMgYXBhcnQgYmVjYXVzZSB0aGUgbW9kZWwgYXNzdW1lcyBpbmRlcGVuZGVuY2Ugb2YgdGhlIGZlYXR1cmVzIGFuZCBpdCBkb2VzIG5vdCBoYW5kbGUgaW50ZXJhY3Rpb25zLg0KDQpXZSBjYW4gbG9vayBhdCBST0MgY3VydmVzIGZvciB0aGUgc2V0IG9mIDUgY3Jvc3MtdmFsaWRhdGlvbiBmb2xkcyBvZiB0aGUgYmVzdCBtb2RlbDoNCg0KYGBge3J9DQpjdl9yZXMgJT4lIA0KICBwdWxsX3dvcmtmbG93X3NldF9yZXN1bHQoImVtYmVkZGluZ3NfcmFuZF9mb3Jlc3QiKSAlPiUgDQogIGNvbGxlY3RfcHJlZGljdGlvbnMoKSAlPiUgDQogIGdyb3VwX2J5KGlkKSAlPiUNCiAgcm9jX2N1cnZlKHRydXRoID0gZ2VucmUxLCAucHJlZF9BY3Rpb246LnByZWRfVGhyaWxsZXIpICU+JQ0KICBhdXRvcGxvdCgpICsNCiAgbGFicygNCiAgICBjb2xvciA9IE5VTEwsDQogICAgdGl0bGUgPSAiUk9DIGN1cnZlIGZvciBOZXRmbGl4IE1vdmllIEdlbnJlMSBSYW5kb20gRm9yZXN0IFByZWRpY3RvciIsDQogICAgc3VidGl0bGUgPSAiRWFjaCByZXNhbXBsZSBmb2xkIGlzIHNob3duIGluIGEgZGlmZmVyZW50IGNvbG9yIg0KICApDQpgYGANCg0KVGhpcyBtb2RlbCBwcmVkaWN0cyBEb2N1bWVudGFyaWVzIGFuZCBJbnRlcm5hdGlvbmFsIGZpbG1zIHZlcnkgd2VsbC4gT24gdGhlIG90aGVyIGV4dHJlbWUsIFJvbWFudGljIE1vdmllcyBhbmQgIk90aGVyIiBhcmUgbm90IHByZWRpY3RlZCB3ZWxsIGluIGV2ZXJ5IGNyb3NzIHZhbGlkYXRpb24gZm9sZC4NCg0KV2UgY2FuIGFsc28gY3JlYXRlIGEgY29uZnVzaW9uIG1hdHJpeCBmcm9tIHRoZSByZXNhbXBsZXMgdXNpbmcgYGNvbmZfbWF0X3Jlc2FtcGxlZCgpYC4sIHdoaWNoIGNvbXB1dGVzIGEgc2VwYXJhdGUgY29uZnVzaW9uIG1hdHJpeCBmb3IgZWFjaCByZXNhbXBsZSB0aGVuIGF2ZXJhZ2VzIHRoZSBjZWxsIGNvdW50cy4NCg0KYGBge3J9DQpjdl9yZXMgJT4lIA0KICBwdWxsX3dvcmtmbG93X3NldF9yZXN1bHQoImVtYmVkZGluZ3NfcmFuZF9mb3Jlc3QiKSAlPiUgDQogIGNvbmZfbWF0X3Jlc2FtcGxlZCh0aWR5ID0gRkFMU0UpIA0KYGBgDQoNCiMjIFNlbGVjdCB0aGUgYmVzdCBtb2RlbA0KDQpgYGB7cn0NCmJlc3RfcmVzdWx0cyA8LSBjdl9yZXMgJT4lIA0KICBwdWxsX3dvcmtmbG93X3NldF9yZXN1bHQoImVtYmVkZGluZ3NfcmFuZF9mb3Jlc3QiKSAlPiUgDQogIHNlbGVjdF9iZXN0KG1ldHJpYyA9ICJyb2NfYXVjIikNCg0KdGVzdF9yZXN1bHRzIDwtIGN2X3JlcyAlPiUgDQogIHB1bGxfd29ya2Zsb3coImVtYmVkZGluZ3NfcmFuZF9mb3Jlc3QiKSAlPiUgDQogIGZpbmFsaXplX3dvcmtmbG93KGJlc3RfcmVzdWx0cykgJT4lIA0KICBsYXN0X2ZpdChzcGxpdCA9IG5ldGZsaXhfc3BsaXQpDQoNCmBgYA0KDQpUaGUgdGVzdCByZXN1bHRzIHNob3c6DQoNCmBgYHtyfQ0KY29sbGVjdF9tZXRyaWNzKHRlc3RfcmVzdWx0cykNCg0KYGBgDQoNClRoaXMgaXMgYSBnb29kIHRlc3QgcmVzdWx0LCBhcyB0aGUgbW9kZWwgcnVuIG9uIHVuc2VlbiBkYXRhIGRlbGl2ZXJzIHBlcmZvcm1hbmNlIGNvbXBhcmFibGUgdG8gdGhlIHRyYWluaW5nIGZpZ3VyZXMuIFRoaXMgbW9kZWwgZG9lcyBub3Qgb3Zlci1maXQgdGhlIHRyYWluaW5nIGRhdGEuDQoNCkF0IHNvbWUgbGF0ZXIgZGF0ZSwgSSdkIGxpa2UgdG8gZXhwbG9yZSBob3cgdG8gZXh0cmFjdCBpbXBvcnRhbmNlIHNjb3JlcyBmcm9tIHRoZSBlbWJlZGRpbmdzLg0KDQoNCg==</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2021_04_20.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
