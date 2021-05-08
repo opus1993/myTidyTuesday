@@ -60,18 +60,14 @@ library(tidytext)
 library(tidymodels)
 library(themis)
 library(textrecipes)
-  
 
 library(discrim) 
-  
 
 library(finetune)
-library(vip)
 
 library(workflowsets)
 library(doParallel)
-  
-library(fastshap)
+
  })
 
 update_geom_font_defaults(font_rc_light)
@@ -359,6 +355,8 @@ autoplot(cv_res,
 
 The embeddings pre-processor gives a big boost in performance. Bayes is fast, but it falls apart because the model assumes independence of the features and it does not handle interactions.
 
+# {-}
+
 ## Performance
 
 We can look at ROC curves for the set of 5 cross-validation folds of the best model:
@@ -378,8 +376,6 @@ cv_res %>%
 ```
 
 This model predicts Documentaries and International films very well. On the other extreme, Romantic Movies and "Other" are not predicted well in every cross validation fold.
-
-# {-}
 
 We can also create a confusion matrix from the resamples using `conf_mat_resampled()`., which computes a separate confusion matrix for each resample then averages the cell counts.
 
