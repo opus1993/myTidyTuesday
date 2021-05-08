@@ -204,9 +204,18 @@ netflix_split <- initial_split(netflix_df, strata = genre1)
 netflix_train <- training(netflix_split)
 netflix_test  <- testing(netflix_split)
 
-(netflix_folds <- vfold_cv(netflix_train,
-                          v = 5, strata = genre1))
+netflix_folds <- vfold_cv(netflix_train,
+                          v = 5, strata = genre1)
 ```
+
+```{r}
+ggplot(netflix_folds %>%  tidy(), 
+       aes(Fold, Row, fill = Data)) +
+  geom_tile() +
+  labs(caption = "Resampling strategy")
+
+```
+
 
 Our dataset will be pre-processed through two different recipes that engineer text features by tokenizing the description, cast, and the director fields.
 
@@ -214,7 +223,7 @@ The first recipe applies filters to use the words, cast members, and director wi
 
 The second filter the description words to remove stopwords and then builds 25 word embeddings with [Glove Twitter 27B](https://www.aclweb.org/anthology/D14-1162/). Learn more about word embeddings and pre-trained model transfer learning [here](https://www.youtube.com/watch?v=oUpuABKoElw). The recipe goes on to hash the cast member and director features into numeric variables with the hashing trick.
 
-Both models are centered and scaled. There are no missing values. With a big multi-class challenge, we need to take action to balance the classes. `downsample` discards members of the majority classes (in the training set only).
+Both models are centered and scaled. There are no missing values. With a big multi-class challenge, we need to take action to balance the classes. `smote` upsamples members of the minority classes with nearest neighbors imputation (in the training set only).
 
 ## Pre-processing
 
