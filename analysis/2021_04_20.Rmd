@@ -386,12 +386,14 @@ cv_res %>%
 
 This model predicts Documentaries and International films very well. On the other extreme, Romantic Movies and "Other" are not predicted well in every cross validation fold.
 
-We can also create a confusion matrix from the resamples using `conf_mat_resampled()`., which computes a separate confusion matrix for each resample then averages the cell counts.
+We can also create a confusion matrix from the resamples using `conf_mat_resampled()`, which computes a separate confusion matrix for each resample and then averages the cell counts.
 
 ```{r}
 cv_res %>% 
   pull_workflow_set_result("embeddings_rand_forest") %>% 
-  conf_mat_resampled(tidy = FALSE) 
+  conf_mat_resampled(tidy = FALSE) %>% 
+  autoplot(type = "heatmap") +
+  scale_fill_distiller(palette = 2, direction = "reverse")
 ```
 
 ## Select the best model
