@@ -393,7 +393,9 @@ cv_res %>%
   pull_workflow_set_result("embeddings_rand_forest") %>% 
   conf_mat_resampled(tidy = FALSE) %>% 
   autoplot(type = "heatmap") +
-  scale_fill_distiller(palette = 2, direction = "reverse")
+  scale_fill_distiller(palette = 2, direction = "reverse") +
+  scale_x_discrete(guide = guide_axis(n.dodge = 3))
+  
 ```
 
 ## Select the best model
