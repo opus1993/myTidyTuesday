@@ -192,7 +192,7 @@ netflix_df <- netflix_titles %>%
 
 ```
 
-Let’s split the data using the default 3:1 ratio of training-to-test and resample the training set using 10-fold cross-validation. V-fold cross-validation randomly splits the data into V groups (10) of roughly equal size (called "folds"). A resample of the analysis data consists of V-1 (9) of the folds while the assessment set contains the final fold. In basic V-fold cross-validation (i.e. no repeats), the number of resamples is equal to V.
+Let’s split the data using the default 3:1 ratio of training-to-test and resample the training set using 5-fold cross-validation. V-fold cross-validation randomly splits the data into V groups (5) of roughly equal size (called "folds"). A resample of the analysis data consists of V-1 (4) of the folds while the assessment set contains the final fold. In basic V-fold cross-validation (i.e. no repeats), the number of resamples is equal to V.
 
 ## Cross Validation
 
