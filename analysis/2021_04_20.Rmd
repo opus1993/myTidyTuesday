@@ -291,7 +291,7 @@ embeddings_rec %>%
 
 # Machine Learning {.tabset}
 
-For the models themselves, we use the the `parsnip` package to create sets of model specifications.  All are setup for classification. For this demonstration, I am interested in the behavior of the SVM Liblinear engine and the naive Bayes engine.
+For the models themselves, we use the the `parsnip` package to create sets of model specifications.  All are setup for classification. For this demonstration, I am interested in the behavior of the random forest `ranger` engine and the naive Bayes engine.
 
 ```{r}
 ranger_spec <-
