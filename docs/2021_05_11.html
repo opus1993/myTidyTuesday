@@ -38,6 +38,7 @@
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -313,7 +314,7 @@ $(document).ready(function () {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -322,7 +323,7 @@ $(document).ready(function () {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -334,7 +335,7 @@ $(document).ready(function () {
 <strong>Last updated:</strong> 2021-05-12
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -350,12 +351,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -422,16 +423,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9e544417b23ffe9c3cd8f1d06934baea42e56402targetblank9e54441a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/9e544417b23ffe9c3cd8f1d06934baea42e56402" target="_blank">9e54441</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree457b7196c193eb045156f75146c75331b5317c2etargetblank457b719a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/457b7196c193eb045156f75146c75331b5317c2e" target="_blank">457b719</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree9e544417b23ffe9c3cd8f1d06934baea42e56402targetblank9e54441a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree457b7196c193eb045156f75146c75331b5317c2etargetblank457b719a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/9e544417b23ffe9c3cd8f1d06934baea42e56402" target="_blank">9e54441</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/457b7196c193eb045156f75146c75331b5317c2e" target="_blank">457b719</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -450,7 +451,6 @@ Untracked files:
     Untracked:  analysis/.vscode/
 
 Unstaged changes:
-    Modified:   analysis/2021_05_11.Rmd
     Modified:   analysis/BackboneWatershed.Rmd
 
 </code></pre>
@@ -495,6 +495,57 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/457b7196c193eb045156f75146c75331b5317c2e/analysis/2021_05_11.Rmd" target="_blank">457b719</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-05-12
+</td>
+<td>
+wflow_publish(“analysis/2021_05_11.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/f756ae53ad9f8cc1034351c7734dd9f587c743a1/analysis/2021_05_11.Rmd" target="_blank">f756ae5</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-05-12
+</td>
+<td>
+wflow_publish(“analysis/2021_05_11.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/5330b036e6d8abe3fd9482d29d3da44b495ed3eb/docs/2021_05_11.html" target="_blank">5330b03</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-05-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/opus1993/myTidyTuesday/blob/9e544417b23ffe9c3cd8f1d06934baea42e56402/analysis/2021_05_11.Rmd" target="_blank">9e54441</a>
 </td>
 <td>
@@ -534,7 +585,6 @@ wflow_publish(“analysis/2021_05_11.Rmd”)
 options(tigris_use_cache = TRUE)
 suppressPackageStartupMessages({
 library(tidyverse)
-library(lubridate)
 library(hrbrthemes)
 library(tidycensus)
   
@@ -548,11 +598,7 @@ ggplot2::theme_set(hrbrthemes::theme_ipsum_gs() +
             ggplot2::theme(plot.title.position = &quot;plot&quot;,
                            plot.caption.position = &quot;plot&quot;))</code></pre>
 <p>Loading the data</p>
-<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2021-05-11&quot;)</code></pre>
-<pre><code>
-    Downloading file 1 of 2: `broadband.csv`
-    Downloading file 2 of 2: `broadband_zip.csv`</code></pre>
-<pre class="r"><code>broadband_il &lt;- tt$broadband %&gt;%
+<pre class="r"><code>broadband_il &lt;- tidytuesdayR::tt_load(&quot;2021-05-11&quot;)$broadband %&gt;%
   janitor::clean_names() %&gt;%
   filter(st == &quot;IL&quot;) %&gt;%
   transmute(
@@ -565,6 +611,9 @@ ggplot2::theme_set(hrbrthemes::theme_ipsum_gs() +
     state = &quot;IL&quot;,
     geometry = TRUE
   ))</code></pre>
+<pre><code>
+    Downloading file 1 of 2: `broadband.csv`
+    Downloading file 2 of 2: `broadband_zip.csv`</code></pre>
 <pre class="r"><code>plot_il &lt;- function(variable) {
   broadband_il %&gt;%
     st_as_sf() %&gt;%
@@ -586,14 +635,22 @@ plot_il(estimate) +
   plot_il(usage) +
   scale_fill_viridis_b(n.breaks = 8, labels = scales::percent_format(accuracy = 1)) +
   labs(
-    subtitle = &quot;High Speed Broadband usage&quot;,
+    subtitle = &quot;High Speed Broadband Usage&quot;,
     fill = NULL
   ) +
   plot_annotation(
-    title = &quot;Household income and High Speed broadband usage in Illinois&quot;,
-    caption = &quot;Data Sources: Microsoft and US Census ACS&quot;
+    title = &quot;High Speed Broadband in Illinois&quot;,
+    caption = &quot;Data Sources: Microsoft and US Census ACS 2019 \n
+                  percent of people per county that use the internet at more than 25 Mbps/3 Mbps&quot;
   )</code></pre>
 <p><img src="figure/2021_05_11.Rmd/unnamed-chunk-1-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>Related tweets and insiprations:</p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/jrosecalabrese/status/1392299000401858563&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">My first contribution to <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> — I compared Internet usage in my home state versus my current state<a href="https://t.co/Hh0yHclKvP">https://t.co/Hh0yHclKvP</a> <a href="https://t.co/FjHmyonpEm">pic.twitter.com/FjHmyonpEm</a></p>&mdash; Julianna Calabrese (@jrosecalabrese) <a href="https://twitter.com/jrosecalabrese/status/1392299000401858563?ref_src=twsrc%5Etfw">May 12, 2021</a></blockquote>
+
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/juliasilge/status/1392324410082689026&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">This week&#39;s <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> is about internet access across the US 👩🏽‍💻🧑🏻‍💻👨🏿‍💻 and I can hardly resist making maps of my home state of TX!! <br><br>I used tidycensus to get median household income data 💰 for comparison; <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> code is here:<a href="https://t.co/2vc5sXjwD7">https://t.co/2vc5sXjwD7</a> <a href="https://t.co/snHcGRnRAs">pic.twitter.com/snHcGRnRAs</a></p>&mdash; Julia Silge (@juliasilge) <a href="https://twitter.com/juliasilge/status/1392324410082689026?ref_src=twsrc%5Etfw">May 12, 2021</a></blockquote>
+
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -620,38 +677,39 @@ attached base packages:
 
 other attached packages:
  [1] patchwork_1.1.1   sf_0.9-8          tidycensus_0.11.4 hrbrthemes_0.8.6 
- [5] lubridate_1.7.10  forcats_0.5.1     stringr_1.4.0     dplyr_1.0.6      
- [9] purrr_0.3.4       readr_1.4.0       tidyr_1.1.3       tibble_3.1.1     
-[13] ggplot2_3.3.3     tidyverse_1.3.1   workflowr_1.6.2  
+ [5] forcats_0.5.1     stringr_1.4.0     dplyr_1.0.6       purrr_0.3.4      
+ [9] readr_1.4.0       tidyr_1.1.3       tibble_3.1.1      ggplot2_3.3.3    
+[13] tidyverse_1.3.1   workflowr_1.6.2  
 
 loaded via a namespace (and not attached):
  [1] colorspace_2.0-1   selectr_0.4-2      ellipsis_0.3.2     class_7.3-19      
  [5] rgdal_1.5-23       rprojroot_2.0.2    snakecase_0.11.0   fs_1.5.0          
  [9] rstudioapi_0.13    proxy_0.4-25       farver_2.1.0       fansi_0.4.2       
-[13] xml2_1.3.2         R.methodsS3_1.8.1  extrafont_0.17     memuse_4.1-0      
-[17] knitr_1.33         jsonlite_1.7.2     broom_0.7.6.9001   Rttf2pt1_1.3.8    
-[21] dbplyr_2.1.1       R.oo_1.24.0        compiler_4.0.5     httr_1.4.2        
-[25] backports_1.2.1    assertthat_0.2.1   cli_2.5.0          later_1.2.0       
-[29] htmltools_0.5.1.1  tools_4.0.5        gtable_0.3.0       glue_1.4.2        
-[33] rappdirs_0.3.3     Rcpp_1.0.6         cellranger_1.1.0   jquerylib_0.1.4   
-[37] styler_1.4.1       vctrs_0.3.8        extrafontdb_1.0    tigris_1.0        
-[41] xfun_0.22          ps_1.6.0           rvest_1.0.0        lifecycle_1.0.0   
-[45] scales_1.1.1       ragg_1.1.2         hms_1.0.0          promises_1.2.0.1  
-[49] yaml_2.2.1         curl_4.3.1         gdtools_0.2.3      sass_0.3.1        
-[53] stringi_1.6.1      highr_0.9          maptools_1.1-1     e1071_1.7-6       
-[57] rlang_0.4.11       pkgconfig_2.0.3    systemfonts_1.0.1  evaluate_0.14     
-[61] lattice_0.20-44    labeling_0.4.2     tidyselect_1.1.1   magrittr_2.0.1    
-[65] tidytuesdayR_1.0.1 R6_2.5.0           generics_0.1.0     DBI_1.1.1         
-[69] pillar_1.6.0       haven_2.4.1        whisker_0.4        foreign_0.8-81    
-[73] withr_2.4.2        units_0.7-1        sp_1.4-5           janitor_2.1.0     
-[77] modelr_0.1.8       crayon_1.4.1       uuid_0.1-4         KernSmooth_2.23-20
-[81] utf8_1.2.1         rmarkdown_2.8      usethis_2.0.1      grid_4.0.5        
-[85] readxl_1.3.1       git2r_0.28.0       reprex_2.0.0       digest_0.6.27     
-[89] classInt_0.4-3     R.cache_0.15.0     httpuv_1.6.1       R.utils_2.10.1    
-[93] textshaping_0.3.3  munsell_0.5.0      viridisLite_0.4.0  bslib_0.2.4       </code></pre>
+[13] lubridate_1.7.10   xml2_1.3.2         R.methodsS3_1.8.1  extrafont_0.17    
+[17] memuse_4.1-0       knitr_1.33         jsonlite_1.7.2     broom_0.7.6.9001  
+[21] Rttf2pt1_1.3.8     dbplyr_2.1.1       R.oo_1.24.0        compiler_4.0.5    
+[25] httr_1.4.2         backports_1.2.1    assertthat_0.2.1   cli_2.5.0         
+[29] later_1.2.0        htmltools_0.5.1.1  tools_4.0.5        gtable_0.3.0      
+[33] glue_1.4.2         rappdirs_0.3.3     Rcpp_1.0.6         cellranger_1.1.0  
+[37] jquerylib_0.1.4    styler_1.4.1       vctrs_0.3.8        extrafontdb_1.0   
+[41] tigris_1.0         xfun_0.22          ps_1.6.0           rvest_1.0.0       
+[45] lifecycle_1.0.0    scales_1.1.1       ragg_1.1.2         hms_1.0.0         
+[49] promises_1.2.0.1   yaml_2.2.1         curl_4.3.1         gdtools_0.2.3     
+[53] sass_0.3.1         tweetrmd_0.0.8     stringi_1.6.1      highr_0.9         
+[57] maptools_1.1-1     e1071_1.7-6        rlang_0.4.11       pkgconfig_2.0.3   
+[61] systemfonts_1.0.1  evaluate_0.14      lattice_0.20-44    labeling_0.4.2    
+[65] tidyselect_1.1.1   magrittr_2.0.1     tidytuesdayR_1.0.1 R6_2.5.0          
+[69] generics_0.1.0     DBI_1.1.1          pillar_1.6.0       haven_2.4.1       
+[73] whisker_0.4        foreign_0.8-81     withr_2.4.2        units_0.7-1       
+[77] sp_1.4-5           janitor_2.1.0      modelr_0.1.8       crayon_1.4.1      
+[81] uuid_0.1-4         KernSmooth_2.23-20 utf8_1.2.1         rmarkdown_2.8     
+[85] usethis_2.0.1      grid_4.0.5         readxl_1.3.1       git2r_0.28.0      
+[89] reprex_2.0.0       digest_0.6.27      classInt_0.4-3     R.cache_0.15.0    
+[93] httpuv_1.6.1       R.utils_2.10.1     textshaping_0.3.3  munsell_0.5.0     
+[97] viridisLite_0.4.0  bslib_0.2.4       </code></pre>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlVTIEJyb2FkYmFuZCBBY2Nlc3MiDQphdXRob3I6ICJKaW0gR3J1bWFuIg0KZGF0ZTogIk1heSA1LCAyMDIxIg0Kb3V0cHV0Og0KICB3b3JrZmxvd3I6OndmbG93X2h0bWw6DQogICAgdG9jOiBubw0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBkZl9wcmludDogcGFnZWQNCmVkaXRvcl9vcHRpb25zOg0KICBjaHVua19vdXRwdXRfdHlwZTogY29uc29sZQ0KLS0tDQoNClRoZSAjVGlkeVR1ZXNkYXkgZGF0YSB0aGlzIHdlZWsgaXMgb24gSW50ZXJuZXQgQWNjZXNzLCBmcm9tIE1pY3Jvc29mdCBieSB3YXkgb2YgVGhlIFZlcmdlLiANCg0KPiBJZiBicm9hZGJhbmQgYWNjZXNzIHdhcyBhIHByb2JsZW0gYmVmb3JlIDIwMjAsIHRoZSBwYW5kZW1pYyB0dXJuZWQgaXQgaW50byBhIGNyaXNpcy4gQXMgZXZlcnlkYXkgYnVzaW5lc3NlcyBtb3ZlZCBvbmxpbmUsIGNpdHkgY291bmNpbCBtZWV0aW5ncyBvciBjb3VydCBwcm9jZWVkaW5ncyBiZWNhbWUgbmVhci1pbmFjY2Vzc2libGUgdG8gYW55b25lIHdob3NlIGNvbm5lY3Rpb24gY291bGRu4oCZdCBzdXBwb3J0IGEgWm9vbSBjYWxsLiBTb21lIHNjaG9vbCBkaXN0cmljdHMgc3RhcnRlZCBwcm92aWRpbmcgV2ktRmkgaG90c3BvdHMgdG8gc3R1ZGVudHMgd2l0aG91dCBhIHJlbGlhYmxlIGhvbWUgY29ubmVjdGlvbi4gSW4gb3RoZXIgZGlzdHJpY3RzLCBraWRzIHNldCB1cCBpbiBNY0RvbmFsZOKAmXMgcGFya2luZyBsb3RzIGp1c3QgdG8gZ2V0IGEgcmVsaWFibGUgZW5vdWdoIHNpZ25hbCB0byBkbyB0aGVpciBob21ld29yay4gQWZ0ZXIgeWVhcnMgb2Ygc2xvd2x5IHdpZGVuaW5nLCB0aGUgYnJvYWRiYW5kIGdhcCBiZWNhbWUgaW1wb3NzaWJsZSB0byBpZ25vcmUuDQoNCkZpcnN0LCBsZXQncyBsb2FkIGxpYnJhcmllcyBhbmQgc2V0IGEgZ2dwbG90IHRoZW1lOg0KDQpgYGB7ciBzZXR1cCwgd2FybmluZz1GQUxTRX0NCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KA0KCWVjaG8gPSBUUlVFLA0KCW1lc3NhZ2UgPSBGQUxTRSwNCgl3YXJuaW5nID0gRkFMU0UsDQoJY2FjaGUgPSBGQUxTRSwNCgljYWNoZS5sYXp5ID0gRkFMU0UsDQoJZGZfcHJpbnQgPSAicGFnZWQiLA0KCWRwaSA9IDMwMCwNCgl0aWR5ID0gInN0eWxlciIsDQoJZGV2ID0gInJhZ2dfcG5nIiwNCglhdXRvZGVwID0gVFJVRQ0KKQ0Kb3B0aW9ucyh0aWdyaXNfdXNlX2NhY2hlID0gVFJVRSkNCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyh7DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkobHVicmlkYXRlKQ0KbGlicmFyeShocmJydGhlbWVzKQ0KbGlicmFyeSh0aWR5Y2Vuc3VzKQ0KICANCmxpYnJhcnkoc2YpDQpsaWJyYXJ5KHBhdGNod29yaykNCn0pDQoNCnVwZGF0ZV9nZW9tX2ZvbnRfZGVmYXVsdHMoZm9udF9yY19saWdodCkNCg0KZ2dwbG90Mjo6dGhlbWVfc2V0KGhyYnJ0aGVtZXM6OnRoZW1lX2lwc3VtX2dzKCkgKw0KICAgICAgICAgICAgZ2dwbG90Mjo6dGhlbWUocGxvdC50aXRsZS5wb3NpdGlvbiA9ICJwbG90IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHBsb3QuY2FwdGlvbi5wb3NpdGlvbiA9ICJwbG90IikpDQoNCmBgYA0KDQpMb2FkaW5nIHRoZSBkYXRhIA0KDQpgYGB7ciBsb2FkLCBtZXNzYWdlPUZBTFNFfQ0KdHQgPC0gdGlkeXR1ZXNkYXlSOjp0dF9sb2FkKCIyMDIxLTA1LTExIikNCg0KYnJvYWRiYW5kX2lsIDwtIHR0JGJyb2FkYmFuZCAlPiUNCiAgamFuaXRvcjo6Y2xlYW5fbmFtZXMoKSAlPiUNCiAgZmlsdGVyKHN0ID09ICJJTCIpICU+JSANCiAgdHJhbnNtdXRlKEdFT0lEID0gYXMuY2hhcmFjdGVyKGNvdW50eV9pZCksDQogICAgICAgICAgICB1c2FnZSA9IHBhcnNlX251bWJlcihicm9hZGJhbmRfdXNhZ2UsIG5hID0gIi0iICkpICU+JSANCiAgbGVmdF9qb2luKGdldF9hY3MoZ2VvZ3JhcGh5ID0gImNvdW50eSIsDQogICAgICAgICAgICAgICAgICAgIHZhcmlhYmxlcyA9ICJCMTkwMTNfMDAxIiwNCiAgICAgICAgICAgICAgICAgICAgc3RhdGUgPSAiSUwiLA0KICAgICAgICAgICAgICAgICAgICBnZW9tZXRyeSA9IFRSVUUpKQ0KDQpgYGANCg0KYGBge3J9DQpwbG90X2lsIDwtIGZ1bmN0aW9uKHZhcmlhYmxlKSB7DQogIGJyb2FkYmFuZF9pbCAlPiUNCiAgICBzdF9hc19zZigpICU+JQ0KICAgIGdncGxvdChhZXMoZmlsbCA9IHt7dmFyaWFibGV9fSApKSArDQogICAgZ2VvbV9zZihjb2xvciA9ICJncmF5ODAiLCBzaXplID0gMC4yKSArDQogICAgY29vcmRfc2YobGFiZWxfYXhlcyA9ICItLS0tIiwNCiAgICAgICAgICAgICBsYWJlbF9ncmF0aWN1bGUgPSAiLS0tLSIpICsNCiAgICB0aGVtZShwYW5lbC5ncmlkLm1ham9yID0gZWxlbWVudF9ibGFuaygpKQ0KfQ0KDQpwbG90X2lsKGVzdGltYXRlKSArIA0KICAgIHNjYWxlX2ZpbGxfdmlyaWRpc19iKG9wdGlvbiA9ICJwbGFzbWEiLCBuLmJyZWFrcyA9IDgpICsNCiAgICBsYWJzKHN1YnRpdGxlID0gIk1lZGlhbiBIb3VzZWhvbGQgSW5jb21lIiwNCiAgICAgICAgIGZpbGwgPSAiJFVTIikgKw0KICBwbG90X2lsKHVzYWdlKSArIA0KICAgIHNjYWxlX2ZpbGxfdmlyaWRpc19iKCBuLmJyZWFrcyA9IDgsIGxhYmVscyA9IHNjYWxlczo6cGVyY2VudF9mb3JtYXQoYWNjdXJhY3kgPSAxKSkgKw0KICAgIGxhYnMoc3VidGl0bGUgPSAiSGlnaCBTcGVlZCBCcm9hZGJhbmQgdXNhZ2UiLA0KICAgICAgICAgZmlsbCA9IE5VTEwpICsNCiAgcGxvdF9hbm5vdGF0aW9uKHRpdGxlID0gIkhvdXNlaG9sZCBpbmNvbWUgYW5kIEhpZ2ggU3BlZWQgYnJvYWRiYW5kIHVzYWdlIGluIElsbGlub2lzIiwNCiAgICAgICAgICAgICAgICAgIGNhcHRpb24gPSAiRGF0YSBTb3VyY2VzOiBNaWNyb3NvZnQgYW5kIFVTIENlbnN1cyBBQ1MiKQ0KYGBgDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlVTIEJyb2FkYmFuZCBBY2Nlc3MiDQphdXRob3I6ICJKaW0gR3J1bWFuIg0KZGF0ZTogIk1heSA1LCAyMDIxIg0Kb3V0cHV0Og0KICB3b3JrZmxvd3I6OndmbG93X2h0bWw6DQogICAgdG9jOiBubw0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBkZl9wcmludDogcGFnZWQNCmVkaXRvcl9vcHRpb25zOg0KICBjaHVua19vdXRwdXRfdHlwZTogY29uc29sZQ0KLS0tDQoNClRoZSAjVGlkeVR1ZXNkYXkgZGF0YSB0aGlzIHdlZWsgaXMgb24gSW50ZXJuZXQgQWNjZXNzLCBmcm9tIE1pY3Jvc29mdCBieSB3YXkgb2YgVGhlIFZlcmdlLiANCg0KPiBJZiBicm9hZGJhbmQgYWNjZXNzIHdhcyBhIHByb2JsZW0gYmVmb3JlIDIwMjAsIHRoZSBwYW5kZW1pYyB0dXJuZWQgaXQgaW50byBhIGNyaXNpcy4gQXMgZXZlcnlkYXkgYnVzaW5lc3NlcyBtb3ZlZCBvbmxpbmUsIGNpdHkgY291bmNpbCBtZWV0aW5ncyBvciBjb3VydCBwcm9jZWVkaW5ncyBiZWNhbWUgbmVhci1pbmFjY2Vzc2libGUgdG8gYW55b25lIHdob3NlIGNvbm5lY3Rpb24gY291bGRu4oCZdCBzdXBwb3J0IGEgWm9vbSBjYWxsLiBTb21lIHNjaG9vbCBkaXN0cmljdHMgc3RhcnRlZCBwcm92aWRpbmcgV2ktRmkgaG90c3BvdHMgdG8gc3R1ZGVudHMgd2l0aG91dCBhIHJlbGlhYmxlIGhvbWUgY29ubmVjdGlvbi4gSW4gb3RoZXIgZGlzdHJpY3RzLCBraWRzIHNldCB1cCBpbiBNY0RvbmFsZOKAmXMgcGFya2luZyBsb3RzIGp1c3QgdG8gZ2V0IGEgcmVsaWFibGUgZW5vdWdoIHNpZ25hbCB0byBkbyB0aGVpciBob21ld29yay4gQWZ0ZXIgeWVhcnMgb2Ygc2xvd2x5IHdpZGVuaW5nLCB0aGUgYnJvYWRiYW5kIGdhcCBiZWNhbWUgaW1wb3NzaWJsZSB0byBpZ25vcmUuDQoNCkZpcnN0LCBsZXQncyBsb2FkIGxpYnJhcmllcyBhbmQgc2V0IGEgZ2dwbG90IHRoZW1lOg0KDQpgYGB7ciBzZXR1cCwgd2FybmluZz1GQUxTRX0NCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KA0KCWVjaG8gPSBUUlVFLA0KCW1lc3NhZ2UgPSBGQUxTRSwNCgl3YXJuaW5nID0gRkFMU0UsDQoJY2FjaGUgPSBGQUxTRSwNCgljYWNoZS5sYXp5ID0gRkFMU0UsDQoJZGZfcHJpbnQgPSAicGFnZWQiLA0KCWRwaSA9IDMwMCwNCgl0aWR5ID0gInN0eWxlciIsDQoJZGV2ID0gInJhZ2dfcG5nIiwNCglhdXRvZGVwID0gVFJVRQ0KKQ0Kb3B0aW9ucyh0aWdyaXNfdXNlX2NhY2hlID0gVFJVRSkNCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyh7DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkoaHJicnRoZW1lcykNCmxpYnJhcnkodGlkeWNlbnN1cykNCiAgDQpsaWJyYXJ5KHNmKQ0KbGlicmFyeShwYXRjaHdvcmspDQp9KQ0KDQp1cGRhdGVfZ2VvbV9mb250X2RlZmF1bHRzKGZvbnRfcmNfbGlnaHQpDQoNCmdncGxvdDI6OnRoZW1lX3NldChocmJydGhlbWVzOjp0aGVtZV9pcHN1bV9ncygpICsNCiAgICAgICAgICAgIGdncGxvdDI6OnRoZW1lKHBsb3QudGl0bGUucG9zaXRpb24gPSAicGxvdCIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICBwbG90LmNhcHRpb24ucG9zaXRpb24gPSAicGxvdCIpKQ0KDQpgYGANCg0KTG9hZGluZyB0aGUgZGF0YSANCg0KYGBge3IgbG9hZCwgbWVzc2FnZT1GQUxTRX0NCmJyb2FkYmFuZF9pbCA8LSB0aWR5dHVlc2RheVI6OnR0X2xvYWQoIjIwMjEtMDUtMTEiKSRicm9hZGJhbmQgJT4lDQogIGphbml0b3I6OmNsZWFuX25hbWVzKCkgJT4lDQogIGZpbHRlcihzdCA9PSAiSUwiKSAlPiUgDQogIHRyYW5zbXV0ZShHRU9JRCA9IGFzLmNoYXJhY3Rlcihjb3VudHlfaWQpLA0KICAgICAgICAgICAgdXNhZ2UgPSBwYXJzZV9udW1iZXIoYnJvYWRiYW5kX3VzYWdlLCBuYSA9ICItIiApKSAlPiUgDQogIGxlZnRfam9pbihnZXRfYWNzKGdlb2dyYXBoeSA9ICJjb3VudHkiLA0KICAgICAgICAgICAgICAgICAgICB2YXJpYWJsZXMgPSAiQjE5MDEzXzAwMSIsDQogICAgICAgICAgICAgICAgICAgIHN0YXRlID0gIklMIiwNCiAgICAgICAgICAgICAgICAgICAgZ2VvbWV0cnkgPSBUUlVFKSkNCmBgYA0KDQpgYGB7cn0NCnBsb3RfaWwgPC0gZnVuY3Rpb24odmFyaWFibGUpIHsNCiAgYnJvYWRiYW5kX2lsICU+JQ0KICAgIHN0X2FzX3NmKCkgJT4lDQogICAgZ2dwbG90KGFlcyhmaWxsID0ge3t2YXJpYWJsZX19ICkpICsNCiAgICBnZW9tX3NmKGNvbG9yID0gImdyYXk4MCIsIHNpemUgPSAwLjIpICsNCiAgICBjb29yZF9zZihsYWJlbF9heGVzID0gIi0tLS0iLA0KICAgICAgICAgICAgIGxhYmVsX2dyYXRpY3VsZSA9ICItLS0tIikgKw0KICAgIHRoZW1lKHBhbmVsLmdyaWQubWFqb3IgPSBlbGVtZW50X2JsYW5rKCkpDQp9DQoNCnBsb3RfaWwoZXN0aW1hdGUpICsgDQogICAgc2NhbGVfZmlsbF92aXJpZGlzX2Iob3B0aW9uID0gInBsYXNtYSIsIG4uYnJlYWtzID0gOCkgKw0KICAgIGxhYnMoc3VidGl0bGUgPSAiTWVkaWFuIEhvdXNlaG9sZCBJbmNvbWUiLA0KICAgICAgICAgZmlsbCA9ICIkVVMiKSArDQogIHBsb3RfaWwodXNhZ2UpICsgDQogICAgc2NhbGVfZmlsbF92aXJpZGlzX2IoIG4uYnJlYWtzID0gOCwgbGFiZWxzID0gc2NhbGVzOjpwZXJjZW50X2Zvcm1hdChhY2N1cmFjeSA9IDEpKSArDQogICAgbGFicyhzdWJ0aXRsZSA9ICJIaWdoIFNwZWVkIEJyb2FkYmFuZCBVc2FnZSIsDQogICAgICAgICBmaWxsID0gTlVMTCkgKw0KICBwbG90X2Fubm90YXRpb24odGl0bGUgPSAiSGlnaCBTcGVlZCBCcm9hZGJhbmQgaW4gSWxsaW5vaXMiLA0KICAgICAgICAgICAgICAgICAgY2FwdGlvbiA9ICJEYXRhIFNvdXJjZXM6IE1pY3Jvc29mdCBhbmQgVVMgQ2Vuc3VzIEFDUyAyMDE5IFxuDQogICAgICAgICAgICAgICAgICBwZXJjZW50IG9mIHBlb3BsZSBwZXIgY291bnR5IHRoYXQgdXNlIHRoZSBpbnRlcm5ldCBhdCBtb3JlIHRoYW4gMjUgTWJwcy8zIE1icHMiKQ0KYGBgDQoNClJlbGF0ZWQgdHdlZXRzIGFuZCBpbnNpcHJhdGlvbnM6DQoNCmBgYHtyfQ0KdHdlZXRybWQ6OmluY2x1ZGVfdHdlZXQoImh0dHBzOi8vdHdpdHRlci5jb20vanJvc2VjYWxhYnJlc2Uvc3RhdHVzLzEzOTIyOTkwMDA0MDE4NTg1NjMiKQ0KDQp0d2VldHJtZDo6aW5jbHVkZV90d2VldCgiaHR0cHM6Ly90d2l0dGVyLmNvbS9qdWxpYXNpbGdlL3N0YXR1cy8xMzkyMzI0NDEwMDgyNjg5MDI2IikNCg0KDQoNCmBgYA0KDQoNCg==</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
