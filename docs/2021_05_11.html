@@ -314,7 +314,7 @@ $(document).ready(function () {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -323,7 +323,7 @@ $(document).ready(function () {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -335,7 +335,7 @@ $(document).ready(function () {
 <strong>Last updated:</strong> 2021-05-12
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -351,12 +351,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -423,16 +423,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree21ff3cc77bc5139933855d7b3dc625fd68afe856targetblank21ff3cca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/21ff3cc77bc5139933855d7b3dc625fd68afe856" target="_blank">21ff3cc</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea353fcc6e020e4a64b2c40a69bd2627dcce659b5targetblanka353fcca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a353fcc6e020e4a64b2c40a69bd2627dcce659b5" target="_blank">a353fcc</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree21ff3cc77bc5139933855d7b3dc625fd68afe856targetblank21ff3cca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea353fcc6e020e4a64b2c40a69bd2627dcce659b5targetblanka353fcca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/21ff3cc77bc5139933855d7b3dc625fd68afe856" target="_blank">21ff3cc</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a353fcc6e020e4a64b2c40a69bd2627dcce659b5" target="_blank">a353fcc</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -451,7 +451,6 @@ Untracked files:
     Untracked:  analysis/.vscode/
 
 Unstaged changes:
-    Modified:   analysis/2021_05_11.Rmd
     Modified:   analysis/BackboneWatershed.Rmd
 
 </code></pre>
@@ -491,6 +490,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/a353fcc6e020e4a64b2c40a69bd2627dcce659b5/analysis/2021_05_11.Rmd" target="_blank">a353fcc</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-05-12
+</td>
+<td>
+wflow_publish(“analysis/2021_05_11.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/b7d480dbca6aa8d43f4d0f65e5eb1e1c2a74a74d/docs/2021_05_11.html" target="_blank">b7d480d</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-05-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -676,7 +709,7 @@ plot_il(estimate) +
   plot_annotation(
     title = &quot;High Speed Broadband in Illinois&quot;,
     caption = &quot;Data Sources: Microsoft and US Census ACS 2019 \n
-                  percent of people per county that use the internet at more than 25 Mbps/3 Mbps&quot;
+                  Percent of people per county that use the internet at more than 25 Mbps/3 Mbps&quot;
   ) &amp;
   theme(
     plot.margin = margin(0.5, 0, 0, 0, &quot;cm&quot;),
@@ -751,7 +784,7 @@ loaded via a namespace (and not attached):
 [97] viridisLite_0.4.0  bslib_0.2.4       </code></pre>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlVTIEJyb2FkYmFuZCBBY2Nlc3MiDQphdXRob3I6ICJKaW0gR3J1bWFuIg0KZGF0ZTogIk1heSA1LCAyMDIxIg0Kb3V0cHV0Og0KICB3b3JrZmxvd3I6OndmbG93X2h0bWw6DQogICAgdG9jOiBubw0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBkZl9wcmludDogcGFnZWQNCmVkaXRvcl9vcHRpb25zOg0KICBjaHVua19vdXRwdXRfdHlwZTogY29uc29sZQ0KLS0tDQoNClRoZSAjVGlkeVR1ZXNkYXkgZGF0YSB0aGlzIHdlZWsgaXMgb24gSW50ZXJuZXQgQWNjZXNzLCBmcm9tIE1pY3Jvc29mdCBieSB3YXkgb2YgVGhlIFZlcmdlLiANCg0KPiBJZiBicm9hZGJhbmQgYWNjZXNzIHdhcyBhIHByb2JsZW0gYmVmb3JlIDIwMjAsIHRoZSBwYW5kZW1pYyB0dXJuZWQgaXQgaW50byBhIGNyaXNpcy4gQXMgZXZlcnlkYXkgYnVzaW5lc3NlcyBtb3ZlZCBvbmxpbmUsIGNpdHkgY291bmNpbCBtZWV0aW5ncyBvciBjb3VydCBwcm9jZWVkaW5ncyBiZWNhbWUgbmVhci1pbmFjY2Vzc2libGUgdG8gYW55b25lIHdob3NlIGNvbm5lY3Rpb24gY291bGRu4oCZdCBzdXBwb3J0IGEgWm9vbSBjYWxsLiBTb21lIHNjaG9vbCBkaXN0cmljdHMgc3RhcnRlZCBwcm92aWRpbmcgV2ktRmkgaG90c3BvdHMgdG8gc3R1ZGVudHMgd2l0aG91dCBhIHJlbGlhYmxlIGhvbWUgY29ubmVjdGlvbi4gSW4gb3RoZXIgZGlzdHJpY3RzLCBraWRzIHNldCB1cCBpbiBNY0RvbmFsZOKAmXMgcGFya2luZyBsb3RzIGp1c3QgdG8gZ2V0IGEgcmVsaWFibGUgZW5vdWdoIHNpZ25hbCB0byBkbyB0aGVpciBob21ld29yay4gQWZ0ZXIgeWVhcnMgb2Ygc2xvd2x5IHdpZGVuaW5nLCB0aGUgYnJvYWRiYW5kIGdhcCBiZWNhbWUgaW1wb3NzaWJsZSB0byBpZ25vcmUuDQoNCkZpcnN0LCBsZXQncyBsb2FkIGxpYnJhcmllcyBhbmQgc2V0IGEgZ2dwbG90IHRoZW1lOg0KDQpgYGB7ciBzZXR1cCwgd2FybmluZz1GQUxTRX0NCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KA0KCWVjaG8gPSBUUlVFLA0KCW1lc3NhZ2UgPSBGQUxTRSwNCgl3YXJuaW5nID0gRkFMU0UsDQoJY2FjaGUgPSBGQUxTRSwNCgljYWNoZS5sYXp5ID0gRkFMU0UsDQoJZGZfcHJpbnQgPSAicGFnZWQiLA0KCWRwaSA9IDMwMCwNCgl0aWR5ID0gInN0eWxlciIsDQoJZGV2ID0gInJhZ2dfcG5nIiwNCglhdXRvZGVwID0gVFJVRQ0KKQ0Kb3B0aW9ucyh0aWdyaXNfdXNlX2NhY2hlID0gVFJVRSkNCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyh7DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkoaHJicnRoZW1lcykNCmxpYnJhcnkodGlkeWNlbnN1cykNCiAgDQpsaWJyYXJ5KHNmKQ0KbGlicmFyeShwYXRjaHdvcmspDQp9KQ0KDQp1cGRhdGVfZ2VvbV9mb250X2RlZmF1bHRzKGZvbnRfcmNfbGlnaHQpDQoNCmdncGxvdDI6OnRoZW1lX3NldChocmJydGhlbWVzOjp0aGVtZV9pcHN1bV9ncygpICsNCiAgICAgICAgICAgIGdncGxvdDI6OnRoZW1lKHBsb3QudGl0bGUucG9zaXRpb24gPSAicGxvdCIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICBwbG90LmNhcHRpb24ucG9zaXRpb24gPSAicGxvdCIpKQ0KDQpgYGANCg0KTG9hZGluZyB0aGUgZGF0YSANCg0KYGBge3IgbG9hZCwgbWVzc2FnZT1GQUxTRX0NCmJyb2FkYmFuZF9pbCA8LSB0aWR5dHVlc2RheVI6OnR0X2xvYWQoIjIwMjEtMDUtMTEiKSRicm9hZGJhbmQgJT4lDQogIGphbml0b3I6OmNsZWFuX25hbWVzKCkgJT4lDQogIGZpbHRlcihzdCA9PSAiSUwiKSAlPiUgDQogIHRyYW5zbXV0ZShHRU9JRCA9IGFzLmNoYXJhY3Rlcihjb3VudHlfaWQpLA0KICAgICAgICAgICAgdXNhZ2UgPSBwYXJzZV9udW1iZXIoYnJvYWRiYW5kX3VzYWdlLCBuYSA9ICItIiApKSAlPiUgDQogIGxlZnRfam9pbihnZXRfYWNzKGdlb2dyYXBoeSA9ICJjb3VudHkiLA0KICAgICAgICAgICAgICAgICAgICB2YXJpYWJsZXMgPSAiQjE5MDEzXzAwMSIsDQogICAgICAgICAgICAgICAgICAgIHN0YXRlID0gIklMIiwNCiAgICAgICAgICAgICAgICAgICAgZ2VvbWV0cnkgPSBUUlVFKSkNCmBgYA0KDQpgYGB7cn0NCnBsb3RfaWwgPC0gZnVuY3Rpb24odmFyaWFibGUpIHsNCiAgYnJvYWRiYW5kX2lsICU+JQ0KICAgIHN0X2FzX3NmKCkgJT4lDQogICAgZ2dwbG90KGFlcyhmaWxsID0ge3t2YXJpYWJsZX19ICkpICsNCiAgICBnZW9tX3NmKGNvbG9yID0gImdyYXk4MCIsIHNpemUgPSAwLjIpICsNCiAgICBjb29yZF9zZihsYWJlbF9heGVzID0gIi0tLS0iLA0KICAgICAgICAgICAgIGxhYmVsX2dyYXRpY3VsZSA9ICItLS0tIikgKw0KICAgIHRoZW1lKHBhbmVsLmdyaWQubWFqb3IgPSBlbGVtZW50X2JsYW5rKCkpDQp9DQoNCnBsb3RfaWwoZXN0aW1hdGUpICsgDQogICAgc2NhbGVfZmlsbF92aXJpZGlzX2Iob3B0aW9uID0gInBsYXNtYSIsIG4uYnJlYWtzID0gOCwgbGFiZWxzID0gc2NhbGVzOjpjb21tYSkgKw0KICAgIGxhYnMoc3VidGl0bGUgPSAiTWVkaWFuIEhvdXNlaG9sZCBJbmNvbWUiLA0KICAgICAgICAgZmlsbCA9ICIkVVMiKSArDQogIHBsb3RfaWwodXNhZ2UpICsgDQogICAgc2NhbGVfZmlsbF92aXJpZGlzX2IoIG4uYnJlYWtzID0gOCwgbGFiZWxzID0gc2NhbGVzOjpwZXJjZW50X2Zvcm1hdChhY2N1cmFjeSA9IDEpKSArDQogICAgbGFicyhzdWJ0aXRsZSA9ICJIaWdoIFNwZWVkIEJyb2FkYmFuZCBVc2FnZSIsDQogICAgICAgICBmaWxsID0gTlVMTCkgKw0KICBwbG90X2Fubm90YXRpb24odGl0bGUgPSAiSGlnaCBTcGVlZCBCcm9hZGJhbmQgaW4gSWxsaW5vaXMiLA0KICAgICAgICAgICAgICAgICAgY2FwdGlvbiA9ICJEYXRhIFNvdXJjZXM6IE1pY3Jvc29mdCBhbmQgVVMgQ2Vuc3VzIEFDUyAyMDE5IFxuDQogICAgICAgICAgICAgICAgICBwZXJjZW50IG9mIHBlb3BsZSBwZXIgY291bnR5IHRoYXQgdXNlIHRoZSBpbnRlcm5ldCBhdCBtb3JlIHRoYW4gMjUgTWJwcy8zIE1icHMiKSAmDQogIHRoZW1lKHBsb3QubWFyZ2luID0gbWFyZ2luICgwLjUsIDAsIDAsIDAsICJjbSIpLA0KICAgICAgICBwbG90LnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAzMCkpDQpgYGANCg0KUmVsYXRlZCB0d2VldHMgYW5kIGluc3ByYXRpb25zOg0KDQpgYGB7cn0NCnR3ZWV0cm1kOjppbmNsdWRlX3R3ZWV0KCJodHRwczovL3R3aXR0ZXIuY29tL2pyb3NlY2FsYWJyZXNlL3N0YXR1cy8xMzkyMjk5MDAwNDAxODU4NTYzIikNCg0KdHdlZXRybWQ6OmluY2x1ZGVfdHdlZXQoImh0dHBzOi8vdHdpdHRlci5jb20vanVsaWFzaWxnZS9zdGF0dXMvMTM5MjMyNDQxMDA4MjY4OTAyNiIpDQoNCnR3ZWV0cm1kOjppbmNsdWRlX3R3ZWV0KCJodHRwczovL3R3aXR0ZXIuY29tL2p1bGlhc2lsZ2Uvc3RhdHVzLzEzOTIzMjQ0MTAwODI2ODkwMjYiKQ0KDQpgYGANCg0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlVTIEJyb2FkYmFuZCBBY2Nlc3MiDQphdXRob3I6ICJKaW0gR3J1bWFuIg0KZGF0ZTogIk1heSA1LCAyMDIxIg0Kb3V0cHV0Og0KICB3b3JrZmxvd3I6OndmbG93X2h0bWw6DQogICAgdG9jOiBubw0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBkZl9wcmludDogcGFnZWQNCmVkaXRvcl9vcHRpb25zOg0KICBjaHVua19vdXRwdXRfdHlwZTogY29uc29sZQ0KLS0tDQoNClRoZSAjVGlkeVR1ZXNkYXkgZGF0YSB0aGlzIHdlZWsgaXMgb24gSW50ZXJuZXQgQWNjZXNzLCBmcm9tIE1pY3Jvc29mdCBieSB3YXkgb2YgVGhlIFZlcmdlLiANCg0KPiBJZiBicm9hZGJhbmQgYWNjZXNzIHdhcyBhIHByb2JsZW0gYmVmb3JlIDIwMjAsIHRoZSBwYW5kZW1pYyB0dXJuZWQgaXQgaW50byBhIGNyaXNpcy4gQXMgZXZlcnlkYXkgYnVzaW5lc3NlcyBtb3ZlZCBvbmxpbmUsIGNpdHkgY291bmNpbCBtZWV0aW5ncyBvciBjb3VydCBwcm9jZWVkaW5ncyBiZWNhbWUgbmVhci1pbmFjY2Vzc2libGUgdG8gYW55b25lIHdob3NlIGNvbm5lY3Rpb24gY291bGRu4oCZdCBzdXBwb3J0IGEgWm9vbSBjYWxsLiBTb21lIHNjaG9vbCBkaXN0cmljdHMgc3RhcnRlZCBwcm92aWRpbmcgV2ktRmkgaG90c3BvdHMgdG8gc3R1ZGVudHMgd2l0aG91dCBhIHJlbGlhYmxlIGhvbWUgY29ubmVjdGlvbi4gSW4gb3RoZXIgZGlzdHJpY3RzLCBraWRzIHNldCB1cCBpbiBNY0RvbmFsZOKAmXMgcGFya2luZyBsb3RzIGp1c3QgdG8gZ2V0IGEgcmVsaWFibGUgZW5vdWdoIHNpZ25hbCB0byBkbyB0aGVpciBob21ld29yay4gQWZ0ZXIgeWVhcnMgb2Ygc2xvd2x5IHdpZGVuaW5nLCB0aGUgYnJvYWRiYW5kIGdhcCBiZWNhbWUgaW1wb3NzaWJsZSB0byBpZ25vcmUuDQoNCkZpcnN0LCBsZXQncyBsb2FkIGxpYnJhcmllcyBhbmQgc2V0IGEgZ2dwbG90IHRoZW1lOg0KDQpgYGB7ciBzZXR1cCwgd2FybmluZz1GQUxTRX0NCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KA0KCWVjaG8gPSBUUlVFLA0KCW1lc3NhZ2UgPSBGQUxTRSwNCgl3YXJuaW5nID0gRkFMU0UsDQoJY2FjaGUgPSBGQUxTRSwNCgljYWNoZS5sYXp5ID0gRkFMU0UsDQoJZGZfcHJpbnQgPSAicGFnZWQiLA0KCWRwaSA9IDMwMCwNCgl0aWR5ID0gInN0eWxlciIsDQoJZGV2ID0gInJhZ2dfcG5nIiwNCglhdXRvZGVwID0gVFJVRQ0KKQ0Kb3B0aW9ucyh0aWdyaXNfdXNlX2NhY2hlID0gVFJVRSkNCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyh7DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkoaHJicnRoZW1lcykNCmxpYnJhcnkodGlkeWNlbnN1cykNCiAgDQpsaWJyYXJ5KHNmKQ0KbGlicmFyeShwYXRjaHdvcmspDQp9KQ0KDQp1cGRhdGVfZ2VvbV9mb250X2RlZmF1bHRzKGZvbnRfcmNfbGlnaHQpDQoNCmdncGxvdDI6OnRoZW1lX3NldChocmJydGhlbWVzOjp0aGVtZV9pcHN1bV9ncygpICsNCiAgICAgICAgICAgIGdncGxvdDI6OnRoZW1lKHBsb3QudGl0bGUucG9zaXRpb24gPSAicGxvdCIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICBwbG90LmNhcHRpb24ucG9zaXRpb24gPSAicGxvdCIpKQ0KDQpgYGANCg0KTG9hZGluZyB0aGUgZGF0YSANCg0KYGBge3IgbG9hZCwgbWVzc2FnZT1GQUxTRX0NCmJyb2FkYmFuZF9pbCA8LSB0aWR5dHVlc2RheVI6OnR0X2xvYWQoIjIwMjEtMDUtMTEiKSRicm9hZGJhbmQgJT4lDQogIGphbml0b3I6OmNsZWFuX25hbWVzKCkgJT4lDQogIGZpbHRlcihzdCA9PSAiSUwiKSAlPiUgDQogIHRyYW5zbXV0ZShHRU9JRCA9IGFzLmNoYXJhY3Rlcihjb3VudHlfaWQpLA0KICAgICAgICAgICAgdXNhZ2UgPSBwYXJzZV9udW1iZXIoYnJvYWRiYW5kX3VzYWdlLCBuYSA9ICItIiApKSAlPiUgDQogIGxlZnRfam9pbihnZXRfYWNzKGdlb2dyYXBoeSA9ICJjb3VudHkiLA0KICAgICAgICAgICAgICAgICAgICB2YXJpYWJsZXMgPSAiQjE5MDEzXzAwMSIsDQogICAgICAgICAgICAgICAgICAgIHN0YXRlID0gIklMIiwNCiAgICAgICAgICAgICAgICAgICAgZ2VvbWV0cnkgPSBUUlVFKSkNCmBgYA0KDQpgYGB7cn0NCnBsb3RfaWwgPC0gZnVuY3Rpb24odmFyaWFibGUpIHsNCiAgYnJvYWRiYW5kX2lsICU+JQ0KICAgIHN0X2FzX3NmKCkgJT4lDQogICAgZ2dwbG90KGFlcyhmaWxsID0ge3t2YXJpYWJsZX19ICkpICsNCiAgICBnZW9tX3NmKGNvbG9yID0gImdyYXk4MCIsIHNpemUgPSAwLjIpICsNCiAgICBjb29yZF9zZihsYWJlbF9heGVzID0gIi0tLS0iLA0KICAgICAgICAgICAgIGxhYmVsX2dyYXRpY3VsZSA9ICItLS0tIikgKw0KICAgIHRoZW1lKHBhbmVsLmdyaWQubWFqb3IgPSBlbGVtZW50X2JsYW5rKCkpDQp9DQoNCnBsb3RfaWwoZXN0aW1hdGUpICsgDQogICAgc2NhbGVfZmlsbF92aXJpZGlzX2Iob3B0aW9uID0gInBsYXNtYSIsIG4uYnJlYWtzID0gOCwgbGFiZWxzID0gc2NhbGVzOjpjb21tYSkgKw0KICAgIGxhYnMoc3VidGl0bGUgPSAiTWVkaWFuIEhvdXNlaG9sZCBJbmNvbWUiLA0KICAgICAgICAgZmlsbCA9ICIkVVMiKSArDQogIHBsb3RfaWwodXNhZ2UpICsgDQogICAgc2NhbGVfZmlsbF92aXJpZGlzX2IoIG4uYnJlYWtzID0gOCwgbGFiZWxzID0gc2NhbGVzOjpwZXJjZW50X2Zvcm1hdChhY2N1cmFjeSA9IDEpKSArDQogICAgbGFicyhzdWJ0aXRsZSA9ICJIaWdoIFNwZWVkIEJyb2FkYmFuZCBVc2FnZSIsDQogICAgICAgICBmaWxsID0gTlVMTCkgKw0KICBwbG90X2Fubm90YXRpb24odGl0bGUgPSAiSGlnaCBTcGVlZCBCcm9hZGJhbmQgaW4gSWxsaW5vaXMiLA0KICAgICAgICAgICAgICAgICAgY2FwdGlvbiA9ICJEYXRhIFNvdXJjZXM6IE1pY3Jvc29mdCBhbmQgVVMgQ2Vuc3VzIEFDUyAyMDE5IFxuDQogICAgICAgICAgICAgICAgICBQZXJjZW50IG9mIHBlb3BsZSBwZXIgY291bnR5IHRoYXQgdXNlIHRoZSBpbnRlcm5ldCBhdCBtb3JlIHRoYW4gMjUgTWJwcy8zIE1icHMiKSAmDQogIHRoZW1lKHBsb3QubWFyZ2luID0gbWFyZ2luICgwLjUsIDAsIDAsIDAsICJjbSIpLA0KICAgICAgICBwbG90LnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAzMCkpDQpgYGANCg0KUmVsYXRlZCB0d2VldHMgYW5kIGluc3ByYXRpb25zOg0KDQpgYGB7cn0NCnR3ZWV0cm1kOjppbmNsdWRlX3R3ZWV0KCJodHRwczovL3R3aXR0ZXIuY29tL2pyb3NlY2FsYWJyZXNlL3N0YXR1cy8xMzkyMjk5MDAwNDAxODU4NTYzIikNCg0KdHdlZXRybWQ6OmluY2x1ZGVfdHdlZXQoImh0dHBzOi8vdHdpdHRlci5jb20vanVsaWFzaWxnZS9zdGF0dXMvMTM5MjMyNDQxMDA4MjY4OTAyNiIpDQoNCnR3ZWV0cm1kOjppbmNsdWRlX3R3ZWV0KCJodHRwczovL3R3aXR0ZXIuY29tL2p1bGlhc2lsZ2Uvc3RhdHVzLzEzOTIzMjQ0MTAwODI2ODkwMjYiKQ0KDQpgYGANCg0KDQo=</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
