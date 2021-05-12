@@ -97,7 +97,7 @@ tweetrmd::include_tweet("https://twitter.com/jrosecalabrese/status/1392299000401
 
 tweetrmd::include_tweet("https://twitter.com/juliasilge/status/1392324410082689026")
 
-tweetrmd::include_tweet("https://twitter.com/juliasilge/status/1392324410082689026")
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1392486129786572801")
 
 ```
 
