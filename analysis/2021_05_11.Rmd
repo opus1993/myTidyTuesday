@@ -90,7 +90,7 @@ plot_il(estimate) +
         plot.title = element_text(size = 30))
 ```
 
-Related tweets and insprations:
+Related tweets and inspirations:
 
 ```{r}
 tweetrmd::include_tweet("https://twitter.com/jrosecalabrese/status/1392299000401858563")
