@@ -84,10 +84,11 @@ plot_il(estimate) +
     labs(subtitle = "High Speed Broadband Usage",
          fill = NULL) +
   plot_annotation(title = "High Speed Broadband in Illinois",
-                  caption = "Data Sources: Microsoft and US Census ACS")
+                  caption = "Data Sources: Microsoft and US Census ACS 2019 \n
+                  percent of people per county that use the internet at more than 25 Mbps/3 Mbps")
 ```
 
-Related tweets, insiprations:
+Related tweets and insiprations:
 
 ```{r}
 tweetrmd::include_tweet("https://twitter.com/jrosecalabrese/status/1392299000401858563")
