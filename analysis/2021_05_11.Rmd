@@ -76,7 +76,7 @@ plot_il <- function(variable) {
 }
 
 plot_il(estimate) + 
-    scale_fill_viridis_b(option = "plasma", n.breaks = 8) +
+    scale_fill_viridis_b(option = "plasma", n.breaks = 8, labels = scales::comma) +
     labs(subtitle = "Median Household Income",
          fill = "$US") +
   plot_il(usage) + 
@@ -85,7 +85,7 @@ plot_il(estimate) +
          fill = NULL) +
   plot_annotation(title = "High Speed Broadband in Illinois",
                   caption = "Data Sources: Microsoft and US Census ACS 2019 \n
-                  percent of people per county that use the internet at more than 25 Mbps/3 Mbps") &
+                  Percent of people per county that use the internet at more than 25 Mbps/3 Mbps") &
   theme(plot.margin = margin (0.5, 0, 0, 0, "cm"),
         plot.title = element_text(size = 30))
 ```
