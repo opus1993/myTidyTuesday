@@ -12,7 +12,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r}
+```{r netflix_logo}
 knitr::include_graphics("assets/netflix.png", error = FALSE)
 ```
 
@@ -99,7 +99,7 @@ netflix_titles <-
 
 The dataset includes `r scales::comma(nrow(netflix_titles))` titles, both as movies and TV shows. Other summary details of the dataset, as provided by `skimr`
 
-```{r}
+```{r skim}
 skimr::skim(netflix_titles) 
 ```
 
@@ -107,7 +107,7 @@ skimr::skim(netflix_titles)
 
 The `listed_in` character field associates individual titles with one or more genres. When separated out, the count of titles in each genre includes:
 
-```{r}
+```{r genres}
 netflix_titles %>%
   separate_rows(listed_in, sep = ", ") %>% 
   count(listed_in)
@@ -151,7 +151,7 @@ Given the description, cast members, director, and release_year, can we build a 
 
 Unbalanced multi-class problems are especially challenging. And in the Netflix dataset, most movies belong to two or three genres at the same time. To make this problem just a little less complex, we will bundle some genre's into logical groupings. I am also only using the first `listed_in` genre, as the primary. The result is 20 genres.
 
-```{r}
+```{r dataframe}
 netflix_df <- netflix_titles %>% 
   select(genre = listed_in, 
          show_id, 
@@ -192,7 +192,7 @@ netflix_df <- netflix_titles %>%
 
 ```
 
-```{r}
+```{r count_genres}
 netflix_df %>%
   count(genre1) %>% 
   mutate(pct = n / sum(n)) %>% 
@@ -210,7 +210,7 @@ Let’s split the data using the default 3:1 ratio of training-to-test and resam
 
 The strata argument causes the random sampling to be conducted within the stratification variable. 
 
-```{r}
+```{r cross_validation}
 set.seed(1501)
 netflix_split <- initial_split(netflix_df, strata = genre1)
 netflix_train <- training(netflix_split)
@@ -220,7 +220,7 @@ netflix_folds <- vfold_cv(netflix_train,
                           v = 5, strata = genre1)
 ```
 
-```{r}
+```{r resampling_strategy}
 ggplot(netflix_folds %>%  tidy(), 
        aes(Fold, Row, fill = Data)) +
   geom_tile() +
@@ -238,53 +238,13 @@ With a big multi-class challenge, we need to take action to balance the classes.
 
 ## Pre-processing
 
-```{r}
+```{r recipes}
 (token_rec <- recipe(genre1 ~ description + cast + director, data = netflix_train) %>%
   step_tokenize(description) %>%
   step_stopwords(description))
 
-(downsample_rec <- token_rec %>% 
-  step_downsample(genre1))
-
 (upsample_rec <- token_rec %>% 
   step_upsample(genre1))
-
-(smote_rec <- token_rec %>% 
-  step_smote(genre1))
-
-(filter_downsample_rec <- downsample_rec %>%
-  step_stopwords(description) %>%
-  step_stem(description) %>% 
-  step_tokenfilter(description, max_tokens = 30) %>% 
-  step_tokenize(cast,
-                token = "regex",
-                options = list(pattern = ", ")) %>%
-  step_tokenfilter(cast, max_tokens = 30) %>% 
-  step_tokenize(director,
-                token = "regex",
-                options = list(pattern = ", ")) %>%
-  step_tokenfilter(director, max_tokens = 30) %>% 
-  step_tf(description) %>%
-  step_tf(cast) %>%
-  step_tf(director) %>% 
-  step_normalize(all_numeric()))
-
-(filter_smote_rec <- smote_rec %>%
-  step_stopwords(description) %>%
-  step_stem(description) %>% 
-  step_tokenfilter(description, max_tokens = 30) %>% 
-  step_tokenize(cast,
-                token = "regex",
-                options = list(pattern = ", ")) %>%
-  step_tokenfilter(cast, max_tokens = 30) %>% 
-  step_tokenize(director,
-                token = "regex",
-                options = list(pattern = ", ")) %>%
-  step_tokenfilter(director, max_tokens = 30) %>% 
-  step_tf(description) %>%
-  step_tf(cast) %>%
-  step_tf(director) %>% 
-  step_normalize(all_numeric()))
 
 (filter_upsample_rec <- upsample_rec %>%
   step_stopwords(description) %>%
@@ -303,19 +263,6 @@ With a big multi-class challenge, we need to take action to balance the classes.
   step_tf(director) %>% 
   step_normalize(all_numeric()))
 
-(embeddings_downsample_rec <- downsample_rec %>% 
-   textrecipes::step_word_embeddings(description,
-                                     embeddings = textdata::embedding_glove27b()) %>% 
-   step_tokenize(cast,
-                 token = "regex",
-                 options = list(pattern = ", ")) %>% 
-   step_texthash(cast, num_terms = 50) %>% 
-   step_tokenize(director,
-                 token = "regex",
-                 options = list(pattern = ", ")) %>% 
-   step_texthash(director, num_terms = 50)) %>% 
-   step_normalize(all_numeric())
-
 (embeddings_upsample_rec <- upsample_rec %>% 
    textrecipes::step_word_embeddings(description,
                                      embeddings = textdata::embedding_glove27b()) %>% 
@@ -329,27 +276,14 @@ With a big multi-class challenge, we need to take action to balance the classes.
    step_texthash(director, num_terms = 50)) %>% 
    step_normalize(all_numeric())
 
-(embeddings_smote_rec <- smote_rec %>% 
-   textrecipes::step_word_embeddings(description,
-                                     embeddings = textdata::embedding_glove27b()) %>% 
-   step_tokenize(cast,
-                 token = "regex",
-                 options = list(pattern = ", ")) %>% 
-   step_texthash(cast, num_terms = 50) %>% 
-   step_tokenize(director,
-                 token = "regex",
-                 options = list(pattern = ", ")) %>% 
-   step_texthash(director, num_terms = 50)) %>% 
-   step_normalize(all_numeric())
-   
 ```
 
 ## Filtered Recipe
 
 A look at the features in the fully pre-processed, "filtered", downsampled training set:
 
-```{r}
-filter_downsample_rec %>% 
+```{r filtered_rec}
+filter_upsample_rec %>% 
   prep() %>% 
   bake(new_data = NULL) %>% 
   glimpse()
@@ -359,8 +293,8 @@ filter_downsample_rec %>%
 
 And a look at the features of the downsampled "embeddings" recipe:
 
-```{r}
-embeddings_downsample_rec %>% 
+```{r embeddings_rec}
+embeddings_upsample_rec %>% 
   prep() %>% 
   bake(new_data = NULL) %>% 
   glimpse()
@@ -372,7 +306,7 @@ embeddings_downsample_rec %>%
 
 For the models themselves, we use the the `parsnip` package to create sets of model specifications.  All are setup for classification. For this demonstration, I am interested in the behavior of the random forest `ranger` engine and the naive Bayes engine.
 
-```{r}
+```{r machine_learning_specs}
 ranger_spec <-
   rand_forest(trees = 1000) %>%
   set_mode("classification") %>%
@@ -388,15 +322,11 @@ nb_spec <- naive_Bayes() %>%
 
 This is where the cool part comes in: We now define a “workflow set.” We apply `cross = TRUE` to look at all combinations of recipes and models. 
 
-```{r}
+```{r workflowsets}
 (wfs <- 
    bind_rows(workflow_set(
-              preproc = list(filter_smote = filter_smote_rec,
-                             filter_upsample = filter_upsample_rec,
-                             filter_downsample = filter_downsample_rec,
-                             embeddings_smote = embeddings_smote_rec,
-                             embeddings_downsample = embeddings_downsample_rec,
-                             embeddings_upsample = embeddings_upsample_rec
+              preproc = list(filter = filter_upsample_rec,
+                             embeddings = embeddings_upsample_rec
               ),
               models = list(nb_spec, ranger_spec),
               cross = TRUE)
@@ -404,7 +334,7 @@ This is where the cool part comes in: We now define a “workflow set.” We app
 )
 ```
 
-And we see we have our twelve different workflows set up. 
+And we see we have our four different workflows set up. 
 
 ## Tuning and Cross Validation
 
@@ -509,7 +439,7 @@ collect_metrics(test_results)
 
 ```
 
-This is a good test result, as the model run on unseen data delivers performance comparable to the training figures. This model does not over-fit the training data.
+This is a good test result, as the model run on unseen data delivers performance comparable to the training figures, so does not over-fit.
 
 At some later date, I'd like to explore how to extract importance scores from the embeddings.
 
