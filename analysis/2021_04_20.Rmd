@@ -192,6 +192,18 @@ netflix_df <- netflix_titles %>%
 
 ```
 
+```{r}
+netflix_df %>%
+  count(genre1) %>% 
+  mutate(pct = n / sum(n)) %>% 
+  ggplot(aes(pct, fct_reorder(genre1, pct))) +
+  geom_col(fill = "lightblue") +
+  scale_x_continuous(labels = scales::percent) +
+  geom_label(aes(label = scales::percent(pct, accuracy = .1))) +
+  labs(title = "Severe Imbalance in Media Genre Classification",
+       y = NULL, x = NULL)
+```
+
 Let’s split the data using the default 3:1 ratio of training-to-test and resample the training set using 5-fold cross-validation. V-fold cross-validation randomly splits the data into V groups (5) of roughly equal size (called "folds"). A resample of the analysis data consists of V-1 (4) of the folds while the assessment set contains the final fold. In basic V-fold cross-validation (i.e. no repeats), the number of resamples is equal to V.
 
 ## Cross Validation
@@ -216,20 +228,31 @@ ggplot(netflix_folds %>%  tidy(),
 
 ```
 
-
-Our dataset will be pre-processed through two different recipes that engineer text features by tokenizing the description, cast, and the director fields.
+Our dataset will be pre-processed through several different recipes that engineer text features by tokenizing the description, cast, and the director fields.
 
 The first recipe applies filters to use the words, cast members, and director with the 30 highest term frequencies after removing stop words and stemming.
 
-The second filter the description words to remove stopwords and then builds 25 word embeddings with [Glove Twitter 27B](https://www.aclweb.org/anthology/D14-1162/). Learn more about word embeddings and pre-trained model transfer learning [here](https://www.youtube.com/watch?v=oUpuABKoElw). The recipe goes on to hash the cast member and director features into numeric variables with the hashing trick.
+The second filter the description words to remove stopwords and then builds 25 word embeddings with [Glove Twitter 27B](https://www.aclweb.org/anthology/D14-1162/). Learn more about word embeddings and pre-trained model transfer learning [here](https://www.youtube.com/watch?v=oUpuABKoElw). The recipe goes on to hash the cast member and director features into numeric variables with the hashing trick. All models are centered and scaled. There are no missing values. 
 
-Both models are centered and scaled. There are no missing values. With a big multi-class challenge, we need to take action to balance the classes. `smote` upsamples members of the minority classes with nearest neighbors imputation (in the training set only).
+With a big multi-class challenge, we need to take action to balance the classes. `smote` upsamples members of the minority classes with nearest neighbors imputation (in the training set only). `upsampling` replicates rows of the minority classes to match the count of the members of the largest class member. 
 
 ## Pre-processing
 
 ```{r}
-(smote_rec <- recipe(genre1 ~ description + cast + director, data = netflix_train) %>%
+(token_rec <- recipe(genre1 ~ description + cast + director, data = netflix_train) %>%
   step_tokenize(description) %>%
+  step_stopwords(description))
+
+(downsample_rec <- token_rec %>% 
+  step_downsample(genre1))
+
+(upsample_rec <- token_rec %>% 
+  step_upsample(genre1))
+
+(smote_rec <- token_rec %>% 
+  step_smote(genre1))
+
+(filter_downsample_rec <- downsample_rec %>%
   step_stopwords(description) %>%
   step_stem(description) %>% 
   step_tokenfilter(description, max_tokens = 30) %>% 
@@ -244,12 +267,43 @@ Both models are centered and scaled. There are no missing values. With a big mul
   step_tf(description) %>%
   step_tf(cast) %>%
   step_tf(director) %>% 
-  step_smote(genre1) %>% 
   step_normalize(all_numeric()))
 
-(embeddings_rec <- recipe(genre1 ~ description + cast + director, data = netflix_train) %>% 
-   step_tokenize(description) %>% 
-   step_stopwords(description) %>% 
+(filter_smote_rec <- smote_rec %>%
+  step_stopwords(description) %>%
+  step_stem(description) %>% 
+  step_tokenfilter(description, max_tokens = 30) %>% 
+  step_tokenize(cast,
+                token = "regex",
+                options = list(pattern = ", ")) %>%
+  step_tokenfilter(cast, max_tokens = 30) %>% 
+  step_tokenize(director,
+                token = "regex",
+                options = list(pattern = ", ")) %>%
+  step_tokenfilter(director, max_tokens = 30) %>% 
+  step_tf(description) %>%
+  step_tf(cast) %>%
+  step_tf(director) %>% 
+  step_normalize(all_numeric()))
+
+(filter_upsample_rec <- upsample_rec %>%
+  step_stopwords(description) %>%
+  step_stem(description) %>% 
+  step_tokenfilter(description, max_tokens = 30) %>% 
+  step_tokenize(cast,
+                token = "regex",
+                options = list(pattern = ", ")) %>%
+  step_tokenfilter(cast, max_tokens = 30) %>% 
+  step_tokenize(director,
+                token = "regex",
+                options = list(pattern = ", ")) %>%
+  step_tokenfilter(director, max_tokens = 30) %>% 
+  step_tf(description) %>%
+  step_tf(cast) %>%
+  step_tf(director) %>% 
+  step_normalize(all_numeric()))
+
+(embeddings_downsample_rec <- downsample_rec %>% 
    textrecipes::step_word_embeddings(description,
                                      embeddings = textdata::embedding_glove27b()) %>% 
    step_tokenize(cast,
@@ -259,18 +313,43 @@ Both models are centered and scaled. There are no missing values. With a big mul
    step_tokenize(director,
                  token = "regex",
                  options = list(pattern = ", ")) %>% 
-   step_texthash(director, num_terms = 50) %>% 
-   step_smote(genre1) %>% 
-   step_normalize(all_numeric()))
-  
+   step_texthash(director, num_terms = 50)) %>% 
+   step_normalize(all_numeric())
+
+(embeddings_upsample_rec <- upsample_rec %>% 
+   textrecipes::step_word_embeddings(description,
+                                     embeddings = textdata::embedding_glove27b()) %>% 
+   step_tokenize(cast,
+                 token = "regex",
+                 options = list(pattern = ", ")) %>% 
+   step_texthash(cast, num_terms = 50) %>% 
+   step_tokenize(director,
+                 token = "regex",
+                 options = list(pattern = ", ")) %>% 
+   step_texthash(director, num_terms = 50)) %>% 
+   step_normalize(all_numeric())
+
+(embeddings_smote_rec <- smote_rec %>% 
+   textrecipes::step_word_embeddings(description,
+                                     embeddings = textdata::embedding_glove27b()) %>% 
+   step_tokenize(cast,
+                 token = "regex",
+                 options = list(pattern = ", ")) %>% 
+   step_texthash(cast, num_terms = 50) %>% 
+   step_tokenize(director,
+                 token = "regex",
+                 options = list(pattern = ", ")) %>% 
+   step_texthash(director, num_terms = 50)) %>% 
+   step_normalize(all_numeric())
+   
 ```
 
 ## Filtered Recipe
 
-A look at the features in the fully pre-processed, "filtered", training set:
+A look at the features in the fully pre-processed, "filtered", downsampled training set:
 
 ```{r}
-smote_rec %>% 
+filter_downsample_rec %>% 
   prep() %>% 
   bake(new_data = NULL) %>% 
   glimpse()
@@ -278,10 +357,10 @@ smote_rec %>%
 
 ## Text Embeddings Recipe
 
-And a look at the features of the "embeddings" recipe:
+And a look at the features of the downsampled "embeddings" recipe:
 
 ```{r}
-embeddings_rec %>% 
+embeddings_downsample_rec %>% 
   prep() %>% 
   bake(new_data = NULL) %>% 
   glimpse()
@@ -312,15 +391,20 @@ This is where the cool part comes in: We now define a “workflow set.” We app
 ```{r}
 (wfs <- 
    bind_rows(workflow_set(
-              preproc = list(smote = smote_rec, 
-                             embeddings = embeddings_rec),
+              preproc = list(filter_smote = filter_smote_rec,
+                             filter_upsample = filter_upsample_rec,
+                             filter_downsample = filter_downsample_rec,
+                             embeddings_smote = embeddings_smote_rec,
+                             embeddings_downsample = embeddings_downsample_rec,
+                             embeddings_upsample = embeddings_upsample_rec
+              ),
               models = list(nb_spec, ranger_spec),
               cross = TRUE)
              )
 )
 ```
 
-And we see we have our four different workflows set up. 
+And we see we have our twelve different workflows set up. 
 
 ## Tuning and Cross Validation
 
@@ -352,7 +436,7 @@ We can then look at the results. What are the top workflows?
 
 ```{r}
 cv_res %>% 
-  rank_results() %>% 
+  rank_results(rank_metric = "roc_auc") %>% 
   filter(.metric == "roc_auc") %>% 
   select(wflow_id, roc_auc = mean, rank)
 
@@ -360,19 +444,25 @@ autoplot(cv_res,
          rank_metric = "roc_auc", 
          metric = "roc_auc",
          select_best = TRUE)
+
 ```
 
-The embeddings pre-processor gives a big boost in performance. Bayes is fast, but it falls apart because the model assumes independence of the features and it does not handle interactions.
+The embeddings pre-processor gives a big boost in predictive performance. The bayes models train quickly, but fall apart because the model assumes independence of the features and does not handle interactions.
 
 # {-}
 
 ## Performance
 
-We can look at ROC curves for the set of 5 cross-validation folds of the best model:
+We can look at ROC curves by genre class for the set of 5 cross-validation folds of the best model:
 
 ```{r}
+best_id <-  cv_res %>% 
+  rank_results(rank_metric = "roc_auc") %>%
+  filter(.metric == "roc_auc", rank == 1) %>%
+  pull(wflow_id)
+
 cv_res %>% 
-  pull_workflow_set_result("embeddings_rand_forest") %>% 
+  pull_workflow_set_result(best_id) %>% 
   collect_predictions() %>% 
   group_by(id) %>%
   roc_curve(truth = genre1, .pred_Action:.pred_Thriller) %>%
@@ -390,7 +480,7 @@ We can also create a confusion matrix from the resamples using `conf_mat_resampl
 
 ```{r}
 cv_res %>% 
-  pull_workflow_set_result("embeddings_rand_forest") %>% 
+  pull_workflow_set_result(best_id) %>% 
   conf_mat_resampled(tidy = FALSE) %>% 
   autoplot(type = "heatmap") +
   scale_fill_distiller(palette = 2, direction = "reverse") +
@@ -402,11 +492,11 @@ cv_res %>%
 
 ```{r}
 best_results <- cv_res %>% 
-  pull_workflow_set_result("embeddings_rand_forest") %>% 
+  pull_workflow_set_result(best_id) %>% 
   select_best(metric = "roc_auc")
 
 test_results <- cv_res %>% 
-  pull_workflow("embeddings_rand_forest") %>% 
+  pull_workflow(best_id) %>% 
   finalize_workflow(best_results) %>% 
   last_fit(split = netflix_split)
 
