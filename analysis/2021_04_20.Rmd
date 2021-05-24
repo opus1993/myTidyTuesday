@@ -30,6 +30,8 @@ First, I want to acknowledge that I benefited from the guidance and work of the 
 
 1. Max Kuhn and Julia Silge's in-progres book Tidy Modeling With R [Chapter 15: Screening Many Models](https://www.tmwr.org/workflow-sets.html)
 
+1. Max Kuhn's LA R User Group talk on 18May2021
+
 My goal is to explore and classify using the `tidymodels` framework and `workflowsets` to predict the genre of the titles on the streaming services. Dr. Silge hinted in her broadcast that a multi-class prediction would be possible with a neural net. Let's explore that path.
 
 First, let's load libraries and set a ggplot theme:
@@ -63,10 +65,11 @@ library(textrecipes)
 
 library(discrim) 
 
-library(finetune)
-
+library(finetune)  #  fast hyperparameter selection
 library(workflowsets)
-library(doParallel)
+library(tidyposterior)
+  
+library(stacks)
 
  })
 
@@ -312,10 +315,31 @@ ranger_spec <-
   set_mode("classification") %>%
   set_engine("ranger")
 
+logistic_reg_glmnet_spec <-
+  multinom_reg(penalty = 0.3, 
+               mixture = .01) %>%
+  set_engine('glmnet')
+
 nb_spec <- naive_Bayes() %>%
   set_mode("classification") %>%
   set_engine("naivebayes")
 
+nn_spec <-
+  mlp(penalty = 0.005,
+      hidden_units = 4,
+      epochs = 1500) %>% 
+  set_mode("classification") %>%
+  set_engine("nnet")
+
+svm_poly_kernlab_spec <-
+  svm_poly(
+    cost = tune(),
+    degree = tune(),
+    scale_factor = tune(),
+    margin = tune()
+  ) %>%
+  set_engine('kernlab') %>%
+  set_mode('classification')
 ```
 
 ## Workflowsets 
@@ -323,40 +347,55 @@ nb_spec <- naive_Bayes() %>%
 This is where the cool part comes in: We now define a “workflow set.” We apply `cross = TRUE` to look at all combinations of recipes and models. 
 
 ```{r workflowsets}
-(wfs <- 
-   bind_rows(workflow_set(
-              preproc = list(filter = filter_upsample_rec,
-                             embeddings = embeddings_upsample_rec
-              ),
-              models = list(nb_spec, ranger_spec),
-              cross = TRUE)
-             )
-)
+(wfs <-
+   bind_rows(
+     workflow_set(
+       preproc = list(filter = filter_upsample_rec),
+       models = list(nb_spec, logistic_reg_glmnet_spec)
+     ),
+     workflow_set(
+       preproc = list(embeddings = embeddings_upsample_rec),
+       models = list(
+         nb_spec, 
+         ranger_spec, 
+         logistic_reg_glmnet_spec,
+         nn_spec, 
+         svm_poly_kernlab_spec)
+     )
+   ))
+
 ```
 
-And we see we have our four different workflows set up. 
+And we see we have our six different workflows set up. 
 
 ## Tuning and Cross Validation
 
 The engines chosen here require no tuning. We will load register a parallel backend to speed the computations across the cross validation folds.
 
 ```{r}
-all_cores <- parallel::detectCores(logical = FALSE)
 
-cl <- makePSOCKcluster(all_cores)
-doParallel::registerDoParallel(cl)
+all_cores <- parallelly::availableCores(omit = 1)
+future::plan("multisession", workers = all_cores) # on Windows
+
+race_ctrl <-
+   control_race(
+      save_pred = TRUE,
+      parallel_over = "everything",
+      save_workflow = FALSE
+   )
 
 system.time(
 
       cv_res <- wfs %>%
-        workflow_map(fn = "fit_resamples",
+        workflow_map("tune_race_anova",
                      seed = 2021,
                      resamples = netflix_folds,
-                     control = control_resamples(save_pred = TRUE),
+                     control = race_ctrl,
+                     grid = 10,
                      verbose = TRUE)
 )
 
-doParallel::stopImplicitCluster()
+future::plan(strategy = "sequential")
 
 ```
 
@@ -368,16 +407,91 @@ We can then look at the results. What are the top workflows?
 cv_res %>% 
   rank_results(rank_metric = "roc_auc") %>% 
   filter(.metric == "roc_auc") %>% 
-  select(wflow_id, roc_auc = mean, rank)
+  select(wflow_id, .config, roc_auc = mean, rank)
 
 autoplot(cv_res, 
          rank_metric = "roc_auc", 
-         metric = "roc_auc",
-         select_best = TRUE)
+         metric = "roc_auc")
 
 ```
 
-The embeddings pre-processor gives a big boost in predictive performance. The bayes models train quickly, but fall apart because the model assumes independence of the features and does not handle interactions.
+Let's update with some reasonable ranges for the support vector machine parameters:
+
+```{r}
+autoplot(cv_res,
+         id = "embeddings_svm_poly",
+         metric = "roc_auc")
+```
+
+The defaults are printed here. Let's restrict degree and scale_factor.
+
+```{r}
+cost()
+degree()
+scale_factor()
+svm_margin()
+
+svm_params <- wfs %>% 
+  pull_workflow("embeddings_svm_poly") %>% 
+  parameters() %>% 
+  update(scale_factor = scale_factor(c(-4, -1)))
+
+```
+
+## Round 2 Tuning and Cross Validation
+
+Now let's update the option list and re-run that workflow:
+
+```{r}
+future::plan("multisession", workers = all_cores) # on Windows
+
+cv_res_round2 <- cv_res %>% 
+  option_add(param_info = svm_params, id = "embeddings_svm_poly") %>% 
+  filter(grepl("svm", wflow_id)) %>% 
+  workflow_map("tune_race_anova",
+                     seed = 2021,
+                     resamples = netflix_folds,
+                     control = race_ctrl,
+                     grid = 4,
+                     verbose = TRUE)
+
+future::plan(strategy = "sequential")
+
+updated_res <- cv_res %>% 
+  filter(!grepl("svm", wflow_id)) %>% 
+  bind_rows(cv_res_round2)
+
+updated_res %>% 
+  rank_results(rank_metric = "roc_auc") %>% 
+  filter(.metric == "roc_auc") %>% 
+  select(wflow_id, .config, roc_auc = mean, rank)
+
+autoplot(updated_res, 
+         rank_metric = "roc_auc", 
+         metric = "roc_auc")
+
+```
+
+The embeddings pre-processor gives a big boost in predictive performance. The naive_bayes models train quickly, but fall apart because the model assumes independence of the features and does not handle interactions. Even after advanced tuning, this support vector machine still did not outperform the `ranger` random forest. But, are the differences between them significant, or are they more or less the same?
+
+# A Bayesian analysis of the results
+
+```{r}
+roc_auc <- updated_res %>% 
+              perf_mod(
+                iter = 5000,
+                chains = 10,
+                cores = 6,
+                seed = 2021,
+                refresh = 0
+              )  
+
+# Assess for a difference of 0.05 in AUC
+roc_auc %>% 
+  autoplot(type = "ROPE", size = 0.05)
+```
+
+This suggests that the random forest and the best regularized regression are not much different than one another.
 
 # {-}
 
@@ -386,12 +500,12 @@ The embeddings pre-processor gives a big boost in predictive performance. The ba
 We can look at ROC curves by genre class for the set of 5 cross-validation folds of the best model:
 
 ```{r}
-best_id <-  cv_res %>% 
+best_id <-  updated_res %>% 
   rank_results(rank_metric = "roc_auc") %>%
   filter(.metric == "roc_auc", rank == 1) %>%
   pull(wflow_id)
 
-cv_res %>% 
+updated_res %>% 
   pull_workflow_set_result(best_id) %>% 
   collect_predictions() %>% 
   group_by(id) %>%
@@ -399,7 +513,7 @@ cv_res %>%
   autoplot() +
   labs(
     color = NULL,
-    title = "ROC curve for Netflix Movie Genre1 Random Forest Predictor",
+    title = glue::glue("ROC curve for Netflix Movie { best_id } Predictor"),
     subtitle = "Each resample fold is shown in a different color"
   )
 ```
@@ -408,8 +522,8 @@ This model predicts Documentaries and International films very well. On the othe
 
 We can also create a confusion matrix from the resamples using `conf_mat_resampled()`, which computes a separate confusion matrix for each resample and then averages the cell counts.
 
-```{r}
-cv_res %>% 
+```{r message=FALSE, warning=FALSE}
+updated_res %>% 
   pull_workflow_set_result(best_id) %>% 
   conf_mat_resampled(tidy = FALSE) %>% 
   autoplot(type = "heatmap") +
@@ -421,11 +535,11 @@ cv_res %>%
 ## Select the best model
 
 ```{r}
-best_results <- cv_res %>% 
+best_results <- updated_res %>% 
   pull_workflow_set_result(best_id) %>% 
   select_best(metric = "roc_auc")
 
-test_results <- cv_res %>% 
+test_results <- updated_res %>% 
   pull_workflow(best_id) %>% 
   finalize_workflow(best_results) %>% 
   last_fit(split = netflix_split)
@@ -440,6 +554,8 @@ collect_metrics(test_results)
 ```
 
 This is a good test result, as the model run on unseen data delivers performance comparable to the training figures, so does not over-fit.
+
+But, I am still not particularly satisfied with the multi-class accuracy figure.
 
 At some later date, I'd like to explore how to extract importance scores from the embeddings.
 
