@@ -196,7 +196,7 @@ train_numeric <- train_df %>% keep(is.numeric) %>% colnames()
 
 chart <- c(train_numeric, "rain_tomorrow")
 
-train_df %>%
+p1 <- train_df %>%
   select_at(vars(chart)) %>%
   select(-id) %>%
   pivot_longer(
@@ -217,14 +217,24 @@ train_df %>%
   ggplot() +
   geom_histogram(mapping = aes(x = value, fill = rain_tomorrow),
                  bins = 50, show.legend = FALSE) +
-  facet_wrap(~ key, scales = "free", ncol = 3) +
+  facet_wrap(~ key, scales = "free", ncol = 4) +
   scale_x_continuous(n.breaks = 3) +
   scale_y_continuous(n.breaks = 3) +
-  theme(plot.subtitle = ggtext::element_textbox_simple()) +
+  theme(plot.subtitle = ggtext::element_textbox_simple(),
+        plot.background = element_rect(color = "white")) +
   labs(title = "Numeric Feature Histogram Distributions",
        subtitle = "<span style = 'color:#00BFC4'>Rainy days</span> and <span style = 'color:#F8766D'> not rainy days</span>",
        x = NULL, y = NULL)
 
+ggsave(p1, file = here::here("docs","assets","rainyDays.png"),
+       device = "png")
+```
+
+```{r}
+knitr::include_graphics(here::here("docs", 
+                                   "assets",
+                                   "rainyDays.png"),
+                         error = FALSE)
 ```
 
 ```{r}
@@ -284,7 +294,7 @@ train_df %>%
               ) +
   labs(x = NULL,
        y = "% when wind is in this direction",
-       title = "Rain tomrrow depends upon the compass direction",
+       title = "Rain tomorrow depends upon the compass direction",
        subtitle = "<span style = 'color:#F8766D'>3pm </span>, <span style = 'color:#00BA38'> 9am</span>, and <span style = 'color:#619CFF'> Overall</span>",
        color = "Time") +
   theme(plot.subtitle = ggtext::element_textbox_simple(),
@@ -316,7 +326,7 @@ spread_time %>%
   theme(plot.subtitle = ggtext::element_textbox_simple()) +
   labs(x = "9 AM",
        y = "3 PM",
-       title = "Does the difference over the course of the day differ by rain/won't rain?",
+       title = "Does the difference in time of day change rain/won't rain?",
        subtitle = "<span style = 'color:#00BFC4'>Rainy days</span> and <span style = 'color:#F8766D'> not rainy days</span>",
        color = "") 
 
@@ -327,7 +337,7 @@ spread_time %>%
   facet_wrap(~ metric, scales = "free") +
   theme(plot.subtitle = ggtext::element_textbox_simple()) +
   labs(x = "Difference between 3 PM - 9 AM",
-       title = "Does the difference over the course of the day differ by rain/won't rain?",
+       title = "Does the difference in time of day change rain/won't rain?",
        subtitle = "<span style = 'color:#00BFC4'>Rainy days</span> and <span style = 'color:#F8766D'> not rainy days</span>",
        color = NULL, fill = NULL)
 ```
