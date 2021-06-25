@@ -1,7 +1,7 @@
 ---
 title: "Sliced Australia Weather"
 author: "Jim Gruman"
-date: "6/22/2021"
+date: "June 22, 2021"
 output:
   workflowr::wflow_html:
     toc: no
@@ -154,7 +154,7 @@ train_df %>%
 
 ```{r}
 train_df %>%
-  group_by(location = fct_lump(location, 40)) %>%
+  group_by(location = fct_lump(location, 30)) %>%
   summarize_rainfall() %>%
   mutate(location = fct_reorder(location, pct_rain)) %>%
   ggplot(aes(pct_rain, location)) +
@@ -186,13 +186,10 @@ train_df %>%
   scale_size_continuous(guide = "none") +
   coord_cartesian(ylim = c(0, .35)) +
   labs(x = "Year", y = NULL,
-       title = "% days rain (tomorrow) in year")
+       title = "% days rain tomorrow in each year")
 ```
 
 
-filter out postal codes, product Id's, look for other impostor numeric variables
-
-consider log or inverse transformations
 
 ```{r}
 train_numeric <- train_df %>% keep(is.numeric) %>% colnames()
@@ -219,9 +216,10 @@ train_df %>%
   filter(!is.na(value)) %>% 
   ggplot() +
   geom_histogram(mapping = aes(x = value, fill = rain_tomorrow),
-                 bins = 50) +
-  facet_wrap(~ key, scales = "free") +
+                 bins = 50, show.legend = FALSE) +
+  facet_wrap(~ key, scales = "free", ncol = 3) +
   scale_x_continuous(n.breaks = 3) +
+  scale_y_continuous(n.breaks = 3) +
   theme(plot.subtitle = ggtext::element_textbox_simple()) +
   labs(title = "Numeric Feature Histogram Distributions",
        subtitle = "<span style = 'color:#00BFC4'>Rainy days</span> and <span style = 'color:#F8766D'> not rainy days</span>",
@@ -261,23 +259,37 @@ as_angle <- function(direction) {
 
 ```{r}
 train_df %>%
-  gather(type, direction, contains("dir")) %>%
+  pivot_longer(cols = contains("dir"),
+               names_to = "type",
+               values_to = "direction") %>% 
   mutate(type = str_remove(type, "wind_dir"),
          type = ifelse(type == "wind_gust_dir", "Overall", type)) %>%
   group_by(type, direction) %>%
   summarize_rainfall() %>%
+  filter(!is.na(direction)) %>% 
   mutate(angle = as_angle(direction)) %>%
   ggplot(aes(angle)) +
-  geom_line(aes(y = pct_rain, color = type)) +
-  geom_text(aes(y = .4, label = direction), size = 6) +
+  geom_line(aes(y = pct_rain, color = type),
+            show.legend = FALSE) +
+  geom_text(aes(y = .35, label = direction), 
+            size = 6, hjust = 0.5) +
+  annotate("text",
+                x = 120, 
+                y = c(0, 0.1, 0.2, 0.3),
+                label = c(0, 10, 20, 30),
+                size = 3) +
   scale_y_continuous(labels = percent) +
-  expand_limits(y = 0) +
-  coord_polar() +
-  labs(x = "",
-       y = "% rain tomorrow when wind is in this direction",
-       title = "How does rain depend on the compass direction?",
-       color = "Time",
-       caption = "DataViz code by David Robinson")
+  expand_limits(x = c(0,360), y = 0) +
+  coord_polar(start = 0, theta = "x",
+              ) +
+  labs(x = NULL,
+       y = "% when wind is in this direction",
+       title = "Rain tomrrow depends upon the compass direction",
+       subtitle = "<span style = 'color:#F8766D'>3pm </span>, <span style = 'color:#00BA38'> 9am</span>, and <span style = 'color:#619CFF'> Overall</span>",
+       color = "Time") +
+  theme(plot.subtitle = ggtext::element_textbox_simple(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank())
 ```
 
 Looking for interaction terms in change over day!
@@ -392,7 +404,7 @@ rec <-
   step_upsample(rain_tomorrow)
 ```
 
-A quick look at the pre-processed training data set:
+## the pre-processed data
 
 ```{r}
 rec %>% 
@@ -400,6 +412,8 @@ rec %>%
   prep() %>% 
   juice() 
 ```
+
+## Cross Validation
 
 We will use 5-fold cross validation and stratify between the rain and no-rain classes.
 
@@ -549,7 +563,7 @@ Next steps:
 
 The stacks package will select from all of the candidate models used in hyperparameter tuning from the GLMnet and the XGBoost sessions above and blend a weighted subset of several.
 
-The result:
+## Blend the Predictions
 
 ```{r}
 stacked_model <- stacks() %>% 
