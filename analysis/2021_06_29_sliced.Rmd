@@ -1,0 +1,485 @@
+---
+title: "Sliced NYC Airbnb"
+author: "Jim Gruman"
+date: "June 29, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+[SLICED](https://www.notion.so/SLICED-Show-c7bd26356e3a42279e2dfbafb0480073) is like the TV Show Chopped but for data science. Competitors get a never-before-seen dataset and two-hours to code a solution to a prediction challenge. Contestants get points for the best model plus bonus points for data visualization, votes from the audience, and more.
+ 
+[Season 1 Episode 5](https://www.kaggle.com/c/sliced-s01e05-WXx7h8/data) featured a challenge to predict AirBnb pricing for properties in New York City. The evaluation metric in this competition is residual mean log squared error.
+
+To make the best use of the resources that we have, we will explore the data set features to select those with the most predictive power, build a random forest to confirm the receipe, and then use the rest of the time to build one or more Catboost ensemble models.  If we have time, we will also stack several of them. 
+
+Let's load up some packages:
+
+```{r setup}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	cache.lazy = FALSE,
+	df_print = "paged",
+	dpi = 300,
+	tidy = "styler",
+	dev = "ragg_png",
+	autodep = TRUE
+)
+suppressPackageStartupMessages({
+library(tidyverse)
+library(hrbrthemes)
+library(lubridate)
+  
+library(tidymodels)
+library(textrecipes)
+library(treesnip)
+library(finetune)
+library(stacks)
+library(themis)
+library(baguette)
+  
+library(catboost)
+
+})
+
+update_geom_font_defaults(font_rc_light)
+
+ggplot2::theme_set(hrbrthemes::theme_ipsum_tw() +
+            ggplot2::theme(plot.title.position = "plot",
+                           plot.caption.position = "plot"))
+
+#create a data directory
+data_dir <- here::here("data",Sys.Date())
+if (!file.exists(data_dir)) dir.create(data_dir)
+
+# set a competition metric
+mset <- metric_set(mn_log_loss)
+
+# set the competition name from the web address
+competition_name <- "sliced-s01e05-WXx7h8"
+
+zipfile <- paste0(data_dir,"/", competition_name, ".zip")
+
+path_export <- here::here("data",Sys.Date(),paste0(competition_name,".csv"))
+```
+
+A quick reminder before downloading the dataset:  Go to the web site and accept the competition terms!!!
+
+# Import and EDA {.tabset}
+
+I was out on holiday this past week and missed the live competion. This file is a compilatin of some of the best parts of what the contestants demonstrated (live coding from scratch) and Julia Silge's [custom metric blog post](https://juliasilge.com/blog/nyc-airbnb/).
+
+## Direct Import and Skim
+
+We have basic shell commands available to interact with Kaggle here:
+
+```{r kaggle competitions terminal commands, eval=FALSE}
+# from the Kaggle api https://github.com/Kaggle/kaggle-api
+
+# the leaderboard
+shell(glue::glue('kaggle competitions leaderboard { competition_name } -s'))
+
+# the files to download
+shell(glue::glue('kaggle competitions files -c { competition_name }'))
+
+# the command to download files
+shell(glue::glue('kaggle competitions download -c { competition_name } -p { data_dir }'))
+
+# unzip the files received
+shell(glue::glue('unzip { zipfile } -d { data_dir }'))
+
+```
+
+Reading in the contents of the datafiles here:
+
+```{r}
+train_df <- read_csv(file = glue::glue({ data_dir }, "/train.csv")) %>% 
+  mutate(across(c(id, host_id), as.character)) %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(log_price = log10(price + 1))
+
+test_df <- read_csv(file = glue::glue({ data_dir }, "/test.csv")) %>% 
+  mutate(across(c(id, host_id), as.character)) %>% 
+  mutate_if(is.character, as.factor) 
+
+```
+
+Some questions to answer here:
+What features have missing data, and imputations may be required?
+What does the outcome variable look like, in terms of imbalance?
+
+```{r}
+skimr::skim(train_df)
+```
+
+Outcome variable `log(price)` has a mean of 2.06 and a range between 0 and 4. Numerical feature `reviews_per_month` and date `last_review` are missing about 20% of the time in training data. Categorical variable `neighbourhood` has 217 levels.
+
+## Feature plots
+
+The outcome variable itself is skewed across all observations in the training data, as prices often are.
+
+```{r}
+train_df %>%
+  ggplot(aes(price + 1, fill = neighbourhood_group)) +
+  geom_histogram(position = "identity", 
+                 alpha = 0.5, 
+                 bins = 20) +
+  scale_x_log10(labels = scales::dollar_format(accuracy = 1),
+                breaks = c(5, 10, 100, 1000)) +
+  labs(fill = NULL, x = "price per night") +
+  theme(legend.position = c(0.8, 0.5),
+        legend.background = element_rect(color = "white"))
+```
+
+Let's explore the relationships between the features and the numeric outcome. 
+
+A plot of the time series `last_review` by year and the corresponding ranges of price
+
+```{r}
+train_df %>%
+  group_by(year = year(last_review)) %>%
+  summarize(mean_price = mean(price),
+            n = n(),
+            low = quantile(price, probs = 0.25, na.rm = TRUE),
+            high = quantile(price, probs = 0.75, na.rm = TRUE),
+              .groups = "drop") %>%
+  filter(!is.na(year)) %>% 
+  ggplot(aes(year, mean_price)) +
+  geom_line() +
+  geom_point(aes(size = n)) +
+  geom_ribbon(aes(ymin = low, ymax = high), alpha = .1) +
+  expand_limits(y = 0) +
+  scale_x_continuous(breaks = seq(2011, 2017, 2)) +
+  scale_y_continuous(labels = dollar_format()) +
+  labs(x = "Year", y = "Mean Price and IQR",
+       size = "Reviews") +
+  theme(legend.position = c(0.85, 0.2),
+        legend.background = element_rect(color = "white"))
+```
+
+Histograms of the distributions of each numeric feature:
+
+```{r}
+train_numeric <- train_df %>% keep(is.numeric) %>% colnames()
+
+chart <- c(train_numeric)
+
+train_df %>%
+  select_at(vars(chart)) %>%
+  select(-log_price, -price) %>% 
+  pivot_longer(cols = everything(),
+    names_to = "key",
+    values_to = "value"
+  ) %>% 
+  filter(!is.na(value)) %>% 
+  ggplot() +
+  geom_histogram(mapping = aes(x = value),
+                 bins = 50, show.legend = FALSE) +
+  facet_wrap(~ key, scales = "free", ncol = 4) 
+
+```
+
+And the outcome variable by each numeric feature:
+
+```{r}
+train_df %>%
+  select_at(vars(chart)) %>%
+  select(-price) %>% 
+  pivot_longer(cols = -log_price,
+    names_to = "key",
+    values_to = "value"
+  ) %>% 
+  filter(!is.na(value)) %>% 
+  ggplot() +
+  geom_point(mapping = aes(x = value, y = log_price),
+             alpha = 0.1, shape = 20, show.legend = FALSE) +
+  facet_wrap(~ key, scales = "free", ncol = 4) +
+  labs(x = NULL)
+```
+
+## Map of prices 
+
+```{r}
+train_df %>%
+  ggplot(aes(longitude, latitude, z = log_price)) +
+  stat_summary_hex(alpha = 0.8, bins = 50) +
+  scale_fill_fermenter(palette = "YlGnBu") +
+  labs(fill = "Mean price (log10)") +
+  coord_cartesian() +
+  theme(legend.position = c(0.1, 0.8),
+        legend.background = element_rect(color = "white"))
+```
+
+## Numeric Feature Correlations
+
+```{r}
+cr1 <- train_df %>%
+  select(-log_price, -price) %>%
+  keep(is.numeric) %>%
+  cor(use = "pair")
+
+corrplot::corrplot(cr1, type = "upper")
+
+```
+
+# {-}
+
+Conclusions:
+
+* Neighborhood location drives price, through both named neighborhood and through longitude and latitude
+* the numeric features do not provide as much predictive power alone
+* there are AirBNB listings that have neither reviews nor last_review dates. 
+
+# Preprocessiong {.tabset}
+
+## The recipe framework
+
+I am going to train on almost all of the train data. The 1% left is a quick confirmation of validity.  The provided file labeled `test` has no labels.
+
+```{r}
+set.seed(2021)
+split <- train_df %>% 
+  select(-price) %>% 
+  initial_split(strata = log_price,
+                       prop = .99)
+train <- training(split)
+valid <- testing(split)
+```
+
+There are only `r nrow(valid)` held out from training as a last check before submission.
+
+```{r}
+basic_rec <-
+  recipe(log_price ~ ., train) %>%
+  # ---- set aside the row id's
+  update_role(id, host_name, new_role = "id") %>% 
+  step_novel(neighbourhood) %>%
+  step_other(neighbourhood, threshold = 0.01) %>%
+  step_novel(host_id) %>%
+  step_other(host_id, threshold = 0.01) %>%
+  step_tokenize(name) %>%
+  step_stopwords(name) %>%
+  step_texthash(name, num_terms = 16) %>% 
+  step_indicate_na(last_review, reviews_per_month) %>% 
+  step_mutate(last_review = if_else(is.na(last_review),
+                                    min(train$last_review, na.rm = TRUE), last_review)) %>% 
+  step_holiday(last_review) %>% 
+  step_date(last_review, features = "year",
+            keep_original_cols = FALSE) %>% 
+  step_ns(longitude, latitude, deg_free = 3) %>% 
+  step_nzv(all_predictors())
+
+onehot_rec <-
+  basic_rec %>% 
+  step_dummy(all_nominal_predictors())
+    
+```
+
+## the pre-processed data
+
+```{r}
+basic_rec %>% 
+#  finalize_recipe(list(num_comp = 2)) %>% 
+  prep() %>% 
+  juice() 
+```
+
+## Cross Validation
+
+We will use 5-fold cross validation and stratify between the rain and no-rain classes.
+
+```{r}
+train_folds <- vfold_cv(data = train,
+                        strata = log_price,
+                        v = 5)
+
+```
+
+# {-}
+
+# Machine Learning {.tabset}
+
+## Model Specifications
+
+We will build a specification for simple shallow random forest and a specification for catboost. 
+
+```{r}
+catboost_spec <- boost_tree(trees = 1000,
+                            min_n = tune(),
+                            learn_rate = tune(),
+                            tree_depth = tune()) %>% 
+  set_engine("catboost", 
+             nthread = 6) %>%
+  set_mode("regression")
+
+bag_spec <-
+  bag_tree(min_n = 10) %>%
+  set_engine("rpart", times = 25) %>%
+  set_mode("regression")
+
+```
+
+## The RMSLE custom metric
+
+The yardstick default RMSE is on the log of price, not RMSLE on price. This will create a custom function to track RMSLE:
+
+```{r}
+library(rlang)
+
+rmsle_vec <- function(truth, estimate, na_rm = TRUE, ...) {
+  rmsle_impl <- function(truth, estimate) {
+    sqrt(mean((log(truth + 1) - log(estimate + 1))^2))
+  }
+
+  metric_vec_template(
+    metric_impl = rmsle_impl,
+    truth = truth,
+    estimate = estimate,
+    na_rm = na_rm,
+    cls = "numeric",
+    ...
+  )
+}
+
+rmsle <- function(data, ...) {
+  UseMethod("rmsle")
+}
+
+rmsle <- new_numeric_metric(rmsle, direction = "minimize")
+
+rmsle.data.frame <- function(data, truth, estimate, na_rm = TRUE, ...) {
+  metric_summarizer(
+    metric_nm = "rmsle",
+    metric_fn = rmsle_vec,
+    data = data,
+    truth = !!enquo(truth),
+    estimate = !!enquo(estimate),
+    na_rm = na_rm,
+    ...
+  )
+}
+
+mset = metric_set(rmsle)
+```
+
+## Parallel backend
+
+To speed up computation we will use a parallel backend.
+
+```{r}
+all_cores <- parallelly::availableCores(omit = 1)
+future::plan("multisession", workers = all_cores) # on Windows
+
+```
+
+## A quick Random Forest
+
+Lets make a cursory check of the recipe and variable importance, which comes out of `rpart` for free. This workflow also handles factors without dummies.
+
+```{r}
+bag_wf <-
+  workflow() %>%
+  add_recipe(basic_rec) %>%
+  add_model(bag_spec)
+
+set.seed(123)
+bag_fit <- fit(bag_wf, data = train)
+bag_fit
+
+```
+
+We see that `room_type` and the geographical information will be very important for this model.
+
+## Tuning Catboost
+
+Now that we have some confidence that the features have predictive power, lets tune up a set of `catboost` models. 
+
+```{r catboost_tuning}
+
+catboost_params <-
+  dials::parameters(min_n(), # min data in leaf
+                    tree_depth(range = c(4, 10)), # depth
+                    learn_rate() # learning rate
+                    )
+                    
+cbst_grid <- dials::grid_max_entropy(catboost_params,
+                                     size = 20 
+                                     )
+
+cv_res_catboost <-
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(catboost_spec) %>% 
+  tune_grid(    
+    resamples = train_folds,
+    grid = cbst_grid,
+    control = control_race(verbose = FALSE,
+                           save_pred = TRUE, 
+                           save_workflow = TRUE),
+    metrics = mset
+)
+
+autoplot(cv_res_catboost)
+
+show_best(cv_res_catboost) %>% 
+  select(-.estimator)
+
+cat_wf_best <-   
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(catboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_catboost))
+
+cat_fit_best <- cat_wf_best %>%
+  parsnip::fit(data = train)
+
+predict(cat_fit_best, new_data = valid) %>%
+  cbind(valid) %>%
+  ggplot(aes(10^log_price, 10^.pred, color = neighbourhood_group)) +
+  geom_abline(
+    slope = 1,
+    lty = 2,
+    color = "gray50",
+    alpha = 0.5
+  ) +
+  geom_point(alpha = 0.2) +
+  scale_x_log10(labels = scales::dollar_format(accuracy = 1)) +
+  scale_y_log10(labels = scales::dollar_format(accuracy = 1)) +
+  labs(color = NULL, x = "True price", y = "Predicted price")
+
+predict(cat_fit_best, new_data = valid) %>%
+  cbind(valid) %>%
+  rmsle(10^log_price, 10^.pred)
+
+```
+
+This figure is somewhat better than the leaderboard RMSLE of 0.40758, so it would have been worthy of submission.
+
+Lastly, we build the submission file 
+
+```{r}
+
+bind_cols(predict(cat_fit_best, test_df), test_df) %>% 
+  select(id, price = .pred) %>%
+  mutate(price = 10^price) %>% 
+  write_csv(file = path_export)
+
+```
+
+and make the submission to the Kaggle board
+
+```{r, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Catboosted"'))
+```
+
+
+
