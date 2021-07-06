@@ -279,11 +279,11 @@ Adapted from Julia Silge's demonstration
 usa_data = map_data("usa")
 
 train_df %>%
-  ggplot(aes(longitude, latitude, z = 10^price - 1)) +
+  ggplot(aes(longitude, latitude, z = price)) +
   stat_summary_hex(bins = 100) +
   scale_fill_fermenter(palette = "RdBu",
                        direction = -1) +
-  labs(fill = "Mean price") +
+  labs(fill = "Mean price(log10)") +
   cowplot::theme_map() +
   theme(legend.position = c(0.1, 0.8),
         legend.background = element_rect(color = "white"))
@@ -488,12 +488,12 @@ Now that we have some confidence that the features have predictive power, lets t
 catboost_params <-
   dials::parameters(min_n(), # min data in leaf
                     tree_depth(range = c(4, 15)),
-                    learn_rate(range = c(-3, -1), 
+                    learn_rate(range = c(-3, -0.7), 
                                trans = log10_trans())
                     )
                     
 cbst_grid <- dials::grid_max_entropy(catboost_params,
-                                     size = 20 
+                                     size = 40 
                                      )
 cbst_grid
 
