@@ -157,7 +157,7 @@ train_df %>%
   ggplot(aes(10 ^ price , room_type)) +
   geom_boxplot(show.legend = FALSE) +
   scale_x_log10(labels = scales::dollar_format(accuracy = 1)) +
-  labs(y = NULL, x = "Price", title = "Host IDs")
+  labs(y = NULL, x = "Price", title = "Room Types")
 
 train_df %>%
   unnest_tokens(word, name) %>%
@@ -169,7 +169,7 @@ train_df %>%
   ggplot(aes(mean_price, word, size = n)) +
   geom_point() +
   scale_x_log10(labels = scales::dollar_format(accuracy = 1)) +
-  labs(size = "Number of Listings") +
+  labs(size = "Number of Listings", title = "Property Descriptions") +
   theme(legend.position = c(0.8, 0.3),
         legend.background = element_rect(color = "white"))
 
