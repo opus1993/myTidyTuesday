@@ -1,0 +1,534 @@
+---
+title: "Sliced NYC Airbnb"
+author: "Jim Gruman"
+date: "July 13, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+[SLICED](https://www.notion.so/SLICED-Show-c7bd26356e3a42279e2dfbafb0480073) is like the TV Show Chopped but for data science. Competitors get a never-before-seen dataset and two-hours to code a solution to a prediction challenge. Contestants get points for the best model plus bonus points for data visualization, votes from the audience, and more.
+ 
+[Season 1 Episode 7](https://www.kaggle.com/c/sliced-s01e07-HmPsw2/data) features a challenge to predict whether a bank customer is churned. The evaluation metric in this competition is residual mean log loss.
+
+To make the best use of the resources that we have, we will explore the data set features to select those with the most predictive power, build a random forest to confirm the recipe, and then use the rest of the time to build one or more ensemble models. 
+
+Let's load up some packages:
+
+```{r setup}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	cache.lazy = FALSE,
+	df_print = "paged",
+	dpi = 300,
+	tidy = "styler",
+	dev = "ragg_png",
+	autodep = TRUE
+)
+suppressPackageStartupMessages({
+library(tidyverse)
+library(hrbrthemes)
+library(lubridate)
+
+library(tidymodels)
+library(treesnip)
+library(finetune)
+
+library(themis)
+library(baguette)
+  
+library(catboost)
+
+})
+
+update_geom_font_defaults(font_rc_light)
+
+ggplot2::theme_set(hrbrthemes::theme_ipsum_tw() +
+            ggplot2::theme(plot.title.position = "plot",
+                           plot.caption.position = "plot"))
+
+#create a data directory
+data_dir <- here::here("data",Sys.Date())
+if (!file.exists(data_dir)) dir.create(data_dir)
+
+# set a competition metric
+mset <- metric_set(mn_log_loss)
+
+# set the competition name from the web address
+competition_name <- "sliced-s01e07-HmPsw2"
+
+zipfile <- paste0(data_dir,"/", competition_name, ".zip")
+
+path_export <- here::here("data",Sys.Date(),paste0(competition_name,".csv"))
+```
+
+# Import and EDA {.tabset}
+
+A quick reminder before downloading the dataset:  Go to the web site and accept the competition terms!!!
+
+## Direct Import and Skim
+
+We have basic shell commands available to interact with Kaggle here:
+
+```{r kaggle competitions terminal commands, eval=FALSE}
+# from the Kaggle api https://github.com/Kaggle/kaggle-api
+
+# the leaderboard
+shell(glue::glue('kaggle competitions leaderboard { competition_name } -s'))
+
+# the files to download
+shell(glue::glue('kaggle competitions files -c { competition_name }'))
+
+# the command to download files
+shell(glue::glue('kaggle competitions download -c { competition_name } -p { data_dir }'))
+
+# unzip the files received
+shell(glue::glue('unzip { zipfile } -d { data_dir }'))
+
+```
+
+Reading in the contents of the datafiles here:
+
+```{r}
+train_df <- read_csv(file = glue::glue({ data_dir }, "/train.csv")) %>% 
+  mutate(across(c(attrition_flag, gender, education_level, income_category), as.factor)) 
+
+test_df <- read_csv(file = glue::glue({ data_dir }, "/test.csv")) %>% 
+  mutate(across(c(gender, education_level, income_category), as.factor)) 
+
+```
+
+Some questions to answer here:
+What features have missing data, and imputations may be required?
+What does the outcome variable look like, in terms of imbalance?
+
+```{r}
+skimr::skim(train_df)
+```
+
+Outcome variable `attrition_flag` is set to 1 (churned) for 1132 rows, and 0 (not churned) for 5956, so is imbalanced. None of the features is missing obvious data. We will take a closer look at the categorical variable levels in a moment.
+
+## Categorical Feature Plots
+
+```{r}
+summarize_attrition <- function(tbl) {
+  ret <- tbl %>%
+    summarize(
+      n_attrition = sum(attrition_flag == 1),
+      n = n(),
+      .groups = "drop"
+    ) %>%
+    arrange(desc(n)) %>%
+    mutate(
+      pct_attrition = n_attrition / n,
+      low = qbeta(.025, n_attrition + 5, n - n_attrition + .5),
+      high = qbeta(.975, n_attrition + 5, n - n_attrition + .5)
+    ) %>%
+    mutate(pct = n / sum(n))
+  ret
+}
+
+train_df %>%
+  summarize_attrition()
+
+train_df %>%
+  group_by(education_level) %>%
+  summarize_attrition() %>%
+  mutate(education_level = fct_reorder(education_level, pct_attrition)) %>%
+  ggplot(aes(pct_attrition, education_level)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = low, xmax = high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent) +
+  labs(
+    x = "Proportion of attrition",
+    y = "",
+    title = "What education levels get the most attrition?",
+    subtitle = "Including 95% intervals. Size of points is proportional to frequency in the dataset"
+  )
+
+train_df %>%
+  group_by(income_category = fct_lump(income_category , 30)) %>%
+  summarize_attrition() %>%
+  mutate(income_category = fct_reorder(income_category, pct_attrition)) %>%
+  ggplot(aes(pct_attrition, income_category)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = low, xmax = high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent) +
+  labs(
+    x = "Proportion of attrition",
+    y = "",
+    title = "What income category levels get the most attrition?",
+    subtitle = "Including 95% confidence intervals. Size of points is proportional to frequency in the dataset"
+  )
+
+```
+
+## Numeric Feature Plots
+
+The outcome variable itself is skewed across all observations in the training data, as prices often are.
+
+```{r}
+train_numeric <- train_df %>% keep(is.numeric) %>% colnames()
+
+chart <- c(train_numeric, "attrition_flag")
+
+p1 <- train_df %>%
+  select_at(vars(chart)) %>%
+  select(-id) %>%
+  pivot_longer(
+    cols = -attrition_flag,
+    names_to = "key",
+    values_to = "value"
+  ) %>%
+  filter(!is.na(value)) %>%
+  ggplot(mapping = aes(value, 
+  #                     after_stat(density), 
+                       fill = attrition_flag)) +
+  geom_histogram(
+    position = "identity",
+    alpha = 0.5,
+    bins = 30,
+    show.legend = FALSE
+  ) +
+  facet_wrap( ~ key, scales = "free", ncol = 3) +
+  scale_x_continuous(n.breaks = 3) +
+  theme(
+    plot.subtitle = ggtext::element_textbox_simple(),
+    plot.background = element_rect(color = "white")
+  ) +
+  labs(
+    title = "Numeric Feature Histogram Distributions",
+    subtitle = "Customers <span style = 'color:#00BFC4'>churning</span> and <span style = 'color:#F8766D'> not churning</span>",
+    x = "Numeric Feature",
+    y = NULL
+  )
+p1
+ggsave(p1,
+       file = here::here("docs", "assets", "attrition.png"),
+       device = "png")
+```
+
+```{r}
+knitr::include_graphics(here::here("docs", 
+                                   "assets",
+                                   "attrition.png"),
+                         error = FALSE)
+```
+
+## Numeric Feature Correlations
+
+```{r}
+cr1 <- train_df %>%
+  keep(is.numeric) %>%
+  cor(use = "pair")
+
+corrplot::corrplot(cr1, type = "upper")
+
+```
+
+The transaction amounts and transaction counts tend to be correlated. Also, the revolving balance and average utilization ratio.
+
+# {-}
+
+Conclusions:
+
+* There aren't any obvious features to engineer, so as a first pass we will go straight to training what we have.
+* As a second pass, we can add interactions to try to improve the model.
+
+# Preprocessiong {.tabset}
+
+## The recipe framework
+
+I am going to train on almost all of the train data. The 1% left is a quick confirmation of validity.  The provided file labeled `test` has no labels.
+
+```{r}
+set.seed(2021)
+split <- train_df %>% 
+  initial_split(strata = attrition_flag,
+                       prop = .99)
+train <- training(split)
+valid <- testing(split)
+```
+
+There are only `r nrow(valid)` held out from training as a last check before submission.
+
+```{r}
+basic_rec <-
+  recipe(attrition_flag ~ ., train) %>%
+  # ---- set aside the row id's
+  update_role(id, new_role = "id") %>% 
+  step_novel(gender, education_level, income_category) %>%
+  step_normalize(all_numeric_predictors()) %>% 
+  step_nzv(all_predictors())
+
+advanced_rec <-
+  recipe(attrition_flag ~ ., train) %>%
+  # ---- set aside the row id's
+  update_role(id, new_role = "id") %>% 
+  step_novel(gender, education_level, income_category) %>%
+  step_interact(terms = ~ total_relationship_count:avg_utilization_ratio) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_nzv(all_predictors())
+    
+```
+
+## the pre-processed data
+
+```{r}
+basic_rec %>% 
+#  finalize_recipe(list(num_comp = 2)) %>% 
+  prep() %>% 
+  juice() 
+
+advanced_rec %>% 
+  prep() %>% 
+  juice()
+```
+
+## Cross Validation
+
+We will use 5-fold cross validation and stratify between the rain and no-rain classes.
+
+```{r}
+train_folds <- vfold_cv(data = train,
+                        strata = attrition_flag,
+                        v = 5)
+
+```
+
+# {-}
+
+# Machine Learning {.tabset}
+
+## Model Specifications
+
+We will build a specification for simple shallow random forest and a specification for catboost. 
+
+```{r}
+catboost_spec <- boost_tree(trees = 1000,
+                            min_n = tune(),
+                            learn_rate = tune(),
+                            tree_depth = tune()) %>% 
+  set_engine("catboost") %>%
+  set_mode("classification")
+
+bag_spec <-
+  bag_tree(min_n = 10) %>%
+  set_engine("rpart", times = 50) %>%
+  set_mode("classification")
+
+```
+
+## Parallel backend
+
+To speed up computation we will use a parallel backend.
+
+```{r}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+```
+
+## A quick Random Forest
+
+Lets make a cursory check of the recipe and variable importance, which comes out of `rpart` for free. This workflow also handles factors without dummies.
+
+```{r}
+bag_wf <-
+  workflow() %>%
+  add_recipe(basic_rec) %>%
+  add_model(bag_spec)
+
+set.seed(123)
+bag_fit <- parsnip::fit(bag_wf, data = train)
+
+pull_workflow_fit(bag_fit)$fit$imp %>%
+  mutate(term = fct_reorder(term, value)) %>%
+  ggplot(aes(value, term)) +
+  geom_point() +
+  geom_errorbarh(aes(
+    xmin = value - `std.error` / 2,
+    xmax = value + `std.error` / 2
+  ),
+  height = .3) +
+  labs(title = "Feature Importance",
+       x = NULL, y = NULL)
+
+```
+
+We see that `total_trans_ct` and `total_trans_amt` will be very important for this model.
+
+## Tuning Catboost
+
+Now that we have some confidence that the features have predictive power, lets tune up a set of `catboost` models. 
+
+```{r catboost_tuning}
+
+catboost_params <-
+  dials::parameters(min_n(), # min data in leaf
+                    tree_depth(range = c(4, 15)),
+                    learn_rate(range = c(-3, -0.7), 
+                               trans = log10_trans())
+                    )
+                    
+cbst_grid <- dials::grid_max_entropy(catboost_params,
+                                     size = 40 
+                                     )
+cbst_grid
+
+cv_res_catboost <-
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(catboost_spec) %>% 
+  tune_grid(    
+    resamples = train_folds,
+    grid = cbst_grid,
+    control = control_race(verbose = FALSE,
+                           save_pred = TRUE, 
+                           save_workflow = TRUE,
+                           extract = extract_model,
+                           parallel_over = "resamples"),
+    metrics = mset
+)
+
+autoplot(cv_res_catboost)
+
+show_best(cv_res_catboost) %>% 
+  select(-.estimator)
+
+cat_wf_best <-   
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(catboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_catboost))
+
+cat_fit_best <- cat_wf_best %>%
+  parsnip::fit(data = train)
+
+```
+
+Catboost model performance
+
+```{r}
+predict(cat_fit_best, new_data = valid, type = "prob") %>% 
+  cbind(valid) %>%
+  mn_log_loss(attrition_flag , `.pred_0`)
+
+```
+
+# {-}
+
+This catboost figure is not bad, so I'm going to submit.
+
+```{r}
+
+bind_cols(predict(cat_fit_best, test_df), test_df) %>% 
+  select(id, attrition_flag = `.pred_class`) %>%
+  write_csv(file = path_export)
+
+```
+
+and make the submission to the Kaggle board
+
+```{r, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Catboosted with numeric interactions"'))
+```
+
+My interim standings on the competition leaderboard:
+
+```{r}
+knitr::include_graphics(here::here("docs", 
+                                   "assets",
+                                   "2021-07-13.png"),
+                         error = FALSE)
+```
+
+The standings will likely change after Kaggle rolls the scores for the full test dataset.
+
+## Advanced Catboost
+
+Now modeling with the numeric interaction features, tightening up the learn rate, and reducing the size of the grid to speed up results. We are nearly out of time.
+
+```{r advanced_catboost_tuning}
+
+catboost_params <-
+  dials::parameters(min_n(), # min data in leaf
+                    tree_depth(range = c(4, 15)),
+                    learn_rate(range = c(-1, -0.7), # updated
+                               trans = log10_trans())
+                    )
+                    
+cbst_grid <- dials::grid_max_entropy(catboost_params,
+                                     size = 20
+                                     )
+cbst_grid
+
+cv_res_catboost <-
+  workflow() %>% 
+  add_recipe(advanced_rec) %>% 
+  add_model(catboost_spec) %>% 
+  tune_grid(    
+    resamples = train_folds,
+    grid = cbst_grid,
+    control = control_race(verbose = FALSE,
+                           save_pred = TRUE, 
+                           save_workflow = TRUE,
+                           extract = extract_model,
+                           parallel_over = "resamples"),
+    metrics = mset
+)
+
+autoplot(cv_res_catboost)
+
+show_best(cv_res_catboost) %>% 
+  select(-.estimator)
+
+cat_wf_best <-   
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(catboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_catboost))
+
+cat_fit_best <- cat_wf_best %>%
+  parsnip::fit(data = train)
+
+```
+
+Advanced catboost model performance
+
+```{r}
+predict(cat_fit_best, new_data = valid, type = "prob") %>% 
+  cbind(valid) %>%
+  mn_log_loss(attrition_flag , `.pred_0`)
+
+```
+
+This catboost figure is not an improvement, so I'm not going to submit.
+
+My final standings on the Kaggle competition leaderboard:
+
+```{r}
+knitr::include_graphics(here::here("docs", 
+                                   "assets",
+                                   "2021-07-13-2.png"),
+                         error = FALSE)
+```
+
+
