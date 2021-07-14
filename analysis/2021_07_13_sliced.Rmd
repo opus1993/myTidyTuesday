@@ -268,7 +268,7 @@ Conclusions:
 * There aren't any obvious features to engineer, so as a first pass we will go straight to training hyperparameters with the features we have.
 * As a second pass, we can add interactions to try to improve the model.
 
-# Preprocessiong {.tabset}
+# Preprocessing {.tabset}
 
 ## The recipe framework
 
@@ -306,7 +306,7 @@ basic_rec %>%
 
 ## Cross Validation
 
-We will use 5-fold cross validation and stratify between the rain and no-rain classes.
+We will use 5-fold cross validation and stratify between the churn and no-churn classes.
 
 ```{r}
 train_folds <- vfold_cv(data = train,
