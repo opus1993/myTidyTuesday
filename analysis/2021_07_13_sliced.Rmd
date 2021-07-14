@@ -14,9 +14,9 @@ editor_options:
 
 [SLICED](https://www.notion.so/SLICED-Show-c7bd26356e3a42279e2dfbafb0480073) is like the TV Show Chopped but for data science. Competitors get a never-before-seen dataset and two-hours to code a solution to a prediction challenge. Contestants get points for the best model plus bonus points for data visualization, votes from the audience, and more.
  
-[Season 1 Episode 7](https://www.kaggle.com/c/sliced-s01e07-HmPsw2/data) features a challenge to predict whether a bank customer is churned. The evaluation metric for submissions in this competition is residual mean log loss.
+[Season 1 Episode 7](https://www.kaggle.com/c/sliced-s01e07-HmPsw2/data) features a challenge to predict whether a bank customer is churned (lost to another bank). The evaluation metric for submissions in this competition is residual mean log loss.
 
-To make the best use of the resources that we have, we will explore the data set fo features to select those with the most predictive power, build a random forest to confirm the recipe, and then use the rest of the time to build one or more ensemble models. 
+To make the best use of the resources that we have, we will explore the data set for features to select those with the most predictive power, build a random forest to confirm the recipe, and then use the rest of the time to build one or more ensemble models. 
 
 Let's load up some packages:
 
@@ -71,7 +71,7 @@ zipfile <- paste0(data_dir,"/", competition_name, ".zip")
 path_export <- here::here("data",Sys.Date(),paste0(competition_name,".csv"))
 ```
 
-# Import and EDA {.tabset}
+# Import and Exploratory Data Analysis {.tabset}
 
 A quick reminder before downloading the dataset:  Go to the web site and accept the competition terms!!!
 
@@ -187,9 +187,9 @@ train_df %>%
   ) +
   labs(
     title = "Differences in Credit Limits, by Gender",
-    subtitle = "Customers <span style = 'color:#00BFC4'>churning</span> and <span style = 'color:#F8766D'> not churning</span>",
+    subtitle = "Customers <span style = 'color:#00BFC4'>churning</span> and <span style = 'color:#F8766D'> not churning</span>. Note that the vast majority of Men have higher limits.",
     x = "Gender",
-    y = NULL
+    y = "Credit Limit"
   )
 
 ```
@@ -261,6 +261,8 @@ The transaction amounts and transaction counts tend to be correlated. Also, the 
 
 # {-}
 
+----
+
 Conclusions:
 
 * There aren't any obvious features to engineer, so as a first pass we will go straight to training hyperparameters with the features we have.
@@ -316,6 +318,8 @@ train_folds <- vfold_cv(data = train,
 # {-}
 
 # Machine Learning {.tabset}
+
+Let's run models in two steps. The first is a simple, fast shallow random forest, to confirm that the model will run and observe feature importance scores. The second will use `catboost`. Both use the basic recipe preprocessor.
 
 ## Model Specifications
 
@@ -426,7 +430,9 @@ cat_fit_best <- cat_wf_best %>%
 
 ```
 
-Catboost model performance
+# {-}
+
+## Catboost model performance
 
 ```{r}
 predict(cat_fit_best, new_data = valid, type = "prob") %>% 
@@ -435,9 +441,7 @@ predict(cat_fit_best, new_data = valid, type = "prob") %>%
 
 ```
 
-# {-}
-
-This catboost figure is not bad, so I'm going to submit.
+This catboost mean logloss figure is not bad, so I'm going to write it out in a suitable csv...
 
 ```{r}
 
@@ -463,6 +467,8 @@ knitr::include_graphics(here::here("docs",
 ```
 
 The standings will likely change after Kaggle rolls the scores for the full test dataset.
+
+## Machine Learning Round 2 {.tabset}
 
 ## Advanced Catboost
 
@@ -522,7 +528,9 @@ cat_fit_best <- cat_wf_best %>%
 
 ```
 
-Advanced catboost model performance
+# {-}
+
+## Advanced catboost model performance
 
 ```{r}
 predict(cat_fit_best, new_data = valid, type = "prob") %>% 
@@ -532,9 +540,6 @@ predict(cat_fit_best, new_data = valid, type = "prob") %>%
 ```
 
 This catboost figure is not an improvement, so I'm not going to submit.
-
-# {-}
-
 
 My final standings on the Kaggle competition leaderboard:
 
