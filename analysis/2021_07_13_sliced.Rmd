@@ -14,9 +14,9 @@ editor_options:
 
 [SLICED](https://www.notion.so/SLICED-Show-c7bd26356e3a42279e2dfbafb0480073) is like the TV Show Chopped but for data science. Competitors get a never-before-seen dataset and two-hours to code a solution to a prediction challenge. Contestants get points for the best model plus bonus points for data visualization, votes from the audience, and more.
  
-[Season 1 Episode 7](https://www.kaggle.com/c/sliced-s01e07-HmPsw2/data) features a challenge to predict whether a bank customer is churned. The evaluation metric in this competition is residual mean log loss.
+[Season 1 Episode 7](https://www.kaggle.com/c/sliced-s01e07-HmPsw2/data) features a challenge to predict whether a bank customer is churned. The evaluation metric for submissions in this competition is residual mean log loss.
 
-To make the best use of the resources that we have, we will explore the data set features to select those with the most predictive power, build a random forest to confirm the recipe, and then use the rest of the time to build one or more ensemble models. 
+To make the best use of the resources that we have, we will explore the data set fo features to select those with the most predictive power, build a random forest to confirm the recipe, and then use the rest of the time to build one or more ensemble models. 
 
 Let's load up some packages:
 
@@ -75,7 +75,7 @@ path_export <- here::here("data",Sys.Date(),paste0(competition_name,".csv"))
 
 A quick reminder before downloading the dataset:  Go to the web site and accept the competition terms!!!
 
-## Direct Import and Skim
+## Direct Import and Shell Commands
 
 We have basic shell commands available to interact with Kaggle here:
 
@@ -106,6 +106,8 @@ test_df <- read_csv(file = glue::glue({ data_dir }, "/test.csv")) %>%
   mutate(across(c(gender, education_level, income_category), as.factor)) 
 
 ```
+
+## Skim
 
 Some questions to answer here:
 What features have missing data, and imputations may be required?
@@ -176,6 +178,20 @@ train_df %>%
     subtitle = "Including 95% confidence intervals. Size of points is proportional to frequency in the dataset"
   )
 
+train_df %>%
+  ggplot(aes(gender, credit_limit, color = attrition_flag)) +
+  geom_boxplot(show.legend = FALSE) +
+  theme(
+    plot.subtitle = ggtext::element_textbox_simple(),
+    plot.background = element_rect(color = "white")
+  ) +
+  labs(
+    title = "Differences in Credit Limits, by Gender",
+    subtitle = "Customers <span style = 'color:#00BFC4'>churning</span> and <span style = 'color:#F8766D'> not churning</span>",
+    x = "Gender",
+    y = NULL
+  )
+
 ```
 
 ## Numeric Feature Plots
@@ -217,8 +233,8 @@ p1 <- train_df %>%
     x = "Numeric Feature",
     y = NULL
   )
-p1
-ggsave(p1,
+
+ggsave(p1, height = 7, width = 7,
        file = here::here("docs", "assets", "attrition.png"),
        device = "png")
 ```
@@ -247,7 +263,7 @@ The transaction amounts and transaction counts tend to be correlated. Also, the 
 
 Conclusions:
 
-* There aren't any obvious features to engineer, so as a first pass we will go straight to training what we have.
+* There aren't any obvious features to engineer, so as a first pass we will go straight to training hyperparameters with the features we have.
 * As a second pass, we can add interactions to try to improve the model.
 
 # Preprocessiong {.tabset}
@@ -275,16 +291,6 @@ basic_rec <-
   step_novel(gender, education_level, income_category) %>%
   step_normalize(all_numeric_predictors()) %>% 
   step_nzv(all_predictors())
-
-advanced_rec <-
-  recipe(attrition_flag ~ ., train) %>%
-  # ---- set aside the row id's
-  update_role(id, new_role = "id") %>% 
-  step_novel(gender, education_level, income_category) %>%
-  step_interact(terms = ~ total_relationship_count:avg_utilization_ratio) %>% 
-  step_normalize(all_numeric_predictors()) %>% 
-  step_nzv(all_predictors())
-    
 ```
 
 ## the pre-processed data
@@ -294,10 +300,6 @@ basic_rec %>%
 #  finalize_recipe(list(num_comp = 2)) %>% 
   prep() %>% 
   juice() 
-
-advanced_rec %>% 
-  prep() %>% 
-  juice()
 ```
 
 ## Cross Validation
@@ -468,6 +470,15 @@ Now modeling with the numeric interaction features, tightening up the learn rate
 
 ```{r advanced_catboost_tuning}
 
+advanced_rec <-
+  recipe(attrition_flag ~ ., train) %>%
+  # ---- set aside the row id's
+  update_role(id, new_role = "id") %>% 
+  step_novel(gender, education_level, income_category) %>%
+  step_interact(terms = ~ total_relationship_count:avg_utilization_ratio) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_nzv(all_predictors())
+
 catboost_params <-
   dials::parameters(min_n(), # min data in leaf
                     tree_depth(range = c(4, 15)),
@@ -521,6 +532,9 @@ predict(cat_fit_best, new_data = valid, type = "prob") %>%
 ```
 
 This catboost figure is not an improvement, so I'm not going to submit.
+
+# {-}
+
 
 My final standings on the Kaggle competition leaderboard:
 
