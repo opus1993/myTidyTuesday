@@ -240,9 +240,7 @@ ggsave(p1, height = 7, width = 7,
 ```
 
 ```{r}
-knitr::include_graphics(here::here("docs", 
-                                   "assets",
-                                   "attrition.png"),
+knitr::include_graphics("assets/attrition.png",
                          error = FALSE)
 ```
 
@@ -460,9 +458,7 @@ shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_e
 My interim standings on the competition leaderboard:
 
 ```{r}
-knitr::include_graphics(here::here("docs", 
-                                   "assets",
-                                   "2021-07-13.png"),
+knitr::include_graphics("assets/2021-07-13.png",
                          error = FALSE)
 ```
 
@@ -551,9 +547,7 @@ This catboost figure is not an improvement, so I'm not going to submit.
 My final standings on the Kaggle competition leaderboard:
 
 ```{r}
-knitr::include_graphics(here::here("docs", 
-                                   "assets",
-                                   "2021-07-13-2.png"),
+knitr::include_graphics("assets/2021-07-13-2.png",
                          error = FALSE)
 ```
 
