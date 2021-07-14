@@ -1,5 +1,5 @@
 ---
-title: "Sliced NYC Airbnb"
+title: "Sliced Bank Account Churn"
 author: "Jim Gruman"
 date: "July 13, 2021"
 output:
@@ -470,11 +470,11 @@ The standings will likely change after Kaggle rolls the scores for the full test
 
 ## Machine Learning Round 2 {.tabset}
 
-## Advanced Catboost
+## Recipe with Interactions
 
 Now modeling with the numeric interaction features, tightening up the learn rate, and reducing the size of the grid to speed up results. We are nearly out of time.
 
-```{r advanced_catboost_tuning}
+```{r advanced_recipe}
 
 advanced_rec <-
   recipe(attrition_flag ~ ., train) %>%
@@ -484,6 +484,11 @@ advanced_rec <-
   step_interact(terms = ~ total_relationship_count:avg_utilization_ratio) %>% 
   step_normalize(all_numeric_predictors()) %>% 
   step_nzv(all_predictors())
+```
+
+## Advanced Catboost Tuning
+
+```{r advanced_catboost_tuning}
 
 catboost_params <-
   dials::parameters(min_n(), # min data in leaf
@@ -528,8 +533,6 @@ cat_fit_best <- cat_wf_best %>%
 
 ```
 
-# {-}
-
 ## Advanced catboost model performance
 
 ```{r}
@@ -540,6 +543,10 @@ predict(cat_fit_best, new_data = valid, type = "prob") %>%
 ```
 
 This catboost figure is not an improvement, so I'm not going to submit.
+
+# {-}
+
+----
 
 My final standings on the Kaggle competition leaderboard:
 
