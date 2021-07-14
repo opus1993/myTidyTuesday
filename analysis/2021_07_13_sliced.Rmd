@@ -468,7 +468,7 @@ knitr::include_graphics(here::here("docs",
 
 The standings will likely change after Kaggle rolls the scores for the full test dataset.
 
-## Machine Learning Round 2 {.tabset}
+# Machine Learning Round 2 {.tabset}
 
 ## Recipe with Interactions
 
