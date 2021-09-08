@@ -1,0 +1,484 @@
+---
+title: "Washington State Trails"
+author: "Jim Gruman"
+date: "November 27, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+The data this week comes from [Washington Trails Association](https://www.wta.org/go-outside/hikes?b_start:int=1) courtesy of the [TidyX crew](https://github.com/thebioengineer/TidyX/tree/master/TidyTuesday_Explained/035-Rectangles), [Ellis Hughes](https://twitter.com/Ellis_hughes) and [Patrick Ward](https://twitter.com/OSPpatrick)!
+
+A video going through this data can be found on [YouTube](https://bit.ly/TidyX_Ep35). Their original scraping code can be found on [GitHub](https://github.com/thebioengineer/TidyX/blob/master/TidyTuesday_Explained/035-Rectangles/Washington-hikes.R). The Washington Trails Assocation website includes [this leaflet-style map visual](https://www.wta.org/go-outside/map)
+
+Let's setup with the `tidyverse`, a theming package `hrbrthemes`, some web scraping tools, and table building tools.
+
+```{r setup }
+suppressPackageStartupMessages({
+library(tidyverse)
+library(hrbrthemes)
+extrafont::loadfonts(quiet = TRUE)
+library(rvest)
+library(gt)
+library(fontawesome)
+library(htmltools)
+
+library(ggridges)
+
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+ggplot2::theme_set(theme_jim(base_size = 12))
+```
+
+The original dataset provided by R4DS:
+
+```{r Load}
+
+tt <- tidytuesdayR::tt_load("2020-11-24")
+
+```
+
+```{r Readme, eval = interactive(), include=FALSE}
+
+tt
+
+```
+
+After visiting the Washington Trails Association web site, I had expected to find 3869 hikes. It turns out that the R4DS scraping script skips all trails that lack elevation, gain, length, or rating figures. For more advanced visuals, I decided to go back and re-visit the scraping algorithm to also gather the geospatial coordinates in the sub pages.  The update is here:
+
+```{r scraping}
+hike_data_rds <- here::here("data/hike_data.rds")
+
+if (!file.exists(hike_data_rds)) {
+  
+  hike_pages <- 1:129
+  
+  hike_data <- lapply( hike_pages - 1 , function(page){
+    
+    start_int <- 30 * page
+    
+    page_url <- paste0(
+      "https://www.wta.org/go-outside/hikes?b_start:int=",
+      start_int
+    )
+    
+    page_html <- read_html(page_url)
+    
+    page_html %>% 
+      
+      html_nodes(".search-result-item") %>% 
+      
+      map(
+        function(hike){
+          
+          hike_name <- hike %>%
+            html_nodes(".item-header") %>% 
+            html_nodes(".listitem-title") %>% 
+            html_nodes("span") %>%  
+            html_text()
+
+          hike_page <- hike %>% 
+            html_nodes(".item-header") %>% 
+            html_nodes(".listitem-title") %>% 
+            html_attr("href") 
+          
+          hike_location <- hike %>% 
+            html_nodes(".item-header") %>% 
+            html_nodes(".region") %>% 
+            html_text()
+
+          hike_desc <- hike %>% 
+            html_nodes(".hike-detail") %>% 
+            html_nodes(".listing-summary") %>% 
+            html_text() %>% 
+            stringr::str_trim(side = "both")
+          
+          hike_features <- hike %>% 
+            html_nodes(".hike-detail") %>% 
+            html_nodes(".trip-features") %>% 
+            html_nodes("img") %>% 
+            html_attr("title") %>% 
+            list()
+          
+          tibble(
+            name = hike_name,
+            location = hike_location,
+            features = hike_features,
+            description = hike_desc,
+            hike_page = hike_page
+          )
+        }) %>% 
+      bind_rows() %>% 
+
+      mutate(stats = map(hike_page, function(hike_page){
+          print(hike_page)
+
+          stats_html <- read_html(hike_page) 
+          
+          length <- stats_html %>% 
+                    html_nodes(".hike-stat") %>%
+                    html_nodes("#distance") %>%
+                    html_nodes("span") %>%
+                    html_text()
+          
+          elevation <- stats_html %>% 
+                       html_nodes(".hike-stat") %>% 
+                       `[[`(3)
+          
+          elevation_state <- case_when(
+                sum(html_text(elevation) %>% str_detect(c("Gain","Point"))) == 2 ~ "both",
+                html_text(elevation) %>% str_detect("Gain") ~ "gain",
+                html_text(elevation) %>% str_detect("Point") ~ "highpoint",
+                TRUE ~ "neither"
+          )
+          
+          if ( elevation_state == "both") { 
+            gain <- elevation %>%
+                            html_nodes("span") %>% 
+                            html_text() %>% 
+                            `[[`(1)
+            
+            highpoint <- elevation %>%
+                            html_nodes("span") %>% 
+                            html_text() %>% 
+                            `[[`(2)
+            
+            } else if ( elevation_state == "highpoint") {
+             
+             highpoint <- elevation %>%
+                            html_nodes("span") %>% 
+                            html_text() 
+             
+             gain <- NA_character_
+             
+           } else if ( elevation_state == "gain") {
+             
+             gain <- elevation %>%
+                            html_nodes("span") %>% 
+                            html_text() 
+             
+             highpoint <- NA_character_
+             
+           } else if (elevation_state == "neither") {
+             highpoint <- NA_character_
+             gain <- NA_character_
+           }
+         
+      rating <- stats_html %>% 
+                      html_nodes(".hike-stat") %>% 
+                      `[[`(4) %>%
+                      html_nodes(".current-rating") %>%
+                      html_text()
+            
+      longitude <- if (is_empty(stats_html %>% 
+                       html_nodes(".latlong") %>%
+                       html_node("span") %>% 
+                       html_text)) {NA_character_} else {
+        
+                      stats_html %>% 
+                      html_nodes(".latlong") %>%
+                      html_nodes("span") %>% 
+                      html_text() %>% 
+                      `[[`(1) }
+      
+      latitude <- if (is_empty(stats_html %>% 
+                       html_nodes(".latlong") %>%
+                       html_node("span") %>% 
+                       html_text)) {NA_character_} else {
+        
+                      stats_html %>% 
+                      html_nodes(".latlong") %>%
+                      html_nodes("span") %>% 
+                      html_text() %>% 
+                      `[[`(2) }
+      
+    stats <- tibble(
+        length = length,
+        gain = gain,
+        highpoint = highpoint,
+        rating = rating,
+        longitude = longitude,
+        latitude = latitude)
+      
+    return(stats)
+      }))
+    
+  }) %>% 
+    bind_rows() %>% 
+    unnest_wider(stats) 
+  
+hike_data <- hike_data %>% 
+    mutate(
+      trip = case_when(
+      grepl("roundtrip",length) ~ "roundtrip",
+      grepl("one-way",length) ~ "one-way",
+      grepl("of trails",length) ~ "trails"),
+     length_total = as.numeric(gsub("(\\d+[.]\\d+).*","\\1", length)) * ((trip == "one-way") + 1)) %>% 
+   mutate(
+    across(c(length, gain, highpoint, longitude, latitude, rating), parse_number))  
+  write_rds(hike_data, file = hike_data_rds)
+  
+}else{
+  
+  hike_data <- read_rds(hike_data_rds)
+  
+}
+
+```
+
+We will further separate the location field into region and subregion, by the hyphen.
+
+```{r}
+hike_data <- hike_data %>% 
+   separate(location, into = c("region","subregion"), sep = " -- ", fill = "right") %>% 
+   replace_na(list(subregion = "Other")) %>% 
+   mutate(across(c(name, region, subregion), as_factor))
+
+```
+
+First, a table of summarized trail data by Region
+
+```{r}
+rating_stars <- function(rating, max_rating = 5){
+  rounded_rating <- floor(rating + 0.5)
+  stars <- lapply(seq_len(max_rating), function(i){
+    if (i <= rounded_rating) fontawesome::fa("star", fill = "orange") 
+    else fontawesome::fa("star", fill = "grey")
+  })
+  label <- sprintf("%s out of %s", rating, max_rating)
+  div_out <- div(title = label, "aria-label" = label, role = "img", stars)
+  
+  as.character(div_out) %>% 
+    gt::html()
+}
+
+hike_data %>% 
+  group_by(region, subregion) %>% 
+  summarize(total_length = round(sum(length, na.rm = TRUE)),
+            average_gain = round(mean(gain, na.rm = TRUE)),
+            min_rating = round(min(rating, na.rm = TRUE),1),
+            max_rating = round(max(rating, na.rm = TRUE),1),
+            number = n(),
+            .groups = "drop") %>% 
+  mutate(subregion = fct_reorder(subregion, desc(number)),
+         min_rating = map(min_rating, rating_stars),
+         max_rating = map(max_rating, rating_stars)) %>%    
+  select(region, subregion, number, total_length, average_gain, min_rating, max_rating) %>% 
+  arrange(region, subregion) %>% 
+  group_by(region) %>% 
+  gt() %>% 
+  tab_header(title = gt::html("<span style='color:darkgreen'>Washington State Hiking Trail Summary by Region</span>")) %>% 
+  cols_label(subregion = "Region",
+             number = "Number of Trails",
+              total_length = md("Total Milage All Trails"),
+              average_gain = md("Average Elevation Gain (Feet)"),
+              min_rating = md("**Min Rating**"),
+              max_rating = md("**Max Rating**")) %>% 
+  opt_row_striping() %>% 
+  tab_options(data_row.padding = px(3))  
+```
+
+Another table, adapted from [Kaustav Sen's post](https://github.com/kaustavSen/tidytuesday/blob/master/2020/week_48_washington_trails.Rmd)
+
+```{r}
+thumbs_up <- function(value) {
+  icon <- fa("thumbs-up", fill = "#38A605")
+  div(icon) %>% 
+    as.character() %>% 
+    html()
+}
+
+bar_chart <- function(value, color = "#DFB37D"){
+    glue::glue(
+      "<span style=\"display: inline-block; 
+      direction: ltr; border-radius: 4px; 
+      padding-right: 2px; background-color: {color}; 
+      color: {color}; width: {value}%\"> &nbsp; </span>"
+    ) %>% 
+    as.character() %>% 
+    gt::html()
+}
+
+
+hike_data %>% 
+  group_by(region) %>% 
+  arrange(desc(rating)) %>% 
+  slice(1:4) %>% 
+  ungroup() %>% 
+  select(-description, -gain, -highpoint, -latitude, -longitude,
+         -hike_page, -subregion, -length_total, -trip) %>%
+  mutate(rating = if_else(is.na(rating),0,rating), 
+    length_bar = map(length, bar_chart),
+    rating = map(rating, rating_stars),
+    feature_present = 1,
+    feature_present = map(feature_present, thumbs_up)
+  ) %>% 
+  unnest_longer(features) %>% 
+  mutate(features = str_replace(features, pattern = "/.+", replacement = "")) %>% 
+  pivot_wider(
+    names_from = features,
+    values_from = feature_present
+  ) %>%
+  group_by(region) %>% 
+  arrange(-length) %>% 
+  select(name, length, length_bar, rating, everything()) %>% 
+  gt() %>% 
+  cols_width(
+    "name" ~ px(250),
+    "length" ~ px(75),
+    "length_bar" ~ px(140),
+    "rating" ~ px(140),
+    4:last_col() ~ px(120)
+  ) %>% 
+  tab_spanner(
+    label = "Features",
+    columns = 5:last_col()
+  ) %>% 
+  cols_label(
+    name = "",
+    length = md("Length<br/>(in miles)"),
+    length_bar = "",
+    rating = "Rating"
+  ) %>% 
+  tab_header(
+    title = "Top Hiking Trails to visit in Washington",
+    subtitle = "The 4 top rated trails in each of the 11 major regions of Washington State"
+  ) %>% 
+  tab_source_note(
+    source_note = md("**Data:** Washington Trails Association | **Table:** Jim Gruman")
+  ) %>% 
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans SC"),
+      weight = "bold"
+    ),
+    locations = list(cells_row_groups(), cells_column_spanners("Features"))
+  ) %>% 
+  tab_style(
+    style = cell_fill(
+      color = "#DFB37D",
+      alpha = 0.5
+    ),
+    locations = cells_row_groups()
+  ) %>% 
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans"),
+      v_align = "bottom",
+      align = "center"
+    ),
+    locations = cells_column_labels(columns = everything())
+  ) %>% 
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans"),
+    ),
+    locations = cells_body("name")
+  ) %>% 
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans"),
+      align = "left",
+      size = px(30)
+    ),
+    locations = cells_title("subtitle")
+  ) %>% 
+  tab_style(
+    style = cell_text(
+      size = "medium"
+    ),
+    locations = cells_body(columns = 4:last_col())
+  ) %>%
+  tab_style(
+    style = cell_text(
+      align = "left"
+    ),
+    locations = cells_body(columns = "length_bar")
+  ) %>%
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans SC"),
+      align = "left",
+      weight = "bold",
+      size = px(50)
+    ),
+    locations = cells_title("title")
+  ) %>% 
+  opt_table_font(font = google_font("Fira Mono")) %>% 
+  tab_options(
+    table.border.top.color = "white",
+  ) 
+```
+
+What is the distribution of hiking trail lengths around the state regions?
+
+```{r}
+
+hike_data %>% 
+  filter(!is.na(length)) %>% 
+  ggplot(aes(length, region, fill = region)) +
+  geom_density_ridges(alpha = 0.9, show.legend = FALSE) +
+  scale_x_log10(labels = scales::comma_format(accuracy = 1)) +
+  coord_cartesian(clip = "off") +
+  labs(x = "Trail Lengths in Miles, Log Scale", y = NULL, 
+       title = "Trail Lenths Available by Region", 
+       subtitle = "The Cascades have more of the Longer Trails", 
+       caption = "@jim_gruman | Data: TidyX") 
+```
+
+Let's take a closer look at the features of each trail and the relationship with length:
+
+```{r}
+hikes_complete <- hike_data %>%
+    filter(length > 0.1) %>%
+    mutate(hikeID = row_number(),
+           length = log10(length),
+           length = length %/% 0.2 * 0.2) %>%
+    select(hikeID, length, features) %>%
+    unnest(features) %>%
+    count(length, features) %>%
+    complete(length, features, fill = list(n = 0)) %>%
+    group_by(length) %>%
+    mutate(length_total = sum(n)) %>%
+    ungroup()
+
+hikes_complete
+```
+
+```{r}
+slopes <- hikes_complete %>%
+    nest_by(features) %>%
+    mutate(model = list(glm(cbind(n, length_total) ~ length, 
+                            family = "binomial", 
+                            data = data))) %>%
+    summarize(broom::tidy(model)) %>%
+    ungroup %>%
+    filter(term == "length") %>%
+    mutate(p.value = p.adjust(p.value)) %>%
+    filter(p.value < 0.05) %>%
+    arrange(estimate)
+```
+
+
+```{r}
+hikes_complete %>%
+    mutate(length_percent = n / length_total) %>%
+    inner_join(slopes) %>%
+    mutate(features = fct_reorder(features, -estimate)) %>%
+    ggplot(aes(length, length_percent)) +
+    geom_smooth(method = "lm") +
+    geom_point() +
+    facet_wrap(~features) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+    labs(x = "Length of each trail (log10 scale)",
+         y = "% of trails with each feature",
+         title = "Which features of Washington hikes are associated with longer trails?",
+         caption = "@jim_gruman | Data: TidyX")
+```
+
