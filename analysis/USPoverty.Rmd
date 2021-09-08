@@ -1,0 +1,126 @@
+---
+title: "US Poverty"
+date: "November 11, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+The data here comes from the [US Census American Community Survey](https://www.census.gov/library/visualizations/interactive/2014-2018-poverty-rate-by-county.html) 2014-2018 5-year dataset.
+
+Our goal is to recreate this beautiful Tableau [graphic](https://public.tableau.com/views/18_5yr_Poverty/2018Poverty?:embed=y&:embed_code_version=3&:loadOrderID=0&:display_count=y&:origin=viz_share_link), but to represent the population size better.
+
+<iframe src="https://public.tableau.com/views/18_5yr_Poverty/2018Poverty?:language=en&:display_count=y&:origin=viz_share_link" loading="lazy" style="width: 100%; height: 600px; border: 0px none;"></iframe>
+
+
+```{r setup}
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(hrbrthemes)    # shortcuts for fonts and color palettes
+extrafont::loadfonts(quiet = TRUE)
+
+library(cartogram)
+library(sf)
+library(tmap)
+library(tigris)
+
+library(tidycensus)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+
+```{r getData, message=FALSE, warning=FALSE}
+nonx <- c('78', '69', '66', '72', '60', '15', '02')
+
+if (file.exists("data/us_states.rds")) {
+  us_states <- read_rds("data/us_states.rds")
+} else {
+  us_states <- states(cb = TRUE) %>%
+    filter(!STATEFP %in% nonx) %>%
+    st_transform(crs = 2163)
+  
+  write_rds(us_states, "data/us_states.rds")
+}
+
+
+if (file.exists("data/acs_poverty.rds")) {
+  poverty <- read_rds("data/acs_poverty.rds")
+} else {
+  poverty <- tidycensus::get_acs(
+    geography = "county",
+    variables = c(poverty = "B17013_001"),
+    geometry = TRUE,
+    year = 2018
+  ) %>%
+    select(GEOID, NAME, estimate, moe, geometry)
+  
+  write_rds(poverty, "data/acs_poverty.rds")
+}
+
+population <-
+  suppressMessages(
+    tidycensus::get_acs(
+      geography = "county",
+      variables = c(population = "B01003_001"),
+      geometry = FALSE,
+      year = 2018
+    ) %>%
+      select(GEOID, estimate)
+  )
+```
+
+The bubbles are generated on top of the shapefile centroids, and then adjusted to fit through iterations with the cartogram package.
+
+```{r}
+counties_sf <- poverty %>% 
+  left_join(population, by = "GEOID", suffix = c(".pov",".pop")) %>% 
+  mutate(rate = round(estimate.pov/estimate.pop,2),
+         moe_rate = round(moe/estimate.pop,3)) %>% 
+  st_transform(crs = 2163)
+
+county_dorling <-
+  cartogram_dorling(
+    x = counties_sf,
+    weight = "estimate.pop",
+    k = 0.2,
+    itermax = 100
+  )
+```
+
+## A ggplot
+
+```{r ggplot}
+county_dorling %>% 
+  filter(!str_detect(NAME, "Alaska|Hawaii|Puerto|Guam")) %>% 
+  ggplot(aes(fill = rate)) +
+  geom_sf(color = "grey60") +
+  geom_sf(data = us_states, 
+          fill = NA, 
+          show.legend = F, 
+          color = "grey60", 
+          lwd = .5 ) +
+  coord_sf(crs = 2163, datum = NA) +
+  scale_fill_stepsn(colors = c('#eff3ff','#bdd7e7','#6baed6','#3182bd','#08519c')) +
+  labs(title = "2014-2018 Poverty Rate in the United States by County", subtitle = "Bubble size corresponds to County Population",
+       caption = "US Census American Community Survey | jim_gruman")
+
+
+```
+
+And the original tweet, as posted to twitter:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1326673815288623105")
+
+```
