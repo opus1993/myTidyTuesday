@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-12-01" />
+
+<title>Toronto Homeless Shelters</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Toronto Homeless Shelters</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">December 1, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-08
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree836521b02f407e82d14cbb3465ca3621bf792089targetblank836521ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/836521b02f407e82d14cbb3465ca3621bf792089" target="_blank">836521b</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree836521b02f407e82d14cbb3465ca3621bf792089targetblank836521ba" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/836521b02f407e82d14cbb3465ca3621bf792089" target="_blank">836521b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/TorontoShelters.Rmd</code>) and HTML (<code>docs/TorontoShelters.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/836521b02f407e82d14cbb3465ca3621bf792089/analysis/TorontoShelters.Rmd" target="_blank">836521b</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-08
+</td>
+<td>
+apply theme_jim()
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The data this week comes from Sharla Gelfand’s <code>opendatatoronto</code> R package. Her website has additional details and all sorts of other great datasets.</p>
+<p>We are going to explore many of the time series aspects of Homelessness in Toronto, overlay the daily weather, and finally attempt to model and infer what drives the occupancy rate.</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse)
+library(lubridate)
+library(hrbrthemes)
+extrafont::loadfonts(quiet = TRUE)
+library(treemap)
+library(tidymodels)
+})
+source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))</code></pre>
+<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2020-12-01&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `shelters.csv`</code></pre>
+<pre class="r"><code>tt</code></pre>
+<p>An initial look at the format of the dataset provided:</p>
+<pre class="r"><code>tt %&gt;%
+  map(glimpse)</code></pre>
+<pre><code>Rows: 115,916
+Columns: 13
+$ id                  &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,~
+$ occupancy_date      &lt;dttm&gt; 2017-01-01, 2017-01-01, 2017-01-01, 2017-01-01, 2~
+$ organization_name   &lt;chr&gt; &quot;COSTI Immigrant Services&quot;, &quot;Christie Ossington Ne~
+$ shelter_name        &lt;chr&gt; &quot;COSTI Reception Centre&quot;, &quot;Christie Ossington Men&#39;~
+$ shelter_address     &lt;chr&gt; &quot;100 Lippincott Street&quot;, &quot;973 Lansdowne Avenue&quot;, &quot;~
+$ shelter_city        &lt;chr&gt; &quot;Toronto&quot;, &quot;Toronto&quot;, &quot;Toronto&quot;, &quot;Toronto&quot;, &quot;Toron~
+$ shelter_province    &lt;chr&gt; &quot;ON&quot;, &quot;ON&quot;, &quot;ON&quot;, &quot;ON&quot;, &quot;ON&quot;, &quot;ON&quot;, &quot;ON&quot;, &quot;ON&quot;, &quot;O~
+$ shelter_postal_code &lt;chr&gt; &quot;M5S 2P1&quot;, &quot;M6H 3Z5&quot;, &quot;M6H 3Z5&quot;, &quot;M6G 3B1&quot;, NA, &quot;M~
+$ facility_name       &lt;chr&gt; &quot;COSTI Reception Centre&quot;, &quot;Christie Ossington Men&#39;~
+$ program_name        &lt;chr&gt; &quot;COSTI Reception Ctr CITY Program&quot;, &quot;Christie Ossi~
+$ sector              &lt;chr&gt; &quot;Co-ed&quot;, &quot;Men&quot;, &quot;Men&quot;, &quot;Families&quot;, &quot;Men&quot;, &quot;Familie~
+$ occupancy           &lt;dbl&gt; 16, 13, 63, 66, 58, 168, 119, 23, 8, 14, 0, 0, 173~
+$ capacity            &lt;dbl&gt; 16, 17, 63, 70, 60, 160, 150, 28, 0, 40, NA, 0, 25~</code></pre>
+<pre><code>$shelters
+# A tibble: 115,916 x 13
+      id occupancy_date      organization_name   shelter_name    shelter_address
+   &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;               &lt;chr&gt;           &lt;chr&gt;          
+ 1     1 2017-01-01 00:00:00 COSTI Immigrant Se~ COSTI Receptio~ 100 Lippincott~
+ 2     2 2017-01-01 00:00:00 Christie Ossington~ Christie Ossin~ 973 Lansdowne ~
+ 3     3 2017-01-01 00:00:00 Christie Ossington~ Christie Ossin~ 973 Lansdowne ~
+ 4     4 2017-01-01 00:00:00 Christie Refugee W~ Christie Refug~ 43 Christie St~
+ 5     5 2017-01-01 00:00:00 City of Toronto     Birchmount Res~ 1673 Kingston ~
+ 6     6 2017-01-01 00:00:00 City of Toronto     Birkdale Resid~ 1229 Ellesmere~
+ 7     7 2017-01-01 00:00:00 City of Toronto     Birkdale Resid~ 1229 Ellesmere~
+ 8     8 2017-01-01 00:00:00 City of Toronto     Downsview Dells 1651 Sheppard ~
+ 9     9 2017-01-01 00:00:00 City of Toronto     Family Residen~ 4222 Kingston ~
+10    10 2017-01-01 00:00:00 City of Toronto     Family Residen~ 4222 Kingston ~
+# ... with 115,906 more rows, and 8 more variables: shelter_city &lt;chr&gt;,
+#   shelter_province &lt;chr&gt;, shelter_postal_code &lt;chr&gt;, facility_name &lt;chr&gt;,
+#   program_name &lt;chr&gt;, sector &lt;chr&gt;, occupancy &lt;dbl&gt;, capacity &lt;dbl&gt;</code></pre>
+<p>The dataset appears to be a daily report-out of every facility’s occupancy and capacity.</p>
+<div id="lets-grab-the-weather-too" class="section level2">
+<h2>Let’s grab the weather too</h2>
+<p>Importing climate daily stats from “<a href="https://toronto.weatherstats.ca/download.html" class="uri">https://toronto.weatherstats.ca/download.html</a>”</p>
+<pre class="r"><code>weather &lt;- read_csv(here::here(&quot;data/weatherstats_toronto_daily.csv&quot;)) %&gt;%
+  select(date, max_temperature, min_temperature, avg_temperature, precipitation)</code></pre>
+<p>Some fields in the shelter data need be cast as integers and dates. We will also impute to fill-in missing capacity figures on the daily reports, where possible</p>
+<pre class="r"><code>shelters &lt;- tt$shelters %&gt;%
+  mutate(across(occupancy:capacity, as.integer),
+    occupancy_date = lubridate::as_date(occupancy_date)
+  ) %&gt;%
+  group_by(facility_name, shelter_name, organization_name) %&gt;%
+  fill(capacity, .direction = &quot;downup&quot;) %&gt;%
+  ungroup()</code></pre>
+</div>
+<div id="some-basic-facts-about-torontos-homeless-shelter-network" class="section level1">
+<h1>Some basic facts about Toronto’s homeless shelter network</h1>
+<p>The network consists of 33 organizations with 65 named shelters with 114 individual facility locations. Some sites host families, some men, and some women.</p>
+<pre class="r"><code>shelters %&gt;%
+  filter(!is.na(capacity)) %&gt;%
+  group_by(facility_name) %&gt;%
+  summarize(
+    max_cap = max(capacity, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  slice_max(order_by = max_cap, n = 10) %&gt;%
+  mutate(facility_name = fct_reorder(facility_name, max_cap)) %&gt;%
+  ggplot(aes(max_cap, facility_name)) +
+  geom_col(aes(fill = facility_name),
+    show.legend = FALSE
+  ) +
+  labs(
+    title = &quot;Toronto&#39;s Largest Homeless Shelter Facilities&quot;,
+    subtitle = &quot;The Radisson has 902 beds&quot;,
+    x = &quot;Capacity each Night&quot;, y = &quot;&quot;,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
+  ) +
+  theme(panel.grid.major.y = element_blank())</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Some of the largest shelters appear to be re-purposed hotel facilities.</p>
+<p>For reference, let’s sum the maximum bed capacity at all facilities for a perspective of the total network capacity:</p>
+<pre class="r"><code>shelters %&gt;%
+  filter(!is.na(capacity)) %&gt;%
+  group_by(facility_name) %&gt;%
+  summarize(
+    max_cap = max(capacity),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  summarise(Total_Capacity = sum(max_cap, na.rm = TRUE))</code></pre>
+<pre><code># A tibble: 1 x 1
+  Total_Capacity
+           &lt;int&gt;
+1           9282</code></pre>
+<p>There may have been some facility name changes, because the detail by month does not support this grand total.</p>
+<p>Typical facilities are under 200 beds</p>
+<pre class="r"><code>shelters %&gt;%
+  ggplot() +
+  geom_histogram(aes(capacity), fill = 2) +
+  labs(
+    title = &quot;Capacity Range of Facilities in Toronto&#39;s Homeless Shelter System&quot;,
+    subtitle = &quot;Some of the largest shelters appear to be re-purposed hotel facilities.&quot;,
+    y = &quot;Number of Facilities&quot;,
+    x = &quot;Bed Capacity&quot;,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>shelter_cap &lt;- shelters %&gt;%
+  filter(capacity &gt; 0) %&gt;%
+  group_by(organization_name, shelter_name, facility_name) %&gt;%
+  summarize(
+    capacity = max(capacity, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  )
+
+treemap(shelter_cap,
+  index = c(
+    &quot;organization_name&quot;,
+    &quot;shelter_name&quot;,
+    &quot;facility_name&quot;
+  ),
+  vSize = &quot;capacity&quot;, type = &quot;index&quot;,
+  fontsize.labels = c(9, 6, 4),
+  fontcolor.labels = c(&quot;white&quot;, &quot;black&quot;, &quot;black&quot;),
+  bg.labels = c(&quot;transparent&quot;),
+  palette = &quot;Set1&quot;,
+  title = &quot;Capacity of Toronto&#39;s Homeless Shelter System&quot;
+)</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Let’s look at capacity across the network, by month, over time:</p>
+<pre class="r"><code>shelters %&gt;%
+  group_by(
+    month = month(occupancy_date,
+      abbr = TRUE,
+      label = TRUE
+    ),
+    year = factor(year(occupancy_date),
+      levels = c(&quot;2019&quot;, &quot;2018&quot;, &quot;2017&quot;)
+    ),
+    facility_name
+  ) %&gt;%
+  summarize(
+    avg_cap = mean(capacity, na.rm = TRUE),
+    .groups = &quot;drop_last&quot;
+  ) %&gt;%
+  summarize(
+    tot_cap = sum(avg_cap, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  ggplot(aes(month, tot_cap, color = year, group = year)) +
+  geom_line(size = 2) +
+  scale_y_continuous(label = scales::comma_format()) +
+  scale_x_discrete(expand = c(0, 0)) +
+  labs(
+    title = &quot;Monthly Total Capacity in Toronto&#39;s Homeless Shelter System&quot;,
+    subtitle = &quot;Infrastructure has grown to fill the need. Thousands of people are served every night.&quot;,
+    y = NULL, color = NULL,
+    x = NULL,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
+  ) +
+  theme(
+    legend.position = c(0.85, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Let’s take a similar approach and sum up the facility occupancy each month</p>
+<pre class="r"><code>shelters %&gt;%
+  group_by(
+    month = month(occupancy_date,
+      abbr = TRUE,
+      label = TRUE
+    ),
+    year = factor(year(occupancy_date),
+      levels = c(&quot;2019&quot;, &quot;2018&quot;, &quot;2017&quot;)
+    ), facility_name
+  ) %&gt;%
+  summarize(
+    tot_occupancy = mean(occupancy, na.rm = TRUE),
+    .groups = &quot;drop_last&quot;
+  ) %&gt;%
+  summarize(
+    tot_occupancy = sum(tot_occupancy),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  ggplot(aes(month, tot_occupancy, color = year, group = year)) +
+  geom_line(size = 2) +
+  scale_y_continuous(label = scales::comma_format()) +
+  scale_x_discrete(expand = c(0, 0)) +
+  labs(
+    title = &quot;Monthly Total Occupancy in Toronto&#39;s Homeless Shelter System&quot;,
+    y = NULL,
+    x = NULL, color = NULL,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
+  ) +
+  theme(
+    legend.position = c(0.9, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-7-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Essentially dividing the occupancy by the capacity, this is the aggregated result as a percentage rate:</p>
+<pre class="r"><code>shelters %&gt;%
+  group_by(
+    month = month(occupancy_date,
+      abbr = TRUE,
+      label = TRUE
+    ),
+    year = factor(year(occupancy_date),
+      levels = c(&quot;2019&quot;, &quot;2018&quot;, &quot;2017&quot;)
+    ),
+    facility_name
+  ) %&gt;%
+  summarize(
+    avg_occupancy = mean(occupancy, na.rm = TRUE),
+    avg_cap = mean(capacity, na.rm = TRUE),
+    .groups = &quot;drop_last&quot;
+  ) %&gt;%
+  summarize(
+    mean_rate = sum(avg_occupancy, na.rm = TRUE) / sum(avg_cap, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  filter(year != &quot;2017&quot;) %&gt;%
+  ggplot(aes(month, mean_rate, color = year, group = year)) +
+  geom_line(size = 2) +
+  scale_y_continuous(label = scales::percent_format(accuracy = 1)) +
+  scale_x_discrete(expand = c(0, 0)) +
+  labs(
+    title = &quot;Mean Occupancy Rate in Toronto&#39;s Homeless Shelter System&quot;,
+    subtitle = &quot;Across the network, for the sum of all facilities&quot;,
+    y = NULL,
+    x = NULL,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
+  ) +
+  theme(
+    legend.position = c(0.9, 0.1),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-8-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>What about by day of the week ?</p>
+<pre class="r"><code>shelters %&gt;%
+  mutate(
+    wday = wday(occupancy_date,
+      label = TRUE,
+      abbr = TRUE
+    ),
+    year = year(occupancy_date)
+  ) %&gt;%
+  group_by(year, wday) %&gt;%
+  summarise(
+    occupancy = sum(occupancy, na.rm = TRUE),
+    capacity = sum(capacity, na.rm = TRUE),
+    rate = occupancy / capacity,
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  filter(year %in% c(2018, 2019)) %&gt;%
+  ggplot(aes(wday, rate,
+    color = factor(year,
+      levels = c(&quot;2019&quot;, &quot;2018&quot;)
+    ),
+    group = year
+  )) +
+  geom_line(size = 2) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
+  labs(
+    title = &quot;Day of Week Average Occupancy Rate across Toronto&#39;s Homeless Shelter System&quot;, y = NULL, x = NULL,
+    subtitle = &quot;Average Occupancy Rate&quot;,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;, color = NULL
+  ) +
+  theme(
+    legend.position = c(0.9, 0.2),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-9-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>The aggregate like might be misleading. What is the distribution of rates across the network each month?</p>
+<pre class="r"><code>shelters %&gt;%
+  group_by(
+    month = month(occupancy_date,
+      abbr = TRUE,
+      label = TRUE
+    ),
+    year = factor(year(occupancy_date),
+      levels = c(&quot;2019&quot;, &quot;2018&quot;, &quot;2017&quot;)
+    ),
+    organization_name, facility_name
+  ) %&gt;%
+  summarize(
+    avg_occupancy = mean(occupancy, na.rm = TRUE),
+    avg_cap = mean(capacity, na.rm = TRUE),
+    .groups = &quot;drop_last&quot;
+  ) %&gt;%
+  filter(year != &quot;2017&quot;, avg_occupancy &gt; 0) %&gt;%
+  mutate(
+    mean_rate = avg_occupancy / avg_cap,
+    CityShelter = if_else(organization_name == &quot;City of Toronto&quot;, &quot;City Shelter&quot;, &quot;All Others&quot;)
+  ) %&gt;%
+  ggplot(aes(month, mean_rate, group = month)) +
+  geom_boxplot(outlier.alpha = 0.001) +
+  geom_jitter(aes(shape = CityShelter),
+    alpha = 0.7, size = 2, color = ipsum_pal()(2)[2]
+  ) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_discrete(expand = c(0, 0)) +
+  labs(
+    title = &quot;Mean Occupancy Rate for each Facility in Toronto&#39;s Homeless Shelter System&quot;,
+    subtitle = &quot;Across the network, each month&quot;,
+    y = NULL,
+    x = NULL, shape = NULL,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
+  ) +
+  theme(
+    legend.position = c(0.9, 0.9),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-10-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Some facilities are nearly always over capacity every month. Many report exactly 100% occupancy every month.</p>
+<p>How many facilities are managed by each organization?</p>
+<pre class="r"><code>shelters %&gt;%
+  select(organization_name, facility_name) %&gt;%
+  distinct(facility_name, .keep_all = TRUE) %&gt;%
+  count(organization_name, sort = TRUE) %&gt;%
+  mutate(organization_name = fct_reorder(organization_name, n)) %&gt;%
+  ggplot(aes(n, organization_name)) +
+  geom_col(aes(fill = 4),
+    show.legend = FALSE
+  ) +
+  labs(
+    title = &quot;Toronto Homeless Shelter Organizations&quot;,
+    x = &quot;Number of Facilities&quot;, y = &quot;&quot;,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
+  ) +
+  theme(panel.grid.major.y = element_blank())</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-11-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Let’s join the data frames of the weather with the shelter occupancy data by date</p>
+<pre class="r"><code>shelterWeather &lt;- shelters %&gt;%
+  filter(!is.na(occupancy)) %&gt;%
+  filter(capacity &gt; 0) %&gt;%
+  filter(occupancy_date &gt;= min(weather$date)) %&gt;%
+  mutate(rate = occupancy / capacity) %&gt;%
+  select(
+    id, organization_name, shelter_name, facility_name,
+    occupancy_date,
+    occupancy,
+    capacity,
+    rate
+  ) %&gt;%
+  left_join(weather, by = c(&quot;occupancy_date&quot; = &quot;date&quot;)) %&gt;%
+  mutate(
+    precipitation_deg = case_when(
+      precipitation == 0 ~ &quot;None&quot;,
+      between(precipitation, 0.01, 10) ~ &quot;Low&quot;,
+      between(precipitation, 10.01, 20) ~ &quot;Medium&quot;,
+      between(precipitation, 20.01, 40) ~ &quot;High&quot;,
+      TRUE ~ &quot;Very High&quot;
+    ),
+    org = case_when(
+      organization_name == &quot;City of Toronto&quot; ~ &quot;City of Toronto&quot;,
+      TRUE ~ &quot;All Others&quot;
+    )
+  )</code></pre>
+<p>What other patterns do we see each day?</p>
+<p>Let’s start with the minimum temperature. Note that the weather file earliest data is March of 2018.</p>
+<pre class="r"><code>shelterWeather %&gt;%
+  group_by(
+    day = day(occupancy_date),
+    month = month(occupancy_date),
+    year = year(occupancy_date)
+  ) %&gt;%
+  summarise(
+    avg_rate = mean(rate, na.rm = TRUE),
+    avg_temp = mean(min_temperature, na.rm = TRUE),
+    avg_precipitation = mean(precipitation, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  filter(year %in% c(2018, 2019)) %&gt;%
+  ggplot(aes(avg_temp, avg_rate)) +
+  geom_point(alpha = 0.5) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  geom_smooth(se = FALSE) +
+  facet_wrap(~year) +
+  labs(
+    title = &quot;Occupancy Rate in Toronto&#39;s Shelter System driven by  Temperature&quot;,
+    subtitle = &quot;Based on Average Daily Minimum Temperature(Celsius)&quot;,
+    y = &quot;Average Occupancy Rate&quot;,
+    x = &quot;Average Temperature (Celsius)&quot;,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-13-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>shelterWeather %&gt;%
+  filter(precipitation &gt; 0) %&gt;%
+  group_by(
+    day = day(occupancy_date),
+    month = month(occupancy_date),
+    year = year(occupancy_date)
+  ) %&gt;%
+  summarise(
+    avg_rate = mean(rate, na.rm = TRUE),
+    avg_temp = mean(min_temperature, na.rm = TRUE),
+    avg_precipitation = mean(precipitation, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  filter(year %in% c(2018, 2019)) %&gt;%
+  ggplot(aes(avg_precipitation, avg_rate)) +
+  geom_point(alpha = 0.5) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_log10() +
+  geom_smooth(se = FALSE) +
+  facet_wrap(~year) +
+  labs(
+    title = &quot;Occupancy Rate in Toronto&#39;s Shelter System Driven by Precipitation&quot;,
+    subtitle = &quot;Based on Daily Average Precipitation&quot;,
+    y = &quot;Average Occupancy Rate&quot;,
+    x = &quot;Average Precipitation (mm) on Log Scale&quot;,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-14-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Lets build a model of Over-Capacity events at each facility with features for the weekday, month, temperature, precipitation, and the two level org identifying the city shelters to make some inferences about what might be drivers of overcrowding.</p>
+<p>Setting the breakpoint for over capacity at 0.999 could be argued because every shelter should have 1 empty bed for newcomers. It yields a data set that is largely balanced between response classes.</p>
+<pre class="r"><code>shelter_df &lt;- shelterWeather %&gt;%
+  mutate(over_cap = factor(if_else(rate &gt; 0.9999, &quot;Yes&quot;, &quot;No&quot;))) %&gt;%
+  select(
+    over_cap, occupancy_date,
+    min_temperature,
+    precipitation_deg,
+    org
+  )
+
+table(shelter_df$over_cap)</code></pre>
+<pre><code>
+   No   Yes 
+16828 24493 </code></pre>
+<pre class="r"><code>shelter_rec &lt;-
+  recipe(over_cap ~ ., data = shelter_df) %&gt;%
+  step_date(occupancy_date,
+    features = c(&quot;dow&quot;, &quot;month&quot;)
+  ) %&gt;%
+  step_holiday(occupancy_date,
+    holidays = timeDate::listHolidays(&quot;CA&quot;)
+  ) %&gt;%
+  step_rm(occupancy_date) %&gt;%
+  step_dummy(all_nominal(), -all_outcomes()) %&gt;%
+  step_center(all_predictors()) %&gt;%
+  step_scale(all_predictors()) %&gt;%
+  step_zv(all_predictors())
+
+glm_mod &lt;- logistic_reg() %&gt;%
+  set_engine(&quot;glm&quot;) %&gt;%
+  set_mode(&quot;classification&quot;)
+
+shelter_wflow &lt;- workflow() %&gt;%
+  add_model(glm_mod) %&gt;%
+  add_recipe(shelter_rec)</code></pre>
+<p>Let’s fit the linear model</p>
+<pre class="r"><code>shelter_glmfit &lt;-
+  shelter_wflow %&gt;%
+  fit(data = shelter_df)</code></pre>
+<p>This <code>shelter_glmfit</code> object has the finalized recipe and fitted model objects inside. Let’s extract the model objects from the workflow.</p>
+<p>For over capacity events, what features can we infer may be significant?</p>
+<pre class="r"><code>shelter_glmfit %&gt;%
+  tidy(conf.int = TRUE, exponentiate = TRUE) %&gt;%
+  filter(term != &quot;(Intercept)&quot;) %&gt;%
+  mutate(term = fct_reorder(term, estimate)) %&gt;%
+  ggplot(aes(estimate, term)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), color = &quot;gray&quot;) +
+  geom_vline(xintercept = 1, color = &quot;red&quot;) +
+  labs(
+    title = &quot;Relative risk factors for Shelter Facility Overcapacity&quot;,
+    caption = &quot;Data: open.toronto.ca | Visual: jim_gruman&quot;,
+    x = &quot;Exponentiated estimate for log odds&quot;, y = NULL
+  )</code></pre>
+<p><img src="figure/TorontoShelters.Rmd/unnamed-chunk-18-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>There is some evidence in this dataset that the months of December, (January), February, March, April, May, and June drive over occupancy over capacity. Also, the City of Toronto facilities themselves are over capacity.</p>
+<p>My tweet from the archives:</p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/jim_gruman/status/1334250855319687175&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Two for <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> <br>1) A treemap of organization/shelter/facility capacity<br>2) Inference of features that may drive over-capacity<a href="https://t.co/4ebkC4p5DP">https://t.co/4ebkC4p5DP</a> <a href="https://t.co/rh4U79vGxr">pic.twitter.com/rh4U79vGxr</a></p>&mdash; Jim Gruman📚🚵‍♂️⚙ (@jim_gruman) <a href="https://twitter.com/jim_gruman/status/1334250855319687175?ref_src=twsrc%5Etfw">December 2, 2020</a></blockquote>
+
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] yardstick_0.0.8    workflowsets_0.1.0 workflows_0.2.3    tune_0.1.6        
+ [5] rsample_0.1.0      recipes_0.1.16     parsnip_0.1.7.900  modeldata_0.1.1   
+ [9] infer_1.0.0        dials_0.0.9.9000   scales_1.1.1       broom_0.7.9       
+[13] tidymodels_0.1.3   treemap_2.4-3      hrbrthemes_0.8.0   lubridate_1.7.10  
+[17] forcats_0.5.1      stringr_1.4.0      dplyr_1.0.7        purrr_0.3.4       
+[21] readr_2.0.1        tidyr_1.1.3        tibble_3.1.4       ggplot2_3.3.5     
+[25] tidyverse_1.3.1    workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.2.1    systemfonts_1.0.2 
+  [4] selectr_0.4-2      plyr_1.8.6         igraph_1.2.6      
+  [7] tidytuesdayR_1.0.1 splines_4.1.1      listenv_0.8.0     
+ [10] usethis_2.0.1      gridBase_0.4-7     digest_0.6.27     
+ [13] foreach_1.5.1      htmltools_0.5.2    viridis_0.6.1     
+ [16] fansi_0.5.0        magrittr_2.0.1     tzdb_0.1.2        
+ [19] globals_0.14.0     modelr_0.1.8       gower_0.2.2       
+ [22] extrafont_0.17     vroom_1.5.4        R.utils_2.10.1    
+ [25] extrafontdb_1.0    hardhat_0.1.6      colorspace_2.0-2  
+ [28] rvest_1.0.1        textshaping_0.3.5  haven_2.4.3       
+ [31] xfun_0.25          crayon_1.4.1       jsonlite_1.7.2    
+ [34] survival_3.2-11    iterators_1.0.13   glue_1.4.2        
+ [37] gtable_0.3.0       ipred_0.9-11       R.cache_0.15.0    
+ [40] tweetrmd_0.0.9     Rttf2pt1_1.3.9     future.apply_1.8.1
+ [43] DBI_1.1.1          Rcpp_1.0.7         viridisLite_0.4.0 
+ [46] xtable_1.8-4       bit_4.0.4          GPfit_1.0-8       
+ [49] lava_1.6.10        prodlim_2019.11.13 httr_1.4.2        
+ [52] RColorBrewer_1.1-2 ellipsis_0.3.2     farver_2.1.0      
+ [55] R.methodsS3_1.8.1  pkgconfig_2.0.3    nnet_7.3-16       
+ [58] sass_0.4.0         dbplyr_2.1.1       utf8_1.2.2        
+ [61] here_1.0.1         labeling_0.4.2     tidyselect_1.1.1  
+ [64] rlang_0.4.11       DiceDesign_1.9     later_1.3.0       
+ [67] munsell_0.5.0      cellranger_1.1.0   tools_4.1.1       
+ [70] cachem_1.0.6       cli_3.0.1          generics_0.1.0    
+ [73] evaluate_0.14      fastmap_1.1.0      yaml_2.2.1        
+ [76] ragg_1.1.3         bit64_4.0.5        knitr_1.33        
+ [79] fs_1.5.0           nlme_3.1-152       future_1.22.1     
+ [82] whisker_0.4        mime_0.11          R.oo_1.24.0       
+ [85] xml2_1.3.2         compiler_4.1.1     rstudioapi_0.13   
+ [88] curl_4.3.2         reprex_2.0.1       lhs_1.1.1         
+ [91] bslib_0.3.0        stringi_1.7.4      highr_0.9         
+ [94] gdtools_0.2.3      lattice_0.20-44    Matrix_1.3-4      
+ [97] styler_1.5.1       conflicted_1.0.4   vctrs_0.3.8       
+[100] pillar_1.6.2       lifecycle_1.0.0    furrr_0.2.3       
+[103] jquerylib_0.1.4    data.table_1.14.0  httpuv_1.6.2      
+[106] R6_2.5.1           promises_1.2.0.1   gridExtra_2.3     
+[109] parallelly_1.27.0  codetools_0.2-18   MASS_7.3-54       
+[112] assertthat_0.2.1   rprojroot_2.0.2    withr_2.4.2       
+[115] mgcv_1.8-36        parallel_4.1.1     hms_1.1.0         
+[118] grid_4.1.1         rpart_4.1-15       timeDate_3043.102 
+[121] class_7.3-19       rmarkdown_2.10     git2r_0.28.0      
+[124] pROC_1.18.0        shiny_1.6.0       </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
