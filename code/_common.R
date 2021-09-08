@@ -6,14 +6,15 @@ knitr::opts_chunk$set(
   eval = TRUE,
   cache.lazy = FALSE,
   df_print = "paged",
-  dpi = 72, # this creates 2*105 dpi at 6 in, which is 300 dpi at 4.2
+  dpi = 72,
   tidy = "styler",
-  dev = "ragg_png", 
+  tidy.opts = list(comment = FALSE),
+  dev = "ragg_png",
   autodep = TRUE,
   fig.align = 'center',
   fig.width = 9,
-  fig.asp = 0.618,  # 1 / phi
-  class.output = "scroll-100"
+  fig.asp = 0.618      #,   1 / phi
+#  class.output = "scroll-100"   # must include the CSS, doesn't style on github pages
 )
 
 knitr::opts_template$set(
@@ -47,23 +48,25 @@ autoplot.conf_mat <- function(object, type = "heatmap", ...) {
   cm_heat(object)
 }
 
+# Yardstick----
+
 cm_heat <- function(x) {
   `%+%` <- ggplot2::`%+%`
-  
+
   table <- x$table
-  
+
   df <- as.data.frame.table(table)
-  
+
   # Force known column names, assuming that predictions are on the
   # left hand side of the table (#157).
   names(df) <- c("Prediction", "Truth", "Freq")
-  
+
   # Have prediction levels going from high to low so they plot in an
   # order that matches the LHS of the confusion matrix
   lvls <- levels(df$Prediction)
   df$Prediction <- factor(df$Prediction, levels = rev(lvls))
   axis_labels <- yardstick:::get_axis_labels(x)
-  
+
   df %>%
     ggplot2::ggplot(
       ggplot2::aes(
@@ -79,12 +82,55 @@ cm_heat <- function(x) {
       legend.position = "none"
     ) %+%
     ggplot2::geom_text(mapping = ggplot2::aes(label = Freq,
-                                              color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))), 
-                       size = 30) %+% 
+                                              color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))),
+                       size = 30) %+%
     ggplot2::labs(x = axis_labels$x, y = axis_labels$y)
 }
+
+# VariableImportance----
+# https://www.tmwr.org/explain.html from Tidy Modeling With R
+
+ggplot_imp <- function(...) {
+  obj <- list(...)
+  metric_name <- attr(obj[[1]], "loss_name")
+  metric_lab <- paste(metric_name,
+                      "after permutations\n(higher indicates more important)")
+
+  full_vip <- dplyr::bind_rows(obj) %>%
+    dplyr::filter(variable != "_baseline_")
+
+  perm_vals <- full_vip %>%
+    dplyr::filter(variable == "_full_model_") %>%
+    dplyr::group_by(label) %>%
+    summarise(dropout_loss = mean(dropout_loss))
+
+  p <- full_vip %>%
+    dplyr::filter(variable != "_full_model_") %>%
+    dplyr::mutate(variable = fct_reorder(variable, dropout_loss)) %>%
+    ggplot2::ggplot(ggplot2::aes(dropout_loss, variable))
+  if(length(obj) > 1) {
+    p <- p +
+      ggplot2::facet_wrap(vars(label)) +
+      ggplot2::geom_vline(data = perm_vals, ggplot2::aes(xintercept = dropout_loss, color = label),
+                 size = 1.4, lty = 2, alpha = 0.7) +
+      ggplot2::geom_boxplot(ggplot2::aes(color = label, fill = label), alpha = 0.2)
+  } else {
+    p <- p +
+      ggplot2::geom_vline(data = perm_vals, ggplot2::aes(xintercept = dropout_loss),
+                 size = 1.4, lty = 2, alpha = 0.7) +
+      ggplot2::geom_boxplot(fill = "#91CBD765", alpha = 0.4)
+
+  }
+  p +
+    ggplot2::theme(legend.position = "none") +
+    ggplot2::labs(x = metric_lab,
+         y = NULL,  fill = NULL,  color = NULL)
+}
+
+# ----
 
 tidymodels::tidymodels_prefer(quiet = TRUE)
 conflicted::conflict_prefer("vi", "vip", quiet = TRUE)
 conflicted::conflict_prefer("explain", "lime", quiet = TRUE)
 conflicted::conflict_prefer("select", "dplyr", quiet = TRUE)
+conflicted::conflict_prefer("filter", "dplyr", quiet = TRUE)
