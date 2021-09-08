@@ -1,0 +1,365 @@
+---
+title: "Tour De France"
+author: "Jim Gruman"
+date: 'April 7, 2020'
+output:
+  workflowr::wflow_html: 
+    toc: false
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+## Visualising Tour De France Data
+
+> Inspired by the work of Alastair Rushworth at [Visualising Tour De France Data In R ](https://alastairrushworth.github.io/Visualising-Tour-de-France-data-in-R/)
+
+> and [David Robinson's live screencast](https://www.youtube.com/watch?v=vT-DElIaKtE)
+
+> and [Dr. Margaret Siple's work](https://github.com/mcsiple/tidytuesday/blob/master/TourdeFrance.R)
+
+<center>
+![](https://www.letour.fr/img/dyn/event/1@2x.png)
+</center>
+
+> and by the R4DS learning community #TidyTuesday
+
+### Importing Libraries and Datasets
+
+```{r setup_libraries}
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(paletteer)
+library(ggtext)
+library(rvest)
+
+library(lubridate)
+
+library(patchwork)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+tuesdata <- tidytuesdayR::tt_load('2020-04-07')
+
+tdf_winners <- tuesdata$tdf_winners %>%
+       mutate(year = ymd(year(start_date),truncated = 2L),
+              speed = distance / time_overall)
+
+stage_data <- tuesdata$stage_data
+tdf_stages <- tuesdata$tdf_stages %>%
+  janitor::clean_names() %>%
+  mutate(year = year(date))
+
+showtext::showtext_auto()
+```
+
+```{r scrape_flags}
+
+cf_io <- read_html("https://www.countryflags.io/")
+
+country_ids <- cf_io %>% 
+  html_nodes(".item_country") %>% 
+  lapply(function(el){
+    
+    key <- el %>% 
+      html_text %>% 
+      str_split("\\n") %>% 
+      `[[`(1) %>% 
+      trimws() %>% 
+      {
+        .[nchar(.) > 0]
+      }
+    
+    data.frame(
+      code = key[1],
+      nationality = key[2]
+    )
+  }) %>% 
+  bind_rows
+
+get_country_flag <- function(x){
+  
+  urls <- sapply(x, function(x){
+    code <- country_ids$code[which(country_ids$nationality == x)]
+    file.path("https://www.countryflags.io", code, "flat/64.png")
+  })
+  
+  paste0("<img src='",urls,"' width='30' />")
+  
+}
+
+```
+
+Nationalities of the Winners
+
+```{r nations}
+tdf_nations <- tdf_winners %>%
+  mutate(nationality = stringr::str_squish(nationality),
+         nationality = case_when(
+    nationality == "Great Britain" ~ "United Kingdom",
+    TRUE ~ nationality
+  )) %>%  
+  count(nationality, sort = TRUE) %>%
+  mutate(nationality = fct_reorder(nationality,n)) %>%
+  top_n(8, n) 
+
+flag_labels <- get_country_flag(tdf_nations$nationality)
+
+pal <- RColorBrewer::brewer.pal('Set1',n = 8)
+
+nations <- tdf_nations %>%
+  ggplot(aes(n, nationality)) +
+  geom_bar(fill = 2, stat = "identity") +
+  scale_y_discrete(name = NULL, labels = flag_labels) +
+  scale_fill_discrete(guide = FALSE) +
+  theme_jim(base_size = 10) +
+  theme(axis.text.y = ggtext::element_markdown(color = "black", size = 11),
+        axis.title.y = element_blank(),
+        plot.title.position = "plot",
+        panel.grid.major.y = element_blank()) +
+  expand_limits(x = c(0,45)) +
+  labs( title = "National Wins",
+        caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())) 
+  
+```
+
+Physical characteristics and race characteristics by decade
+
+```{r averages}
+by_decade <- tdf_winners %>%
+  group_by(decade = 10 * (year(year) %/% 10 )) %>%
+  summarize(winner_age = mean(age, na.rm = TRUE),
+            winner_height = mean(height, na.rm = TRUE),
+            winner_weight = mean(weight, na.rm = TRUE),
+            winner_margin = mean(time_margin, na.rm = TRUE),
+            winner_time = mean(time_overall, na.rm = TRUE),
+            winner_speed = mean(speed, na.rm = TRUE))
+```
+
+
+```{r p1}
+p1 <- by_decade %>%  
+  ggplot(aes(decade, winner_age)) +
+  geom_line(color = 4, size = 3, show.legend = FALSE) +
+  expand_limits(y = 0) +
+  labs( y = "",
+    title = "Average Age of Tour de France Winners By Decade",
+    subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
+    caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
+  ) 
+
+p1
+
+```
+
+```{r p2}
+p2 <- by_decade %>%  
+  ggplot(aes(decade, winner_margin)) +
+  geom_line(color = 5, size = 3) +
+  expand_limits(y = 0) +
+  labs( y = "Hours",
+    title = "Margin of Victory of Tour de France Winners By Decade",
+    subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
+    caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
+  ) 
+
+p2
+
+```
+
+
+
+```{r p3}
+p3 <- by_decade %>%  
+  ggplot(aes(decade, winner_speed)) +
+  geom_line(color = 6, size = 3) +
+  expand_limits(y = 0) +
+  labs( y = "Hours",
+    title = "Average Speed of Tour de France Winners By Decade",
+    subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
+    caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
+  ) 
+
+p3
+```
+
+Life Expectancy of TDF winners with survival analysis
+
+extrapolated for the riders 38 still alive (not yet dead)
+
+```{r survival, fig.width=6, fig.height=4}
+library(survival)
+surv_model <- tdf_winners %>%
+  distinct(winner_name, .keep_all = TRUE)  %>%
+  transmute(birth_year = year(born),
+            death_year = year(died),
+            dead =  as.integer(!is.na(death_year))) %>%
+  mutate(age_at_death = coalesce(death_year, 2020) - birth_year) %>%
+  survfit(Surv(age_at_death, dead) ~ 1, data = .) 
+
+surv_model %>%
+  plot(main = "K-M Survival of Tour De France Winners")
+
+library(broom)
+
+glance(surv_model) %>% knitr::kable()
+
+```
+
+Of the 63 Tour De France winners, 38 are still alive. After accounting for survival expectations for the living, the median life expectancy of a Tour de France winner is estimated as 77 years old.
+
+Stage data
+
+```{r stages}
+p <- stage_data %>%
+  group_by(decade = 10 * (year %/% 10 )) %>%
+  distinct(rider, edition, age) %>%
+    ggplot(aes(decade, age)) +
+  geom_jitter(color = 7, size = 0.5, alpha = 0.1)
+
+p4 <- p + 
+  geom_line(data = by_decade, aes(decade, winner_age), 
+            color = 8, size = 3, show.legend = FALSE) +
+  expand_limits(y = 0) +
+  labs( y = "", x = "",
+    title = "Average Age of Tour de France Winners By Decade",
+    subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
+    caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date())
+  )
+
+p4
+```
+
+
+
+```{r stage_completion}
+stages_joined <- stage_data  %>%
+  tidyr::extract(stage_results_id, "stage", "stage-(.*)") %>%
+  mutate(stage = if_else(year %in% 1967:1968 & stage == 0, "1a", stage),
+         stage = if_else(year %in% 1967:1968 & stage == 1,"1b", stage),
+         stage = if_else(year %in% 1969:2012 & stage == 0, "P", stage)) %>%
+  filter(year < 2018) %>%
+  left_join(tdf_stages, by = c("year","stage")) %>% 
+  select(-winner, bib_number, winner_country) %>%
+  mutate(rank = as.integer(rank)) %>%
+  group_by(year, stage) %>%
+  mutate(finishers = sum(!is.na(rank))) %>%
+  ungroup() %>%
+  mutate(percentile = 1 - rank / finishers)
+
+```
+
+```{r}
+p5 <- stages_joined %>%
+  count(year, stage) %>%
+  ggplot(aes(n)) +
+  geom_histogram(fill = 11) +
+  labs(title = "Number of Stages Joined Each Year")
+
+p5
+```
+
+It appears that some racers are eliminated or drop out as stages are completed
+
+```{r}
+total_points <- stages_joined %>%
+  group_by(year, rider) %>%
+  summarize(total_points = sum(points, na.rm = TRUE),
+            .groups = "drop") %>%
+  mutate(points_rank = percent_rank(total_points)) 
+
+```
+
+Does the winner of the first stage predict their final point ranking?
+
+```{r first_predictive_final}
+p6 <- stages_joined %>%
+  filter(stage == "1") %>%
+  inner_join(total_points, by = c("year","rider")) %>%
+  select(year, rider, 
+         percentile_first_stage = percentile,
+         points_rank) %>%
+  filter(!is.na(percentile_first_stage)) %>%
+  mutate(first_stage_bin = cut(percentile_first_stage, seq(0,1,0.1))) %>%
+  filter(!is.na(first_stage_bin)) %>%
+  ggplot(aes(first_stage_bin, points_rank)) +
+  geom_boxplot(fill = 12) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Decile Perforance in the First Stage",
+       y = "Overall Points Percentile",
+       title = "Relationship of TDF First Stage Finish w/ Overall Finish",
+       subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle',
+       caption = paste0('@Jim_Gruman | #TidyTuesday | ', Sys.Date()))
+
+p6
+```
+
+
+Lets explore the names and life durations of the Tour de France winners
+
+```{r lifespans, opts.Label='fig.long'}
+winners <- tdf_winners %>%
+  select(edition,winner_name,born,died,nickname,nationality,start_date, year) %>%
+  # factor and reorder the winners by birth date
+  mutate(winner_name = fct_reorder(winner_name, desc(born))) %>%
+  # compute a life duration in numeric years
+  mutate(life_duration = as.numeric(as.duration(ymd(born) %--% ymd(died)),"years")) %>%
+  filter(!is.na(life_duration))
+
+pal <- RColorBrewer::brewer.pal('Set1',n = 3)
+
+life_wins <- winners %>%
+  ggplot() +
+  geom_linerange(aes(xmin = born,
+                     xmax = died,
+                     y = winner_name,
+                     color = life_duration),
+                     lwd = 1.1) +
+  labs(x = "",
+       y = "Year") +
+  geom_point(aes(y = winner_name,
+                 x = year),
+                 shape = 19, 
+                 size = 2,
+                 color = 'grey') +
+  scale_shape_identity('',
+         labels = 'Won the\nTour de France',
+         breaks = c(19),
+         guide = 'legend') +
+  scale_colour_gradient2('Lifetime\n(years)',
+                         low = pal[1], mid = pal[2], 
+                         high = pal[3], midpoint = 60) +
+  labs(title = 'Lifespans of Riders', 
+       subtitle = 'source: Alastair Rushworths R Data Package tdf and Kaggle') +
+  guides(colour = guide_legend(order = 1),
+         shape = guide_legend(order = 2)) +
+  theme(legend.position = "top",
+        legend.background = element_rect(color = "white")) +
+  theme_jim(base_size = 10) 
+
+
+```
+
+```{r TourdeFrance, fig.width=12, opts.Label='fig.long'}
+
+(life_wins | nations ) +
+  plot_annotation("Tour de France Winners") +
+  theme(aspect.ratio = 3)
+
+```
+
+The original tweet submission:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1248662506102497281")
+```
+
+
+
