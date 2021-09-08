@@ -313,7 +313,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-09-07
+<strong>Last updated:</strong> 2021-09-08
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -404,16 +404,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong9059f93"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 9059f93 </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb33c0f7c892ef515adc8f98a16689a20edce853atargetblankb33c0f7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/b33c0f7c892ef515adc8f98a16689a20edce853a" target="_blank">b33c0f7</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong9059f93" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb33c0f7c892ef515adc8f98a16689a20edce853atargetblankb33c0f7a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 9059f93. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/b33c0f7c892ef515adc8f98a16689a20edce853a" target="_blank">b33c0f7</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -424,12 +424,12 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  code/_common.R
-    Untracked:  code/owasippe.R
+    Untracked:  catboost_info/
+    Untracked:  data/2021-09-08/
 
 Unstaged changes:
-    Modified:   analysis/about.Rmd
-    Modified:   analysis/license.Rmd
+    Modified:   analysis/2021_08_17_sliced.Rmd
+    Modified:   code/_common.R
 
 </code></pre>
 <p>
@@ -473,7 +473,41 @@ Message
 Rmd
 </td>
 <td>
-9059f93
+<a href="https://github.com/opus1993/myTidyTuesday/blob/b33c0f7c892ef515adc8f98a16689a20edce853a/analysis/Survival.Rmd" target="_blank">b33c0f7</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-08
+</td>
+<td>
+Add censoring image and Zeltzer playlist
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/c72b825925a086cae6d149cee5a28d61f94293d8/docs/Survival.html" target="_blank">c72b825</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/9059f935ff63a7157bda1cb83d529bab68739a2b/analysis/Survival.Rmd" target="_blank">9059f93</a>
 </td>
 <td>
 opus1993
@@ -495,14 +529,14 @@ wflow_publish(“analysis/Survival.Rmd”)
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>Survival analysis is one of the oldest <a href="https://www.amazon.com/Emergence-Probability-Philosophical-Statistical-Probabilistic/dp/0521685575">subfields of statistics</a>. Basic life-table methods, including techniques for dealing with censored data, were discovered <a href="http://www.pauldickman.com/survival/handouts/21%20-%20EoB%20Survival%20analysis%20overview.pdf">before 1700</a>, and in the early eighteenth century, the old masters - de Moivre working on annuities, and Daniel Bernoulli studying competing risks for the analysis of smallpox inoculation - developed the modern foundations of the field. Today survival analysis models are important in <strong>Engineering</strong>, Insurance, <strong>Marketing</strong>, Medicine, Econometrics, and many other application areas.</p>
-<p>ZedStatistics episode 1 is a quick no-code, no-math video introduction:</p>
+<p><a href="http://www.zstatistics.com/videos">ZedStatistics</a> episode 1 is a quick no-code, no-math video introduction:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/v1QqpG0rR1k" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 </iframe>
+<p>As of this post’s publication, Justin Zeltzer has released <a href="https://www.youtube.com/playlist?list=PLTNMv857s9WUclZLm6OFUW3QcXgRa97jx">3 episodes to a playlist</a>.</p>
 <div id="what-is-survival-analysis" class="section level2">
 <h2>What is Survival Analysis?</h2>
 <p>A simpler characterization might be <em>time-to-event</em> analysis. These are use cases where we are concerned with the time it takes for an <strong>event</strong> to occur after an <strong>exposure</strong>. As an example, an exposure might be the date of a medical diagnosis. Or it could be the moment of childbirth. Or the date of delivery of a new tractor to a customer.</p>
-<pre class="r"><code>knitr::include_graphics(&quot;assets/periodofstudy.png&quot;, error = FALSE)</code></pre>
-<p><img src="assets/periodofstudy.png" style="display: block; margin: auto;" /></p>
+<p><img src="https://bigdata.go.th/wp-content/uploads/2020/09/Screenshot-2020-10-06-093522.png" /></p>
 <p>Survival analysis data is aligned for all participants to zero at each participant’s exposure time. The event of interest could be death or the failure of a component of the tractor. Time-to-event data always consist of the distinct <strong>exposure</strong> start and distinct <strong>event</strong> end for each study participant.</p>
 </div>
 <div id="what-is-censoring" class="section level2">
@@ -541,14 +575,14 @@ ggsurvplot(
     title = &quot;Kaplan-Meier (KM) Curve&quot;,
     subtitle = &quot;Each step down represents an event of interest&quot;
   )</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>The <code>ggfortify</code> package also contains methods for autoplotting simple survival plots.</p>
 <pre class="r"><code>ggfortify:::autoplot.survfit(km) +
   labs(
     title = &quot;Kaplan-Meier (KM) Curve&quot;,
     subtitle = &quot;Each step down represents an event of interest&quot;
   )</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>It is important to note here that the KM curve is a non-parametric curve. That is, the curve is simply a description of the underlying data and that there are no parameters involved. Most use cases in this problem space ask that we model to predict the behavior of a population, or the behavior of a change in a treatment of the population. To do so will require that we introduce other concepts, like the <code>hazard</code> parameter. More on this later.</p>
 <hr />
 </div>
@@ -578,7 +612,7 @@ ggplot(GBSG2, aes(factor(cens))) +
     title = &quot;German Breast Cancer Study Group 2&quot;,
     caption = &quot;source: GBSG2 dataset&quot;
   )</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>As noted above, with a large enough sample size, the KM curve approaches the true survival function for that population. We will return to this dataset to explore the impact of the study participants features on survival rates.</p>
 <pre class="r"><code>sobj &lt;- Surv(GBSG2$time, GBSG2$cens)
 
@@ -594,7 +628,7 @@ ggsurvplot(
     caption = &quot;source: GBSG2 dataset&quot;,
     x = &quot;Time in days&quot;
   )</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 </div>
@@ -650,7 +684,7 @@ ggsurvplot_df(fit = surv_wb, surv.geom = geom_line, legend = &quot;none&quot;) +
     caption = &quot;source: GBSG2 dataset&quot;,
     x = &quot;Time in days&quot;
   )</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-7-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>The base Weibull model curve is a smoothed parametric form of the stepped Kaplan-Meier curve that we saw earlier. The power of the parametric approach becomes apparent when we model on the differences in features within the dataset for inference. Recall in the German Breast Cancer dataset that it includes patient attributes including classifications for the size of the tumor <code>tsize</code> and whether hormonal therapy was applied as <code>horTh</code>.</p>
 <pre class="r"><code>GBSG2 %&gt;%
   head() %&gt;%
@@ -787,7 +821,7 @@ ggsurvplot_df(surv_wbmod,
     caption = &quot;source: GBSG2 dataset&quot;,
     x = &quot;Time in days&quot;
   )</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-9-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-8-1.png" width="648" style="display: block; margin: auto;" /></p>
 <div id="other-distributions-beyond-weibull" class="section level3">
 <h3>Other distributions beyond Weibull</h3>
 <p>In addition to Weibull, the <code>surveg()</code> function will model exponential, lognormal, gaussian, logistic, and loglogistic as parametric distributions on the data provided. These may be more suitable for small samples where prior information is known about the survival characteristics of the larger population.</p>
@@ -855,24 +889,24 @@ ggsurvplot_df(surv_cxmod,
     caption = &quot;source: GBSG2 dataset&quot;,
     x = &quot;Time in days&quot;
   )</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-11-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-10-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>Data scientists who are accustomed to computing ROC curves to assess model performance should be interested in the Concordance statistic. The documentation for the <code>survConcordance()</code> function in the <code>survival</code> package defines concordance as “the probability of agreement for any two randomly chosen observations, where in this case agreement means that the observation with the shorter survival time of the two also has the larger risk score. The predictor (or risk score) will often be the result of a Cox model or other regression” and notes that: “For continuous covariates concordance is equivalent to Kendall’s tau, and for logistic regression is is equivalent to the area under the ROC curve.”</p>
 <pre class="r"><code>fit.test &lt;- cox.zph(cxmod)
 
 ggcoxzph(fit.test)</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-12-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-11-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>ggcoxdiagnostics(cxmod,
   type = &quot;deviance&quot;,
   ax.scale = &quot;linear.predictions&quot;
 )</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-13-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-12-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>ggcoxdiagnostics(cxmod,
   type = &quot;schoenfeld&quot;,
   ax.scale = &quot;time&quot;
 )</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-14-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-13-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>ggforest(cxmod, data = GBSG2)</code></pre>
-<p><img src="figure/Survival.Rmd/unnamed-chunk-15-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-14-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>The quantity of interest from a Cox regression model is a hazard ratio (HR). The HR represents the ratio of hazards between two groups at any particular point in time. The HR is interpreted as the instantaneous rate of occurrence of the event of interest in those who are still at risk for the event. It is not a risk, though it is commonly interpreted as such.</p>
 <p>If you have a regression parameter <span class="math inline">\(\beta\)</span> (from column estimate in our coxph) then HR = <span class="math inline">\(e^\beta\)</span>. Thus, a HR &lt; 1 indicates reduced hazard of death whereas a HR &gt; 1 indicates an increased hazard of death.</p>
 <hr />
