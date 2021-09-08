@@ -70,19 +70,15 @@ articlesTable <- articles %>%
   filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate","here","hrbrthemes", "tweetrmd")) %>% 
   arrange(desc(lubridate::mdy(dateline)),
           libraries) %>% 
-  tidyr::nest(package = libraries) 
-
-df_url <- articles %>% 
+  tidyr::nest(package = libraries) %>% 
   mutate(link = stringr::str_remove(file,".Rmd")) %>% 
-  mutate(link = paste0("https://opus1993.github.io/myTidyTuesday/",link,".html")) %>% 
-  pull(link)  
+  mutate(link = paste0("https://opus1993.github.io/myTidyTuesday/",link,".html"))
 
 articlesTable %>% 
   mutate(title = text_spec(title,
                            format = "html", 
-                           link = df_url)) %>% 
-  select(-file) %>% 
-
+                           link = link)) %>% 
+  select(-file, -link) %>% 
   knitr::kable("html", 
                escape = FALSE,
                col.names = c("Title","Date","Packages")) %>%
