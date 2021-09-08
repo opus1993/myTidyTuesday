@@ -53,7 +53,7 @@ library_f <- function(file) {
 
 ```{r}
 
-articles <- articles %>% 
+articlesTable <- articles %>% 
   mutate(title = map_chr(file,~ title_f(.))) %>% 
   mutate(dateline = map_chr(file, ~ date_f(.))) %>% 
   mutate(libraries = map(file, ~ library_f(.))) %>%
@@ -64,10 +64,12 @@ articles <- articles %>%
   mutate(dateline = str_sub(dateline, 
                             start = 8L,
                             end = str_length(dateline) - 1L)) %>% 
-  mutate(libraries = str_sub(libraries, 
+  mutate(libraries = str_squish(str_sub(libraries, 
                              start = str_locate(libraries, "\\(")[,1] + 1,
-                             end = str_locate(libraries, "\\)")[,1] - 1 )) %>%
-  filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate","here","hrbrthemes", "tweetrmd") ) %>% 
+                             end = str_locate(libraries, "\\)")[,1] - 1 ))) %>% 
+  filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate","here","hrbrthemes", "tweetrmd")) %>% 
+  arrange(desc(lubridate::mdy(dateline)),
+          libraries) %>% 
   tidyr::nest(package = libraries) 
 
 df_url <- articles %>% 
@@ -75,19 +77,20 @@ df_url <- articles %>%
   mutate(link = paste0("https://opus1993.github.io/myTidyTuesday/",link,".html")) %>% 
   pull(link)  
 
-articles %>% 
+articlesTable %>% 
   mutate(title = text_spec(title,
                            format = "html", 
                            link = df_url)) %>% 
   select(-file) %>% 
-  arrange(desc(lubridate::mdy(dateline))) %>% 
+
   knitr::kable("html", 
                escape = FALSE,
                col.names = c("Title","Date","Packages")) %>%
   kable_styling(bootstrap_options = c("hover", "condensed"),
                 full_width = TRUE,
-                fixed_thead = TRUE)  
-  
+                fixed_thead = TRUE) %>% 
+  column_spec(1:3,width = c("10em","10em","60em"))
+
 ```
 
 ----
