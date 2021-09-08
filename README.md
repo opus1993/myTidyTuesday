@@ -1,5 +1,3 @@
 # myTidyTuesday
 
-A [workflowr][] project.
-
-[workflowr]: https://github.com/jdblischak/workflowr
+https://opus1993.github.io/myTidyTuesday/
