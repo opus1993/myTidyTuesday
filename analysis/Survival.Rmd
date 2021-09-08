@@ -19,7 +19,9 @@ library(broom)
 library(survival)
 library(survminer)
 
-source("./code/_common.R")
+source("./code/_common.R",
+       verbose = FALSE,
+       local = knitr::knit_global())
 ggplot2::theme_set(theme_jim(base_size = 12))
 ```
 
