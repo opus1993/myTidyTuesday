@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-12-04" />
+
+<title>Survival Analysis</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Survival Analysis</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">December 4, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-07
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong9059f93"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 9059f93 </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong9059f93" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 9059f93. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  code/_common.R
+    Untracked:  code/owasippe.R
+
+Unstaged changes:
+    Modified:   analysis/about.Rmd
+    Modified:   analysis/license.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/Survival.Rmd</code>) and HTML (<code>docs/Survival.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+9059f93
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-07
+</td>
+<td>
+wflow_publish(“analysis/Survival.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Survival analysis is one of the oldest <a href="https://www.amazon.com/Emergence-Probability-Philosophical-Statistical-Probabilistic/dp/0521685575">subfields of statistics</a>. Basic life-table methods, including techniques for dealing with censored data, were discovered <a href="http://www.pauldickman.com/survival/handouts/21%20-%20EoB%20Survival%20analysis%20overview.pdf">before 1700</a>, and in the early eighteenth century, the old masters - de Moivre working on annuities, and Daniel Bernoulli studying competing risks for the analysis of smallpox inoculation - developed the modern foundations of the field. Today survival analysis models are important in <strong>Engineering</strong>, Insurance, <strong>Marketing</strong>, Medicine, Econometrics, and many other application areas.</p>
+<p>ZedStatistics episode 1 is a quick no-code, no-math video introduction:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/v1QqpG0rR1k" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<div id="what-is-survival-analysis" class="section level2">
+<h2>What is Survival Analysis?</h2>
+<p>A simpler characterization might be <em>time-to-event</em> analysis. These are use cases where we are concerned with the time it takes for an <strong>event</strong> to occur after an <strong>exposure</strong>. As an example, an exposure might be the date of a medical diagnosis. Or it could be the moment of childbirth. Or the date of delivery of a new tractor to a customer.</p>
+<pre class="r"><code>knitr::include_graphics(&quot;assets/periodofstudy.png&quot;, error = FALSE)</code></pre>
+<p><img src="assets/periodofstudy.png" style="display: block; margin: auto;" /></p>
+<p>Survival analysis data is aligned for all participants to zero at each participant’s exposure time. The event of interest could be death or the failure of a component of the tractor. Time-to-event data always consist of the distinct <strong>exposure</strong> start and distinct <strong>event</strong> end for each study participant.</p>
+</div>
+<div id="what-is-censoring" class="section level2">
+<h2>What is censoring?</h2>
+<p>A study subject may be censored due to:</p>
+<ul>
+<li>Loss to follow-up (i.e. undocumented, not recorded)</li>
+<li>Withdrawal from study</li>
+<li>No event of interest by the end of the fixed study period</li>
+</ul>
+<p>Censored subjects still provide information so must be appropriately included in the analysis. Ignoring censoring leads to an overestimate of the overall survival probability, because the censored subjects only contribute information for part of the follow-up time, and then fall out of the risk set, thus pulling down the cumulative probability of survival.</p>
+<p>In industry it is common to track component warranty claims and cost on machines sold. Warranty datasets are heavily censored because the study period rarely aligns with the warranty period for each machine delivered. The study time period and fleet population membership must be carefully considered and explicitly defined. In most cases, <strong>exposure</strong> is aligned to zero at the warranty start date.</p>
+<p>The survival <strong>rate</strong> is proportion of the study population that has NOT (yet) experienced the event of interest divided by the whole study population membership within the study timeframe.</p>
+<hr />
+</div>
+<div id="why-do-we-need-special-methods-for-time-to-event-data" class="section level2">
+<h2>Why do we need special methods for time to event data?</h2>
+<p>First, duration times are always positive. Recall that traditional linear regression models make a number of assumptions for independence and normality that are no longer valid in this space. There are distributions, like Weibull, that better represent the problem space. More on this topic later.</p>
+<p>The <code>survival</code> package is the cornerstone of the entire R survival analysis edifice. Not only is the package itself rich in features, but the object created by the <code>Surv()</code> function, which contains failure time and censoring information, is the basic survival analysis data structure in R. Dr. Terry Therneau, the package author, began working on the survival package in 1986. The first public release, in late 1989, used the Statlib service hosted by Carnegie Mellon University. Thereafter, the package was incorporated directly into Splus, and subsequently into R.</p>
+<p>Let’s look at a quick manual example graphically before moving on. The first thing to do is to use <code>Surv()</code> to build the standard survival object. In this case, the variable <code>time</code> is vector of durations, and the variable <code>event</code> is a binary vector of 1’s for the event of interest and 0’s for lack of event at the end of the study period (censored).</p>
+<pre class="r"><code>time &lt;- c(5, 6, 2, 4, 4)
+event &lt;- c(1, 0, 0, 1, 1)
+
+Surv(time, event)</code></pre>
+<pre class="scroll-100"><code>[1] 5  6+ 2+ 4  4 </code></pre>
+<p>A simple way of depicting the survival rate of the population Kaplan-Meier estimator, or product limit estimator chart. A plot of the Kaplan–Meier estimator is a series of declining horizontal steps which, with a large enough sample size, approaches the true survival function for that population. The value of the survival function between successive distinct sampled observations (“clicks”) is assumed to be constant. Note that there is no drop denoted at the time points of censoring.</p>
+<pre class="r"><code>sobj &lt;- data.frame(time = time, event = event)
+
+km &lt;- survfit(Surv(time, event) ~ 1, data = sobj) # the survfit object builds the kaplan-meier est
+ggsurvplot(
+  fit = km, conf.int = FALSE,
+  risk.table = &quot;nrisk_cumevents&quot;,
+  legend = &quot;none&quot;
+) +
+  labs(
+    title = &quot;Kaplan-Meier (KM) Curve&quot;,
+    subtitle = &quot;Each step down represents an event of interest&quot;
+  )</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>The <code>ggfortify</code> package also contains methods for autoplotting simple survival plots.</p>
+<pre class="r"><code>ggfortify:::autoplot.survfit(km) +
+  labs(
+    title = &quot;Kaplan-Meier (KM) Curve&quot;,
+    subtitle = &quot;Each step down represents an event of interest&quot;
+  )</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>It is important to note here that the KM curve is a non-parametric curve. That is, the curve is simply a description of the underlying data and that there are no parameters involved. Most use cases in this problem space ask that we model to predict the behavior of a population, or the behavior of a change in a treatment of the population. To do so will require that we introduce other concepts, like the <code>hazard</code> parameter. More on this later.</p>
+<hr />
+</div>
+<div id="what-are-good-survival-analysis-questions" class="section level2">
+<h2>What are good survival analysis questions?</h2>
+<ul>
+<li>What is the probability that a breast cancer patient survives longer than 5 years?</li>
+<li>What is the typical waiting time for a cab in Chicago?</li>
+<li>What is the typical time required for patent approval?</li>
+<li>Out of 100 unemployed people, how many do we expect to have a job again after 2 months?</li>
+<li>What is the human resources staff turnover churn rate?</li>
+<li>What is the portion of a T8 tractor population that will experience a water pump failure within the first year?</li>
+<li>How does the insertion of a pacemaker treatment improve the survival probability over time for patients with heart disease?</li>
+<li>What is the typical time to re-admission after a patient is discharged from the hospital?</li>
+<li>What is the typical number of pitches for a relief pitcher in a Major League baseball game?</li>
+</ul>
+<p>All of the questions are expressed along the dimensions of the Survival Probability and the duration time to reach that threshold. In many cases, Survival quartiles convey a reasonable sense of the distribution of outcomes.</p>
+<p>The survival function can be expressed mathematically as the Probability that the duration is longer than <em>t</em>, or as 1 minus the probability of Failure for a duration longer than <em>t</em>.</p>
+<p><span class="math display">\[S(t)=1-F(t)=P(T&gt;t)\]</span></p>
+<p>Let’s pause here and consider what the x-axis duration units can be. It would be easy to see how the duration would be calendar time in years, months, or even days. But survival problems can also be modeled in hours or minutes. And in some cases, series like a sequence of pitches in baseball or engine operating hours are suitable for survival analysis. A pitcher that is not pitching and an engine that is not running will not likely experience events of interest.</p>
+<p>Let’s take a closer look at a German Breast Cancer dataset to explore how to answer the question “What is the probability that a breast cancer patient survives longer than 5 years?” The set includes 686 women tracked in a study along with characteristics of each patient. The censoring indicator <code>cens</code> equals 1 for death and 0 for no death within the study timeframe (censored) and the time unit is in days.</p>
+<pre class="r"><code>data(GBSG2, package = &quot;TH.data&quot;) # breast cancer patients, time to death
+
+ggplot(GBSG2, aes(factor(cens))) +
+  geom_bar(fill = hrbrthemes::ipsum_pal()(1)) +
+  labs(
+    title = &quot;German Breast Cancer Study Group 2&quot;,
+    caption = &quot;source: GBSG2 dataset&quot;
+  )</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>As noted above, with a large enough sample size, the KM curve approaches the true survival function for that population. We will return to this dataset to explore the impact of the study participants features on survival rates.</p>
+<pre class="r"><code>sobj &lt;- Surv(GBSG2$time, GBSG2$cens)
+
+km &lt;- survfit(sobj ~ 1, data = sobj) # the survfit object builds the kaplan-meier est
+
+ggsurvplot(
+  fit = km, conf.int = FALSE,
+  risk.table = &quot;nrisk_cumevents&quot;,
+  legend = &quot;none&quot;
+) + # when there is only one curve of all patients
+  labs(
+    title = &quot;German Breast Cancer Study Group 2&quot;,
+    caption = &quot;source: GBSG2 dataset&quot;,
+    x = &quot;Time in days&quot;
+  )</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+</div>
+<div id="the-hazard-function" class="section level1">
+<h1>The Hazard Function</h1>
+<p>Survival analysis encompasses two complementary quantitative views, the survivor function, denoted by <span class="math inline">\(S(t)\)</span>, and the hazard function, denoted by <span class="math inline">\(h(t)\)</span>. The survivor function <span class="math inline">\(S(t)\)</span> gives the probability that a person survives longer than some specified time <span class="math inline">\(t\)</span>: that is, <span class="math inline">\(S(t)\)</span> gives the probability that the random variable <span class="math inline">\(T\)</span> exceeds the specified time <span class="math inline">\(t\)</span>. The survivor function is fundamental to a survival analysis, because obtaining survival probabilities for different values of <span class="math inline">\(t\)</span> provides crucial summary information from survival data.</p>
+<p>The hazard function, denoted by <span class="math inline">\(h(t)\)</span>, is given by the formula: <span class="math inline">\(h(t)\)</span> equals the limit, as <span class="math inline">\(\Delta{t}\)</span> approaches zero, of a probability statement about survival, divided by <span class="math inline">\(\Delta{t}\)</span>, where <span class="math inline">\(\Delta{t}\)</span> denotes a small interval of time.</p>
+<p><span class="math display">\[
+h(t)=\lim_{\Delta{t}\to{0}}\frac{P(t\le T &lt; t + \Delta{t} | T \ge t)}{\Delta{t}}
+\]</span></p>
+<p>Before getting into the specifics of the formula, let’s consider a conceptual interpretation. The hazard function <span class="math inline">\(h(t)\)</span> gives the instantaneous potential per unit time for the event to occur, given that the individual has survived up to time <span class="math inline">\(t\)</span>. Note that, in contrast to the survivor function, which focuses on not failing, the hazard function focuses on failing, that is, on the event occurring. Thus, in some sense, the hazard function can be considered as giving the opposite side of the information given by the survivor function.</p>
+<p>To get an idea of what we mean by instantaneous potential, consider the concept of velocity. If, for example, you are driving in your car and you see that your speedometer is registering 60 mph, what does this reading mean? It means that if in the next hour, you continue to drive this way, with the speedometer exactly on 60, you would cover 60 miles. This reading gives the potential, at the moment you have looked at your speedometer, for how many miles you will travel in the next hour. However, because you may slow down or speed up or even stop during the next hour, the 60-mph speedometer reading does not tell you the number of miles you really will cover in the next hour. The speedometer tells you only how fast you are going at a given moment; that is, the instrument gives your instantaneous potential or velocity.</p>
+<p>Similar to the idea of velocity, a hazard function <span class="math inline">\(h(t)\)</span> gives the instantaneous potential at time <span class="math inline">\(t\)</span> for getting an event, like death or some disease of interest, given survival up to time <span class="math inline">\(t\)</span>. The “given” part, that is, surviving up to time <span class="math inline">\(t\)</span>, is analogous to recognizing in the velocity example that the speedometer reading at a point in time inherently assumes that you have already traveled some distance (i.e., survived) up to the time of the reading.</p>
+<p>In mathematical terms, the given part of the formula for the hazard function is found in the probability statement in the numerator to the right of the limit sign. This statement is a conditional probability because it is of the form, “P of A, given B,” where the P denotes probability and where the long vertical line separating A from B denotes “given.” In the hazard formula, the conditional probability gives the probability that a person’s survival time, <span class="math inline">\(T\)</span>, will lie in the time interval between <span class="math inline">\(t\)</span> and <span class="math inline">\(t + \Delta{t}\)</span>, given that the survival time is greater than or equal to <span class="math inline">\(t\)</span>. Because of the given sign here, the hazard function is sometimes called a <strong>conditional failure rate</strong>.</p>
+<p>Be careful to note that the hazard is a <strong>rate</strong> rather than a probability. Note that in the hazard function formula, the expression to the right of the limit sign gives the ratio of two quantities. The numerator is the conditional probability we just discussed. The denominator is <span class="math inline">\(\Delta{t}\)</span>, which denotes a small time interval. By this division, we obtain a probability per unit time, which is no longer a probability but a rate. In particular, the scale for this ratio is not 0 to 1, as for a probability, but rather ranges between 0 and infinity, and depends on whether time is measured in days, weeks, months, or years, etc.</p>
+<p>When we take the limit of the right-side expression as the time interval approaches zero, we are essentially getting an expression for the instantaneous probability of failing at time <span class="math inline">\(t\)</span> per unit time. Another way of saying this is that the conditional failure rate or hazard function <span class="math inline">\(h(t)\)</span> gives the instantaneous potential for failing at time <span class="math inline">\(t\)</span> per unit time, given survival up to time <span class="math inline">\(t\)</span>.</p>
+<p>As with a survivor function, the hazard function <span class="math inline">\(h(t)\)</span> can be graphed as <span class="math inline">\(t\)</span> ranges over various values. In contrast to a survivor function, the graph of <span class="math inline">\(h(t)\)</span> does not have to start at 1 and go down to zero, but rather can start anywhere and go up and down in any direction over time. In particular, for a specified value of <span class="math inline">\(t\)</span>, the hazard function <span class="math inline">\(h(t)\)</span> has the following characteristics:</p>
+<ul>
+<li>it is always non-negative, that is, equal to or greater than zero, and</li>
+<li>it has no upper bound.</li>
+</ul>
+<p>Of the two functions we have considered, <span class="math inline">\(S(t)\)</span> and <span class="math inline">\(h(t)\)</span>, the survivor function is more naturally appealing for analysis of survival data, simply because <span class="math inline">\(S(t)\)</span> directly describes the survival experience of a study cohort. However, the hazard function is also of interest for the following reasons:</p>
+<ul>
+<li>it is a measure of instantaneous potential whereas a survival curve is a cumulative measure over time</li>
+<li>it may be used to identify a specific model form, such as an exponential, a Weibull, or a lognormal curve that fits one’s data</li>
+<li>it is the vehicle by which mathematical modeling of survival data is carried out; that is, the survival model is usually written in terms of the hazard function.</li>
+</ul>
+<p>Regardless of which function <span class="math inline">\(S(t)\)</span> or <span class="math inline">\(h(t)\)</span> one prefers, there is a clearly defined relationship between the two. In fact, if one knows the form of <span class="math inline">\(S(t)\)</span>, one can derive the corresponding <span class="math inline">\(h(t)\)</span>, and vice versa.</p>
+<p>In any actual data analysis, R / Stata / SAS / Matlab can make the numerical transformation from <span class="math inline">\(S(t)\)</span> to <span class="math inline">\(h(t)\)</span>, or vice versa, without the user ever having to use either formula. The point here is simply that if you know either <span class="math inline">\(S(t)\)</span> or <span class="math inline">\(h(t)\)</span>, you can get the other directly.</p>
+<hr />
+<div id="the-weibull-model" class="section level2">
+<h2>The Weibull model</h2>
+<p>To create a parametric survival model in R, the survival object from above is simply fed into the <code>survreg()</code> function of the <code>{survival}</code> package. As a first pass demonstration here, we will use formula notation to model on none of the data features with <code>~ 1</code>. Model probabilities between 0.01 and 0.99 are fed into the model to predict the time at each, and the associated plot is shown here:</p>
+<pre class="r"><code># Weibull model
+wb &lt;- survival::survreg(Surv(time, cens) ~ 1, GBSG2)
+
+# Retrieve survival curve from model probabilities
+surv &lt;- seq(.99, .01, by = -.01)
+
+# Get time for each probability
+t &lt;- predict(wb, type = &quot;quantile&quot;, p = 1 - surv, newdata = data.frame(1))
+
+# Create data frame with the information
+surv_wb &lt;- data.frame(
+  time = t, surv = surv,
+  upper = NA, lower = NA, std.err = NA
+)
+
+ggsurvplot_df(fit = surv_wb, surv.geom = geom_line, legend = &quot;none&quot;) +
+  labs(
+    title = &quot;German Breast Cancer Study Group 2&quot;,
+    subtitle = &quot;Weibull model&quot;,
+    caption = &quot;source: GBSG2 dataset&quot;,
+    x = &quot;Time in days&quot;
+  )</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-7-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>The base Weibull model curve is a smoothed parametric form of the stepped Kaplan-Meier curve that we saw earlier. The power of the parametric approach becomes apparent when we model on the differences in features within the dataset for inference. Recall in the German Breast Cancer dataset that it includes patient attributes including classifications for the size of the tumor <code>tsize</code> and whether hormonal therapy was applied as <code>horTh</code>.</p>
+<pre class="r"><code>GBSG2 %&gt;%
+  head() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">horTh</th>
+<th align="right">age</th>
+<th align="left">menostat</th>
+<th align="right">tsize</th>
+<th align="left">tgrade</th>
+<th align="right">pnodes</th>
+<th align="right">progrec</th>
+<th align="right">estrec</th>
+<th align="right">time</th>
+<th align="right">cens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">no</td>
+<td align="right">70</td>
+<td align="left">Post</td>
+<td align="right">21</td>
+<td align="left">II</td>
+<td align="right">3</td>
+<td align="right">48</td>
+<td align="right">66</td>
+<td align="right">1814</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">yes</td>
+<td align="right">56</td>
+<td align="left">Post</td>
+<td align="right">12</td>
+<td align="left">II</td>
+<td align="right">7</td>
+<td align="right">61</td>
+<td align="right">77</td>
+<td align="right">2018</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">yes</td>
+<td align="right">58</td>
+<td align="left">Post</td>
+<td align="right">35</td>
+<td align="left">II</td>
+<td align="right">9</td>
+<td align="right">52</td>
+<td align="right">271</td>
+<td align="right">712</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">yes</td>
+<td align="right">59</td>
+<td align="left">Post</td>
+<td align="right">17</td>
+<td align="left">II</td>
+<td align="right">4</td>
+<td align="right">60</td>
+<td align="right">29</td>
+<td align="right">1807</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">no</td>
+<td align="right">73</td>
+<td align="left">Post</td>
+<td align="right">35</td>
+<td align="left">II</td>
+<td align="right">1</td>
+<td align="right">26</td>
+<td align="right">65</td>
+<td align="right">772</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">no</td>
+<td align="right">32</td>
+<td align="left">Pre</td>
+<td align="right">57</td>
+<td align="left">III</td>
+<td align="right">24</td>
+<td align="right">0</td>
+<td align="right">13</td>
+<td align="right">448</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>Because the tumor size <code>tsize</code> is numeric, we will project the 25th, 50th, and 75th quantile to understand the effect. Survival for each combination of features, or covariates, are modeled as <code>survreg(Surv(time, cens) ~ horTh + tsize, data = GBSG2)</code>. Generally speaking, the steps to crafting the visualization are</p>
+<ol style="list-style-type: decimal">
+<li>Compute the Weibull model</li>
+<li>Decide on the array of “imaginary patients” (quantiles in this case)</li>
+<li>Predict durations for each survival rate to build curves</li>
+<li>Bind a data.frame with all survival curve information for each covariate</li>
+<li>Plot</li>
+</ol>
+<pre class="r"><code>wbmod &lt;- survreg(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
+
+newdat &lt;- expand.grid(
+  horTh = levels(GBSG2$horTh),
+  tsize = quantile(GBSG2$tsize, probs = c(0.25, 0.5, 0.75))
+)
+
+surv &lt;- seq(0.99, 0.01, by = -0.01)
+
+t &lt;- predict(wbmod, type = &quot;quantile&quot;, p = 1 - surv, newdata = newdat)
+
+surv_wbmod_wide &lt;- cbind(newdat, t)
+
+# transpose the data frame
+surv_wbmod &lt;- reshape2::melt(surv_wbmod_wide,
+  id.vars = c(&quot;horTh&quot;, &quot;tsize&quot;),
+  variable.name = &quot;surv_id&quot;, value.name = &quot;time&quot;
+)
+
+surv_wbmod$surv &lt;- surv[as.numeric(surv_wbmod$surv_id)]
+
+# add variables required by the plotting function
+surv_wbmod[, c(&quot;upper&quot;, &quot;lower&quot;, &quot;std.err&quot;, &quot;strata&quot;)] &lt;- NA
+
+ggsurvplot_df(surv_wbmod,
+  surv.geom = geom_line,
+  linetype = &quot;horTh&quot;, color = &quot;tsize&quot;, legend.title = NULL
+) +
+  labs(
+    title = &quot;German Breast Cancer Study Group 2&quot;,
+    subtitle = &quot;Weibull models&quot;,
+    caption = &quot;source: GBSG2 dataset&quot;,
+    x = &quot;Time in days&quot;
+  )</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-9-1.png" width="648" style="display: block; margin: auto;" /></p>
+<div id="other-distributions-beyond-weibull" class="section level3">
+<h3>Other distributions beyond Weibull</h3>
+<p>In addition to Weibull, the <code>surveg()</code> function will model exponential, lognormal, gaussian, logistic, and loglogistic as parametric distributions on the data provided. These may be more suitable for small samples where prior information is known about the survival characteristics of the larger population.</p>
+</div>
+</div>
+<div id="the-cox-regression-model-also-known-as-the-proportional-hazards-model" class="section level2">
+<h2>The Cox regression model, also known as the proportional hazards model</h2>
+<p>In many applications of survival analysis, the interest focuses on how covariates may affect the outcome; in clinical trials, adjustment of treatment effects for effects of other explanatory variables may be crucial if the randomized groups are unbalanced with respect to important prognostic factors, and in epidemiological cohort studies, reliable effects of exposure may be obtained only if some adjustment is made for confounding variables. In these situations, a regression model is useful and the most important model for survival data is the <a href="http://www.medicine.mcgill.ca/epidemiology/hanley/bios601/Encyclopedia%20of%20Biostatistics2ndEd2005.pdf">Cox proportional hazards</a> regression model.</p>
+<pre class="r"><code>cxmod &lt;- coxph(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
+
+broom::tidy(cxmod, exp = TRUE) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">horThyes</td>
+<td align="right">0.6882602</td>
+<td align="right">0.1251764</td>
+<td align="right">-2.984494</td>
+<td align="right">0.0028405</td>
+</tr>
+<tr class="even">
+<td align="left">tsize</td>
+<td align="right">1.0153688</td>
+<td align="right">0.0035637</td>
+<td align="right">4.279772</td>
+<td align="right">0.0000187</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the model flags both horTh and tsize features as significant. However, some caution needs to be exercised in interpreting these results. While the Cox Proportional Hazard’s model is thought to be “robust”, a careful analysis would check the assumptions underlying the model. For example, the Cox model assumes that the covariates do not vary with time. In a vignette that accompanies the survival package Therneau, Crowson and Atkinson demonstrate that the Karnofsky score (karno) is, in fact, time-dependent so the assumptions for the Cox model are not met. The vignette authors go on to present a strategy for dealing with time dependent covariates.</p>
+<p>And a data visual:</p>
+<pre class="r"><code>newdat &lt;- expand.grid(
+  horTh = levels(GBSG2$horTh),
+  tsize = quantile(GBSG2$tsize, probs = c(0.25, 0.5, 0.75))
+)
+
+rownames(newdat) &lt;- letters[1:6]
+
+cxsf &lt;- survfit(cxmod, data = GBSG2, newdata = newdat, conf.type = &quot;none&quot;)
+surv_cxmod0 &lt;- surv_summary(cxsf)
+
+surv_cxmod &lt;- cbind(surv_cxmod0, newdat[surv_cxmod0$strata, ])
+
+ggsurvplot_df(surv_cxmod,
+  fun = &quot;cumhaz&quot;,
+  surv.geom = geom_line,
+  linetype = &quot;horTh&quot;,
+  color = &quot;tsize&quot;,
+  legend.title = NULL,
+  censor = FALSE
+) +
+  labs(
+    title = &quot;German Breast Cancer Study Group 2&quot;,
+    subtitle = &quot;Cox Proportional Hazard models&quot;,
+    caption = &quot;source: GBSG2 dataset&quot;,
+    x = &quot;Time in days&quot;
+  )</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-11-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Data scientists who are accustomed to computing ROC curves to assess model performance should be interested in the Concordance statistic. The documentation for the <code>survConcordance()</code> function in the <code>survival</code> package defines concordance as “the probability of agreement for any two randomly chosen observations, where in this case agreement means that the observation with the shorter survival time of the two also has the larger risk score. The predictor (or risk score) will often be the result of a Cox model or other regression” and notes that: “For continuous covariates concordance is equivalent to Kendall’s tau, and for logistic regression is is equivalent to the area under the ROC curve.”</p>
+<pre class="r"><code>fit.test &lt;- cox.zph(cxmod)
+
+ggcoxzph(fit.test)</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-12-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggcoxdiagnostics(cxmod,
+  type = &quot;deviance&quot;,
+  ax.scale = &quot;linear.predictions&quot;
+)</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-13-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggcoxdiagnostics(cxmod,
+  type = &quot;schoenfeld&quot;,
+  ax.scale = &quot;time&quot;
+)</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-14-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggforest(cxmod, data = GBSG2)</code></pre>
+<p><img src="figure/Survival.Rmd/unnamed-chunk-15-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>The quantity of interest from a Cox regression model is a hazard ratio (HR). The HR represents the ratio of hazards between two groups at any particular point in time. The HR is interpreted as the instantaneous rate of occurrence of the event of interest in those who are still at risk for the event. It is not a risk, though it is commonly interpreted as such.</p>
+<p>If you have a regression parameter <span class="math inline">\(\beta\)</span> (from column estimate in our coxph) then HR = <span class="math inline">\(e^\beta\)</span>. Thus, a HR &lt; 1 indicates reduced hazard of death whereas a HR &gt; 1 indicates an increased hazard of death.</p>
+<hr />
+<p>Additional resources</p>
+<p>The <code>survival</code> package also includes robust methods for adjusting survival models for confounding variables, multi-state models (i.e. healthy-illness-death), population contrasts, competing risks, and validation. Much more material can be found in the Vignettes.</p>
+<blockquote>
+<p><a href="https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#Part_1:_Introduction_to_Survival_Analysis">Emily C. Zabor</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/">Joe Rickert on RViews</a></p>
+</blockquote>
+<blockquote>
+<p><a href="http://www.pauldickman.com/survival/handouts/21%20-%20EoB%20Survival%20analysis%20overview.pdf">Andersen PK, Keiding N. Survival analysis, overview</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.openintro.org/download.php?file=survival_analysis_in_R&amp;referrer=/stat/surv.php">OpenIntro Survival Analysis in R</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://cran.r-project.org/web/views/Survival.html">CRAN task view on Survival Analysis</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.coursera.org/learn/survival-analysis-r-public-health">Survival Analysis in R for Public Health</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://learn.datacamp.com/courses/survival-analysis-in-r#!">Survival Analysis in R</a></p>
+</blockquote>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre class="scroll-100"><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] splines   stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] survminer_0.4.9 ggpubr_0.4.0    survival_3.2-11 broom_0.7.9    
+ [5] forcats_0.5.1   stringr_1.4.0   dplyr_1.0.7     purrr_0.3.4    
+ [9] readr_2.0.1     tidyr_1.1.3     tibble_3.1.4    ggplot2_3.3.5  
+[13] tidyverse_1.3.1 workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.2.1    systemfonts_1.0.2 
+  [4] workflows_0.2.3    plyr_1.8.6         listenv_0.8.0     
+  [7] digest_0.6.27      foreach_1.5.1      htmltools_0.5.2   
+ [10] yardstick_0.0.8    viridis_0.6.1      parsnip_0.1.7.900 
+ [13] fansi_0.5.0        ggfortify_0.4.12   magrittr_2.0.1    
+ [16] tune_0.1.6         tzdb_0.1.2         openxlsx_4.2.4    
+ [19] recipes_0.1.16     globals_0.14.0     modelr_0.1.8      
+ [22] gower_0.2.2        extrafont_0.17     R.utils_2.10.1    
+ [25] extrafontdb_1.0    hardhat_0.1.6      rsample_0.1.0     
+ [28] dials_0.0.9.9000   colorspace_2.0-2   rvest_1.0.1       
+ [31] textshaping_0.3.5  haven_2.4.3        xfun_0.25         
+ [34] crayon_1.4.1       jsonlite_1.7.2     zoo_1.8-9         
+ [37] iterators_1.0.13   glue_1.4.2         gtable_0.3.0      
+ [40] ipred_0.9-11       R.cache_0.15.0     car_3.0-11        
+ [43] Rttf2pt1_1.3.9     future.apply_1.8.1 abind_1.4-5       
+ [46] scales_1.1.1       infer_1.0.0        DBI_1.1.1         
+ [49] rstatix_0.7.0      Rcpp_1.0.7         gridtext_0.1.4    
+ [52] viridisLite_0.4.0  xtable_1.8-4       GPfit_1.0-8       
+ [55] foreign_0.8-81     km.ci_0.5-2        lava_1.6.10       
+ [58] prodlim_2019.11.13 httr_1.4.2         ellipsis_0.3.2    
+ [61] farver_2.1.0       R.methodsS3_1.8.1  pkgconfig_2.0.3   
+ [64] nnet_7.3-16        sass_0.4.0         dbplyr_2.1.1      
+ [67] utf8_1.2.2         reshape2_1.4.4     labeling_0.4.2    
+ [70] tidyselect_1.1.1   rlang_0.4.11       DiceDesign_1.9    
+ [73] later_1.3.0        cachem_1.0.6       munsell_0.5.0     
+ [76] cellranger_1.1.0   tools_4.1.1        cli_3.0.1         
+ [79] generics_0.1.0     evaluate_0.14      fastmap_1.1.0     
+ [82] ragg_1.1.3         yaml_2.2.1         rematch2_2.1.2    
+ [85] knitr_1.33         fs_1.5.0           zip_2.2.0         
+ [88] survMisc_0.5.5     nlme_3.1-152       future_1.22.1     
+ [91] whisker_0.4        R.oo_1.24.0        xml2_1.3.2        
+ [94] compiler_4.1.1     rstudioapi_0.13    curl_4.3.2        
+ [97] ggsignif_0.6.2     reprex_2.0.1       lhs_1.1.1         
+[100] bslib_0.3.0        stringi_1.7.4      highr_0.9         
+[103] gdtools_0.2.3      hrbrthemes_0.8.0   lattice_0.20-44   
+[106] Matrix_1.3-4       markdown_1.1       styler_1.5.1      
+[109] KMsurv_0.1-5       conflicted_1.0.4   vctrs_0.3.8       
+[112] tidymodels_0.1.3   pillar_1.6.2       lifecycle_1.0.0   
+[115] furrr_0.2.3        jquerylib_0.1.4    cowplot_1.1.1     
+[118] data.table_1.14.0  httpuv_1.6.2       R6_2.5.1          
+[121] promises_1.2.0.1   gridExtra_2.3      rio_0.5.27        
+[124] parallelly_1.27.0  codetools_0.2-18   MASS_7.3-54       
+[127] assertthat_0.2.1   rprojroot_2.0.2    withr_2.4.2       
+[130] mgcv_1.8-36        ggtext_0.1.1       parallel_4.1.1    
+[133] hms_1.1.0          grid_4.1.1         rpart_4.1-15      
+[136] timeDate_3043.102  class_7.3-19       rmarkdown_2.10    
+[139] carData_3.0-4      git2r_0.28.0       pROC_1.18.0       
+[142] lubridate_1.7.10  </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
