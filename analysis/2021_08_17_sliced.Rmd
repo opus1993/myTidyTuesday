@@ -30,7 +30,7 @@ The audience is invited to participate as well. This type of problem is a big ch
 
 ![](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F7f7ba5f9-d7bd-4101-8933-a112b4f78570%2FFrame_3.png?table=block&id=c7bd2635-6e3a-4227-9e2d-fbafb0480073&spaceId=2cc404e6-fe20-483d-9ea5-5d44eb3dd586&width=1510&userId=&cache=v2)
 
-Clearly there is a large imbalance here between good and bad loans. This is probably a good thing for the banks, but poses an interesting issue for us because we want to ensure we are sensitive to the bad loans and are not overwhelmed by the number of good ones. One approach that we might take is `downsample` the number of good loans so that the total number of them is more in line with the number of bad loans.
+Clearly there is a large imbalance here between good and bad loans. This is probably a good thing for the banks, but poses an interesting issue for us because we want to ensure we are sensitive to the bad loans and are not overwhelmed by the number of good ones. One approach that we might take is to `downsample` the number of good loans so that the total number of them is more in line with the number of bad loans.
 
 There are likely confounders and other feature transformations required.  I also wondered whether approaching this as a classification problem first, and building a regression second might be better. Eben Esterhuizen was kind enough to share his top-scoring Python model code at Kaggle. Interestingly, this was exactly his approach.
 
@@ -440,7 +440,7 @@ train_df %>%
   labs(subtitle = "Mean Default Value Where > $1", 
        title = "Numeric Features by Loan Origination Year",
        y = NULL, fill = "Default $") +
-  theme(aspect.ratio = 1) +
+  theme(aspect.ratio = 1.3) +
   theme_jim(base_size = 8)
 
 tmwr_cols <- viridis::viridis_pal(option = "H")
@@ -492,15 +492,17 @@ Your best alternative to any complex model isn’t “no model.” Your alternat
 
 Once you’re comparing a complicated model to a parsimonious model you can intelligently discuss the “marginal benefit (or lift) from complexity.”
 
-In the loan default dataset, predicting a nondefault class for every case results in 77.1% accuracy, doing nothing. Let's call this the NULL model.
-
 ```{r null accuracy}
 round(100*prop.table(table(train_df$default_flag)),1) 
 ```
 
+In the loan default dataset, predicting a nondefault class for every case results in 77.1% accuracy, doing nothing. Let's call this the NULL model.
+
+----
+
 ## Spending the Data
 
-We will split `train_df` randomly into a training portion (90%) and a labeled testing portion (10%). We will divide the training portion into 5-fold cross validation sets and stratify on the `default_flag` to build models that are less likely to over-fit.  
+We will split `train_df` randomly into a training portion (90%) and a labeled testing portion (10%). The training portion is then divided into 5-fold cross validation sets and stratified on the `default_flag` to ensure that each CV fold has some proportion of the imbalanced outcomes.  
 
 ```{r spending the data}
 set.seed(2021)
@@ -516,9 +518,9 @@ class_folds <- vfold_cv(training, v = 5, strata = default_flag )
 
 ## The Recipes
 
-We are going to start by taking a survey of a handful of models that train fast, have little tuning required, and are generally interpretable. The pre-processor, or {`tidymodels`} `recipe()`, transforms the dataframe into formats that machine learning algorithms can work with. 
+We are going to start by taking a survey of a handful of models that train fast, have little tuning required, and are generally interpretable. The choice of pre-processor, or `tidymodels` `recipe()` steps, transforms the dataframe into formats that machine learning algorithms can work with. 
 
-Our strategy here is to pre-process at three levels. The first, `classification_rec` is a raw dataset with all categorical predictors intact. The second, `dummies_classification_rec` tunes a threshold for lumping parameters together and then creates dummy variables from the categoricals so everything is numeric. With so many category levels, this training set could be thousands of columns wide, and sparse. There is a cardinality tradeoff here, where each additional column may not contribute much to the model. The third pre-processor works as a sort of supervised learning version of principal components analysis, called [Partial Least Squares](https://www.tmwr.org/dimensionality.html#partial-least-squares), that simultaneously maximize the variation in the predictors while also maximizing the relationship between those components and the outcome.
+Our strategy here is to pre-process at three levels. The first, `classification_rec` is a raw dataset with all categorical predictors intact. The second, `dummies_classification_rec` tunes a threshold for lumping categorical levels together and then creates dummy variables so everything is numeric. With so many category levels, this training set could be thousands of columns wide, and sparse. There is a cardinality tradeoff here, where each additional column may not contribute much to the model. The third pre-processor, `pls_classification_rec`, works as a sort of supervised learning version of principal components analysis, called [Partial Least Squares](https://www.tmwr.org/dimensionality.html#partial-least-squares), that simultaneously maximize the variation in the predictors while also maximizing the relationship between those components and the outcome.
 
 ```{r classification recipes}
 
@@ -648,9 +650,9 @@ rda_spec <-
 
 ```
 
-## Model Tuning
+## GLM Model Tune
 
-We are going to quickly race through a grid of of parameter combinations. I will set reasonable parameters ranges for the categorical variable lumping and the number of PLS components.
+We are going to quickly race through a grid of 6 parameter combinations with `workflowsets`. I will set reasonable parameters ranges in advance for the categorical variable lumping and the number of PLS components.
 
 ```{r parallel, eval = FALSE}
 ctrl <- control_race(parallel_over = "everything",
@@ -766,16 +768,27 @@ write_rds(default_res, here::here(data_dir, "baselines.rds"))
 ```
 
 `i 1 of 6 tuning:     factor_glmnet`
+
 `v 1 of 6 tuning:     factor_glmnet (1h 1m 15.9s)`
+
 `i 2 of 6 tuning:     factor_fda`
+
 `v 2 of 6 tuning:     factor_fda (57m 56.7s)`
+
 `i 3 of 6 tuning:     factor_rda`
+
 `v 3 of 6 tuning:     factor_rda (13m 13.9s)`
+
 `i 4 of 6 tuning:     pls_glmnet`
+
 `v 4 of 6 tuning:     pls_glmnet (9m 10.9s)`
+
 `i 5 of 6 tuning:     pls_fda`
+
 `v 5 of 6 tuning:     pls_fda (10m 18.3s)`
+
 `i 6 of 6 tuning:     pls_rda`
+
 `v 6 of 6 tuning:     pls_rda (11m 49.3s)`
 
 ```{r baseline workflowsets collect_metrics}
@@ -845,7 +858,10 @@ With our class probabilities in hand, we can use `make_two_class_pred()` to conv
 lending_test_pred %>%
   mutate(.pred = make_two_class_pred(.pred_nondefault, levels(default_flag), threshold = .5)) %>%
   dplyr::select(default_flag, contains(".pred")) %>% 
-  count(.truth = default_flag, .pred)
+  conf_mat(truth = default_flag, estimate = .pred) %>% 
+  autoplot() +
+  labs(title = "GLM Confusion Matrix at 0.5 Cutoff")
+
 ```
 
 With a 0.5 threshold, almost all of the loans were predicted as “nondefault”. Perhaps this has something to do with the large class imbalance. On the other hand, the bank might want to be more stringent with what is classified as a “good” loan, and might require a probability of 0.75 as the threshold.
@@ -854,7 +870,9 @@ With a 0.5 threshold, almost all of the loans were predicted as “nondefault”
 lending_test_pred %>%
   mutate(.pred = make_two_class_pred(.pred_nondefault, levels(default_flag), threshold = .75)) %>%
   dplyr::select(default_flag, contains(".pred")) %>% 
-  count(.truth = default_flag, .pred)
+  conf_mat(truth = default_flag, estimate = .pred) %>% 
+  autoplot() +
+  labs(title = "GLM Confusion Matrix at 0.75 Cutoff")
 ```
 
 In this case, many the bad loans were correctly classified as bad, but more of the good loans were also misclassified as bad now. There is a tradeoff here, which can be somewhat captured by the metrics `sensitivity` and `specificity`.
@@ -927,7 +945,7 @@ glm_classification_fit %>%
 
 Let's use the insights gained above, including the variable importance scores, to build a better boosted model.
 
-## Catboost
+## Catboost Model Tune
 
 [Catboost](https://catboost.ai/) is a high-performance open source library for gradient boosting on decision trees. The algorithm has advantages in automatically handling deep categorical and hieararchies of categorical features and leveraging the residuals of the weak learners to boost additional rounds of model training. The catboost specification requires five tuning parameters, so it often takes more time to find optimal combinations.
 
@@ -1130,7 +1148,7 @@ Good enough to move forward. Loans predicted in the classifier to default will b
 
 ## Variable Importance
 
-Let's look at the features that contributed the most to this classification model:
+Let's look at the features that contributed the most to this classification model. 
 
 ```{r classifier variable importance}
 
@@ -1145,7 +1163,7 @@ classification_fit %>%
     geom_col() +
   labs(title = "Catboost SBA Default Classification Feature Importance",
        y = NULL, x = NULL)
-  
+
 ```
 
 The interaction feature that built by binding the bank to the approval year ended up as the most important feature, and the second most important is the ration between SBA_Approval value and the Gross Loan value. 
@@ -1566,29 +1584,29 @@ I like to come back to either these scores, or partial dependence plots, to be a
 
 ```{r regression variable importance}
 
-regression_fit %>% 
-  extract_fit_engine() %>% 
-  catboost.get_feature_importance(pool = NULL, 
-                                  type = 'FeatureImportance',
-                                  thread_count = -1) %>% 
-  as_tibble(rownames = "Feature") %>% 
-  mutate(Feature = fct_reorder(Feature, V1)) %>% 
-  ggplot(aes(V1, Feature)) +
-    geom_col() +
-  labs(title = "Regression Feature Importance",
-       y = NULL, x = NULL)
-  
+vip_regressor <- 
+  DALEXtra::explain_tidymodels(
+    regression_fit,
+    data = augment(regression_fit, augment(classification_fit, train_df)) %>% 
+                        mutate(.pred = if_else(default_flag == "default", .pred, 0)) %>% 
+                        select(-default_amount),
+    y = augment(regression_fit, augment(classification_fit, train_df)) %>% 
+                        mutate(.pred = if_else(default_flag == "default", .pred, 0)) %>% 
+                        select(default_amount),
+    label = "Catboost Regression",
+    verbose = FALSE
+  ) %>% 
+  DALEX::model_parts()
+
+ggplot_imp(vip_regressor) +
+  labs(title = "SBA Default Amount Regression Feature Importance")
+
 ```
 
 # {-}
 
 With all models built and fit, we can now pipeline the whole process for the holdout and make the Kaggle submission.
 
-```{r, eval = FALSE}
-augment(regression_fit, augment(classification_fit, competition_submission_df) %>% 
-                        mutate(.pred = if_else(default_flag == "default", .pred, 0))) 
-
-```
 
 ```{r post csv xgboost2, eval = FALSE}
 shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Catboost with advanced preprocessing model 2"'))
