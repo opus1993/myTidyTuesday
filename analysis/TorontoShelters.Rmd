@@ -1,0 +1,483 @@
+---
+title: "Toronto Homeless Shelters"
+author: "Jim Gruman"
+date: "December 1, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+The data this week comes from Sharla Gelfand's `opendatatoronto` R package. Her website has additional details and all sorts of other great datasets.
+
+We are going to explore many of the time series aspects of Homelessness in Toronto, overlay the daily weather, and finally attempt to model and infer what drives the occupancy rate.
+
+```{r setup}
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(lubridate)
+library(hrbrthemes)
+extrafont::loadfonts(quiet = TRUE)
+library(treemap)
+library(tidymodels)
+})
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+```
+
+```{r Load}
+
+tt <- tidytuesdayR::tt_load("2020-12-01")
+
+```
+
+```{r Readme, eval = interactive()}
+
+tt
+
+```
+
+An initial look at the format of the dataset provided:
+
+```{r Glimpse}
+tt %>% 
+  map(glimpse) 
+```
+
+The dataset appears to be a daily report-out of every facility's occupancy and capacity.
+
+## Let's grab the weather too
+
+Importing climate daily stats from "https://toronto.weatherstats.ca/download.html"
+
+```{r}
+weather <- read_csv(here::here("data/weatherstats_toronto_daily.csv")) %>%
+  select(date, max_temperature, min_temperature, avg_temperature, precipitation)
+```
+
+Some fields in the shelter data need be cast as integers and dates. We will also impute to fill-in missing capacity figures on the daily reports, where possible
+
+```{r Wrangle}
+shelters <- tt$shelters %>% 
+  mutate(across(occupancy:capacity, as.integer),
+         occupancy_date = lubridate::as_date(occupancy_date)) %>% 
+    group_by(facility_name, shelter_name, organization_name) %>% 
+    fill(capacity, .direction = "downup") %>% 
+    ungroup()
+```
+
+# Some basic facts about Toronto's homeless shelter network
+
+The network consists of `r count(distinct(shelters, organization_name))` organizations with `r count(distinct(shelters, shelter_name))` named shelters with `r count(distinct(shelters, facility_name))` individual facility locations. Some sites host families, some men, and some women.
+
+```{r}
+shelters %>%
+  filter(!is.na(capacity)) %>% 
+  group_by(facility_name) %>% 
+  summarize(max_cap = max(capacity, na.rm = TRUE),
+            .groups = "drop") %>% 
+  slice_max(order_by = max_cap, n = 10) %>% 
+  mutate(facility_name = fct_reorder(facility_name, max_cap)) %>% 
+  ggplot(aes(max_cap, facility_name)) +
+  geom_col(aes(fill = facility_name),
+           show.legend = FALSE) +
+  labs(title = "Toronto's Largest Homeless Shelter Facilities",
+       subtitle = "The Radisson has 902 beds",
+       x = "Capacity each Night", y = "",
+       caption = "Data: open.toronto.ca | Visual: jim_gruman") +
+  theme(panel.grid.major.y = element_blank())
+  
+```
+
+Some of the largest shelters appear to be re-purposed hotel facilities. 
+
+For reference, let's sum the maximum bed capacity at all facilities for a perspective of the total network capacity:
+
+```{r}
+shelters %>%
+  filter(!is.na(capacity)) %>%   
+  group_by(facility_name) %>% 
+  summarize(max_cap = max(capacity),
+            .groups = "drop") %>% 
+  summarise(Total_Capacity = sum(max_cap, na.rm = TRUE))
+```
+
+There may have been some facility name changes, because the detail by month does not support this grand total.
+
+Typical facilities are under 200 beds
+
+```{r}
+shelters %>% 
+  ggplot() +
+  geom_histogram(aes(capacity), fill = 2) +
+  labs(
+    title = "Capacity Range of Facilities in Toronto's Homeless Shelter System",
+    subtitle = "Some of the largest shelters appear to be re-purposed hotel facilities.",
+    y = "Number of Facilities", 
+    x = "Bed Capacity",
+    caption = "Data: open.toronto.ca | Visual: jim_gruman"
+  )
+```
+
+```{r}
+shelter_cap <- shelters %>% 
+  filter(capacity > 0) %>% 
+  group_by(organization_name, shelter_name, facility_name) %>% 
+  summarize(capacity = max(capacity, na.rm = TRUE),
+            .groups = "drop")
+
+treemap(shelter_cap,
+        index = c("organization_name",
+                  "shelter_name",
+                  "facility_name"),
+        vSize = "capacity", type = "index",
+        fontsize.labels = c(9,6,4),
+        fontcolor.labels = c("white","black","black"),
+        bg.labels = c("transparent"),
+        palette = "Set1",
+        title = "Capacity of Toronto's Homeless Shelter System"
+        ) 
+
+```
+
+Let's look at capacity across the network, by month, over time:
+
+```{r}
+shelters %>% 
+  group_by(month = month(occupancy_date, 
+                 abbr = TRUE,
+                 label = TRUE),
+           year = factor(year(occupancy_date),
+                        levels = c("2019","2018","2017")),
+           facility_name) %>% 
+  summarize(avg_cap = mean(capacity, na.rm = TRUE),
+            .groups = "drop_last") %>% 
+  summarize(tot_cap = sum(avg_cap, na.rm = TRUE),
+            .groups = "drop") %>% 
+  ggplot(aes(month, tot_cap, color = year, group = year)) +
+  geom_line(size = 2) +
+  scale_y_continuous(label = scales::comma_format()) +
+  scale_x_discrete(expand = c(0,0)) +
+  labs(
+    title = "Monthly Total Capacity in Toronto's Homeless Shelter System",
+    subtitle = "Infrastructure has grown to fill the need. Thousands of people are served every night.",
+    y = NULL, color = NULL,
+    x = NULL,
+    caption = "Data: open.toronto.ca | Visual: jim_gruman"
+  ) +
+  theme(legend.position = c(0.85,0.5),
+        legend.background = element_rect(color = "white"))
+
+```
+
+Let's take a similar approach and sum up the facility occupancy each month
+
+```{r}
+shelters %>% 
+  group_by(month = month(occupancy_date, 
+                 abbr = TRUE,
+                 label = TRUE),
+           year = factor(year(occupancy_date),
+                        levels = c("2019","2018","2017")), facility_name) %>% 
+  summarize(tot_occupancy = mean(occupancy, na.rm = TRUE),
+            .groups = "drop_last") %>% 
+  summarize(tot_occupancy = sum(tot_occupancy),
+            .groups = "drop") %>%
+  ggplot(aes(month, tot_occupancy, color = year, group = year)) +
+  geom_line(size = 2) +
+  scale_y_continuous(label = scales::comma_format()) +
+  scale_x_discrete(expand = c(0,0)) +
+  labs(
+    title = "Monthly Total Occupancy in Toronto's Homeless Shelter System",
+    y = NULL,
+    x = NULL, color = NULL,
+    caption = "Data: open.toronto.ca | Visual: jim_gruman"
+  ) +
+  theme(legend.position = c(0.9,0.5),
+        legend.background = element_rect(color = "white"))
+
+```
+
+Essentially dividing the occupancy by the capacity, this is the aggregated result as a percentage rate:
+
+```{r}
+shelters %>% 
+  group_by(month = month(occupancy_date, 
+                 abbr = TRUE,
+                 label = TRUE),
+           year = factor(year(occupancy_date),
+                        levels = c("2019","2018","2017")),
+           facility_name) %>% 
+  summarize(avg_occupancy = mean(occupancy, na.rm = TRUE),
+            avg_cap = mean(capacity, na.rm = TRUE),
+            .groups = "drop_last") %>% 
+  summarize(mean_rate = sum(avg_occupancy, na.rm = TRUE)/sum(avg_cap, na.rm = TRUE),
+            .groups = "drop") %>% 
+  filter(year != "2017") %>% 
+  ggplot(aes(month, mean_rate, color = year, group = year)) +
+  geom_line(size = 2) +
+  scale_y_continuous(label = scales::percent_format(accuracy = 1)) +
+  scale_x_discrete(expand = c(0,0)) +
+  labs(
+    title = "Mean Occupancy Rate in Toronto's Homeless Shelter System",
+    subtitle = "Across the network, for the sum of all facilities",
+    y = NULL,
+    x = NULL,
+    caption = "Data: open.toronto.ca | Visual: jim_gruman"
+  ) +
+  theme(legend.position = c(0.9,0.1),
+        legend.background = element_rect(color = "white"))
+
+```
+
+What about by day of the week ?
+
+```{r}
+shelters %>%
+  mutate(wday = wday(occupancy_date, 
+                     label = TRUE,
+                     abbr = TRUE), 
+           year = year(occupancy_date)) %>%
+  group_by(year, wday) %>% 
+  summarise(
+    occupancy = sum(occupancy, na.rm = TRUE),
+    capacity = sum(capacity, na.rm = TRUE),
+    rate = occupancy/capacity,
+    .groups = "drop"
+  ) %>% 
+  filter(year %in% c(2018,2019)) %>% 
+  ggplot(aes(wday, rate, 
+             color = factor(year,
+                            levels = c("2019","2018")),
+             group = year)) +
+  geom_line(size = 2) +
+  scale_x_discrete(expand = c(0,0)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
+  labs(
+    title = "Day of Week Average Occupancy Rate across Toronto's Homeless Shelter System", y = NULL, x = NULL,
+    subtitle = "Average Occupancy Rate",
+    caption = "Data: open.toronto.ca | Visual: jim_gruman", color = NULL
+  ) +
+  theme(legend.position = c(0.9, 0.2),
+        legend.background = element_rect(color = "white"))
+```
+
+The aggregate like might be misleading. What is the distribution of rates across the network each month?
+
+```{r}
+shelters %>% 
+  group_by(month = month(occupancy_date, 
+                 abbr = TRUE,
+                 label = TRUE),
+           year = factor(year(occupancy_date),
+                        levels = c("2019","2018","2017")),
+          organization_name, facility_name) %>% 
+  summarize(avg_occupancy = mean(occupancy, na.rm = TRUE),
+            avg_cap = mean(capacity, na.rm = TRUE),
+            .groups = "drop_last") %>% 
+  filter(year != "2017", avg_occupancy > 0) %>% 
+  mutate(mean_rate = avg_occupancy/avg_cap,
+         CityShelter = if_else(organization_name == "City of Toronto", "City Shelter", "All Others")) %>% 
+  ggplot(aes(month, mean_rate, group = month)) +
+  geom_boxplot(outlier.alpha = 0.001) +
+  geom_jitter(aes(shape = CityShelter), 
+              alpha = 0.7, size = 2, color = ipsum_pal()(2)[2]) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_discrete(expand = c(0,0)) +
+  labs(
+    title = "Mean Occupancy Rate for each Facility in Toronto's Homeless Shelter System",
+    subtitle = "Across the network, each month",
+    y = NULL,
+    x = NULL, shape = NULL,
+    caption = "Data: open.toronto.ca | Visual: jim_gruman"
+  ) +
+  theme(legend.position = c(0.9,0.9),
+        legend.background = element_rect(color = "white"))
+
+```
+
+Some facilities are nearly always over capacity every month. Many report exactly 100% occupancy every month.
+
+How many facilities are managed by each organization?
+
+```{r}
+shelters %>%
+  select(organization_name, facility_name) %>% 
+  distinct(facility_name, .keep_all = TRUE) %>% 
+  count(organization_name, sort = TRUE) %>%
+  mutate(organization_name = fct_reorder(organization_name, n)) %>% 
+  ggplot(aes(n, organization_name)) +
+  geom_col(aes(fill = 4),
+           show.legend = FALSE) +
+  labs(title = "Toronto Homeless Shelter Organizations",
+       x = "Number of Facilities", y = "",
+       caption = "Data: open.toronto.ca | Visual: jim_gruman") +
+  theme(panel.grid.major.y = element_blank())
+  
+```
+
+Let's join the data frames of the weather with the shelter occupancy data by date
+
+```{r}
+shelterWeather <- shelters %>%
+  filter(!is.na(occupancy)) %>%
+  filter(capacity > 0) %>%
+  filter(occupancy_date >= min(weather$date)) %>% 
+  mutate(rate = occupancy/capacity) %>%
+  select(id, organization_name, shelter_name, facility_name,
+         occupancy_date,
+         occupancy,
+         capacity,
+         rate) %>% 
+  left_join(weather, by = c("occupancy_date" = "date")) %>%
+  mutate(precipitation_deg = case_when(
+    precipitation == 0 ~ "None",
+    between(precipitation, 0.01,10) ~ "Low",
+    between(precipitation, 10.01,20) ~ "Medium",
+    between(precipitation, 20.01, 40) ~ "High",
+    TRUE ~ "Very High"
+  ),
+  org = case_when(
+    organization_name == "City of Toronto" ~ "City of Toronto",
+    TRUE ~ "All Others"
+  ))
+```
+
+What other patterns do we see each day? 
+
+Let's start with the minimum temperature. Note that the weather file earliest data is March of 2018.
+
+```{r}
+shelterWeather %>%
+  group_by(day = day(occupancy_date), 
+           month = month(occupancy_date),
+           year = year(occupancy_date)) %>%
+  summarise(
+    avg_rate = mean(rate, na.rm = TRUE),
+    avg_temp = mean(min_temperature, na.rm = TRUE),
+    avg_precipitation = mean(precipitation, na.rm = TRUE),
+    .groups = "drop"
+  ) %>% 
+  filter(year %in% c(2018,2019)) %>% 
+  ggplot(aes(avg_temp, avg_rate)) +
+  geom_point(alpha = 0.5) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  geom_smooth(se = FALSE) +
+  facet_wrap(~year) +
+  labs(
+    title = "Occupancy Rate in Toronto's Shelter System driven by  Temperature",
+    subtitle = "Based on Average Daily Minimum Temperature(Celsius)",
+    y = "Average Occupancy Rate",
+    x = "Average Temperature (Celsius)",
+    caption = "Data: open.toronto.ca | Visual: jim_gruman"
+  )
+```
+
+```{r}
+shelterWeather %>%
+  filter(precipitation > 0) %>% 
+  group_by(day = day(occupancy_date), 
+           month = month(occupancy_date),
+           year = year(occupancy_date)) %>%
+  summarise(
+    avg_rate = mean(rate, na.rm = TRUE),
+    avg_temp = mean(min_temperature, na.rm = TRUE),
+    avg_precipitation = mean(precipitation, na.rm = TRUE),
+    .groups = "drop"
+  ) %>% 
+  filter(year %in% c(2018,2019)) %>% 
+  ggplot(aes(avg_precipitation, avg_rate)) +
+  geom_point(alpha = 0.5) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_log10() +
+  geom_smooth(se = FALSE) +
+  facet_wrap(~year) +
+  labs(
+    title = "Occupancy Rate in Toronto's Shelter System Driven by Precipitation",
+    subtitle = "Based on Daily Average Precipitation",
+    y = "Average Occupancy Rate",
+    x = "Average Precipitation (mm) on Log Scale",
+    caption = "Data: open.toronto.ca | Visual: jim_gruman"
+  )
+```
+
+Lets build a model of Over-Capacity events at each facility with features for the weekday, month, temperature, precipitation, and the two level org identifying the city shelters to make some inferences about what might be drivers of overcrowding.
+
+Setting the breakpoint for over capacity at 0.999 could be argued because every shelter should have 1 empty bed for newcomers. It yields a data set that is largely balanced between response classes.
+
+```{r}
+shelter_df <- shelterWeather %>% 
+  mutate(over_cap = factor(if_else(rate > 0.9999, "Yes", "No"))) %>% 
+  select(over_cap, occupancy_date, 
+         min_temperature, 
+         precipitation_deg, 
+         org) 
+
+table(shelter_df$over_cap)
+```
+
+
+```{r }
+shelter_rec <-
+  recipe(over_cap ~ ., data = shelter_df) %>% 
+  step_date(occupancy_date, 
+            features = c("dow","month")) %>% 
+  step_holiday(occupancy_date, 
+               holidays = timeDate::listHolidays("CA")) %>% 
+  step_rm(occupancy_date) %>% 
+  step_dummy(all_nominal(), -all_outcomes()) %>% 
+  step_center(all_predictors()) %>% 
+  step_scale(all_predictors()) %>% 
+  step_zv(all_predictors())
+
+glm_mod <- logistic_reg() %>%
+  set_engine("glm") %>% 
+  set_mode("classification")
+
+shelter_wflow <- workflow() %>% 
+  add_model(glm_mod) %>% 
+  add_recipe(shelter_rec)
+
+```
+
+Let's fit the linear model
+
+```{r}
+shelter_glmfit <-
+  shelter_wflow %>% 
+  fit(data = shelter_df)
+```
+
+This `shelter_glmfit` object has the finalized recipe and fitted model objects inside. Let's extract the model objects from the workflow. 
+
+For over capacity events, what features can we infer may be significant? 
+
+```{r}
+shelter_glmfit %>% 
+  tidy(conf.int = TRUE, exponentiate = TRUE) %>%
+  filter(term != "(Intercept)") %>%
+  mutate(term = fct_reorder(term, estimate)) %>%
+  ggplot(aes(estimate, term)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), color = "gray") +
+  geom_vline(xintercept = 1, color = "red") +
+  labs(
+    title = "Relative risk factors for Shelter Facility Overcapacity",
+    caption = "Data: open.toronto.ca | Visual: jim_gruman",
+    x = "Exponentiated estimate for log odds", y = NULL
+  )
+```
+
+There is some evidence in this dataset that the months of December, (January), February, March, April, May, and June drive over occupancy over capacity. Also, the City of Toronto facilities themselves are over capacity.
+
+My tweet from the archives:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1334250855319687175")
+```
+
