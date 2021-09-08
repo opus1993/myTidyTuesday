@@ -39,17 +39,9 @@ tweetrmd::include_tweet("https://twitter.com/EbenEsterhuizen/status/142783730342
 
 ```
 
-```{css, echo=FALSE}
-.scroll-100 {
-  max-height: 100px;
-  overflow-y: auto;
-  background-color: inherit;
-}
-```
-
 My plan here is to re-write his approach in R, make a number of improvements, and explain how it all works. Let's load up R packages:
 
-```{r setup, class.output="scroll-100"}
+```{r setup}
 
 suppressPackageStartupMessages({
 library(tidyverse) # clean and transform rectangular data
@@ -75,7 +67,8 @@ library(themis) # ml prep tools for handling unbalanced datasets
 })
 
 source(here::here("code","_common.R"),
-       verbose = FALSE)
+       verbose = FALSE,
+       local = knitr::knit_global())
 
 theme_set(theme_jim(base_size = 14))
 
