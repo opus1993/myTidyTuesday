@@ -1,0 +1,90 @@
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  eval = TRUE,
+  cache.lazy = FALSE,
+  df_print = "paged",
+  dpi = 72, # this creates 2*105 dpi at 6 in, which is 300 dpi at 4.2
+  tidy = "styler",
+  dev = "ragg_png", 
+  autodep = TRUE,
+  fig.align = 'center',
+  fig.width = 9,
+  fig.asp = 0.618,  # 1 / phi
+  class.output = "scroll-100"
+)
+
+knitr::opts_template$set(
+  fig.large = list(fig.asp = 0.8, out.width = '100%'),
+  fig.square = list(fig.asp = 1, out.width = '100%'),
+  fig.long = list(fig.asp = 1.5, out.width = '100%')
+)
+
+alpha_viridis <- function(...) {
+  scale_fill_gradientn(..., colors = viridis::viridis(256, option = 'H'))
+}
+
+color_index <- c(12,8,4,11,7,3,10,6,2,9,5,1)
+
+options(
+  ggplot2.discrete.fill = viridis::viridis_pal(option = "H")(12)[color_index],
+  ggplot2.discrete.colour = viridis::viridis_pal(option = "H")(12)[color_index],
+  ggplot2.continuous.fill = alpha_viridis,
+  ggplot2.continuous.colour = alpha_viridis
+)
+
+hrbrthemes::update_geom_font_defaults(hrbrthemes::font_rc_light)
+
+theme_jim <- function(base_size = 12){
+   hrbrthemes::theme_ipsum_tw(base_size = base_size) %+replace%
+      theme(plot.title.position = "plot",
+            plot.caption.position = "plot")
+}
+
+autoplot.conf_mat <- function(object, type = "heatmap", ...) {
+  cm_heat(object)
+}
+
+cm_heat <- function(x) {
+  `%+%` <- ggplot2::`%+%`
+  
+  table <- x$table
+  
+  df <- as.data.frame.table(table)
+  
+  # Force known column names, assuming that predictions are on the
+  # left hand side of the table (#157).
+  names(df) <- c("Prediction", "Truth", "Freq")
+  
+  # Have prediction levels going from high to low so they plot in an
+  # order that matches the LHS of the confusion matrix
+  lvls <- levels(df$Prediction)
+  df$Prediction <- factor(df$Prediction, levels = rev(lvls))
+  axis_labels <- yardstick:::get_axis_labels(x)
+  
+  df %>%
+    ggplot2::ggplot(
+      ggplot2::aes(
+        x = Truth,
+        y = Prediction,
+        fill = Freq
+      )
+    ) %+%
+    ggplot2::geom_tile() %+%
+    ggplot2::scale_fill_viridis_c(option = "H") %+%
+    ggplot2::theme(
+      panel.background = ggplot2::element_blank(),
+      legend.position = "none"
+    ) %+%
+    ggplot2::geom_text(mapping = ggplot2::aes(label = Freq,
+                                              color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))), 
+                       size = 30) %+% 
+    ggplot2::labs(x = axis_labels$x, y = axis_labels$y)
+}
+
+tidymodels::tidymodels_prefer(quiet = TRUE)
+conflicted::conflict_prefer("vi", "vip", quiet = TRUE)
+conflicted::conflict_prefer("explain", "lime", quiet = TRUE)
+conflicted::conflict_prefer("select", "dplyr", quiet = TRUE)
