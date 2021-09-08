@@ -8,7 +8,6 @@ knitr::opts_chunk$set(
   df_print = "paged",
   dpi = 72,
   tidy = "styler",
-  tidy.opts = list(comment = FALSE),
   dev = "ragg_png",
   autodep = TRUE,
   fig.align = 'center',
