@@ -404,16 +404,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb33c0f7c892ef515adc8f98a16689a20edce853atargetblankb33c0f7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/b33c0f7c892ef515adc8f98a16689a20edce853a" target="_blank">b33c0f7</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeedd4303e487af5072853a69955cd6a0f2638a053targetblankedd4303a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/edd4303e487af5072853a69955cd6a0f2638a053" target="_blank">edd4303</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb33c0f7c892ef515adc8f98a16689a20edce853atargetblankb33c0f7a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeedd4303e487af5072853a69955cd6a0f2638a053targetblankedd4303a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/b33c0f7c892ef515adc8f98a16689a20edce853a" target="_blank">b33c0f7</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/edd4303e487af5072853a69955cd6a0f2638a053" target="_blank">edd4303</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -422,14 +422,8 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Untracked files:
-    Untracked:  catboost_info/
-    Untracked:  data/2021-09-08/
-
-Unstaged changes:
-    Modified:   analysis/2021_08_17_sliced.Rmd
-    Modified:   code/_common.R
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
 
 </code></pre>
 <p>
@@ -468,6 +462,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/edd4303e487af5072853a69955cd6a0f2638a053/analysis/Survival.Rmd" target="_blank">edd4303</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-08
+</td>
+<td>
+knit_global
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/d6bb4c21a673fd8e9dae87f5c408d2fe5f50fe8c/docs/Survival.html" target="_blank">d6bb4c2</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -557,31 +585,25 @@ wflow_publish(“analysis/Survival.Rmd”)
 <p>First, duration times are always positive. Recall that traditional linear regression models make a number of assumptions for independence and normality that are no longer valid in this space. There are distributions, like Weibull, that better represent the problem space. More on this topic later.</p>
 <p>The <code>survival</code> package is the cornerstone of the entire R survival analysis edifice. Not only is the package itself rich in features, but the object created by the <code>Surv()</code> function, which contains failure time and censoring information, is the basic survival analysis data structure in R. Dr. Terry Therneau, the package author, began working on the survival package in 1986. The first public release, in late 1989, used the Statlib service hosted by Carnegie Mellon University. Thereafter, the package was incorporated directly into Splus, and subsequently into R.</p>
 <p>Let’s look at a quick manual example graphically before moving on. The first thing to do is to use <code>Surv()</code> to build the standard survival object. In this case, the variable <code>time</code> is vector of durations, and the variable <code>event</code> is a binary vector of 1’s for the event of interest and 0’s for lack of event at the end of the study period (censored).</p>
-<pre class="r"><code>time &lt;- c(5, 6, 2, 4, 4)
-event &lt;- c(1, 0, 0, 1, 1)
+<pre class="r"><code>time &lt;- c(5,6,2,4,4)
+event &lt;- c(1,0,0,1,1)
 
 Surv(time, event)</code></pre>
-<pre class="scroll-100"><code>[1] 5  6+ 2+ 4  4 </code></pre>
+<pre><code>[1] 5  6+ 2+ 4  4 </code></pre>
 <p>A simple way of depicting the survival rate of the population Kaplan-Meier estimator, or product limit estimator chart. A plot of the Kaplan–Meier estimator is a series of declining horizontal steps which, with a large enough sample size, approaches the true survival function for that population. The value of the survival function between successive distinct sampled observations (“clicks”) is assumed to be constant. Note that there is no drop denoted at the time points of censoring.</p>
-<pre class="r"><code>sobj &lt;- data.frame(time = time, event = event)
+<pre class="r"><code>sobj = data.frame(time = time, event = event)
 
-km &lt;- survfit(Surv(time, event) ~ 1, data = sobj) # the survfit object builds the kaplan-meier est
-ggsurvplot(
-  fit = km, conf.int = FALSE,
-  risk.table = &quot;nrisk_cumevents&quot;,
-  legend = &quot;none&quot;
-) +
-  labs(
-    title = &quot;Kaplan-Meier (KM) Curve&quot;,
-    subtitle = &quot;Each step down represents an event of interest&quot;
-  )</code></pre>
+km &lt;- survfit(Surv(time, event) ~ 1, data = sobj)    # the survfit object builds the kaplan-meier est
+ggsurvplot(fit = km, conf.int = FALSE,
+           risk.table = &quot;nrisk_cumevents&quot;,
+           legend = &quot;none&quot;)  +
+  labs(title = &quot;Kaplan-Meier (KM) Curve&quot;,
+       subtitle = &quot;Each step down represents an event of interest&quot;)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>The <code>ggfortify</code> package also contains methods for autoplotting simple survival plots.</p>
 <pre class="r"><code>ggfortify:::autoplot.survfit(km) +
-  labs(
-    title = &quot;Kaplan-Meier (KM) Curve&quot;,
-    subtitle = &quot;Each step down represents an event of interest&quot;
-  )</code></pre>
+  labs(title = &quot;Kaplan-Meier (KM) Curve&quot;,
+       subtitle = &quot;Each step down represents an event of interest&quot;)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>It is important to note here that the KM curve is a non-parametric curve. That is, the curve is simply a description of the underlying data and that there are no parameters involved. Most use cases in this problem space ask that we model to predict the behavior of a population, or the behavior of a change in a treatment of the population. To do so will require that we introduce other concepts, like the <code>hazard</code> parameter. More on this later.</p>
 <hr />
@@ -604,30 +626,24 @@ ggsurvplot(
 <p><span class="math display">\[S(t)=1-F(t)=P(T&gt;t)\]</span></p>
 <p>Let’s pause here and consider what the x-axis duration units can be. It would be easy to see how the duration would be calendar time in years, months, or even days. But survival problems can also be modeled in hours or minutes. And in some cases, series like a sequence of pitches in baseball or engine operating hours are suitable for survival analysis. A pitcher that is not pitching and an engine that is not running will not likely experience events of interest.</p>
 <p>Let’s take a closer look at a German Breast Cancer dataset to explore how to answer the question “What is the probability that a breast cancer patient survives longer than 5 years?” The set includes 686 women tracked in a study along with characteristics of each patient. The censoring indicator <code>cens</code> equals 1 for death and 0 for no death within the study timeframe (censored) and the time unit is in days.</p>
-<pre class="r"><code>data(GBSG2, package = &quot;TH.data&quot;) # breast cancer patients, time to death
+<pre class="r"><code>data(GBSG2, package = &quot;TH.data&quot;)     # breast cancer patients, time to death
 
 ggplot(GBSG2, aes(factor(cens))) +
   geom_bar(fill = hrbrthemes::ipsum_pal()(1)) +
-  labs(
-    title = &quot;German Breast Cancer Study Group 2&quot;,
-    caption = &quot;source: GBSG2 dataset&quot;
-  )</code></pre>
+  labs(title = &quot;German Breast Cancer Study Group 2&quot;,
+  caption = &quot;source: GBSG2 dataset&quot;)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>As noted above, with a large enough sample size, the KM curve approaches the true survival function for that population. We will return to this dataset to explore the impact of the study participants features on survival rates.</p>
 <pre class="r"><code>sobj &lt;- Surv(GBSG2$time, GBSG2$cens)
 
-km &lt;- survfit(sobj ~ 1, data = sobj) # the survfit object builds the kaplan-meier est
+km &lt;- survfit(sobj ~ 1, data = sobj)    # the survfit object builds the kaplan-meier est
 
-ggsurvplot(
-  fit = km, conf.int = FALSE,
-  risk.table = &quot;nrisk_cumevents&quot;,
-  legend = &quot;none&quot;
-) + # when there is only one curve of all patients
-  labs(
-    title = &quot;German Breast Cancer Study Group 2&quot;,
-    caption = &quot;source: GBSG2 dataset&quot;,
-    x = &quot;Time in days&quot;
-  )</code></pre>
+ggsurvplot(fit = km, conf.int = FALSE,
+           risk.table = &quot;nrisk_cumevents&quot;,
+           legend = &quot;none&quot;) +  # when there is only one curve of all patients
+  labs(title = &quot;German Breast Cancer Study Group 2&quot;,
+  caption = &quot;source: GBSG2 dataset&quot;,
+  x = &quot;Time in days&quot;)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
@@ -665,29 +681,25 @@ h(t)=\lim_{\Delta{t}\to{0}}\frac{P(t\le T &lt; t + \Delta{t} | T \ge t)}{\Delta{
 <pre class="r"><code># Weibull model
 wb &lt;- survival::survreg(Surv(time, cens) ~ 1, GBSG2)
 
-# Retrieve survival curve from model probabilities
+# Retrieve survival curve from model probabilities 
 surv &lt;- seq(.99, .01, by = -.01)
 
 # Get time for each probability
 t &lt;- predict(wb, type = &quot;quantile&quot;, p = 1 - surv, newdata = data.frame(1))
 
 # Create data frame with the information
-surv_wb &lt;- data.frame(
-  time = t, surv = surv,
-  upper = NA, lower = NA, std.err = NA
-)
+surv_wb &lt;- data.frame(time = t, surv = surv, 
+                      upper = NA, lower = NA, std.err = NA)
 
 ggsurvplot_df(fit = surv_wb, surv.geom = geom_line, legend = &quot;none&quot;) +
-  labs(
-    title = &quot;German Breast Cancer Study Group 2&quot;,
-    subtitle = &quot;Weibull model&quot;,
-    caption = &quot;source: GBSG2 dataset&quot;,
-    x = &quot;Time in days&quot;
-  )</code></pre>
+  labs(title = &quot;German Breast Cancer Study Group 2&quot;,
+       subtitle = &quot;Weibull model&quot;,
+  caption = &quot;source: GBSG2 dataset&quot;,
+  x = &quot;Time in days&quot;)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>The base Weibull model curve is a smoothed parametric form of the stepped Kaplan-Meier curve that we saw earlier. The power of the parametric approach becomes apparent when we model on the differences in features within the dataset for inference. Recall in the German Breast Cancer dataset that it includes patient attributes including classifications for the size of the tumor <code>tsize</code> and whether hormonal therapy was applied as <code>horTh</code>.</p>
-<pre class="r"><code>GBSG2 %&gt;%
-  head() %&gt;%
+<pre class="r"><code>GBSG2 %&gt;% 
+  head() %&gt;% 
   knitr::kable()</code></pre>
 <table>
 <thead>
@@ -815,12 +827,10 @@ ggsurvplot_df(surv_wbmod,
   surv.geom = geom_line,
   linetype = &quot;horTh&quot;, color = &quot;tsize&quot;, legend.title = NULL
 ) +
-  labs(
-    title = &quot;German Breast Cancer Study Group 2&quot;,
-    subtitle = &quot;Weibull models&quot;,
-    caption = &quot;source: GBSG2 dataset&quot;,
-    x = &quot;Time in days&quot;
-  )</code></pre>
+  labs(title = &quot;German Breast Cancer Study Group 2&quot;,
+       subtitle = &quot;Weibull models&quot;,
+  caption = &quot;source: GBSG2 dataset&quot;,
+  x = &quot;Time in days&quot;)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-8-1.png" width="648" style="display: block; margin: auto;" /></p>
 <div id="other-distributions-beyond-weibull" class="section level3">
 <h3>Other distributions beyond Weibull</h3>
@@ -832,7 +842,7 @@ ggsurvplot_df(surv_wbmod,
 <p>In many applications of survival analysis, the interest focuses on how covariates may affect the outcome; in clinical trials, adjustment of treatment effects for effects of other explanatory variables may be crucial if the randomized groups are unbalanced with respect to important prognostic factors, and in epidemiological cohort studies, reliable effects of exposure may be obtained only if some adjustment is made for confounding variables. In these situations, a regression model is useful and the most important model for survival data is the <a href="http://www.medicine.mcgill.ca/epidemiology/hanley/bios601/Encyclopedia%20of%20Biostatistics2ndEd2005.pdf">Cox proportional hazards</a> regression model.</p>
 <pre class="r"><code>cxmod &lt;- coxph(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
 
-broom::tidy(cxmod, exp = TRUE) %&gt;%
+broom::tidy(cxmod, exp = TRUE) %&gt;% 
   knitr::kable()</code></pre>
 <table>
 <thead>
@@ -876,19 +886,17 @@ surv_cxmod0 &lt;- surv_summary(cxsf)
 surv_cxmod &lt;- cbind(surv_cxmod0, newdat[surv_cxmod0$strata, ])
 
 ggsurvplot_df(surv_cxmod,
-  fun = &quot;cumhaz&quot;,
+              fun = &quot;cumhaz&quot;,
   surv.geom = geom_line,
-  linetype = &quot;horTh&quot;,
-  color = &quot;tsize&quot;,
-  legend.title = NULL,
+  linetype = &quot;horTh&quot;, 
+  color = &quot;tsize&quot;, 
+  legend.title = NULL, 
   censor = FALSE
 ) +
-  labs(
-    title = &quot;German Breast Cancer Study Group 2&quot;,
-    subtitle = &quot;Cox Proportional Hazard models&quot;,
-    caption = &quot;source: GBSG2 dataset&quot;,
-    x = &quot;Time in days&quot;
-  )</code></pre>
+  labs(title = &quot;German Breast Cancer Study Group 2&quot;,
+       subtitle = &quot;Cox Proportional Hazard models&quot;,
+  caption = &quot;source: GBSG2 dataset&quot;,
+  x = &quot;Time in days&quot;)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-10-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>Data scientists who are accustomed to computing ROC curves to assess model performance should be interested in the Concordance statistic. The documentation for the <code>survConcordance()</code> function in the <code>survival</code> package defines concordance as “the probability of agreement for any two randomly chosen observations, where in this case agreement means that the observation with the shorter survival time of the two also has the larger risk score. The predictor (or risk score) will often be the result of a Cox model or other regression” and notes that: “For continuous covariates concordance is equivalent to Kendall’s tau, and for logistic regression is is equivalent to the area under the ROC curve.”</p>
 <pre class="r"><code>fit.test &lt;- cox.zph(cxmod)
@@ -896,14 +904,12 @@ ggsurvplot_df(surv_cxmod,
 ggcoxzph(fit.test)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-11-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>ggcoxdiagnostics(cxmod,
-  type = &quot;deviance&quot;,
-  ax.scale = &quot;linear.predictions&quot;
-)</code></pre>
+                 type = &quot;deviance&quot;,
+                 ax.scale = &quot;linear.predictions&quot;)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-12-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>ggcoxdiagnostics(cxmod,
-  type = &quot;schoenfeld&quot;,
-  ax.scale = &quot;time&quot;
-)</code></pre>
+                 type = &quot;schoenfeld&quot;,
+                 ax.scale = &quot;time&quot;)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-13-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>ggforest(cxmod, data = GBSG2)</code></pre>
 <p><img src="figure/Survival.Rmd/unnamed-chunk-14-1.png" width="648" style="display: block; margin: auto;" /></p>
@@ -941,7 +947,7 @@ ggcoxzph(fit.test)</code></pre>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre class="scroll-100"><code>R version 4.1.1 (2021-08-10)
+<pre><code>R version 4.1.1 (2021-08-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 19043)
 
@@ -972,47 +978,45 @@ loaded via a namespace (and not attached):
  [13] fansi_0.5.0        ggfortify_0.4.12   magrittr_2.0.1    
  [16] tune_0.1.6         tzdb_0.1.2         openxlsx_4.2.4    
  [19] recipes_0.1.16     globals_0.14.0     modelr_0.1.8      
- [22] gower_0.2.2        extrafont_0.17     R.utils_2.10.1    
- [25] extrafontdb_1.0    hardhat_0.1.6      rsample_0.1.0     
- [28] dials_0.0.9.9000   colorspace_2.0-2   rvest_1.0.1       
- [31] textshaping_0.3.5  haven_2.4.3        xfun_0.25         
- [34] crayon_1.4.1       jsonlite_1.7.2     zoo_1.8-9         
- [37] iterators_1.0.13   glue_1.4.2         gtable_0.3.0      
- [40] ipred_0.9-11       R.cache_0.15.0     car_3.0-11        
- [43] Rttf2pt1_1.3.9     future.apply_1.8.1 abind_1.4-5       
- [46] scales_1.1.1       infer_1.0.0        DBI_1.1.1         
- [49] rstatix_0.7.0      Rcpp_1.0.7         gridtext_0.1.4    
- [52] viridisLite_0.4.0  xtable_1.8-4       GPfit_1.0-8       
- [55] foreign_0.8-81     km.ci_0.5-2        lava_1.6.10       
- [58] prodlim_2019.11.13 httr_1.4.2         ellipsis_0.3.2    
- [61] farver_2.1.0       R.methodsS3_1.8.1  pkgconfig_2.0.3   
- [64] nnet_7.3-16        sass_0.4.0         dbplyr_2.1.1      
- [67] utf8_1.2.2         reshape2_1.4.4     labeling_0.4.2    
- [70] tidyselect_1.1.1   rlang_0.4.11       DiceDesign_1.9    
- [73] later_1.3.0        cachem_1.0.6       munsell_0.5.0     
- [76] cellranger_1.1.0   tools_4.1.1        cli_3.0.1         
- [79] generics_0.1.0     evaluate_0.14      fastmap_1.1.0     
- [82] ragg_1.1.3         yaml_2.2.1         rematch2_2.1.2    
- [85] knitr_1.33         fs_1.5.0           zip_2.2.0         
- [88] survMisc_0.5.5     nlme_3.1-152       future_1.22.1     
- [91] whisker_0.4        R.oo_1.24.0        xml2_1.3.2        
- [94] compiler_4.1.1     rstudioapi_0.13    curl_4.3.2        
- [97] ggsignif_0.6.2     reprex_2.0.1       lhs_1.1.1         
-[100] bslib_0.3.0        stringi_1.7.4      highr_0.9         
-[103] gdtools_0.2.3      hrbrthemes_0.8.0   lattice_0.20-44   
-[106] Matrix_1.3-4       markdown_1.1       styler_1.5.1      
-[109] KMsurv_0.1-5       conflicted_1.0.4   vctrs_0.3.8       
-[112] tidymodels_0.1.3   pillar_1.6.2       lifecycle_1.0.0   
-[115] furrr_0.2.3        jquerylib_0.1.4    cowplot_1.1.1     
-[118] data.table_1.14.0  httpuv_1.6.2       R6_2.5.1          
-[121] promises_1.2.0.1   gridExtra_2.3      rio_0.5.27        
-[124] parallelly_1.27.0  codetools_0.2-18   MASS_7.3-54       
-[127] assertthat_0.2.1   rprojroot_2.0.2    withr_2.4.2       
-[130] mgcv_1.8-36        ggtext_0.1.1       parallel_4.1.1    
-[133] hms_1.1.0          grid_4.1.1         rpart_4.1-15      
-[136] timeDate_3043.102  class_7.3-19       rmarkdown_2.10    
-[139] carData_3.0-4      git2r_0.28.0       pROC_1.18.0       
-[142] lubridate_1.7.10  </code></pre>
+ [22] gower_0.2.2        extrafont_0.17     extrafontdb_1.0   
+ [25] hardhat_0.1.6      rsample_0.1.0      dials_0.0.9.9000  
+ [28] colorspace_2.0-2   rvest_1.0.1        textshaping_0.3.5 
+ [31] haven_2.4.3        xfun_0.25          crayon_1.4.1      
+ [34] jsonlite_1.7.2     zoo_1.8-9          iterators_1.0.13  
+ [37] glue_1.4.2         gtable_0.3.0       ipred_0.9-11      
+ [40] car_3.0-11         Rttf2pt1_1.3.9     future.apply_1.8.1
+ [43] abind_1.4-5        scales_1.1.1       infer_1.0.0       
+ [46] DBI_1.1.1          rstatix_0.7.0      Rcpp_1.0.7        
+ [49] gridtext_0.1.4     viridisLite_0.4.0  xtable_1.8-4      
+ [52] GPfit_1.0-8        foreign_0.8-81     km.ci_0.5-2       
+ [55] lava_1.6.10        prodlim_2019.11.13 httr_1.4.2        
+ [58] ellipsis_0.3.2     farver_2.1.0       pkgconfig_2.0.3   
+ [61] nnet_7.3-16        sass_0.4.0         dbplyr_2.1.1      
+ [64] utf8_1.2.2         reshape2_1.4.4     labeling_0.4.2    
+ [67] tidyselect_1.1.1   rlang_0.4.11       DiceDesign_1.9    
+ [70] later_1.3.0        cachem_1.0.6       munsell_0.5.0     
+ [73] cellranger_1.1.0   tools_4.1.1        cli_3.0.1         
+ [76] generics_0.1.0     evaluate_0.14      fastmap_1.1.0     
+ [79] ragg_1.1.3         yaml_2.2.1         knitr_1.33        
+ [82] fs_1.5.0           zip_2.2.0          survMisc_0.5.5    
+ [85] nlme_3.1-152       future_1.22.1      whisker_0.4       
+ [88] xml2_1.3.2         compiler_4.1.1     rstudioapi_0.13   
+ [91] curl_4.3.2         ggsignif_0.6.2     reprex_2.0.1      
+ [94] lhs_1.1.1          bslib_0.3.0        stringi_1.7.4     
+ [97] highr_0.9          gdtools_0.2.3      hrbrthemes_0.8.0  
+[100] lattice_0.20-44    Matrix_1.3-4       markdown_1.1      
+[103] styler_1.5.1       KMsurv_0.1-5       conflicted_1.0.4  
+[106] vctrs_0.3.8        tidymodels_0.1.3   pillar_1.6.2      
+[109] lifecycle_1.0.0    furrr_0.2.3        jquerylib_0.1.4   
+[112] cowplot_1.1.1      data.table_1.14.0  httpuv_1.6.2      
+[115] R6_2.5.1           promises_1.2.0.1   gridExtra_2.3     
+[118] rio_0.5.27         parallelly_1.27.0  codetools_0.2-18  
+[121] MASS_7.3-54        assertthat_0.2.1   rprojroot_2.0.2   
+[124] withr_2.4.2        mgcv_1.8-36        ggtext_0.1.1      
+[127] parallel_4.1.1     hms_1.1.0          grid_4.1.1        
+[130] rpart_4.1-15       timeDate_3043.102  class_7.3-19      
+[133] rmarkdown_2.10     carData_3.0-4      git2r_0.28.0      
+[136] pROC_1.18.0        lubridate_1.7.10  </code></pre>
 </div>
 </div>
 </div>
