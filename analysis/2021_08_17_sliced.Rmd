@@ -322,7 +322,7 @@ train_df %>%
 
 train_df %>% 
   plot_category(Sector) +
-  labs(title = "Transportation leads")
+  labs(title = "Construction leads")
 
 train_df %>% 
   plot_category(Bank) +
@@ -345,7 +345,7 @@ train_df %>%
 
 train_df %>% 
   plot_category(NAICS2) +
-  labs(title = "NAICS codes starting with 48")
+  labs(title = "NAICS codes starting with 23")
 
 train_df %>% 
   plot_category(NAICS3) +
@@ -353,7 +353,7 @@ train_df %>%
 
 train_df %>% 
   plot_category(NAICS4) +
-  labs(title = "NAICS codes starting with 7222")
+  labs(title = "NAICS codes starting with 8121")
 
 train_df %>% 
   plot_category(NAICS) +
@@ -393,7 +393,7 @@ train_df %>%
 
 ### Numeric Features
 
-```{r summarize numeric outcome}
+```{r summarize numeric outcome, opts.Label='fig.long'}
 train_numeric <- train_df %>% keep(is.numeric) %>% colnames()
 
 train_df %>%
@@ -422,7 +422,7 @@ train_df %>%
     x = NULL,
     y = "Count"
   ) +
-  theme(aspect.ratio = 1) +
+  theme(aspect.ratio = 1.3) +
   theme_jim(base_size = 8)
 
 train_df %>% 
@@ -1599,6 +1599,7 @@ vip_regressor <-
   DALEX::model_parts()
 
 ggplot_imp(vip_regressor) +
+  theme(aspect.ratio = 1.2) +
   labs(title = "SBA Default Amount Regression Feature Importance")
 
 ```
