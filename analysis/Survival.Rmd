@@ -27,17 +27,17 @@ ggplot2::theme_set(theme_jim(base_size = 12))
 
 Survival analysis is one of the oldest [subfields of statistics](https://www.amazon.com/Emergence-Probability-Philosophical-Statistical-Probabilistic/dp/0521685575). Basic life-table methods, including techniques for dealing with censored data, were discovered [before 1700](http://www.pauldickman.com/survival/handouts/21%20-%20EoB%20Survival%20analysis%20overview.pdf), and in the early eighteenth century, the old masters - de Moivre working on annuities, and Daniel Bernoulli studying competing risks for the analysis of smallpox inoculation - developed the modern foundations of the field. Today survival analysis models are important in **Engineering**, Insurance, **Marketing**, Medicine, Econometrics, and many other application areas. 
 
-ZedStatistics episode 1 is a quick no-code, no-math video introduction:
+[ZedStatistics](http://www.zstatistics.com/videos) episode 1 is a quick no-code, no-math video introduction:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/v1QqpG0rR1k" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+As of this post's publication, Justin Zeltzer has released [3 episodes to a playlist](https://www.youtube.com/playlist?list=PLTNMv857s9WUclZLm6OFUW3QcXgRa97jx).
 
 ## What is Survival Analysis?
 
 A simpler characterization might be *time-to-event* analysis. These are use cases where we are concerned with the time it takes for an **event** to occur after an **exposure**. As an example, an exposure might be the date of a medical diagnosis. Or it could be the moment of childbirth. Or the date of delivery of a new tractor to a customer. 
 
-```{r}
-knitr::include_graphics("assets/periodofstudy.png", error = FALSE)
-```
+![](https://bigdata.go.th/wp-content/uploads/2020/09/Screenshot-2020-10-06-093522.png)
 
 Survival analysis data is aligned for all participants to zero at each participant's exposure time. The event of interest could be death or the failure of a component of the tractor. Time-to-event data always consist of the distinct **exposure** start and distinct **event** end for each study participant. 
 
