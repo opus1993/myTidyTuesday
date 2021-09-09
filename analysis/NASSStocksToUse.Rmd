@@ -154,14 +154,16 @@ pprices2000 <- df2 %>%
   ggplot(aes(x = Date,y = value, color = name), show.legend = FALSE) +
     geom_line(size = 1, alpha = 0.6, show.legend = FALSE) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-    scale_x_date(limits = c(ymd(start_date), max(df2$Date) %m+% months(12)),
-                 breaks = seq.Date(ymd(start_date), ymd("2020-01-01"), by = "5 years"),
+    scale_x_date(limits = c(ymd(start_date), 
+                            max(df2$Date) %m+% years(2)),
+                 breaks = seq.Date(ymd(start_date), 
+                                   ymd("2020-01-01"), by = "5 years"),
                  minor_breaks = NULL,
 date_labels = "%Y")   +
   geom_text_repel(data = . %>% filter(Date == max(df2$Date)),
     aes(label = name),
     direction = "y",
-    xlim = c(max(df2$Date) %m+% months(9), NA),
+    xlim = c(max(df2$Date) %m+% years(1), NA),
     hjust = 0,
     segment.size = .7,
     segment.alpha = .5,
@@ -186,20 +188,22 @@ pprices2020 <- df2 %>%
             Wheat = SRW/max(ifelse(Date == min_date,SRW,0)),
             `Hard Wheat` = HRW/max(ifelse(Date == min_date,HRW,0))) %>%
   pivot_longer(-Date) %>%
-  filter(between(Date, ymd("2020-01-01"), ymd("2020-12-31"))) %>%
+  filter(year(Date) == 2020) %>%
   ggplot(aes(x = Date, y = value, color = name), show.legend = FALSE) +
     geom_line(size = 1, alpha = 0.6, show.legend = FALSE) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
     scale_x_date(limits = c(ymd("2020-01-01"), ymd("2021-02-01")),
                  breaks = seq.Date(ymd("2020-01-01"), 
-                                   ymd("2021-01-01"), 
+                                   ymd("2021-12-01"), 
                                    by = "month"),
                  minor_breaks = NULL,
 date_labels = "%b") +
-  geom_text_repel(data = . %>% filter(Date == ymd("2021-01-01")),
+  geom_text_repel(data = . %>% 
+                    filter(year(Date) == 2020) %>% 
+                    filter(Date == max(Date)),
     aes(label = name),
     direction = "y",
-    xlim = c(ymd("2021-01-01") %m+% months(1), NA),
+    xlim = c(ymd("2021-02-01"), NA),
     hjust = 0,
     segment.size = .7,
     segment.alpha = .5,
