@@ -97,29 +97,29 @@ pstocks <- df1 %>%
     pivot_longer(-year) %>% 
     mutate(name_lab = if_else(year == max(year), name, NA_character_)) %>% 
 ggplot(aes(x = year, y = value, color = name, label = name_lab)) +
-    geom_line(size = 1) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  scale_x_continuous(limits = c(2000, 2023),
+    geom_line(size = 1, show.legend = FALSE) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+    scale_x_continuous(limits = c(2000, 2023),
                      breaks = seq(2000,2020, by = 5),
                      minor_breaks = NULL) +
     geom_text_repel(
-    direction = "y",
-    xlim = c(2020.8, NA),
-    hjust = 0,
-    segment.size = .7,
-    segment.alpha = .5,
-    segment.linetype = "dotted",
-    box.padding = .4,
-    segment.curvature = -0.1,
-    segment.ncp = 3,
-    segment.angle = 20
-    ) +
+        direction = "y",
+        xlim = c(2020.8, NA),
+        hjust = 0,
+        segment.size = .7,
+        segment.alpha = .5,
+        segment.linetype = "dotted",
+        box.padding = .4,
+        segment.curvature = -0.1,
+        segment.ncp = 3,
+        segment.angle = 20, 
+        show.legend = FALSE
+        ) +
     labs(x = NULL,
          y = NULL,
          color = NULL,
          title = "Crop Year Ending Stocks as a Percent of Use",
-         caption = "Source: USDA NASS | @jim_gruman") +
-  theme(legend.position = "")
+         caption = "Source: USDA NASS | @jim_gruman") 
 
 
 ```
@@ -151,13 +151,27 @@ pprices2000 <- df2 %>%
             `Hard Wheat` = HRW/max(ifelse(Date == min_date,HRW,0))) %>%
   pivot_longer(-Date) %>%
   filter(Date > start_date) %>%
-  ggplot(aes(x = Date,y = value, color = name)) +
-    geom_line(size = 1, alpha = 0.6) +
+  ggplot(aes(x = Date,y = value, color = name), show.legend = FALSE) +
+    geom_line(size = 1, alpha = 0.6, show.legend = FALSE) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-    scale_x_date(limits = c(ymd(start_date), NA),
+    scale_x_date(limits = c(ymd(start_date), max(df2$Date) %m+% months(12)),
                  breaks = seq.Date(ymd(start_date), ymd("2020-01-01"), by = "5 years"),
                  minor_breaks = NULL,
-date_labels = "%Y") +
+date_labels = "%Y")   +
+  geom_text_repel(data = . %>% filter(Date == max(df2$Date)),
+    aes(label = name),
+    direction = "y",
+    xlim = c(max(df2$Date) %m+% months(9), NA),
+    hjust = 0,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = "dotted",
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20, 
+   show.legend = FALSE
+    ) +
     labs(x = "Date", y = NULL, color = NULL,
          subtitle = paste0("Price ","(Index = 100% on ",min_date,")"),color = "Commodity",
          title = "Corn, Soybean and Wheat Prices",
@@ -172,14 +186,30 @@ pprices2020 <- df2 %>%
             Wheat = SRW/max(ifelse(Date == min_date,SRW,0)),
             `Hard Wheat` = HRW/max(ifelse(Date == min_date,HRW,0))) %>%
   pivot_longer(-Date) %>%
-  filter(Date > ymd("2020-01-01")) %>%
-  ggplot(aes(x = Date,y = value,color = name)) +
-    geom_line(size = 1, alpha = 0.6) +
+  filter(between(Date, ymd("2020-01-01"), ymd("2020-12-31"))) %>%
+  ggplot(aes(x = Date, y = value, color = name), show.legend = FALSE) +
+    geom_line(size = 1, alpha = 0.6, show.legend = FALSE) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-    scale_x_date(limits = c(ymd("2020-01-01"), NA),
-                 breaks = seq.Date(ymd("2020-01-01"), ymd("2021-01-01"), by = "month"),
+    scale_x_date(limits = c(ymd("2020-01-01"), ymd("2021-02-01")),
+                 breaks = seq.Date(ymd("2020-01-01"), 
+                                   ymd("2021-01-01"), 
+                                   by = "month"),
                  minor_breaks = NULL,
 date_labels = "%b") +
+  geom_text_repel(data = . %>% filter(Date == ymd("2021-01-01")),
+    aes(label = name),
+    direction = "y",
+    xlim = c(ymd("2021-01-01") %m+% months(1), NA),
+    hjust = 0,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = "dotted",
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20, 
+   show.legend = FALSE
+    ) +
     labs(x = "Date", y = NULL, 
          subtitle = paste0("Price ","(Index = 100% on ",min_date,")"),color = NULL,
          title = "2020 Corn, Soybean and Wheat Prices",
