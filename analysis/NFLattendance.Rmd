@@ -36,14 +36,14 @@ attendance <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytu
 
 standings <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-04/standings.csv')
 
-attendance_joined<-attendance %>%
+attendance_joined <- attendance %>%
   left_join(standings, by = c("year", "team_name", "team"))
 
 ```
 
 Explore the files and look for trends. In this boxplot visual, some teams certainly expect higher weekly attendance.
 
-```{r}
+```{r, fig.asp=1}
 attendance_joined %>%
   filter(!is.na(weekly_attendance)) %>%
   ggplot(aes(
