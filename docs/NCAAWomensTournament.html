@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-10-07" />
+
+<title>NCAA Womens Tournament</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">NCAA Womens Tournament</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">October 7, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-09
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree72875191bf920a961b7003d13a7419bb1e6d9df6targetblank7287519a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/72875191bf920a961b7003d13a7419bb1e6d9df6" target="_blank">7287519</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree72875191bf920a961b7003d13a7419bb1e6d9df6targetblank7287519a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/72875191bf920a961b7003d13a7419bb1e6d9df6" target="_blank">7287519</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/NCAAWomensTournament.Rmd</code>) and HTML (<code>docs/NCAAWomensTournament.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/72875191bf920a961b7003d13a7419bb1e6d9df6/analysis/NCAAWomensTournament.Rmd" target="_blank">7287519</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-09
+</td>
+<td>
+change to emojifont package
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<blockquote>
+<p>Adapted from <a href="https://juliasilge.com/blog/ncaa-tuning/">NCAA Tuning</a> by Julia Silge <span class="citation">@JuliaSilge</span></p>
+</blockquote>
+<p>This example walks through how to tune and choose hyperparameters using this week’s #TidyTuesday dataset on NCAA women’s basketball tournaments. 🏀</p>
+<div id="explore-the-data" class="section level2">
+<h2>Explore the data</h2>
+<p>Our modeling goal is to estimate the relationship of <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-10-06/readme.md">expected tournament wins by seed from this week’s #TidyTuesday dataset</a>. This is similar to the <a href="https://fivethirtyeight.com/features/tom-izzo-is-the-best-coach-in-modern-ncaa-tournament-history-by-far/">“average” column in the FiveThirtyEight table in this article</a>.</p>
+<p>Let’s start by reading in the data.</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse)
+
+library(tidymodels)
+library(splines)
+
+})
+
+source(here::here(&quot;code&quot;,&quot;_common.R&quot;),  
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+tt &lt;- tidytuesdayR::tt_load(&quot;2020-10-06&quot;)</code></pre>
+<pre><code>--- Compiling #TidyTuesday Information for 2020-10-06 ----</code></pre>
+<pre><code>--- There is 1 file available ---</code></pre>
+<pre><code>--- Starting Download ---</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `tournament.csv`</code></pre>
+<pre><code>--- Download complete ---</code></pre>
+<pre class="r"><code>tournament &lt;- tt$tournament</code></pre>
+<p>We can look at the mean wins by seed.</p>
+<pre class="r"><code>tournament %&gt;%
+  group_by(seed) %&gt;%
+  summarise(
+    exp_wins = mean(tourney_w, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  ggplot(aes(seed, exp_wins)) +
+  geom_point(alpha = 0.8, size = 3) +
+  labs(y = &quot;tournament wins (mean)&quot;)</code></pre>
+<p><img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-2-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Let’s visualize all the tournament results, not just the averages.</p>
+<pre class="r"><code>tournament %&gt;%
+  filter(!is.na(seed)) %&gt;%
+  ggplot(aes(seed, tourney_w)) +
+  geom_bin2d(binwidth = c(1, 1), alpha = 0.8) +
+  labs(
+    fill = &quot;number of\nteams&quot;, y = &quot;&quot;,
+    subtitle = &quot;Tournament wins&quot;,
+    title = &quot;Womens NCAA&quot;,
+    caption = &quot;Data by FiveThirtyEight | Visualization by @jim_gruman&quot;
+  ) +
+  theme(
+    legend.position = c(0.9, 0.9),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-3-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>We have a lot of options to deal with data like this (curvy, integers, all greater than zero) but one straightforward option is <a href="https://www.tmwr.org/recipes.html#spline-functions">splines</a>. Splines aren’t perfect for this because they aren’t constrained to stay greater than zero or to always decrease, but they work pretty well and can be used in lots of situations. We have to choose the <strong>degrees of freedom</strong> for the splines.</p>
+<pre class="r"><code>plot_smoother &lt;- function(deg_free) {
+  p &lt;- ggplot(tournament, aes(seed, tourney_w)) +
+    geom_bin2d(binwidth = c(1, 1), alpha = 0.8) +
+    geom_smooth(
+      method = lm, se = FALSE, color = &quot;black&quot;,
+      formula = y ~ ns(x, df = deg_free)
+    ) +
+    labs(
+      fill = &quot;number of\nteams&quot;,
+      title = &quot;Womens NCAA&quot;,
+      caption = &quot;Data by FiveThirtyEight | Visualization by @jim_gruman&quot;,
+      subtitle = paste(&quot;Tournament Wins explained by &quot;, deg_free, &quot;spline terms&quot;)
+    ) +
+    theme(
+      legend.position = c(0.9, 0.9),
+      legend.background = element_rect(color = &quot;white&quot;)
+    )
+
+  print(p)
+}
+
+walk(c(2, 4, 6, 8, 10, 15), plot_smoother)</code></pre>
+<p><img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-4-.gif" width="200%" style="display: block; margin: auto;" /></p>
+<p>As the number of degrees of freedom goes up, the curves get more wiggly. This would allow the model to fit a more complex relationship, perhaps too much so. We can <em>tune</em> this hyperparameter to find the best value.</p>
+</div>
+<div id="build-a-model" class="section level2">
+<h2>Build a model</h2>
+<p>We can start by loading the <code>tidymodels</code> metapackage, and splitting our data into training and testing sets.</p>
+<pre class="r"><code>set.seed(123)
+tourney_split &lt;- tournament %&gt;%
+  filter(!is.na(seed)) %&gt;%
+  initial_split(strata = seed)
+
+tourney_train &lt;- training(tourney_split)
+tourney_test &lt;- testing(tourney_split)</code></pre>
+<p>We are going to use <a href="https://www.tmwr.org/resampling.html">resampling</a> to evaluate model performance. A bootstrap sample is a sample that is the same size as the original data set that is made using replacement. This results in analysis samples that have multiple replicates of some of the original rows of the data.</p>
+<pre class="r"><code>set.seed(234)
+tourney_folds &lt;- bootstraps(tourney_train)
+tourney_folds</code></pre>
+<pre><code># Bootstrap sampling 
+# A tibble: 25 x 2
+   splits             id         
+   &lt;list&gt;             &lt;chr&gt;      
+ 1 &lt;split [1561/545]&gt; Bootstrap01
+ 2 &lt;split [1561/585]&gt; Bootstrap02
+ 3 &lt;split [1561/595]&gt; Bootstrap03
+ 4 &lt;split [1561/580]&gt; Bootstrap04
+ 5 &lt;split [1561/578]&gt; Bootstrap05
+ 6 &lt;split [1561/594]&gt; Bootstrap06
+ 7 &lt;split [1561/567]&gt; Bootstrap07
+ 8 &lt;split [1561/570]&gt; Bootstrap08
+ 9 &lt;split [1561/597]&gt; Bootstrap09
+10 &lt;split [1561/575]&gt; Bootstrap10
+# ... with 15 more rows</code></pre>
+<p>Next we build a recipe for data preprocessing. It only has one step!</p>
+<ul>
+<li><p>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what our training data is.</p></li>
+<li><p>For our first and only step, we create new spline terms from the original <code>seed</code> variable. We don’t know what the best value for the degrees of freedom is, so we will <code>tune()</code> it. We can set an <code>id</code> value for the tuneable parameter to more easily keep track of it, if we want.</p></li>
+</ul>
+<p>The object <code>tourney_rec</code> is a recipe that has <strong>not</strong> been trained on data yet, and in fact, we can’t do this because we haven’t decided on a value for <code>deg_free</code>.</p>
+<pre class="r"><code>tourney_rec &lt;- recipe(tourney_w ~ seed, data = tourney_train) %&gt;%
+  step_ns(seed, deg_free = tune(&quot;seed_splines&quot;))
+
+tourney_rec</code></pre>
+<pre><code>Data Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor          1
+
+Operations:
+
+Natural Splines on seed</code></pre>
+<p>Next, let’s create a model specification for a linear regression model, and the combine the recipe and model together in a <a href="https://www.tmwr.org/workflows.html">workflow</a>.</p>
+<pre class="r"><code>lm_spec &lt;- linear_reg() %&gt;% set_engine(&quot;lm&quot;)
+
+tourney_wf &lt;- workflow() %&gt;%
+  add_recipe(tourney_rec) %&gt;%
+  add_model(lm_spec)
+
+tourney_wf</code></pre>
+<pre><code>== Workflow ====================================================================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ----------------------------------------------------------------
+1 Recipe Step
+
+* step_ns()
+
+-- Model -----------------------------------------------------------------------
+Linear Regression Model Specification (regression)
+
+Computational engine: lm </code></pre>
+<p>This workflow is almost ready to go, but we need to decide what values to try for the splines. There are several different ways to <a href="https://dials.tidymodels.org/">create tuning grids</a>, but if the grid you need is very simple, you might prefer to create it by hand.</p>
+<pre class="r"><code>spline_grid &lt;- tibble(seed_splines = c(1:4, 6, 8, 10))
+spline_grid %&gt;%
+  knitr::kable(align = &quot;l&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">seed_splines</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+</tr>
+<tr class="odd">
+<td align="left">6</td>
+</tr>
+<tr class="even">
+<td align="left">8</td>
+</tr>
+<tr class="odd">
+<td align="left">10</td>
+</tr>
+</tbody>
+</table>
+<p>Now we can put this all together! When we use <code>tune_grid()</code>, we will fit each of the options in the grid to each of the resamples.</p>
+<pre class="r"><code>all_cores &lt;- parallelly::availableCores(omit = 1)
+all_cores</code></pre>
+<pre><code>system 
+    11 </code></pre>
+<pre class="r"><code>future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows
+
+save_preds &lt;- control_grid(save_pred = TRUE)
+
+spline_rs &lt;-
+  tune_grid(
+    tourney_wf,
+    resamples = tourney_folds,
+    grid = spline_grid,
+    control = save_preds
+  )
+
+spline_rs</code></pre>
+<pre><code># Tuning results
+# Bootstrap sampling 
+# A tibble: 25 x 5
+   splits             id          .metrics          .notes           .predictions
+   &lt;list&gt;             &lt;chr&gt;       &lt;list&gt;            &lt;list&gt;           &lt;list&gt;      
+ 1 &lt;split [1561/545]&gt; Bootstrap01 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [3,~
+ 2 &lt;split [1561/585]&gt; Bootstrap02 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [4,~
+ 3 &lt;split [1561/595]&gt; Bootstrap03 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [4,~
+ 4 &lt;split [1561/580]&gt; Bootstrap04 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [4,~
+ 5 &lt;split [1561/578]&gt; Bootstrap05 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [4,~
+ 6 &lt;split [1561/594]&gt; Bootstrap06 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [4,~
+ 7 &lt;split [1561/567]&gt; Bootstrap07 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [3,~
+ 8 &lt;split [1561/570]&gt; Bootstrap08 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [3,~
+ 9 &lt;split [1561/597]&gt; Bootstrap09 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [4,~
+10 &lt;split [1561/575]&gt; Bootstrap10 &lt;tibble [14 x 5]&gt; &lt;tibble [0 x 1]&gt; &lt;tibble [4,~
+# ... with 15 more rows</code></pre>
+<p>We have now fit each of our candidate set of spline features to our resampled training set!</p>
+</div>
+<div id="evaluate-model" class="section level2">
+<h2>Evaluate model</h2>
+<p>Now let’s check out how we did.</p>
+<pre class="r"><code>collect_metrics(spline_rs) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">seed_splines</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.9876010</td>
+<td align="right">25</td>
+<td align="right">0.0057964</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.4365488</td>
+<td align="right">25</td>
+<td align="right">0.0037990</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.9114383</td>
+<td align="right">25</td>
+<td align="right">0.0060283</td>
+<td align="left">Preprocessor2_Model1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5209721</td>
+<td align="right">25</td>
+<td align="right">0.0052959</td>
+<td align="left">Preprocessor2_Model1</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8944212</td>
+<td align="right">25</td>
+<td align="right">0.0062435</td>
+<td align="left">Preprocessor3_Model1</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5387421</td>
+<td align="right">25</td>
+<td align="right">0.0056062</td>
+<td align="left">Preprocessor3_Model1</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8934482</td>
+<td align="right">25</td>
+<td align="right">0.0063220</td>
+<td align="left">Preprocessor4_Model1</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5396353</td>
+<td align="right">25</td>
+<td align="right">0.0056399</td>
+<td align="left">Preprocessor4_Model1</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8937110</td>
+<td align="right">25</td>
+<td align="right">0.0063760</td>
+<td align="left">Preprocessor5_Model1</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5394114</td>
+<td align="right">25</td>
+<td align="right">0.0057790</td>
+<td align="left">Preprocessor5_Model1</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8952845</td>
+<td align="right">25</td>
+<td align="right">0.0063011</td>
+<td align="left">Preprocessor6_Model1</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5378269</td>
+<td align="right">25</td>
+<td align="right">0.0059841</td>
+<td align="left">Preprocessor6_Model1</td>
+</tr>
+<tr class="odd">
+<td align="right">10</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8976755</td>
+<td align="right">25</td>
+<td align="right">0.0059911</td>
+<td align="left">Preprocessor7_Model1</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="right">0.5353777</td>
+<td align="right">25</td>
+<td align="right">0.0058777</td>
+<td align="left">Preprocessor7_Model1</td>
+</tr>
+</tbody>
+</table>
+<p>Looks like the model got better and better as we added more degrees of freedom, which isn’t too shocking. In what way did it change?</p>
+<pre class="r"><code>collect_metrics(spline_rs) %&gt;%
+  ggplot(aes(seed_splines, mean, color = .metric)) +
+  geom_line(size = 1.5, alpha = 0.5) +
+  geom_point(size = 3) +
+  facet_wrap(~.metric, ncol = 1, scales = &quot;free_y&quot;) +
+  labs(x = &quot;degrees of freedom&quot;, y = NULL) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="figure/NCAAWomensTournament.Rmd/unnamed-chunk-12-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>The model improved a lot as we increased the degrees of freedom at the beginning, but then continuing to add more didn’t make much difference. We could choose the numerically optimal hyperparameter with <code>select_best()</code> but that would choose a more wiggly, complex model than we probably want. We can choose a <em>simpler</em> model that performs well, within some limits around the numerically optimal result. We could choose either by percent loss in performance or within one standard error in performance.</p>
+<pre class="r"><code>select_by_pct_loss(spline_rs,
+  metric = &quot;rmse&quot;,
+  limit = 5,
+  seed_splines
+) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">seed_splines</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+<th align="right">.best</th>
+<th align="right">.loss</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.9114383</td>
+<td align="right">25</td>
+<td align="right">0.0060283</td>
+<td align="left">Preprocessor2_Model1</td>
+<td align="right">0.8934482</td>
+<td align="right">2.013561</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>select_by_one_std_err(spline_rs,
+  metric = &quot;rmse&quot;,
+  seed_splines
+) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">seed_splines</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+<th align="right">.best</th>
+<th align="right">.bound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="right">0.8944212</td>
+<td align="right">25</td>
+<td align="right">0.0062435</td>
+<td align="left">Preprocessor3_Model1</td>
+<td align="right">0.8934482</td>
+<td align="right">0.8997702</td>
+</tr>
+</tbody>
+</table>
+<p>Looks like 2 or 3 degrees of freedom is a good option. Let’s go with 3, and update our tuneable workflow with this information and then fit it to our training data.</p>
+<pre class="r"><code>final_wf &lt;- finalize_workflow(tourney_wf, tibble(seed_splines = 3))
+tourney_fit &lt;- fit(final_wf, tourney_train)
+tourney_fit</code></pre>
+<pre><code>== Workflow [trained] ==========================================================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ----------------------------------------------------------------
+1 Recipe Step
+
+* step_ns()
+
+-- Model -----------------------------------------------------------------------
+
+Call:
+stats::lm(formula = ..y ~ ., data = data)
+
+Coefficients:
+(Intercept)    seed_ns_1    seed_ns_2    seed_ns_3  
+      3.234       -1.886       -5.445       -1.858  </code></pre>
+<p>We can predict from this fitted workflow. For example, we can predict on the testing data and compute model performance.</p>
+<pre class="r"><code>tourney_test %&gt;%
+  bind_cols(predict(tourney_fit, tourney_test)) %&gt;%
+  metrics(tourney_w, .pred) %&gt;%
+  knitr::kable(align = &quot;l&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="left">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rmse</td>
+<td align="left">standard</td>
+<td align="left">0.8302226</td>
+</tr>
+<tr class="even">
+<td align="left">rsq</td>
+<td align="left">standard</td>
+<td align="left">0.5874205</td>
+</tr>
+<tr class="odd">
+<td align="left">mae</td>
+<td align="left">standard</td>
+<td align="left">0.5971794</td>
+</tr>
+</tbody>
+</table>
+<p>Pretty good! We can also predict on other kinds of new data. For example, let’s recreate the <a href="https://fivethirtyeight.com/features/tom-izzo-is-the-best-coach-in-modern-ncaa-tournament-history-by-far/">“average” column in the FiveThirtyEight table on expected wins</a>.</p>
+<pre class="r"><code>predict(tourney_fit, new_data = tibble(seed = 1:16)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">.pred</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3.2335079</td>
+</tr>
+<tr class="even">
+<td align="right">2.6044101</td>
+</tr>
+<tr class="odd">
+<td align="right">2.0111317</td>
+</tr>
+<tr class="even">
+<td align="right">1.4894923</td>
+</tr>
+<tr class="odd">
+<td align="right">1.0753114</td>
+</tr>
+<tr class="even">
+<td align="right">0.7929041</td>
+</tr>
+<tr class="odd">
+<td align="right">0.6205691</td>
+</tr>
+<tr class="even">
+<td align="right">0.5251009</td>
+</tr>
+<tr class="odd">
+<td align="right">0.4732938</td>
+</tr>
+<tr class="even">
+<td align="right">0.4319423</td>
+</tr>
+<tr class="odd">
+<td align="right">0.3740070</td>
+</tr>
+<tr class="even">
+<td align="right">0.2971133</td>
+</tr>
+<tr class="odd">
+<td align="right">0.2050530</td>
+</tr>
+<tr class="even">
+<td align="right">0.1016177</td>
+</tr>
+<tr class="odd">
+<td align="right">-0.0094010</td>
+</tr>
+<tr class="even">
+<td align="right">-0.1242113</td>
+</tr>
+</tbody>
+</table>
+<p>It’s close! This isn’t a huge surprise, since we’re fitting curves to data in a straightforward way here, but it’s still good to see. You can also see why splines aren’t perfect for this task, because the prediction isn’t constrained to positive values.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] splines   stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] vctrs_0.3.8        rlang_0.4.11       yardstick_0.0.8    workflowsets_0.1.0
+ [5] workflows_0.2.3    tune_0.1.6         rsample_0.1.0      recipes_0.1.16    
+ [9] parsnip_0.1.7.900  modeldata_0.1.1    infer_1.0.0        dials_0.0.9.9000  
+[13] scales_1.1.1       broom_0.7.9        tidymodels_0.1.3   forcats_0.5.1     
+[17] stringr_1.4.0      dplyr_1.0.7        purrr_0.3.4        readr_2.0.1       
+[21] tidyr_1.1.3        tibble_3.1.4       ggplot2_3.3.5      tidyverse_1.3.1   
+[25] workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.2.1    systemfonts_1.0.2 
+  [4] plyr_1.8.6         selectr_0.4-2      tidytuesdayR_1.0.1
+  [7] listenv_0.8.0      usethis_2.0.1      digest_0.6.27     
+ [10] foreach_1.5.1      htmltools_0.5.2    viridis_0.6.1     
+ [13] fansi_0.5.0        magrittr_2.0.1     tzdb_0.1.2        
+ [16] globals_0.14.0     modelr_0.1.8       gower_0.2.2       
+ [19] extrafont_0.17     R.utils_2.10.1     vroom_1.5.4       
+ [22] sysfonts_0.8.5     extrafontdb_1.0    hardhat_0.1.6     
+ [25] colorspace_2.0-2   rvest_1.0.1        textshaping_0.3.5 
+ [28] haven_2.4.3        xfun_0.25          crayon_1.4.1      
+ [31] jsonlite_1.7.2     survival_3.2-11    iterators_1.0.13  
+ [34] glue_1.4.2         gtable_0.3.0       ipred_0.9-11      
+ [37] emojifont_0.5.5    R.cache_0.15.0     Rttf2pt1_1.3.9    
+ [40] future.apply_1.8.1 DBI_1.1.1          Rcpp_1.0.7        
+ [43] showtextdb_3.0     viridisLite_0.4.0  bit_4.0.4         
+ [46] GPfit_1.0-8        lava_1.6.10        prodlim_2019.11.13
+ [49] httr_1.4.2         ellipsis_0.3.2     farver_2.1.0      
+ [52] R.methodsS3_1.8.1  pkgconfig_2.0.3    nnet_7.3-16       
+ [55] sass_0.4.0         dbplyr_2.1.1       utf8_1.2.2        
+ [58] here_1.0.1         labeling_0.4.2     tidyselect_1.1.1  
+ [61] DiceDesign_1.9     later_1.3.0        munsell_0.5.0     
+ [64] cellranger_1.1.0   tools_4.1.1        cachem_1.0.6      
+ [67] cli_3.0.1          generics_0.1.0     gifski_1.4.3-1    
+ [70] evaluate_0.14      fastmap_1.1.0      ragg_1.1.3        
+ [73] yaml_2.2.1         bit64_4.0.5        knitr_1.34        
+ [76] fs_1.5.0           showtext_0.9-4     nlme_3.1-152      
+ [79] future_1.22.1      whisker_0.4        R.oo_1.24.0       
+ [82] xml2_1.3.2         compiler_4.1.1     rstudioapi_0.13   
+ [85] curl_4.3.2         reprex_2.0.1       lhs_1.1.3         
+ [88] bslib_0.3.0        stringi_1.7.4      highr_0.9         
+ [91] gdtools_0.2.3      hrbrthemes_0.8.0   lattice_0.20-44   
+ [94] Matrix_1.3-4       styler_1.5.1       conflicted_1.0.4  
+ [97] pillar_1.6.2       lifecycle_1.0.0    furrr_0.2.3       
+[100] jquerylib_0.1.4    httpuv_1.6.2       R6_2.5.1          
+[103] promises_1.2.0.1   gridExtra_2.3      parallelly_1.28.1 
+[106] codetools_0.2-18   MASS_7.3-54        assertthat_0.2.1  
+[109] proto_1.0.0        rprojroot_2.0.2    withr_2.4.2       
+[112] mgcv_1.8-36        parallel_4.1.1     hms_1.1.0         
+[115] grid_4.1.1         rpart_4.1-15       timeDate_3043.102 
+[118] class_7.3-19       rmarkdown_2.10     git2r_0.28.0      
+[121] pROC_1.18.0        lubridate_1.7.10  </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
