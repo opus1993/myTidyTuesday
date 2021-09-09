@@ -10,16 +10,17 @@ knitr::opts_chunk$set(
   tidy = "styler",
   dev = "ragg_png",
   autodep = TRUE,
+  out.width ='200%',
   fig.align = 'center',
   fig.width = 9,
-  fig.asp = 0.618      #,   1 / phi
+  fig.asp = 0.618      #,   1 / phi   use 1 for facet_wrap
 #  class.output = "scroll-100"   # must include the CSS, doesn't style on github pages
 )
 
 knitr::opts_template$set(
-  fig.large = list(fig.asp = 0.8, out.width = '100%'),
-  fig.square = list(fig.asp = 1, out.width = '100%'),
-  fig.long = list(fig.asp = 1.5, out.width = '100%')
+  fig.large = list(fig.asp = 0.8), #
+  fig.square = list(fig.asp = 1),
+  fig.long = list(fig.asp = 1.5)
 )
 
 alpha_viridis <- function(...) {
