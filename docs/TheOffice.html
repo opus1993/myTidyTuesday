@@ -405,16 +405,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree8013a27cac1ab4571fe0175d8ab8f4df2c6d4cb7targetblank8013a27a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/8013a27cac1ab4571fe0175d8ab8f4df2c6d4cb7" target="_blank">8013a27</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec91aa8430224b99cfd9c4f395f70cabbded2fbdctargetblankc91aa84a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/c91aa8430224b99cfd9c4f395f70cabbded2fbdc" target="_blank">c91aa84</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree8013a27cac1ab4571fe0175d8ab8f4df2c6d4cb7targetblank8013a27a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec91aa8430224b99cfd9c4f395f70cabbded2fbdctargetblankc91aa84a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/8013a27cac1ab4571fe0175d8ab8f4df2c6d4cb7" target="_blank">8013a27</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/c91aa8430224b99cfd9c4f395f70cabbded2fbdc" target="_blank">c91aa84</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -475,6 +475,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/c91aa8430224b99cfd9c4f395f70cabbded2fbdc/analysis/TheOffice.Rmd" target="_blank">c91aa84</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-08
+</td>
+<td>
+knitr options set for big charts
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/d73c5deb89aa79e1383a878d334e0e908a743bd8/docs/TheOffice.html" target="_blank">d73c5de</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/opus1993/myTidyTuesday/blob/8013a27cac1ab4571fe0175d8ab8f4df2c6d4cb7/analysis/TheOffice.Rmd" target="_blank">8013a27</a>
 </td>
 <td>
@@ -521,7 +555,7 @@ office_ratings &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfo
     subtitle = &quot;Average IMDB Rating&quot;,
     caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
   )</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-2-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>office_ratings %&gt;%
   mutate(
     top_title = ifelse(imdb_rating &gt;= 9.2 | imdb_rating &lt;= 7,
@@ -555,7 +589,7 @@ office_ratings &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfo
     legend.position = &quot;none&quot;
   ) +
   labs(x = &quot;Episode Number&quot;, y = &quot;IMDB Rating&quot;)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-2-2.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-2-2.png" width="200%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>office_ratings %&gt;%
   arrange(desc(imdb_rating)) %&gt;%
   mutate(
@@ -563,15 +597,14 @@ office_ratings &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfo
     title = fct_reorder(title, imdb_rating)
   ) %&gt;%
   head(20) %&gt;%
-  ggplot(aes(title, imdb_rating, color = factor(season), size = total_votes)) +
+  ggplot(aes(y = title, x = imdb_rating, color = factor(season), size = total_votes)) +
   geom_point() +
-  coord_flip() +
   labs(
     color = &quot;Season&quot;,
     title = &quot;Most Popular Episodes of The Office&quot;,
     subtitle = &quot;Top 20 Season.Episode Titles, Color by Season and Size by Total Votes&quot;, caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
   )</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-3-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <p>To merge the datasets on episode, we have to clean the ratings file field by removing punctuation, digits, the words “part” and “parts”, and make all text lower case. Even after cleaning, three episode titles have to be manually imputed with a case_when statement to successfully join every episode rating with the text of the episode.</p>
 <pre class="r"><code>remove_regex &lt;- &quot;[:punct:]|[:digit:]|parts |part |the |and&quot;
 
@@ -633,28 +666,26 @@ character_tf_idf &lt;- transcript_words %&gt;%
   filter(character == &quot;Dwight&quot;) %&gt;%
   mutate(word = fct_reorder(word, tf_idf)) %&gt;%
   head(20) %&gt;%
-  ggplot(aes(word, tf_idf)) +
+  ggplot(aes(y = word, x = tf_idf)) +
   geom_col() +
-  coord_flip() +
   labs(
     title = &quot;Dwight&#39;s Lines in The Office&quot;,
     subtitle = &quot;Highest Tf-IDF words&quot;,
     caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
   )</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>character_tf_idf %&gt;%
   filter(character == &quot;Jim&quot;) %&gt;%
   mutate(word = fct_reorder(word, tf_idf)) %&gt;%
   head(20) %&gt;%
-  ggplot(aes(word, tf_idf)) +
+  ggplot(aes(y = word, x = tf_idf)) +
   geom_col() +
-  coord_flip() +
   labs(
     title = &quot;Jim&#39;s Lines in The Office&quot;,
     subtitle = &quot;Highest Tf-IDF words&quot;,
     caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
   )</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-2.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-7-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>character_tf_idf %&gt;%
   filter(character %in% c(&quot;Jim&quot;, &quot;Dwight&quot;, &quot;Michael&quot;, &quot;Meredith&quot;)) %&gt;%
   group_by(character) %&gt;%
@@ -672,7 +703,7 @@ character_tf_idf &lt;- transcript_words %&gt;%
     caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
     x = &quot;&quot;, y = &quot;TF-IDF of character-word pairs&quot;
   )</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-6-3.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-8-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <p>We are going to use several different kinds of features for modeling. Let’s find out how many times characters speak per episode.</p>
 <pre class="r"><code>characters &lt;- office_info %&gt;%
   count(episode_name, character) %&gt;%
@@ -720,7 +751,7 @@ character_tf_idf &lt;- transcript_words %&gt;%
     caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
     x = NULL, y = &quot;IMDB Rating&quot;
   )</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-10-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-12-1.png" width="200%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="train-a-model" class="section level2">
 <h2>Train a Model</h2>
@@ -790,7 +821,7 @@ lasso_grid &lt;- tune_grid(
   facet_wrap(~.metric, scales = &quot;free&quot;, nrow = 2) +
   scale_x_log10() +
   theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-16-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-18-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <p>This is a great way to see that regularization helps this modeling a lot. We have a couple of options for choosing our final parameter, such as <code>select_by_pct_loss()</code> or <code>select_by_one_std_err()</code>, but for now let’s stick with just picking the lowest RMSE. After we have that parameter, we can finalize our workflow, i.e. update it with this value.</p>
 <pre class="r"><code>lowest_rmse &lt;- lasso_grid %&gt;%
   select_best(&quot;rmse&quot;)
@@ -833,7 +864,7 @@ Computational engine: glmnet </code></pre>
   geom_col() +
   scale_x_continuous(expand = c(0, 0)) +
   labs(y = NULL)</code></pre>
-<p><img src="figure/TheOffice.Rmd/unnamed-chunk-18-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TheOffice.Rmd/unnamed-chunk-20-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <p>Clearly, the features with the greatest importance in predicting IMDB rating include the presence of Greg Daniels, Michael, the episode itself, B J Novak, and Jan.</p>
 <p>And then, finally, let’s return to our test data. The <code>tune</code> package has a function <code>last_fit()</code> which is nice for situations when you have tuned and finalized a model or workflow and want to fit it one last time on your training data and evaluate it on your testing data. You only have to pass this function your finalized model/workflow and your split.</p>
 <pre class="r"><code>last_fit(
