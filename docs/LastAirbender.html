@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-08-11" />
+
+<title>The Last Airbender</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">The Last Airbender</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">August 11, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-09
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree03bfdad51314d94887f3ae2b512ebe4016152984targetblank03bfdada"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/03bfdad51314d94887f3ae2b512ebe4016152984" target="_blank">03bfdad</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree03bfdad51314d94887f3ae2b512ebe4016152984targetblank03bfdada" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/03bfdad51314d94887f3ae2b512ebe4016152984" target="_blank">03bfdad</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/LastAirbender.Rmd</code>) and HTML (<code>docs/LastAirbender.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/03bfdad51314d94887f3ae2b512ebe4016152984/analysis/LastAirbender.Rmd" target="_blank">03bfdad</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-09
+</td>
+<td>
+remove dependency on pdf in graphics
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>Lately Julia Silge has been publishing <a href="https://juliasilge.com/category/tidymodels/">screencasts</a> demonstrating how to use the <a href="https://www.tidymodels.org/">tidymodels</a> framework, from first steps in modeling to how to evaluate complex models. Today’s example admittedly does not result in the <em>best</em> performing model you’ll ever see, but it is really fun and uses this week’s <a href="https://github.com/rfordatascience/tidytuesday"><code>#TidyTuesday</code> dataset</a> on <em>Avatar: The Last Airbender</em>. 🔥, 🌏, 🌊, 💨</p>
+<div id="explore-the-data" class="section level2">
+<h2>Explore the data</h2>
+<p>This week’s #TidyTuesday dataset is from <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-08-11/readme.md">episodes of <em>Avatar: The Last Airbender</em></a>. Our modeling goal is to predict the speaker of each line of dialogue.</p>
+<pre class="r"><code>avatar &lt;- tidytuesdayR::tt_load(&quot;2020-08-11&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 2: `avatar.csv`
+    Downloading file 2 of 2: `scene_description.csv`</code></pre>
+<pre class="r"><code>avatar_raw &lt;- avatar$avatar
+
+avatar_raw %&gt;%
+  count(character, sort = TRUE) %&gt;%
+  head() %&gt;%
+  knitr::kable(caption = &quot;The 6 characters with the most lines&quot;)</code></pre>
+<table>
+<caption>The 6 characters with the most lines</caption>
+<thead>
+<tr class="header">
+<th align="left">character</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Scene Description</td>
+<td align="right">3393</td>
+</tr>
+<tr class="even">
+<td align="left">Aang</td>
+<td align="right">1796</td>
+</tr>
+<tr class="odd">
+<td align="left">Sokka</td>
+<td align="right">1639</td>
+</tr>
+<tr class="even">
+<td align="left">Katara</td>
+<td align="right">1437</td>
+</tr>
+<tr class="odd">
+<td align="left">Zuko</td>
+<td align="right">776</td>
+</tr>
+<tr class="even">
+<td align="left">Toph</td>
+<td align="right">507</td>
+</tr>
+</tbody>
+</table>
+<p>Rows with <code>Scene Description</code> are not dialogue; the main character Aang speaks the most lines overall. How does this change through the three “books” of the show?</p>
+<pre class="r"><code>avatar_raw %&gt;%
+  filter(!is.na(character_words)) %&gt;%
+  mutate(
+    book = fct_inorder(book),
+    character = fct_lump_n(character, 10)
+  ) %&gt;%
+  count(book, character) %&gt;%
+  mutate(character = reorder_within(character, n, book)) %&gt;%
+  ggplot(aes(n, character, fill = book)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~book, scales = &quot;free&quot;) +
+  scale_y_reordered() +
+  scale_fill_manual(values = c(
+    avatar_pal(&quot;WaterTribe&quot;)(1),
+    avatar_pal(&quot;EarthKingdom&quot;)(1),
+    avatar_pal(&quot;FireNation&quot;)(1)
+  )) +
+  labs(
+    y = NULL, x = NULL,
+    title = &quot;Last Airbender words spoken by book&quot;
+  )</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-2-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Let’s create a dataset for our modeling question, and look at a few example lines.</p>
+<pre class="r"><code>avatar &lt;- avatar_raw %&gt;%
+  filter(!is.na(character_words)) %&gt;%
+  mutate(aang = if_else(character == &quot;Aang&quot;, &quot;Aang&quot;, &quot;Other&quot;)) %&gt;%
+  dplyr::select(aang, book, text = character_words)
+
+avatar %&gt;%
+  filter(aang == &quot;Aang&quot;) %&gt;%
+  sample_n(10) %&gt;%
+  pull(text) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">You really think so?</td>
+</tr>
+<tr class="even">
+<td align="left">Hey, I just found out this morning!</td>
+</tr>
+<tr class="odd">
+<td align="left">Good to see you here.</td>
+</tr>
+<tr class="even">
+<td align="left">Well, if I’m going to the Eastern Air Temple, Appa and I can drop you off at Chameleon Bay to see your dad.</td>
+</tr>
+<tr class="odd">
+<td align="left">I never thought I’d miss grass this much!</td>
+</tr>
+<tr class="even">
+<td align="left">I’ll do whatever it takes.</td>
+</tr>
+<tr class="odd">
+<td align="left">You’re just a curly tailed blue nose.</td>
+</tr>
+<tr class="even">
+<td align="left">Uh … no one told us we had to have passports.</td>
+</tr>
+<tr class="odd">
+<td align="left">No self-control …</td>
+</tr>
+<tr class="even">
+<td align="left">Just some dance movements.</td>
+</tr>
+</tbody>
+</table>
+<p>This… may be a challenge.</p>
+<p>What are the highest log odds words from Aang and other speakers?</p>
+<pre class="r"><code>avatar_lo &lt;- avatar %&gt;%
+  unnest_tokens(word, text) %&gt;%
+  count(aang, word) %&gt;%
+  bind_log_odds(aang, word, n) %&gt;%
+  arrange(-log_odds_weighted)
+
+avatar_lo %&gt;%
+  group_by(aang) %&gt;%
+  top_n(n = 15, wt = log_odds_weighted) %&gt;%
+  ungroup() %&gt;%
+  mutate(word = reorder(word, log_odds_weighted)) %&gt;%
+  ggplot(aes(log_odds_weighted, word, fill = aang)) +
+  geom_col(alpha = 0.8, show.legend = FALSE) +
+  facet_wrap(~aang, scales = &quot;free&quot;) +
+  scale_fill_avatar(palette = &quot;AirNomads&quot;) +
+  labs(
+    y = NULL, x = &quot;log odds weights&quot;,
+    title = &quot;Last Airbender Importance of Words&quot;
+  )</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-4-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>These words make sense, but the counts are probably too low to build a good model with. Instead, let’s try using <a href="https://textfeatures.mikewk.com/">text features</a> like the number of punctuation characters, number of pronons, and so forth.</p>
+<pre class="r"><code>tf &lt;- textfeatures(
+  avatar,
+  sentiment = FALSE, word_dims = 0,
+  normalize = FALSE, verbose = FALSE
+)
+
+tf %&gt;%
+  bind_cols(avatar) %&gt;%
+  group_by(aang) %&gt;%
+  summarise(across(starts_with(&quot;n_&quot;), mean)) %&gt;%
+  pivot_longer(starts_with(&quot;n_&quot;), names_to = &quot;text_feature&quot;) %&gt;%
+  filter(value &gt; 0.01) %&gt;%
+  mutate(text_feature = fct_reorder(text_feature, -value)) %&gt;%
+  ggplot(aes(aang, value, fill = aang)) +
+  geom_col(position = &quot;dodge&quot;, alpha = 0.8, show.legend = FALSE) +
+  facet_wrap(~text_feature, scales = &quot;free&quot;, ncol = 6) +
+  scale_fill_avatar(&quot;AirNomads&quot;) +
+  labs(x = NULL, y = &quot;Mean text features per spoken line&quot;)</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-5-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>You can <a href="https://textfeatures.mikewk.com/reference/count_functions.html">read the definitions of these counts here</a>. The differences in these features are what we want to build a model to use in prediction.</p>
+</div>
+<div id="build-a-model" class="section level2">
+<h2>Build a model</h2>
+<p>We can start by loading the tidymodels metapackage, and splitting our data into training and testing sets.</p>
+<pre class="r"><code>set.seed(123)
+avatar_split &lt;- initial_split(avatar, strata = aang)
+avatar_train &lt;- training(avatar_split)
+avatar_test &lt;- testing(avatar_split)</code></pre>
+<p>Next, let’s create cross-validation resamples of the training data, to evaluate our models.</p>
+<pre class="r"><code>set.seed(234)
+avatar_folds &lt;- vfold_cv(avatar_train, strata = aang)</code></pre>
+<p>Next, let’s <strong>preprocess</strong> our data to get it ready for modeling.</p>
+<pre class="r"><code>avatar_rec &lt;- recipe(aang ~ text, data = avatar_train) %&gt;%
+  step_downsample(aang) %&gt;%
+  step_textfeature(text) %&gt;%
+  step_zv(all_predictors()) %&gt;%
+  step_normalize(all_predictors())
+
+avatar_prep &lt;- prep(avatar_rec)
+avatar_prep</code></pre>
+<pre><code>Data Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor          1
+
+Training data contained 7494 data points and no missing data.
+
+Operations:
+
+Down-sampling based on aang [trained]
+Text feature extraction for text [trained]
+Zero variance filter removed 15 items [trained]
+Centering and scaling for 12 items [trained]</code></pre>
+<p>Let’s walk through the steps in this recipe.</p>
+<ul>
+<li>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what data we are using.</li>
+<li>Next, we downsample for our predictor, since there are many more lines spoken by characters other than Aang than by Aang.</li>
+<li>We create the text features using a step from the <a href="https://textrecipes.tidymodels.org/">textrecipes</a> package.</li>
+<li>Then we remove zero-variance variables, which includes variables like the text features about URLs and hashtags in this case.</li>
+<li>Finally, we center and scale the predictors because of the specific kind of model we want to try out.</li>
+</ul>
+<p>We’re mostly going to use this recipe in a <code>workflow()</code> so we don’t need to stress too much about whether to <code>prep()</code> or not. Since we <em>are</em> going to compute variable importance, we will need to come back to <code>juice(avatar_prep)</code>.</p>
+<p>Let’s compare <em>two</em> different models, a random forest model and a support vector machine model. We start by creating the model specifications.</p>
+<pre class="r"><code>rf_spec &lt;- rand_forest(trees = 1000) %&gt;%
+  set_engine(&quot;ranger&quot;) %&gt;%
+  set_mode(&quot;classification&quot;)
+
+svm_spec &lt;- svm_rbf(cost = 0.5) %&gt;%
+  set_engine(&quot;kernlab&quot;) %&gt;%
+  set_mode(&quot;classification&quot;)</code></pre>
+<p>Next let’s start putting together a tidymodels <code>workflow()</code>, a helper object to help manage modeling pipelines with pieces that fit together like Lego blocks. Notice that there is no model yet: <code>Model: None</code>.</p>
+<pre class="r"><code>avatar_wf &lt;- workflow() %&gt;%
+  add_recipe(avatar_rec)</code></pre>
+<p>Now we can add a model, and the fit to each of the resamples. First, we can fit the random forest model.</p>
+<pre class="r"><code>all_cores &lt;- parallelly::availableCores(omit = 1)
+all_cores</code></pre>
+<pre><code>system 
+    11 </code></pre>
+<pre class="r"><code>future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows
+
+set.seed(1234)
+rf_rs &lt;- avatar_wf %&gt;%
+  add_model(rf_spec) %&gt;%
+  fit_resamples(
+    resamples = avatar_folds,
+    metrics = metric_set(roc_auc, accuracy, sens, spec),
+    control = control_grid(save_pred = TRUE)
+  )</code></pre>
+<p>Second, we can fit the support vector machine model.</p>
+<pre class="r"><code>set.seed(2345)
+svm_rs &lt;- avatar_wf %&gt;%
+  add_model(svm_spec) %&gt;%
+  fit_resamples(
+    resamples = avatar_folds,
+    metrics = metric_set(roc_auc, accuracy, sens, spec),
+    control = control_grid(save_pred = TRUE)
+  )</code></pre>
+<p>We have fit each of our candidate models to our resampled training set.</p>
+</div>
+<div id="evaluate-model" class="section level2">
+<h2>Evaluate model</h2>
+<p>Let have a look at how we did.</p>
+<pre class="r"><code>collect_metrics(rf_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.5393722</td>
+<td align="right">10</td>
+<td align="right">0.0064483</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.5501353</td>
+<td align="right">10</td>
+<td align="right">0.0062918</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="odd">
+<td align="left">sens</td>
+<td align="left">binary</td>
+<td align="right">0.5307905</td>
+<td align="right">10</td>
+<td align="right">0.0085026</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">spec</td>
+<td align="left">binary</td>
+<td align="right">0.5412460</td>
+<td align="right">10</td>
+<td align="right">0.0080031</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>conf_mat_resampled(rf_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Prediction</th>
+<th align="left">Truth</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Aang</td>
+<td align="left">Aang</td>
+<td align="right">71.5</td>
+</tr>
+<tr class="even">
+<td align="left">Aang</td>
+<td align="left">Other</td>
+<td align="right">282.0</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="left">Aang</td>
+<td align="right">63.2</td>
+</tr>
+<tr class="even">
+<td align="left">Other</td>
+<td align="left">Other</td>
+<td align="right">332.7</td>
+</tr>
+</tbody>
+</table>
+<p>Well, that is underwhelming!</p>
+<pre class="r"><code>collect_metrics(svm_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.5270838</td>
+<td align="right">10</td>
+<td align="right">0.0083769</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.5683824</td>
+<td align="right">10</td>
+<td align="right">0.0079888</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="odd">
+<td align="left">sens</td>
+<td align="left">binary</td>
+<td align="right">0.5790768</td>
+<td align="right">10</td>
+<td align="right">0.0192877</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">spec</td>
+<td align="left">binary</td>
+<td align="right">0.5156948</td>
+<td align="right">10</td>
+<td align="right">0.0122867</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>conf_mat_resampled(svm_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Prediction</th>
+<th align="left">Truth</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Aang</td>
+<td align="left">Aang</td>
+<td align="right">78.0</td>
+</tr>
+<tr class="even">
+<td align="left">Aang</td>
+<td align="left">Other</td>
+<td align="right">297.7</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="left">Aang</td>
+<td align="right">56.7</td>
+</tr>
+<tr class="even">
+<td align="left">Other</td>
+<td align="left">Other</td>
+<td align="right">317.0</td>
+</tr>
+</tbody>
+</table>
+<p>Different, but not really better! The SVM model is better able to identify the positive cases but at the expense of the negative cases. Overall, we definitely see that this is a hard problem that we barely are able to have any predictive ability for.</p>
+<p>Let’s say we are more interested in detecting Aang’s lines, even at the expense of the false positives.</p>
+<pre class="r"><code>svm_rs %&gt;%
+  collect_predictions() %&gt;%
+  group_by(id) %&gt;%
+  roc_curve(aang, .pred_Aang) %&gt;%
+  ggplot(aes(1 - specificity, sensitivity, color = id)) +
+  geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
+  geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
+  scale_color_avatar(palette = &quot;EarthKingdom&quot;) +
+  coord_equal() +
+  labs(title = &quot;ROC curve of SVM Models\nby cross validation fold&quot;)</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-15-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>This plot highlights how this model is barely doing better than guessing.</p>
+<p>Keeping in mind the realities of our model performance, let’s talk about how to compute variable importance for a model like an SVM, which does not have information within it about variable importance like a linear model or a tree-based model. In this case, we can use a method like permutation of the variables.</p>
+<pre class="r"><code>set.seed(345)
+avatar_imp &lt;- avatar_wf %&gt;%
+  add_model(svm_spec) %&gt;%
+  fit(avatar_train) %&gt;%
+  extract_fit_parsnip() %&gt;%
+  vi(
+    method = &quot;permute&quot;, nsim = 10,
+    target = &quot;aang&quot;, metric = &quot;auc&quot;, reference_class = &quot;Other&quot;,
+    pred_wrapper = kernlab::predict, train = juice(avatar_prep)
+  )
+
+avatar_imp %&gt;%
+  slice_max(Importance, n = 8) %&gt;%
+  mutate(
+    Variable = str_remove(Variable, &quot;textfeature_text_n_&quot;),
+    Variable = fct_reorder(Variable, Importance)
+  ) %&gt;%
+  ggplot(aes(Importance, Variable, color = Variable)) +
+  geom_errorbar(aes(xmin = Importance - StDev, xmax = Importance + StDev),
+    alpha = 0.5, size = 1.3, show.legend = FALSE
+  ) +
+  geom_point(size = 3) +
+  scale_color_avatar(palette = &quot;FireNation&quot;) +
+  labs(
+    y = NULL,
+    title = &quot;Variable Importance&quot;
+  )</code></pre>
+<p><img src="figure/LastAirbender.Rmd/unnamed-chunk-16-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>These are the text features that are most important globally for whether a line was spoken by Aang or not.</p>
+<p>Finally, we can return to the testing data to confirm that our (admittedly lackluster) performance is about the same.</p>
+<pre class="r"><code>avatar_final &lt;- avatar_wf %&gt;%
+  add_model(svm_spec) %&gt;%
+  last_fit(avatar_split)
+
+avatar_final %&gt;%
+  collect_metrics() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.5484388</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.5564722</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>avatar_final %&gt;%
+  collect_predictions() %&gt;%
+  conf_mat(aang, .pred_class)</code></pre>
+<pre><code>          Truth
+Prediction Aang Other
+     Aang   238   917
+     Other  211  1132</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+ [1] kernlab_0.9-29     ranger_0.13.1      vctrs_0.3.8       
+ [4] rlang_0.4.11       vip_0.3.2          themis_0.1.4      
+ [7] textrecipes_0.4.1  yardstick_0.0.8    workflowsets_0.1.0
+[10] workflows_0.2.3    tune_0.1.6         rsample_0.1.0     
+[13] recipes_0.1.16     parsnip_0.1.7.900  modeldata_0.1.1   
+[16] infer_1.0.0        dials_0.0.9.9000   broom_0.7.9       
+[19] tidymodels_0.1.3   showtext_0.9-4     showtextdb_3.0    
+[22] sysfonts_0.8.5     tidylo_0.1.0       textfeatures_0.3.3
+[25] tidytext_0.3.1     tvthemes_1.1.1     forcats_0.5.1     
+[28] stringr_1.4.0      dplyr_1.0.7        purrr_0.3.4       
+[31] readr_2.0.1        tidyr_1.1.3        tibble_3.1.4      
+[34] ggplot2_3.3.5      tidyverse_1.3.1    scales_1.1.1      
+[37] workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2         proto_1.0.0        R.utils_2.10.1    
+  [4] tidyselect_1.1.1   grid_4.1.1         pROC_1.18.0       
+  [7] munsell_0.5.0      codetools_0.2-18   ragg_1.1.3        
+ [10] future_1.22.1      withr_2.4.2        colorspace_2.0-2  
+ [13] highr_0.9          knitr_1.34         rstudioapi_0.13   
+ [16] Rttf2pt1_1.3.9     listenv_0.8.0      labeling_0.4.2    
+ [19] git2r_0.28.0       farver_2.1.0       bit64_4.0.5       
+ [22] DiceDesign_1.9     rprojroot_2.0.2    mlr_2.19.0        
+ [25] parallelly_1.28.1  generics_0.1.0     ipred_0.9-11      
+ [28] xfun_0.25          R6_2.5.1           doParallel_1.0.16 
+ [31] tfse_0.5.0         lhs_1.1.3          cachem_1.0.6      
+ [34] assertthat_0.2.1   promises_1.2.0.1   vroom_1.5.4       
+ [37] nnet_7.3-16        emojifont_0.5.5    gtable_0.3.0      
+ [40] globals_0.14.0     timeDate_3043.102  BBmisc_1.11       
+ [43] systemfonts_1.0.2  splines_4.1.1      extrafontdb_1.0   
+ [46] selectr_0.4-2      checkmate_2.0.0    yaml_2.2.1        
+ [49] modelr_0.1.8       backports_1.2.1    httpuv_1.6.2      
+ [52] tokenizers_0.2.1   extrafont_0.17     tools_4.1.1       
+ [55] lava_1.6.10        usethis_2.0.1      ellipsis_0.3.2    
+ [58] jquerylib_0.1.4    Rcpp_1.0.7         plyr_1.8.6        
+ [61] parallelMap_1.5.1  rpart_4.1-15       ParamHelpers_1.14 
+ [64] viridis_0.6.1      haven_2.4.3        hrbrthemes_0.8.0  
+ [67] fs_1.5.0           here_1.0.1         furrr_0.2.3       
+ [70] unbalanced_2.0     magrittr_2.0.1     data.table_1.14.0 
+ [73] magick_2.7.3       reprex_2.0.1       RANN_2.6.1        
+ [76] GPfit_1.0-8        SnowballC_0.7.0    whisker_0.4       
+ [79] ROSE_0.0-4         R.cache_0.15.0     hms_1.1.0         
+ [82] evaluate_0.14      readxl_1.3.1       gridExtra_2.3     
+ [85] compiler_4.1.1     crayon_1.4.1       R.oo_1.24.0       
+ [88] htmltools_0.5.2    later_1.3.0        tzdb_0.1.2        
+ [91] lubridate_1.7.10   DBI_1.1.1          dbplyr_2.1.1      
+ [94] MASS_7.3-54        Matrix_1.3-4       cli_3.0.1         
+ [97] R.methodsS3_1.8.1  parallel_4.1.1     gower_0.2.2       
+[100] pkgconfig_2.0.3    xml2_1.3.2         foreach_1.5.1     
+[103] bslib_0.3.0        hardhat_0.1.6      tidytuesdayR_1.0.1
+[106] prodlim_2019.11.13 rvest_1.0.1        janeaustenr_0.1.5 
+[109] digest_0.6.27      rmarkdown_2.10     cellranger_1.1.0  
+[112] fastmatch_1.1-3    gdtools_0.2.3      curl_4.3.2        
+[115] lifecycle_1.0.0    jsonlite_1.7.2     viridisLite_0.4.0 
+[118] fansi_0.5.0        pillar_1.6.2       lattice_0.20-44   
+[121] fastmap_1.1.0      httr_1.4.2         survival_3.2-11   
+[124] glue_1.4.2         conflicted_1.0.4   FNN_1.1.3         
+[127] iterators_1.0.13   bit_4.0.4          class_7.3-19      
+[130] stringi_1.7.4      sass_0.4.0         rematch2_2.1.2    
+[133] textshaping_0.3.5  styler_1.5.1       future.apply_1.8.1</code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
