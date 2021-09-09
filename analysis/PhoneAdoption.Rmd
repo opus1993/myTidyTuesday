@@ -1,0 +1,345 @@
+---
+title: "Historical Phone Usage"
+date: "November 10, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+The data this week comes from  [OurWorldInData.org](https://ourworldindata.org/technology-adoption) and is related to telephone subscriptions, mobile and landline, as part of the **Adoption of technologies around the world** series.
+
+Their web page presents high quality interactive javascript visuals of time series line charts and map chloropleths as
+
+<iframe src="https://ourworldindata.org/grapher/fixed-telephone-subscriptions-per-100-people?tab=chart" loading="lazy" style="width: 100%; height: 600px; border: 0px none;"></iframe>
+
+```{r include = FALSE}
+htmltools::includeHTML("https://ourworldindata.org/grapher/fixed-telephone-subscriptions-per-100-people?tab=chart")
+```
+
+and
+
+<iframe src="https://ourworldindata.org/grapher/mobile-cellular-subscriptions-per-100-people?tab=chart" loading="lazy" style="width: 100%; height: 600px; border: 0px none;"></iframe>
+
+```{r include = FALSE}
+htmltools::includeHTML("https://ourworldindata.org/grapher/mobile-cellular-subscriptions-per-100-people?tab=chart")
+```
+
+Our mission is to discover other insights with the dataset
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(hrbrthemes)    # shortcuts for fonts and color palettes
+extrafont::loadfonts(quiet = TRUE)
+library(tidytuesdayR) 
+
+library(scales)
+
+library(WDI)          # World Bank World Development Indicators
+
+library(naniar)        # missing data exploration and imputation
+library(visdat)        # handy missing data visuals
+
+library(ggtext)     # color annotations and plot labels
+
+library(ggrepel)
+})
+source(here::here("code","_common.R"),  
+       verbose = FALSE,
+       local = knitr::knit_global())
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+# Load the weekly Data
+
+Download the weekly data and make available in the `tt` object.
+
+```{r Load}
+
+tt <- tt_load("2020-11-10")
+
+```
+
+```{r Readme, eval = interactive(), include=FALSE}
+
+tt
+
+```
+
+Let's take an initial look at the format of the data available. There are two tables included.  Some of the gdp data is missing
+
+The subs figure is a rate of subscriptions per 100 population
+
+Mobile data is only available to 2017. To make meaningful comparisons, we will stack the datasets and trim to 2017
+
+```{r}
+phones <- bind_rows(tt$mobile %>% 
+  rename(subscriptions = mobile_subs) %>% 
+  mutate(type = "Mobile") , 
+  tt$landline %>% 
+  rename(subscriptions = landline_subs) %>% 
+  mutate(type = "Landline")) %>% 
+  rename(country = entity) %>% 
+  mutate(type = fct_relevel(type, c("Mobile","Landline")),
+         year = as.integer(year)) %>% 
+  filter(year <= 2017L, !str_detect(country, "Serbia")) %>% 
+  complete(type, 
+           nesting(continent, country), 
+           year = 1990L:2017L) %>% 
+  group_by(country) %>% 
+  tidyr::fill(subscriptions) %>% 
+  ungroup() %>% 
+  tidyr::replace_na(list(subscriptions = 0))
+```
+
+For the United States:
+
+```{r}
+phones %>% 
+  filter(country == "United States", !is.na(subscriptions)) %>% 
+  ggplot(aes(year, subscriptions, color = type)) +
+  geom_line(size = 2) +
+  scale_x_continuous(expand = expansion(mult = c(0,0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL) +
+  scale_linetype_manual(guide = guide_legend(reverse = FALSE)) +
+  labs(title = "Telephone subscriptions in the United States",
+      subtitle = "Rate / 100 Population", x = "", y = "", color = "") +
+    theme(legend.position = c(0.9,0.5),
+        legend.background = element_rect(color = "white"),
+        axis.line.x = element_blank()) 
+
+```
+
+For the single nation of Sudan:
+
+```{r}
+phones %>% 
+  filter(country == "Sudan", !is.na(subscriptions)) %>% 
+  ggplot(aes(year, subscriptions, color = type)) +
+  geom_line(size = 2) +
+  scale_x_continuous(expand = expansion(mult = c(0,0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL) +
+  scale_linetype_manual(guide = guide_legend(reverse = FALSE)) +
+  labs(title = "Telephone subscriptions in Sudan",
+      subtitle = "Rate / 100 Population", x = "", y = "", color = "") +
+  annotate("text", x = 2002, y = 20, 
+           label = "Sudan skipped landline \ninfrastructure development",
+           size = 4,
+           color  = "black") +
+    theme(legend.position = c(0.9,0.3),
+        legend.background = element_rect(color = "white"),
+        axis.line.x = element_blank()) 
+```
+
+For the single nation of Luxembourg:
+
+```{r}
+phones %>% 
+  filter(country == "Luxembourg", !is.na(subscriptions)) %>% 
+  ggplot(aes(year, subscriptions, color = type)) +
+  geom_line(size = 2) +
+  scale_x_continuous(expand = expansion(mult = c(0,0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL) +
+  scale_linetype_manual(guide = guide_legend(reverse = FALSE)) +
+  labs(title = "Telephone subscriptions in Luxembourg",
+      subtitle = "Rate / 100 Population", x = "", y = "", color = "") +
+  annotate("text", x = 1995, y = 43, 
+           label = "Around 50 of 100 people \n retain landlines",
+           size = 4,
+           color  = "black") +
+  annotate("text", x = 2010, y = 120, 
+           label = "There are more moble subscriptions \nthan there are people",
+           size = 4,
+           color  = "black") +
+      theme(legend.position = c(0.9,0.5),
+        legend.background = element_rect(color = "white"),
+        axis.line.x = element_blank()) 
+
+```
+
+For the single nation of North Korea:
+
+```{r}
+phones %>% 
+  filter(country == "North Korea", !is.na(subscriptions)) %>% 
+  ggplot(aes(year, subscriptions, color = type)) +
+  geom_line(size = 2) +
+  scale_x_continuous(expand = expansion(mult = c(0,0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL) +
+  scale_linetype_manual(guide = guide_legend(reverse = FALSE)) +
+  annotate("text", x = 2010, y = 11, 
+           label = "2017 is unknown",
+           size = 4,
+           color  = "black") +
+  labs(title = "Telephone Subscribers in North Korea",
+      subtitle = "Rate / 100 Population", x = "", y = "", color = "") +
+      theme(legend.position = c(0.9,0.5),
+        legend.background = element_rect(color = "white"),
+        axis.line.x = element_blank()) 
+
+```
+
+Descriptive statistics across continents and by national income:
+
+```{r}
+
+summarize_subscriptions <- . %>%        # making the summary re-usable
+  filter(!is.na(subscriptions)) %>%
+  summarize(avg_subscriptions = mean(subscriptions),
+            median_subscriptions = median(subscriptions),
+            q25 = quantile(subscriptions, .25),
+            q75 = quantile(subscriptions, .75), 
+            .groups = "drop")
+
+phones %>%
+  filter(!is.na(subscriptions)) %>%
+  group_by(year, continent, type) %>%
+  summarize_subscriptions() %>%
+  ggplot(aes(year,
+             avg_subscriptions,
+             color = type)) +
+  geom_line(size = 2) +
+  geom_ribbon(aes(ymin = q25, ymax = q75), alpha = .2, show.legend = FALSE) +
+  scale_x_continuous(expand = expansion(mult = c(0,0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL) +
+  facet_wrap(~ continent) +
+  theme(legend.position = c(0.8, 0.2)) +
+  labs(x = "",
+       y = "Median subscriptions per person",
+       color = "",
+       title = "How do mobile and landline adoption differ between continents?",
+       subtitle = "Ribbon shows the 25th-75th percentile range of all countries",
+      caption = "Data: OurWorldInData.org | Visual: @jim_gruman")
+```
+
+
+```{r}
+country_incomes <- WDI(indicator = c(gdp_per_capita = "NY.GDP.PCAP.PP.KD",
+                                     pop = "SP.POP.TOTL"),
+                       start = 2005, 
+                       end = 2005, 
+                       extra = TRUE) %>%
+  as_tibble() %>%
+  select(code = iso3c, income, gdp_per_capita, pop) %>%
+  filter(!is.na(income)) %>% 
+  mutate(income = as_factor(income))  %>%
+  mutate(income = fct_relevel(income, 
+                              "Aggregates",
+                              "Low income", 
+                              "Lower middle income", 
+                              "Upper middle income"))
+
+by_year_income <- phones %>%
+  inner_join(country_incomes, by = "code") %>%
+  group_by(year, income, type) %>%
+  summarize_subscriptions()
+
+by_year_income %>%
+  ggplot(aes(year,
+             median_subscriptions,
+             color = type)) +
+  geom_line(size = 2) +
+  geom_ribbon(aes(ymin = q25, ymax = q75), 
+              alpha = .2, show.legend = FALSE) +
+  scale_x_continuous(expand = expansion(mult = c(0,0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL) +
+  facet_wrap(~ income) +
+  labs(
+       y = "Median subscriptions per person", x = "",
+       color = "",
+       title = "How do mobile and landline adoption differ between national income categories?",
+       subtitle = "Ribbon shows the 25th-75th percentile range of all countries",
+      caption = "Data: OurWorldInData.org and World Bank | Visual: @jim_gruman") +
+  theme(legend.position = "bottom")
+
+```
+
+
+What are ways we could summarize stats for each country?
+
+```{r}
+country_sizes <- phones %>%
+  group_by(country) %>%
+  summarize(avg_population = mean(total_pop, na.rm = TRUE),
+            .groups = "drop" ) %>% 
+  slice_max(order_by = avg_population, n = 52) 
+
+phones %>%
+  semi_join(country_sizes, by = "country") %>% 
+  ggplot(aes(year,
+             subscriptions,
+             color = type,
+             group = interaction(type, country))) +
+  geom_line(size = 1.5) +
+  scale_x_continuous(expand = expansion(mult = c(0,0)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = NULL) +
+  facet_wrap(~ continent) +
+  geom_hline(yintercept = 70, lty = 2) +
+  labs(y = "Subscriptions per 100 population",
+       x = "",
+       title = "Mobile phone technology penetration and the race to 70 subscriptions per 100 people",
+       subtitle = "In the largest 50 nations, the US, Canada, and Europe replaced landlines. Africa started from scratch with mobile",
+       color = "",
+      caption = "Data: OurWorldInData.org and World Bank | Visual: @jim_gruman") +
+  theme(legend.position = c(0.9, 0.2))
+
+```
+
+```{r}
+countries_summarized <- phones %>%
+  filter(!is.na(subscriptions)) %>%
+  select(-total_pop, gdp_per_cap) %>%
+  pivot_wider(names_from = type, values_from = subscriptions) %>%
+  group_by(continent, country, code) %>%
+  summarize(year_past_70_mobile = na_if(min(year[Mobile >= 70]), Inf),
+            peak_landline = max(Landline, na.rm = TRUE),
+            peak_mobile = max(Mobile),
+            n_mobile = sum(!is.na(Mobile))) %>%
+  ungroup() %>%
+  inner_join(country_incomes, by = "code") %>%
+  filter(n_mobile >= 25) %>%
+  arrange(desc(year_past_70_mobile))
+
+countries_summarized %>%
+  tidyr::drop_na() %>% 
+  ggplot(aes(year_past_70_mobile,
+             gdp_per_capita,
+             color = continent,
+             size = pop)) +
+  geom_point(alpha = 0.6) +
+  geom_text_repel(aes(label = country), show.legend = FALSE) +
+  scale_y_log10(labels = dollar) +
+  scale_x_continuous(expand = expansion(mult = c(0.05,0.05)),
+    breaks = seq(1990, 2020, 5),
+    minor_breaks = seq(1990, 2019, 1)) +
+  scale_color_discrete(guide = guide_legend(override.aes = list(size = 10))) +
+  scale_size_continuous(labels = comma,
+                        range = c(3,8)) +
+  labs(y = "GDP per capita (in 2005)",
+       x = "Year mobile subscriptions passed 70/100 people",
+       title = "Wealthy countries in Europe had early mobile phone technology penetration",
+       subtitle = "The year that each nation first exceeded 70 subscribers per 100 population",
+       size = "National \nPopulation",
+       color = "",
+      caption = "Data: OurWorldInData.org and World Bank | Visual: @jim_gruman") +
+  theme(legend.position = c(0.95,0.8),
+        legend.background = element_rect(color = "white")) 
+
+```
+
+
+
+
+
+
