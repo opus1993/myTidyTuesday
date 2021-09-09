@@ -33,7 +33,8 @@ options(
   ggplot2.discrete.fill = viridis::viridis_pal(option = "H")(12)[color_index],
   ggplot2.discrete.colour = viridis::viridis_pal(option = "H")(12)[color_index],
   ggplot2.continuous.fill = alpha_viridis,
-  ggplot2.continuous.colour = alpha_viridis
+  ggplot2.continuous.colour = alpha_viridis,
+  hrbrthemes.loadfonts = TRUE
 )
 
 hrbrthemes::update_geom_font_defaults(hrbrthemes::font_rc_light)
