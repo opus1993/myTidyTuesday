@@ -1,0 +1,232 @@
+---
+title: "USDA NASS Stocks to Use"
+author: "Jim Gruman"
+date: "January 7, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+Professor Aaron Smith, Ag Economist at UC Davis, writes in [Good Times Down on the Farm](https://juliasilge.com/blog/chicago-traffic-model/), that corn, soybean and wheat prices have increased by 50% since mid-August of 2020.  On top of [record government support payments](https://asmith.ucdavis.edu/news/farm-support) to US farmers in 2020, these price increases are a huge potential boon for farmers as they plan next year's crops.  
+
+But what caused the price increase?
+
+
+```{r setup}
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(lubridate)
+library(here)
+library(rnassqs)
+library(ggrepel)
+library(Quandl)
+})
+
+extrafont::loadfonts(quiet = TRUE)
+
+source(here::here("code","_common.R"),  
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+```
+
+```{r}
+
+nassqs_auth(Sys.getenv("NASSQS_TOKEN")) # authentificate your api key
+# nassqs_params() # check what variables are there
+# comm_list <- nassqs_param_values("commodity_desc") # get commodity list
+
+# set years
+years <- 2000:2020
+
+# set parameters for API calls except for years 
+# (we are not allowed to request many records at once, so I iterate API calls by years)
+params <- list(source_desc = "SURVEY", 
+              short_desc = c("CORN, GRAIN - STOCKS, MEASURED IN BU",
+                           "WHEAT - STOCKS, MEASURED IN BU",
+                           "SOYBEANS - STOCKS, MEASURED IN BU",
+                           "CORN, GRAIN - PRODUCTION, MEASURED IN BU",
+                           "WHEAT - PRODUCTION, MEASURED IN BU",
+                           "SOYBEANS - PRODUCTION, MEASURED IN BU"),
+              agg_level_desc = "NATIONAL") 
+
+# create data based on the parameters and years using 'nassqs'
+if (!file.exists(here("data","grainstocks.rds"))) {
+df <- map_dfr(years, function(x){params[["year"]] <- x; nassqs(params)}) 
+write_rds(df, here("data","grainstocks.rds"))
+} else {
+df <- read_rds(here("data","grainstocks.rds"))
+}
+
+
+# process data for plotting
+df1 <- df %>% 
+  select(year, state_alpha, commodity_desc, freq_desc, reference_period_desc, unit_desc, short_desc, Value)  %>%
+  mutate(Value = parse_number(Value)) %>%
+  filter(!reference_period_desc %in% c("FIRST OF MAR","FIRST OF DEC")) %>%
+  filter(!(reference_period_desc %in% c("FIRST OF JUN") & commodity_desc %in% c("CORN","SOYBEANS"))) %>%
+  filter(!(reference_period_desc %in% c("FIRST OF SEP") & commodity_desc %in% c("WHEAT"))) %>%
+  filter(!str_detect(reference_period_desc,"YEAR -")) %>%
+  mutate(short_desc = case_when(
+    short_desc == "CORN, GRAIN - PRODUCTION, MEASURED IN BU" ~ "Corn_Prod",
+    short_desc=="CORN, GRAIN - STOCKS, MEASURED IN BU" ~ "Corn_Stocks",
+    short_desc=="SOYBEANS - PRODUCTION, MEASURED IN BU" ~ "Soybean_Prod",
+    short_desc=="SOYBEANS - STOCKS, MEASURED IN BU" ~ "Soybean_Stocks",
+    short_desc=="WHEAT - PRODUCTION, MEASURED IN BU" ~ "Wheat_Prod",
+    short_desc=="WHEAT - STOCKS, MEASURED IN BU" ~ "Wheat_Stocks",
+    TRUE ~ short_desc
+  )) %>% 
+  select(year, short_desc, Value) %>%
+  pivot_wider(values_from = Value,
+              names_from = short_desc) %>%
+  add_row(year = max(df$year) + 1,
+          Corn_Stocks = 1702000000,
+          Soybean_Stocks = 175000000,
+          Wheat_Stocks = 862000000) %>%
+  mutate(Corn = lead(Corn_Stocks,1)/(Corn_Prod + Corn_Stocks - lead(Corn_Stocks,1))) %>%
+  mutate(Soybean = lead(Soybean_Stocks,1)/(Soybean_Prod + Soybean_Stocks - lead(Soybean_Stocks,1))) %>%
+  mutate(Wheat = lead(Wheat_Stocks,1)/(Wheat_Prod + Wheat_Stocks - lead(Wheat_Stocks,1))) %>% filter(year != max(df$year) + 1)
+
+pstocks <- df1 %>%
+  select(year, Corn, Soybean, Wheat) %>%
+    pivot_longer(-year) %>% 
+    mutate(name_lab = if_else(year == max(year), name, NA_character_)) %>% 
+ggplot(aes(x = year, y = value, color = name, label = name_lab)) +
+    geom_line(size = 1) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(limits = c(2000, 2023),
+                     breaks = seq(2000,2020, by = 5),
+                     minor_breaks = NULL) +
+    geom_text_repel(
+    direction = "y",
+    xlim = c(2020.8, NA),
+    hjust = 0,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = "dotted",
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20
+    ) +
+    labs(x = NULL,
+         y = NULL,
+         color = NULL,
+         title = "Crop Year Ending Stocks as a Percent of Use",
+         caption = "Source: USDA NASS | @jim_gruman") +
+  theme(legend.position = "")
+
+
+```
+
+
+```{r}
+Quandl.api_key(Sys.getenv("quandl"))
+
+crops = c("Corn","Soybeans","SRW", "HRW")
+update_since = as.Date("2000-01-01") # change this one
+
+futuresID = c("C","S","W","KW")
+
+min_date <- as.Date("2020-08-10")
+start_date <- as.Date("2000-01-01")
+  
+df2 <- map_dfc(list(futuresID),  ~Quandl::Quandl(paste0("CHRIS/CME_",.,"1"), 
+                          start_date = as.character(start_date))) %>% 
+  select(Date , ends_with("Settle")) %>% 
+  mutate(Date = ymd(Date))
+
+names(df2) <- c("Date",crops)
+  
+pprices2000 <- df2 %>% 
+  transmute(Date = Date,
+            Corn = Corn/max(ifelse(Date == min_date,Corn,0)),
+            Soybeans = Soybeans/max(ifelse(Date == min_date,Soybeans,0)),
+            Wheat = SRW/max(ifelse(Date == min_date,SRW,0)),
+            `Hard Wheat` = HRW/max(ifelse(Date == min_date,HRW,0))) %>%
+  pivot_longer(-Date) %>%
+  filter(Date > start_date) %>%
+  ggplot(aes(x = Date,y = value, color = name)) +
+    geom_line(size = 1, alpha = 0.6) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+    scale_x_date(limits = c(ymd(start_date), NA),
+                 breaks = seq.Date(ymd(start_date), ymd("2020-01-01"), by = "5 years"),
+                 minor_breaks = NULL,
+date_labels = "%Y") +
+    labs(x = "Date", y = NULL, color = NULL,
+         subtitle = paste0("Price ","(Index = 100% on ",min_date,")"),color = "Commodity",
+         title = "Corn, Soybean and Wheat Prices",
+         caption = "Source: Quandl | Visual: @jim_gruman") +
+   theme(legend.position = c(0.9,0.7),
+         legend.background = element_rect(color = "white"))
+
+pprices2020 <- df2 %>% 
+  transmute(Date = Date,
+            Corn = Corn/max(ifelse(Date == min_date,Corn,0)),
+            Soybeans = Soybeans/max(ifelse(Date == min_date,Soybeans,0)),
+            Wheat = SRW/max(ifelse(Date == min_date,SRW,0)),
+            `Hard Wheat` = HRW/max(ifelse(Date == min_date,HRW,0))) %>%
+  pivot_longer(-Date) %>%
+  filter(Date > ymd("2020-01-01")) %>%
+  ggplot(aes(x = Date,y = value,color = name)) +
+    geom_line(size = 1, alpha = 0.6) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+    scale_x_date(limits = c(ymd("2020-01-01"), NA),
+                 breaks = seq.Date(ymd("2020-01-01"), ymd("2021-01-01"), by = "month"),
+                 minor_breaks = NULL,
+date_labels = "%b") +
+    labs(x = "Date", y = NULL, 
+         subtitle = paste0("Price ","(Index = 100% on ",min_date,")"),color = NULL,
+         title = "2020 Corn, Soybean and Wheat Prices",
+         caption = "Source: Quandl | Visual: @jim_gruman") +
+   theme(legend.position = c(0.95,0.2),
+         legend.background = element_rect(color = "white"))
+
+```
+
+```{r}
+pprices2020
+```
+
+First, some perspective. Prices were much higher in 2011-13 than in the last 5 years. Corn averaged \$6.50 per bushel in 2011-13 and just \$3.70 in 2015-19, soybeans averaged \$14 in 2011-13 and \$9.50 in 2015-19, and wheat averaged \$7.70 in 2011-13 and \$4.60 in 2015-19. 
+
+```{r}
+pprices2000
+```
+
+Smith goes on to say that commodity prices rise because some quantity has been, or is expected to be, removed from the market. It may be removed by bad weather that reduces production or a new buyer who increases purchases. His rule of thumb for US major grains is that the percentage price change is similar to, or a little larger than, the quantity removed as a percent of production. 
+
+In [this paper](https://doi.org/10.1093/ajae/aas032) that Aaron Smith published in 2012 with Mike Adjemian, they estimated how much corn and soybean futures change when the USDA changes its production estimates. They found that a 1% decline in expected corn production raises prices by 1.35% on average, and that a 1% decline in expected soybean production raises prices by 1% on average. The price response is larger when the markets are tight such as when inventories are low or during the ethanol boom and when the quantity decline is expected to be repeated for multiple years.
+
+For example, the 2012 drought in the US midwest reduced corn production by about 27% and increased prices by about 39%. In May of that year, [USDA projected](https://downloads.usda.library.cornell.edu/usda-esmis/files/3t945q76s/db78tc299/rv042t388/wasde-05-10-2012.pdf) a 14.8b bushel harvest, but actual US production was 10.8b, a loss of 27%. During the growing season, as markets became aware of the poor weather, the December futures price rose from \$5.39 on May 1 to \$7.49 on December 3, an increase of 39%.  So, the 39% price increase came from a 27% quantity loss. 
+
+To explain 2020's 50% increase in prices, we are looking for 50/1.35 = 37% of corn production being removed from the market, or about 5.5b bushels. We're also looking for about 2b bushels of soybeans (50% of production) and about 0.9b bushels of wheat (50% of production). 
+
+**These are huge numbers.**
+
+One possibility is the recent surge in US exports to China. We're only a third of the way through the crop year, but we're not going to get anywhere close to 5.5b of corn exported to China.
+
+China has also resumed buying US soybeans in a big way. The purchases started in August, right around when prices started increasing, but are the purchases large enough to explain the 50% price increases? To explain a 50% soybean price increase, we need about 55mmt (i.e., 2b bushels) to be removed from the market this crop year.  Suppose the market was expecting 2020/21 exports to China to track the 2019/20 levels. We're 17mmt ahead of that pace through the first third of the year. If we keep it up, we'd be 51mmt ahead of pace by the end of the crop year for a total of 65mmt of soybean exports to China.  
+
+Is that feasible? Professor Smith has doubts
+
+The required quantity change to cause a 50% price increase would be smaller if inventories (stocks) were low. Put differently, the commodity is less price elastic when stocks are low. Projected corn stocks at the end of the 2020 crop year are about average (11.5%), wheat stocks are high (43%), and soybean stocks are at their lowest in at least 20 years (3.9%). Thus, China's buying binge may have driven prices up by more than it normally would  because of the current low stocks.
+
+```{r}
+pstocks
+```
+
+Another explanation for the price increases could be expected production losses in the Southern Hemisphere in their upcoming season. 
+
+In summary, China's return to buying US soybeans is the proximate cause of the late 2020 price boom in soybeans. Corn and wheat prices have increased because the market expects farmers to plant more soybeans, and therefore less corn and wheat, next year.
+
+Expect midwestern farmers to be locking in these high prices selling forward for next year's crop, and by extension, it may be a good time to be in the tractor sales business.
+
+----
+
+Read Aaron Smith's [article here]() and check out the [UC Davis Export Sales Reports data app](https://asmith.ucdavis.edu/data/export-sales-reports).
