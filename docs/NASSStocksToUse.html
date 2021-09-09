@@ -404,16 +404,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree050b3d1964e13ca553042675c7e7b8377f16aecetargetblank050b3d1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/050b3d1964e13ca553042675c7e7b8377f16aece" target="_blank">050b3d1</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree1c0244747ea918c54973bc61f8cb57d44e6970detargetblank1c02447a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/1c0244747ea918c54973bc61f8cb57d44e6970de" target="_blank">1c02447</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree050b3d1964e13ca553042675c7e7b8377f16aecetargetblank050b3d1a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree1c0244747ea918c54973bc61f8cb57d44e6970detargetblank1c02447a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/050b3d1964e13ca553042675c7e7b8377f16aece" target="_blank">050b3d1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/1c0244747ea918c54973bc61f8cb57d44e6970de" target="_blank">1c02447</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -467,6 +467,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/1c0244747ea918c54973bc61f8cb57d44e6970de/analysis/NASSStocksToUse.Rmd" target="_blank">1c02447</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-09
+</td>
+<td>
+label lines directly without a legend
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/210ff1d85e2cec81a4d2e7741bf30a0d83ecb6c9/docs/NASSStocksToUse.html" target="_blank">210ff1d</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -583,7 +617,7 @@ pstocks &lt;- df1 %&gt;%
   pivot_longer(-year) %&gt;%
   mutate(name_lab = if_else(year == max(year), name, NA_character_)) %&gt;%
   ggplot(aes(x = year, y = value, color = name, label = name_lab)) +
-  geom_line(size = 1) +
+  geom_line(size = 1, show.legend = FALSE) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   scale_x_continuous(
     limits = c(2000, 2023),
@@ -600,7 +634,8 @@ pstocks &lt;- df1 %&gt;%
     box.padding = .4,
     segment.curvature = -0.1,
     segment.ncp = 3,
-    segment.angle = 20
+    segment.angle = 20,
+    show.legend = FALSE
   ) +
   labs(
     x = NULL,
@@ -608,8 +643,7 @@ pstocks &lt;- df1 %&gt;%
     color = NULL,
     title = &quot;Crop Year Ending Stocks as a Percent of Use&quot;,
     caption = &quot;Source: USDA NASS | @jim_gruman&quot;
-  ) +
-  theme(legend.position = &quot;&quot;)</code></pre>
+  )</code></pre>
 <pre class="r"><code>Quandl.api_key(Sys.getenv(&quot;quandl&quot;))
 
 crops &lt;- c(&quot;Corn&quot;, &quot;Soybeans&quot;, &quot;SRW&quot;, &quot;HRW&quot;)
@@ -638,14 +672,29 @@ pprices2000 &lt;- df2 %&gt;%
   ) %&gt;%
   pivot_longer(-Date) %&gt;%
   filter(Date &gt; start_date) %&gt;%
-  ggplot(aes(x = Date, y = value, color = name)) +
-  geom_line(size = 1, alpha = 0.6) +
+  ggplot(aes(x = Date, y = value, color = name), show.legend = FALSE) +
+  geom_line(size = 1, alpha = 0.6, show.legend = FALSE) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   scale_x_date(
-    limits = c(ymd(start_date), NA),
+    limits = c(ymd(start_date), max(df2$Date) %m+% months(12)),
     breaks = seq.Date(ymd(start_date), ymd(&quot;2020-01-01&quot;), by = &quot;5 years&quot;),
     minor_breaks = NULL,
     date_labels = &quot;%Y&quot;
+  ) +
+  geom_text_repel(
+    data = . %&gt;% filter(Date == max(df2$Date)),
+    aes(label = name),
+    direction = &quot;y&quot;,
+    xlim = c(max(df2$Date) %m+% months(9), NA),
+    hjust = 0,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = &quot;dotted&quot;,
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20,
+    show.legend = FALSE
   ) +
   labs(
     x = &quot;Date&quot;, y = NULL, color = NULL,
@@ -667,15 +716,33 @@ pprices2020 &lt;- df2 %&gt;%
     `Hard Wheat` = HRW / max(ifelse(Date == min_date, HRW, 0))
   ) %&gt;%
   pivot_longer(-Date) %&gt;%
-  filter(Date &gt; ymd(&quot;2020-01-01&quot;)) %&gt;%
-  ggplot(aes(x = Date, y = value, color = name)) +
-  geom_line(size = 1, alpha = 0.6) +
+  filter(between(Date, ymd(&quot;2020-01-01&quot;), ymd(&quot;2020-12-31&quot;))) %&gt;%
+  ggplot(aes(x = Date, y = value, color = name), show.legend = FALSE) +
+  geom_line(size = 1, alpha = 0.6, show.legend = FALSE) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   scale_x_date(
-    limits = c(ymd(&quot;2020-01-01&quot;), NA),
-    breaks = seq.Date(ymd(&quot;2020-01-01&quot;), ymd(&quot;2021-01-01&quot;), by = &quot;month&quot;),
+    limits = c(ymd(&quot;2020-01-01&quot;), ymd(&quot;2021-02-01&quot;)),
+    breaks = seq.Date(ymd(&quot;2020-01-01&quot;),
+      ymd(&quot;2021-01-01&quot;),
+      by = &quot;month&quot;
+    ),
     minor_breaks = NULL,
     date_labels = &quot;%b&quot;
+  ) +
+  geom_text_repel(
+    data = . %&gt;% filter(Date == ymd(&quot;2021-01-01&quot;)),
+    aes(label = name),
+    direction = &quot;y&quot;,
+    xlim = c(ymd(&quot;2021-01-01&quot;) %m+% months(1), NA),
+    hjust = 0,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = &quot;dotted&quot;,
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20,
+    show.legend = FALSE
   ) +
   labs(
     x = &quot;Date&quot;, y = NULL,
