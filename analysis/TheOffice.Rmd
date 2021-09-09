@@ -24,6 +24,7 @@ source(here::here("code","_common.R"),
        verbose = FALSE,
        local = knitr::knit_global())
 ggplot2::theme_set(theme_jim(base_size = 12))
+
 ```
 
 # Lasso Regression using Tidymodels Workflows and The Office TidyTuesday DataSet
@@ -88,9 +89,8 @@ office_ratings %>%
   mutate(title = paste0(season, ".", episode, " ", title),
          title = fct_reorder(title, imdb_rating)) %>%
   head(20) %>%
-  ggplot(aes(title, imdb_rating, color = factor(season), size = total_votes)) +
+  ggplot(aes(y = title,x = imdb_rating, color = factor(season), size = total_votes)) +
   geom_point() +
-  coord_flip() +
   labs(color = "Season",
        title = "Most Popular Episodes of The Office",
        subtitle = "Top 20 Season.Episode Titles, Color by Season and Size by Total Votes", caption = paste0("Jim Gruman ", Sys.Date())) 
@@ -166,25 +166,24 @@ character_tf_idf %>%
   filter(character == "Dwight") %>%
   mutate(word = fct_reorder(word, tf_idf)) %>%
   head(20) %>%
-  ggplot(aes(word, tf_idf)) +
+  ggplot(aes(y = word,x =  tf_idf)) +
   geom_col() +
-  coord_flip() +  
   labs(title = "Dwight's Lines in The Office",
        subtitle = "Highest Tf-IDF words", 
        caption = paste0("Jim Gruman ", Sys.Date())) 
-
+```
+```{r}
 character_tf_idf %>%
   filter(character == "Jim") %>%
   mutate(word = fct_reorder(word, tf_idf)) %>%
   head(20) %>%
-  ggplot(aes(word, tf_idf)) +
+  ggplot(aes(y = word, x = tf_idf)) +
   geom_col() +
-  coord_flip() +  
   labs(title = "Jim's Lines in The Office",
        subtitle = "Highest Tf-IDF words", 
        caption = paste0("Jim Gruman ", Sys.Date())) 
-
-
+```
+```{r, fig.asp=1}
 character_tf_idf %>%
   filter(character %in% c("Jim","Dwight","Michael","Meredith")) %>%
   group_by(character) %>%
