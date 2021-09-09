@@ -333,7 +333,7 @@ countries_summarized %>%
        size = "National \nPopulation",
        color = "",
       caption = "Data: OurWorldInData.org and World Bank | Visual: @jim_gruman") +
-  theme(legend.position = c(0.95,0.8),
+  theme(legend.position = "bottom",
         legend.background = element_rect(color = "white")) 
 
 ```
