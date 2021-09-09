@@ -1,0 +1,250 @@
+---
+title: "NFL attendance"
+author: "Jim Gruman"
+date: 'February 4, 2020'
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(tidymodels)
+})
+source(here::here("code","_common.R"),  
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+Let's build a very simple model for [NFL attendance](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-04/readme.md) 
+
+## Explore data
+
+Load the attendance and team standings data from Github
+
+```{r }
+attendance <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-04/attendance.csv')
+
+standings <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-04/standings.csv')
+
+attendance_joined<-attendance %>%
+  left_join(standings, by = c("year", "team_name", "team"))
+
+```
+
+Explore the files and look for trends. In this boxplot visual, some teams certainly expect higher weekly attendance.
+
+```{r}
+attendance_joined %>%
+  filter(!is.na(weekly_attendance)) %>%
+  ggplot(aes(
+    y = fct_reorder(team_name, weekly_attendance),
+    x = weekly_attendance,
+    fill = playoffs
+  )) +
+  geom_boxplot(outlier.alpha = 0.5) +
+  scale_x_continuous(labels = scales::label_comma()) +
+  labs(
+    title = "NFL Weekly Attendance",
+    caption = paste0("Jim Gruman ", Sys.Date()),
+    x = "",
+    y = "Weekly Attendance"
+  ) +
+  theme(legend.position = "bottom") 
+
+```
+
+In this histogram, playoff-bound teams generally have higher point spread margins over the course of many games.
+
+```{r}
+attendance_joined %>%
+  distinct(team_name, year, margin_of_victory, playoffs)%>%
+  ggplot(aes(margin_of_victory, fill = playoffs))+
+  geom_histogram(position = "identity", alpha = 0.7)+
+  labs(title = "NFL Team Margin of Victory",
+      caption = paste0("Jim Gruman ",Sys.Date()),
+      x = "Point Spread", y = "Game Count") +
+  theme(legend.position = "bottom")
+```
+
+Across the weeks of the season, this data visualization shows the distribution of attendance by week number.
+
+```{r}
+attendance_joined %>%
+  mutate(week = factor(week))%>%
+  ggplot(aes(week, weekly_attendance, fill = "blue"))+
+  geom_boxplot(show.legend = FALSE, outlier.alpha = 0.4)+
+  labs(title = "NFL Weekly Game Attendance",
+      caption = paste0("Jim Gruman ",Sys.Date()),
+      x = "Week of Season", y = "Attendance")+
+  theme(legend.position = "bottom")+
+  scale_y_continuous(labels = scales::label_comma())
+
+```
+
+To build models for the prediction of weekly attendance, we will select for features arbitrarily on the team_name, the year, the week of the game, and the margin of victory.
+
+```{r}
+attendance_df<-attendance_joined  %>%
+  filter(!is.na(weekly_attendance))%>%
+  dplyr::select(weekly_attendance, team_name, year, week, 
+         margin_of_victory, strength_of_schedule, playoffs)
+
+```
+
+## Train a Model
+
+First, the data are split into training and testing sets at about 75/25, stratifying for similar playoff outcomes in both.
+
+```{r}
+
+attendance_split <- attendance_df %>%
+  initial_split(strata = playoffs)
+
+nfl_train <- training(attendance_split)
+nfl_test <- testing(attendance_split)
+
+
+```
+
+A simple linear model is specified and fit, and the estimates of coefficients are shown here:
+
+```{r}
+lm_spec <- linear_reg(mode = "regression") %>%
+  set_engine(engine = "lm")
+
+lm_fit <- lm_spec %>%
+  fit(weekly_attendance ~ ., data = nfl_train)
+
+tidy(lm_fit) %>% 
+  arrange(-p.value) %>% 
+  filter(p.value < 0.05) %>% 
+  knitr::kable()
+
+```
+
+A comparable random forest regression is specified and fit here:
+
+```{r}
+rf_spec <- rand_forest(mode = "regression") %>%
+  set_engine(engine = "ranger")
+
+rf_fit <- rf_spec %>%
+  fit(weekly_attendance ~ ., data = nfl_train)
+
+tidy(lm_fit) %>% 
+  arrange(-estimate) %>% 
+  knitr::kable()
+
+```
+
+## Evaluate Models
+
+```{r}
+results_train <- lm_fit %>%
+  predict(new_data = nfl_train) %>%
+  mutate(truth = nfl_train$weekly_attendance,
+         model = "lm") %>%
+  bind_rows(rf_fit %>%
+      predict(new_data = nfl_train) %>%
+      mutate(truth = nfl_train$weekly_attendance,
+         model = "rf"))
+
+results_test <- lm_fit %>%
+  predict(new_data = nfl_test) %>%
+  mutate(truth = nfl_test$weekly_attendance,
+         model = "lm") %>%
+  bind_rows(rf_fit %>%
+      predict(new_data = nfl_test) %>%
+      mutate(truth = nfl_test$weekly_attendance,
+         model = "rf"))
+
+```
+On the training dataset
+
+```{r}
+results_train %>%
+  group_by(model) %>%
+  rmse(truth = truth, estimate = .pred) %>% 
+  knitr::kable()
+```
+
+On the testing data:
+
+```{r}
+results_test %>%
+  group_by(model) %>%
+  rmse(truth = truth, estimate = .pred) %>% 
+  knitr::kable()
+```
+
+The random forest model here appears to overfit the training data set, with disappointing results on new data.
+
+```{r}
+
+results_test %>%
+  mutate(train = "testing") %>%
+  bind_rows(results_train %>%
+              mutate(train = "training")) %>%
+  ggplot(aes(truth, .pred, color = model)) +
+  geom_abline(lty = 2, color = "gray80", size = 1.5) +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~train)
+
+```
+### Lets try again, with resampling on the training
+
+```{r}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+nfl_folds <- vfold_cv(nfl_train, strata = playoffs)
+
+rf_res <- fit_resamples(
+  workflow(weekly_attendance ~ . , rf_spec) ,
+  nfl_folds,
+  control = control_resamples(save_pred = TRUE)
+)
+
+rf_res %>% 
+  collect_metrics() %>% 
+  knitr::kable()
+```
+
+```{r}
+rf_res %>%
+  unnest(.predictions) %>%
+  ggplot(aes(weekly_attendance, .pred, color = id)) +
+  geom_abline(lty = 2, color = "gray80", size = 1.5) +
+  geom_point(alpha = 0.5) +
+  labs(title = "Model Accuracy",
+      caption = paste0("Jim Gruman ",Sys.Date()),
+      x = "Attendance Truth", y = "Attendance Prediction") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(labels = scales::label_comma()) +
+  scale_x_continuous(labels = scales::label_comma())
+
+```
+
+After resampling, the root mean squared error of the random forest model on test data is improved only marginally, compared to the conventional linear model.
+
+Credits:
+  Julia Silge, RStudio
+  Thomas Mock, RStudio
+  
+
+
+
+
+
