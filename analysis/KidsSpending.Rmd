@@ -1,0 +1,206 @@
+---
+title: "Kids Spending"
+date: "September 22, 2020"
+author: "Jim Gruman"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+The data for this week was provided by the US Census Bureau from their State and Local Government finance survey
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(geojsonio)
+library(broom)
+library(rgeos)
+library(ggtext)
+
+library(showtext)
+})
+
+sysfonts::font_add(family = "IBM Plex Sans", regular = "C:/Users/jimgr/Documents/R/win-library/4.0/hrbrthemes/fonts/plex-sans/IBMPlexSans-Regular.TTF")
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+# ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+```{r data, include = FALSE}
+
+tt <- tidytuesdayR::tt_load("2020-09-15")
+
+df_kids <- tt$kids
+```
+
+The Carto platform host connections to geospatial datasets and the geojson format featured here. The web site credits AndrewXHill as the creator.
+
+```{r prep-data}
+df_kids_health <- 
+  df_kids %>%
+  filter(variable == "pubhealth") %>% 
+  group_by(state) %>% 
+  mutate(
+    diff = inf_adj_perchild[which(year == max(year))] - inf_adj_perchild[which(year == min(year))],
+    diff_cat = case_when(
+      diff < -.1 ~ 1,  ## considerably lower
+      diff >= -.1 & diff < 0 ~ 2,  ## slightly lower
+      diff >= 0 & diff <= .2 ~ 3,  ## slightly higher
+      diff > .2 & diff <= 0.8  ~ 4,  ## considerably higher
+      diff > 0.8 ~ 5,  ## considerably higher
+    ),
+    diff_cat = factor(diff_cat, levels = 1:5)
+  )
+## HEX MAP #####################################################################
+# the geojson is downloadable from https://team.cartodb.com/u/andrew/tables/andrew.us_states_hexgrid/public/map
+
+map_hex <- geojson_read(
+    here::here("data", "us_states_hexgrid.geojson"),  
+    what = "sp"
+  )
+map_hex@data <- map_hex@data %>%
+  mutate(google_name = gsub(" \\(United States\\)", "", google_name))
+
+map_hex_fortified <- tidy(map_hex, region = "google_name")
+## smaller polygons for frame
+
+map_hex_buffer <-
+  gBuffer(map_hex, width = -.15, byid = T)
+  
+map_hex_buffer_fortified <- tidy(map_hex_buffer, region = "google_name")
+## calculate centroids
+centr <- cbind.data.frame(data.frame(gCentroid(map_hex_buffer, byid = T), id = map_hex@data$google_name))
+## calculate lines based on centroids
+df_kids_tl <- 
+  df_kids_health %>% 
+  left_join(centr, by = c("state" = "id")) %>% 
+  mutate(
+    year_rel = year - (min(year) + (max(year) - min(year)) / 2),
+    year_x = x + year_rel / 5.5,
+    inf_adj_perchild_rel = inf_adj_perchild - (min(inf_adj_perchild) + (max(inf_adj_perchild) - min(inf_adj_perchild)) / 200) - 1.5,
+    inf_y = y + inf_adj_perchild_rel / 2
+  ) %>% 
+  mutate(base = y + min(inf_adj_perchild_rel) / 2)
+## centroids for labels
+df_kids_labels <-
+  df_kids_health %>% 
+  left_join(map_hex@data[,6:7], by = c("state" = "google_name")) %>% 
+  left_join(centr, by = c("state" = "id")) %>% 
+  mutate(
+    y = case_when(
+      iso3166_2 == "ME" ~ y + .3,
+      iso3166_2 == "WY" ~ y + .7,
+      iso3166_2 == "DC" ~ y - .4,
+      iso3166_2 == "HI" ~ y + .4,
+      iso3166_2 == "DE" ~ y + .1,
+      TRUE ~ y
+    )
+  )
+  
+## combine data
+df_kids_hex_buffer <- map_hex_buffer_fortified %>%
+  left_join(df_kids_health, by = c("id" = "state")) 
+```
+
+```{r plot}
+ggplot(data = df_kids_tl,
+       aes(year_x, inf_y, group = state)) +
+  geom_polygon(
+    data = df_kids_hex_buffer,
+    aes(long, lat, 
+        group = id,
+        color = diff_cat), 
+    fill = "grey9", size = 2.4
+  ) +
+  geom_polygon(
+    data = map_hex_fortified,
+    aes(long, lat, 
+        group = id), 
+    color = "grey18", 
+    fill = "transparent", size = 1
+  ) +
+  geom_line(
+    color = "grey72", size = .2
+  ) +
+  geom_point(
+    color = "white", 
+    size = .1
+  ) +
+  geom_text(
+    data = df_kids_tl %>% filter(year %in% c(1997, 2016)),
+    aes(label = {format(round(inf_adj_perchild, 2), digits = 2)},
+        hjust = year == 1997),
+    family = "IBM Plex Sans",
+    color = "grey62",
+    size = 1,
+    nudge_y = .2
+  ) +
+  geom_text(
+    data = df_kids_labels %>% group_by(iso3166_2) %>% slice(1),
+    aes(x, y, label = iso3166_2, color = diff_cat,
+        color = after_scale(colorspace::lighten(color, .2))),
+    family = "IBM Plex Sans",
+    size = 2.4,
+    fontface = "bold"
+  ) +
+  geom_richtext(
+    data = tibble(
+      x = -103.9388, y = 53.8,
+      label = 
+      "<b style='color:#f5f5f5;font-size:15pt;'>US Spending Trends in Children Public Health 1997—2016</b><br><br>
+      Each hexagon shows the change in public health spending on children by state and year per child in 1,000 constant dollars.<br><b style='color:#d7191c;'>Rhode Island</b>, <b style='color:#d7191c;'>Tennessee </b>, <b style='color:#d7191c;'>Kansas</b>, <b style='color:#d7191c;'>Alabama</b>, and <b style='color:#d7191c;'>Rhode Island</b> spent less in 2016 compared to 1997 while <b style='color:#1a9641;'>Vermont</b>,<br>the <b style='color:#1a9641;'>District of Columbia</b>, <b style='color:#1a9641;'>Wyoming</b>, <b style='color:#1a9641;'>North Dakota</b>, <b style='color:#1a9641;'>Arizona</b>, <b style='color:#1a9641;'>Pennsylvania</b>, <b style='color:#1a9641;'>Delaware</b>, and <b style='color:#1a9641;'>California</b> increased the amount by far."
+    ),
+    aes(x, y, label = label),
+    inherit.aes = F,
+    family = "IBM Plex Sans",
+    size = 2.7,
+    color = "grey72",
+    fill = NA,
+    label.color = NA,
+    hjust = .5
+  ) +
+  geom_richtext(
+    data = tibble(
+      x = -82,
+      y = 30,
+      text = "<b style='font-size:7pt;'>Change in Public Health Efforts<br>from 1997 to 2016 per Child:</b><br><br>
+              <span style='color:#1a9641;'>• Increase by more than K$800</span><br>
+              <span style='color:#a6d96a;'>• Increase by K$200 to K$800</span><br>
+              <span style='color:#ffffbf;'>• Increase by up to K$200</span><br>
+              <span style='color:#fdae61;'>• Decrease by up to K$100</span><br>
+              <span style='color:#d7191c;'>• Decrease by more than K$100</span>"),
+    aes(x, y, label = text),
+    inherit.aes = F,
+    family = "IBM Plex Sans",
+    color = "grey72",
+    size = 2,
+    fontface = "bold",
+    hjust = 0,
+    fill = "grey12",
+    lineheight = 1.3,
+    label.color = NA,
+    label.padding = unit(rep(.6, 4), "lines")
+  ) +
+  coord_map() +
+  scale_color_manual(
+    values = c('#d7191c','#fdae61','#ffffbf','#a6d96a','#1a9641'),
+    guide = "none"
+  ) +
+  labs(caption = "Visualization by Jim Gruman  •  Data: Census Bureau's Annual State and Local Government Finance Survey (Expenditure Variable E32)") +
+  theme_void() +
+  theme(plot.background = element_rect(fill = "grey18", color = NA),
+        plot.caption = element_text(family = "IBM Plex Sans", color = "grey72", 
+                                    size = 6, hjust = .5,
+                                    margin = margin(b = 10, t = 15)))
+```
+
