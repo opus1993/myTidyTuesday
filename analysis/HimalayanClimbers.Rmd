@@ -580,7 +580,8 @@ The accuracy is great but that sensitivity is not what we'd like to see. The ran
 glm_rs %>%
     conf_mat_resampled(tidy = FALSE) %>% 
     autoplot() +
-    labs(title = "GLM Confidence Matrix across resamples")
+    labs(title = "GLM Confidence Matrix across resamples") +
+    theme_jim(base_size = 10)
 ```
 
 
@@ -588,7 +589,8 @@ glm_rs %>%
 rf_rs %>%
   conf_mat_resampled(tidy = FALSE) %>% 
   autoplot() +
-  labs(title = "Random Forest Confidence Matrix across resamples")
+  labs(title = "Random Forest Confidence Matrix across resamples") +
+  theme_jim(base_size = 10)
 ```
 
 The random forest model is quite bad at identifying which expedition members died, while the logistic regression model does about the same for both classes.
@@ -626,8 +628,11 @@ collect_metrics(members_final) %>% knitr::kable()
 collect_predictions(members_final) %>%
   conf_mat(died, .pred_class) %>% 
   autoplot() +
-  labs(title = "GLM Model Performance on Testing Data")
+  labs(title = "GLM Model Performance on Testing Data") +
+  theme_jim(base_size = 10)
 ```
+
+Well, this is not so great. The GLM model predicts that all climbers survive.
 
 The coefficients (which we can get out using `tidy()`) have been estimated using the training data. If we use `exponentiate = TRUE`, we have odds ratios.
 
@@ -639,9 +644,9 @@ members_final %>%
   knitr::kable(digits = 4)
 ```
 
-we can also visualize the results.
+we can also visualize the variable coefficients of the GLM model.
 
-```{r}
+```{r, fig.asp = 1}
 members_final %>%
   extract_workflow() %>% 
   tidy() %>%
