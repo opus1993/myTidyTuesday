@@ -1,0 +1,256 @@
+---
+title: "Hops"
+author: "Jim Gruman"
+date: "September 24, 2020"
+output:
+  workflowr::wflow_html:
+    toc: false
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+> Adapted from [Hoppiness](https://asmith.ucdavis.edu/news/hoppiness) by Aaron Smith @ASmithUCD
+
+Beer is a simple beverage. It has only four ingredients: **malt, water, yeast, and hops**. This simplicity belies a recent dramatic change in the relative proportions of these ingredients.
+
+An IPA from your [favorite craft brewery](https://www.berryessabrewingco.com/beers) uses up to 50 times as much hops per pint as America's leading beer, Bud Light.  As craft brewing has grown, hops have become a booming crop even as total beer consumption declines.
+
+US beer consumption has dropped by more than 25% in the past 25 years, and the rate of decline is speeding up. Beer sales were down 2% in 2019 compared to the year before. Share prices of Anheuser-Busch InBev and Miller-Coors, which between them supply [two thirds](https://www.nbwa.org/resources/industry-fast-facts) of the US market, are down more than 50% in the past five years. 
+
+```{r}
+knitr::include_graphics("https://www.nbwa.org/sites/default/files/AdobeStock_205461433_1.jpeg", 
+                        error = FALSE)
+
+```
+
+This aggregate decline masks substantial growth in craft beer production. In 2019, craft beer [comprised 13.6% of the US beer market by volume](https://www.brewersassociation.org/statistics-and-data/national-beer-stats/), up from less than 5% market share in 2010.  Although its growth rate has slowed in recent years, craft beer was still growing at 4% per year before the coronavirus pandemic.
+
+The pandemic has reduced on-site consumption at [craft breweries](https://www.thedailybeast.com/no-beer-sales-arent-booming).  If total craft beer production has also declined, we would expect a reduction in hops use, which would cause inventories to accumulate.  The National Agricultural Statistics Service (NASS) of USDA reports hop inventories [declined by 50 million pounds](https://www.nass.usda.gov/Statistics_by_State/Regional_Office/Northwest/includes/Publications/Hops/hops0920.pdf) from March to September this year, which suggests 50 million pounds were used to brew beer in those months. This is the same as the March to September inventory decline in 2019.
+
+The US and Germany produce 80% of the world's hops. The Pacific Northwest produces essentially all US hops, with most of that now in Washington's Yakima Valley. California had significant hop acreage until the mid 1980s. Since 2012, hop acreage in the Yakima Valley has increased by 80% to 41,000 acres along with the craft-brewing boom. 
+
+
+```{r libraries, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(rnassqs)
+library(blscrapeR) # at https://www.r-pkg.org/pkg/blscrapeR
+
+library(paletteer)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+```{r loadNASS, message=FALSE, warning=FALSE, include=FALSE}
+# api for NASS (get yours at quickstats.nass.usda.gov/api)
+# mine is saved to r_environ and retrieved with Sys.getenv
+apikey <- Sys.getenv("NASSQS_TOKEN")
+
+nassqs_auth(apikey) # authenticate our api key
+# nassqs_params() # check what variables are there
+
+# comm_list <- nassqs_param_values("commodity_desc") # get commodity list
+
+# grep("HOPS",comm_list,value = TRUE) # show all commodity names that contain "HOPS" (we have only one here).
+
+# set a sequence of years
+years <- 1915:2020
+
+# set parameters for the API calls, except for years 
+# we are not allowed to request many records at once, so let's iterate API calls by years
+params <- list(source_desc = "SURVEY", 
+              commodity_desc = "HOPS", 
+              agg_level_desc = c("STATE","NATIONAL"), 
+              freq_desc = "ANNUAL", 
+              reference_period_desc = c("YEAR","MARKETING YEAR") )
+
+# fetch data based on the parameters and years using 'nassqs'
+
+get_nassqs <- function(year){
+  params[["year"]] <- year
+  nassqs(params)
+}
+
+df <- map_df(years, get_nassqs) %>% 
+  select(year, 
+         state_alpha, 
+         freq_desc, 
+         reference_period_desc, 
+         unit_desc,short_desc, 
+         Value) %>% 
+  mutate(Value = parse_number(Value,
+                              na = c("","NA","(D)"))) 
+```
+
+
+```{r stackedAcreage}
+df %>%
+  filter(short_desc == "HOPS - ACRES HARVESTED") %>%    
+  filter(!state_alpha == "US") %>%     
+  mutate(state_alpha = fct_reorder(state_alpha, desc(Value))) %>% 
+  ggplot(aes(x = year, y = Value, fill = state_alpha)) +
+  geom_area() +
+  labs(fill = "State", x = "Year", y = "Acres") +
+  labs(title = "Area of Hops Production by US State",
+       fill = "",
+       caption = "Visualization: @jim_gruman Data: USDA NASS") +
+  scale_y_continuous(labels = scales::comma_format()) +
+  expand_limits(y = 0) +
+  theme(legend.position = c(0.14,0.7),
+        legend.background = element_rect(color = "white"))
+
+```
+
+The increase in demand for hops drove an increase in the price paid to hops growers.
+
+```{r}
+
+df_cpi <- inflation_adjust(2019) %>% 
+          mutate( year = as.integer(year))
+
+df_price <- df %>% 
+  filter(year >= 1947, 
+         short_desc == "HOPS - PRICE RECEIVED, MEASURED IN $ / LB") %>% 
+  inner_join(df_cpi, by = "year") %>% 
+  mutate(avg_cpi = avg_cpi/pull(filter(df_cpi, year == 2019), avg_cpi),
+         rValue = Value/avg_cpi)
+```
+
+```{r}
+df_price %>%
+  filter(short_desc == "HOPS - PRICE RECEIVED, MEASURED IN $ / LB") %>%  
+  filter(!state_alpha == "US") %>%      
+  filter(year > 1999) %>%     
+  ggplot(aes(x = year, y = rValue, color = state_alpha)) +
+  geom_line(size = 1, show.legend = FALSE) +
+  ggrepel::geom_text_repel(
+    data = . %>% filter(year == max(df_price$year)),
+    aes(label = state_alpha,
+        color = state_alpha),
+    direction = "y",
+    xlim = c(max(df_price$year), NA),
+    hjust = 1,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = "dotted",
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20,
+    show.legend = FALSE,
+    max.overlaps = 40,
+    fontface = "bold"
+  ) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  labs(color = "State",x = "Year", y = "$/pound") +
+  labs(title = "Hops real price received, adjusted for 2019 cpi",
+       caption = "Visualization: @jim_gruman Data: USDA NASS") 
+```
+
+Since 2013, NASS has reported production for 55 different varieties of hops. This is unusual, in that they do they report more than a few varieties for any other crop. 
+
+The US produced 112 million pounds of hops in 2019, of which the top 10 varieties made up about 70%. Citra is now the most produced variety, after recently overtaking Zeus and Cascade. New varieties, Pahto and Amarillo, recently entered the top 10.
+
+
+```{r}
+df_variety <- df %>% 
+  mutate(Value = if_else(is.na(Value),0,Value)) %>% 
+  filter(str_detect(short_desc,"PRODUCTION, MEASURED IN LB"),
+         !str_detect(short_desc,"HOPS - PRODUCTION, MEASURED IN LB")) %>% 
+  group_by(year, short_desc) %>%
+  summarize(prod = sum(Value, na.rm = TRUE),
+            .groups = "drop")
+
+# Rank varieties by largest to smallest
+large_varieties <- expand_grid(year = unique(df_variety$year), 
+                               short_desc = unique(df_variety$short_desc)) %>% 
+     left_join(df_variety, 
+               by = c("short_desc" = "short_desc", "year" = "year")) %>% 
+        group_by(short_desc) %>%
+        mutate(median_prod = median(prod, na.rm = TRUE)) %>%
+        select(year, short_desc, median_prod) %>% 
+        ungroup()
+
+patterns <- ", HBC |, YCR |, ADHA-|, VGXP0| R| TM|/|[1-9]"
+
+df_variety  %>%
+  full_join(large_varieties, 
+            by = c("short_desc" = "short_desc", "year" = "year")) %>% 
+  mutate(prod = if_else(is.na(prod),0,prod),
+         variety = str_sub(short_desc,7,-30),
+         variety = str_remove_all(variety, patterns),
+         variety = fct_lump_n(variety,n = 11, w = median_prod, other_level = "OTHER"),
+         variety = fct_reorder(variety, -median_prod)) %>% 
+  group_by(year, variety) %>%
+  summarize(var_prod = sum(prod)/1000000,
+            .groups = "drop") %>% 
+  ggplot(aes(x = year, y = var_prod, fill = variety)) +
+  geom_area(show.legend = FALSE) +
+    ggrepel::geom_text_repel(
+    data = . %>% filter(year == max(df_variety$year)) %>% 
+                 mutate(value = cumsum(rev(var_prod))),
+    aes(label = rev(variety),
+        y = value,
+        color = rev(variety)),
+    direction = "y",
+    xlim = c(max(df_variety$year), NA),
+    hjust = 1,
+    segment.size = .7,
+    segment.alpha = .5,
+    segment.linetype = "dotted",
+    box.padding = .4,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20,
+    show.legend = FALSE,
+    max.overlaps = 40,
+    fontface = "bold"
+  ) +
+  scale_x_continuous(limits = c(2013, 2021),
+                     breaks = seq(2013, 2019,2)) +
+  labs(x = "Year", 
+       y = "Million Pounds",
+       title = "U.S. Hop Production by Variety",
+       caption = "Visualization: @jim_gruman Data: USDA NASS") 
+```
+
+The plot below shows the top 40 U.S. hop varieties, ordered by the increase in production from 2013 to 2019. It shows the substantial growth in hops that are popular in craft beers, such as Citra, Mosaic, Simcoe, and Amarillo.
+
+```{r, fig.asp=1}
+########### bar plot: Proportion of Production from top varieties
+# Rank varieties by largest to smallest change from 2013-2019
+large_changes <- df_variety %>%
+   pivot_wider(names_from = year,
+               values_from = prod,
+               values_fill = 0) %>% 
+   mutate(change = `2019` - `2013`) %>% 
+   select(short_desc, change)
+
+df_variety %>%
+  full_join(large_varieties) %>%    # merge on variety rank variable
+  full_join(large_changes) %>%    # merge on change rank variable
+  mutate(variety = str_sub(short_desc,7,-30)) %>%  
+  mutate(variety = str_sub(short_desc,7,-30),
+         variety = str_remove_all(variety, patterns),
+         variety = fct_lump_n(variety,n = 40, w = median_prod, other_level = "OTHER"),
+         variety = fct_reorder(variety, -median_prod)) %>% 
+  filter(!variety == "OTHER") %>%       # delete other variety
+  mutate(prod = prod/1000000) %>%     # change units for plot
+  ggplot(aes(y = reorder(variety,-change), x = prod, fill = year)) +
+  geom_bar(stat = "identity",show.legend = FALSE) +
+  scale_x_continuous(n.breaks = 3) +
+  labs(y = "Variety", x = "Million Pounds") +
+  facet_grid(cols = vars(year)) +
+  labs(title = 'Hop Acreage by Variety and Year (Ordered by Change from 2013-2019)',
+       caption = "Visualization: @jim_gruman Data: USDA NASS")
+       
+```
+
+Hops were introduced to beer almost a thousand years ago to add bitterness and flavor. They also act as a preservative, which is the property that allegedly led [George Hodgson to add large amounts of it to the original IPA](http://allaboutbeer.com/beer_style/india-pale-ale/) for shipment to India in the 18th century. Three centuries later, the humble hop is the leading feature of the most vibrant segment of the beer market. The [cool kids](https://www.thedailybeast.com/is-craft-beer-too-hoppy-to-drink) may think the hoppy-beer trend is out of hand, but there are few signs of a reduction in demand for hops. 
