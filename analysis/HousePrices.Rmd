@@ -1,0 +1,253 @@
+---
+title: "FreddieMac House Prices"
+author: "Jim Gruman"
+date: "September 13, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+> Derived from Len Kiefer's excellent post at [Visual Meditations on House Prices 2020 Edition](http://lenkiefer.com/2020/11/30/visual-meditations-on-house-prices-2020-edition/)
+
+Our goal here is to explore several ways of visualizing current aggregated housing prices, using the [Freddie Mac House Price Index](http://www.freddiemac.com/research/indices/house-price-index.page). We’ll be looking at the annualized rate of change over 3-month sliding windows. For example, the latest data is through October 2020, so the rate of change we’re looking at is from July to October (growth in August, September, October).
+
+```{r setup}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(lubridate)
+library(hrbrthemes)
+extrafont::loadfonts(quiet = TRUE)
+
+library(geofacet)
+library(gganimate)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+We will load the latest data directly from the web site and cache it in a local data folder.
+
+```{r load_data}
+fmhpi_file <- here::here("data/fmhpi.rds")
+
+if (!file.exists(fmhpi_file)) {
+  write_rds(read_csv("http://www.freddiemac.com/fmac-resources/research/docs/fmhpi_master_file.csv"), fmhpi_file)
+}
+
+dt <- read_rds(fmhpi_file) %>% 
+  group_by(GEO_Type, GEO_Name) %>% 
+  mutate(hpa12 = Index_SA/lag(Index_SA, 12) - 1,
+         hpa3 = (Index_SA/lag(Index_SA , 3))**4 - 1,
+         date = as_date(ISOdate(Year, Month, 1)),
+         hpa3_lag3 = lag(hpa3, 3)) %>% 
+  ungroup()
+
+dts <- dt %>% 
+  filter(Year > 2017, GEO_Type == "State") %>% 
+  group_by(date) %>% 
+  arrange(date, hpa3) %>% 
+  mutate(rank = 1:n()) %>% 
+  ungroup() 
+
+yy <- 2020
+mm <- 10
+```
+
+The graph below shows that after slowing in spring, US house prices accelerated to a more than 20 percent annualized growth rate in early 2021.
+
+```{r}
+
+dt %>% 
+  filter(Year > yy - 3, GEO_Name == "USA") %>%  
+  ggplot(aes(y = hpa3, x = date, fill =  hpa3)) +
+  geom_col() +
+  geom_path() +
+  geom_point() +
+  geom_text(data = . %>% filter(date == max(date)),
+            nudge_y = 0.02, 
+            fontface = "bold", 
+            size = 4,
+            aes(y = hpa3, x = date, label = GEO_Name)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1),
+                     position = "right") +
+  scale_fill_viridis_c(limits = c(-0.05,0.55),
+                       label = scales::percent,
+                       option = "H") +
+  labs(x = NULL,
+       y = "3-month annualized % change",
+       fill = "3-month annualized rate",
+       title = "House Price Growth (USA)",
+       caption = "Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman",
+       subtitle = paste0(format(ISOdate(yy - 2,1,1),"%b %Y"), "-" , format(max(dt$date),"%b %Y"))) +
+  theme(legend.position = "top", 
+        legend.direction = "horizontal",
+        legend.key.width = unit(2, "cm")) 
+
+```
+
+But that national trend masks a lot of variations across states. Let’s map it out:
+
+```{r, fig.asp = 1}
+dts %>%   
+  filter(Year > yy - 3) %>%  
+  ggplot(aes(date, hpa3, group = GEO_Name, fill = hpa3)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1),
+                     limits = c(-0.027,0.55), 
+                     breaks = seq(-0.1,0.5,0.1)) +
+  labs(y = NULL,
+       x = "3-month annualized % change",
+       title = "House Price Growth by State",
+       caption = "Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman",
+       subtitle = paste0(format(ISOdate(yy - 2,1,1),"%b %Y"), "-" , format(max(dts$date),"%b %Y"))) +
+  theme(legend.position = "top",
+        legend.key.width = unit(2,"cm"),
+        plot.title = element_text(size = rel(1.75), face = "bold"),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.text.x =  element_text(size = rel(0.5),
+                                 color = "gray50"),
+        axis.text.y =  element_text(size = rel(0.5),
+                                 color = "gray50"),
+        strip.background = element_rect(fill = "gray15"),
+        strip.text = element_text(color = "gray90",
+                                  size = rel(0.9),
+                                  face = "bold"),
+        panel.spacing.x = unit(0.01, "cm"),
+        panel.spacing.y = unit(0.1, "cm")) +
+  scale_fill_viridis_c(limits = c(-0.027,0.55),
+                       label = scales::percent_format(accuracy = 1),
+                       name = "3-month annualized rate",
+                       option = "H") +
+  facet_geo(~GEO_Name)
+```
+
+We can see that the acceleration is much higher in states like Idaho (ID) and Colorado (CO). Idaho’s house price growth rate is nearly double the US rate.
+
+As another view, instead of using geo facets we could plot each state on the y axis and compare them vertically, with house price growth on the x axis. We’ll add a line segment that reached back 3 months and shows the relative trend. If the segment extends left, that means the state had slower growth 3 months ago and house price have accelerated. If the segment extends right, the opposite.
+
+Let’s consider February of 2020, just before the COVID-19 pandemic hit the US economy.
+
+```{r segment charts, fig.asp = 1}
+
+mychart <- function(yy = 2020, mm = 4){
+  
+  dts2 <- dts %>% 
+    filter(Year == yy & Month == mm) 
+  
+  ggplot(data = dts2, aes(x = hpa3,
+                            y = fct_reorder(GEO_Name, hpa3), 
+                            fill = hpa3)) +
+    geom_point() +
+    geom_segment(aes(xend = hpa3_lag3, yend = GEO_Name)) +
+    geom_label(aes(label = GEO_Name, fill = hpa3), 
+               size = rel(3), 
+               label.padding = unit(0.15,"lines"),
+               fontface = "bold") +
+    scale_x_continuous(labels = scales::percent_format(accuracy = 1),
+                       limits = c(-0.027, 0.55),
+                       breaks = seq(-0.1,0.4,0.1)) +
+    labs(y = NULL,
+         x = "3-month annualized % change, line extends to 3 months prior",
+         title = "House Price Growth by State",
+         caption = "Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman",
+         subtitle = format(max(dts2$date), "%b %Y")) +
+  theme(legend.position = "top", 
+        legend.direction = "horizontal",
+        legend.key.width = unit(2,"cm"),
+        plot.title = element_text(size = rel(1.75), face = "bold"),
+        panel.grid.major.y = element_blank(),
+        axis.text.y =  element_blank(),
+        axis.ticks.y = element_blank()) +
+  scale_fill_viridis_c(limits = c(-0.027,0.55),
+                       label = scales::percent_format(accuracy = 1),
+                       name = "3-month annualized rate",
+                       option = "H")
+ 
+}
+
+mychart(2020, 2)
+```
+
+For most, but not all states, the segment extends left, meaning price growth from December 2019 to February 2020 was higher than from October to December 2019.
+
+Let’s roll forward 3 months to the period covering February 2020 to May 2020 compared to December 2019 to February 2020.
+
+```{r, fig.asp=1}
+mychart(2020, 5)
+```
+
+Here we see that many states were slowing down. At that point, it was reasonable to be concerned that the housing market would falter. But it did not. Thanks to low mortgage interest rates and policies like forbearance and foreclosure moratoria, the housing market rebounded. The latest data, as of July 2021:
+
+```{r, fig.asp=1}
+mychart(2021, 7)
+```
+
+By July 2021, most states are experiencing a rapid acceleration in house prices, with Nevada (NV) leading the way.
+
+Now that we’ve build individual frames, let’s watch the animation unfold:
+
+```{r animatedPoints}
+
+a <- dts %>% 
+  ggplot(aes(
+    x = hpa3,
+    y = rank,
+    fill = hpa3
+  )) +
+  geom_point() +
+  geom_segment(aes(xend = hpa3_lag3, yend = rank)) +
+  geom_label(aes(label = GEO_Name, fill = hpa3,
+                 color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))), 
+               size = rel(3), 
+               label.padding = unit(0.15,"lines"),
+               fontface = "bold") +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1),
+                       limits = c(-0.1, 0.55),
+                       breaks = seq(-0.1,0.5,0.1)) +
+   labs(y = NULL,
+         x = "3-month annualized % change, line extends to 3 months prior",
+         title = "House Price Growth by State",
+         subtitle = "{closest_state}",
+         caption = "Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman") +
+  theme(legend.position = "top", 
+        legend.direction = "horizontal",
+        legend.key.width = unit(2,"cm"),
+        plot.title = element_text(size = rel(1.75), face = "bold"),
+        panel.grid.major.y = element_blank(),
+        axis.text.y =  element_blank(),
+        axis.ticks.y = element_blank()) +
+  scale_fill_viridis_c(limits = c(-0.05,0.55),
+                       label = scales::percent,
+                       name = "3-month annualized rate",
+                       option = "H") +
+  facet_wrap(~date)
+
+
+animate(a + 
+          facet_null() + 
+          transition_states(states = date) +
+          ease_aes('cubic-in-out') +
+          geom_text(x = 0.38,
+                    y = 4,
+                    size = 30,
+                    aes(label = format(ISOdate(Year, Month, 1), "%b %Y"))) +
+          aes(group = GEO_Name), 
+        nframes = 184, 
+        end_pause = 60,
+        width = 740, 
+        height = 1000, 
+        fps = 15)
+
+```
+
+
+
