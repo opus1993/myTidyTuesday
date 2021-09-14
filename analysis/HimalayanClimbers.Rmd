@@ -1,0 +1,665 @@
+---
+title: "Himalayan Climbers"
+author: "Jim Gruman"
+date: "September 22, 2020"
+output:
+  workflowr::wflow_html:
+    toc: false
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+This week's data comes from the Himalayan Database, a compilation of records for all expeditions that have climbed in the Nepal Himalaya mountain chain. The data covers all expeditions from 1905 thru the spring of 2019 for more than 465 significant peaks in Nepal.
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(ebbr) # empirical bayes for binomials in R by David Robinson at https://github.com/dgrtwo/ebbr
+
+library(gt)
+  
+library(tidymodels)
+library(themis)
+
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+```{r Load, include = FALSE}
+tt <- tidytuesdayR::tt_load("2020-09-22")
+
+peaks <- tt$peaks %>% 
+  rename(height_meters = height_metres)
+
+```
+
+Let's first explore the details of the mountain peaks
+
+```{r}
+peaks %>% 
+  arrange(desc(height_meters)) %>%
+  head(20) %>% 
+  mutate(peak_name = fct_reorder(peak_name, height_meters)) %>%
+  ggplot(aes(height_meters, peak_name, fill = climbing_status)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = "Height (meters)",
+       y = NULL,
+       title = "Top 20 Himalayan Peaks",
+       subtitle = "With both <span style = 'color:#F1CA3AFF;'>Climbed</span>
+and <span style = 'color:#7A0403FF;'>Unclimbed</span> summits.",
+       fill = "") +
+  theme(plot.subtitle = ggtext::element_markdown(size = 11, lineheight = 1.2,
+                                                 face = "bold"),
+        panel.grid.major.y = element_blank())
+```
+
+Let's tidy some of the expeditions dataset
+
+```{r}
+na_reasons <- c("Unknown",
+                "Attempt rumoured",
+                "Did not attempt climb", 
+                "Did not reach base camp")
+
+expeditions <- tt$expeditions %>% 
+  mutate(time_to_highpoint = highpoint_date -
+           basecamp_date,
+         success = case_when(str_detect(termination_reason, "Success") ~ "Success",
+                             termination_reason %in% na_reasons ~ "Other", 
+                             TRUE ~ "Failure"),
+         days_to_highpoint = as.integer(highpoint_date - basecamp_date))
+
+```
+
+Other questions that could be posed and possible answered with this dataset:
+
+- Fraction of successful climbs per year
+
+- Rate of death over time, deadliest peaks, by mountain
+
+- Death causes and rate of injury
+
+- Distribution of duration of climbs versus the height or time
+
+- Correlation between frequency of expeditions and death rate
+
+- Which are the most dangerous peaks that have been climbed?
+```{r}
+summarize_expeditions <- function(tbl){
+  tbl %>% 
+    summarize(first_climb = min(year),
+            success_rate = mean(success == "Success"),
+            n_climbs = n(),
+            across(members:hired_staff_deaths, sum),
+            .groups = "drop") %>% 
+      mutate(pct_death = member_deaths / members,
+         pct_hired_staff_deaths = hired_staff_deaths / hired_staff)
+}
+
+
+peak_summarized <- expeditions  %>% 
+  group_by(peak_id, peak_name) %>% 
+  summarize_expeditions() %>% 
+  ungroup() %>% 
+  arrange(desc(n_climbs)) %>% 
+  inner_join(peaks %>% select(peak_id, height_meters), by = "peak_id")
+
+```
+
+What are the deadliest mountains?
+
+Answering the question directly from the proportions may be misleading because some mountains have so few climbers. 
+
+Given the limited amount of data available on some mountains, the death rate is adjusted by adding the available priors from all climbing.  The model could be further refined by regressing on information about oxygen use or other features.
+
+For further reading: [Introduction to Empirical Bayes: Examples from Baseball Statistics](https://www.amazon.com/Introduction-Empirical-Bayes-Examples-Statistics-ebook/dp/B06WP26J8Q)
+
+```{r}
+peaks_eb <- peak_summarized %>% 
+  filter(members >= 20) %>% 
+  arrange(desc(pct_death)) %>% 
+  add_ebb_estimate(member_deaths, members) 
+
+peaks_eb %>% 
+  ggplot(aes(pct_death, .fitted)) +
+  geom_point(aes(size = members)) +
+  geom_abline(color = "red") +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_color_viridis_c(trans = "log10") +
+  labs(x = "Death Rate (raw)",
+       y = "Adjusted Estimate of Death Rate using empirical Bayes",
+       title = "How much adjustment compression using priors?") +
+  theme(legend.position = c(0.8, 0.2))
+```
+
+
+
+```{r}
+peaks_eb %>% 
+  filter(members >= 500) %>% 
+  arrange(desc(.fitted)) %>% 
+  mutate(peak_name = fct_reorder(peak_name, .fitted)) %>% 
+  ggplot(aes(.fitted, peak_name)) +
+  geom_point(aes(size = members)) +
+  geom_errorbarh(aes(xmin = .low, xmax = .high), color = "gray") +
+  expand_limits(x = 0) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(subtitle = "Estimate of Death Rate using empirical Bayes with 95% credible interval",
+       y = "", x = "",
+       title = "Deadliest Himalayan Peaks with more than 500 climbers",
+       caption = "Visual: @jim_gruman, Data: the Himalayan Database") +
+  theme(panel.grid.major.y = element_blank(),
+        legend.position = c(0.8, 0.2))
+
+```
+
+How does death rate relate to elevation?
+
+```{r}
+peaks_eb %>% 
+  filter(members >= 500) %>% 
+  ggplot(aes(height_meters, .fitted)) +
+  geom_point(aes(size = members)) +
+  labs(title = "There does not appear to be a relationship between death rate and height")
+```
+
+What is the distance between the base camp and the summit?
+
+```{r}
+expeditions %>% 
+  filter(success == "Success", 
+         !is.na(days_to_highpoint),
+         !is.na(peak_name)) %>% 
+  mutate(peak_name = fct_lump(peak_name, 10),
+         peak_name = fct_reorder(peak_name, days_to_highpoint, mean)) %>% 
+  ggplot(aes(days_to_highpoint, peak_name)) +
+  geom_boxplot() +
+  labs(title = "Duration to successfully summit the most popular Himalayan peaks",
+       caption = "Visual: @jim_gruman, Data:  the Himalayan Database",
+       x = "Days from basecamp to summit",
+       y = "") +
+  theme(panel.grid.major.y = element_blank())
+  
+```
+
+## Explore Mount Everest more closely
+
+```{r}
+expeditions %>% 
+  filter(peak_name == "Everest") %>% 
+  ggplot(aes(days_to_highpoint, fill = success)) +
+  geom_density(alpha = 0.3) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "Duration to successfully summit Everest",
+       caption = "Visual: @jim_gruman, Data:  the Himalayan Database",
+       x = "Days from basecamp to summit",
+       y = "Percentage",
+       fill = "") +
+  theme(panel.grid.major.y = element_blank(),
+        legend.position = c(0.6,0.5),
+        legend.background = element_rect(color = "white"))
+```
+
+
+When have the Everest expeditions been successful?
+
+```{r}
+expeditions %>% 
+  ggplot(aes(year, fill = success)) + 
+  geom_histogram(alpha = 0.3, bins = 40) +
+  labs(title = "Year of Everest climbs",
+       caption = "Visual: @jim_gruman, Data:  the Himalayan Database",
+       x = "Year",
+       y = "Climbers",
+       fill = "") +
+  theme(panel.grid.major.y = element_blank(),
+        legend.position = c(0.2,0.5),
+        legend.background = element_rect(color = "white"))
+```
+
+What is the median amount of time to climb?
+
+```{r}
+everest_by_decade <- expeditions %>% 
+  filter(peak_name  == "Everest") %>% 
+  mutate(decade = pmax(10 * (year %/% 10), 1970)) %>%  # limp prior to 1970
+  group_by(decade, peak_name) %>% 
+  summarize_expeditions() 
+
+everest_by_decade %>% 
+  ggplot(aes(decade, pct_death)) +
+  geom_line(aes(color = "All climbers")) +
+  geom_line(aes(y = pct_hired_staff_deaths, color = "Hired Staff")) +
+  geom_point(aes(color = "All climbers", size = members)) +
+  geom_point(aes(y = pct_hired_staff_deaths, color = "Hired Staff", size = hired_staff)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
+  scale_x_continuous(breaks = seq(1970, 2010, 10),
+                     labels = c("<= 1980",seq(1980, 2010, 10))) +
+  expand_limits(y = 0) +
+  labs(x = "Decade", color = "",
+       y = "Death Rate",
+       title = "Everest has been getting less deadly over time",
+       subtitle = "Though trends have reversed for hired staff",
+       size = "Number of climbers",caption = "Visual: @jim_gruman, Data:  the Himalayan Database") +
+  theme(legend.position = c(0.2, 0.4),
+        legend.background = element_rect(color = "white"))
+
+everest_by_decade %>% 
+  ggplot(aes(decade, success_rate)) +
+  geom_line() +
+  geom_point(aes(size = n_climbs)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(breaks = seq(1970, 2010, 10),
+                     labels = c("<= 1980",seq(1980, 2010, 10))) +
+  expand_limits(y = 0) +
+  labs(x = "Decade",
+       y = "Success Rate",
+       title = "The Everest summit success rate has been increasing",
+       size = "Number of climbs",caption = "Visual: @jim_gruman, Data:  the Himalayan Database") +
+  theme(legend.position = c(0.7, 0.3),
+        legend.background = element_rect(color = "white"))
+  
+```
+
+Examine the death probability per expedition member. What causes climber fatalities?
+
+```{r}
+members <- tt$members
+
+members %>% 
+  count(died, death_cause) %>%
+  knitr::kable()
+
+members %>% 
+  count(sex) %>%
+  knitr::kable()
+
+```
+
+For Everest, what are the significant features in predicting death?
+
+```{r}
+
+members %>% 
+  filter(peak_name == "Everest") %>% 
+  mutate(expedition_role = fct_lump(expedition_role, 5)) %>% 
+  glm(died ~ year + age + sex + expedition_role, 
+      data = .,
+      family = "binomial") %>% 
+  tidy() %>% 
+  mutate(p.value = format.pval(p.value)) %>%
+  knitr::kable()
+```
+
+The significant features include the year (lowers likelihood), the leader role (more likely to die), age (more likely to die), and the H-Aworker (much more likely to die)
+
+```{r}
+members %>% 
+  filter(peak_name == "Everest", !is.na(age)) %>% 
+  group_by(age = 10 * (age %/% 10)) %>% 
+  summarize(n_climbers = n(),
+            pct_death = mean(died))  %>%
+  knitr::kable()
+  
+```
+
+
+```{r}
+members %>% 
+  filter(peak_name == "Everest", !is.na(age)) %>% 
+  group_by(hired) %>% 
+  summarize(n_climbers = n(),
+            pct_death = mean(died))  %>%
+  knitr::kable()
+```
+
+It seems that expedition role H-A worker may be confounded with hired in some funky way
+
+What happens when oxygen is included?
+
+```{r}
+model <- members %>% 
+  filter(peak_name == "Everest", !is.na(age)) %>% 
+  mutate(leader = expedition_role == "Leader") %>% 
+  glm(died ~ year + age + sex + leader + hired + oxygen_used, 
+      data = .,
+      family = "binomial") 
+
+model %>% 
+  tidy(conf.int = TRUE, exponentiate = TRUE) %>% 
+  filter(term != "(Intercept)") %>% 
+  mutate(term = fct_reorder(term, estimate)) %>% 
+  ggplot(aes(estimate, term)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), color = "gray") +
+  geom_vline(xintercept = 1, color = "red") +
+  labs(title = "Relative risk factors for death on Everest summits",
+       caption = "Visual: @jim_gruman, Data:  the Himalayan Database",
+       x = "Exponentiated estimate for log odds")
+
+```
+There may be an interaction, where added risk to hired workers is associated with climbing expeditions that use oxygen (maybe due to carrying the tanks). Maybe explore it further next time.
+
+----
+
+## Women on Himalayan climbing expeditions @dm_ferrero
+
+Calculate proportion of female climbers per peak per year
+
+```{r}
+top_peaks <- members %>% 
+  count(peak_name, sort = TRUE) %>% 
+  slice(1:20) %>% 
+  pull(peak_name)
+
+prop_women <- members %>% 
+  filter(peak_name %in% top_peaks) %>% 
+  count(peak_name, year, sex) %>% 
+  pivot_wider(names_from = sex, values_from = n, names_prefix = "num_") %>% 
+  replace_na(list(num_F = 0)) %>% 
+  mutate(prop_F = num_F/(num_M + num_F),
+         total_peeps = num_M + num_F) %>% 
+  arrange(year)
+
+```
+
+Calculate proportion of female climbers per peak per year
+
+```{r}
+prop_women <- members %>% 
+  filter(peak_name %in% top_peaks) %>% 
+  count(peak_name, year, sex) %>% 
+  pivot_wider(names_from = sex, values_from = n, names_prefix = "num_") %>% 
+  replace_na(list(num_F = 0)) %>% 
+  mutate(prop_F = num_F/(num_M + num_F),
+         total_peeps = num_M + num_F) %>% 
+  arrange(year)
+```
+
+Inspired by Danielle Ferraro @dm_ferraro
+
+```{r}
+# Plot
+ggplot(prop_women, aes(x = year, 
+                       y = factor(peak_name, levels = rev(top_peaks)))) +
+  geom_point(aes(size = total_peeps, color = prop_F), alpha = 0.7) +
+  scale_color_viridis_b(n.breaks = 4, 
+                        labels = scales::percent_format(accuracy = 1), 
+                        option = "H") +
+  scale_x_continuous(breaks = seq(1900, 2010, by = 10)) +
+  labs(x = NULL,
+       y = NULL,
+       size = "Total expedition\nmembers",
+       color = "Percentage of\nwomen",
+       title = "Women on Himalayan climbing expeditions",
+       subtitle = "Each point represents the number of expedition members and percentage of women on that peak for that year",
+       caption = "Data: The Himalayan Database\nFigure by @jim_gruman for #TidyTuesday") +
+  theme(panel.background = element_blank(),
+        panel.grid.major = element_line(color = "grey30", size = 0.2),
+        panel.grid.minor = element_line(color = "grey30", size = 0.2),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.background = element_blank(),
+        axis.ticks = element_blank(),
+        legend.key = element_blank(),
+        plot.title = element_text(size = 22)
+  )
+```
+
+----
+
+# More Machine Learning Modeling
+
+Strategies for handling class imbalances
+
+Let’s make one last exploratory plot and look at seasons. How much difference is there in survival across the four seasons?
+
+```{r}
+members %>%
+  filter(season != "Unknown") %>%
+  count(season, died) %>%
+  group_by(season) %>%
+  mutate(
+    percent = n / sum(n),
+    died = case_when(
+      died ~ "Died",
+      TRUE ~ "Did not die"
+    )
+  ) %>%
+  ggplot(aes(season, percent, fill = season)) +
+  geom_col(position = "dodge", show.legend = FALSE) +
+  scale_fill_viridis_d(option = "H") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  facet_wrap(~died, scales = "free") +
+  labs(x = NULL, y = "% of expedition members")
+
+```
+
+Let’s now create the dataset that we’ll use for modeling by filtering on some of the variables and transforming some variables to a be factors. There are still lots of `NA` values for age but we are going to impute those.
+
+```{r}
+members_df <- members %>%
+  filter(season != "Unknown", !is.na(sex), !is.na(citizenship)) %>%
+  select(peak_id, year, season, sex, age, citizenship, hired, success, died) %>%
+  mutate(died = case_when(
+    died ~ "died",
+    TRUE ~ "survived"
+  )) %>%
+  mutate_if(is.character, factor) %>%
+  mutate_if(is.logical, as.integer)
+
+```
+## Build a Model
+
+We can start by loading the tidymodels metapackage, and splitting our data into training and testing sets.
+
+```{r}
+members_split <- initial_split(members_df, strata = died)
+members_train <- training(members_split)
+members_test <- testing(members_split)
+```
+
+We are going to use [resampling](https://www.tmwr.org/resampling.html) to evaluate model performance.
+
+```{r}
+members_folds <- vfold_cv(members_train, strata = died)
+```
+
+Next we build a recipe for data preprocessing.
+
+- First, we must tell the `recipe()` what our model is going to be (using a formula here) and what our training data is.
+
+- Next, we impute the missing values for age using the median age in the training data set. There are more complex steps available for imputation, but we’ll stick with a straightforward option here.
+
+- Next, we use `step_other()` to collapse categorical levels for peak and citizenship. Before this step, there were hundreds of values in each variable.
+
+- After this, we can create indicator variables for the non-numeric, categorical values, except for the outcome died which we need to keep as a factor.
+
+- Finally, there are many more people who survived their expedition than who died (thankfully) so we will use `step_smote()` to balance the classes.
+
+```{r}
+members_rec <- recipe(died ~ ., data = members_train) %>%
+  step_impute_median(age) %>%
+  step_other(peak_id, citizenship, threshold = 0.01) %>%
+  step_dummy(all_nominal_predictors()) %>% 
+  step_smote(died)
+
+members_rec
+```
+
+We’re going to use this recipe in a `workflow()` so we don’t need to stress a lot about whether to `prep()` or not. If you want to explore the what the recipe is doing to your data, you can first `prep()` the recipe to estimate the parameters needed for each step and then `bake(new_data = NULL)` to pull out the training data with those steps applied.
+
+Let’s compare two different models, a logistic regression model and a random forest model. We start by creating the model specifications.
+
+```{r}
+glm_spec <- logistic_reg() %>%
+  set_engine("glm")
+
+glm_spec
+```
+
+```{r}
+rf_spec <- rand_forest(trees = 1000) %>%
+  set_mode("classification") %>%
+  set_engine("ranger")
+
+rf_spec
+```
+
+Next let’s start putting together a tidymodels`workflow()`, a helper object to help manage modeling pipelines with pieces that fit together like Lego blocks. Notice that there is no model yet: **Model: None.**
+
+```{r}
+members_wf <- workflow() %>%
+  add_recipe(members_rec)
+
+members_wf
+```
+
+Now we can add a model, and the fit to each of the resamples. First, we can fit the logistic regression model. Let’s set a non-default metric set so we can add sensitivity and specificity.
+
+```{r}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+members_metrics <- metric_set(roc_auc, accuracy, sensitivity, specificity)
+
+# doParallel::registerDoParallel()
+glm_rs <- members_wf %>%
+  add_model(glm_spec) %>%
+  fit_resamples(
+    resamples = members_folds,
+    metrics = members_metrics,
+    control = control_resamples(save_pred = TRUE)
+  )
+
+```
+
+Second, we can fit the random forest model.
+
+```{r}
+rf_rs <- members_wf %>%
+  add_model(rf_spec) %>%
+  fit_resamples(
+    resamples = members_folds,
+    metrics = members_metrics,
+    control = control_resamples(save_pred = TRUE)
+  )
+
+```
+
+We have fit each of our candidate models to our resampled training set!
+
+## Evaluate Models
+
+Let's check out how we did
+
+```{r}
+collect_metrics(glm_rs) %>% knitr::kable()
+```
+
+Well, this is middling but at least mostly consistent for the positive and negative classes. 
+
+
+```{r}
+collect_metrics(rf_rs) %>% knitr::kable()
+```
+
+The accuracy is great but that sensitivity is not what we'd like to see. The random forest model has not done a great job of learning how to recognize both classes, even with our oversampling strategy. Let’s dig deeper into how these models are doing to see this more. For example, how are they predicting the two classes?
+
+```{r}
+glm_rs %>%
+    conf_mat_resampled(tidy = FALSE) %>% 
+    autoplot() +
+    labs(title = "GLM Confidence Matrix across resamples")
+```
+
+
+```{r}
+rf_rs %>%
+  conf_mat_resampled(tidy = FALSE) %>% 
+  autoplot() +
+  labs(title = "Random Forest Confidence Matrix across resamples")
+```
+
+The random forest model is quite bad at identifying which expedition members died, while the logistic regression model does about the same for both classes.
+
+We can also make an ROC curve.
+
+```{r}
+glm_rs %>%
+  collect_predictions() %>%
+  group_by(id) %>%
+  roc_curve(died, .pred_died) %>%
+  ggplot(aes(1 - specificity, sensitivity, color = id)) +
+  geom_abline(lty = 2, color = "gray80", size = 1.5) +
+  geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
+  coord_equal()
+```
+
+It is finally time for us to return to the testing set. Notice that we have not used the testing set yet during this whole analysis; to compare and assess models we used resamples of the training set. Let’s *fit* one more time to the training data and evaluate on the testing data using the function `last_fit()`.
+
+```{r}
+members_final <- members_wf %>%
+  add_model(glm_spec) %>%
+  last_fit(members_split)
+
+members_final
+```
+
+The metrics and predictions here are on the *testing* data.
+
+```{r}
+collect_metrics(members_final) %>% knitr::kable()
+```
+
+```{r}
+collect_predictions(members_final) %>%
+  conf_mat(died, .pred_class) %>% 
+  autoplot() +
+  labs(title = "GLM Model Performance on Testing Data")
+```
+
+The coefficients (which we can get out using `tidy()`) have been estimated using the training data. If we use `exponentiate = TRUE`, we have odds ratios.
+
+```{r}
+members_final %>%
+  extract_workflow() %>% 
+  tidy(exponentiate = TRUE) %>%
+  arrange(estimate) %>%
+  knitr::kable(digits = 4)
+```
+
+we can also visualize the results.
+
+```{r}
+members_final %>%
+  extract_workflow() %>% 
+  tidy() %>%
+  filter(term != "(Intercept)") %>%
+  ggplot(aes(estimate, fct_reorder(term, estimate))) +
+  geom_vline(xintercept = 0, color = "gray50", lty = 2, size = 1.2) +
+  geom_errorbar(aes(
+    xmin = estimate - std.error,
+    xmax = estimate + std.error
+  ),
+  width = .2, color = "gray50", alpha = 0.7
+  ) +
+  geom_point(size = 2) +
+  labs(y = NULL, x = "Coefficent from logistic regression")
+```
+
+- The features with coefficients on the positive side (like climbing in summer, being on a successful expedition, or being from the UK or US) are associated with surviving.
+
+- The features with coefficients on the negative side (like climbing specific peaks including Everest, being one of the hired members of a expedition, or being a man) are associated with dying.
+
+Remember that we have to interpret model coefficients like this in light of the predictive accuracy of our model, which was somewhat middling; there are more factors at play in who survives these expeditions than what we have accounted for in the model directly. Also note that we see evidence in this model for how dangerous it is to be a native Sherpa climber in Nepal, hired as an expedition member.
