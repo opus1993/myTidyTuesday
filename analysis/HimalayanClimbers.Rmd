@@ -52,8 +52,8 @@ peaks %>%
   labs(x = "Height (meters)",
        y = NULL,
        title = "Top 20 Himalayan Peaks",
-       subtitle = "With both <span style = 'color:#F1CA3AFF;'>Climbed</span>
-and <span style = 'color:#7A0403FF;'>Unclimbed</span> summits.",
+       subtitle = "With both <span style = 'color:#7A0403FF;'>Climbed</span>
+and <span style = 'color:#F1CA3AFF;'>Unclimbed</span> summits.",
        fill = "") +
   theme(plot.subtitle = ggtext::element_markdown(size = 11, lineheight = 1.2,
                                                  face = "bold"),
