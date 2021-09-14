@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-09-22" />
+
+<title>Himalayan Climbers</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Himalayan Climbers</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">September 22, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-13
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea7d52ca3f6d7a545681eb42382e588a29eeb0a15targetblanka7d52caa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a7d52ca3f6d7a545681eb42382e588a29eeb0a15" target="_blank">a7d52ca</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea7d52ca3f6d7a545681eb42382e588a29eeb0a15targetblanka7d52caa" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a7d52ca3f6d7a545681eb42382e588a29eeb0a15" target="_blank">a7d52ca</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/HimalayanClimbers.Rmd</code>) and HTML (<code>docs/HimalayanClimbers.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/a7d52ca3f6d7a545681eb42382e588a29eeb0a15/analysis/HimalayanClimbers.Rmd" target="_blank">a7d52ca</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-13
+</td>
+<td>
+update to new autoplot vis for confusion matrices
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>This week’s data comes from the Himalayan Database, a compilation of records for all expeditions that have climbed in the Nepal Himalaya mountain chain. The data covers all expeditions from 1905 thru the spring of 2019 for more than 465 significant peaks in Nepal.</p>
+<p>Let’s first explore the details of the mountain peaks</p>
+<pre class="r"><code>peaks %&gt;%
+  arrange(desc(height_meters)) %&gt;%
+  head(20) %&gt;%
+  mutate(peak_name = fct_reorder(peak_name, height_meters)) %&gt;%
+  ggplot(aes(height_meters, peak_name, fill = climbing_status)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    x = &quot;Height (meters)&quot;,
+    y = NULL,
+    title = &quot;Top 20 Himalayan Peaks&quot;,
+    subtitle = &quot;With both &lt;span style = &#39;color:#F1CA3AFF;&#39;&gt;Climbed&lt;/span&gt;
+and &lt;span style = &#39;color:#7A0403FF;&#39;&gt;Unclimbed&lt;/span&gt; summits.&quot;,
+    fill = &quot;&quot;
+  ) +
+  theme(
+    plot.subtitle = ggtext::element_markdown(
+      size = 11, lineheight = 1.2,
+      face = &quot;bold&quot;
+    ),
+    panel.grid.major.y = element_blank()
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-1-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Let’s tidy some of the expeditions dataset</p>
+<pre class="r"><code>na_reasons &lt;- c(
+  &quot;Unknown&quot;,
+  &quot;Attempt rumoured&quot;,
+  &quot;Did not attempt climb&quot;,
+  &quot;Did not reach base camp&quot;
+)
+
+expeditions &lt;- tt$expeditions %&gt;%
+  mutate(
+    time_to_highpoint = highpoint_date -
+      basecamp_date,
+    success = case_when(
+      str_detect(termination_reason, &quot;Success&quot;) ~ &quot;Success&quot;,
+      termination_reason %in% na_reasons ~ &quot;Other&quot;,
+      TRUE ~ &quot;Failure&quot;
+    ),
+    days_to_highpoint = as.integer(highpoint_date - basecamp_date)
+  )</code></pre>
+<p>Other questions that could be posed and possible answered with this dataset:</p>
+<ul>
+<li><p>Fraction of successful climbs per year</p></li>
+<li><p>Rate of death over time, deadliest peaks, by mountain</p></li>
+<li><p>Death causes and rate of injury</p></li>
+<li><p>Distribution of duration of climbs versus the height or time</p></li>
+<li><p>Correlation between frequency of expeditions and death rate</p></li>
+<li><p>Which are the most dangerous peaks that have been climbed?</p></li>
+</ul>
+<pre class="r"><code>summarize_expeditions &lt;- function(tbl) {
+  tbl %&gt;%
+    summarize(
+      first_climb = min(year),
+      success_rate = mean(success == &quot;Success&quot;),
+      n_climbs = n(),
+      across(members:hired_staff_deaths, sum),
+      .groups = &quot;drop&quot;
+    ) %&gt;%
+    mutate(
+      pct_death = member_deaths / members,
+      pct_hired_staff_deaths = hired_staff_deaths / hired_staff
+    )
+}
+
+
+peak_summarized &lt;- expeditions %&gt;%
+  group_by(peak_id, peak_name) %&gt;%
+  summarize_expeditions() %&gt;%
+  ungroup() %&gt;%
+  arrange(desc(n_climbs)) %&gt;%
+  inner_join(peaks %&gt;% select(peak_id, height_meters), by = &quot;peak_id&quot;)</code></pre>
+<p>What are the deadliest mountains?</p>
+<p>Answering the question directly from the proportions may be misleading because some mountains have so few climbers.</p>
+<p>Given the limited amount of data available on some mountains, the death rate is adjusted by adding the available priors from all climbing. The model could be further refined by regressing on information about oxygen use or other features.</p>
+<p>For further reading: <a href="https://www.amazon.com/Introduction-Empirical-Bayes-Examples-Statistics-ebook/dp/B06WP26J8Q">Introduction to Empirical Bayes: Examples from Baseball Statistics</a></p>
+<pre class="r"><code>peaks_eb &lt;- peak_summarized %&gt;%
+  filter(members &gt;= 20) %&gt;%
+  arrange(desc(pct_death)) %&gt;%
+  add_ebb_estimate(member_deaths, members)
+
+peaks_eb %&gt;%
+  ggplot(aes(pct_death, .fitted)) +
+  geom_point(aes(size = members)) +
+  geom_abline(color = &quot;red&quot;) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_color_viridis_c(trans = &quot;log10&quot;) +
+  labs(
+    x = &quot;Death Rate (raw)&quot;,
+    y = &quot;Adjusted Estimate of Death Rate using empirical Bayes&quot;,
+    title = &quot;How much adjustment compression using priors?&quot;
+  ) +
+  theme(legend.position = c(0.8, 0.2))</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-4-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>peaks_eb %&gt;%
+  filter(members &gt;= 500) %&gt;%
+  arrange(desc(.fitted)) %&gt;%
+  mutate(peak_name = fct_reorder(peak_name, .fitted)) %&gt;%
+  ggplot(aes(.fitted, peak_name)) +
+  geom_point(aes(size = members)) +
+  geom_errorbarh(aes(xmin = .low, xmax = .high), color = &quot;gray&quot;) +
+  expand_limits(x = 0) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    subtitle = &quot;Estimate of Death Rate using empirical Bayes with 95% credible interval&quot;,
+    y = &quot;&quot;, x = &quot;&quot;,
+    title = &quot;Deadliest Himalayan Peaks with more than 500 climbers&quot;,
+    caption = &quot;Visual: @jim_gruman, Data: the Himalayan Database&quot;
+  ) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    legend.position = c(0.8, 0.2)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-5-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>How does death rate relate to elevation?</p>
+<pre class="r"><code>peaks_eb %&gt;%
+  filter(members &gt;= 500) %&gt;%
+  ggplot(aes(height_meters, .fitted)) +
+  geom_point(aes(size = members)) +
+  labs(title = &quot;There does not appear to be a relationship between death rate and height&quot;)</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-6-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>What is the distance between the base camp and the summit?</p>
+<pre class="r"><code>expeditions %&gt;%
+  filter(
+    success == &quot;Success&quot;,
+    !is.na(days_to_highpoint),
+    !is.na(peak_name)
+  ) %&gt;%
+  mutate(
+    peak_name = fct_lump(peak_name, 10),
+    peak_name = fct_reorder(peak_name, days_to_highpoint, mean)
+  ) %&gt;%
+  ggplot(aes(days_to_highpoint, peak_name)) +
+  geom_boxplot() +
+  labs(
+    title = &quot;Duration to successfully summit the most popular Himalayan peaks&quot;,
+    caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
+    x = &quot;Days from basecamp to summit&quot;,
+    y = &quot;&quot;
+  ) +
+  theme(panel.grid.major.y = element_blank())</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-7-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<div id="explore-mount-everest-more-closely" class="section level2">
+<h2>Explore Mount Everest more closely</h2>
+<pre class="r"><code>expeditions %&gt;%
+  filter(peak_name == &quot;Everest&quot;) %&gt;%
+  ggplot(aes(days_to_highpoint, fill = success)) +
+  geom_density(alpha = 0.3) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = &quot;Duration to successfully summit Everest&quot;,
+    caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
+    x = &quot;Days from basecamp to summit&quot;,
+    y = &quot;Percentage&quot;,
+    fill = &quot;&quot;
+  ) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    legend.position = c(0.6, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-8-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>When have the Everest expeditions been successful?</p>
+<pre class="r"><code>expeditions %&gt;%
+  ggplot(aes(year, fill = success)) +
+  geom_histogram(alpha = 0.3, bins = 40) +
+  labs(
+    title = &quot;Year of Everest climbs&quot;,
+    caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Climbers&quot;,
+    fill = &quot;&quot;
+  ) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    legend.position = c(0.2, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-9-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>What is the median amount of time to climb?</p>
+<pre class="r"><code>everest_by_decade &lt;- expeditions %&gt;%
+  filter(peak_name == &quot;Everest&quot;) %&gt;%
+  mutate(decade = pmax(10 * (year %/% 10), 1970)) %&gt;%
+  # limp prior to 1970
+  group_by(decade, peak_name) %&gt;%
+  summarize_expeditions()
+
+everest_by_decade %&gt;%
+  ggplot(aes(decade, pct_death)) +
+  geom_line(aes(color = &quot;All climbers&quot;)) +
+  geom_line(aes(y = pct_hired_staff_deaths, color = &quot;Hired Staff&quot;)) +
+  geom_point(aes(color = &quot;All climbers&quot;, size = members)) +
+  geom_point(aes(y = pct_hired_staff_deaths, color = &quot;Hired Staff&quot;, size = hired_staff)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = .1)) +
+  scale_x_continuous(
+    breaks = seq(1970, 2010, 10),
+    labels = c(&quot;&lt;= 1980&quot;, seq(1980, 2010, 10))
+  ) +
+  expand_limits(y = 0) +
+  labs(
+    x = &quot;Decade&quot;, color = &quot;&quot;,
+    y = &quot;Death Rate&quot;,
+    title = &quot;Everest has been getting less deadly over time&quot;,
+    subtitle = &quot;Though trends have reversed for hired staff&quot;,
+    size = &quot;Number of climbers&quot;, caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;
+  ) +
+  theme(
+    legend.position = c(0.2, 0.4),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-10-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>everest_by_decade %&gt;%
+  ggplot(aes(decade, success_rate)) +
+  geom_line() +
+  geom_point(aes(size = n_climbs)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(
+    breaks = seq(1970, 2010, 10),
+    labels = c(&quot;&lt;= 1980&quot;, seq(1980, 2010, 10))
+  ) +
+  expand_limits(y = 0) +
+  labs(
+    x = &quot;Decade&quot;,
+    y = &quot;Success Rate&quot;,
+    title = &quot;The Everest summit success rate has been increasing&quot;,
+    size = &quot;Number of climbs&quot;, caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;
+  ) +
+  theme(
+    legend.position = c(0.7, 0.3),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-10-2.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Examine the death probability per expedition member. What causes climber fatalities?</p>
+<pre class="r"><code>members &lt;- tt$members
+
+members %&gt;%
+  count(died, death_cause) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">died</th>
+<th align="left">death_cause</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="left">NA</td>
+<td align="right">75413</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="left">AMS</td>
+<td align="right">102</td>
+</tr>
+<tr class="odd">
+<td align="left">TRUE</td>
+<td align="left">Avalanche</td>
+<td align="right">369</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="left">Crevasse</td>
+<td align="right">27</td>
+</tr>
+<tr class="odd">
+<td align="left">TRUE</td>
+<td align="left">Disappearance (unexplained)</td>
+<td align="right">49</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="left">Exhaustion</td>
+<td align="right">41</td>
+</tr>
+<tr class="odd">
+<td align="left">TRUE</td>
+<td align="left">Exposure / frostbite</td>
+<td align="right">42</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="left">Fall</td>
+<td align="right">331</td>
+</tr>
+<tr class="odd">
+<td align="left">TRUE</td>
+<td align="left">Falling rock / ice</td>
+<td align="right">26</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="left">Icefall collapse</td>
+<td align="right">16</td>
+</tr>
+<tr class="odd">
+<td align="left">TRUE</td>
+<td align="left">Illness (non-AMS)</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="left">Other</td>
+<td align="right">33</td>
+</tr>
+<tr class="odd">
+<td align="left">TRUE</td>
+<td align="left">Unknown</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>members %&gt;%
+  count(sex) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">sex</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">F</td>
+<td align="right">7044</td>
+</tr>
+<tr class="even">
+<td align="left">M</td>
+<td align="right">69473</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>For Everest, what are the significant features in predicting death?</p>
+<pre class="r"><code>members %&gt;%
+  filter(peak_name == &quot;Everest&quot;) %&gt;%
+  mutate(expedition_role = fct_lump(expedition_role, 5)) %&gt;%
+  glm(died ~ year + age + sex + expedition_role,
+    data = .,
+    family = &quot;binomial&quot;
+  ) %&gt;%
+  tidy() %&gt;%
+  mutate(p.value = format.pval(p.value)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">49.8368629</td>
+<td align="right">7.0523777</td>
+<td align="right">7.0666752</td>
+<td align="left">1.5869e-12</td>
+</tr>
+<tr class="even">
+<td align="left">year</td>
+<td align="right">-0.0276627</td>
+<td align="right">0.0035435</td>
+<td align="right">-7.8066459</td>
+<td align="left">5.8730e-15</td>
+</tr>
+<tr class="odd">
+<td align="left">age</td>
+<td align="right">0.0182624</td>
+<td align="right">0.0066097</td>
+<td align="right">2.7629740</td>
+<td align="left">0.0057277</td>
+</tr>
+<tr class="even">
+<td align="left">sexM</td>
+<td align="right">0.3353777</td>
+<td align="right">0.2907061</td>
+<td align="right">1.1536656</td>
+<td align="left">0.2486373</td>
+</tr>
+<tr class="odd">
+<td align="left">expedition_roleDeputy Leader</td>
+<td align="right">-0.0639574</td>
+<td align="right">0.5124297</td>
+<td align="right">-0.1248120</td>
+<td align="left">0.9006724</td>
+</tr>
+<tr class="even">
+<td align="left">expedition_roleExp Doctor</td>
+<td align="right">-0.1399287</td>
+<td align="right">0.4634403</td>
+<td align="right">-0.3019346</td>
+<td align="left">0.7627019</td>
+</tr>
+<tr class="odd">
+<td align="left">expedition_roleH-A Worker</td>
+<td align="right">0.3469201</td>
+<td align="right">0.1625223</td>
+<td align="right">2.1346007</td>
+<td align="left">0.0327936</td>
+</tr>
+<tr class="even">
+<td align="left">expedition_roleLeader</td>
+<td align="right">0.6033960</td>
+<td align="right">0.1852958</td>
+<td align="right">3.2563929</td>
+<td align="left">0.0011284</td>
+</tr>
+<tr class="odd">
+<td align="left">expedition_roleOther</td>
+<td align="right">0.0700387</td>
+<td align="right">0.2232777</td>
+<td align="right">0.3136842</td>
+<td align="left">0.7537609</td>
+</tr>
+</tbody>
+</table>
+<p>The significant features include the year (lowers likelihood), the leader role (more likely to die), age (more likely to die), and the H-Aworker (much more likely to die)</p>
+<pre class="r"><code>members %&gt;%
+  filter(peak_name == &quot;Everest&quot;, !is.na(age)) %&gt;%
+  group_by(age = 10 * (age %/% 10)) %&gt;%
+  summarize(
+    n_climbers = n(),
+    pct_death = mean(died)
+  ) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">age</th>
+<th align="right">n_climbers</th>
+<th align="right">pct_death</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10</td>
+<td align="right">263</td>
+<td align="right">0.0076046</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="right">5258</td>
+<td align="right">0.0125523</td>
+</tr>
+<tr class="odd">
+<td align="right">30</td>
+<td align="right">8079</td>
+<td align="right">0.0120064</td>
+</tr>
+<tr class="even">
+<td align="right">40</td>
+<td align="right">5001</td>
+<td align="right">0.0115977</td>
+</tr>
+<tr class="odd">
+<td align="right">50</td>
+<td align="right">1897</td>
+<td align="right">0.0147601</td>
+</tr>
+<tr class="even">
+<td align="right">60</td>
+<td align="right">446</td>
+<td align="right">0.0269058</td>
+</tr>
+<tr class="odd">
+<td align="right">70</td>
+<td align="right">48</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="right">80</td>
+<td align="right">5</td>
+<td align="right">0.4000000</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>members %&gt;%
+  filter(peak_name == &quot;Everest&quot;, !is.na(age)) %&gt;%
+  group_by(hired) %&gt;%
+  summarize(
+    n_climbers = n(),
+    pct_death = mean(died)
+  ) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">hired</th>
+<th align="right">n_climbers</th>
+<th align="right">pct_death</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">14624</td>
+<td align="right">0.0121718</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">6373</td>
+<td align="right">0.0136513</td>
+</tr>
+</tbody>
+</table>
+<p>It seems that expedition role H-A worker may be confounded with hired in some funky way</p>
+<p>What happens when oxygen is included?</p>
+<pre class="r"><code>model &lt;- members %&gt;%
+  filter(peak_name == &quot;Everest&quot;, !is.na(age)) %&gt;%
+  mutate(leader = expedition_role == &quot;Leader&quot;) %&gt;%
+  glm(died ~ year + age + sex + leader + hired + oxygen_used,
+    data = .,
+    family = &quot;binomial&quot;
+  )
+
+model %&gt;%
+  tidy(conf.int = TRUE, exponentiate = TRUE) %&gt;%
+  filter(term != &quot;(Intercept)&quot;) %&gt;%
+  mutate(term = fct_reorder(term, estimate)) %&gt;%
+  ggplot(aes(estimate, term)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), color = &quot;gray&quot;) +
+  geom_vline(xintercept = 1, color = &quot;red&quot;) +
+  labs(
+    title = &quot;Relative risk factors for death on Everest summits&quot;,
+    caption = &quot;Visual: @jim_gruman, Data:  the Himalayan Database&quot;,
+    x = &quot;Exponentiated estimate for log odds&quot;
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-15-1.png" width="200%" style="display: block; margin: auto;" /> There may be an interaction, where added risk to hired workers is associated with climbing expeditions that use oxygen (maybe due to carrying the tanks). Maybe explore it further next time.</p>
+<hr />
+</div>
+<div id="women-on-himalayan-climbing-expeditions-dm_ferrero" class="section level2">
+<h2>Women on Himalayan climbing expeditions <span class="citation">@dm_ferrero</span></h2>
+<p>Calculate proportion of female climbers per peak per year</p>
+<pre class="r"><code>top_peaks &lt;- members %&gt;%
+  count(peak_name, sort = TRUE) %&gt;%
+  slice(1:20) %&gt;%
+  pull(peak_name)
+
+prop_women &lt;- members %&gt;%
+  filter(peak_name %in% top_peaks) %&gt;%
+  count(peak_name, year, sex) %&gt;%
+  pivot_wider(names_from = sex, values_from = n, names_prefix = &quot;num_&quot;) %&gt;%
+  replace_na(list(num_F = 0)) %&gt;%
+  mutate(
+    prop_F = num_F / (num_M + num_F),
+    total_peeps = num_M + num_F
+  ) %&gt;%
+  arrange(year)</code></pre>
+<p>Calculate proportion of female climbers per peak per year</p>
+<pre class="r"><code>prop_women &lt;- members %&gt;%
+  filter(peak_name %in% top_peaks) %&gt;%
+  count(peak_name, year, sex) %&gt;%
+  pivot_wider(names_from = sex, values_from = n, names_prefix = &quot;num_&quot;) %&gt;%
+  replace_na(list(num_F = 0)) %&gt;%
+  mutate(
+    prop_F = num_F / (num_M + num_F),
+    total_peeps = num_M + num_F
+  ) %&gt;%
+  arrange(year)</code></pre>
+<p>Inspired by Danielle Ferraro <span class="citation">@dm_ferraro</span></p>
+<pre class="r"><code># Plot
+ggplot(prop_women, aes(
+  x = year,
+  y = factor(peak_name, levels = rev(top_peaks))
+)) +
+  geom_point(aes(size = total_peeps, color = prop_F), alpha = 0.7) +
+  scale_color_viridis_b(
+    n.breaks = 4,
+    labels = scales::percent_format(accuracy = 1),
+    option = &quot;H&quot;
+  ) +
+  scale_x_continuous(breaks = seq(1900, 2010, by = 10)) +
+  labs(
+    x = NULL,
+    y = NULL,
+    size = &quot;Total expedition\nmembers&quot;,
+    color = &quot;Percentage of\nwomen&quot;,
+    title = &quot;Women on Himalayan climbing expeditions&quot;,
+    subtitle = &quot;Each point represents the number of expedition members and percentage of women on that peak for that year&quot;,
+    caption = &quot;Data: The Himalayan Database\nFigure by @jim_gruman for #TidyTuesday&quot;
+  ) +
+  theme(
+    panel.background = element_blank(),
+    panel.grid.major = element_line(color = &quot;grey30&quot;, size = 0.2),
+    panel.grid.minor = element_line(color = &quot;grey30&quot;, size = 0.2),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    legend.background = element_blank(),
+    axis.ticks = element_blank(),
+    legend.key = element_blank(),
+    plot.title = element_text(size = 22)
+  )</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-18-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="more-machine-learning-modeling" class="section level1">
+<h1>More Machine Learning Modeling</h1>
+<p>Strategies for handling class imbalances</p>
+<p>Let’s make one last exploratory plot and look at seasons. How much difference is there in survival across the four seasons?</p>
+<pre class="r"><code>members %&gt;%
+  filter(season != &quot;Unknown&quot;) %&gt;%
+  count(season, died) %&gt;%
+  group_by(season) %&gt;%
+  mutate(
+    percent = n / sum(n),
+    died = case_when(
+      died ~ &quot;Died&quot;,
+      TRUE ~ &quot;Did not die&quot;
+    )
+  ) %&gt;%
+  ggplot(aes(season, percent, fill = season)) +
+  geom_col(position = &quot;dodge&quot;, show.legend = FALSE) +
+  scale_fill_viridis_d(option = &quot;H&quot;) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  facet_wrap(~died, scales = &quot;free&quot;) +
+  labs(x = NULL, y = &quot;% of expedition members&quot;)</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-19-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Let’s now create the dataset that we’ll use for modeling by filtering on some of the variables and transforming some variables to a be factors. There are still lots of <code>NA</code> values for age but we are going to impute those.</p>
+<pre class="r"><code>members_df &lt;- members %&gt;%
+  filter(season != &quot;Unknown&quot;, !is.na(sex), !is.na(citizenship)) %&gt;%
+  select(peak_id, year, season, sex, age, citizenship, hired, success, died) %&gt;%
+  mutate(died = case_when(
+    died ~ &quot;died&quot;,
+    TRUE ~ &quot;survived&quot;
+  )) %&gt;%
+  mutate_if(is.character, factor) %&gt;%
+  mutate_if(is.logical, as.integer)</code></pre>
+<div id="build-a-model" class="section level2">
+<h2>Build a Model</h2>
+<p>We can start by loading the tidymodels metapackage, and splitting our data into training and testing sets.</p>
+<pre class="r"><code>members_split &lt;- initial_split(members_df, strata = died)
+members_train &lt;- training(members_split)
+members_test &lt;- testing(members_split)</code></pre>
+<p>We are going to use <a href="https://www.tmwr.org/resampling.html">resampling</a> to evaluate model performance.</p>
+<pre class="r"><code>members_folds &lt;- vfold_cv(members_train, strata = died)</code></pre>
+<p>Next we build a recipe for data preprocessing.</p>
+<ul>
+<li><p>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what our training data is.</p></li>
+<li><p>Next, we impute the missing values for age using the median age in the training data set. There are more complex steps available for imputation, but we’ll stick with a straightforward option here.</p></li>
+<li><p>Next, we use <code>step_other()</code> to collapse categorical levels for peak and citizenship. Before this step, there were hundreds of values in each variable.</p></li>
+<li><p>After this, we can create indicator variables for the non-numeric, categorical values, except for the outcome died which we need to keep as a factor.</p></li>
+<li><p>Finally, there are many more people who survived their expedition than who died (thankfully) so we will use <code>step_smote()</code> to balance the classes.</p></li>
+</ul>
+<pre class="r"><code>members_rec &lt;- recipe(died ~ ., data = members_train) %&gt;%
+  step_impute_median(age) %&gt;%
+  step_other(peak_id, citizenship, threshold = 0.01) %&gt;%
+  step_dummy(all_nominal_predictors()) %&gt;%
+  step_smote(died)
+
+members_rec</code></pre>
+<pre><code>Data Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor          8
+
+Operations:
+
+Median Imputation for age
+Collapsing factor levels for peak_id, citizenship
+Dummy variables from all_nominal_predictors()
+SMOTE based on died</code></pre>
+<p>We’re going to use this recipe in a <code>workflow()</code> so we don’t need to stress a lot about whether to <code>prep()</code> or not. If you want to explore the what the recipe is doing to your data, you can first <code>prep()</code> the recipe to estimate the parameters needed for each step and then <code>bake(new_data = NULL)</code> to pull out the training data with those steps applied.</p>
+<p>Let’s compare two different models, a logistic regression model and a random forest model. We start by creating the model specifications.</p>
+<pre class="r"><code>glm_spec &lt;- logistic_reg() %&gt;%
+  set_engine(&quot;glm&quot;)
+
+glm_spec</code></pre>
+<pre><code>Logistic Regression Model Specification (classification)
+
+Computational engine: glm </code></pre>
+<pre class="r"><code>rf_spec &lt;- rand_forest(trees = 1000) %&gt;%
+  set_mode(&quot;classification&quot;) %&gt;%
+  set_engine(&quot;ranger&quot;)
+
+rf_spec</code></pre>
+<pre><code>Random Forest Model Specification (classification)
+
+Main Arguments:
+  trees = 1000
+
+Computational engine: ranger </code></pre>
+<p>Next let’s start putting together a tidymodels<code>workflow()</code>, a helper object to help manage modeling pipelines with pieces that fit together like Lego blocks. Notice that there is no model yet: <strong>Model: None.</strong></p>
+<pre class="r"><code>members_wf &lt;- workflow() %&gt;%
+  add_recipe(members_rec)
+
+members_wf</code></pre>
+<pre><code>== Workflow ====================================================================
+Preprocessor: Recipe
+Model: None
+
+-- Preprocessor ----------------------------------------------------------------
+4 Recipe Steps
+
+* step_impute_median()
+* step_other()
+* step_dummy()
+* step_smote()</code></pre>
+<p>Now we can add a model, and the fit to each of the resamples. First, we can fit the logistic regression model. Let’s set a non-default metric set so we can add sensitivity and specificity.</p>
+<pre class="r"><code>all_cores &lt;- parallelly::availableCores(omit = 1)
+all_cores</code></pre>
+<pre><code>system 
+    11 </code></pre>
+<pre class="r"><code>future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows
+
+members_metrics &lt;- metric_set(roc_auc, accuracy, sensitivity, specificity)
+
+# doParallel::registerDoParallel()
+glm_rs &lt;- members_wf %&gt;%
+  add_model(glm_spec) %&gt;%
+  fit_resamples(
+    resamples = members_folds,
+    metrics = members_metrics,
+    control = control_resamples(save_pred = TRUE)
+  )</code></pre>
+<p>Second, we can fit the random forest model.</p>
+<pre class="r"><code>rf_rs &lt;- members_wf %&gt;%
+  add_model(rf_spec) %&gt;%
+  fit_resamples(
+    resamples = members_folds,
+    metrics = members_metrics,
+    control = control_resamples(save_pred = TRUE)
+  )</code></pre>
+<p>We have fit each of our candidate models to our resampled training set!</p>
+</div>
+<div id="evaluate-models" class="section level2">
+<h2>Evaluate Models</h2>
+<p>Let’s check out how we did</p>
+<pre class="r"><code>collect_metrics(glm_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.6676891</td>
+<td align="right">10</td>
+<td align="right">0.0015514</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.7202278</td>
+<td align="right">10</td>
+<td align="right">0.0085022</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="odd">
+<td align="left">sens</td>
+<td align="left">binary</td>
+<td align="right">0.6798315</td>
+<td align="right">10</td>
+<td align="right">0.0148981</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">spec</td>
+<td align="left">binary</td>
+<td align="right">0.6674792</td>
+<td align="right">10</td>
+<td align="right">0.0016366</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<p>Well, this is middling but at least mostly consistent for the positive and negative classes.</p>
+<pre class="r"><code>collect_metrics(rf_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.9780237</td>
+<td align="right">10</td>
+<td align="right">0.0003557</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.7594277</td>
+<td align="right">10</td>
+<td align="right">0.0104190</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="odd">
+<td align="left">sens</td>
+<td align="left">binary</td>
+<td align="right">0.1355960</td>
+<td align="right">10</td>
+<td align="right">0.0075674</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">spec</td>
+<td align="left">binary</td>
+<td align="right">0.9903824</td>
+<td align="right">10</td>
+<td align="right">0.0004311</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<p>The accuracy is great but that sensitivity is not what we’d like to see. The random forest model has not done a great job of learning how to recognize both classes, even with our oversampling strategy. Let’s dig deeper into how these models are doing to see this more. For example, how are they predicting the two classes?</p>
+<pre class="r"><code>glm_rs %&gt;%
+  conf_mat_resampled(tidy = FALSE) %&gt;%
+  autoplot() +
+  labs(title = &quot;GLM Confidence Matrix across resamples&quot;)</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-31-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>rf_rs %&gt;%
+  conf_mat_resampled(tidy = FALSE) %&gt;%
+  autoplot() +
+  labs(title = &quot;Random Forest Confidence Matrix across resamples&quot;)</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-32-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>The random forest model is quite bad at identifying which expedition members died, while the logistic regression model does about the same for both classes.</p>
+<p>We can also make an ROC curve.</p>
+<pre class="r"><code>glm_rs %&gt;%
+  collect_predictions() %&gt;%
+  group_by(id) %&gt;%
+  roc_curve(died, .pred_died) %&gt;%
+  ggplot(aes(1 - specificity, sensitivity, color = id)) +
+  geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
+  geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
+  coord_equal()</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-33-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>It is finally time for us to return to the testing set. Notice that we have not used the testing set yet during this whole analysis; to compare and assess models we used resamples of the training set. Let’s <em>fit</em> one more time to the training data and evaluate on the testing data using the function <code>last_fit()</code>.</p>
+<pre class="r"><code>members_final &lt;- members_wf %&gt;%
+  add_model(glm_spec) %&gt;%
+  last_fit(members_split)
+
+members_final</code></pre>
+<pre><code># Resampling results
+# Manual resampling 
+# A tibble: 1 x 6
+  splits                id               .metrics  .notes .predictions .workflow
+  &lt;list&gt;                &lt;chr&gt;            &lt;list&gt;    &lt;list&gt; &lt;list&gt;       &lt;list&gt;   
+1 &lt;split [57380/19127]&gt; train/test split &lt;tibble ~ &lt;tibb~ &lt;tibble [19~ &lt;workflo~</code></pre>
+<p>The metrics and predictions here are on the <em>testing</em> data.</p>
+<pre class="r"><code>collect_metrics(members_final) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">binary</td>
+<td align="right">0.6715115</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.7243124</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>collect_predictions(members_final) %&gt;%
+  conf_mat(died, .pred_class) %&gt;%
+  autoplot() +
+  labs(title = &quot;GLM Model Performance on Testing Data&quot;)</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-36-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>The coefficients (which we can get out using <code>tidy()</code>) have been estimated using the training data. If we use <code>exponentiate = TRUE</code>, we have odds ratios.</p>
+<pre class="r"><code>members_final %&gt;%
+  extract_workflow() %&gt;%
+  tidy(exponentiate = TRUE) %&gt;%
+  arrange(estimate) %&gt;%
+  knitr::kable(digits = 4)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">0.0000</td>
+<td align="right">1.0071</td>
+<td align="right">-50.7877</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">peak_id_ANN1</td>
+<td align="right">0.0814</td>
+<td align="right">0.0529</td>
+<td align="right">-47.4281</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">peak_id_DHA1</td>
+<td align="right">0.0983</td>
+<td align="right">0.0480</td>
+<td align="right">-48.3149</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">peak_id_KANG</td>
+<td align="right">0.1000</td>
+<td align="right">0.0570</td>
+<td align="right">-40.3997</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">peak_id_PUMO</td>
+<td align="right">0.1652</td>
+<td align="right">0.0537</td>
+<td align="right">-33.5158</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">peak_id_MAKA</td>
+<td align="right">0.1952</td>
+<td align="right">0.0504</td>
+<td align="right">-32.4175</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">peak_id_MANA</td>
+<td align="right">0.1973</td>
+<td align="right">0.0433</td>
+<td align="right">-37.5068</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">peak_id_EVER</td>
+<td align="right">0.2294</td>
+<td align="right">0.0377</td>
+<td align="right">-39.0889</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">peak_id_other</td>
+<td align="right">0.2550</td>
+<td align="right">0.0375</td>
+<td align="right">-36.4663</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">hired</td>
+<td align="right">0.4030</td>
+<td align="right">0.0575</td>
+<td align="right">-15.8060</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">sex_M</td>
+<td align="right">0.4672</td>
+<td align="right">0.0317</td>
+<td align="right">-24.0209</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">peak_id_LHOT</td>
+<td align="right">0.5757</td>
+<td align="right">0.0587</td>
+<td align="right">-9.4069</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">peak_id_CHOY</td>
+<td align="right">0.6400</td>
+<td align="right">0.0427</td>
+<td align="right">-10.4613</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_Russia</td>
+<td align="right">0.8491</td>
+<td align="right">0.0698</td>
+<td align="right">-2.3435</td>
+<td align="right">0.0191</td>
+</tr>
+<tr class="odd">
+<td align="left">peak_id_HIML</td>
+<td align="right">0.8916</td>
+<td align="right">0.0832</td>
+<td align="right">-1.3781</td>
+<td align="right">0.1682</td>
+</tr>
+<tr class="even">
+<td align="left">peak_id_BARU</td>
+<td align="right">0.9108</td>
+<td align="right">0.0656</td>
+<td align="right">-1.4230</td>
+<td align="right">0.1547</td>
+</tr>
+<tr class="odd">
+<td align="left">peak_id_ANN4</td>
+<td align="right">0.9647</td>
+<td align="right">0.0917</td>
+<td align="right">-0.3919</td>
+<td align="right">0.6952</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">0.9904</td>
+<td align="right">0.0008</td>
+<td align="right">-12.7651</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">year</td>
+<td align="right">1.0267</td>
+<td align="right">0.0005</td>
+<td align="right">52.1618</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_India</td>
+<td align="right">1.0906</td>
+<td align="right">0.0635</td>
+<td align="right">1.3655</td>
+<td align="right">0.1721</td>
+</tr>
+<tr class="odd">
+<td align="left">season_Spring</td>
+<td align="right">1.1001</td>
+<td align="right">0.0168</td>
+<td align="right">5.6950</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">season_Winter</td>
+<td align="right">1.1219</td>
+<td align="right">0.0444</td>
+<td align="right">2.5881</td>
+<td align="right">0.0096</td>
+</tr>
+<tr class="odd">
+<td align="left">citizenship_Germany</td>
+<td align="right">1.3270</td>
+<td align="right">0.0623</td>
+<td align="right">4.5435</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_S.Korea</td>
+<td align="right">1.4019</td>
+<td align="right">0.0591</td>
+<td align="right">5.7147</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">citizenship_Poland</td>
+<td align="right">1.7852</td>
+<td align="right">0.0686</td>
+<td align="right">8.4455</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_other</td>
+<td align="right">1.8164</td>
+<td align="right">0.0521</td>
+<td align="right">11.4518</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">success</td>
+<td align="right">2.3182</td>
+<td align="right">0.0166</td>
+<td align="right">50.7364</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_Japan</td>
+<td align="right">2.4260</td>
+<td align="right">0.0542</td>
+<td align="right">16.3549</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">citizenship_Spain</td>
+<td align="right">2.8580</td>
+<td align="right">0.0603</td>
+<td align="right">17.4191</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_Switzerland</td>
+<td align="right">2.9370</td>
+<td align="right">0.0660</td>
+<td align="right">16.3193</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">citizenship_France</td>
+<td align="right">2.9518</td>
+<td align="right">0.0578</td>
+<td align="right">18.7304</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_Nepal</td>
+<td align="right">2.9763</td>
+<td align="right">0.0747</td>
+<td align="right">14.5924</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">citizenship_Austria</td>
+<td align="right">3.4269</td>
+<td align="right">0.0680</td>
+<td align="right">18.1080</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_China</td>
+<td align="right">4.0187</td>
+<td align="right">0.0714</td>
+<td align="right">19.4695</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">citizenship_New.Zealand</td>
+<td align="right">4.4991</td>
+<td align="right">0.0960</td>
+<td align="right">15.6614</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_Canada</td>
+<td align="right">4.9039</td>
+<td align="right">0.0905</td>
+<td align="right">17.5721</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">citizenship_UK</td>
+<td align="right">5.0950</td>
+<td align="right">0.0587</td>
+<td align="right">27.7364</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">citizenship_Italy</td>
+<td align="right">5.3972</td>
+<td align="right">0.0662</td>
+<td align="right">25.4856</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">citizenship_USA</td>
+<td align="right">5.6072</td>
+<td align="right">0.0581</td>
+<td align="right">29.6837</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">season_Summer</td>
+<td align="right">6.4447</td>
+<td align="right">0.0974</td>
+<td align="right">19.1391</td>
+<td align="right">0.0000</td>
+</tr>
+</tbody>
+</table>
+<p>we can also visualize the results.</p>
+<pre class="r"><code>members_final %&gt;%
+  extract_workflow() %&gt;%
+  tidy() %&gt;%
+  filter(term != &quot;(Intercept)&quot;) %&gt;%
+  ggplot(aes(estimate, fct_reorder(term, estimate))) +
+  geom_vline(xintercept = 0, color = &quot;gray50&quot;, lty = 2, size = 1.2) +
+  geom_errorbar(aes(
+    xmin = estimate - std.error,
+    xmax = estimate + std.error
+  ),
+  width = .2, color = &quot;gray50&quot;, alpha = 0.7
+  ) +
+  geom_point(size = 2) +
+  labs(y = NULL, x = &quot;Coefficent from logistic regression&quot;)</code></pre>
+<p><img src="figure/HimalayanClimbers.Rmd/unnamed-chunk-38-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>The features with coefficients on the positive side (like climbing in summer, being on a successful expedition, or being from the UK or US) are associated with surviving.</p></li>
+<li><p>The features with coefficients on the negative side (like climbing specific peaks including Everest, being one of the hired members of a expedition, or being a man) are associated with dying.</p></li>
+</ul>
+<p>Remember that we have to interpret model coefficients like this in light of the predictive accuracy of our model, which was somewhat middling; there are more factors at play in who survives these expeditions than what we have accounted for in the model directly. Also note that we see evidence in this model for how dangerous it is to be a native Sherpa climber in Nepal, hired as an expedition member.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ranger_0.13.1      vctrs_0.3.8        rlang_0.4.11       themis_0.1.4      
+ [5] yardstick_0.0.8    workflowsets_0.1.0 workflows_0.2.3    tune_0.1.6        
+ [9] rsample_0.1.0      recipes_0.1.16     parsnip_0.1.7.900  modeldata_0.1.1   
+[13] infer_1.0.0        dials_0.0.9.9000   scales_1.1.1       broom_0.7.9       
+[17] tidymodels_0.1.3   gt_0.3.1           ebbr_0.1           forcats_0.5.1     
+[21] stringr_1.4.0      dplyr_1.0.7        purrr_0.3.4        readr_2.0.1       
+[25] tidyr_1.1.3        tibble_3.1.4       ggplot2_3.3.5      tidyverse_1.3.1   
+[29] workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2         R.utils_2.10.1     tidyselect_1.1.1  
+  [4] grid_4.1.1         pROC_1.18.0        munsell_0.5.0     
+  [7] codetools_0.2-18   ragg_1.1.3         future_1.22.1     
+ [10] withr_2.4.2        colorspace_2.0-2   highr_0.9         
+ [13] knitr_1.34         rstudioapi_0.13    stats4_4.1.1      
+ [16] Rttf2pt1_1.3.9     listenv_0.8.0      labeling_0.4.2    
+ [19] git2r_0.28.0       bit64_4.0.5        DiceDesign_1.9    
+ [22] farver_2.1.0       rprojroot_2.0.2    mlr_2.19.0        
+ [25] parallelly_1.28.1  generics_0.1.0     ipred_0.9-11      
+ [28] xfun_0.25          R6_2.5.1           markdown_1.1      
+ [31] doParallel_1.0.16  VGAM_1.1-5         lhs_1.1.3         
+ [34] cachem_1.0.6       assertthat_0.2.1   promises_1.2.0.1  
+ [37] vroom_1.5.4        nnet_7.3-16        gtable_0.3.0      
+ [40] globals_0.14.0     timeDate_3043.102  BBmisc_1.11       
+ [43] systemfonts_1.0.2  splines_4.1.1      extrafontdb_1.0   
+ [46] lazyeval_0.2.2     selectr_0.4-2      prismatic_1.0.0   
+ [49] checkmate_2.0.0    yaml_2.2.1         modelr_0.1.8      
+ [52] backports_1.2.1    httpuv_1.6.2       gridtext_0.1.4    
+ [55] extrafont_0.17     tools_4.1.1        lava_1.6.10       
+ [58] usethis_2.0.1      ellipsis_0.3.2     jquerylib_0.1.4   
+ [61] Rcpp_1.0.7         plyr_1.8.6         parallelMap_1.5.1 
+ [64] rpart_4.1-15       ParamHelpers_1.14  viridis_0.6.1     
+ [67] haven_2.4.3        hrbrthemes_0.8.0   fs_1.5.0          
+ [70] here_1.0.1         furrr_0.2.3        unbalanced_2.0    
+ [73] magrittr_2.0.1     data.table_1.14.0  reprex_2.0.1      
+ [76] RANN_2.6.1         GPfit_1.0-8        whisker_0.4       
+ [79] ROSE_0.0-4         R.cache_0.15.0     hms_1.1.0         
+ [82] evaluate_0.14      readxl_1.3.1       gridExtra_2.3     
+ [85] compiler_4.1.1     crayon_1.4.1       R.oo_1.24.0       
+ [88] htmltools_0.5.2    later_1.3.0        tzdb_0.1.2        
+ [91] ggtext_0.1.1       lubridate_1.7.10   DBI_1.1.1         
+ [94] dbplyr_2.1.1       MASS_7.3-54        Matrix_1.3-4      
+ [97] cli_3.0.1          R.methodsS3_1.8.1  parallel_4.1.1    
+[100] gower_0.2.2        pkgconfig_2.0.3    xml2_1.3.2        
+[103] foreach_1.5.1      bslib_0.3.0        hardhat_0.1.6     
+[106] tidytuesdayR_1.0.1 prodlim_2019.11.13 rvest_1.0.1       
+[109] digest_0.6.27      rmarkdown_2.10     cellranger_1.1.0  
+[112] fastmatch_1.1-3    gdtools_0.2.3      curl_4.3.2        
+[115] lifecycle_1.0.0    jsonlite_1.7.2     viridisLite_0.4.0 
+[118] fansi_0.5.0        pillar_1.6.2       lattice_0.20-44   
+[121] fastmap_1.1.0      httr_1.4.2         survival_3.2-11   
+[124] glue_1.4.2         conflicted_1.0.4   FNN_1.1.3         
+[127] iterators_1.0.13   bit_4.0.4          class_7.3-19      
+[130] stringi_1.7.4      sass_0.4.0         rematch2_2.1.2    
+[133] textshaping_0.3.5  styler_1.5.1       future.apply_1.8.1</code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
