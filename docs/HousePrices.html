@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2021-09-13" />
+
+<title>FreddieMac House Prices</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">FreddieMac House Prices</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">September 13, 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-13
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec97598999bd31918cdda87f6d84ca2837999db91targetblankc975989a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/c97598999bd31918cdda87f6d84ca2837999db91" target="_blank">c975989</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec97598999bd31918cdda87f6d84ca2837999db91targetblankc975989a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/c97598999bd31918cdda87f6d84ca2837999db91" target="_blank">c975989</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/HousePrices.Rmd</code>) and HTML (<code>docs/HousePrices.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/c97598999bd31918cdda87f6d84ca2837999db91/analysis/HousePrices.Rmd" target="_blank">c975989</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-13
+</td>
+<td>
+use most recent Freddie Mac data and common.R baseline
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<blockquote>
+<p>Derived from Len Kiefer’s excellent post at <a href="http://lenkiefer.com/2020/11/30/visual-meditations-on-house-prices-2020-edition/">Visual Meditations on House Prices 2020 Edition</a></p>
+</blockquote>
+<p>Our goal here is to explore several ways of visualizing current aggregated housing prices, using the <a href="http://www.freddiemac.com/research/indices/house-price-index.page">Freddie Mac House Price Index</a>. We’ll be looking at the annualized rate of change over 3-month sliding windows. For example, the latest data is through October 2020, so the rate of change we’re looking at is from July to October (growth in August, September, October).</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse)
+library(lubridate)
+library(hrbrthemes)
+extrafont::loadfonts(quiet = TRUE)
+
+library(geofacet)
+library(gganimate)
+})
+
+source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
+       verbose = FALSE,
+       local = knitr::knit_global())</code></pre>
+<pre><code>Registered S3 method overwritten by &#39;tune&#39;:
+  method                   from   
+  required_pkgs.model_spec parsnip</code></pre>
+<pre class="r"><code>ggplot2::theme_set(theme_jim(base_size = 12))</code></pre>
+<p>We will load the latest data directly from the web site and cache it in a local data folder.</p>
+<pre class="r"><code>fmhpi_file &lt;- here::here(&quot;data/fmhpi.rds&quot;)
+
+if (!file.exists(fmhpi_file)) {
+  write_rds(read_csv(&quot;http://www.freddiemac.com/fmac-resources/research/docs/fmhpi_master_file.csv&quot;), fmhpi_file)
+}
+
+dt &lt;- read_rds(fmhpi_file) %&gt;%
+  group_by(GEO_Type, GEO_Name) %&gt;%
+  mutate(
+    hpa12 = Index_SA / lag(Index_SA, 12) - 1,
+    hpa3 = (Index_SA / lag(Index_SA, 3))**4 - 1,
+    date = as_date(ISOdate(Year, Month, 1)),
+    hpa3_lag3 = lag(hpa3, 3)
+  ) %&gt;%
+  ungroup()
+
+dts &lt;- dt %&gt;%
+  filter(Year &gt; 2017, GEO_Type == &quot;State&quot;) %&gt;%
+  group_by(date) %&gt;%
+  arrange(date, hpa3) %&gt;%
+  mutate(rank = 1:n()) %&gt;%
+  ungroup()
+
+yy &lt;- 2020
+mm &lt;- 10</code></pre>
+<p>The graph below shows that after slowing in spring, US house prices accelerated to a more than 20 percent annualized growth rate in early 2021.</p>
+<pre class="r"><code>dt %&gt;%
+  filter(Year &gt; yy - 3, GEO_Name == &quot;USA&quot;) %&gt;%
+  ggplot(aes(y = hpa3, x = date, fill = hpa3)) +
+  geom_col() +
+  geom_path() +
+  geom_point() +
+  geom_text(
+    data = . %&gt;% filter(date == max(date)),
+    nudge_y = 0.02,
+    fontface = &quot;bold&quot;,
+    size = 4,
+    aes(y = hpa3, x = date, label = GEO_Name)
+  ) +
+  scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    position = &quot;right&quot;
+  ) +
+  scale_fill_viridis_c(
+    limits = c(-0.05, 0.55),
+    label = scales::percent,
+    option = &quot;H&quot;
+  ) +
+  labs(
+    x = NULL,
+    y = &quot;3-month annualized % change&quot;,
+    fill = &quot;3-month annualized rate&quot;,
+    title = &quot;House Price Growth (USA)&quot;,
+    caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;,
+    subtitle = paste0(format(ISOdate(yy - 2, 1, 1), &quot;%b %Y&quot;), &quot;-&quot;, format(max(dt$date), &quot;%b %Y&quot;))
+  ) +
+  theme(
+    legend.position = &quot;top&quot;,
+    legend.direction = &quot;horizontal&quot;,
+    legend.key.width = unit(2, &quot;cm&quot;)
+  )</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-1-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>But that national trend masks a lot of variations across states. Let’s map it out:</p>
+<pre class="r"><code>dts %&gt;%
+  filter(Year &gt; yy - 3) %&gt;%
+  ggplot(aes(date, hpa3, group = GEO_Name, fill = hpa3)) +
+  geom_col() +
+  scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    limits = c(-0.027, 0.55),
+    breaks = seq(-0.1, 0.5, 0.1)
+  ) +
+  labs(
+    y = NULL,
+    x = &quot;3-month annualized % change&quot;,
+    title = &quot;House Price Growth by State&quot;,
+    caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;,
+    subtitle = paste0(format(ISOdate(yy - 2, 1, 1), &quot;%b %Y&quot;), &quot;-&quot;, format(max(dts$date), &quot;%b %Y&quot;))
+  ) +
+  theme(
+    legend.position = &quot;top&quot;,
+    legend.key.width = unit(2, &quot;cm&quot;),
+    plot.title = element_text(size = rel(1.75), face = &quot;bold&quot;),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.text.x = element_text(
+      size = rel(0.5),
+      color = &quot;gray50&quot;
+    ),
+    axis.text.y = element_text(
+      size = rel(0.5),
+      color = &quot;gray50&quot;
+    ),
+    strip.background = element_rect(fill = &quot;gray15&quot;),
+    strip.text = element_text(
+      color = &quot;gray90&quot;,
+      size = rel(0.9),
+      face = &quot;bold&quot;
+    ),
+    panel.spacing.x = unit(0.01, &quot;cm&quot;),
+    panel.spacing.y = unit(0.1, &quot;cm&quot;)
+  ) +
+  scale_fill_viridis_c(
+    limits = c(-0.027, 0.55),
+    label = scales::percent_format(accuracy = 1),
+    name = &quot;3-month annualized rate&quot;,
+    option = &quot;H&quot;
+  ) +
+  facet_geo(~GEO_Name)</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-2-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>We can see that the acceleration is much higher in states like Idaho (ID) and Colorado (CO). Idaho’s house price growth rate is nearly double the US rate.</p>
+<p>As another view, instead of using geo facets we could plot each state on the y axis and compare them vertically, with house price growth on the x axis. We’ll add a line segment that reached back 3 months and shows the relative trend. If the segment extends left, that means the state had slower growth 3 months ago and house price have accelerated. If the segment extends right, the opposite.</p>
+<p>Let’s consider February of 2020, just before the COVID-19 pandemic hit the US economy.</p>
+<pre class="r"><code>mychart &lt;- function(yy = 2020, mm = 4) {
+  dts2 &lt;- dts %&gt;%
+    filter(Year == yy &amp; Month == mm)
+
+  ggplot(data = dts2, aes(
+    x = hpa3,
+    y = fct_reorder(GEO_Name, hpa3),
+    fill = hpa3
+  )) +
+    geom_point() +
+    geom_segment(aes(xend = hpa3_lag3, yend = GEO_Name)) +
+    geom_label(aes(label = GEO_Name, fill = hpa3),
+      size = rel(3),
+      label.padding = unit(0.15, &quot;lines&quot;),
+      fontface = &quot;bold&quot;
+    ) +
+    scale_x_continuous(
+      labels = scales::percent_format(accuracy = 1),
+      limits = c(-0.027, 0.55),
+      breaks = seq(-0.1, 0.4, 0.1)
+    ) +
+    labs(
+      y = NULL,
+      x = &quot;3-month annualized % change, line extends to 3 months prior&quot;,
+      title = &quot;House Price Growth by State&quot;,
+      caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;,
+      subtitle = format(max(dts2$date), &quot;%b %Y&quot;)
+    ) +
+    theme(
+      legend.position = &quot;top&quot;,
+      legend.direction = &quot;horizontal&quot;,
+      legend.key.width = unit(2, &quot;cm&quot;),
+      plot.title = element_text(size = rel(1.75), face = &quot;bold&quot;),
+      panel.grid.major.y = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank()
+    ) +
+    scale_fill_viridis_c(
+      limits = c(-0.027, 0.55),
+      label = scales::percent_format(accuracy = 1),
+      name = &quot;3-month annualized rate&quot;,
+      option = &quot;H&quot;
+    )
+}
+
+mychart(2020, 2)</code></pre>
+<p><img src="figure/HousePrices.Rmd/segment%20charts-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>For most, but not all states, the segment extends left, meaning price growth from December 2019 to February 2020 was higher than from October to December 2019.</p>
+<p>Let’s roll forward 3 months to the period covering February 2020 to May 2020 compared to December 2019 to February 2020.</p>
+<pre class="r"><code>mychart(2020, 5)</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-3-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Here we see that many states were slowing down. At that point, it was reasonable to be concerned that the housing market would falter. But it did not. Thanks to low mortgage interest rates and policies like forbearance and foreclosure moratoria, the housing market rebounded. The latest data, as of July 2021:</p>
+<pre class="r"><code>mychart(2021, 7)</code></pre>
+<p><img src="figure/HousePrices.Rmd/unnamed-chunk-4-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>By July 2021, most states are experiencing a rapid acceleration in house prices, with Nevada (NV) leading the way.</p>
+<p>Now that we’ve build individual frames, let’s watch the animation unfold:</p>
+<pre class="r"><code>a &lt;- dts %&gt;%
+  ggplot(aes(
+    x = hpa3,
+    y = rank,
+    fill = hpa3
+  )) +
+  geom_point() +
+  geom_segment(aes(xend = hpa3_lag3, yend = rank)) +
+  geom_label(aes(
+    label = GEO_Name, fill = hpa3,
+    color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))
+  ),
+  size = rel(3),
+  label.padding = unit(0.15, &quot;lines&quot;),
+  fontface = &quot;bold&quot;
+  ) +
+  scale_x_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    limits = c(-0.1, 0.55),
+    breaks = seq(-0.1, 0.5, 0.1)
+  ) +
+  labs(
+    y = NULL,
+    x = &quot;3-month annualized % change, line extends to 3 months prior&quot;,
+    title = &quot;House Price Growth by State&quot;,
+    subtitle = &quot;{closest_state}&quot;,
+    caption = &quot;Data: Freddie Mac House Price Index, seasonally adjusted | Visual: @jim_gruman&quot;
+  ) +
+  theme(
+    legend.position = &quot;top&quot;,
+    legend.direction = &quot;horizontal&quot;,
+    legend.key.width = unit(2, &quot;cm&quot;),
+    plot.title = element_text(size = rel(1.75), face = &quot;bold&quot;),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  ) +
+  scale_fill_viridis_c(
+    limits = c(-0.05, 0.55),
+    label = scales::percent,
+    name = &quot;3-month annualized rate&quot;,
+    option = &quot;H&quot;
+  ) +
+  facet_wrap(~date)
+
+
+animate(a +
+  facet_null() +
+  transition_states(states = date) +
+  ease_aes(&quot;cubic-in-out&quot;) +
+  geom_text(
+    x = 0.38,
+    y = 4,
+    size = 30,
+    aes(label = format(ISOdate(Year, Month, 1), &quot;%b %Y&quot;))
+  ) +
+  aes(group = GEO_Name),
+nframes = 184,
+end_pause = 60,
+width = 740,
+height = 1000,
+fps = 15
+)</code></pre>
+<p><img src="figure/HousePrices.Rmd/animatedPoints-1.gif" width="200%" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] gganimate_1.0.7  geofacet_0.2.0   hrbrthemes_0.8.0 lubridate_1.7.10
+ [5] forcats_0.5.1    stringr_1.4.0    dplyr_1.0.7      purrr_0.3.4     
+ [9] readr_2.0.1      tidyr_1.1.3      tibble_3.1.4     ggplot2_3.3.5   
+[13] tidyverse_1.3.1  workflowr_1.6.2 
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1        backports_1.2.1     systemfonts_1.0.2  
+  [4] workflows_0.2.3     plyr_1.8.6          sp_1.4-5           
+  [7] splines_4.1.1       listenv_0.8.0       digest_0.6.27      
+ [10] yardstick_0.0.8     foreach_1.5.1       htmltools_0.5.2    
+ [13] viridis_0.6.1       parsnip_0.1.7.900   fansi_0.5.0        
+ [16] magrittr_2.0.1      tune_0.1.6          tzdb_0.1.2         
+ [19] recipes_0.1.16      globals_0.14.0      modelr_0.1.8       
+ [22] gower_0.2.2         extrafont_0.17      R.utils_2.10.1     
+ [25] extrafontdb_1.0     hardhat_0.1.6       rsample_0.1.0      
+ [28] prettyunits_1.1.1   jpeg_0.1-9          dials_0.0.9.9000   
+ [31] colorspace_2.0-2    rvest_1.0.1         ggrepel_0.9.1      
+ [34] textshaping_0.3.5   haven_2.4.3         xfun_0.25          
+ [37] prismatic_1.0.0     crayon_1.4.1        jsonlite_1.7.2     
+ [40] survival_3.2-11     iterators_1.0.13    glue_1.4.2         
+ [43] gtable_0.3.0        ipred_0.9-11        R.cache_0.15.0     
+ [46] Rttf2pt1_1.3.9      future.apply_1.8.1  imguR_1.0.3        
+ [49] scales_1.1.1        infer_1.0.0         DBI_1.1.1          
+ [52] Rcpp_1.0.7          viridisLite_0.4.0   progress_1.2.2     
+ [55] units_0.7-2         GPfit_1.0-8         proxy_0.4-26       
+ [58] lava_1.6.10         prodlim_2019.11.13  geogrid_0.1.1      
+ [61] httr_1.4.2          ellipsis_0.3.2      R.methodsS3_1.8.1  
+ [64] pkgconfig_2.0.3     farver_2.1.0        nnet_7.3-16        
+ [67] sass_0.4.0          dbplyr_2.1.1        utf8_1.2.2         
+ [70] here_1.0.1          labeling_0.4.2      tidyselect_1.1.1   
+ [73] rlang_0.4.11        DiceDesign_1.9      later_1.3.0        
+ [76] cachem_1.0.6        munsell_0.5.0       cellranger_1.1.0   
+ [79] tools_4.1.1         cli_3.0.1           generics_0.1.0     
+ [82] gifski_1.4.3-1      broom_0.7.9         evaluate_0.14      
+ [85] fastmap_1.1.0       ragg_1.1.3          yaml_2.2.1         
+ [88] knitr_1.34          fs_1.5.0            future_1.22.1      
+ [91] whisker_0.4         R.oo_1.24.0         xml2_1.3.2         
+ [94] compiler_4.1.1      rstudioapi_0.13     png_0.1-7          
+ [97] e1071_1.7-8         reprex_2.0.1        lhs_1.1.3          
+[100] tweenr_1.0.2        bslib_0.3.0         stringi_1.7.4      
+[103] highr_0.9           gdtools_0.2.3       rgeos_0.5-7        
+[106] lattice_0.20-44     Matrix_1.3-4        styler_1.5.1       
+[109] classInt_0.4-3      conflicted_1.0.4    vctrs_0.3.8        
+[112] tidymodels_0.1.3    pillar_1.6.2        lifecycle_1.0.0    
+[115] furrr_0.2.3         jquerylib_0.1.4     httpuv_1.6.2       
+[118] R6_2.5.1            promises_1.2.0.1    KernSmooth_2.23-20 
+[121] gridExtra_2.3       parallelly_1.28.1   codetools_0.2-18   
+[124] MASS_7.3-54         assertthat_0.2.1    rprojroot_2.0.2    
+[127] withr_2.4.2         rnaturalearth_0.1.0 parallel_4.1.1     
+[130] hms_1.1.0           grid_4.1.1          rpart_4.1-15       
+[133] timeDate_3043.102   class_7.3-19        rmarkdown_2.10     
+[136] git2r_0.28.0        pROC_1.18.0         sf_1.0-2           </code></pre>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
