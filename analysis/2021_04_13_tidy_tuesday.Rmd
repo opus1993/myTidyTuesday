@@ -1,0 +1,449 @@
+---
+title: "US Post Offices"
+author: "Jim Gruman"
+date: "April 13, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+# TidyTuesday this week: United States Post Offices
+
+Credit to Bob Rudis for sharing the idea of working with this dataset.
+
+The authors of the dataset are:
+
+Blevins, Cameron; Helbock, Richard W., 2021, ["US Post Offices",](https://doi.org/10.7910/DVN/NUKCNA)
+
+
+```{r setup, warning=FALSE}
+
+suppressPackageStartupMessages({
+library(tidyverse)
+
+library(lubridate)
+library(hrbrthemes)
+
+library(ggthemes)
+library(historydata)
+library(gganimate)
+  
+library(tidymodels)
+library(themis)
+library(finetune)
+library(textrecipes)
+ })
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+
+```{r load, message=FALSE}
+
+tt <- tidytuesdayR::tt_load("2021-04-13")
+
+post_offices <- tt$post_offices %>%
+  select(
+    name,
+    state,
+    county1,
+    established,
+    discontinued,
+    latitude,
+    longitude
+    ) %>% 
+  mutate(discontinued = case_when(
+    discontinued == 997 ~ 1997,
+    discontinued == 18323 ~ 1832,
+    discontinued == 18903 ~ 1890,
+    discontinued == 19093 ~ 1909,
+    discontinued == 19173 ~ 1917,
+    discontinued == 19223 ~ 1922,
+    discontinued == 4859 ~ 1859,
+    TRUE ~ discontinued),
+    established = if_else(established < 200,
+                               established*10,
+                               established),
+    state = case_when(state == "MI/OH"~"OH",
+                      state == "VAy" ~ "VA",
+                      TRUE ~state)
+    ) 
+```
+
+```{r post_office_years}
+post_office_years <- post_offices %>%
+  select(
+    name,
+    state,
+    established,
+    discontinued
+    ) %>% 
+  replace_na(list(discontinued = 2003)) %>% 
+  filter(!is.na(established)) %>%   
+  mutate(year = map2(established, discontinued, seq)) %>% 
+  unnest(year)
+```
+
+```{r states}
+states <- tibble(state = state.abb, 
+                 state.division,
+                 state.area) %>% 
+  bind_rows(tibble(
+    state = "DC",
+    state.division = "South Atlantic",
+    state.area = 68.3
+  ))
+
+post_office_years %>% 
+  inner_join(states) %>% 
+  count(year,
+        region = state.division,
+        name = "n_post_offices") %>% 
+  ggplot(aes(year, n_post_offices, fill = region)) +
+  geom_area() +
+  scale_y_continuous(labels = scales::comma,
+                     position = "right") +
+  labs(y = NULL, x = NULL, fill = NULL,
+       title = "Number of Active US Post Offices",
+       caption = "Data: Blevins, Cameron; Helbock, Richard W., 2021") +
+  theme(legend.position = c(0.1, 0.5),
+        legend.background = element_rect(color = "white"))
+  
+```
+
+```{r regions, fig.asp=1}
+post_office_years %>% 
+  inner_join(states) %>% 
+  count(year,
+        region = state.division,
+        name = "n_post_offices") %>% 
+  mutate(region = fct_reorder(region, -n_post_offices, sum)) %>% 
+  ggplot(aes(year, n_post_offices, fill = region)) +
+  geom_area(show.legend = FALSE) +
+  geom_label(data = states %>% 
+               group_by(region = state.division) %>% 
+               summarize(area = sum(state.area)),
+            aes(label = paste0(scales::comma(area)," sq. miles"),
+                x = 1750,
+                y = 14000
+            ),
+            fill = "white"
+            ) +
+  scale_y_continuous(labels = scales::comma,
+                     position = "right") +
+  facet_wrap(~ region) +
+  labs(y = NULL, x = NULL, fill = NULL,
+       title = "Number of Active US Post Offices by Region",
+       caption = "Data: Blevins, Cameron; Helbock, Richard W., 2021") 
+```
+
+
+```{r closures, fig.asp=1}
+post_offices %>% 
+  inner_join(states) %>% 
+  filter(!is.na(discontinued)) %>% 
+  count(region = state.division, 
+        decade = 10 * (discontinued %/% 10),
+        name = "n_closures") %>% 
+  ggplot(aes(decade, -n_closures, fill = region)) +
+  geom_area(show.legend = FALSE,
+            color = "black") +
+  scale_x_continuous(n.breaks = 3) +
+  facet_wrap(~region) +
+  labs(title = "US Post Office Closures by Decade")
+  
+```
+
+```{r openings, fig.asp=1}
+post_offices %>% 
+  inner_join(states) %>% 
+  count(region = state.division, 
+        decade = 10 * (established %/% 10),
+        name = "n_opening") %>% 
+  filter(decade < 2000) %>% 
+  ggplot(aes(decade, n_opening, fill = region)) +
+  geom_area(show.legend = FALSE,
+            color = "black") +
+  scale_x_continuous(n.breaks = 3) +
+  facet_wrap(~region) +
+  labs(title = "US Post Office Openings by Decade")
+  
+```
+
+```{r combo, fig.asp=1}
+post_offices %>% 
+  inner_join(states) %>% 
+  count(region = state.division, 
+        decade = 10 * (established %/% 10),
+        name = "n_opening") %>% 
+  complete(region, decade, fill = list(n_opening = 0)) %>% 
+  inner_join(
+    post_offices %>% 
+      inner_join(states) %>% 
+      filter(!is.na(discontinued)) %>% 
+      count(region = state.division, 
+            decade = 10 * (discontinued %/% 10),
+            name = "n_closures") %>% 
+      complete(region, decade, fill = list(n_closures = 0)),
+    by = c("region", "decade")) %>% 
+  group_by(region) %>% 
+  mutate(total = cumsum(n_opening - n_closures)) %>% 
+  ggplot() +
+  geom_col(aes(decade, n_opening, fill = region),
+    show.legend = FALSE, color = "black") +
+  geom_col(aes(decade, -n_closures, fill = region),
+    show.legend = FALSE, color = "black") +
+  geom_line(aes(decade, total),
+    show.legend = FALSE, color = "black") +
+  scale_x_continuous(n.breaks = 3) +
+  annotate("label",
+           x = 1950,
+           y = 10000,
+           label = "Net Total") +
+  facet_wrap(~region) +
+  labs(title = "US Post Office Openings and Closings by Decade",
+       y = NULL, x = NULL,
+       caption = "Data: Blevins, Cameron; Helbock, Richard W., 2021") 
+```
+
+```{r y2k}
+states_map <- map_data("state") %>% 
+  as_tibble() %>% 
+  mutate(state = state.abb[match(region, str_to_lower(state.name))]) %>% 
+  replace_na(list(state = "DC"))
+
+post_office_years %>%
+  filter(year == 2000) %>%
+  count(state, sort  = TRUE) %>%
+  inner_join(
+    us_state_populations %>%
+      filter(year == 2000) %>%
+      mutate(state = state.abb[match(state, state.name)]) %>%
+      replace_na(list(state = "DC")),
+    by = "state"
+  ) %>%
+  mutate(post_office_density = n / (population / 1e6)) %>%
+  inner_join(states_map) %>%
+  ggplot(aes(long, lat, group = group, fill = post_office_density)) +
+  geom_polygon(color = "gray20") +
+  theme_map() +
+  labs(title = "US Post Offices per Million Population in 2000",
+       fill = NULL)
+  
+```
+
+I wonder whether the West Virginia post offices were originally shown as addressed in Virginia?
+
+```{r animation}
+anim <- post_offices %>% 
+  inner_join(states) %>% 
+  count(state, 
+        decade = 10 * (established %/% 10),
+        name = "n_opening") %>% 
+  complete(state, decade, fill = list(n_opening = 0)) %>% 
+  inner_join(
+    post_offices %>% 
+      inner_join(states) %>% 
+      filter(!is.na(discontinued)) %>% 
+      count(state,
+            decade = 10 * (discontinued %/% 10),
+            name = "n_closures") %>% 
+      complete(state, decade, fill = list(n_closures = 0)),
+    by = c("state", "decade")) %>% 
+  group_by(state) %>% 
+  mutate(total = cumsum(n_opening - n_closures)) %>% 
+  inner_join(
+    us_state_populations %>%
+      mutate(state = state.abb[match(state, state.name)]) %>%
+      replace_na(list(state = "DC")),
+    by = c("decade" = "year", "state")
+  ) %>%
+  filter(population > 10000) %>% 
+  right_join(states_map, by = "state") %>%
+  ggplot(aes(long, lat, group = group, fill = total)) +
+  geom_polygon(color = "gray20") +
+  transition_manual(decade) +
+  theme_map() +
+  labs(title = "US Post Offices in { current_frame }",
+       fill = NULL)
+ 
+animate(anim,
+        end_pause = 60,
+        width = 1000, 
+        height = 740, 
+        fps = 5)
+
+```
+
+
+## A subtext predictive model
+
+We will build on Julia Silge's work posted [here](https://juliasilge.com/blog/hawaii-post-offices/)
+
+Our modeling goal is to predict whether a post office is in Hawaii, where many names of the post offices are unique.
+
+We can start by loading the tidymodels metapackage, splitting our data into training and testing sets, and creating cross-validation samples.
+
+```{r po_split}
+po_split <- post_offices %>%
+  mutate(state = case_when(
+    state == "HI" ~ "Hawaii",
+    TRUE ~ "Other"
+  )) %>%
+  select(name, state) %>%
+  initial_split(strata = state)
+
+po_train <- training(po_split)
+po_test <- testing(po_split)
+
+set.seed(234)
+po_folds <- vfold_cv(po_train, strata = state)
+
+```
+
+Next, let’s create our feature engineering recipe. Let’s tokenize using byte pair encoding; this is an algorithm that iteratively merges frequently occurring subword pairs and gets us information in between character-level and word-level. 
+
+```{r po_rec}
+po_rec <- recipe(state ~ name, data = po_train) %>%
+  step_tokenize(name,
+    engine = "tokenizers.bpe",
+    training_options = list(vocab_size = 500)
+  ) %>%
+  step_tokenfilter(name, max_tokens = tune()) %>%
+  step_tf(name) %>%
+  step_normalize(all_predictors()) %>%
+  step_smote(state)
+
+```
+
+We also are upsampling this very imbalanced data set via `step_smote()` from the `themis` package. The results of this data preprocessing show us the subword features.
+
+Next let’s create a model specification for a linear support vector machine. This is a newer model in parsnip, currently in the development version on GitHub. Linear SVMs are often a good starting choice for text models.
+
+```{r svm_spec}
+svm_spec <- svm_linear() %>%
+  set_mode("classification") %>%
+  set_engine("LiblineaR")
+```
+
+Let’s put these together in a workflow.
+
+```{r po_wf}
+po_wf <- workflow() %>%
+  add_recipe(po_rec) %>%
+  add_model(svm_spec)
+```
+
+Let's explore tuning levels of token filtering between 80 and 400.
+
+```{r po_params}
+po_params <- parameters(po_wf) %>% 
+  update(max_tokens = max_tokens(c(80, 400)))
+```
+
+
+Now let’s fit this workflow (that combines feature engineering with the SVM model) to the resamples we created earlier. The linear SVM model does not support class probabilities, so we need to set a custom `metric_set()` that only includes metrics for hard class probabilities.
+
+```{r tune_grid}
+# register a parallel backend, leaving one core available
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+po_rs <- 
+  tune_race_anova(
+  po_wf,
+  po_folds,
+  grid = po_params %>% grid_regular(levels = 4),
+  metrics = metric_set(accuracy, sens, spec),
+  control = control_race(save_pred = TRUE)
+)
+```
+
+How did we do?
+
+```{r tune_grid_plot}
+
+autoplot(po_rs)
+```
+
+Not too bad, although you can tell we are doing better on one class than the other as we add more model features. Let's pick the one with the best specificity.
+
+```{r show_best}
+show_best(po_rs, metric = "sens")
+```
+
+### Fit and evaluate final model
+
+Next, let’s fit our model on last time to the whole training set at once (rather than resampled data) and evaluate on the testing set. This is the first time we have touched the testing set.
+
+```{r final_wf}
+final_wf <- po_wf %>% 
+  finalize_workflow(
+    select_best(po_rs, metric = "sens")
+  )
+ 
+final_fit <- last_fit(
+  final_wf,
+  po_split,
+  metrics = metric_set(accuracy, sens, spec)
+)
+
+collect_metrics(final_fit)
+```
+
+Our performance on the testing set is about the same as what we found with our resampled data, which is good.
+
+We can explore how the model is doing for both the positive and negative classes with a confusion matrix.
+
+```{r collect_predictions}
+collect_predictions(final_fit) %>%
+  conf_mat(state, .pred_class) %>% 
+  autoplot() +
+  labs(title = "Confusion Matrix on held out test data")
+```
+
+This just really emphasizes what an imbalanced problem this is, but we can see how well we are doing for the post offices in Hawaii vs. the rest of the country.
+
+```{r po_fit, fig.asp=1}
+po_fit <- extract_fit_parsnip(final_fit)
+
+liblinear_obj <- po_fit$fit$W
+
+liblinear_df <- tibble(term = colnames(liblinear_obj),
+                       estimate = liblinear_obj[1,])
+
+liblinear_df %>%
+  filter(term != "Bias") %>%
+  group_by(estimate > 0) %>%
+  slice_max(abs(estimate), n = 15) %>%
+  ungroup() %>%
+  mutate(term = str_remove(term, "tf_name_")) %>%
+  ggplot(aes(estimate, fct_reorder(term, estimate), fill = estimate > 0)) +
+  geom_col(alpha = 0.6, show.legend = FALSE) +
+  geom_text(aes(label = term),
+            hjust = 1) +
+  scale_y_discrete(breaks = NULL) +
+  theme(axis.text.y = element_blank()) +
+  labs(
+    x = "Coefficient from linear SVM",
+    y = NULL,
+    fill = NULL,
+    title = "Which subwords in a US Post Office names are used more in Hawaii?",
+    subtitle = "Subwords like A, _H, U, and O are the strongest predictors of a post office being in Hawaii"
+  )
+
+```
+
+Credit to Julia Silge for introducing `LiblineaR` and `tokenizers.bpe`, and the predictive workflow shown here.
