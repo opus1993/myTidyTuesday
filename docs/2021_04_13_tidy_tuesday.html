@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2021-04-13" />
+
+<title>US Post Offices</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">US Post Offices</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">April 13, 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-14
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree18f8ff058b5f899cc78929ef06485d474182def8targetblank18f8ff0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/18f8ff058b5f899cc78929ef06485d474182def8" target="_blank">18f8ff0</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree18f8ff058b5f899cc78929ef06485d474182def8targetblank18f8ff0a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/18f8ff058b5f899cc78929ef06485d474182def8" target="_blank">18f8ff0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2021_04_13_tidy_tuesday.Rmd</code>) and HTML (<code>docs/2021_04_13_tidy_tuesday.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/18f8ff058b5f899cc78929ef06485d474182def8/analysis/2021_04_13_tidy_tuesday.Rmd" target="_blank">18f8ff0</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-14
+</td>
+<td>
+standard viridis h color pallete and tune_race_anova
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="tidytuesday-this-week-united-states-post-offices" class="section level1">
+<h1>TidyTuesday this week: United States Post Offices</h1>
+<p>Credit to Bob Rudis for sharing the idea of working with this dataset.</p>
+<p>The authors of the dataset are:</p>
+<p>Blevins, Cameron; Helbock, Richard W., 2021, <a href="https://doi.org/10.7910/DVN/NUKCNA">“US Post Offices”,</a></p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse)
+
+library(lubridate)
+library(hrbrthemes)
+
+library(ggthemes)
+library(historydata)
+library(gganimate)
+  
+library(tidymodels)
+library(themis)
+library(finetune)
+library(textrecipes)
+ })
+
+source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))</code></pre>
+<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2021-04-13&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `post_offices.csv`</code></pre>
+<pre class="r"><code>post_offices &lt;- tt$post_offices %&gt;%
+  select(
+    name,
+    state,
+    county1,
+    established,
+    discontinued,
+    latitude,
+    longitude
+  ) %&gt;%
+  mutate(
+    discontinued = case_when(
+      discontinued == 997 ~ 1997,
+      discontinued == 18323 ~ 1832,
+      discontinued == 18903 ~ 1890,
+      discontinued == 19093 ~ 1909,
+      discontinued == 19173 ~ 1917,
+      discontinued == 19223 ~ 1922,
+      discontinued == 4859 ~ 1859,
+      TRUE ~ discontinued
+    ),
+    established = if_else(established &lt; 200,
+      established * 10,
+      established
+    ),
+    state = case_when(
+      state == &quot;MI/OH&quot; ~ &quot;OH&quot;,
+      state == &quot;VAy&quot; ~ &quot;VA&quot;,
+      TRUE ~ state
+    )
+  )</code></pre>
+<pre class="r"><code>post_office_years &lt;- post_offices %&gt;%
+  select(
+    name,
+    state,
+    established,
+    discontinued
+  ) %&gt;%
+  replace_na(list(discontinued = 2003)) %&gt;%
+  filter(!is.na(established)) %&gt;%
+  mutate(year = map2(established, discontinued, seq)) %&gt;%
+  unnest(year)</code></pre>
+<pre class="r"><code>states &lt;- tibble(
+  state = state.abb,
+  state.division,
+  state.area
+) %&gt;%
+  bind_rows(tibble(
+    state = &quot;DC&quot;,
+    state.division = &quot;South Atlantic&quot;,
+    state.area = 68.3
+  ))
+
+post_office_years %&gt;%
+  inner_join(states) %&gt;%
+  count(year,
+    region = state.division,
+    name = &quot;n_post_offices&quot;
+  ) %&gt;%
+  ggplot(aes(year, n_post_offices, fill = region)) +
+  geom_area() +
+  scale_y_continuous(
+    labels = scales::comma,
+    position = &quot;right&quot;
+  ) +
+  labs(
+    y = NULL, x = NULL, fill = NULL,
+    title = &quot;Number of Active US Post Offices&quot;,
+    caption = &quot;Data: Blevins, Cameron; Helbock, Richard W., 2021&quot;
+  ) +
+  theme(
+    legend.position = c(0.1, 0.5),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/states-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>post_office_years %&gt;%
+  inner_join(states) %&gt;%
+  count(year,
+    region = state.division,
+    name = &quot;n_post_offices&quot;
+  ) %&gt;%
+  mutate(region = fct_reorder(region, -n_post_offices, sum)) %&gt;%
+  ggplot(aes(year, n_post_offices, fill = region)) +
+  geom_area(show.legend = FALSE) +
+  geom_label(
+    data = states %&gt;%
+      group_by(region = state.division) %&gt;%
+      summarize(area = sum(state.area)),
+    aes(
+      label = paste0(scales::comma(area), &quot; sq. miles&quot;),
+      x = 1750,
+      y = 14000
+    ),
+    fill = &quot;white&quot;
+  ) +
+  scale_y_continuous(
+    labels = scales::comma,
+    position = &quot;right&quot;
+  ) +
+  facet_wrap(~region) +
+  labs(
+    y = NULL, x = NULL, fill = NULL,
+    title = &quot;Number of Active US Post Offices by Region&quot;,
+    caption = &quot;Data: Blevins, Cameron; Helbock, Richard W., 2021&quot;
+  )</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/regions-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>post_offices %&gt;%
+  inner_join(states) %&gt;%
+  filter(!is.na(discontinued)) %&gt;%
+  count(
+    region = state.division,
+    decade = 10 * (discontinued %/% 10),
+    name = &quot;n_closures&quot;
+  ) %&gt;%
+  ggplot(aes(decade, -n_closures, fill = region)) +
+  geom_area(
+    show.legend = FALSE,
+    color = &quot;black&quot;
+  ) +
+  scale_x_continuous(n.breaks = 3) +
+  facet_wrap(~region) +
+  labs(title = &quot;US Post Office Closures by Decade&quot;)</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/closures-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>post_offices %&gt;%
+  inner_join(states) %&gt;%
+  count(
+    region = state.division,
+    decade = 10 * (established %/% 10),
+    name = &quot;n_opening&quot;
+  ) %&gt;%
+  filter(decade &lt; 2000) %&gt;%
+  ggplot(aes(decade, n_opening, fill = region)) +
+  geom_area(
+    show.legend = FALSE,
+    color = &quot;black&quot;
+  ) +
+  scale_x_continuous(n.breaks = 3) +
+  facet_wrap(~region) +
+  labs(title = &quot;US Post Office Openings by Decade&quot;)</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/openings-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>post_offices %&gt;%
+  inner_join(states) %&gt;%
+  count(
+    region = state.division,
+    decade = 10 * (established %/% 10),
+    name = &quot;n_opening&quot;
+  ) %&gt;%
+  complete(region, decade, fill = list(n_opening = 0)) %&gt;%
+  inner_join(
+    post_offices %&gt;%
+      inner_join(states) %&gt;%
+      filter(!is.na(discontinued)) %&gt;%
+      count(
+        region = state.division,
+        decade = 10 * (discontinued %/% 10),
+        name = &quot;n_closures&quot;
+      ) %&gt;%
+      complete(region, decade, fill = list(n_closures = 0)),
+    by = c(&quot;region&quot;, &quot;decade&quot;)
+  ) %&gt;%
+  group_by(region) %&gt;%
+  mutate(total = cumsum(n_opening - n_closures)) %&gt;%
+  ggplot() +
+  geom_col(aes(decade, n_opening, fill = region),
+    show.legend = FALSE, color = &quot;black&quot;
+  ) +
+  geom_col(aes(decade, -n_closures, fill = region),
+    show.legend = FALSE, color = &quot;black&quot;
+  ) +
+  geom_line(aes(decade, total),
+    show.legend = FALSE, color = &quot;black&quot;
+  ) +
+  scale_x_continuous(n.breaks = 3) +
+  annotate(&quot;label&quot;,
+    x = 1950,
+    y = 10000,
+    label = &quot;Net Total&quot;
+  ) +
+  facet_wrap(~region) +
+  labs(
+    title = &quot;US Post Office Openings and Closings by Decade&quot;,
+    y = NULL, x = NULL,
+    caption = &quot;Data: Blevins, Cameron; Helbock, Richard W., 2021&quot;
+  )</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/combo-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>states_map &lt;- map_data(&quot;state&quot;) %&gt;%
+  as_tibble() %&gt;%
+  mutate(state = state.abb[match(region, str_to_lower(state.name))]) %&gt;%
+  replace_na(list(state = &quot;DC&quot;))
+
+post_office_years %&gt;%
+  filter(year == 2000) %&gt;%
+  count(state, sort = TRUE) %&gt;%
+  inner_join(
+    us_state_populations %&gt;%
+      filter(year == 2000) %&gt;%
+      mutate(state = state.abb[match(state, state.name)]) %&gt;%
+      replace_na(list(state = &quot;DC&quot;)),
+    by = &quot;state&quot;
+  ) %&gt;%
+  mutate(post_office_density = n / (population / 1e6)) %&gt;%
+  inner_join(states_map) %&gt;%
+  ggplot(aes(long, lat, group = group, fill = post_office_density)) +
+  geom_polygon(color = &quot;gray20&quot;) +
+  theme_map() +
+  labs(
+    title = &quot;US Post Offices per Million Population in 2000&quot;,
+    fill = NULL
+  )</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/y2k-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>I wonder whether the West Virginia post offices were originally shown as addressed in Virginia?</p>
+<pre class="r"><code>anim &lt;- post_offices %&gt;%
+  inner_join(states) %&gt;%
+  count(state,
+    decade = 10 * (established %/% 10),
+    name = &quot;n_opening&quot;
+  ) %&gt;%
+  complete(state, decade, fill = list(n_opening = 0)) %&gt;%
+  inner_join(
+    post_offices %&gt;%
+      inner_join(states) %&gt;%
+      filter(!is.na(discontinued)) %&gt;%
+      count(state,
+        decade = 10 * (discontinued %/% 10),
+        name = &quot;n_closures&quot;
+      ) %&gt;%
+      complete(state, decade, fill = list(n_closures = 0)),
+    by = c(&quot;state&quot;, &quot;decade&quot;)
+  ) %&gt;%
+  group_by(state) %&gt;%
+  mutate(total = cumsum(n_opening - n_closures)) %&gt;%
+  inner_join(
+    us_state_populations %&gt;%
+      mutate(state = state.abb[match(state, state.name)]) %&gt;%
+      replace_na(list(state = &quot;DC&quot;)),
+    by = c(&quot;decade&quot; = &quot;year&quot;, &quot;state&quot;)
+  ) %&gt;%
+  filter(population &gt; 10000) %&gt;%
+  right_join(states_map, by = &quot;state&quot;) %&gt;%
+  ggplot(aes(long, lat, group = group, fill = total)) +
+  geom_polygon(color = &quot;gray20&quot;) +
+  transition_manual(decade) +
+  theme_map() +
+  labs(
+    title = &quot;US Post Offices in { current_frame }&quot;,
+    fill = NULL
+  )
+
+animate(anim,
+  end_pause = 60,
+  width = 1000,
+  height = 740,
+  fps = 5
+)</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/animation-1.gif" width="200%" style="display: block; margin: auto;" /></p>
+<div id="a-subtext-predictive-model" class="section level2">
+<h2>A subtext predictive model</h2>
+<p>We will build on Julia Silge’s work posted <a href="https://juliasilge.com/blog/hawaii-post-offices/">here</a></p>
+<p>Our modeling goal is to predict whether a post office is in Hawaii, where many names of the post offices are unique.</p>
+<p>We can start by loading the tidymodels metapackage, splitting our data into training and testing sets, and creating cross-validation samples.</p>
+<pre class="r"><code>po_split &lt;- post_offices %&gt;%
+  mutate(state = case_when(
+    state == &quot;HI&quot; ~ &quot;Hawaii&quot;,
+    TRUE ~ &quot;Other&quot;
+  )) %&gt;%
+  select(name, state) %&gt;%
+  initial_split(strata = state)
+
+po_train &lt;- training(po_split)
+po_test &lt;- testing(po_split)
+
+set.seed(234)
+po_folds &lt;- vfold_cv(po_train, strata = state)</code></pre>
+<p>Next, let’s create our feature engineering recipe. Let’s tokenize using byte pair encoding; this is an algorithm that iteratively merges frequently occurring subword pairs and gets us information in between character-level and word-level.</p>
+<pre class="r"><code>po_rec &lt;- recipe(state ~ name, data = po_train) %&gt;%
+  step_tokenize(name,
+    engine = &quot;tokenizers.bpe&quot;,
+    training_options = list(vocab_size = 500)
+  ) %&gt;%
+  step_tokenfilter(name, max_tokens = tune()) %&gt;%
+  step_tf(name) %&gt;%
+  step_normalize(all_predictors()) %&gt;%
+  step_smote(state)</code></pre>
+<p>We also are upsampling this very imbalanced data set via <code>step_smote()</code> from the <code>themis</code> package. The results of this data preprocessing show us the subword features.</p>
+<p>Next let’s create a model specification for a linear support vector machine. This is a newer model in parsnip, currently in the development version on GitHub. Linear SVMs are often a good starting choice for text models.</p>
+<pre class="r"><code>svm_spec &lt;- svm_linear() %&gt;%
+  set_mode(&quot;classification&quot;) %&gt;%
+  set_engine(&quot;LiblineaR&quot;)</code></pre>
+<p>Let’s put these together in a workflow.</p>
+<pre class="r"><code>po_wf &lt;- workflow() %&gt;%
+  add_recipe(po_rec) %&gt;%
+  add_model(svm_spec)</code></pre>
+<p>Let’s explore tuning levels of token filtering between 80 and 400.</p>
+<pre class="r"><code>po_params &lt;- parameters(po_wf) %&gt;%
+  update(max_tokens = max_tokens(c(80, 400)))</code></pre>
+<p>Now let’s fit this workflow (that combines feature engineering with the SVM model) to the resamples we created earlier. The linear SVM model does not support class probabilities, so we need to set a custom <code>metric_set()</code> that only includes metrics for hard class probabilities.</p>
+<pre class="r"><code># register a parallel backend, leaving one core available
+all_cores &lt;- parallelly::availableCores(omit = 1)
+all_cores</code></pre>
+<pre><code>system 
+    11 </code></pre>
+<pre class="r"><code>future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows
+
+po_rs &lt;-
+  tune_race_anova(
+    po_wf,
+    po_folds,
+    grid = po_params %&gt;% grid_regular(levels = 4),
+    metrics = metric_set(accuracy, sens, spec),
+    control = control_race(save_pred = TRUE)
+  )</code></pre>
+<p>How did we do?</p>
+<pre class="r"><code>autoplot(po_rs)</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/tune_grid_plot-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Not too bad, although you can tell we are doing better on one class than the other as we add more model features. Let’s pick the one with the best specificity.</p>
+<pre class="r"><code>show_best(po_rs, metric = &quot;sens&quot;)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["max_tokens"],"name":[1],"type":["int"],"align":["right"]},{"label":[".metric"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[3],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[5],"type":["int"],"align":["right"]},{"label":["std_err"],"name":[6],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"400","2":"sens","3":"binary","4":"0.7207148","5":"10","6":"0.04934352","7":"Preprocessor4_Model1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div id="fit-and-evaluate-final-model" class="section level3">
+<h3>Fit and evaluate final model</h3>
+<p>Next, let’s fit our model on last time to the whole training set at once (rather than resampled data) and evaluate on the testing set. This is the first time we have touched the testing set.</p>
+<pre class="r"><code>final_wf &lt;- po_wf %&gt;%
+  finalize_workflow(
+    select_best(po_rs, metric = &quot;sens&quot;)
+  )
+
+final_fit &lt;- last_fit(
+  final_wf,
+  po_split,
+  metrics = metric_set(accuracy, sens, spec)
+)
+
+collect_metrics(final_fit)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"accuracy","2":"binary","3":"0.9860599","4":"Preprocessor1_Model1"},{"1":"sens","2":"binary","3":"0.6875000","4":"Preprocessor1_Model1"},{"1":"spec","2":"binary","3":"0.9864054","4":"Preprocessor1_Model1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Our performance on the testing set is about the same as what we found with our resampled data, which is good.</p>
+<p>We can explore how the model is doing for both the positive and negative classes with a confusion matrix.</p>
+<pre class="r"><code>collect_predictions(final_fit) %&gt;%
+  conf_mat(state, .pred_class) %&gt;%
+  autoplot() +
+  labs(title = &quot;Confusion Matrix on held out test data&quot;)</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/collect_predictions-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>This just really emphasizes what an imbalanced problem this is, but we can see how well we are doing for the post offices in Hawaii vs. the rest of the country.</p>
+<pre class="r"><code>po_fit &lt;- extract_fit_parsnip(final_fit)
+
+liblinear_obj &lt;- po_fit$fit$W
+
+liblinear_df &lt;- tibble(
+  term = colnames(liblinear_obj),
+  estimate = liblinear_obj[1, ]
+)
+
+liblinear_df %&gt;%
+  filter(term != &quot;Bias&quot;) %&gt;%
+  group_by(estimate &gt; 0) %&gt;%
+  slice_max(abs(estimate), n = 15) %&gt;%
+  ungroup() %&gt;%
+  mutate(term = str_remove(term, &quot;tf_name_&quot;)) %&gt;%
+  ggplot(aes(estimate, fct_reorder(term, estimate), fill = estimate &gt; 0)) +
+  geom_col(alpha = 0.6, show.legend = FALSE) +
+  geom_text(aes(label = term),
+    hjust = 1
+  ) +
+  scale_y_discrete(breaks = NULL) +
+  theme(axis.text.y = element_blank()) +
+  labs(
+    x = &quot;Coefficient from linear SVM&quot;,
+    y = NULL,
+    fill = NULL,
+    title = &quot;Which subwords in a US Post Office names are used more in Hawaii?&quot;,
+    subtitle = &quot;Subwords like A, _H, U, and O are the strongest predictors of a post office being in Hawaii&quot;
+  )</code></pre>
+<p><img src="figure/2021_04_13_tidy_tuesday.Rmd/po_fit-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Credit to Julia Silge for introducing <code>LiblineaR</code> and <code>tokenizers.bpe</code>, and the predictive workflow shown here.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] LiblineaR_2.10-12    vctrs_0.3.8          rlang_0.4.11        
+ [4] tokenizers.bpe_0.1.0 textrecipes_0.4.1    finetune_0.1.0      
+ [7] themis_0.1.4         yardstick_0.0.8      workflowsets_0.1.0  
+[10] workflows_0.2.3      tune_0.1.6           rsample_0.1.0       
+[13] recipes_0.1.16       parsnip_0.1.7.900    modeldata_0.1.1     
+[16] infer_1.0.0          dials_0.0.9.9000     scales_1.1.1        
+[19] broom_0.7.9          tidymodels_0.1.3     gganimate_1.0.7     
+[22] historydata_0.1      ggthemes_4.2.4       hrbrthemes_0.8.0    
+[25] lubridate_1.7.10     forcats_0.5.1        stringr_1.4.0       
+[28] dplyr_1.0.7          purrr_0.3.4          readr_2.0.1         
+[31] tidyr_1.1.3          tibble_3.1.4         ggplot2_3.3.5       
+[34] tidyverse_1.3.1      workflowr_1.6.2     
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2         R.utils_2.10.1     tidyselect_1.1.1  
+  [4] lme4_1.1-27.1      grid_4.1.1         pROC_1.18.0       
+  [7] munsell_0.5.0      codetools_0.2-18   ragg_1.1.3        
+ [10] future_1.22.1      gifski_1.4.3-1     withr_2.4.2       
+ [13] colorspace_2.0-2   highr_0.9          knitr_1.34        
+ [16] rstudioapi_0.13    Rttf2pt1_1.3.9     listenv_0.8.0     
+ [19] labeling_0.4.2     git2r_0.28.0       bit64_4.0.5       
+ [22] DiceDesign_1.9     farver_2.1.0       rprojroot_2.0.2   
+ [25] mlr_2.19.0         parallelly_1.28.1  generics_0.1.0    
+ [28] ipred_0.9-11       xfun_0.25          R6_2.5.1          
+ [31] doParallel_1.0.16  lhs_1.1.3          cachem_1.0.6      
+ [34] assertthat_0.2.1   promises_1.2.0.1   vroom_1.5.4       
+ [37] nnet_7.3-16        gtable_0.3.0       globals_0.14.0    
+ [40] timeDate_3043.102  BBmisc_1.11        systemfonts_1.0.2 
+ [43] splines_4.1.1      extrafontdb_1.0    selectr_0.4-2     
+ [46] prismatic_1.0.0    checkmate_2.0.0    yaml_2.2.1        
+ [49] modelr_0.1.8       backports_1.2.1    httpuv_1.6.2      
+ [52] extrafont_0.17     tools_4.1.1        lava_1.6.10       
+ [55] usethis_2.0.1      ellipsis_0.3.2     jquerylib_0.1.4   
+ [58] Rcpp_1.0.7         plyr_1.8.6         progress_1.2.2    
+ [61] parallelMap_1.5.1  prettyunits_1.1.1  rpart_4.1-15      
+ [64] ParamHelpers_1.14  viridis_0.6.1      haven_2.4.3       
+ [67] fs_1.5.0           here_1.0.1         furrr_0.2.3       
+ [70] unbalanced_2.0     magrittr_2.0.1     data.table_1.14.0 
+ [73] reprex_2.0.1       RANN_2.6.1         GPfit_1.0-8       
+ [76] whisker_0.4        ROSE_0.0-4         R.cache_0.15.0    
+ [79] hms_1.1.0          evaluate_0.14      readxl_1.3.1      
+ [82] gridExtra_2.3      compiler_4.1.1     maps_3.3.0        
+ [85] crayon_1.4.1       minqa_1.2.4        R.oo_1.24.0       
+ [88] htmltools_0.5.2    later_1.3.0        tzdb_0.1.2        
+ [91] DBI_1.1.1          tweenr_1.0.2       dbplyr_2.1.1      
+ [94] MASS_7.3-54        boot_1.3-28        Matrix_1.3-4      
+ [97] cli_3.0.1          R.methodsS3_1.8.1  parallel_4.1.1    
+[100] gower_0.2.2        pkgconfig_2.0.3    xml2_1.3.2        
+[103] foreach_1.5.1      bslib_0.3.0        hardhat_0.1.6     
+[106] tidytuesdayR_1.0.1 prodlim_2019.11.13 rvest_1.0.1       
+[109] digest_0.6.27      rmarkdown_2.10     cellranger_1.1.0  
+[112] fastmatch_1.1-3    gdtools_0.2.3      curl_4.3.2        
+[115] nloptr_1.2.2.2     nlme_3.1-152       lifecycle_1.0.0   
+[118] jsonlite_1.7.2     viridisLite_0.4.0  fansi_0.5.0       
+[121] pillar_1.6.2       lattice_0.20-44    fastmap_1.1.0     
+[124] httr_1.4.2         survival_3.2-11    glue_1.4.2        
+[127] conflicted_1.0.4   FNN_1.1.3          iterators_1.0.13  
+[130] bit_4.0.4          class_7.3-19       stringi_1.7.4     
+[133] sass_0.4.0         rematch2_2.1.2     textshaping_0.3.5 
+[136] styler_1.5.1       future.apply_1.8.1</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlVTIFBvc3QgT2ZmaWNlcyINCmF1dGhvcjogIkppbSBHcnVtYW4iDQpkYXRlOiAiQXByaWwgMTMsIDIwMjEiDQpvdXRwdXQ6DQogIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICB0b2M6IG5vDQogICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgIGRmX3ByaW50OiBwYWdlZA0KZWRpdG9yX29wdGlvbnM6DQogIGNodW5rX291dHB1dF90eXBlOiBjb25zb2xlDQotLS0NCg0KIyBUaWR5VHVlc2RheSB0aGlzIHdlZWs6IFVuaXRlZCBTdGF0ZXMgUG9zdCBPZmZpY2VzDQoNCkNyZWRpdCB0byBCb2IgUnVkaXMgZm9yIHNoYXJpbmcgdGhlIGlkZWEgb2Ygd29ya2luZyB3aXRoIHRoaXMgZGF0YXNldC4NCg0KVGhlIGF1dGhvcnMgb2YgdGhlIGRhdGFzZXQgYXJlOg0KDQpCbGV2aW5zLCBDYW1lcm9uOyBIZWxib2NrLCBSaWNoYXJkIFcuLCAyMDIxLCBbIlVTIFBvc3QgT2ZmaWNlcyIsXShodHRwczovL2RvaS5vcmcvMTAuNzkxMC9EVk4vTlVLQ05BKQ0KDQoNCmBgYHtyIHNldHVwLCB3YXJuaW5nPUZBTFNFfQ0KDQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMoew0KbGlicmFyeSh0aWR5dmVyc2UpDQoNCmxpYnJhcnkobHVicmlkYXRlKQ0KbGlicmFyeShocmJydGhlbWVzKQ0KDQpsaWJyYXJ5KGdndGhlbWVzKQ0KbGlicmFyeShoaXN0b3J5ZGF0YSkNCmxpYnJhcnkoZ2dhbmltYXRlKQ0KICANCmxpYnJhcnkodGlkeW1vZGVscykNCmxpYnJhcnkodGhlbWlzKQ0KbGlicmFyeShmaW5ldHVuZSkNCmxpYnJhcnkodGV4dHJlY2lwZXMpDQogfSkNCg0Kc291cmNlKGhlcmU6OmhlcmUoImNvZGUiLCJfY29tbW9uLlIiKSwNCiAgICAgICB2ZXJib3NlID0gRkFMU0UsDQogICAgICAgbG9jYWwgPSBrbml0cjo6a25pdF9nbG9iYWwoKSkNCg0KZ2dwbG90Mjo6dGhlbWVfc2V0KHRoZW1lX2ppbShiYXNlX3NpemUgPSAxMikpDQoNCmBgYA0KDQoNCmBgYHtyIGxvYWQsIG1lc3NhZ2U9RkFMU0V9DQoNCnR0IDwtIHRpZHl0dWVzZGF5Ujo6dHRfbG9hZCgiMjAyMS0wNC0xMyIpDQoNCnBvc3Rfb2ZmaWNlcyA8LSB0dCRwb3N0X29mZmljZXMgJT4lDQogIHNlbGVjdCgNCiAgICBuYW1lLA0KICAgIHN0YXRlLA0KICAgIGNvdW50eTEsDQogICAgZXN0YWJsaXNoZWQsDQogICAgZGlzY29udGludWVkLA0KICAgIGxhdGl0dWRlLA0KICAgIGxvbmdpdHVkZQ0KICAgICkgJT4lIA0KICBtdXRhdGUoZGlzY29udGludWVkID0gY2FzZV93aGVuKA0KICAgIGRpc2NvbnRpbnVlZCA9PSA5OTcgfiAxOTk3LA0KICAgIGRpc2NvbnRpbnVlZCA9PSAxODMyMyB+IDE4MzIsDQogICAgZGlzY29udGludWVkID09IDE4OTAzIH4gMTg5MCwNCiAgICBkaXNjb250aW51ZWQgPT0gMTkwOTMgfiAxOTA5LA0KICAgIGRpc2NvbnRpbnVlZCA9PSAxOTE3MyB+IDE5MTcsDQogICAgZGlzY29udGludWVkID09IDE5MjIzIH4gMTkyMiwNCiAgICBkaXNjb250aW51ZWQgPT0gNDg1OSB+IDE4NTksDQogICAgVFJVRSB+IGRpc2NvbnRpbnVlZCksDQogICAgZXN0YWJsaXNoZWQgPSBpZl9lbHNlKGVzdGFibGlzaGVkIDwgMjAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVzdGFibGlzaGVkKjEwLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVzdGFibGlzaGVkKSwNCiAgICBzdGF0ZSA9IGNhc2Vfd2hlbihzdGF0ZSA9PSAiTUkvT0gifiJPSCIsDQogICAgICAgICAgICAgICAgICAgICAgc3RhdGUgPT0gIlZBeSIgfiAiVkEiLA0KICAgICAgICAgICAgICAgICAgICAgIFRSVUUgfnN0YXRlKQ0KICAgICkgDQpgYGANCg0KYGBge3IgcG9zdF9vZmZpY2VfeWVhcnN9DQpwb3N0X29mZmljZV95ZWFycyA8LSBwb3N0X29mZmljZXMgJT4lDQogIHNlbGVjdCgNCiAgICBuYW1lLA0KICAgIHN0YXRlLA0KICAgIGVzdGFibGlzaGVkLA0KICAgIGRpc2NvbnRpbnVlZA0KICAgICkgJT4lIA0KICByZXBsYWNlX25hKGxpc3QoZGlzY29udGludWVkID0gMjAwMykpICU+JSANCiAgZmlsdGVyKCFpcy5uYShlc3RhYmxpc2hlZCkpICU+JSAgIA0KICBtdXRhdGUoeWVhciA9IG1hcDIoZXN0YWJsaXNoZWQsIGRpc2NvbnRpbnVlZCwgc2VxKSkgJT4lIA0KICB1bm5lc3QoeWVhcikNCmBgYA0KDQpgYGB7ciBzdGF0ZXN9DQpzdGF0ZXMgPC0gdGliYmxlKHN0YXRlID0gc3RhdGUuYWJiLCANCiAgICAgICAgICAgICAgICAgc3RhdGUuZGl2aXNpb24sDQogICAgICAgICAgICAgICAgIHN0YXRlLmFyZWEpICU+JSANCiAgYmluZF9yb3dzKHRpYmJsZSgNCiAgICBzdGF0ZSA9ICJEQyIsDQogICAgc3RhdGUuZGl2aXNpb24gPSAiU291dGggQXRsYW50aWMiLA0KICAgIHN0YXRlLmFyZWEgPSA2OC4zDQogICkpDQoNCnBvc3Rfb2ZmaWNlX3llYXJzICU+JSANCiAgaW5uZXJfam9pbihzdGF0ZXMpICU+JSANCiAgY291bnQoeWVhciwNCiAgICAgICAgcmVnaW9uID0gc3RhdGUuZGl2aXNpb24sDQogICAgICAgIG5hbWUgPSAibl9wb3N0X29mZmljZXMiKSAlPiUgDQogIGdncGxvdChhZXMoeWVhciwgbl9wb3N0X29mZmljZXMsIGZpbGwgPSByZWdpb24pKSArDQogIGdlb21fYXJlYSgpICsNCiAgc2NhbGVfeV9jb250aW51b3VzKGxhYmVscyA9IHNjYWxlczo6Y29tbWEsDQogICAgICAgICAgICAgICAgICAgICBwb3NpdGlvbiA9ICJyaWdodCIpICsNCiAgbGFicyh5ID0gTlVMTCwgeCA9IE5VTEwsIGZpbGwgPSBOVUxMLA0KICAgICAgIHRpdGxlID0gIk51bWJlciBvZiBBY3RpdmUgVVMgUG9zdCBPZmZpY2VzIiwNCiAgICAgICBjYXB0aW9uID0gIkRhdGE6IEJsZXZpbnMsIENhbWVyb247IEhlbGJvY2ssIFJpY2hhcmQgVy4sIDIwMjEiKSArDQogIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9IGMoMC4xLCAwLjUpLA0KICAgICAgICBsZWdlbmQuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChjb2xvciA9ICJ3aGl0ZSIpKQ0KICANCmBgYA0KDQpgYGB7ciByZWdpb25zLCBmaWcuYXNwPTF9DQpwb3N0X29mZmljZV95ZWFycyAlPiUgDQogIGlubmVyX2pvaW4oc3RhdGVzKSAlPiUgDQogIGNvdW50KHllYXIsDQogICAgICAgIHJlZ2lvbiA9IHN0YXRlLmRpdmlzaW9uLA0KICAgICAgICBuYW1lID0gIm5fcG9zdF9vZmZpY2VzIikgJT4lIA0KICBtdXRhdGUocmVnaW9uID0gZmN0X3Jlb3JkZXIocmVnaW9uLCAtbl9wb3N0X29mZmljZXMsIHN1bSkpICU+JSANCiAgZ2dwbG90KGFlcyh5ZWFyLCBuX3Bvc3Rfb2ZmaWNlcywgZmlsbCA9IHJlZ2lvbikpICsNCiAgZ2VvbV9hcmVhKHNob3cubGVnZW5kID0gRkFMU0UpICsNCiAgZ2VvbV9sYWJlbChkYXRhID0gc3RhdGVzICU+JSANCiAgICAgICAgICAgICAgIGdyb3VwX2J5KHJlZ2lvbiA9IHN0YXRlLmRpdmlzaW9uKSAlPiUgDQogICAgICAgICAgICAgICBzdW1tYXJpemUoYXJlYSA9IHN1bShzdGF0ZS5hcmVhKSksDQogICAgICAgICAgICBhZXMobGFiZWwgPSBwYXN0ZTAoc2NhbGVzOjpjb21tYShhcmVhKSwiIHNxLiBtaWxlcyIpLA0KICAgICAgICAgICAgICAgIHggPSAxNzUwLA0KICAgICAgICAgICAgICAgIHkgPSAxNDAwMA0KICAgICAgICAgICAgKSwNCiAgICAgICAgICAgIGZpbGwgPSAid2hpdGUiDQogICAgICAgICAgICApICsNCiAgc2NhbGVfeV9jb250aW51b3VzKGxhYmVscyA9IHNjYWxlczo6Y29tbWEsDQogICAgICAgICAgICAgICAgICAgICBwb3NpdGlvbiA9ICJyaWdodCIpICsNCiAgZmFjZXRfd3JhcCh+IHJlZ2lvbikgKw0KICBsYWJzKHkgPSBOVUxMLCB4ID0gTlVMTCwgZmlsbCA9IE5VTEwsDQogICAgICAgdGl0bGUgPSAiTnVtYmVyIG9mIEFjdGl2ZSBVUyBQb3N0IE9mZmljZXMgYnkgUmVnaW9uIiwNCiAgICAgICBjYXB0aW9uID0gIkRhdGE6IEJsZXZpbnMsIENhbWVyb247IEhlbGJvY2ssIFJpY2hhcmQgVy4sIDIwMjEiKSANCmBgYA0KDQoNCmBgYHtyIGNsb3N1cmVzLCBmaWcuYXNwPTF9DQpwb3N0X29mZmljZXMgJT4lIA0KICBpbm5lcl9qb2luKHN0YXRlcykgJT4lIA0KICBmaWx0ZXIoIWlzLm5hKGRpc2NvbnRpbnVlZCkpICU+JSANCiAgY291bnQocmVnaW9uID0gc3RhdGUuZGl2aXNpb24sIA0KICAgICAgICBkZWNhZGUgPSAxMCAqIChkaXNjb250aW51ZWQgJS8lIDEwKSwNCiAgICAgICAgbmFtZSA9ICJuX2Nsb3N1cmVzIikgJT4lIA0KICBnZ3Bsb3QoYWVzKGRlY2FkZSwgLW5fY2xvc3VyZXMsIGZpbGwgPSByZWdpb24pKSArDQogIGdlb21fYXJlYShzaG93LmxlZ2VuZCA9IEZBTFNFLA0KICAgICAgICAgICAgY29sb3IgPSAiYmxhY2siKSArDQogIHNjYWxlX3hfY29udGludW91cyhuLmJyZWFrcyA9IDMpICsNCiAgZmFjZXRfd3JhcCh+cmVnaW9uKSArDQogIGxhYnModGl0bGUgPSAiVVMgUG9zdCBPZmZpY2UgQ2xvc3VyZXMgYnkgRGVjYWRlIikNCiAgDQpgYGANCg0KYGBge3Igb3BlbmluZ3MsIGZpZy5hc3A9MX0NCnBvc3Rfb2ZmaWNlcyAlPiUgDQogIGlubmVyX2pvaW4oc3RhdGVzKSAlPiUgDQogIGNvdW50KHJlZ2lvbiA9IHN0YXRlLmRpdmlzaW9uLCANCiAgICAgICAgZGVjYWRlID0gMTAgKiAoZXN0YWJsaXNoZWQgJS8lIDEwKSwNCiAgICAgICAgbmFtZSA9ICJuX29wZW5pbmciKSAlPiUgDQogIGZpbHRlcihkZWNhZGUgPCAyMDAwKSAlPiUgDQogIGdncGxvdChhZXMoZGVjYWRlLCBuX29wZW5pbmcsIGZpbGwgPSByZWdpb24pKSArDQogIGdlb21fYXJlYShzaG93LmxlZ2VuZCA9IEZBTFNFLA0KICAgICAgICAgICAgY29sb3IgPSAiYmxhY2siKSArDQogIHNjYWxlX3hfY29udGludW91cyhuLmJyZWFrcyA9IDMpICsNCiAgZmFjZXRfd3JhcCh+cmVnaW9uKSArDQogIGxhYnModGl0bGUgPSAiVVMgUG9zdCBPZmZpY2UgT3BlbmluZ3MgYnkgRGVjYWRlIikNCiAgDQpgYGANCg0KYGBge3IgY29tYm8sIGZpZy5hc3A9MX0NCnBvc3Rfb2ZmaWNlcyAlPiUgDQogIGlubmVyX2pvaW4oc3RhdGVzKSAlPiUgDQogIGNvdW50KHJlZ2lvbiA9IHN0YXRlLmRpdmlzaW9uLCANCiAgICAgICAgZGVjYWRlID0gMTAgKiAoZXN0YWJsaXNoZWQgJS8lIDEwKSwNCiAgICAgICAgbmFtZSA9ICJuX29wZW5pbmciKSAlPiUgDQogIGNvbXBsZXRlKHJlZ2lvbiwgZGVjYWRlLCBmaWxsID0gbGlzdChuX29wZW5pbmcgPSAwKSkgJT4lIA0KICBpbm5lcl9qb2luKA0KICAgIHBvc3Rfb2ZmaWNlcyAlPiUgDQogICAgICBpbm5lcl9qb2luKHN0YXRlcykgJT4lIA0KICAgICAgZmlsdGVyKCFpcy5uYShkaXNjb250aW51ZWQpKSAlPiUgDQogICAgICBjb3VudChyZWdpb24gPSBzdGF0ZS5kaXZpc2lvbiwgDQogICAgICAgICAgICBkZWNhZGUgPSAxMCAqIChkaXNjb250aW51ZWQgJS8lIDEwKSwNCiAgICAgICAgICAgIG5hbWUgPSAibl9jbG9zdXJlcyIpICU+JSANCiAgICAgIGNvbXBsZXRlKHJlZ2lvbiwgZGVjYWRlLCBmaWxsID0gbGlzdChuX2Nsb3N1cmVzID0gMCkpLA0KICAgIGJ5ID0gYygicmVnaW9uIiwgImRlY2FkZSIpKSAlPiUgDQogIGdyb3VwX2J5KHJlZ2lvbikgJT4lIA0KICBtdXRhdGUodG90YWwgPSBjdW1zdW0obl9vcGVuaW5nIC0gbl9jbG9zdXJlcykpICU+JSANCiAgZ2dwbG90KCkgKw0KICBnZW9tX2NvbChhZXMoZGVjYWRlLCBuX29wZW5pbmcsIGZpbGwgPSByZWdpb24pLA0KICAgIHNob3cubGVnZW5kID0gRkFMU0UsIGNvbG9yID0gImJsYWNrIikgKw0KICBnZW9tX2NvbChhZXMoZGVjYWRlLCAtbl9jbG9zdXJlcywgZmlsbCA9IHJlZ2lvbiksDQogICAgc2hvdy5sZWdlbmQgPSBGQUxTRSwgY29sb3IgPSAiYmxhY2siKSArDQogIGdlb21fbGluZShhZXMoZGVjYWRlLCB0b3RhbCksDQogICAgc2hvdy5sZWdlbmQgPSBGQUxTRSwgY29sb3IgPSAiYmxhY2siKSArDQogIHNjYWxlX3hfY29udGludW91cyhuLmJyZWFrcyA9IDMpICsNCiAgYW5ub3RhdGUoImxhYmVsIiwNCiAgICAgICAgICAgeCA9IDE5NTAsDQogICAgICAgICAgIHkgPSAxMDAwMCwNCiAgICAgICAgICAgbGFiZWwgPSAiTmV0IFRvdGFsIikgKw0KICBmYWNldF93cmFwKH5yZWdpb24pICsNCiAgbGFicyh0aXRsZSA9ICJVUyBQb3N0IE9mZmljZSBPcGVuaW5ncyBhbmQgQ2xvc2luZ3MgYnkgRGVjYWRlIiwNCiAgICAgICB5ID0gTlVMTCwgeCA9IE5VTEwsDQogICAgICAgY2FwdGlvbiA9ICJEYXRhOiBCbGV2aW5zLCBDYW1lcm9uOyBIZWxib2NrLCBSaWNoYXJkIFcuLCAyMDIxIikgDQpgYGANCg0KYGBge3IgeTJrfQ0Kc3RhdGVzX21hcCA8LSBtYXBfZGF0YSgic3RhdGUiKSAlPiUgDQogIGFzX3RpYmJsZSgpICU+JSANCiAgbXV0YXRlKHN0YXRlID0gc3RhdGUuYWJiW21hdGNoKHJlZ2lvbiwgc3RyX3RvX2xvd2VyKHN0YXRlLm5hbWUpKV0pICU+JSANCiAgcmVwbGFjZV9uYShsaXN0KHN0YXRlID0gIkRDIikpDQoNCnBvc3Rfb2ZmaWNlX3llYXJzICU+JQ0KICBmaWx0ZXIoeWVhciA9PSAyMDAwKSAlPiUNCiAgY291bnQoc3RhdGUsIHNvcnQgID0gVFJVRSkgJT4lDQogIGlubmVyX2pvaW4oDQogICAgdXNfc3RhdGVfcG9wdWxhdGlvbnMgJT4lDQogICAgICBmaWx0ZXIoeWVhciA9PSAyMDAwKSAlPiUNCiAgICAgIG11dGF0ZShzdGF0ZSA9IHN0YXRlLmFiYlttYXRjaChzdGF0ZSwgc3RhdGUubmFtZSldKSAlPiUNCiAgICAgIHJlcGxhY2VfbmEobGlzdChzdGF0ZSA9ICJEQyIpKSwNCiAgICBieSA9ICJzdGF0ZSINCiAgKSAlPiUNCiAgbXV0YXRlKHBvc3Rfb2ZmaWNlX2RlbnNpdHkgPSBuIC8gKHBvcHVsYXRpb24gLyAxZTYpKSAlPiUNCiAgaW5uZXJfam9pbihzdGF0ZXNfbWFwKSAlPiUNCiAgZ2dwbG90KGFlcyhsb25nLCBsYXQsIGdyb3VwID0gZ3JvdXAsIGZpbGwgPSBwb3N0X29mZmljZV9kZW5zaXR5KSkgKw0KICBnZW9tX3BvbHlnb24oY29sb3IgPSAiZ3JheTIwIikgKw0KICB0aGVtZV9tYXAoKSArDQogIGxhYnModGl0bGUgPSAiVVMgUG9zdCBPZmZpY2VzIHBlciBNaWxsaW9uIFBvcHVsYXRpb24gaW4gMjAwMCIsDQogICAgICAgZmlsbCA9IE5VTEwpDQogIA0KYGBgDQoNCkkgd29uZGVyIHdoZXRoZXIgdGhlIFdlc3QgVmlyZ2luaWEgcG9zdCBvZmZpY2VzIHdlcmUgb3JpZ2luYWxseSBzaG93biBhcyBhZGRyZXNzZWQgaW4gVmlyZ2luaWE/DQoNCmBgYHtyIGFuaW1hdGlvbn0NCmFuaW0gPC0gcG9zdF9vZmZpY2VzICU+JSANCiAgaW5uZXJfam9pbihzdGF0ZXMpICU+JSANCiAgY291bnQoc3RhdGUsIA0KICAgICAgICBkZWNhZGUgPSAxMCAqIChlc3RhYmxpc2hlZCAlLyUgMTApLA0KICAgICAgICBuYW1lID0gIm5fb3BlbmluZyIpICU+JSANCiAgY29tcGxldGUoc3RhdGUsIGRlY2FkZSwgZmlsbCA9IGxpc3Qobl9vcGVuaW5nID0gMCkpICU+JSANCiAgaW5uZXJfam9pbigNCiAgICBwb3N0X29mZmljZXMgJT4lIA0KICAgICAgaW5uZXJfam9pbihzdGF0ZXMpICU+JSANCiAgICAgIGZpbHRlcighaXMubmEoZGlzY29udGludWVkKSkgJT4lIA0KICAgICAgY291bnQoc3RhdGUsDQogICAgICAgICAgICBkZWNhZGUgPSAxMCAqIChkaXNjb250aW51ZWQgJS8lIDEwKSwNCiAgICAgICAgICAgIG5hbWUgPSAibl9jbG9zdXJlcyIpICU+JSANCiAgICAgIGNvbXBsZXRlKHN0YXRlLCBkZWNhZGUsIGZpbGwgPSBsaXN0KG5fY2xvc3VyZXMgPSAwKSksDQogICAgYnkgPSBjKCJzdGF0ZSIsICJkZWNhZGUiKSkgJT4lIA0KICBncm91cF9ieShzdGF0ZSkgJT4lIA0KICBtdXRhdGUodG90YWwgPSBjdW1zdW0obl9vcGVuaW5nIC0gbl9jbG9zdXJlcykpICU+JSANCiAgaW5uZXJfam9pbigNCiAgICB1c19zdGF0ZV9wb3B1bGF0aW9ucyAlPiUNCiAgICAgIG11dGF0ZShzdGF0ZSA9IHN0YXRlLmFiYlttYXRjaChzdGF0ZSwgc3RhdGUubmFtZSldKSAlPiUNCiAgICAgIHJlcGxhY2VfbmEobGlzdChzdGF0ZSA9ICJEQyIpKSwNCiAgICBieSA9IGMoImRlY2FkZSIgPSAieWVhciIsICJzdGF0ZSIpDQogICkgJT4lDQogIGZpbHRlcihwb3B1bGF0aW9uID4gMTAwMDApICU+JSANCiAgcmlnaHRfam9pbihzdGF0ZXNfbWFwLCBieSA9ICJzdGF0ZSIpICU+JQ0KICBnZ3Bsb3QoYWVzKGxvbmcsIGxhdCwgZ3JvdXAgPSBncm91cCwgZmlsbCA9IHRvdGFsKSkgKw0KICBnZW9tX3BvbHlnb24oY29sb3IgPSAiZ3JheTIwIikgKw0KICB0cmFuc2l0aW9uX21hbnVhbChkZWNhZGUpICsNCiAgdGhlbWVfbWFwKCkgKw0KICBsYWJzKHRpdGxlID0gIlVTIFBvc3QgT2ZmaWNlcyBpbiB7IGN1cnJlbnRfZnJhbWUgfSIsDQogICAgICAgZmlsbCA9IE5VTEwpDQogDQphbmltYXRlKGFuaW0sDQogICAgICAgIGVuZF9wYXVzZSA9IDYwLA0KICAgICAgICB3aWR0aCA9IDEwMDAsIA0KICAgICAgICBoZWlnaHQgPSA3NDAsIA0KICAgICAgICBmcHMgPSA1KQ0KDQpgYGANCg0KDQojIyBBIHN1YnRleHQgcHJlZGljdGl2ZSBtb2RlbA0KDQpXZSB3aWxsIGJ1aWxkIG9uIEp1bGlhIFNpbGdlJ3Mgd29yayBwb3N0ZWQgW2hlcmVdKGh0dHBzOi8vanVsaWFzaWxnZS5jb20vYmxvZy9oYXdhaWktcG9zdC1vZmZpY2VzLykNCg0KT3VyIG1vZGVsaW5nIGdvYWwgaXMgdG8gcHJlZGljdCB3aGV0aGVyIGEgcG9zdCBvZmZpY2UgaXMgaW4gSGF3YWlpLCB3aGVyZSBtYW55IG5hbWVzIG9mIHRoZSBwb3N0IG9mZmljZXMgYXJlIHVuaXF1ZS4NCg0KV2UgY2FuIHN0YXJ0IGJ5IGxvYWRpbmcgdGhlIHRpZHltb2RlbHMgbWV0YXBhY2thZ2UsIHNwbGl0dGluZyBvdXIgZGF0YSBpbnRvIHRyYWluaW5nIGFuZCB0ZXN0aW5nIHNldHMsIGFuZCBjcmVhdGluZyBjcm9zcy12YWxpZGF0aW9uIHNhbXBsZXMuDQoNCmBgYHtyIHBvX3NwbGl0fQ0KcG9fc3BsaXQgPC0gcG9zdF9vZmZpY2VzICU+JQ0KICBtdXRhdGUoc3RhdGUgPSBjYXNlX3doZW4oDQogICAgc3RhdGUgPT0gIkhJIiB+ICJIYXdhaWkiLA0KICAgIFRSVUUgfiAiT3RoZXIiDQogICkpICU+JQ0KICBzZWxlY3QobmFtZSwgc3RhdGUpICU+JQ0KICBpbml0aWFsX3NwbGl0KHN0cmF0YSA9IHN0YXRlKQ0KDQpwb190cmFpbiA8LSB0cmFpbmluZyhwb19zcGxpdCkNCnBvX3Rlc3QgPC0gdGVzdGluZyhwb19zcGxpdCkNCg0Kc2V0LnNlZWQoMjM0KQ0KcG9fZm9sZHMgPC0gdmZvbGRfY3YocG9fdHJhaW4sIHN0cmF0YSA9IHN0YXRlKQ0KDQpgYGANCg0KTmV4dCwgbGV04oCZcyBjcmVhdGUgb3VyIGZlYXR1cmUgZW5naW5lZXJpbmcgcmVjaXBlLiBMZXTigJlzIHRva2VuaXplIHVzaW5nIGJ5dGUgcGFpciBlbmNvZGluZzsgdGhpcyBpcyBhbiBhbGdvcml0aG0gdGhhdCBpdGVyYXRpdmVseSBtZXJnZXMgZnJlcXVlbnRseSBvY2N1cnJpbmcgc3Vid29yZCBwYWlycyBhbmQgZ2V0cyB1cyBpbmZvcm1hdGlvbiBpbiBiZXR3ZWVuIGNoYXJhY3Rlci1sZXZlbCBhbmQgd29yZC1sZXZlbC4gDQoNCmBgYHtyIHBvX3JlY30NCnBvX3JlYyA8LSByZWNpcGUoc3RhdGUgfiBuYW1lLCBkYXRhID0gcG9fdHJhaW4pICU+JQ0KICBzdGVwX3Rva2VuaXplKG5hbWUsDQogICAgZW5naW5lID0gInRva2VuaXplcnMuYnBlIiwNCiAgICB0cmFpbmluZ19vcHRpb25zID0gbGlzdCh2b2NhYl9zaXplID0gNTAwKQ0KICApICU+JQ0KICBzdGVwX3Rva2VuZmlsdGVyKG5hbWUsIG1heF90b2tlbnMgPSB0dW5lKCkpICU+JQ0KICBzdGVwX3RmKG5hbWUpICU+JQ0KICBzdGVwX25vcm1hbGl6ZShhbGxfcHJlZGljdG9ycygpKSAlPiUNCiAgc3RlcF9zbW90ZShzdGF0ZSkNCg0KYGBgDQoNCldlIGFsc28gYXJlIHVwc2FtcGxpbmcgdGhpcyB2ZXJ5IGltYmFsYW5jZWQgZGF0YSBzZXQgdmlhIGBzdGVwX3Ntb3RlKClgIGZyb20gdGhlIGB0aGVtaXNgIHBhY2thZ2UuIFRoZSByZXN1bHRzIG9mIHRoaXMgZGF0YSBwcmVwcm9jZXNzaW5nIHNob3cgdXMgdGhlIHN1YndvcmQgZmVhdHVyZXMuDQoNCk5leHQgbGV04oCZcyBjcmVhdGUgYSBtb2RlbCBzcGVjaWZpY2F0aW9uIGZvciBhIGxpbmVhciBzdXBwb3J0IHZlY3RvciBtYWNoaW5lLiBUaGlzIGlzIGEgbmV3ZXIgbW9kZWwgaW4gcGFyc25pcCwgY3VycmVudGx5IGluIHRoZSBkZXZlbG9wbWVudCB2ZXJzaW9uIG9uIEdpdEh1Yi4gTGluZWFyIFNWTXMgYXJlIG9mdGVuIGEgZ29vZCBzdGFydGluZyBjaG9pY2UgZm9yIHRleHQgbW9kZWxzLg0KDQpgYGB7ciBzdm1fc3BlY30NCnN2bV9zcGVjIDwtIHN2bV9saW5lYXIoKSAlPiUNCiAgc2V0X21vZGUoImNsYXNzaWZpY2F0aW9uIikgJT4lDQogIHNldF9lbmdpbmUoIkxpYmxpbmVhUiIpDQpgYGANCg0KTGV04oCZcyBwdXQgdGhlc2UgdG9nZXRoZXIgaW4gYSB3b3JrZmxvdy4NCg0KYGBge3IgcG9fd2Z9DQpwb193ZiA8LSB3b3JrZmxvdygpICU+JQ0KICBhZGRfcmVjaXBlKHBvX3JlYykgJT4lDQogIGFkZF9tb2RlbChzdm1fc3BlYykNCmBgYA0KDQpMZXQncyBleHBsb3JlIHR1bmluZyBsZXZlbHMgb2YgdG9rZW4gZmlsdGVyaW5nIGJldHdlZW4gODAgYW5kIDQwMC4NCg0KYGBge3IgcG9fcGFyYW1zfQ0KcG9fcGFyYW1zIDwtIHBhcmFtZXRlcnMocG9fd2YpICU+JSANCiAgdXBkYXRlKG1heF90b2tlbnMgPSBtYXhfdG9rZW5zKGMoODAsIDQwMCkpKQ0KYGBgDQoNCg0KTm93IGxldOKAmXMgZml0IHRoaXMgd29ya2Zsb3cgKHRoYXQgY29tYmluZXMgZmVhdHVyZSBlbmdpbmVlcmluZyB3aXRoIHRoZSBTVk0gbW9kZWwpIHRvIHRoZSByZXNhbXBsZXMgd2UgY3JlYXRlZCBlYXJsaWVyLiBUaGUgbGluZWFyIFNWTSBtb2RlbCBkb2VzIG5vdCBzdXBwb3J0IGNsYXNzIHByb2JhYmlsaXRpZXMsIHNvIHdlIG5lZWQgdG8gc2V0IGEgY3VzdG9tIGBtZXRyaWNfc2V0KClgIHRoYXQgb25seSBpbmNsdWRlcyBtZXRyaWNzIGZvciBoYXJkIGNsYXNzIHByb2JhYmlsaXRpZXMuDQoNCmBgYHtyIHR1bmVfZ3JpZH0NCiMgcmVnaXN0ZXIgYSBwYXJhbGxlbCBiYWNrZW5kLCBsZWF2aW5nIG9uZSBjb3JlIGF2YWlsYWJsZQ0KYWxsX2NvcmVzIDwtIHBhcmFsbGVsbHk6OmF2YWlsYWJsZUNvcmVzKG9taXQgPSAxKQ0KYWxsX2NvcmVzDQoNCmZ1dHVyZTo6cGxhbigibXVsdGlzZXNzaW9uIiwgd29ya2VycyA9IGFsbF9jb3JlcykgIyBvbiBXaW5kb3dzDQoNCnBvX3JzIDwtIA0KICB0dW5lX3JhY2VfYW5vdmEoDQogIHBvX3dmLA0KICBwb19mb2xkcywNCiAgZ3JpZCA9IHBvX3BhcmFtcyAlPiUgZ3JpZF9yZWd1bGFyKGxldmVscyA9IDQpLA0KICBtZXRyaWNzID0gbWV0cmljX3NldChhY2N1cmFjeSwgc2Vucywgc3BlYyksDQogIGNvbnRyb2wgPSBjb250cm9sX3JhY2Uoc2F2ZV9wcmVkID0gVFJVRSkNCikNCmBgYA0KDQpIb3cgZGlkIHdlIGRvPw0KDQpgYGB7ciB0dW5lX2dyaWRfcGxvdH0NCg0KYXV0b3Bsb3QocG9fcnMpDQpgYGANCg0KTm90IHRvbyBiYWQsIGFsdGhvdWdoIHlvdSBjYW4gdGVsbCB3ZSBhcmUgZG9pbmcgYmV0dGVyIG9uIG9uZSBjbGFzcyB0aGFuIHRoZSBvdGhlciBhcyB3ZSBhZGQgbW9yZSBtb2RlbCBmZWF0dXJlcy4gTGV0J3MgcGljayB0aGUgb25lIHdpdGggdGhlIGJlc3Qgc3BlY2lmaWNpdHkuDQoNCmBgYHtyIHNob3dfYmVzdH0NCnNob3dfYmVzdChwb19ycywgbWV0cmljID0gInNlbnMiKQ0KYGBgDQoNCiMjIyBGaXQgYW5kIGV2YWx1YXRlIGZpbmFsIG1vZGVsDQoNCk5leHQsIGxldOKAmXMgZml0IG91ciBtb2RlbCBvbiBsYXN0IHRpbWUgdG8gdGhlIHdob2xlIHRyYWluaW5nIHNldCBhdCBvbmNlIChyYXRoZXIgdGhhbiByZXNhbXBsZWQgZGF0YSkgYW5kIGV2YWx1YXRlIG9uIHRoZSB0ZXN0aW5nIHNldC4gVGhpcyBpcyB0aGUgZmlyc3QgdGltZSB3ZSBoYXZlIHRvdWNoZWQgdGhlIHRlc3Rpbmcgc2V0Lg0KDQpgYGB7ciBmaW5hbF93Zn0NCmZpbmFsX3dmIDwtIHBvX3dmICU+JSANCiAgZmluYWxpemVfd29ya2Zsb3coDQogICAgc2VsZWN0X2Jlc3QocG9fcnMsIG1ldHJpYyA9ICJzZW5zIikNCiAgKQ0KIA0KZmluYWxfZml0IDwtIGxhc3RfZml0KA0KICBmaW5hbF93ZiwNCiAgcG9fc3BsaXQsDQogIG1ldHJpY3MgPSBtZXRyaWNfc2V0KGFjY3VyYWN5LCBzZW5zLCBzcGVjKQ0KKQ0KDQpjb2xsZWN0X21ldHJpY3MoZmluYWxfZml0KQ0KYGBgDQoNCk91ciBwZXJmb3JtYW5jZSBvbiB0aGUgdGVzdGluZyBzZXQgaXMgYWJvdXQgdGhlIHNhbWUgYXMgd2hhdCB3ZSBmb3VuZCB3aXRoIG91ciByZXNhbXBsZWQgZGF0YSwgd2hpY2ggaXMgZ29vZC4NCg0KV2UgY2FuIGV4cGxvcmUgaG93IHRoZSBtb2RlbCBpcyBkb2luZyBmb3IgYm90aCB0aGUgcG9zaXRpdmUgYW5kIG5lZ2F0aXZlIGNsYXNzZXMgd2l0aCBhIGNvbmZ1c2lvbiBtYXRyaXguDQoNCmBgYHtyIGNvbGxlY3RfcHJlZGljdGlvbnN9DQpjb2xsZWN0X3ByZWRpY3Rpb25zKGZpbmFsX2ZpdCkgJT4lDQogIGNvbmZfbWF0KHN0YXRlLCAucHJlZF9jbGFzcykgJT4lIA0KICBhdXRvcGxvdCgpICsNCiAgbGFicyh0aXRsZSA9ICJDb25mdXNpb24gTWF0cml4IG9uIGhlbGQgb3V0IHRlc3QgZGF0YSIpDQpgYGANCg0KVGhpcyBqdXN0IHJlYWxseSBlbXBoYXNpemVzIHdoYXQgYW4gaW1iYWxhbmNlZCBwcm9ibGVtIHRoaXMgaXMsIGJ1dCB3ZSBjYW4gc2VlIGhvdyB3ZWxsIHdlIGFyZSBkb2luZyBmb3IgdGhlIHBvc3Qgb2ZmaWNlcyBpbiBIYXdhaWkgdnMuIHRoZSByZXN0IG9mIHRoZSBjb3VudHJ5Lg0KDQpgYGB7ciBwb19maXQsIGZpZy5hc3A9MX0NCnBvX2ZpdCA8LSBleHRyYWN0X2ZpdF9wYXJzbmlwKGZpbmFsX2ZpdCkNCg0KbGlibGluZWFyX29iaiA8LSBwb19maXQkZml0JFcNCg0KbGlibGluZWFyX2RmIDwtIHRpYmJsZSh0ZXJtID0gY29sbmFtZXMobGlibGluZWFyX29iaiksDQogICAgICAgICAgICAgICAgICAgICAgIGVzdGltYXRlID0gbGlibGluZWFyX29ialsxLF0pDQoNCmxpYmxpbmVhcl9kZiAlPiUNCiAgZmlsdGVyKHRlcm0gIT0gIkJpYXMiKSAlPiUNCiAgZ3JvdXBfYnkoZXN0aW1hdGUgPiAwKSAlPiUNCiAgc2xpY2VfbWF4KGFicyhlc3RpbWF0ZSksIG4gPSAxNSkgJT4lDQogIHVuZ3JvdXAoKSAlPiUNCiAgbXV0YXRlKHRlcm0gPSBzdHJfcmVtb3ZlKHRlcm0sICJ0Zl9uYW1lXyIpKSAlPiUNCiAgZ2dwbG90KGFlcyhlc3RpbWF0ZSwgZmN0X3Jlb3JkZXIodGVybSwgZXN0aW1hdGUpLCBmaWxsID0gZXN0aW1hdGUgPiAwKSkgKw0KICBnZW9tX2NvbChhbHBoYSA9IDAuNiwgc2hvdy5sZWdlbmQgPSBGQUxTRSkgKw0KICBnZW9tX3RleHQoYWVzKGxhYmVsID0gdGVybSksDQogICAgICAgICAgICBoanVzdCA9IDEpICsNCiAgc2NhbGVfeV9kaXNjcmV0ZShicmVha3MgPSBOVUxMKSArDQogIHRoZW1lKGF4aXMudGV4dC55ID0gZWxlbWVudF9ibGFuaygpKSArDQogIGxhYnMoDQogICAgeCA9ICJDb2VmZmljaWVudCBmcm9tIGxpbmVhciBTVk0iLA0KICAgIHkgPSBOVUxMLA0KICAgIGZpbGwgPSBOVUxMLA0KICAgIHRpdGxlID0gIldoaWNoIHN1YndvcmRzIGluIGEgVVMgUG9zdCBPZmZpY2UgbmFtZXMgYXJlIHVzZWQgbW9yZSBpbiBIYXdhaWk/IiwNCiAgICBzdWJ0aXRsZSA9ICJTdWJ3b3JkcyBsaWtlIEEsIF9ILCBVLCBhbmQgTyBhcmUgdGhlIHN0cm9uZ2VzdCBwcmVkaWN0b3JzIG9mIGEgcG9zdCBvZmZpY2UgYmVpbmcgaW4gSGF3YWlpIg0KICApDQoNCmBgYA0KDQpDcmVkaXQgdG8gSnVsaWEgU2lsZ2UgZm9yIGludHJvZHVjaW5nIGBMaWJsaW5lYVJgIGFuZCBgdG9rZW5pemVycy5icGVgLCBhbmQgdGhlIHByZWRpY3RpdmUgd29ya2Zsb3cgc2hvd24gaGVyZS4NCg==</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2021_04_13_tidy_tuesday.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
