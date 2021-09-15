@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-04-21" />
+
+<title>GDPR Fines</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">GDPR Fines</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">April 21, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-15
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree92bc445e016738fa539c5473e388903aa4b6dee1targetblank92bc445a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/92bc445e016738fa539c5473e388903aa4b6dee1" target="_blank">92bc445</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree92bc445e016738fa539c5473e388903aa4b6dee1targetblank92bc445a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/92bc445e016738fa539c5473e388903aa4b6dee1" target="_blank">92bc445</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/GDPRfines.Rmd</code>) and HTML (<code>docs/GDPRfines.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/92bc445e016738fa539c5473e388903aa4b6dee1/analysis/GDPRfines.Rmd" target="_blank">92bc445</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-15
+</td>
+<td>
+add tweet attribution and new viridis color scheme
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/02009d5c35a087640d217620a02a0d938bef6236/analysis/GDPRfines.Rmd" target="_blank">02009d5</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-15
+</td>
+<td>
+add tweet attribution and new viridis color scheme
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>This week’s <a href="https://github.com/rfordatascience/tidytuesday"><code>#TidyTuesday</code> dataset</a> is on EU GDPR violations.</p>
+<p>In addition, R version 4.0.0 <strong>Arbor Day</strong> was just released. I am re-installing packages as-required while going through projects like this one.</p>
+<p>The R Studio team recently launched <a href="https://www.tidymodels.org/"><code>tidymodels.org</code></a>, a new central location with resources and documentation for tidymodels packages. Check out the <a href="https://www.tidyverse.org/blog/2020/04/tidymodels-org/">official blog post</a> for more details.</p>
+<p>Julia Silge published a great blog post with <a href="https://juliasilge.com/category/tidymodels/">another screencast demonstrating how to use <code>tidymodels</code></a>. She includes a good video for folks getting started with <code>tidymodels</code>.</p>
+<div id="explore-the-data" class="section level2">
+<h2>Explore the data</h2>
+<p>Our modeling goal here is to understand what kind of GDPR violations are associated with higher fines in the <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-04-21/readme.md">#TidyTuesday dataset</a> for this week. Before we start, what are the most common GDPR articles actually about? Roughly speaking:</p>
+<ul>
+<li><strong>Article 5:</strong> principles for processing personal data (legitimate purpose, limited)</li>
+<li><strong>Article 6:</strong> lawful processing of personal data (i.e. consent, etc)</li>
+<li><strong>Article 13:</strong> inform subject when personal data is collected</li>
+<li><strong>Article 15:</strong> right of access by data subject</li>
+<li><strong>Article 32:</strong> security of processing (i.e. data breaches)</li>
+</ul>
+<p>Let’s get started by looking at the data on violations.</p>
+<pre class="r"><code>gdpr_raw &lt;- readr::read_tsv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-21/gdpr_violations.tsv&quot;)
+
+gdpr_raw %&gt;%
+  head() %&gt;%
+  knitr::kable(&quot;html&quot;) %&gt;%
+  kableExtra::kable_styling(
+    bootstrap_options = c(&quot;striped&quot;, &quot;condensed&quot;),
+    full_width = F,
+    fixed_thead = T
+  )</code></pre>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+picture
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+name
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+price
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+authority
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+date
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+controller
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+article_violated
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+type
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+source
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+summary
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/republic-of-poland.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/republic-of-poland.svg</a>
+</td>
+<td style="text-align:left;">
+Poland
+</td>
+<td style="text-align:right;">
+9380
+</td>
+<td style="text-align:left;">
+Polish National Personal Data Protection Office (UODO)
+</td>
+<td style="text-align:left;">
+10/18/2019
+</td>
+<td style="text-align:left;">
+Polish Mayor
+</td>
+<td style="text-align:left;">
+Art. 28 GDPR
+</td>
+<td style="text-align:left;">
+Non-compliance with lawful basis for data processing
+</td>
+<td style="text-align:left;">
+<a href="https://uodo.gov.pl/decyzje/ZSPU.421.3.2019" class="uri">https://uodo.gov.pl/decyzje/ZSPU.421.3.2019</a>
+</td>
+<td style="text-align:left;">
+No data processing agreement has been concluded with the company whose servers contained the resources of the Public Information Bulletin (BIP) of the Municipal Office in Aleksandrów Kujawski. For this reason, a fine of 40.000 PLN (9400 EUR) was imposed on the mayor of the city.
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg</a>
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:right;">
+2500
+</td>
+<td style="text-align:left;">
+Romanian National Supervisory Authority for Personal Data Processing (ANSPDCP)
+</td>
+<td style="text-align:left;">
+10/17/2019
+</td>
+<td style="text-align:left;">
+UTTIS INDUSTRIES
+</td>
+<td style="text-align:left;">
+Art. 12 GDPR|Art. 13 GDPR|Art. 5 (1) c) GDPR|Art. 6 GDPR
+</td>
+<td style="text-align:left;">
+Information obligation non-compliance
+</td>
+<td style="text-align:left;">
+<a href="https://www.dataprotection.ro/?page=A_patra_amenda&amp;lang=ro" class="uri">https://www.dataprotection.ro/?page=A_patra_amenda&amp;lang=ro</a>
+</td>
+<td style="text-align:left;">
+A controller was sanctioned because he had unlawfully processed the personal data (CNP), and images of employees obtained through the surveillance system. The disclosure of the CNP in a report for the ISCIR training in 2018 wasn’t legal, as per Art.6 GDPR.
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/spain.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/spain.svg</a>
+</td>
+<td style="text-align:left;">
+Spain
+</td>
+<td style="text-align:right;">
+60000
+</td>
+<td style="text-align:left;">
+Spanish Data Protection Authority (AEPD)
+</td>
+<td style="text-align:left;">
+10/16/2019
+</td>
+<td style="text-align:left;">
+Xfera Moviles S.A.
+</td>
+<td style="text-align:left;">
+Art. 5 GDPR|Art. 6 GDPR
+</td>
+<td style="text-align:left;">
+Non-compliance with lawful basis for data processing
+</td>
+<td style="text-align:left;">
+<a href="https://www.aepd.es/resoluciones/PS-00262-2019_ORI.pdf" class="uri">https://www.aepd.es/resoluciones/PS-00262-2019_ORI.pdf</a>
+</td>
+<td style="text-align:left;">
+The company had unlawfully processed the personal data despite the subject’s request to stop doing so.
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/spain.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/spain.svg</a>
+</td>
+<td style="text-align:left;">
+Spain
+</td>
+<td style="text-align:right;">
+8000
+</td>
+<td style="text-align:left;">
+Spanish Data Protection Authority (AEPD)
+</td>
+<td style="text-align:left;">
+10/16/2019
+</td>
+<td style="text-align:left;">
+Iberdrola Clientes
+</td>
+<td style="text-align:left;">
+Art. 31 GDPR
+</td>
+<td style="text-align:left;">
+Failure to cooperate with supervisory authority
+</td>
+<td style="text-align:left;">
+<a href="https://www.aepd.es/resoluciones/PS-00304-2019_ORI.pdf" class="uri">https://www.aepd.es/resoluciones/PS-00304-2019_ORI.pdf</a>
+</td>
+<td style="text-align:left;">
+Iberdrola Clientes violated Article 13 of the GDPR when it showed a complete lack of cooperation with the AEPD. The latter had requested Iberdrola Clientes to provide the necessary information needed to add a person to the solvency list.
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg</a>
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:right;">
+150000
+</td>
+<td style="text-align:left;">
+Romanian National Supervisory Authority for Personal Data Processing (ANSPDCP)
+</td>
+<td style="text-align:left;">
+10/09/2019
+</td>
+<td style="text-align:left;">
+Raiffeisen Bank SA
+</td>
+<td style="text-align:left;">
+Art. 32 GDPR
+</td>
+<td style="text-align:left;">
+Failure to implement sufficient measures to ensure information security
+</td>
+<td style="text-align:left;">
+<a href="https://www.dataprotection.ro/?page=Comunicat_Presa_09_10_2019&amp;lang=ro" class="uri">https://www.dataprotection.ro/?page=Comunicat_Presa_09_10_2019&amp;lang=ro</a>
+</td>
+<td style="text-align:left;">
+Raiffeisen Bank Romania did not observe the necessary security measures required by the GDPR when it assessed the scores of individuals on the WhatsApp platform. The personal data was exchanged via WhatsApp.
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg</a>
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:right;">
+20000
+</td>
+<td style="text-align:left;">
+Romanian National Supervisory Authority for Personal Data Processing (ANSPDCP)
+</td>
+<td style="text-align:left;">
+10/09/2019
+</td>
+<td style="text-align:left;">
+Vreau Credit SRL
+</td>
+<td style="text-align:left;">
+Art. 32 GDPR|Art. 33 GDPR
+</td>
+<td style="text-align:left;">
+Failure to implement sufficient measures to ensure information security
+</td>
+<td style="text-align:left;">
+<a href="https://www.dataprotection.ro/?page=Comunicat_Presa_09_10_2019&amp;lang=ro" class="uri">https://www.dataprotection.ro/?page=Comunicat_Presa_09_10_2019&amp;lang=ro</a>
+</td>
+<td style="text-align:left;">
+The Company sent personal information through the WhatsApp platform to Raiffeisen Bank in order to facilitate the assessment of personal scores. The results were returned on the same platform.
+</td>
+</tr>
+</tbody>
+</table>
+<p>How are the fines distributed?</p>
+<pre class="r"><code>gdpr_raw %&gt;%
+  ggplot(aes(price + 1)) +
+  geom_histogram(fill = &quot;midnightblue&quot;, alpha = 0.7, bins = 40) +
+  scale_x_log10(labels = scales::dollar_format(prefix = &quot;€&quot;)) +
+  labs(
+    title = &quot;EU General Data Protection Regulation 2016/679 (GDPR) Fines&quot;,
+    subtitle = &quot;Scraped from https://www.privacyaffairs.com/gdpr-fines/&quot;,
+    x = &quot;GDPR fine (EUR)&quot;, y = &quot;Number of GDPR violations&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/GDPRfines.Rmd/p1-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Some of the violations were fined zero EUR. Let’s make a one-article-per-row version of this dataset.</p>
+<pre class="r"><code>gdpr_tidy &lt;- gdpr_raw %&gt;%
+  transmute(id,
+    price,
+    country = name,
+    article_violated,
+    articles = str_extract_all(article_violated, &quot;Art.[:digit:]+|Art. [:digit:]+&quot;)
+  ) %&gt;%
+  mutate(total_articles = map_int(articles, length)) %&gt;%
+  unnest(articles) %&gt;%
+  add_count(articles) %&gt;%
+  filter(n &gt; 10) %&gt;%
+  select(-n)
+
+gdpr_tidy %&gt;%
+  head() %&gt;%
+  knitr::kable(&quot;html&quot;) %&gt;%
+  kableExtra::kable_styling(
+    bootstrap_options = c(&quot;striped&quot;, &quot;condensed&quot;),
+    full_width = F, fixed_thead = T
+  )</code></pre>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+price
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+article_violated
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+articles
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+total_articles
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2500
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:left;">
+Art. 12 GDPR|Art. 13 GDPR|Art. 5 (1) c) GDPR|Art. 6 GDPR
+</td>
+<td style="text-align:left;">
+Art. 13
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2500
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:left;">
+Art. 12 GDPR|Art. 13 GDPR|Art. 5 (1) c) GDPR|Art. 6 GDPR
+</td>
+<td style="text-align:left;">
+Art. 5
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2500
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:left;">
+Art. 12 GDPR|Art. 13 GDPR|Art. 5 (1) c) GDPR|Art. 6 GDPR
+</td>
+<td style="text-align:left;">
+Art. 6
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+60000
+</td>
+<td style="text-align:left;">
+Spain
+</td>
+<td style="text-align:left;">
+Art. 5 GDPR|Art. 6 GDPR
+</td>
+<td style="text-align:left;">
+Art. 5
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+60000
+</td>
+<td style="text-align:left;">
+Spain
+</td>
+<td style="text-align:left;">
+Art. 5 GDPR|Art. 6 GDPR
+</td>
+<td style="text-align:left;">
+Art. 6
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+150000
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:left;">
+Art. 32 GDPR
+</td>
+<td style="text-align:left;">
+Art. 32
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<p>How are the fines distributed by article?</p>
+<pre class="r"><code>gdpr_tidy %&gt;%
+  mutate(
+    articles = str_replace_all(articles, &quot;Art. &quot;, &quot;Article &quot;),
+    articles = fct_reorder(articles, price)
+  ) %&gt;%
+  ggplot(aes(articles, price + 1, color = articles, fill = articles)) +
+  geom_boxplot(alpha = 0.2, outlier.colour = NA, show.legend = FALSE) +
+  geom_quasirandom(show.legend = FALSE) +
+  scale_y_log10(labels = scales::dollar_format(prefix = &quot;€&quot;)) +
+  labs(
+    x = NULL, y = &quot;GDPR fine (EUR)&quot;,
+    title = &quot;GDPR Fines Levied, by Article&quot;,
+    subtitle = &quot;For 250 violations in 25 countries&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/GDPRfines.Rmd/p2-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Now let’s create a dataset for predictive modeling.</p>
+<pre class="r"><code>gdpr_violations &lt;- gdpr_tidy %&gt;%
+  mutate(value = 1) %&gt;%
+  select(-article_violated) %&gt;%
+  pivot_wider(
+    names_from = articles, values_from = value,
+    values_fn = list(value = max), values_fill = list(value = 0)
+  ) %&gt;%
+  janitor::clean_names()
+
+gdpr_violations %&gt;%
+  head() %&gt;%
+  knitr::kable(&quot;html&quot;) %&gt;%
+  kableExtra::kable_styling(
+    bootstrap_options = c(&quot;striped&quot;, &quot;condensed&quot;),
+    full_width = F, fixed_thead = T
+  )</code></pre>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+price
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+total_articles
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_13
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_5
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_6
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_32
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_15
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2500
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+60000
+</td>
+<td style="text-align:left;">
+Spain
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+150000
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+20000
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+200000
+</td>
+<td style="text-align:left;">
+Greece
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+30000
+</td>
+<td style="text-align:left;">
+Spain
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="build-a-model" class="section level2">
+<h2>Build a model</h2>
+<p>Let’s preprocess our data to get it ready for modeling.</p>
+<pre class="r"><code>gdpr_rec &lt;- recipe(price ~ ., data = gdpr_violations) %&gt;%
+  update_role(id, new_role = &quot;id&quot;) %&gt;%
+  step_log(price, base = 10, offset = 1, skip = TRUE) %&gt;%
+  step_other(country, other = &quot;Other&quot;) %&gt;%
+  step_dummy(all_nominal_predictors()) %&gt;%
+  step_zv(all_predictors())
+
+gdpr_prep &lt;- prep(gdpr_rec)
+
+gdpr_prep</code></pre>
+<pre><code>Data Recipe
+
+Inputs:
+
+      role #variables
+        id          1
+   outcome          1
+ predictor          7
+
+Training data contained 219 data points and no missing data.
+
+Operations:
+
+Log transformation on price [trained]
+Collapsing factor levels for country [trained]
+Dummy variables from country [trained]
+Zero variance filter removed no terms [trained]</code></pre>
+<p>Let’s walk through the steps in this recipe.</p>
+<ul>
+<li>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what data we are using.</li>
+<li>Next, we update the role for <code>id</code>, since this variable is not a predictor or outcome but I would like to keep it in the data for convenience.</li>
+<li>Next, we take the log of the outcome (<code>price</code>, the amount of the fine).</li>
+<li>There are a lot of countries in this dataset, so let’s collapse some of the less frequently occurring countries into another <code>"Other"</code> category.</li>
+<li>Finally, we can create indicator variables and remove varibles with zero variance.</li>
+</ul>
+<p>Before using <code>prep()</code> these steps have been defined but not actually run or implemented. The <code>prep()</code> function is where everything gets evaluated.</p>
+<p>Now it’s time to specify our model. I am using a <a href="https://tidymodels.github.io/workflows/"><code>workflow()</code></a> in this example for convenience; these are objects that can help you manage modeling pipelines more easily, with pieces that fit together like Lego blocks. This <code>workflow()</code> contains both the recipe and the model (a straightforward Ordinary Least Squares linear regression).</p>
+<pre class="r"><code>gdpr_wf &lt;- workflow() %&gt;%
+  add_recipe(gdpr_rec) %&gt;%
+  add_model(linear_reg() %&gt;%
+    set_engine(&quot;lm&quot;))
+
+gdpr_wf</code></pre>
+<pre><code>== Workflow ====================================================================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ----------------------------------------------------------------
+4 Recipe Steps
+
+* step_log()
+* step_other()
+* step_dummy()
+* step_zv()
+
+-- Model -----------------------------------------------------------------------
+Linear Regression Model Specification (regression)
+
+Computational engine: lm </code></pre>
+<p>You can <code>fit()</code> a workflow, much like you can fit a model, and then you can pull out the fit object and <code>tidy()</code> it to work with the estimates of the linear coefficients.</p>
+<pre class="r"><code>gdpr_fit &lt;- gdpr_wf %&gt;%
+  fit(data = gdpr_violations)
+
+extract_fit_engine(gdpr_fit) %&gt;%
+  tidy() %&gt;%
+  arrange(desc(estimate))</code></pre>
+<pre><code># A tibble: 13 x 5
+   term                   estimate std.error statistic  p.value
+   &lt;chr&gt;                     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)              3.77       0.409     9.21  3.82e-17
+ 2 total_articles           0.480      0.166     2.90  4.20e- 3
+ 3 country_Spain            0.430      0.364     1.18  2.40e- 1
+ 4 country_Other            0.234      0.355     0.660 5.10e- 1
+ 5 country_Germany          0.0597     0.419     0.143 8.87e- 1
+ 6 art_32                  -0.153      0.315    -0.487 6.27e- 1
+ 7 country_Hungary         -0.155      0.479    -0.324 7.46e- 1
+ 8 country_Romania         -0.346      0.433    -0.799 4.25e- 1
+ 9 art_5                   -0.419      0.283    -1.48  1.40e- 1
+10 art_6                   -0.560      0.295    -1.90  5.91e- 2
+11 country_Czech.Republic  -0.650      0.467    -1.39  1.66e- 1
+12 art_13                  -0.763      0.407    -1.87  6.27e- 2
+13 art_15                  -1.57       0.465    -3.37  8.97e- 4</code></pre>
+<p>GDPR violations of more than one article have higher fines.</p>
+</div>
+<div id="explore-results" class="section level2">
+<h2>Explore results</h2>
+<p>Lots of those coefficients have big p-values (for example, all the countries) but I think the best way to understand these results will be to visualize some predictions. You can predict on new data in tidymodels with either a model or a <code>workflow()</code>.</p>
+<p>Let’s create some example new data that we are interested in.</p>
+<pre class="r"><code>new_gdpr &lt;- crossing(
+  country = &quot;Other&quot;,
+  art_5 = 0:1,
+  art_6 = 0:1,
+  art_13 = 0:1,
+  art_15 = 0:1,
+  art_32 = 0:1
+) %&gt;%
+  mutate(
+    id = row_number(),
+    total_articles = art_5 + art_6 + art_13 + art_15 + art_32
+  )
+
+new_gdpr %&gt;%
+  head() %&gt;%
+  knitr::kable(&quot;html&quot;) %&gt;%
+  kableExtra::kable_styling(
+    bootstrap_options = c(&quot;striped&quot;, &quot;condensed&quot;),
+    full_width = F, fixed_thead = T
+  )</code></pre>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_5
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_6
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_13
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_15
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_32
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+total_articles
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s find both the mean predictions and the confidence intervals.</p>
+<pre class="r"><code>mean_pred &lt;- predict(gdpr_fit,
+  new_data = new_gdpr
+)
+
+conf_int_pred &lt;- predict(gdpr_fit,
+  new_data = new_gdpr,
+  type = &quot;conf_int&quot;
+)
+
+gdpr_res &lt;- new_gdpr %&gt;%
+  bind_cols(mean_pred) %&gt;%
+  bind_cols(conf_int_pred)
+
+gdpr_res %&gt;%
+  head() %&gt;%
+  knitr::kable(&quot;html&quot;) %&gt;%
+  kableExtra::kable_styling(
+    bootstrap_options = c(&quot;striped&quot;, &quot;condensed&quot;),
+    full_width = F, fixed_thead = T
+  )</code></pre>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_5
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_6
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_13
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_15
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+art_32
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+total_articles
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+.pred
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+.pred_lower
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+.pred_upper
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4.000446
+</td>
+<td style="text-align:right;">
+3.410428
+</td>
+<td style="text-align:right;">
+4.590464
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4.326841
+</td>
+<td style="text-align:right;">
+3.922444
+</td>
+<td style="text-align:right;">
+4.731237
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.912359
+</td>
+<td style="text-align:right;">
+2.245405
+</td>
+<td style="text-align:right;">
+3.579314
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3.238753
+</td>
+<td style="text-align:right;">
+2.407347
+</td>
+<td style="text-align:right;">
+4.070160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3.717506
+</td>
+<td style="text-align:right;">
+2.992813
+</td>
+<td style="text-align:right;">
+4.442199
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4.043900
+</td>
+<td style="text-align:right;">
+3.336772
+</td>
+<td style="text-align:right;">
+4.751029
+</td>
+</tr>
+</tbody>
+</table>
+<p>There are lots of things we can do wtih these results! For example, what are the predicted GDPR fines for violations of each article type (violating only one article)?</p>
+<pre class="r"><code>gdpr_res %&gt;%
+  filter(total_articles == 1) %&gt;%
+  pivot_longer(art_5:art_32) %&gt;%
+  filter(value &gt; 0) %&gt;%
+  mutate(
+    name = str_replace_all(name, &quot;art_&quot;, &quot;Article &quot;),
+    name = fct_reorder(name, .pred)
+  ) %&gt;%
+  ggplot(aes(name, 10^.pred, color = name)) +
+  geom_point(size = 3.5) +
+  geom_errorbar(aes(
+    ymin = 10^.pred_lower,
+    ymax = 10^.pred_upper
+  ),
+  width = 0.2, alpha = 0.7
+  ) +
+  labs(
+    x = NULL, y = &quot;Increase in fine (EUR)&quot;,
+    title = &quot;Predicted Fine for each Type of GDPR Article Violation&quot;,
+    subtitle = &quot;Modeling based on 250 violations in 25 countries&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  scale_y_log10(labels = scales::dollar_format(prefix = &quot;€&quot;, accuracy = 1))</code></pre>
+<p><img src="figure/GDPRfines.Rmd/p3-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>We can see here that violations such as data breaches have higher fines on average than violations about rights of access.</p>
+<pre class="r"><code># Get countries in dataset as a vector
+gdpr_countries &lt;- gdpr_raw %&gt;%
+  distinct(name) %&gt;%
+  pull()
+
+# Get sf objects, filter by countries in dataset
+countries_sf &lt;- rnaturalearth::ne_countries(country = c(gdpr_countries, &quot;Czechia&quot;), scale = &quot;large&quot;, returnclass = &quot;sf&quot;) %&gt;%
+  select(name, geometry) %&gt;%
+  mutate(name = replace(name, name == &quot;Czechia&quot;, &quot;Czech Republic&quot;))
+
+# Group fines by country, merge with sf
+countries_map &lt;- gdpr_raw %&gt;%
+  mutate(name = stringr::str_to_title(name)) %&gt;%
+  group_by(name) %&gt;%
+  mutate(
+    price_sum = sum(price),
+    price_label = case_when(
+      round(price_sum / 1e6) &gt; 0 ~ paste0(round(price_sum / 1e6), &quot;M&quot;),
+      round(price_sum / 1e5) &gt; 0 ~ paste0(round(price_sum / 1e6, 1), &quot;M&quot;),
+      round(price_sum / 1e3) &gt; 0 ~ paste0(round(price_sum / 1e3), &quot;K&quot;),
+      price_sum &gt; 0 ~ paste0(round(price_sum / 1e3, 1), &quot; K&quot;),
+      TRUE ~ &quot;0&quot;
+    )
+  ) %&gt;%
+  left_join(countries_sf) %&gt;%
+  select(name, price_sum, price_label, geometry)
+
+# Copied from https://developers.google.com/public-data/docs/canonical/countries_csv
+centroids &lt;- read_html(&quot;https://developers.google.com/public-data/docs/canonical/countries_csv&quot;) %&gt;%
+  html_node(&quot;table&quot;) %&gt;%
+  html_table()
+
+# Dataset for red &quot;arrows&quot; (to draw with geom_polygon)
+price_arrows &lt;- countries_map %&gt;%
+  select(name, price_sum, price_label) %&gt;%
+  left_join(centroids) %&gt;%
+  mutate(
+    arrow_x = list(c(longitude - 0.5, longitude, longitude + 0.5, longitude)),
+    arrow_y = list(c(latitude - 0.03, latitude, latitude - 0.03, latitude + price_sum / 1.5e6))
+  ) %&gt;%
+  unnest(c(arrow_x, arrow_y))
+
+ggplot() +
+  # map
+  geom_sf(data = countries_map, aes(geometry = geometry), fill = &quot;#EBE9E1&quot;, colour = &quot;grey70&quot;, size = 0.25) +
+  # country name
+  geom_text(data = price_arrows, aes(x = longitude - 0.2, y = latitude - 0.4, label = name), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5) +
+  # red price, over 10M
+  geom_text(data = subset(price_arrows, price_sum &gt; 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = &quot;#BA4E35&quot;) +
+  # black price, under 10M
+  geom_text(data = subset(price_arrows, price_sum &lt; 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = &quot;black&quot;) +
+  # red arrows
+  geom_polygon(data = price_arrows, aes(x = arrow_x, y = arrow_y, group = name), fill = &quot;#BA4E35&quot;, colour = NA, alpha = 0.8) +
+  # title and caption
+  annotate(&quot;richtext&quot;,
+    x = -26, y = 80, hjust = 0, vjust = 1,
+    label = &quot;**Total of GDPR fines by country**&lt;br&gt;&lt;span style = &#39;font-size:12pt&#39;&gt;Rounded to nearest million or thousand euro&lt;/span&gt;&lt;br&gt;&lt;span style = &#39;font-size:8pt&#39;&gt;Source: Privacy Affairs | Graphic: @Jim_Gruman&lt;/span&gt;&quot;,
+    family = &quot;Helvetica&quot;, size = 8, lineheight = 1.1, fill = NA, label.color = NA
+  ) +
+  theme_void() +
+  theme(
+    plot.margin = unit(c(20, 20, 20, 20), &quot;pt&quot;),
+    plot.title = element_text(
+      color = &quot;gray40&quot;,
+      size = 12, family = &quot;Helvetica&quot;, face = &quot;bold&quot;
+    )
+  ) +
+  coord_sf(xlim = c(-27.5, 37.5), ylim = c(32.5, 82.5), expand = FALSE) +
+  labs(x = NULL, y = NULL)</code></pre>
+<p><img src="figure/GDPRfines.Rmd/p4-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>David Sjoberg built this incredible chart</p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/davsjob/status/1256293020791685123&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">😱 I thought it might be a neat idea to combine a map, rank and a bar chart in one plot for <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a>. It was messy but fun.<br><br>Code: <a href="https://t.co/IouFXdvYjf">https://t.co/IouFXdvYjf</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/ggplot?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://t.co/wyHsUGpwKC">pic.twitter.com/wyHsUGpwKC</a></p>&mdash; David Sjöberg (@davsjob) <a href="https://twitter.com/davsjob/status/1256293020791685123?ref_src=twsrc%5Etfw">May 1, 2020</a></blockquote>
+
+<pre class="r"><code>gdpr_df &lt;- gdpr_raw %&gt;%
+  group_by(name) %&gt;%
+  summarise(
+    price = sum(price),
+    .groups = &quot;drop&quot;
+  )
+
+sdf &lt;- rnaturalearthdata::countries50 %&gt;%
+  st_as_sf() %&gt;%
+  st_make_valid() %&gt;%
+  st_crop(xmin = -24, xmax = 31, ymin = 33, ymax = 73) %&gt;%
+  filter(admin %in% gdpr_df$name) %&gt;%
+  left_join(gdpr_df, by = c(&quot;admin&quot; = &quot;name&quot;)) %&gt;%
+  mutate(
+    price_cap = price / pop_est,
+    admin = case_when(
+      admin == &quot;United Kingdom&quot; ~ &quot;UK&quot;,
+      admin == &quot;Czech Republic&quot; ~ &quot;Czech&quot;,
+      TRUE ~ admin
+    )
+  )
+
+ranking &lt;- st_geometry(sdf) %&gt;%
+  st_point_on_surface() %&gt;%
+  st_coordinates() %&gt;%
+  as_tibble() %&gt;%
+  bind_cols(tibble(
+    fine_cap = BBmisc::normalize(rank(sdf$price_cap), range = c(40.12161, 66.12161), method = &quot;range&quot;),
+    country = sdf$admin,
+    xend = 60,
+    x_axis_start = xend + 10,
+    fine_cap_x = BBmisc::normalize(sdf$price_cap, range = c(first(x_axis_start), 100), method = &quot;range&quot;),
+    val_txt = paste0(format(sdf$price_cap, digits = 0, nsmall = 2)),
+    val_txt2 = if_else(country == &quot;Austria&quot;, paste0(val_txt, &quot;€ per capita&quot;), val_txt)
+  ))
+
+sdf &lt;- sdf %&gt;%
+  bind_cols(ranking %&gt;% select(fine_cap))
+
+
+ggplot() +
+  geom_sf(
+    data = sdf,
+    size = .3,
+    fill = &quot;transparent&quot;,
+    color = &quot;gray17&quot;
+  ) +
+  # Sigmoid from country to start of barchart
+  ggbump::geom_sigmoid(
+    data = ranking,
+    aes(
+      x = X,
+      y = Y,
+      xend = x_axis_start - .2,
+      yend = fine_cap,
+      group = country,
+      color = fine_cap
+    ),
+    alpha = .6,
+    smooth = 10,
+    size = 1
+  ) +
+  # Line from xstart to value
+  geom_segment(
+    data = ranking,
+    aes(
+      x = x_axis_start,
+      y = fine_cap,
+      xend = fine_cap_x,
+      yend = fine_cap,
+      color = fine_cap
+    ),
+    alpha = .6,
+    size = 1,
+    lineend = &quot;round&quot;
+  ) +
+  # Y axis - black line
+  geom_segment(
+    data = ranking,
+    aes(
+      x = x_axis_start,
+      y = 40,
+      xend = x_axis_start,
+      yend = 67
+    ),
+    alpha = .6,
+    size = 1.3,
+    color = &quot;black&quot;
+  ) +
+  # dot on centroid of country in map
+  geom_point(
+    data = ranking,
+    aes(x = X, y = Y, color = fine_cap),
+    size = 2
+  ) +
+  # Country text
+  geom_text(
+    data = ranking,
+    aes(
+      x = x_axis_start - .5,
+      y = fine_cap,
+      label = country,
+      color = fine_cap
+    ),
+    hjust = 1,
+    size = 2.5,
+    nudge_y = .5
+  ) +
+  # Value text
+  geom_text(
+    data = ranking,
+    aes(
+      x = fine_cap_x,
+      y = fine_cap,
+      label = val_txt2,
+      color = fine_cap
+    ),
+    hjust = 0,
+    size = 2,
+    nudge_x = .4
+  ) +
+  coord_sf(clip = &quot;off&quot;) +
+  scale_fill_viridis_c(option = &quot;H&quot;) +
+  scale_color_viridis_c(option = &quot;H&quot;) +
+  theme_void() +
+  labs(
+    title = &quot;GDPR fines per capita&quot;,
+    subtitle = str_wrap(
+      &quot;The General Data Protection Regulation (EU) 2016/679 (GDPR) is a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA).&quot;,
+      100
+    ),
+    caption = &quot;Source: TidyTuesday &amp; Wikipedia&quot;
+  ) +
+  theme(
+    plot.margin = unit(c(0.5, 1, 0.5, 0.5), &quot;cm&quot;),
+    legend.position = &quot;none&quot;,
+    plot.background = element_rect(fill = &quot;black&quot;),
+    plot.caption = element_text(color = &quot;white&quot;),
+    plot.title = element_text(
+      color = &quot;white&quot;,
+      size = 16,
+      family = &quot;Helvetica&quot;,
+      face = &quot;bold&quot;
+    ),
+    plot.subtitle = element_text(color = &quot;white&quot;, size = 8)
+  )</code></pre>
+<p><img src="figure/GDPRfines.Rmd/p5-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] rvest_1.0.1         ggtext_0.1.1        sf_1.0-2           
+ [4] rnaturalearth_0.1.0 ggbeeswarm_0.6.0    yardstick_0.0.8    
+ [7] workflowsets_0.1.0  workflows_0.2.3     tune_0.1.6         
+[10] rsample_0.1.0       recipes_0.1.16      parsnip_0.1.7.900  
+[13] modeldata_0.1.1     infer_1.0.0         dials_0.0.9.9000   
+[16] scales_1.1.1        broom_0.7.9         tidymodels_0.1.3   
+[19] forcats_0.5.1       stringr_1.4.0       dplyr_1.0.7        
+[22] purrr_0.3.4         readr_2.0.1         tidyr_1.1.3        
+[25] tibble_3.1.4        ggplot2_3.3.5       tidyverse_1.3.1    
+[28] workflowr_1.6.2    
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2               R.utils_2.10.1           tidyselect_1.1.1        
+  [4] grid_4.1.1               pROC_1.18.0              munsell_0.5.0           
+  [7] codetools_0.2-18         ragg_1.1.3               units_0.7-2             
+ [10] future_1.22.1            withr_2.4.2              colorspace_2.0-2        
+ [13] ggbump_0.1.0             highr_0.9                knitr_1.34              
+ [16] rstudioapi_0.13          wk_0.5.0                 Rttf2pt1_1.3.9          
+ [19] listenv_0.8.0            labeling_0.4.2           git2r_0.28.0            
+ [22] rnaturalearthdata_0.1.0  bit64_4.0.5              DiceDesign_1.9          
+ [25] farver_2.1.0             rprojroot_2.0.2          parallelly_1.28.1       
+ [28] vctrs_0.3.8              generics_0.1.0           ipred_0.9-11            
+ [31] xfun_0.25                R6_2.5.1                 markdown_1.1            
+ [34] lhs_1.1.3                cachem_1.0.6             assertthat_0.2.1        
+ [37] promises_1.2.0.1         vroom_1.5.4              nnet_7.3-16             
+ [40] rgeos_0.5-7              beeswarm_0.4.0           gtable_0.3.0            
+ [43] globals_0.14.0           timeDate_3043.102        rlang_0.4.11            
+ [46] BBmisc_1.11              systemfonts_1.0.2        splines_4.1.1           
+ [49] extrafontdb_1.0          selectr_0.4-2            checkmate_2.0.0         
+ [52] s2_1.0.6                 yaml_2.2.1               modelr_0.1.8            
+ [55] backports_1.2.1          httpuv_1.6.2             gridtext_0.1.4          
+ [58] extrafont_0.17           tools_4.1.1              lava_1.6.10             
+ [61] ellipsis_0.3.2           kableExtra_1.3.4         jquerylib_0.1.4         
+ [64] proxy_0.4-26             Rcpp_1.0.7               plyr_1.8.6              
+ [67] classInt_0.4-3           rpart_4.1-15             viridis_0.6.1           
+ [70] haven_2.4.3              hrbrthemes_0.8.0         fs_1.5.0                
+ [73] here_1.0.1               furrr_0.2.3              magrittr_2.0.1          
+ [76] reprex_2.0.1             GPfit_1.0-8              whisker_0.4             
+ [79] R.cache_0.15.0           hms_1.1.0                rnaturalearthhires_0.2.0
+ [82] evaluate_0.14            readxl_1.3.1             gridExtra_2.3           
+ [85] compiler_4.1.1           KernSmooth_2.23-20       crayon_1.4.1            
+ [88] R.oo_1.24.0              htmltools_0.5.2          later_1.3.0             
+ [91] tzdb_0.1.2               lubridate_1.7.10         DBI_1.1.1               
+ [94] dbplyr_2.1.1             MASS_7.3-54              Matrix_1.3-4            
+ [97] cli_3.0.1                R.methodsS3_1.8.1        parallel_4.1.1          
+[100] gower_0.2.2              pkgconfig_2.0.3          tweetrmd_0.0.9          
+[103] sp_1.4-5                 xml2_1.3.2               foreach_1.5.1           
+[106] svglite_2.0.0            vipor_0.4.5              bslib_0.3.0             
+[109] hardhat_0.1.6            webshot_0.5.2            prodlim_2019.11.13      
+[112] snakecase_0.11.0         digest_0.6.27            janitor_2.1.0           
+[115] rmarkdown_2.10           cellranger_1.1.0         gdtools_0.2.3           
+[118] curl_4.3.2               lifecycle_1.0.0          jsonlite_1.7.2          
+[121] viridisLite_0.4.0        fansi_0.5.0              pillar_1.6.2            
+[124] lattice_0.20-44          fastmap_1.1.0            httr_1.4.2              
+[127] survival_3.2-11          glue_1.4.2               conflicted_1.0.4        
+[130] iterators_1.0.13         bit_4.0.4                class_7.3-19            
+[133] stringi_1.7.4            sass_0.4.0               rematch2_2.1.2          
+[136] textshaping_0.3.5        styler_1.5.1             e1071_1.7-8             
+[139] future.apply_1.8.1      </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
