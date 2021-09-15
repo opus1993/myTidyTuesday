@@ -1,0 +1,479 @@
+---
+title: "GDPR Fines"
+author: "Jim Gruman"
+date: 'April 21, 2020'
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(tidymodels)
+library(ggbeeswarm)
+
+library(rnaturalearth)
+library(sf)
+library(ggtext)
+library(rvest)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+This week's [`#TidyTuesday` dataset](https://github.com/rfordatascience/tidytuesday) is on EU GDPR violations.
+
+In addition, R version 4.0.0 **Arbor Day** was just released. I am re-installing packages as-required while going through projects like this one.
+
+The R Studio team recently launched [`tidymodels.org`](https://www.tidymodels.org/), a new central location with resources and documentation for tidymodels packages. Check out the [official blog post](https://www.tidyverse.org/blog/2020/04/tidymodels-org/) for more details. 
+
+Julia Silge published a great blog post with [another screencast demonstrating how to use `tidymodels`](https://juliasilge.com/category/tidymodels/). She includes a good video for folks getting started with `tidymodels`.
+
+## Explore the data
+
+Our modeling goal here is to understand what kind of GDPR violations are associated with higher fines in the [#TidyTuesday dataset](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-04-21/readme.md) for this week. Before we start, what are the most common GDPR articles actually about?  Roughly speaking:
+
+- **Article 5:** principles for processing personal data (legitimate purpose, limited)
+- **Article 6:** lawful processing of personal data (i.e. consent, etc)
+- **Article 13:** inform subject when personal data is collected
+- **Article 15:** right of access by data subject
+- **Article 32:** security of processing (i.e. data breaches)
+
+
+Let's get started by looking at the data on violations.
+
+```{r}
+
+gdpr_raw <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-21/gdpr_violations.tsv')
+
+gdpr_raw %>%
+  head() %>%
+  knitr::kable("html") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped","condensed"),
+                            full_width = F, 
+                            fixed_thead = T) 
+```
+
+How are the fines distributed?
+
+
+```{r p1}
+gdpr_raw %>%
+  ggplot(aes(price + 1)) +
+  geom_histogram(fill = "midnightblue", alpha = 0.7, bins = 40) +
+  scale_x_log10(labels = scales::dollar_format(prefix = "€")) +
+  labs(title = "EU General Data Protection Regulation 2016/679 (GDPR) Fines",
+       subtitle = "Scraped from https://www.privacyaffairs.com/gdpr-fines/",
+       x = "GDPR fine (EUR)", y = "Number of GDPR violations",
+       caption = '@Jim_Gruman | #TidyTuesday') 
+
+
+```
+
+Some of the violations were fined zero EUR. Let's make a one-article-per-row version of this dataset.
+
+```{r}
+gdpr_tidy <- gdpr_raw %>%
+  transmute(id,
+            price,
+            country = name,
+            article_violated, 
+            articles = str_extract_all(article_violated, "Art.[:digit:]+|Art. [:digit:]+")) %>%
+  mutate(total_articles = map_int(articles, length)) %>%
+  unnest(articles) %>%
+  add_count(articles) %>%
+  filter(n > 10) %>%
+  select(-n) 
+
+gdpr_tidy %>% 
+  head() %>%
+  knitr::kable("html") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
+                            full_width = F, fixed_thead = T)
+```
+
+How are the fines distributed by article?
+
+```{r p2}
+gdpr_tidy %>%
+  mutate(articles = str_replace_all(articles, "Art. ", "Article "),
+         articles = fct_reorder(articles, price)) %>%
+  ggplot(aes(articles, price + 1, color = articles, fill = articles)) +
+  geom_boxplot(alpha = 0.2, outlier.colour = NA, show.legend = FALSE) +
+  geom_quasirandom(show.legend = FALSE) +
+  scale_y_log10(labels = scales::dollar_format(prefix = "€")) +
+  labs(x = NULL, y = "GDPR fine (EUR)",
+       title = "GDPR Fines Levied, by Article",
+       subtitle = "For 250 violations in 25 countries",
+       caption = '@Jim_Gruman | #TidyTuesday') 
+
+```
+
+Now let's create a dataset for predictive modeling.
+
+```{r}
+gdpr_violations <- gdpr_tidy %>%
+  mutate(value = 1) %>%
+  select(-article_violated) %>%
+  pivot_wider(names_from = articles, values_from = value,
+              values_fn = list(value = max), values_fill = list(value = 0)) %>%
+  janitor::clean_names()
+
+gdpr_violations %>% 
+  head() %>%
+  knitr::kable("html") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
+                            full_width = F, fixed_thead = T)
+```
+
+## Build a model
+
+Let's preprocess our data to get it ready for modeling.
+
+```{r}
+
+gdpr_rec <- recipe(price ~ ., data = gdpr_violations) %>%
+  update_role(id, new_role = "id") %>%
+  step_log(price, base = 10, offset = 1, skip = TRUE) %>%
+  step_other(country, other = "Other") %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_zv(all_predictors())
+
+gdpr_prep <- prep(gdpr_rec)
+
+gdpr_prep
+```
+
+Let's walk through the steps in this recipe.
+
+- First, we must tell the `recipe()` what our model is going to be (using a formula here) and what data we are using.
+- Next, we update the role for `id`, since this variable is not a predictor or outcome but I would like to keep it in the data for convenience.
+- Next, we take the log of the outcome (`price`, the amount of the fine).
+- There are a lot of countries in this dataset, so let's collapse some of the less frequently occurring countries into another `"Other"` category.
+- Finally, we can create indicator variables and remove varibles with zero variance.
+
+Before using `prep()` these steps have been defined but not actually run or implemented. The `prep()` function is where everything gets evaluated.
+
+Now it's time to specify our model. I am using a [`workflow()`](https://tidymodels.github.io/workflows/) in this example for convenience; these are objects that can help you manage modeling pipelines more easily, with pieces that fit together like Lego blocks. This `workflow()` contains both the recipe and the model (a straightforward Ordinary Least Squares linear regression).
+
+```{r}
+gdpr_wf <- workflow() %>%
+  add_recipe(gdpr_rec) %>%
+  add_model(linear_reg() %>%
+              set_engine("lm"))
+
+gdpr_wf
+```
+
+You can `fit()` a workflow, much like you can fit a model, and then you can pull out the fit object and `tidy()` it to work with the estimates of the linear coefficients.
+
+```{r}
+gdpr_fit <- gdpr_wf %>%
+  fit(data = gdpr_violations)
+
+extract_fit_engine(gdpr_fit) %>% 
+  tidy() %>% 
+  arrange(desc(estimate))
+
+```
+
+GDPR violations of more than one article have higher fines.
+
+## Explore results
+
+Lots of those coefficients have big p-values (for example, all the countries) but I think the best way to understand these results will be to visualize some predictions. You can predict on new data in tidymodels with either a model or a `workflow()`.
+
+Let's create some example new data that we are interested in.
+
+```{r}
+new_gdpr <- crossing(country = "Other",
+                     art_5 = 0:1,
+                     art_6 = 0:1,
+                     art_13 = 0:1,
+                     art_15 = 0:1,
+                     art_32 = 0:1) %>%
+    mutate(id = row_number(),
+           total_articles = art_5 + art_6 + art_13 + art_15 + art_32)
+
+new_gdpr %>%
+    head() %>%
+    knitr::kable("html") %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
+                            full_width = F, fixed_thead = T) 
+```
+
+Let's find both the mean predictions and the confidence intervals.
+
+```{r}
+mean_pred <- predict(gdpr_fit,
+                     new_data = new_gdpr)
+
+conf_int_pred <- predict(gdpr_fit, 
+                         new_data = new_gdpr, 
+                         type = "conf_int")
+
+gdpr_res <- new_gdpr %>% 
+    bind_cols(mean_pred) %>% 
+    bind_cols(conf_int_pred)
+
+gdpr_res %>%
+    head() %>%
+    knitr::kable("html") %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped","condensed"), 
+                            full_width = F, fixed_thead = T) 
+```
+
+There are lots of things we can do wtih these results! For example, what are the predicted GDPR fines for violations of each article type (violating only one article)?
+
+```{r p3}
+gdpr_res %>% 
+    filter(total_articles == 1) %>%
+    pivot_longer(art_5:art_32) %>%
+    filter(value > 0) %>%
+    mutate(name = str_replace_all(name, "art_", "Article "),
+           name = fct_reorder(name, .pred)) %>%
+    ggplot(aes(name, 10 ^ .pred, color = name)) +
+    geom_point(size = 3.5) +
+    geom_errorbar(aes(ymin = 10 ^ .pred_lower, 
+                      ymax = 10 ^ .pred_upper),
+                  width = 0.2, alpha = 0.7) +
+    labs(x = NULL, y = "Increase in fine (EUR)",
+         title = "Predicted Fine for each Type of GDPR Article Violation",
+         subtitle = "Modeling based on 250 violations in 25 countries",
+         caption = '@Jim_Gruman | #TidyTuesday') +
+    scale_y_log10(labels = scales::dollar_format(prefix = "€", accuracy = 1)) 
+
+```
+
+We can see here that violations such as data breaches have higher fines on average than violations about rights of access.
+
+```{r p4}
+# Get countries in dataset as a vector
+gdpr_countries <- gdpr_raw %>% 
+  distinct(name) %>% 
+  pull()
+
+# Get sf objects, filter by countries in dataset
+countries_sf <- rnaturalearth::ne_countries(country = c(gdpr_countries, "Czechia"), scale = "large", returnclass = "sf") %>% 
+  select(name, geometry) %>% 
+  mutate(name = replace(name, name == "Czechia", "Czech Republic"))
+
+# Group fines by country, merge with sf
+countries_map <- gdpr_raw %>% 
+  mutate(name = stringr::str_to_title(name)) %>%  
+  group_by(name) %>% 
+  mutate(
+    price_sum = sum(price),
+    price_label = case_when(
+      round(price_sum / 1e6) > 0 ~ paste0(round(price_sum / 1e6), "M"),
+      round(price_sum / 1e5) > 0 ~ paste0(round(price_sum / 1e6, 1), "M"),
+      round(price_sum / 1e3) > 0 ~ paste0(round(price_sum / 1e3), "K"),
+      price_sum > 0 ~ paste0(round(price_sum / 1e3, 1), " K"),
+      TRUE ~ "0"
+    )
+    ) %>% 
+  left_join(countries_sf) %>% 
+  select(name, price_sum, price_label, geometry) 
+
+# Copied from https://developers.google.com/public-data/docs/canonical/countries_csv
+centroids<-read_html("https://developers.google.com/public-data/docs/canonical/countries_csv") %>%
+  html_node("table") %>%
+  html_table() 
+
+# Dataset for red "arrows" (to draw with geom_polygon)
+price_arrows <- countries_map %>% 
+  select(name, price_sum, price_label) %>% 
+  left_join(centroids) %>%
+  mutate(
+    arrow_x = list(c(longitude - 0.5, longitude, longitude + 0.5, longitude)),
+    arrow_y = list(c(latitude - 0.03, latitude, latitude - 0.03, latitude + price_sum/1.5e6))
+  ) %>% 
+  unnest(c(arrow_x, arrow_y))
+
+ggplot() +
+  # map
+  geom_sf(data = countries_map, aes(geometry = geometry), fill = "#EBE9E1", colour = "grey70", size = 0.25) +
+  # country name
+  geom_text(data = price_arrows, aes(x = longitude - 0.2, y = latitude - 0.4, label = name), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5) +
+  # red price, over 10M
+  geom_text(data = subset(price_arrows, price_sum > 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = "#BA4E35")  +
+  # black price, under 10M
+  geom_text(data = subset(price_arrows, price_sum < 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = "black")  +
+  # red arrows
+    geom_polygon(data = price_arrows, aes(x = arrow_x, y = arrow_y, group = name), fill = "#BA4E35", colour = NA, alpha = 0.8) +
+  # title and caption
+  annotate("richtext", x = -26, y = 80, hjust = 0, vjust = 1,
+           label = "**Total of GDPR fines by country**<br><span style = 'font-size:12pt'>Rounded to nearest million or thousand euro</span><br><span style = 'font-size:8pt'>Source: Privacy Affairs | Graphic: @Jim_Gruman</span>",
+           family = "Helvetica", size = 8, lineheight = 1.1, fill = NA, label.color = NA) +
+  theme_void() +
+  theme(
+    plot.margin = unit(c(20, 20, 20, 20),"pt"),
+    plot.title = element_text(color = "gray40", 
+                              size = 12, family = "Helvetica", face = "bold")
+  ) +
+  coord_sf(xlim = c(-27.5, 37.5), ylim = c(32.5, 82.5), expand = FALSE) +
+  labs(x = NULL,y = NULL)
+
+
+```
+
+David Sjoberg built this incredible chart
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/davsjob/status/1256293020791685123")
+```
+
+```{r p5}
+gdpr_df <- gdpr_raw %>% 
+  group_by(name) %>% 
+  summarise(price = sum(price)) %>% 
+  ungroup()
+
+sdf <- rnaturalearthdata::countries50 %>% 
+  st_as_sf() %>% 
+  st_make_valid() %>% 
+  st_crop(xmin = -24, xmax = 31, ymin = 33, ymax = 73) %>% 
+  filter(admin %in% gdpr_df$name) %>% 
+  left_join(gdpr_df, by = c("admin" = "name")) %>% 
+  mutate(price_cap  = price / pop_est,
+         admin = case_when(admin == "United Kingdom" ~ "UK",
+         admin == "Czech Republic" ~ "Czech",
+         TRUE ~ admin))
+
+ranking <- st_geometry(sdf) %>% 
+  st_point_on_surface() %>% 
+  st_coordinates() %>% 
+  as_tibble() %>% 
+  bind_cols(tibble(fine_cap = BBmisc::normalize(rank(sdf$price_cap), range = c(40.12161, 66.12161), method = "range"),
+                 country = sdf$admin,
+                   xend = 60,
+                   x_axis_start = xend + 10,
+                   fine_cap_x = BBmisc::normalize(sdf$price_cap, range = c(first(x_axis_start), 100), method = "range"),
+                   val_txt = paste0(format(sdf$price_cap, digits = 0, nsmall = 2)),
+                   val_txt2 = if_else(country == "Austria", paste0(val_txt, "€ per capita"), val_txt)))
+
+sdf <- sdf %>% 
+  bind_cols(ranking %>% select(fine_cap))
+
+
+ggplot() +
+  geom_sf(
+    data = sdf,
+    size = .3,
+    fill = "transparent",
+    color = "gray17"
+  ) +
+  # Sigmoid from country to start of barchart
+  ggbump::geom_sigmoid(
+    data = ranking,
+    aes(
+      x = X,
+      y = Y,
+      xend = x_axis_start - .2,
+      yend = fine_cap,
+      group = country,
+      color = fine_cap
+    ),
+    alpha = .6,
+    smooth = 10,
+    size = 1
+  ) +
+  # Line from xstart to value
+  geom_segment(
+    data = ranking,
+    aes(
+      x = x_axis_start,
+      y = fine_cap,
+      xend = fine_cap_x,
+      yend = fine_cap,
+      color = fine_cap
+    ),
+    alpha = .6,
+    size = 1,
+    lineend = "round"
+  ) +
+  # Y axis - black line
+  geom_segment(
+    data = ranking,
+    aes(
+      x = x_axis_start,
+      y = 40,
+      xend = x_axis_start,
+      yend = 67
+    ),
+    alpha = .6,
+    size = 1.3,
+    color = "black"
+  ) +
+  # dot on centroid of country in map
+  geom_point(data = ranking,
+             aes(x = X, y = Y, color = fine_cap),
+             size = 2) +
+  # Country text
+  geom_text(
+    data = ranking,
+    aes(
+      x = x_axis_start - .5,
+      y = fine_cap,
+      label = country,
+      color = fine_cap
+    ),
+    hjust = 1,
+    size = 2.5,
+    nudge_y = .5
+  ) +
+  # Value text
+  geom_text(
+    data = ranking,
+    aes(
+      x = fine_cap_x,
+      y = fine_cap,
+      label = val_txt2,
+      color = fine_cap
+    ),
+    hjust = 0,
+    size = 2,
+    nudge_x = .4
+  ) +
+  coord_sf(clip = "off") +
+  scale_fill_viridis_c(option = "H") +
+  scale_color_viridis_c(option = "H") +
+  theme_void() +
+  labs(
+    title = "GDPR fines per capita",
+    subtitle = str_wrap(
+      "The General Data Protection Regulation (EU) 2016/679 (GDPR) is a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA).",
+      100
+    ),
+    caption = "Source: TidyTuesday & Wikipedia"
+  ) +
+  theme(
+    plot.margin = unit(c(0.5, 1, 0.5, 0.5), "cm"),
+    legend.position = "none",
+    plot.background = element_rect(fill = "black"),
+    plot.caption = element_text(color = "white"),
+    plot.title = element_text(
+      color = "white",
+      size = 16,
+      family = "Helvetica",
+      face = "bold"
+    ),
+    plot.subtitle = element_text(color = "white", size = 8)
+  )
+
+```
+
+
+
