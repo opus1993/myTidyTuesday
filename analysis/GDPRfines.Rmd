@@ -338,8 +338,8 @@ tweetrmd::include_tweet("https://twitter.com/davsjob/status/1256293020791685123"
 ```{r p5}
 gdpr_df <- gdpr_raw %>% 
   group_by(name) %>% 
-  summarise(price = sum(price)) %>% 
-  ungroup()
+  summarise(price = sum(price),
+            .groups = "drop")
 
 sdf <- rnaturalearthdata::countries50 %>% 
   st_as_sf() %>% 
