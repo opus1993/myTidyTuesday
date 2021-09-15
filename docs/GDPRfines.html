@@ -407,16 +407,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree92bc445e016738fa539c5473e388903aa4b6dee1targetblank92bc445a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/92bc445e016738fa539c5473e388903aa4b6dee1" target="_blank">92bc445</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree58a0374eeebea96eee8427ede6f0ab5b88680f3dtargetblank58a0374a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/58a0374eeebea96eee8427ede6f0ab5b88680f3d" target="_blank">58a0374</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree92bc445e016738fa539c5473e388903aa4b6dee1targetblank92bc445a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree58a0374eeebea96eee8427ede6f0ab5b88680f3dtargetblank58a0374a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/92bc445e016738fa539c5473e388903aa4b6dee1" target="_blank">92bc445</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/58a0374eeebea96eee8427ede6f0ab5b88680f3d" target="_blank">58a0374</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -481,6 +481,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/58a0374eeebea96eee8427ede6f0ab5b88680f3d/analysis/GDPRfines.Rmd" target="_blank">58a0374</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-15
+</td>
+<td>
+remove the superfluous raw data table
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/764c09b9d91d86f7416efdd5c60d5315612e13ef/docs/GDPRfines.html" target="_blank">764c09b</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-15
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/opus1993/myTidyTuesday/blob/92bc445e016738fa539c5473e388903aa4b6dee1/analysis/GDPRfines.Rmd" target="_blank">92bc445</a>
 </td>
 <td>
@@ -532,267 +566,7 @@ add tweet attribution and new viridis color scheme
 <li><strong>Article 32:</strong> security of processing (i.e. data breaches)</li>
 </ul>
 <p>Let’s get started by looking at the data on violations.</p>
-<pre class="r"><code>gdpr_raw &lt;- readr::read_tsv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-21/gdpr_violations.tsv&quot;)
-
-gdpr_raw %&gt;%
-  head() %&gt;%
-  knitr::kable(&quot;html&quot;) %&gt;%
-  kableExtra::kable_styling(
-    bootstrap_options = c(&quot;striped&quot;, &quot;condensed&quot;),
-    full_width = F,
-    fixed_thead = T
-  )</code></pre>
-<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-id
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-picture
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-name
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-price
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-authority
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-date
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-controller
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-article_violated
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-type
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-source
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-summary
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/republic-of-poland.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/republic-of-poland.svg</a>
-</td>
-<td style="text-align:left;">
-Poland
-</td>
-<td style="text-align:right;">
-9380
-</td>
-<td style="text-align:left;">
-Polish National Personal Data Protection Office (UODO)
-</td>
-<td style="text-align:left;">
-10/18/2019
-</td>
-<td style="text-align:left;">
-Polish Mayor
-</td>
-<td style="text-align:left;">
-Art. 28 GDPR
-</td>
-<td style="text-align:left;">
-Non-compliance with lawful basis for data processing
-</td>
-<td style="text-align:left;">
-<a href="https://uodo.gov.pl/decyzje/ZSPU.421.3.2019" class="uri">https://uodo.gov.pl/decyzje/ZSPU.421.3.2019</a>
-</td>
-<td style="text-align:left;">
-No data processing agreement has been concluded with the company whose servers contained the resources of the Public Information Bulletin (BIP) of the Municipal Office in Aleksandrów Kujawski. For this reason, a fine of 40.000 PLN (9400 EUR) was imposed on the mayor of the city.
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg</a>
-</td>
-<td style="text-align:left;">
-Romania
-</td>
-<td style="text-align:right;">
-2500
-</td>
-<td style="text-align:left;">
-Romanian National Supervisory Authority for Personal Data Processing (ANSPDCP)
-</td>
-<td style="text-align:left;">
-10/17/2019
-</td>
-<td style="text-align:left;">
-UTTIS INDUSTRIES
-</td>
-<td style="text-align:left;">
-Art. 12 GDPR|Art. 13 GDPR|Art. 5 (1) c) GDPR|Art. 6 GDPR
-</td>
-<td style="text-align:left;">
-Information obligation non-compliance
-</td>
-<td style="text-align:left;">
-<a href="https://www.dataprotection.ro/?page=A_patra_amenda&amp;lang=ro" class="uri">https://www.dataprotection.ro/?page=A_patra_amenda&amp;lang=ro</a>
-</td>
-<td style="text-align:left;">
-A controller was sanctioned because he had unlawfully processed the personal data (CNP), and images of employees obtained through the surveillance system. The disclosure of the CNP in a report for the ISCIR training in 2018 wasn’t legal, as per Art.6 GDPR.
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/spain.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/spain.svg</a>
-</td>
-<td style="text-align:left;">
-Spain
-</td>
-<td style="text-align:right;">
-60000
-</td>
-<td style="text-align:left;">
-Spanish Data Protection Authority (AEPD)
-</td>
-<td style="text-align:left;">
-10/16/2019
-</td>
-<td style="text-align:left;">
-Xfera Moviles S.A.
-</td>
-<td style="text-align:left;">
-Art. 5 GDPR|Art. 6 GDPR
-</td>
-<td style="text-align:left;">
-Non-compliance with lawful basis for data processing
-</td>
-<td style="text-align:left;">
-<a href="https://www.aepd.es/resoluciones/PS-00262-2019_ORI.pdf" class="uri">https://www.aepd.es/resoluciones/PS-00262-2019_ORI.pdf</a>
-</td>
-<td style="text-align:left;">
-The company had unlawfully processed the personal data despite the subject’s request to stop doing so.
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:left;">
-<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/spain.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/spain.svg</a>
-</td>
-<td style="text-align:left;">
-Spain
-</td>
-<td style="text-align:right;">
-8000
-</td>
-<td style="text-align:left;">
-Spanish Data Protection Authority (AEPD)
-</td>
-<td style="text-align:left;">
-10/16/2019
-</td>
-<td style="text-align:left;">
-Iberdrola Clientes
-</td>
-<td style="text-align:left;">
-Art. 31 GDPR
-</td>
-<td style="text-align:left;">
-Failure to cooperate with supervisory authority
-</td>
-<td style="text-align:left;">
-<a href="https://www.aepd.es/resoluciones/PS-00304-2019_ORI.pdf" class="uri">https://www.aepd.es/resoluciones/PS-00304-2019_ORI.pdf</a>
-</td>
-<td style="text-align:left;">
-Iberdrola Clientes violated Article 13 of the GDPR when it showed a complete lack of cooperation with the AEPD. The latter had requested Iberdrola Clientes to provide the necessary information needed to add a person to the solvency list.
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:left;">
-<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg</a>
-</td>
-<td style="text-align:left;">
-Romania
-</td>
-<td style="text-align:right;">
-150000
-</td>
-<td style="text-align:left;">
-Romanian National Supervisory Authority for Personal Data Processing (ANSPDCP)
-</td>
-<td style="text-align:left;">
-10/09/2019
-</td>
-<td style="text-align:left;">
-Raiffeisen Bank SA
-</td>
-<td style="text-align:left;">
-Art. 32 GDPR
-</td>
-<td style="text-align:left;">
-Failure to implement sufficient measures to ensure information security
-</td>
-<td style="text-align:left;">
-<a href="https://www.dataprotection.ro/?page=Comunicat_Presa_09_10_2019&amp;lang=ro" class="uri">https://www.dataprotection.ro/?page=Comunicat_Presa_09_10_2019&amp;lang=ro</a>
-</td>
-<td style="text-align:left;">
-Raiffeisen Bank Romania did not observe the necessary security measures required by the GDPR when it assessed the scores of individuals on the WhatsApp platform. The personal data was exchanged via WhatsApp.
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:left;">
-<a href="https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg" class="uri">https://www.privacyaffairs.com/wp-content/uploads/2019/10/romania.svg</a>
-</td>
-<td style="text-align:left;">
-Romania
-</td>
-<td style="text-align:right;">
-20000
-</td>
-<td style="text-align:left;">
-Romanian National Supervisory Authority for Personal Data Processing (ANSPDCP)
-</td>
-<td style="text-align:left;">
-10/09/2019
-</td>
-<td style="text-align:left;">
-Vreau Credit SRL
-</td>
-<td style="text-align:left;">
-Art. 32 GDPR|Art. 33 GDPR
-</td>
-<td style="text-align:left;">
-Failure to implement sufficient measures to ensure information security
-</td>
-<td style="text-align:left;">
-<a href="https://www.dataprotection.ro/?page=Comunicat_Presa_09_10_2019&amp;lang=ro" class="uri">https://www.dataprotection.ro/?page=Comunicat_Presa_09_10_2019&amp;lang=ro</a>
-</td>
-<td style="text-align:left;">
-The Company sent personal information through the WhatsApp platform to Raiffeisen Bank in order to facilitate the assessment of personal scores. The results were returned on the same platform.
-</td>
-</tr>
-</tbody>
-</table>
+<pre class="r"><code>gdpr_raw &lt;- readr::read_tsv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-21/gdpr_violations.tsv&quot;)</code></pre>
 <p>How are the fines distributed?</p>
 <pre class="r"><code>gdpr_raw %&gt;%
   ggplot(aes(price + 1)) +
@@ -1813,76 +1587,6 @@ Other
   scale_y_log10(labels = scales::dollar_format(prefix = &quot;€&quot;, accuracy = 1))</code></pre>
 <p><img src="figure/GDPRfines.Rmd/p3-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <p>We can see here that violations such as data breaches have higher fines on average than violations about rights of access.</p>
-<pre class="r"><code># Get countries in dataset as a vector
-gdpr_countries &lt;- gdpr_raw %&gt;%
-  distinct(name) %&gt;%
-  pull()
-
-# Get sf objects, filter by countries in dataset
-countries_sf &lt;- rnaturalearth::ne_countries(country = c(gdpr_countries, &quot;Czechia&quot;), scale = &quot;large&quot;, returnclass = &quot;sf&quot;) %&gt;%
-  select(name, geometry) %&gt;%
-  mutate(name = replace(name, name == &quot;Czechia&quot;, &quot;Czech Republic&quot;))
-
-# Group fines by country, merge with sf
-countries_map &lt;- gdpr_raw %&gt;%
-  mutate(name = stringr::str_to_title(name)) %&gt;%
-  group_by(name) %&gt;%
-  mutate(
-    price_sum = sum(price),
-    price_label = case_when(
-      round(price_sum / 1e6) &gt; 0 ~ paste0(round(price_sum / 1e6), &quot;M&quot;),
-      round(price_sum / 1e5) &gt; 0 ~ paste0(round(price_sum / 1e6, 1), &quot;M&quot;),
-      round(price_sum / 1e3) &gt; 0 ~ paste0(round(price_sum / 1e3), &quot;K&quot;),
-      price_sum &gt; 0 ~ paste0(round(price_sum / 1e3, 1), &quot; K&quot;),
-      TRUE ~ &quot;0&quot;
-    )
-  ) %&gt;%
-  left_join(countries_sf) %&gt;%
-  select(name, price_sum, price_label, geometry)
-
-# Copied from https://developers.google.com/public-data/docs/canonical/countries_csv
-centroids &lt;- read_html(&quot;https://developers.google.com/public-data/docs/canonical/countries_csv&quot;) %&gt;%
-  html_node(&quot;table&quot;) %&gt;%
-  html_table()
-
-# Dataset for red &quot;arrows&quot; (to draw with geom_polygon)
-price_arrows &lt;- countries_map %&gt;%
-  select(name, price_sum, price_label) %&gt;%
-  left_join(centroids) %&gt;%
-  mutate(
-    arrow_x = list(c(longitude - 0.5, longitude, longitude + 0.5, longitude)),
-    arrow_y = list(c(latitude - 0.03, latitude, latitude - 0.03, latitude + price_sum / 1.5e6))
-  ) %&gt;%
-  unnest(c(arrow_x, arrow_y))
-
-ggplot() +
-  # map
-  geom_sf(data = countries_map, aes(geometry = geometry), fill = &quot;#EBE9E1&quot;, colour = &quot;grey70&quot;, size = 0.25) +
-  # country name
-  geom_text(data = price_arrows, aes(x = longitude - 0.2, y = latitude - 0.4, label = name), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5) +
-  # red price, over 10M
-  geom_text(data = subset(price_arrows, price_sum &gt; 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = &quot;#BA4E35&quot;) +
-  # black price, under 10M
-  geom_text(data = subset(price_arrows, price_sum &lt; 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = &quot;black&quot;) +
-  # red arrows
-  geom_polygon(data = price_arrows, aes(x = arrow_x, y = arrow_y, group = name), fill = &quot;#BA4E35&quot;, colour = NA, alpha = 0.8) +
-  # title and caption
-  annotate(&quot;richtext&quot;,
-    x = -26, y = 80, hjust = 0, vjust = 1,
-    label = &quot;**Total of GDPR fines by country**&lt;br&gt;&lt;span style = &#39;font-size:12pt&#39;&gt;Rounded to nearest million or thousand euro&lt;/span&gt;&lt;br&gt;&lt;span style = &#39;font-size:8pt&#39;&gt;Source: Privacy Affairs | Graphic: @Jim_Gruman&lt;/span&gt;&quot;,
-    family = &quot;Helvetica&quot;, size = 8, lineheight = 1.1, fill = NA, label.color = NA
-  ) +
-  theme_void() +
-  theme(
-    plot.margin = unit(c(20, 20, 20, 20), &quot;pt&quot;),
-    plot.title = element_text(
-      color = &quot;gray40&quot;,
-      size = 12, family = &quot;Helvetica&quot;, face = &quot;bold&quot;
-    )
-  ) +
-  coord_sf(xlim = c(-27.5, 37.5), ylim = c(32.5, 82.5), expand = FALSE) +
-  labs(x = NULL, y = NULL)</code></pre>
-<p><img src="figure/GDPRfines.Rmd/p4-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <p>David Sjoberg built this incredible chart</p>
 <pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/davsjob/status/1256293020791685123&quot;)</code></pre>
 <blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">😱 I thought it might be a neat idea to combine a map, rank and a bar chart in one plot for <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a>. It was messy but fun.<br><br>Code: <a href="https://t.co/IouFXdvYjf">https://t.co/IouFXdvYjf</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/ggplot?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://t.co/wyHsUGpwKC">pic.twitter.com/wyHsUGpwKC</a></p>&mdash; David Sjöberg (@davsjob) <a href="https://twitter.com/davsjob/status/1256293020791685123?ref_src=twsrc%5Etfw">May 1, 2020</a></blockquote>
@@ -2071,53 +1775,51 @@ other attached packages:
 [28] workflowr_1.6.2    
 
 loaded via a namespace (and not attached):
-  [1] utf8_1.2.2               R.utils_2.10.1           tidyselect_1.1.1        
-  [4] grid_4.1.1               pROC_1.18.0              munsell_0.5.0           
-  [7] codetools_0.2-18         ragg_1.1.3               units_0.7-2             
- [10] future_1.22.1            withr_2.4.2              colorspace_2.0-2        
- [13] ggbump_0.1.0             highr_0.9                knitr_1.34              
- [16] rstudioapi_0.13          wk_0.5.0                 Rttf2pt1_1.3.9          
- [19] listenv_0.8.0            labeling_0.4.2           git2r_0.28.0            
- [22] rnaturalearthdata_0.1.0  bit64_4.0.5              DiceDesign_1.9          
- [25] farver_2.1.0             rprojroot_2.0.2          parallelly_1.28.1       
- [28] vctrs_0.3.8              generics_0.1.0           ipred_0.9-11            
- [31] xfun_0.25                R6_2.5.1                 markdown_1.1            
- [34] lhs_1.1.3                cachem_1.0.6             assertthat_0.2.1        
- [37] promises_1.2.0.1         vroom_1.5.4              nnet_7.3-16             
- [40] rgeos_0.5-7              beeswarm_0.4.0           gtable_0.3.0            
- [43] globals_0.14.0           timeDate_3043.102        rlang_0.4.11            
- [46] BBmisc_1.11              systemfonts_1.0.2        splines_4.1.1           
- [49] extrafontdb_1.0          selectr_0.4-2            checkmate_2.0.0         
- [52] s2_1.0.6                 yaml_2.2.1               modelr_0.1.8            
- [55] backports_1.2.1          httpuv_1.6.2             gridtext_0.1.4          
- [58] extrafont_0.17           tools_4.1.1              lava_1.6.10             
- [61] ellipsis_0.3.2           kableExtra_1.3.4         jquerylib_0.1.4         
- [64] proxy_0.4-26             Rcpp_1.0.7               plyr_1.8.6              
- [67] classInt_0.4-3           rpart_4.1-15             viridis_0.6.1           
- [70] haven_2.4.3              hrbrthemes_0.8.0         fs_1.5.0                
- [73] here_1.0.1               furrr_0.2.3              magrittr_2.0.1          
- [76] reprex_2.0.1             GPfit_1.0-8              whisker_0.4             
- [79] R.cache_0.15.0           hms_1.1.0                rnaturalearthhires_0.2.0
- [82] evaluate_0.14            readxl_1.3.1             gridExtra_2.3           
- [85] compiler_4.1.1           KernSmooth_2.23-20       crayon_1.4.1            
- [88] R.oo_1.24.0              htmltools_0.5.2          later_1.3.0             
- [91] tzdb_0.1.2               lubridate_1.7.10         DBI_1.1.1               
- [94] dbplyr_2.1.1             MASS_7.3-54              Matrix_1.3-4            
- [97] cli_3.0.1                R.methodsS3_1.8.1        parallel_4.1.1          
-[100] gower_0.2.2              pkgconfig_2.0.3          tweetrmd_0.0.9          
-[103] sp_1.4-5                 xml2_1.3.2               foreach_1.5.1           
-[106] svglite_2.0.0            vipor_0.4.5              bslib_0.3.0             
-[109] hardhat_0.1.6            webshot_0.5.2            prodlim_2019.11.13      
-[112] snakecase_0.11.0         digest_0.6.27            janitor_2.1.0           
-[115] rmarkdown_2.10           cellranger_1.1.0         gdtools_0.2.3           
-[118] curl_4.3.2               lifecycle_1.0.0          jsonlite_1.7.2          
-[121] viridisLite_0.4.0        fansi_0.5.0              pillar_1.6.2            
-[124] lattice_0.20-44          fastmap_1.1.0            httr_1.4.2              
-[127] survival_3.2-11          glue_1.4.2               conflicted_1.0.4        
-[130] iterators_1.0.13         bit_4.0.4                class_7.3-19            
-[133] stringi_1.7.4            sass_0.4.0               rematch2_2.1.2          
-[136] textshaping_0.3.5        styler_1.5.1             e1071_1.7-8             
-[139] future.apply_1.8.1      </code></pre>
+  [1] utf8_1.2.2              R.utils_2.10.1          tidyselect_1.1.1       
+  [4] grid_4.1.1              pROC_1.18.0             munsell_0.5.0          
+  [7] codetools_0.2-18        ragg_1.1.3              units_0.7-2            
+ [10] future_1.22.1           withr_2.4.2             colorspace_2.0-2       
+ [13] ggbump_0.1.0            highr_0.9               knitr_1.34             
+ [16] rstudioapi_0.13         wk_0.5.0                Rttf2pt1_1.3.9         
+ [19] listenv_0.8.0           labeling_0.4.2          git2r_0.28.0           
+ [22] rnaturalearthdata_0.1.0 bit64_4.0.5             DiceDesign_1.9         
+ [25] farver_2.1.0            rprojroot_2.0.2         parallelly_1.28.1      
+ [28] vctrs_0.3.8             generics_0.1.0          ipred_0.9-11           
+ [31] xfun_0.25               R6_2.5.1                lhs_1.1.3              
+ [34] cachem_1.0.6            assertthat_0.2.1        promises_1.2.0.1       
+ [37] vroom_1.5.4             nnet_7.3-16             beeswarm_0.4.0         
+ [40] gtable_0.3.0            globals_0.14.0          timeDate_3043.102      
+ [43] rlang_0.4.11            BBmisc_1.11             systemfonts_1.0.2      
+ [46] splines_4.1.1           extrafontdb_1.0         checkmate_2.0.0        
+ [49] s2_1.0.6                yaml_2.2.1              modelr_0.1.8           
+ [52] backports_1.2.1         httpuv_1.6.2            gridtext_0.1.4         
+ [55] extrafont_0.17          tools_4.1.1             lava_1.6.10            
+ [58] ellipsis_0.3.2          kableExtra_1.3.4        jquerylib_0.1.4        
+ [61] proxy_0.4-26            Rcpp_1.0.7              plyr_1.8.6             
+ [64] classInt_0.4-3          rpart_4.1-15            viridis_0.6.1          
+ [67] haven_2.4.3             hrbrthemes_0.8.0        fs_1.5.0               
+ [70] here_1.0.1              furrr_0.2.3             magrittr_2.0.1         
+ [73] reprex_2.0.1            GPfit_1.0-8             whisker_0.4            
+ [76] R.cache_0.15.0          hms_1.1.0               evaluate_0.14          
+ [79] readxl_1.3.1            gridExtra_2.3           compiler_4.1.1         
+ [82] KernSmooth_2.23-20      crayon_1.4.1            R.oo_1.24.0            
+ [85] htmltools_0.5.2         later_1.3.0             tzdb_0.1.2             
+ [88] lubridate_1.7.10        DBI_1.1.1               dbplyr_2.1.1           
+ [91] MASS_7.3-54             Matrix_1.3-4            cli_3.0.1              
+ [94] R.methodsS3_1.8.1       parallel_4.1.1          gower_0.2.2            
+ [97] pkgconfig_2.0.3         tweetrmd_0.0.9          sp_1.4-5               
+[100] xml2_1.3.2              foreach_1.5.1           svglite_2.0.0          
+[103] vipor_0.4.5             bslib_0.3.0             hardhat_0.1.6          
+[106] webshot_0.5.2           prodlim_2019.11.13      snakecase_0.11.0       
+[109] digest_0.6.27           janitor_2.1.0           rmarkdown_2.10         
+[112] cellranger_1.1.0        gdtools_0.2.3           curl_4.3.2             
+[115] lifecycle_1.0.0         jsonlite_1.7.2          viridisLite_0.4.0      
+[118] fansi_0.5.0             pillar_1.6.2            lattice_0.20-44        
+[121] fastmap_1.1.0           httr_1.4.2              survival_3.2-11        
+[124] glue_1.4.2              conflicted_1.0.4        iterators_1.0.13       
+[127] bit_4.0.4               class_7.3-19            stringi_1.7.4          
+[130] sass_0.4.0              rematch2_2.1.2          textshaping_0.3.5      
+[133] styler_1.5.1            e1071_1.7-8             future.apply_1.8.1     </code></pre>
 </div>
 </div>
 
