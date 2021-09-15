@@ -344,11 +344,11 @@ po_wf <- workflow() %>%
   add_model(svm_spec)
 ```
 
-Let's explore tuning levels of token filtering between 80 and 400.
+Let's explore tuning levels of token filtering between 200 and 600.
 
 ```{r po_params}
 po_params <- parameters(po_wf) %>% 
-  update(max_tokens = max_tokens(c(80, 400)))
+  update(max_tokens = max_tokens(c(200, 600)))
 ```
 
 
@@ -441,7 +441,7 @@ liblinear_df %>%
     y = NULL,
     fill = NULL,
     title = "Which subwords in a US Post Office names are used more in Hawaii?",
-    subtitle = "Subwords like A, _H, U, and O are the strongest predictors of a post office being in Hawaii"
+    subtitle = "Subwords like A and _H are the strongest predictors of a post office being in Hawaii"
   )
 
 ```
