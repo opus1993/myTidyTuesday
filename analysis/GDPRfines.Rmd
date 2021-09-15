@@ -58,12 +58,6 @@ Let's get started by looking at the data on violations.
 
 gdpr_raw <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-21/gdpr_violations.tsv')
 
-gdpr_raw %>%
-  head() %>%
-  knitr::kable("html") %>%
-  kableExtra::kable_styling(bootstrap_options = c("striped","condensed"),
-                            full_width = F, 
-                            fixed_thead = T) 
 ```
 
 How are the fines distributed?
@@ -258,76 +252,6 @@ gdpr_res %>%
 ```
 
 We can see here that violations such as data breaches have higher fines on average than violations about rights of access.
-
-```{r p4}
-# Get countries in dataset as a vector
-gdpr_countries <- gdpr_raw %>% 
-  distinct(name) %>% 
-  pull()
-
-# Get sf objects, filter by countries in dataset
-countries_sf <- rnaturalearth::ne_countries(country = c(gdpr_countries, "Czechia"), scale = "large", returnclass = "sf") %>% 
-  select(name, geometry) %>% 
-  mutate(name = replace(name, name == "Czechia", "Czech Republic"))
-
-# Group fines by country, merge with sf
-countries_map <- gdpr_raw %>% 
-  mutate(name = stringr::str_to_title(name)) %>%  
-  group_by(name) %>% 
-  mutate(
-    price_sum = sum(price),
-    price_label = case_when(
-      round(price_sum / 1e6) > 0 ~ paste0(round(price_sum / 1e6), "M"),
-      round(price_sum / 1e5) > 0 ~ paste0(round(price_sum / 1e6, 1), "M"),
-      round(price_sum / 1e3) > 0 ~ paste0(round(price_sum / 1e3), "K"),
-      price_sum > 0 ~ paste0(round(price_sum / 1e3, 1), " K"),
-      TRUE ~ "0"
-    )
-    ) %>% 
-  left_join(countries_sf) %>% 
-  select(name, price_sum, price_label, geometry) 
-
-# Copied from https://developers.google.com/public-data/docs/canonical/countries_csv
-centroids<-read_html("https://developers.google.com/public-data/docs/canonical/countries_csv") %>%
-  html_node("table") %>%
-  html_table() 
-
-# Dataset for red "arrows" (to draw with geom_polygon)
-price_arrows <- countries_map %>% 
-  select(name, price_sum, price_label) %>% 
-  left_join(centroids) %>%
-  mutate(
-    arrow_x = list(c(longitude - 0.5, longitude, longitude + 0.5, longitude)),
-    arrow_y = list(c(latitude - 0.03, latitude, latitude - 0.03, latitude + price_sum/1.5e6))
-  ) %>% 
-  unnest(c(arrow_x, arrow_y))
-
-ggplot() +
-  # map
-  geom_sf(data = countries_map, aes(geometry = geometry), fill = "#EBE9E1", colour = "grey70", size = 0.25) +
-  # country name
-  geom_text(data = price_arrows, aes(x = longitude - 0.2, y = latitude - 0.4, label = name), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5) +
-  # red price, over 10M
-  geom_text(data = subset(price_arrows, price_sum > 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = "#BA4E35")  +
-  # black price, under 10M
-  geom_text(data = subset(price_arrows, price_sum < 10e6), aes(x = longitude - 0.2, y = latitude - 2, label = price_label), check_overlap = TRUE, hjust = 0, vjust = 1, size = 3.5, colour = "black")  +
-  # red arrows
-    geom_polygon(data = price_arrows, aes(x = arrow_x, y = arrow_y, group = name), fill = "#BA4E35", colour = NA, alpha = 0.8) +
-  # title and caption
-  annotate("richtext", x = -26, y = 80, hjust = 0, vjust = 1,
-           label = "**Total of GDPR fines by country**<br><span style = 'font-size:12pt'>Rounded to nearest million or thousand euro</span><br><span style = 'font-size:8pt'>Source: Privacy Affairs | Graphic: @Jim_Gruman</span>",
-           family = "Helvetica", size = 8, lineheight = 1.1, fill = NA, label.color = NA) +
-  theme_void() +
-  theme(
-    plot.margin = unit(c(20, 20, 20, 20),"pt"),
-    plot.title = element_text(color = "gray40", 
-                              size = 12, family = "Helvetica", face = "bold")
-  ) +
-  coord_sf(xlim = c(-27.5, 37.5), ylim = c(32.5, 82.5), expand = FALSE) +
-  labs(x = NULL,y = NULL)
-
-
-```
 
 David Sjoberg built this incredible chart
 
