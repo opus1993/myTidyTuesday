@@ -1,0 +1,205 @@
+---
+title: "Billboard Top 100"
+author: "Jim Gruman"
+date: 'September 15, 2021'
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(tidymodels)
+
+library(ggtext)
+
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 10))
+
+```
+
+This week's [`#TidyTuesday` dataset](https://github.com/rfordatascience/tidytuesday) is on Billboard Hot 100 song data.
+
+Before diving into my own work, I'd like recognize the amazing work of a few others:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/issa_madjid/status/1437894988864626693")
+```
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/TannerFlorian/status/1438116383280095237")
+```
+
+Let's load the data and have a look around.
+
+```{r}
+tt <- tidytuesdayR::tt_load("2021-09-14")
+billboard <- tt$billboard
+audio_features <- tt$audio_features
+
+```
+
+I'm interested in joining the Spotify attributes to the Billboard standings to look for a better understanding of what makes a number one hit song.
+
+```{r}
+`%!in%` <- Negate(`%in%`)
+
+top_hits <- billboard %>% 
+  left_join(audio_features) %>% 
+  filter(!is.na(loudness), # remove those without audio features
+         peak_position == 1) %>% 
+  mutate(spotify_track_duration_sec = round(spotify_track_duration_ms/1000)) %>%   pivot_longer(cols = c(spotify_track_duration_sec, 
+                        danceability, 
+                        energy, 
+                        loudness, 
+                        speechiness, 
+                        acousticness, 
+                        instrumentalness, 
+                        liveness, 
+                        valence, 
+                        tempo, 
+                        time_signature, 
+                        spotify_track_popularity), 
+               names_to = "quant_feature", 
+               values_to = "quant_value") %>% 
+  mutate(week_id = lubridate::mdy(week_id)) %>% 
+  group_by(song_id) %>% 
+  slice_max(weeks_on_chart, n = 1) %>%  # selecting last instance on charts
+  mutate(quant_feature = str_to_title(quant_feature),
+         quant_feature = case_when(
+           quant_feature == "Loudness" ~ "Loudness [db]",
+           quant_feature == "Spotify_track_duration_sec" ~ "Duration [sec]",
+           quant_feature == "Tempo" ~ "Tempo [BPM]",
+           quant_feature == "Time_signature" ~ "Time Signature",
+           quant_feature == "Spotify_track_popularity" ~ "Popularity",
+           TRUE ~ quant_feature
+         )) %>% ungroup()
+
+```
+```{r}
+labels_min <- top_hits %>%
+  filter(weeks_on_chart > 52) %>%
+  select(performer, song, week_id, quant_feature, quant_value) %>%
+  group_by(quant_feature) %>%
+  slice_min(n = 1, quant_value) %>%
+  mutate(label = str_c(performer, " -", "\n", song),
+         label = str_replace(label, " Featuring ", ", ")) %>%
+  filter(quant_feature %!in% c("Time Signature", "Instrumentalness")) %>% 
+  dplyr::distinct()
+```
+
+
+```{r}
+labels_max <- top_hits %>%
+  filter(weeks_on_chart > 52) %>%
+  select(performer, song, week_id, quant_feature, quant_value) %>%
+  group_by(quant_feature) %>%
+  slice_max(n = 1, quant_value)%>%
+  mutate(label = str_c(performer, "\n", song),
+         label = str_replace(label, " Featuring ", ", "))%>%
+  filter(quant_feature %!in% c("Time Signature", "Instrumentalness")) %>% 
+  dplyr::distinct()
+```
+
+```{r}
+labelled <- top_hits %>%  
+  left_join(labels_max %>% bind_rows(labels_min)) %>% 
+  dplyr::distinct()
+```
+
+```{r}
+plot_subtitle <- "Spotify audio features of #1 hits on the Billboard Hot 100 from 1960 to 2020. The Billboard Hot 100 is the music industry standard record chart in the United States for individual songs. Chart rankings are based on sales (physical and digital), radio play, and online streaming in the United States. The graphic shows the audio features of all #1 hits that remained in the Hot 100, aggregated by hex bins"
+
+key <- "**Acousticness** - A confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic.<br>
+**Danceability** describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable.<br>
+**Energy** is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. For example, death metal has high energy, while a Bach prelude scores low on the scale. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy.<br>
+**Instrumentalness** predicts whether a track contains no vocals. “Ooh” and “aah” sounds are treated as instrumental in this context. Rap or spoken word tracks are clearly “vocal”. The closer the instrumentalness value is to 1.0, the greater likelihood the track contains no vocal content. Values above 0.5 are intended to represent instrumental tracks, but confidence is higher as the value approaches 1.0.<br>
+**Liveness** detects the presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live. A value above 0.8 provides strong likelihood that the track is live.<br>
+**Loudness** - The overall loudness of a track in decibels (dB). Loudness values are averaged across the entire track and are useful for comparing relative loudness of tracks. Loudness is the quality of a sound that is the primary psychological correlate of physical strength (amplitude). Values typical range between -60 and 0 db.<br>
+**Speechiness** detects the presence of spoken words in a track. The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 0.33 and 0.66 describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 0.33 most likely represent music and other non-speech-like tracks.<br>
+**Tempo** - The overall estimated tempo of a track in beats per minute (BPM). In musical terminology, tempo is the speed or pace of a given piece and derives directly from the average beat duration.<br>
+**Valence** - A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
+<br><br>
+**Data:** Data.World by way of Sean Miller, Billboard.com and Spotify | **Graphic:** @jim_gruman adapted from @TannerFlorian"
+
+```
+
+Another take on Tanner's work, adapted in new colors and aggregated by hex bins to possible improve on the over-plotting problem:
+
+```{r, fig.asp=1.2}
+
+labelled %>% 
+ ggplot() +
+  stat_summary_hex(
+    aes(x = week_id, y = quant_value, z = weeks_on_chart ),
+    alpha = 0.9, 
+    bins = 10) +
+  geom_smooth(
+    aes(x = week_id, y = quant_value),
+    color = "black",
+    size = 1.2,
+    se = FALSE,
+    method = "loess",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(aes(x = week_id, y = quant_value),
+              color = "#e6e6f1",
+    method = "loess",
+    formula = "y ~ x") +
+  geom_point(
+        data = labelled %>% filter(!is.na(label)),
+        aes(x = week_id, y = quant_value),
+        size = 1, color = "black"
+  ) +
+  ggrepel::geom_text_repel(
+    data = labelled %>% filter(!is.na(label)),
+    aes(x = week_id, y = quant_value, label = label),
+    min.segment.length = 0,
+    seed = 42,
+    box.padding = 0.5,
+    color = "black",
+    bg.r = 0.1 ,
+    size = 3,
+    max.overlaps = 50
+  ) +
+  facet_wrap( ~ quant_feature, scales = "free_y") +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    plot.subtitle = element_textbox_simple(
+      size = 13,
+      lineheight = 1.3,
+      padding = margin(5.5, 5.5, 5.5, 5.5),
+      margin = margin(0, 0, 5.5, 0),
+      maxheight = NULL
+    ),
+    plot.title = element_text(size = 30),
+    plot.caption = element_textbox_simple(
+      size = 9,
+      lineheight = 1.2,
+      padding = margin(5.5, 5.5, 5.5, 5.5),
+      margin = margin(25, 0, 0, 0),
+      maxheight = NULL
+    )
+  ) +
+  labs(title = "How to Write a Hit Song",
+       subtitle = plot_subtitle,
+       caption = key,
+       fill = "Avg\nWeeks\non\nChart")
+```
+
+----
+
