@@ -1,0 +1,482 @@
+---
+title: "Friends"
+date: "September 8, 2020"
+author: "Jim Gruman"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+The data this week comes from the `friends` R package for the Friends transcripts and information on the episodes themselves, like when the characters interact with one another.
+
+There's text, appearance, ratings, and many other datasets here. We will check out the `tidytext` mining package and the newly released [Supervised Machine Learning for Text Analysis in R](https://smltar.com/) book, both which are freely available online.
+
+```{r setup, include=FALSE}
+
+suppressPackageStartupMessages({
+extrafont::loadfonts(device="win", quiet = TRUE)
+library(tidyverse)
+library(tidytext)
+library(tidylo)
+library(ragg)
+library(showtext)
+library(glue)
+library(ggbump)
+library(ggdist)
+})
+
+font_add(family = "Gabriel Weiss' Friends Font", 
+         regular = "C:/Users/jimgr/AppData/Local/Microsoft/Windows/Fonts/GABRWFFR.TTF") 
+font_add(family = "IBM Plex Sans", 
+         regular = "C:/Users/jimgr/Documents/R/win-library/4.1/hrbrthemes/fonts/plex-sans/IBMPlexSans-Regular.TTF")
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+friends_pal <- c("#F74035", "#008F48","#3F9DD4" , "#9787CD", "#F6D400", "#941205")
+
+```
+
+Download the weekly data and make available in the `tt` object.
+
+```{r Load}
+
+tt <- tidytuesdayR::tt_load("2020-09-08")
+
+```
+
+
+```{r Wrangle}
+
+friends_text <- tt$friends %>%
+    inner_join(tt$friends_info, by = c("season", "episode")) %>%
+    mutate(episode_title = glue("{ season }.{ episode } {title}"),
+           episode_title = fct_reorder(episode_title, season + .001*episode),
+           text = parse_character(text))
+
+epi.info <- tt$friends_info
+emotion <- tt$friends_emotions
+
+main_characters <- friends_text %>%
+  count(speaker, sort = TRUE) %>%
+  head(6) %>%
+  select(speaker) %>%
+  separate(speaker, into = c("firstname", "lastname"), remove = FALSE)
+
+main_characters %>%
+  pull(speaker)
+
+```
+
+# Words each Character had per season
+
+With inspiration from Dr. Christian Hoggard @CSHoggard
+
+```{r parse}
+friends_parsed <- friends_text %>% 
+  filter(speaker %in% main_characters$speaker) %>%
+  mutate(
+    word_count = str_count(text, "\\w+"),
+    speaker = word(speaker)
+  ) %>%
+  select(-utterance, -scene) %>% 
+  group_by(speaker, season) %>%
+  summarise(word_sum = sum(word_count),
+            .groups = "drop")
+
+friends_parsed %>% 
+  group_by(speaker) %>%
+  summarise(total_sum = sum(word_sum),
+            .groups = "drop") %>% 
+  knitr::kable()
+```
+
+```{r logo}
+img_friends <- "https://turbologo.com/articles/wp-content/uploads/2019/12/friends-logo-cover-678x381.png."
+```
+
+```{r WhoSpokeTheMost, warning=FALSE}
+p <-
+  ggplot(friends_parsed, aes(season, word_sum, color = speaker)) +
+  geom_line(size = 1) +
+  geom_point(size = 3) +
+  lims(y = c(5000, 14000)) +
+  scale_x_continuous(n.breaks = 10) +
+  scale_colour_manual(values = friends_pal) +
+  labs(
+    title = "Who Spoke the Most?",
+    subtitle = "Number of words per season",
+    caption = "@jim_gruman | Source: friends R package | #TidyTuesday",
+    x = "Season",
+    y = NULL
+  ) +
+  annotate(
+    "text",
+    x = 8,
+    y = 13500,
+    size = 4,
+    color = "grey97",
+    family = "IBM Plex Sans",
+    label = "Rachel spoke over 17,000 words \n more than Pheobe!"
+  ) +
+  guides(colour = guide_legend(nrow = 1, 
+                               override.aes = list(linetype = 0, size = 4))) +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    legend.text = element_text(color = "grey97", 
+                               size = 11,
+                               family = "IBM Plex Sans"),
+    plot.margin = margin(20, 20, 20, 20),
+    plot.background = element_rect(fill = "#000000"),
+    panel.grid.major = element_line(
+      size = 0.35,
+      linetype = 'solid',
+      colour = "grey10"
+    ),
+    panel.grid.minor = element_line(
+      size = 0.3,
+      linetype = 'solid',
+      colour = "grey10"
+    ),
+    axis.text.x = element_text(color = "grey97",
+                               family = "IBM Plex Sans"),
+    axis.title.x = element_text(color = "grey97", 
+                                margin = margin(20, 0, 5, 0),
+                                family = "IBM Plex Sans"),
+    axis.text.y = element_text(color = "grey97", 
+                               margin = margin(0, 20, 0, 5),
+                               family = "IBM Plex Sans"),
+    axis.title.y = element_text(color = "grey97",
+                                family = "IBM Plex Sans"),
+    plot.title = element_text(
+      color = "#9C61FD",
+      size = 32,
+      hjust = 0.5,
+      margin = margin(0, 0, 10, 0),
+      family = "Gabriel Weiss' Friends Font",
+      face = "plain"
+    ),
+    plot.subtitle = element_text(
+      color = "grey97",
+      size = 12,
+      hjust = 0.5,
+      margin = margin(0, 0, 10, 0),
+      family = "Gabriel Weiss' Friends Font",
+      face = "plain"
+    ),
+    plot.caption = element_text(
+      size = 9,
+      colour = "grey97",
+      margin = margin(20, 0, 0, 0),
+      family = "IBM Plex Sans"
+    )
+  ) 
+
+cowplot::ggdraw() +
+  cowplot::draw_plot(p) +
+  cowplot::draw_image(img_friends, scale = 0.2, y = -0.45, x = -0.4)
+
+
+```
+
+# Visualize the Lines by Season in Ranks
+
+From David Smale @committedtotape
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/committedtotape/status/1303805992304627713")
+```
+
+
+```{r Ranks}
+lines_by_season <- friends_text %>% 
+  filter(speaker %in% main_characters$speaker) %>%
+  count(season, speaker, name = "lines") %>%
+  group_by(season) %>%
+  arrange(season, -lines) %>%
+  mutate(rank = row_number()) %>%
+  inner_join(main_characters, by = "speaker") 
+
+
+lines_by_season %>%
+  ggplot(aes(season, rank, color = firstname)) +
+  geom_point(size = 7) +
+  geom_text(
+    data = lines_by_season %>% filter(season == 1),
+    aes(x = season - .2, label = firstname),
+    size = 6,
+    hjust = 1
+  ) +
+  geom_text(
+    data = lines_by_season %>% filter(season == 10),
+    aes(x = season + .2, label = firstname),
+    size = 6,
+    hjust = 0
+  ) +
+  geom_bump(size = 2, smooth = 5) +
+  scale_x_continuous(
+    limits = c(0, 11),
+    breaks = seq(1, 10, 1),
+    position = "top"
+  ) +
+  scale_y_reverse(breaks = seq(1, 6, 1),
+                  position = "left") +
+  scale_color_manual(values = friends_pal) +
+  labs(
+    title = "Aw, Phoebs!",
+    subtitle = "Friends ranked by number of lines per season \nPhoebe has the fewest lines in 5 of 10 seasons",
+    caption = "Data: friends R package ",
+    x = "Season",
+    y = NULL
+  ) +
+  theme(
+    legend.position = "none",
+    plot.background = element_rect(fill = "#000000", color = "gray10"),
+    axis.text.x = element_text(color = "gray90", size = 16),
+    axis.text.y = element_text(color = "gray90", size = 16),
+    axis.title.x.top = element_text(
+      color = "gray90",
+      size = 16,
+      hjust = 0.5,
+      margin = margin(0, 0, 10, 0)
+    ),
+    axis.title.y.left = element_text(
+      color = "gray90",
+      size = 16,
+      hjust = 0,
+      vjust = 0.5,
+      angle = 0
+    ),
+    plot.title = element_text(
+      color = "#9C61FD",
+      hjust = 0.5,
+      size = 34,
+      margin = margin(0, 0, 10, 0),
+      family = "Gabriel Weiss' Friends Font",
+      face = "plain"
+    ),
+    plot.subtitle = element_text(
+      color = "gray90",
+      hjust = 0.5,
+      size = 16,
+      margin = margin(0, 0, 20, 0),
+      family = "Gabriel Weiss' Friends Font",
+      face = "plain"
+    ),
+    plot.caption = element_text(
+      color = "gray90",
+      hjust = 1,
+      size = 10,
+      margin = margin(20, 0, 5, 0)
+    ),
+    plot.margin = margin(20, 20, 20, 20),
+    panel.grid.major = element_line(
+      size = 0.35,
+      linetype = 'solid',
+      colour = "grey10"
+    ),
+    panel.grid.minor = element_line(
+      size = 0.3,
+      linetype = 'solid',
+      colour = "grey10"
+    )
+  )
+
+```
+
+Let's model features with regression to infer what features drive imdb_rating
+
+```{r LinesPerEpisode}
+
+speaker_lines_per_episode <- friends_text %>% 
+  count(speaker, episode_title, imdb_rating) %>% 
+  complete(speaker, episode_title, fill = list(n = 0)) %>% 
+  group_by(episode_title) %>%
+  fill(imdb_rating, .direction = "downup") %>% 
+  ungroup() %>% 
+  add_count(episode_title, wt = n, name = "episode_total") %>% 
+  mutate(pct = n / episode_total)
+
+speaker_lines_per_episode %>%
+  semi_join(main_characters, by = "speaker") %>%
+  mutate(speaker = fct_reorder(speaker, n)) %>% 
+  ggplot(aes(pct, 
+             speaker,
+             color = speaker,
+             fill = speaker)) +
+  ggdist::stat_dots(show.legend = FALSE,
+                    side = "both",
+                    layout = "weave") +
+  ggrepel::geom_text_repel(data = . %>% filter(pct > 0.32),
+            aes(label = episode_title),
+            direction = "x",
+            show.legend = FALSE) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "", y = "",
+       title = "Lines portion within each episode",
+       fill = function(x) paste0(as.numeric(x)*100, "%"),
+       caption = "Data: friends R package | Visual by @jim_gruman") +
+  coord_flip() +
+  theme(
+      plot.title = element_text(
+      color = "#9C61FD",
+      hjust = 0.5,
+      size = 34,
+      margin = margin(0, 0, 10, 0),
+      family = "Gabriel Weiss' Friends Font",
+      face = "plain"
+    ),
+    plot.background = element_rect(fill = "#000000", color = "gray10"),
+    plot.caption = element_text(
+      color = "gray90",
+      hjust = 1,
+      size = 10,
+      margin = margin(20, 0, 5, 0)
+    ),
+    plot.margin = margin(20, 20, 20, 20),
+    panel.grid.major = element_line(
+      size = 0.35,
+      linetype = 'solid',
+      colour = "grey10"
+    ),
+    panel.grid.minor = element_line(
+      size = 0.3,
+      linetype = 'solid',
+      colour = "grey10"
+    )
+)
+
+speaker_lines_per_episode %>% 
+  semi_join(main_characters, by = "speaker") %>% 
+  group_by(speaker) %>% 
+  summarize(correlation = cor(pct,imdb_rating)) %>% 
+  knitr::kable()
+
+# setup the training set
+speakers_per_episode_wide <- speaker_lines_per_episode %>% 
+  semi_join(main_characters, by = "speaker") %>% 
+  select(episode_title, speaker, pct, imdb_rating, episode_total) %>% 
+  spread(speaker, pct) %>%
+  select(-episode_title)
+
+speakers_per_episode_wide %>% 
+  lm(imdb_rating ~ ., data = .) %>% 
+  summary() 
+
+```
+
+The more Ross speaks, the more popular the episode is
+
+Let's look at words, and weighted log-odds ratios
+
+```{r uniqueSentiments}
+
+words_unnested <- friends_text %>%
+   left_join(emotion, by = c("season", "episode", "utterance")) %>% 
+   select(text, speaker, season, episode_title, emotion) %>% 
+   unnest_tokens(word, text, to_lower = FALSE) %>% 
+   anti_join(stop_words, by = "word") %>% 
+   filter(!word %in% c("yeah","hey","gonna","uh", "y'know", "um", "ah", "um", "la", "wh"),
+          !str_detect(word, "[:digit:]|^aa"),
+          !is.na(emotion), 
+          emotion != "Neutral" ) %>% 
+  mutate(word = str_to_lower(word))
+
+words_unnested %>% 
+  count(word, sort = TRUE) %>% 
+  slice_max(order_by = n, n = 15) %>% 
+  knitr::kable()
+
+by_speaker_word <- words_unnested %>%
+  semi_join(main_characters, by = "speaker") %>% 
+  count(speaker, word, emotion, name = "n_emotion") %>% 
+  group_by(speaker, word) %>% 
+  summarize(n = sum(n_emotion),
+            emotion =  first(emotion, order_by = -n_emotion),
+            .groups = "drop") 
+
+# what are the most over-represented words for each character?
+unique_sentiments <-  by_speaker_word %>% 
+  bind_log_odds(speaker, word, n) %>% 
+  group_by(speaker) %>% 
+  slice_max(log_odds_weighted, n = 12) %>% 
+  mutate(size = scales::rescale(log_odds_weighted, to = c(3,9)))
+
+```
+
+# Visualize a word cloud with words most representative of each character and most common emotional sentiment
+
+Jack Davison @JDavison_ inspired this beautiful word cloud
+
+Credit David Robinson for the `tidylo` insight 
+
+```{r word_cloud, fig.asp = 0.7}
+ggplot(unique_sentiments,
+       aes(
+         label = word,
+         size = log_odds_weighted,
+         color = emotion,
+         alpha = log_odds_weighted
+       )) +
+  ggwordcloud::geom_text_wordcloud_area(area_corr_power = 1) +
+  facet_wrap(~ speaker) +
+  scale_radius(range = c(3, 20)) +
+  scale_color_manual(values = friends_pal) +
+  scale_alpha(range = c(.5, 1)) +
+  theme(
+    plot.background = element_rect(fill = "#000000", color = NA),
+    strip.text = element_text(
+      family = "Gabriel Weiss' Friends Font",
+      size = 20,
+      color = "white",
+      hjust = 0.5
+    ),
+    plot.margin = unit(rep(1, 4), "cm"),
+    panel.spacing = unit(.5, "cm"),
+    plot.title = element_text(
+      family = "Gabriel Weiss' Friends Font",
+      face = "plain",
+      size = 32,
+      color = "#f4c93cff",
+      hjust = .5,
+      vjust = .5
+    ),
+    plot.subtitle = ggtext::element_markdown(
+      hjust = .5,
+      color = "white",
+      size = 15
+    ),
+    plot.caption = ggtext::element_markdown(
+      hjust = .5,
+      vjust = .5,
+      color = "#f4c93cff"
+    )
+  ) +
+  labs(title = "the one with the sentiment analysis",
+       subtitle = "<span style='color:#F74035'>Joyful</span> <span style='color:#008F48'>Mad</span> <span style='color:#3F9DD4'>Peaceful</span> <span style='color:#9787CD'>Powerful</span> <span style='color:#F6D400'>Sad</span> <span style='color:#941205'>Scared</span><br><br>",
+       caption = "<br>Data from <b>{friends}</b> (github.com/EmilHvitfeldt/friends)<br> Visualisation by <b>Jim Gruman</b> (Twitter @jim_gruman)<br>Code found at <b>opus1993.github.io/myTidyTuesday</b>")
+
+
+```
+
+My #TidyTuesday tweet:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1304230550081875968")
+```
+
+
+
+
+
+
