@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-09-08" />
+
+<title>Friends</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Friends</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">September 8, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-17
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree6365794f430fe970763a6aa50bec9c4c2c7a0677targetblank6365794a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/6365794f430fe970763a6aa50bec9c4c2c7a0677" target="_blank">6365794</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree6365794f430fe970763a6aa50bec9c4c2c7a0677targetblank6365794a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/6365794f430fe970763a6aa50bec9c4c2c7a0677" target="_blank">6365794</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/Friends.Rmd</code>) and HTML (<code>docs/Friends.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/6365794f430fe970763a6aa50bec9c4c2c7a0677/analysis/Friends.Rmd" target="_blank">6365794</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-17
+</td>
+<td>
+Annotate the Lines portion dot plot
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The data this week comes from the <code>friends</code> R package for the Friends transcripts and information on the episodes themselves, like when the characters interact with one another.</p>
+<p>There’s text, appearance, ratings, and many other datasets here. We will check out the <code>tidytext</code> mining package and the newly released <a href="https://smltar.com/">Supervised Machine Learning for Text Analysis in R</a> book, both which are freely available online.</p>
+<p>Download the weekly data and make available in the <code>tt</code> object.</p>
+<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2020-09-08&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 3: `friends.csv`
+    Downloading file 2 of 3: `friends_info.csv`
+    Downloading file 3 of 3: `friends_emotions.csv`</code></pre>
+<pre class="r"><code>friends_text &lt;- tt$friends %&gt;%
+  inner_join(tt$friends_info, by = c(&quot;season&quot;, &quot;episode&quot;)) %&gt;%
+  mutate(
+    episode_title = glue(&quot;{ season }.{ episode } {title}&quot;),
+    episode_title = fct_reorder(episode_title, season + .001 * episode),
+    text = parse_character(text)
+  )
+
+epi.info &lt;- tt$friends_info
+emotion &lt;- tt$friends_emotions
+
+main_characters &lt;- friends_text %&gt;%
+  count(speaker, sort = TRUE) %&gt;%
+  head(6) %&gt;%
+  select(speaker) %&gt;%
+  separate(speaker, into = c(&quot;firstname&quot;, &quot;lastname&quot;), remove = FALSE)
+
+main_characters %&gt;%
+  pull(speaker)</code></pre>
+<pre><code>[1] &quot;Rachel Green&quot;   &quot;Ross Geller&quot;    &quot;Chandler Bing&quot;  &quot;Monica Geller&quot; 
+[5] &quot;Joey Tribbiani&quot; &quot;Phoebe Buffay&quot; </code></pre>
+<div id="words-each-character-had-per-season" class="section level1">
+<h1>Words each Character had per season</h1>
+<p>With inspiration from Dr. Christian Hoggard <span class="citation">@CSHoggard</span></p>
+<pre class="r"><code>friends_parsed &lt;- friends_text %&gt;%
+  filter(speaker %in% main_characters$speaker) %&gt;%
+  mutate(
+    word_count = str_count(text, &quot;\\w+&quot;),
+    speaker = word(speaker)
+  ) %&gt;%
+  select(-utterance, -scene) %&gt;%
+  group_by(speaker, season) %&gt;%
+  summarise(
+    word_sum = sum(word_count),
+    .groups = &quot;drop&quot;
+  )
+
+friends_parsed %&gt;%
+  group_by(speaker) %&gt;%
+  summarise(
+    total_sum = sum(word_sum),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">speaker</th>
+<th align="right">total_sum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Chandler</td>
+<td align="right">93526</td>
+</tr>
+<tr class="even">
+<td align="left">Joey</td>
+<td align="right">93642</td>
+</tr>
+<tr class="odd">
+<td align="left">Monica</td>
+<td align="right">89597</td>
+</tr>
+<tr class="even">
+<td align="left">Phoebe</td>
+<td align="right">88011</td>
+</tr>
+<tr class="odd">
+<td align="left">Rachel</td>
+<td align="right">105237</td>
+</tr>
+<tr class="even">
+<td align="left">Ross</td>
+<td align="right">104144</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>img_friends &lt;- &quot;https://turbologo.com/articles/wp-content/uploads/2019/12/friends-logo-cover-678x381.png.&quot;</code></pre>
+<pre class="r"><code>p &lt;-
+  ggplot(friends_parsed, aes(season, word_sum, color = speaker)) +
+  geom_line(size = 1) +
+  geom_point(size = 3) +
+  lims(y = c(5000, 14000)) +
+  scale_x_continuous(n.breaks = 10) +
+  scale_colour_manual(values = friends_pal) +
+  labs(
+    title = &quot;Who Spoke the Most?&quot;,
+    subtitle = &quot;Number of words per season&quot;,
+    caption = &quot;@jim_gruman | Source: friends R package | #TidyTuesday&quot;,
+    x = &quot;Season&quot;,
+    y = NULL
+  ) +
+  annotate(
+    &quot;text&quot;,
+    x = 8,
+    y = 13500,
+    size = 4,
+    color = &quot;grey97&quot;,
+    family = &quot;IBM Plex Sans&quot;,
+    label = &quot;Rachel spoke over 17,000 words \n more than Pheobe!&quot;
+  ) +
+  guides(colour = guide_legend(
+    nrow = 1,
+    override.aes = list(linetype = 0, size = 4)
+  )) +
+  theme(
+    legend.position = &quot;top&quot;,
+    legend.title = element_blank(),
+    legend.text = element_text(
+      color = &quot;grey97&quot;,
+      size = 11,
+      family = &quot;IBM Plex Sans&quot;
+    ),
+    plot.margin = margin(20, 20, 20, 20),
+    plot.background = element_rect(fill = &quot;#000000&quot;),
+    panel.grid.major = element_line(
+      size = 0.35,
+      linetype = &quot;solid&quot;,
+      colour = &quot;grey10&quot;
+    ),
+    panel.grid.minor = element_line(
+      size = 0.3,
+      linetype = &quot;solid&quot;,
+      colour = &quot;grey10&quot;
+    ),
+    axis.text.x = element_text(
+      color = &quot;grey97&quot;,
+      family = &quot;IBM Plex Sans&quot;
+    ),
+    axis.title.x = element_text(
+      color = &quot;grey97&quot;,
+      margin = margin(20, 0, 5, 0),
+      family = &quot;IBM Plex Sans&quot;
+    ),
+    axis.text.y = element_text(
+      color = &quot;grey97&quot;,
+      margin = margin(0, 20, 0, 5),
+      family = &quot;IBM Plex Sans&quot;
+    ),
+    axis.title.y = element_text(
+      color = &quot;grey97&quot;,
+      family = &quot;IBM Plex Sans&quot;
+    ),
+    plot.title = element_text(
+      color = &quot;#9C61FD&quot;,
+      size = 32,
+      hjust = 0.5,
+      margin = margin(0, 0, 10, 0),
+      family = &quot;Gabriel Weiss&#39; Friends Font&quot;,
+      face = &quot;plain&quot;
+    ),
+    plot.subtitle = element_text(
+      color = &quot;grey97&quot;,
+      size = 12,
+      hjust = 0.5,
+      margin = margin(0, 0, 10, 0),
+      family = &quot;Gabriel Weiss&#39; Friends Font&quot;,
+      face = &quot;plain&quot;
+    ),
+    plot.caption = element_text(
+      size = 9,
+      colour = &quot;grey97&quot;,
+      margin = margin(20, 0, 0, 0),
+      family = &quot;IBM Plex Sans&quot;
+    )
+  )
+
+cowplot::ggdraw() +
+  cowplot::draw_plot(p) +
+  cowplot::draw_image(img_friends, scale = 0.2, y = -0.45, x = -0.4)</code></pre>
+<p><img src="figure/Friends.Rmd/WhoSpokeTheMost-1.png" width="200%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="visualize-the-lines-by-season-in-ranks" class="section level1">
+<h1>Visualize the Lines by Season in Ranks</h1>
+<p>From David Smale <span class="citation">@committedtotape</span></p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/committedtotape/status/1303805992304627713&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Using this week&#39;s <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> on &#39;Friends&#39; to try out the <a href="https://twitter.com/hashtag/ggbump?src=hash&amp;ref_src=twsrc%5Etfw">#ggbump</a> 📦 by <a href="https://twitter.com/davsjob?ref_src=twsrc%5Etfw">@davsjob</a> for the first time. It was fun, good to be back on the Tidy Tuesday 🚂 <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://t.co/vQekflc2Qj">pic.twitter.com/vQekflc2Qj</a></p>&mdash; David Smale 🔎 (@committedtotape) <a href="https://twitter.com/committedtotape/status/1303805992304627713?ref_src=twsrc%5Etfw">September 9, 2020</a></blockquote>
+
+<pre class="r"><code>lines_by_season &lt;- friends_text %&gt;%
+  filter(speaker %in% main_characters$speaker) %&gt;%
+  count(season, speaker, name = &quot;lines&quot;) %&gt;%
+  group_by(season) %&gt;%
+  arrange(season, -lines) %&gt;%
+  mutate(rank = row_number()) %&gt;%
+  inner_join(main_characters, by = &quot;speaker&quot;)
+
+
+lines_by_season %&gt;%
+  ggplot(aes(season, rank, color = firstname)) +
+  geom_point(size = 7) +
+  geom_text(
+    data = lines_by_season %&gt;% filter(season == 1),
+    aes(x = season - .2, label = firstname),
+    size = 6,
+    hjust = 1
+  ) +
+  geom_text(
+    data = lines_by_season %&gt;% filter(season == 10),
+    aes(x = season + .2, label = firstname),
+    size = 6,
+    hjust = 0
+  ) +
+  geom_bump(size = 2, smooth = 5) +
+  scale_x_continuous(
+    limits = c(0, 11),
+    breaks = seq(1, 10, 1),
+    position = &quot;top&quot;
+  ) +
+  scale_y_reverse(
+    breaks = seq(1, 6, 1),
+    position = &quot;left&quot;
+  ) +
+  scale_color_manual(values = friends_pal) +
+  labs(
+    title = &quot;Aw, Phoebs!&quot;,
+    subtitle = &quot;Friends ranked by number of lines per season \nPhoebe has the fewest lines in 5 of 10 seasons&quot;,
+    caption = &quot;Data: friends R package &quot;,
+    x = &quot;Season&quot;,
+    y = NULL
+  ) +
+  theme(
+    legend.position = &quot;none&quot;,
+    plot.background = element_rect(fill = &quot;#000000&quot;, color = &quot;gray10&quot;),
+    axis.text.x = element_text(color = &quot;gray90&quot;, size = 16),
+    axis.text.y = element_text(color = &quot;gray90&quot;, size = 16),
+    axis.title.x.top = element_text(
+      color = &quot;gray90&quot;,
+      size = 16,
+      hjust = 0.5,
+      margin = margin(0, 0, 10, 0)
+    ),
+    axis.title.y.left = element_text(
+      color = &quot;gray90&quot;,
+      size = 16,
+      hjust = 0,
+      vjust = 0.5,
+      angle = 0
+    ),
+    plot.title = element_text(
+      color = &quot;#9C61FD&quot;,
+      hjust = 0.5,
+      size = 34,
+      margin = margin(0, 0, 10, 0),
+      family = &quot;Gabriel Weiss&#39; Friends Font&quot;,
+      face = &quot;plain&quot;
+    ),
+    plot.subtitle = element_text(
+      color = &quot;gray90&quot;,
+      hjust = 0.5,
+      size = 16,
+      margin = margin(0, 0, 20, 0),
+      family = &quot;Gabriel Weiss&#39; Friends Font&quot;,
+      face = &quot;plain&quot;
+    ),
+    plot.caption = element_text(
+      color = &quot;gray90&quot;,
+      hjust = 1,
+      size = 10,
+      margin = margin(20, 0, 5, 0)
+    ),
+    plot.margin = margin(20, 20, 20, 20),
+    panel.grid.major = element_line(
+      size = 0.35,
+      linetype = &quot;solid&quot;,
+      colour = &quot;grey10&quot;
+    ),
+    panel.grid.minor = element_line(
+      size = 0.3,
+      linetype = &quot;solid&quot;,
+      colour = &quot;grey10&quot;
+    )
+  )</code></pre>
+<p><img src="figure/Friends.Rmd/Ranks-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Let’s model features with regression to infer what features drive imdb_rating</p>
+<pre class="r"><code>speaker_lines_per_episode &lt;- friends_text %&gt;%
+  count(speaker, episode_title, imdb_rating) %&gt;%
+  complete(speaker, episode_title, fill = list(n = 0)) %&gt;%
+  group_by(episode_title) %&gt;%
+  fill(imdb_rating, .direction = &quot;downup&quot;) %&gt;%
+  ungroup() %&gt;%
+  add_count(episode_title, wt = n, name = &quot;episode_total&quot;) %&gt;%
+  mutate(pct = n / episode_total)
+
+speaker_lines_per_episode %&gt;%
+  semi_join(main_characters, by = &quot;speaker&quot;) %&gt;%
+  mutate(speaker = fct_reorder(speaker, n)) %&gt;%
+  ggplot(aes(pct,
+    speaker,
+    color = speaker,
+    fill = speaker
+  )) +
+  ggdist::stat_dots(
+    show.legend = FALSE,
+    side = &quot;both&quot;,
+    layout = &quot;weave&quot;
+  ) +
+  ggrepel::geom_text_repel(
+    data = . %&gt;% filter(pct &gt; 0.32),
+    aes(label = episode_title),
+    direction = &quot;x&quot;,
+    show.legend = FALSE
+  ) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    x = &quot;&quot;, y = &quot;&quot;,
+    title = &quot;Lines portion within each episode&quot;,
+    fill = function(x) paste0(as.numeric(x) * 100, &quot;%&quot;),
+    caption = &quot;Data: friends R package | Visual by @jim_gruman&quot;
+  ) +
+  coord_flip() +
+  theme(
+    plot.title = element_text(
+      color = &quot;#9C61FD&quot;,
+      hjust = 0.5,
+      size = 34,
+      margin = margin(0, 0, 10, 0),
+      family = &quot;Gabriel Weiss&#39; Friends Font&quot;,
+      face = &quot;plain&quot;
+    ),
+    plot.background = element_rect(fill = &quot;#000000&quot;, color = &quot;gray10&quot;),
+    plot.caption = element_text(
+      color = &quot;gray90&quot;,
+      hjust = 1,
+      size = 10,
+      margin = margin(20, 0, 5, 0)
+    ),
+    plot.margin = margin(20, 20, 20, 20),
+    panel.grid.major = element_line(
+      size = 0.35,
+      linetype = &quot;solid&quot;,
+      colour = &quot;grey10&quot;
+    ),
+    panel.grid.minor = element_line(
+      size = 0.3,
+      linetype = &quot;solid&quot;,
+      colour = &quot;grey10&quot;
+    )
+  )</code></pre>
+<p><img src="figure/Friends.Rmd/LinesPerEpisode-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>speaker_lines_per_episode %&gt;%
+  semi_join(main_characters, by = &quot;speaker&quot;) %&gt;%
+  group_by(speaker) %&gt;%
+  summarize(correlation = cor(pct, imdb_rating)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">speaker</th>
+<th align="right">correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Chandler Bing</td>
+<td align="right">-0.0415741</td>
+</tr>
+<tr class="even">
+<td align="left">Joey Tribbiani</td>
+<td align="right">-0.0135204</td>
+</tr>
+<tr class="odd">
+<td align="left">Monica Geller</td>
+<td align="right">0.0678008</td>
+</tr>
+<tr class="even">
+<td align="left">Phoebe Buffay</td>
+<td align="right">-0.0169874</td>
+</tr>
+<tr class="odd">
+<td align="left">Rachel Green</td>
+<td align="right">0.0378711</td>
+</tr>
+<tr class="even">
+<td align="left">Ross Geller</td>
+<td align="right">0.1847020</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># setup the training set
+speakers_per_episode_wide &lt;- speaker_lines_per_episode %&gt;%
+  semi_join(main_characters, by = &quot;speaker&quot;) %&gt;%
+  select(episode_title, speaker, pct, imdb_rating, episode_total) %&gt;%
+  spread(speaker, pct) %&gt;%
+  select(-episode_title)
+
+speakers_per_episode_wide %&gt;%
+  lm(imdb_rating ~ ., data = .) %&gt;%
+  summary()</code></pre>
+<pre><code>
+Call:
+lm(formula = imdb_rating ~ ., data = .)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.36610 -0.26579 -0.03479  0.23945  1.26931 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      7.3885721  0.3259390  22.669  &lt; 2e-16 ***
+episode_total    0.0018619  0.0006468   2.879  0.00437 ** 
+`Chandler Bing`  0.0559465  0.6348284   0.088  0.92985    
+`Joey Tribbiani` 0.3301073  0.6275412   0.526  0.59938    
+`Monica Geller`  1.1144906  0.6629858   1.681  0.09413 .  
+`Phoebe Buffay`  0.5689463  0.7366649   0.772  0.44072    
+`Rachel Green`   0.2789640  0.6235201   0.447  0.65501    
+`Ross Geller`    1.8553543  0.6098077   3.043  0.00262 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.3886 on 228 degrees of freedom
+Multiple R-squared:  0.07798,   Adjusted R-squared:  0.04968 
+F-statistic: 2.755 on 7 and 228 DF,  p-value: 0.009136</code></pre>
+<p>The more Ross speaks, the more popular the episode is</p>
+<p>Let’s look at words, and weighted log-odds ratios</p>
+<pre class="r"><code>words_unnested &lt;- friends_text %&gt;%
+  left_join(emotion, by = c(&quot;season&quot;, &quot;episode&quot;, &quot;utterance&quot;)) %&gt;%
+  select(text, speaker, season, episode_title, emotion) %&gt;%
+  unnest_tokens(word, text, to_lower = FALSE) %&gt;%
+  anti_join(stop_words, by = &quot;word&quot;) %&gt;%
+  filter(
+    !word %in% c(&quot;yeah&quot;, &quot;hey&quot;, &quot;gonna&quot;, &quot;uh&quot;, &quot;y&#39;know&quot;, &quot;um&quot;, &quot;ah&quot;, &quot;um&quot;, &quot;la&quot;, &quot;wh&quot;),
+    !str_detect(word, &quot;[:digit:]|^aa&quot;),
+    !is.na(emotion),
+    emotion != &quot;Neutral&quot;
+  ) %&gt;%
+  mutate(word = str_to_lower(word))
+
+words_unnested %&gt;%
+  count(word, sort = TRUE) %&gt;%
+  slice_max(order_by = n, n = 15) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">word</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">i</td>
+<td align="right">40402</td>
+</tr>
+<tr class="even">
+<td align="left">oh</td>
+<td align="right">11831</td>
+</tr>
+<tr class="odd">
+<td align="left">i’m</td>
+<td align="right">10186</td>
+</tr>
+<tr class="even">
+<td align="left">hey</td>
+<td align="right">6073</td>
+</tr>
+<tr class="odd">
+<td align="left">you</td>
+<td align="right">5712</td>
+</tr>
+<tr class="even">
+<td align="left">yeah</td>
+<td align="right">5483</td>
+</tr>
+<tr class="odd">
+<td align="left">no</td>
+<td align="right">5418</td>
+</tr>
+<tr class="even">
+<td align="left">well</td>
+<td align="right">5190</td>
+</tr>
+<tr class="odd">
+<td align="left">what</td>
+<td align="right">4599</td>
+</tr>
+<tr class="even">
+<td align="left">okay</td>
+<td align="right">4454</td>
+</tr>
+<tr class="odd">
+<td align="left">ross</td>
+<td align="right">3461</td>
+</tr>
+<tr class="even">
+<td align="left">so</td>
+<td align="right">3239</td>
+</tr>
+<tr class="odd">
+<td align="left">and</td>
+<td align="right">3045</td>
+</tr>
+<tr class="even">
+<td align="left">god</td>
+<td align="right">2872</td>
+</tr>
+<tr class="odd">
+<td align="left">it’s</td>
+<td align="right">2732</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>by_speaker_word &lt;- words_unnested %&gt;%
+  semi_join(main_characters, by = &quot;speaker&quot;) %&gt;%
+  count(speaker, word, emotion, name = &quot;n_emotion&quot;) %&gt;%
+  group_by(speaker, word) %&gt;%
+  summarize(
+    n = sum(n_emotion),
+    emotion = first(emotion, order_by = -n_emotion),
+    .groups = &quot;drop&quot;
+  )
+
+# what are the most over-represented words for each character?
+unique_sentiments &lt;- by_speaker_word %&gt;%
+  bind_log_odds(speaker, word, n) %&gt;%
+  group_by(speaker) %&gt;%
+  slice_max(log_odds_weighted, n = 12) %&gt;%
+  mutate(size = scales::rescale(log_odds_weighted, to = c(3, 9)))</code></pre>
+</div>
+<div id="visualize-a-word-cloud-with-words-most-representative-of-each-character-and-most-common-emotional-sentiment" class="section level1">
+<h1>Visualize a word cloud with words most representative of each character and most common emotional sentiment</h1>
+<p>Jack Davison <span class="citation">@JDavison_</span> inspired this beautiful word cloud</p>
+<p>Credit David Robinson for the <code>tidylo</code> insight</p>
+<pre class="r"><code>ggplot(
+  unique_sentiments,
+  aes(
+    label = word,
+    size = log_odds_weighted,
+    color = emotion,
+    alpha = log_odds_weighted
+  )
+) +
+  ggwordcloud::geom_text_wordcloud_area(area_corr_power = 1) +
+  facet_wrap(~speaker) +
+  scale_radius(range = c(3, 20)) +
+  scale_color_manual(values = friends_pal) +
+  scale_alpha(range = c(.5, 1)) +
+  theme(
+    plot.background = element_rect(fill = &quot;#000000&quot;, color = NA),
+    strip.text = element_text(
+      family = &quot;Gabriel Weiss&#39; Friends Font&quot;,
+      size = 20,
+      color = &quot;white&quot;,
+      hjust = 0.5
+    ),
+    plot.margin = unit(rep(1, 4), &quot;cm&quot;),
+    panel.spacing = unit(.5, &quot;cm&quot;),
+    plot.title = element_text(
+      family = &quot;Gabriel Weiss&#39; Friends Font&quot;,
+      face = &quot;plain&quot;,
+      size = 32,
+      color = &quot;#f4c93cff&quot;,
+      hjust = .5,
+      vjust = .5
+    ),
+    plot.subtitle = ggtext::element_markdown(
+      hjust = .5,
+      color = &quot;white&quot;,
+      size = 15
+    ),
+    plot.caption = ggtext::element_markdown(
+      hjust = .5,
+      vjust = .5,
+      color = &quot;#f4c93cff&quot;
+    )
+  ) +
+  labs(
+    title = &quot;the one with the sentiment analysis&quot;,
+    subtitle = &quot;&lt;span style=&#39;color:#F74035&#39;&gt;Joyful&lt;/span&gt; &lt;span style=&#39;color:#008F48&#39;&gt;Mad&lt;/span&gt; &lt;span style=&#39;color:#3F9DD4&#39;&gt;Peaceful&lt;/span&gt; &lt;span style=&#39;color:#9787CD&#39;&gt;Powerful&lt;/span&gt; &lt;span style=&#39;color:#F6D400&#39;&gt;Sad&lt;/span&gt; &lt;span style=&#39;color:#941205&#39;&gt;Scared&lt;/span&gt;&lt;br&gt;&lt;br&gt;&quot;,
+    caption = &quot;&lt;br&gt;Data from &lt;b&gt;{friends}&lt;/b&gt; (github.com/EmilHvitfeldt/friends)&lt;br&gt; Visualisation by &lt;b&gt;Jim Gruman&lt;/b&gt; (Twitter @jim_gruman)&lt;br&gt;Code found at &lt;b&gt;opus1993.github.io/myTidyTuesday&lt;/b&gt;&quot;
+  )</code></pre>
+<p><img src="figure/Friends.Rmd/word_cloud-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>My #TidyTuesday tweet:</p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/jim_gruman/status/1304230550081875968&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Giving <a href="https://twitter.com/hashtag/workflowr?src=hash&amp;ref_src=twsrc%5Etfw">#workflowr</a> a test drive w/ <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a><a href="https://t.co/17Ipb1PQLq">https://t.co/17Ipb1PQLq</a><br>Phoebe&#39;s smelly cat stands out <a href="https://twitter.com/hashtag/Friends?src=hash&amp;ref_src=twsrc%5Etfw">#Friends</a> <a href="https://t.co/kfatWPSFAn">pic.twitter.com/kfatWPSFAn</a></p>&mdash; Jim Gruman📚🚵‍♂️⚙ (@jim_gruman) <a href="https://twitter.com/jim_gruman/status/1304230550081875968?ref_src=twsrc%5Etfw">September 11, 2020</a></blockquote>
+
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggdist_3.0.0    ggbump_0.1.0    glue_1.4.2      showtext_0.9-4 
+ [5] showtextdb_3.0  sysfonts_0.8.5  ragg_1.1.3      tidylo_0.1.0   
+ [9] tidytext_0.3.1  forcats_0.5.1   stringr_1.4.0   dplyr_1.0.7    
+[13] purrr_0.3.4     readr_2.0.1     tidyr_1.1.3     tibble_3.1.4   
+[17] ggplot2_3.3.5   tidyverse_1.3.1 workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1         backports_1.2.1      systemfonts_1.0.2   
+  [4] workflows_0.2.3      selectr_0.4-2        plyr_1.8.6          
+  [7] tidytuesdayR_1.0.1   splines_4.1.1        listenv_0.8.0       
+ [10] SnowballC_0.7.0      usethis_2.0.1        digest_0.6.27       
+ [13] foreach_1.5.1        htmltools_0.5.2      yardstick_0.0.8     
+ [16] magick_2.7.3         viridis_0.6.1        parsnip_0.1.7.900   
+ [19] fansi_0.5.0          magrittr_2.0.1       tune_0.1.6          
+ [22] tzdb_0.1.2           recipes_0.1.16       globals_0.14.0      
+ [25] modelr_0.1.8         gower_0.2.2          extrafont_0.17      
+ [28] vroom_1.5.5          R.utils_2.10.1       extrafontdb_1.0     
+ [31] hardhat_0.1.6        rsample_0.1.0        dials_0.0.10        
+ [34] colorspace_2.0-2     ggrepel_0.9.1        rvest_1.0.1         
+ [37] textshaping_0.3.5    haven_2.4.3          xfun_0.26           
+ [40] crayon_1.4.1         jsonlite_1.7.2       survival_3.2-11     
+ [43] iterators_1.0.13     gtable_0.3.0         ipred_0.9-12        
+ [46] distributional_0.2.2 R.cache_0.15.0       tweetrmd_0.0.9      
+ [49] Rttf2pt1_1.3.9       future.apply_1.8.1   scales_1.1.1        
+ [52] infer_1.0.0          DBI_1.1.1            Rcpp_1.0.7          
+ [55] gridtext_0.1.4       viridisLite_0.4.0    bit_4.0.4           
+ [58] GPfit_1.0-8          lava_1.6.10          prodlim_2019.11.13  
+ [61] httr_1.4.2           ggwordcloud_0.5.0    ellipsis_0.3.2      
+ [64] R.methodsS3_1.8.1    pkgconfig_2.0.3      farver_2.1.0        
+ [67] nnet_7.3-16          sass_0.4.0           dbplyr_2.1.1        
+ [70] utf8_1.2.2           here_1.0.1           labeling_0.4.2      
+ [73] tidyselect_1.1.1     rlang_0.4.11         DiceDesign_1.9      
+ [76] later_1.3.0          munsell_0.5.0        cellranger_1.1.0    
+ [79] tools_4.1.1          cachem_1.0.6         cli_3.0.1           
+ [82] generics_0.1.0       broom_0.7.9          evaluate_0.14       
+ [85] fastmap_1.1.0        yaml_2.2.1           rematch2_2.1.2      
+ [88] bit64_4.0.5          knitr_1.34           fs_1.5.0            
+ [91] future_1.22.1        whisker_0.4          R.oo_1.24.0         
+ [94] xml2_1.3.2           tokenizers_0.2.1     compiler_4.1.1      
+ [97] rstudioapi_0.13      png_0.1-7            curl_4.3.2          
+[100] reprex_2.0.1         lhs_1.1.3            bslib_0.3.0         
+[103] stringi_1.7.4        highr_0.9            gdtools_0.2.3       
+[106] hrbrthemes_0.8.0     lattice_0.20-44      Matrix_1.3-4        
+[109] markdown_1.1         styler_1.6.1         conflicted_1.0.4    
+[112] vctrs_0.3.8          tidymodels_0.1.3     pillar_1.6.2        
+[115] lifecycle_1.0.0      furrr_0.2.3          jquerylib_0.1.4     
+[118] cowplot_1.1.1        httpuv_1.6.3         R6_2.5.1            
+[121] promises_1.2.0.1     gridExtra_2.3        janeaustenr_0.1.5   
+[124] parallelly_1.28.1    codetools_0.2-18     MASS_7.3-54         
+[127] assertthat_0.2.1     rprojroot_2.0.2      withr_2.4.2         
+[130] ggtext_0.1.1         parallel_4.1.1       hms_1.1.0           
+[133] grid_4.1.1           rpart_4.1-15         timeDate_3043.102   
+[136] class_7.3-19         rmarkdown_2.11       git2r_0.28.0        
+[139] pROC_1.18.0          lubridate_1.7.10    </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
