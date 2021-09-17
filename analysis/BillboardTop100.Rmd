@@ -41,6 +41,10 @@ tweetrmd::include_tweet("https://twitter.com/issa_madjid/status/1437894988864626
 tweetrmd::include_tweet("https://twitter.com/TannerFlorian/status/1438116383280095237")
 ```
 
+```{r}
+tweetrmd::include_tweet("https://twitter.com/geokaramanis/status/1438878323363524608")
+```
+
 Let's load the data and have a look around.
 
 ```{r}
