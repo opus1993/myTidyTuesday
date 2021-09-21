@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
   tidy = "styler",
   dev = "ragg_png",
   autodep = TRUE,
-  out.width ='200%',
+  out.width = '200%',
   fig.align = 'center',
   fig.width = 9,
   fig.asp = 0.618      #,   1 / phi   use 1 for facet_wrap
@@ -84,7 +84,7 @@ cm_heat <- function(x) {
     ) %+%
     ggplot2::geom_text(mapping = ggplot2::aes(label = Freq,
                                               color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))),
-                       size = 30) %+%
+                       size = rel(4)) %+%
     ggplot2::labs(x = axis_labels$x, y = axis_labels$y)
 }
 
