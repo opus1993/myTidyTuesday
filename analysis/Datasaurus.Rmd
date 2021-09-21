@@ -1,0 +1,205 @@
+---
+title: "Datasaurus"
+author: "Jim Gruman"
+date: "October 14, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+This week’s [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-10-13/readme.md) speaks to the importance of visualization in data exploration. Alberto Cairo created this simulated data set in order to demonstrate how misleading summary statistics can be and to show how useful visualization is in uncovering patterns in data. In this spirit, let’s start exploring this data set to see what we find.
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+extrafont::loadfonts()
+library(broom)
+library(gridExtra)
+library(purrr)
+
+library(tidymodels)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+```
+
+```{r}
+tt <- tidytuesdayR::tt_load("2020-10-13")
+
+```
+We have 1,846 sets of x and y coordinates divided up into thirteen named descriptive data sets. 
+
+```{r}
+datasaurus <- tt$datasaurus
+
+datasaurus %>%
+        group_by(dataset) %>% 
+         summarise(across(c(x, y), 
+                          list(mean = mean, sd = sd)),
+    x_y_cor = cor(x, y)
+  ) %>% 
+  knitr::kable(digits = c(0,2,2,2,2,2))
+```
+
+These data sets have a lot in common. Specifically the x and y means, x and y standard deviations, and Pearson's correlation coefficients are nearly identical.
+
+Let's try fitting each data set to a linear model to each:
+
+```{r}
+datasaurus %>%
+        nest(data = -dataset) %>% 
+        mutate(model = map(data, ~ lm(y ~ x, data = .)),
+               tidied = map(model, broom::tidy)
+        ) %>% 
+        unnest(tidied) %>% 
+        select(-data, -model) %>% knitr::kable(digits = c(0,0,2,2,2,2))
+```
+The intercept, slope and standard errors are all pretty much identical to each other. Let's plot these models and take a look.
+
+```{r }
+datasaurus %>% 
+        ggplot(aes(x, y, color = dataset)) +
+        geom_point() +
+        geom_smooth(method = "lm", 
+                    formula = y ~ x,
+                    se = FALSE,
+                    color = "black") +
+  labs(title = "Best Linear Fit Lines for every dataset",
+       caption = "Simulated Data: Alberto Cairo")
+```
+
+The models match up nicely, but there's a lot of noise and there seem to be some strong unexplained patterns in the underlying data. Let's look at each data set individually.
+
+```{r}
+left_plot <- datasaurus %>%
+        filter(dataset == "dino") %>%
+        ggplot(aes(x, y)) +
+        geom_point(show.legend = FALSE) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+        labs(title = "Each Dataset Has Nearly Identical Summary Statistics",
+             subtitle = "Visualization is an essential component of data exploration",
+             caption = "")
+
+right_plot <- datasaurus %>%
+        filter(dataset != "dino") %>%
+        ggplot(aes(x, y, color = dataset)) +
+        geom_point(show.legend = FALSE) +
+        scale_x_continuous(n.breaks = 2) +
+        facet_wrap( ~ dataset) +
+        theme(strip.text = element_blank(),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank()) +
+        labs(title = "",
+             subtitle = "",
+             caption = "Simulated Data: Alberto Cairo")
+
+grid.arrange(left_plot, right_plot, ncol = 2)
+```
+
+These plots are much more different than the summary statistics alone would suggest!
+
+----
+
+# Predicting class membership
+
+> Based largely on @juliasilge's work at [Datasaurus Multiclass](https://juliasilge.com/blog/datasaurus-multiclass/)
+
+Let’s explore whether we can use modeling to predict which dataset a point belongs to. This is not a large dataset compared to the number of classes (13!) so this will not be a tutorial for best practices for a predictive modeling workflow overall, but it does demonstrate how to evaluate a multiclass model, as well as a bit about how random forest models work.
+
+## Build a model
+
+Let’s start out by creating bootstrap resamples of the Datasaurus Dozen. Notice that we aren’t splitting into testing and training sets, so we won’t have an unbiased estimate of performance on new data. Instead, we will use these resamples to understand the dataset and multiclass models better.
+
+```{r}
+dino_folds <- datasaurus %>%
+  mutate(dataset = factor(dataset)) %>%
+  bootstraps()
+```
+
+Let’s create a random forest model and set up a model workflow with the model and a formula preprocessor. We are predicting the `dataset` class (dino vs. circle vs. bullseye vs. …) from x and y. A random forest model can often do a good job of learning complex interactions in predictors.
+
+```{r}
+rf_spec <- rand_forest(trees = 1000) %>%
+  set_mode("classification") %>%
+  set_engine("ranger")
+
+dino_wf <- workflow() %>%
+  add_formula(dataset ~ x + y) %>%
+  add_model(rf_spec)
+```
+
+Let’s fit the random forest model to the bootstrap resamples.
+
+```{r}
+# register a parallel backend, leaving one core available
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+dino_rs <- fit_resamples(
+  dino_wf,
+  resamples = dino_folds,
+  control = control_resamples(save_pred = TRUE)
+)
+
+```
+
+# Evaluate the model
+
+How did these models do overall?
+
+```{r}
+collect_metrics(dino_rs) %>% knitr::kable()
+```
+
+The accuracy is not great; a multiclass problem like this, especially one with so many classes, is harder than a binary classification problem. There are so many possible wrong answers!
+
+Since we saved the predictions with `save_pred = TRUE` we can compute other performance metrics. Notice that by default the positive predictive value (like accuracy) is macro-weighted for multiclass problems.
+
+```{r}
+dino_rs %>%
+  collect_predictions() %>%
+  group_by(id) %>%
+  ppv(dataset, .pred_class) %>%  knitr::kable(digits = c(0,0,0,3))
+```
+
+Next, let’s compute ROC curves for each class.
+
+```{r, fig.asp = 1}
+dino_rs %>%
+  collect_predictions() %>%
+  group_by(id) %>%
+  roc_curve(dataset, .pred_away:.pred_x_shape) %>%
+  ggplot(aes(1 - specificity, sensitivity, color = id)) +
+  geom_abline(lty = 2, color = "gray80", size = 1.5) +
+  geom_path(show.legend = FALSE, size = 1.2) +
+  scale_x_continuous(n.breaks = 3) +
+  facet_wrap(~.level, ncol = 5) +
+  coord_equal()
+```
+
+We have an ROC curve for each class and each resample in this plot. Notice that the points dataset was easy for the model to identify while the dino dataset was very difficult. The model barely did better than guessing for the dino!
+
+We can also compute a confusion matrix. We could use `tune::conf_mat_resampled()` but since there are so few examples per class and the classes were balanced, let’s just look at all the resamples together.
+
+```{r}
+dino_rs %>%
+  collect_predictions() %>%
+  conf_mat(dataset, .pred_class) %>% 
+  autoplot(type = "heatmap") +
+  theme(text = element_text(size = 12))
+
+```
+
+There is some real variability on the diagonal, with a factor of 10 difference from dinos to dots.
+
+The dino dataset was confused with many of the other datasets, and ``wide_lines` was often confused with both `slant_up` and `away`.
