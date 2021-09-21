@@ -78,6 +78,7 @@ cm_heat <- function(x) {
     ) %+%
     ggplot2::geom_tile() %+%
     ggplot2::scale_fill_viridis_c(option = "H") %+%
+    ggplot2::scale_x_discrete(guide = guide_axis(n.dodge = 2)) %+%
     ggplot2::theme(
       panel.background = ggplot2::element_blank(),
       legend.position = "none"
