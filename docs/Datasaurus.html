@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-10-14" />
+
+<title>Datasaurus</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Datasaurus</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">October 14, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-21
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec032c8fb18a41d41187f30bbdc9193a4ef6bc235targetblankc032c8fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/c032c8fb18a41d41187f30bbdc9193a4ef6bc235" target="_blank">c032c8f</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec032c8fb18a41d41187f30bbdc9193a4ef6bc235targetblankc032c8fa" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/c032c8fb18a41d41187f30bbdc9193a4ef6bc235" target="_blank">c032c8f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/Datasaurus.Rmd</code>) and HTML (<code>docs/Datasaurus.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/c032c8fb18a41d41187f30bbdc9193a4ef6bc235/analysis/Datasaurus.Rmd" target="_blank">c032c8f</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-21
+</td>
+<td>
+new viridis color scheme, fix multiclass confusion matrix
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>This week’s <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-10-13/readme.md">Tidy Tuesday</a> speaks to the importance of visualization in data exploration. Alberto Cairo created this simulated data set in order to demonstrate how misleading summary statistics can be and to show how useful visualization is in uncovering patterns in data. In this spirit, let’s start exploring this data set to see what we find.</p>
+<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2020-10-13&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `datasaurus.csv`</code></pre>
+<p>We have 1,846 sets of x and y coordinates divided up into thirteen named descriptive data sets.</p>
+<pre class="r"><code>datasaurus &lt;- tt$datasaurus
+
+datasaurus %&gt;%
+  group_by(dataset) %&gt;%
+  summarise(across(
+    c(x, y),
+    list(mean = mean, sd = sd)
+  ),
+  x_y_cor = cor(x, y)
+  ) %&gt;%
+  knitr::kable(digits = c(0, 2, 2, 2, 2, 2))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dataset</th>
+<th align="right">x_mean</th>
+<th align="right">x_sd</th>
+<th align="right">y_mean</th>
+<th align="right">y_sd</th>
+<th align="right">x_y_cor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">away</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.06</td>
+</tr>
+<tr class="even">
+<td align="left">bullseye</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
+</tr>
+<tr class="odd">
+<td align="left">circle</td>
+<td align="right">54.27</td>
+<td align="right">16.76</td>
+<td align="right">47.84</td>
+<td align="right">26.93</td>
+<td align="right">-0.07</td>
+</tr>
+<tr class="even">
+<td align="left">dino</td>
+<td align="right">54.26</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.06</td>
+</tr>
+<tr class="odd">
+<td align="left">dots</td>
+<td align="right">54.26</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.93</td>
+<td align="right">-0.06</td>
+</tr>
+<tr class="even">
+<td align="left">h_lines</td>
+<td align="right">54.26</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.06</td>
+</tr>
+<tr class="odd">
+<td align="left">high_lines</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
+</tr>
+<tr class="even">
+<td align="left">slant_down</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
+</tr>
+<tr class="odd">
+<td align="left">slant_up</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
+</tr>
+<tr class="even">
+<td align="left">star</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.93</td>
+<td align="right">-0.06</td>
+</tr>
+<tr class="odd">
+<td align="left">v_lines</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
+</tr>
+<tr class="even">
+<td align="left">wide_lines</td>
+<td align="right">54.27</td>
+<td align="right">16.77</td>
+<td align="right">47.83</td>
+<td align="right">26.94</td>
+<td align="right">-0.07</td>
+</tr>
+<tr class="odd">
+<td align="left">x_shape</td>
+<td align="right">54.26</td>
+<td align="right">16.77</td>
+<td align="right">47.84</td>
+<td align="right">26.93</td>
+<td align="right">-0.07</td>
+</tr>
+</tbody>
+</table>
+<p>These data sets have a lot in common. Specifically the x and y means, x and y standard deviations, and Pearson’s correlation coefficients are nearly identical.</p>
+<p>Let’s try fitting each data set to a linear model to each:</p>
+<pre class="r"><code>datasaurus %&gt;%
+  nest(data = -dataset) %&gt;%
+  mutate(
+    model = map(data, ~ lm(y ~ x, data = .)),
+    tidied = map(model, broom::tidy)
+  ) %&gt;%
+  unnest(tidied) %&gt;%
+  select(-data, -model) %&gt;%
+  knitr::kable(digits = c(0, 0, 2, 2, 2, 2))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dataset</th>
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">dino</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.45</td>
+<td align="right">7.69</td>
+<td align="right">6.95</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">dino</td>
+<td align="left">x</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.76</td>
+<td align="right">0.45</td>
+</tr>
+<tr class="odd">
+<td align="left">away</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.43</td>
+<td align="right">7.69</td>
+<td align="right">6.94</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">away</td>
+<td align="left">x</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.76</td>
+<td align="right">0.45</td>
+</tr>
+<tr class="odd">
+<td align="left">h_lines</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.21</td>
+<td align="right">7.70</td>
+<td align="right">6.91</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">h_lines</td>
+<td align="left">x</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.73</td>
+<td align="right">0.47</td>
+</tr>
+<tr class="odd">
+<td align="left">v_lines</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.89</td>
+<td align="right">7.69</td>
+<td align="right">7.01</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">v_lines</td>
+<td align="left">x</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.82</td>
+<td align="right">0.41</td>
+</tr>
+<tr class="odd">
+<td align="left">x_shape</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.55</td>
+<td align="right">7.69</td>
+<td align="right">6.97</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">x_shape</td>
+<td align="left">x</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.78</td>
+<td align="right">0.44</td>
+</tr>
+<tr class="odd">
+<td align="left">star</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.33</td>
+<td align="right">7.69</td>
+<td align="right">6.93</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">star</td>
+<td align="left">x</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.75</td>
+<td align="right">0.46</td>
+</tr>
+<tr class="odd">
+<td align="left">high_lines</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.81</td>
+<td align="right">7.69</td>
+<td align="right">6.99</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">high_lines</td>
+<td align="left">x</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.81</td>
+<td align="right">0.42</td>
+</tr>
+<tr class="odd">
+<td align="left">dots</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.10</td>
+<td align="right">7.69</td>
+<td align="right">6.90</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">dots</td>
+<td align="left">x</td>
+<td align="right">-0.10</td>
+<td align="right">0.14</td>
+<td align="right">-0.72</td>
+<td align="right">0.48</td>
+</tr>
+<tr class="odd">
+<td align="left">circle</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.80</td>
+<td align="right">7.69</td>
+<td align="right">6.99</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">circle</td>
+<td align="left">x</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.81</td>
+<td align="right">0.42</td>
+</tr>
+<tr class="odd">
+<td align="left">bullseye</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.81</td>
+<td align="right">7.69</td>
+<td align="right">7.00</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">bullseye</td>
+<td align="left">x</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.81</td>
+<td align="right">0.42</td>
+</tr>
+<tr class="odd">
+<td align="left">slant_up</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.81</td>
+<td align="right">7.69</td>
+<td align="right">7.00</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">slant_up</td>
+<td align="left">x</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.81</td>
+<td align="right">0.42</td>
+</tr>
+<tr class="odd">
+<td align="left">slant_down</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.85</td>
+<td align="right">7.69</td>
+<td align="right">7.00</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">slant_down</td>
+<td align="left">x</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.82</td>
+<td align="right">0.41</td>
+</tr>
+<tr class="odd">
+<td align="left">wide_lines</td>
+<td align="left">(Intercept)</td>
+<td align="right">53.63</td>
+<td align="right">7.69</td>
+<td align="right">6.97</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">wide_lines</td>
+<td align="left">x</td>
+<td align="right">-0.11</td>
+<td align="right">0.14</td>
+<td align="right">-0.79</td>
+<td align="right">0.43</td>
+</tr>
+</tbody>
+</table>
+<p>The intercept, slope and standard errors are all pretty much identical to each other. Let’s plot these models and take a look.</p>
+<pre class="r"><code>datasaurus %&gt;%
+  ggplot(aes(x, y, color = dataset)) +
+  geom_point() +
+  geom_smooth(
+    method = &quot;lm&quot;,
+    formula = y ~ x,
+    se = FALSE,
+    color = &quot;black&quot;
+  ) +
+  labs(
+    title = &quot;Best Linear Fit Lines for every dataset&quot;,
+    caption = &quot;Simulated Data: Alberto Cairo&quot;
+  )</code></pre>
+<p><img src="figure/Datasaurus.Rmd/unnamed-chunk-4-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>The models match up nicely, but there’s a lot of noise and there seem to be some strong unexplained patterns in the underlying data. Let’s look at each data set individually.</p>
+<pre class="r"><code>left_plot &lt;- datasaurus %&gt;%
+  filter(dataset == &quot;dino&quot;) %&gt;%
+  ggplot(aes(x, y)) +
+  geom_point(show.legend = FALSE) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = &quot;Each Dataset Has Nearly Identical Summary Statistics&quot;,
+    subtitle = &quot;Visualization is an essential component of data exploration&quot;,
+    caption = &quot;&quot;
+  )
+
+right_plot &lt;- datasaurus %&gt;%
+  filter(dataset != &quot;dino&quot;) %&gt;%
+  ggplot(aes(x, y, color = dataset)) +
+  geom_point(show.legend = FALSE) +
+  scale_x_continuous(n.breaks = 2) +
+  facet_wrap(~dataset) +
+  theme(
+    strip.text = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = &quot;&quot;,
+    subtitle = &quot;&quot;,
+    caption = &quot;Simulated Data: Alberto Cairo&quot;
+  )
+
+grid.arrange(left_plot, right_plot, ncol = 2)</code></pre>
+<p><img src="figure/Datasaurus.Rmd/unnamed-chunk-5-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>These plots are much more different than the summary statistics alone would suggest!</p>
+<hr />
+<div id="predicting-class-membership" class="section level1">
+<h1>Predicting class membership</h1>
+<blockquote>
+<p>Based largely on <span class="citation">@juliasilge</span>’s work at <a href="https://juliasilge.com/blog/datasaurus-multiclass/">Datasaurus Multiclass</a></p>
+</blockquote>
+<p>Let’s explore whether we can use modeling to predict which dataset a point belongs to. This is not a large dataset compared to the number of classes (13!) so this will not be a tutorial for best practices for a predictive modeling workflow overall, but it does demonstrate how to evaluate a multiclass model, as well as a bit about how random forest models work.</p>
+<div id="build-a-model" class="section level2">
+<h2>Build a model</h2>
+<p>Let’s start out by creating bootstrap resamples of the Datasaurus Dozen. Notice that we aren’t splitting into testing and training sets, so we won’t have an unbiased estimate of performance on new data. Instead, we will use these resamples to understand the dataset and multiclass models better.</p>
+<pre class="r"><code>dino_folds &lt;- datasaurus %&gt;%
+  mutate(dataset = factor(dataset)) %&gt;%
+  bootstraps()</code></pre>
+<p>Let’s create a random forest model and set up a model workflow with the model and a formula preprocessor. We are predicting the <code>dataset</code> class (dino vs. circle vs. bullseye vs. …) from x and y. A random forest model can often do a good job of learning complex interactions in predictors.</p>
+<pre class="r"><code>rf_spec &lt;- rand_forest(trees = 1000) %&gt;%
+  set_mode(&quot;classification&quot;) %&gt;%
+  set_engine(&quot;ranger&quot;)
+
+dino_wf &lt;- workflow() %&gt;%
+  add_formula(dataset ~ x + y) %&gt;%
+  add_model(rf_spec)</code></pre>
+<p>Let’s fit the random forest model to the bootstrap resamples.</p>
+<pre class="r"><code># register a parallel backend, leaving one core available
+all_cores &lt;- parallelly::availableCores(omit = 1)
+all_cores</code></pre>
+<pre><code>system 
+    11 </code></pre>
+<pre class="r"><code>future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows
+
+dino_rs &lt;- fit_resamples(
+  dino_wf,
+  resamples = dino_folds,
+  control = control_resamples(save_pred = TRUE)
+)</code></pre>
+</div>
+</div>
+<div id="evaluate-the-model" class="section level1">
+<h1>Evaluate the model</h1>
+<p>How did these models do overall?</p>
+<pre class="r"><code>collect_metrics(dino_rs) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">accuracy</td>
+<td align="left">multiclass</td>
+<td align="right">0.4531722</td>
+<td align="right">25</td>
+<td align="right">0.0031611</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+<tr class="even">
+<td align="left">roc_auc</td>
+<td align="left">hand_till</td>
+<td align="right">0.8475001</td>
+<td align="right">25</td>
+<td align="right">0.0014127</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<p>The accuracy is not great; a multiclass problem like this, especially one with so many classes, is harder than a binary classification problem. There are so many possible wrong answers!</p>
+<p>Since we saved the predictions with <code>save_pred = TRUE</code> we can compute other performance metrics. Notice that by default the positive predictive value (like accuracy) is macro-weighted for multiclass problems.</p>
+<pre class="r"><code>dino_rs %&gt;%
+  collect_predictions() %&gt;%
+  group_by(id) %&gt;%
+  ppv(dataset, .pred_class) %&gt;%
+  knitr::kable(digits = c(0, 0, 0, 3))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">id</th>
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bootstrap01</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.414</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap02</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.440</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap03</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.452</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap04</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.434</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap05</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.460</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap06</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.400</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap07</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.414</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap08</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.404</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap09</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.444</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap10</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.449</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap11</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.422</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap12</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.430</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap13</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.456</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap14</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.415</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap15</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.439</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap16</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.449</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap17</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.419</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap18</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.428</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap19</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.460</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap20</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.425</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap21</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.396</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap22</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.421</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap23</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.436</td>
+</tr>
+<tr class="even">
+<td align="left">Bootstrap24</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.420</td>
+</tr>
+<tr class="odd">
+<td align="left">Bootstrap25</td>
+<td align="left">ppv</td>
+<td align="left">macro</td>
+<td align="right">0.424</td>
+</tr>
+</tbody>
+</table>
+<p>Next, let’s compute ROC curves for each class.</p>
+<pre class="r"><code>dino_rs %&gt;%
+  collect_predictions() %&gt;%
+  group_by(id) %&gt;%
+  roc_curve(dataset, .pred_away:.pred_x_shape) %&gt;%
+  ggplot(aes(1 - specificity, sensitivity, color = id)) +
+  geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
+  geom_path(show.legend = FALSE, size = 1.2) +
+  scale_x_continuous(n.breaks = 3) +
+  facet_wrap(~.level, ncol = 5) +
+  coord_equal()</code></pre>
+<p><img src="figure/Datasaurus.Rmd/unnamed-chunk-11-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>We have an ROC curve for each class and each resample in this plot. Notice that the points dataset was easy for the model to identify while the dino dataset was very difficult. The model barely did better than guessing for the dino!</p>
+<p>We can also compute a confusion matrix. We could use <code>tune::conf_mat_resampled()</code> but since there are so few examples per class and the classes were balanced, let’s just look at all the resamples together.</p>
+<pre class="r"><code>dino_rs %&gt;%
+  collect_predictions() %&gt;%
+  conf_mat(dataset, .pred_class) %&gt;%
+  autoplot(type = &quot;heatmap&quot;) +
+  theme(text = element_text(size = 12))</code></pre>
+<p><img src="figure/Datasaurus.Rmd/unnamed-chunk-12-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>There is some real variability on the diagonal, with a factor of 10 difference from dinos to dots.</p>
+<p>The dino dataset was confused with many of the other datasets, and `<code>wide_lines</code> was often confused with both <code>slant_up</code> and <code>away</code>.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ranger_0.13.1      vctrs_0.3.8        rlang_0.4.11       yardstick_0.0.8   
+ [5] workflowsets_0.1.0 workflows_0.2.3    tune_0.1.6         rsample_0.1.0     
+ [9] recipes_0.1.16     parsnip_0.1.7.900  modeldata_0.1.1    infer_1.0.0       
+[13] dials_0.0.10       scales_1.1.1       tidymodels_0.1.3   gridExtra_2.3     
+[17] broom_0.7.9        forcats_0.5.1      stringr_1.4.0      dplyr_1.0.7       
+[21] purrr_0.3.4        readr_2.0.1        tidyr_1.1.3        tibble_3.1.4      
+[25] ggplot2_3.3.5      tidyverse_1.3.1    workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.2.1    systemfonts_1.0.2 
+  [4] selectr_0.4-2      plyr_1.8.6         tidytuesdayR_1.0.1
+  [7] splines_4.1.1      listenv_0.8.0      usethis_2.0.1     
+ [10] digest_0.6.27      foreach_1.5.1      htmltools_0.5.2   
+ [13] viridis_0.6.1      fansi_0.5.0        magrittr_2.0.1    
+ [16] tzdb_0.1.2         globals_0.14.0     modelr_0.1.8      
+ [19] gower_0.2.2        extrafont_0.17     vroom_1.5.5       
+ [22] R.utils_2.10.1     extrafontdb_1.0    hardhat_0.1.6     
+ [25] colorspace_2.0-2   rvest_1.0.1        textshaping_0.3.5 
+ [28] haven_2.4.3        xfun_0.26          prismatic_1.0.0   
+ [31] crayon_1.4.1       jsonlite_1.7.2     survival_3.2-11   
+ [34] iterators_1.0.13   glue_1.4.2         gtable_0.3.0      
+ [37] ipred_0.9-12       R.cache_0.15.0     Rttf2pt1_1.3.9    
+ [40] future.apply_1.8.1 DBI_1.1.1          Rcpp_1.0.7        
+ [43] viridisLite_0.4.0  bit_4.0.4          GPfit_1.0-8       
+ [46] lava_1.6.10        prodlim_2019.11.13 httr_1.4.2        
+ [49] ellipsis_0.3.2     farver_2.1.0       pkgconfig_2.0.3   
+ [52] R.methodsS3_1.8.1  nnet_7.3-16        sass_0.4.0        
+ [55] dbplyr_2.1.1       utf8_1.2.2         here_1.0.1        
+ [58] labeling_0.4.2     tidyselect_1.1.1   DiceDesign_1.9    
+ [61] later_1.3.0        munsell_0.5.0      cellranger_1.1.0  
+ [64] tools_4.1.1        cachem_1.0.6       cli_3.0.1         
+ [67] generics_0.1.0     evaluate_0.14      fastmap_1.1.0     
+ [70] yaml_2.2.1         ragg_1.1.3         bit64_4.0.5       
+ [73] knitr_1.34         fs_1.5.0           nlme_3.1-152      
+ [76] future_1.22.1      whisker_0.4        R.oo_1.24.0       
+ [79] xml2_1.3.2         compiler_4.1.1     rstudioapi_0.13   
+ [82] curl_4.3.2         reprex_2.0.1       lhs_1.1.3         
+ [85] bslib_0.3.0        stringi_1.7.4      highr_0.9         
+ [88] gdtools_0.2.3      hrbrthemes_0.8.0   lattice_0.20-44   
+ [91] Matrix_1.3-4       styler_1.6.1       conflicted_1.0.4  
+ [94] pillar_1.6.2       lifecycle_1.0.0    furrr_0.2.3       
+ [97] jquerylib_0.1.4    httpuv_1.6.3       R6_2.5.1          
+[100] promises_1.2.0.1   parallelly_1.28.1  codetools_0.2-18  
+[103] MASS_7.3-54        assertthat_0.2.1   rprojroot_2.0.2   
+[106] withr_2.4.2        mgcv_1.8-36        parallel_4.1.1    
+[109] hms_1.1.0          grid_4.1.1         rpart_4.1-15      
+[112] timeDate_3043.102  class_7.3-19       rmarkdown_2.11    
+[115] git2r_0.28.0       pROC_1.18.0        lubridate_1.7.10  </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
