@@ -76,7 +76,7 @@ cm_heat <- function(x) {
         fill = Freq
       )
     ) %+%
-    ggplot2::geom_tile() %+%
+    ggplot2::geom_tile(show.legend = FALSE) %+%
     ggplot2::scale_fill_viridis_c(option = "H") %+%
     ggplot2::scale_x_discrete(guide = guide_axis(n.dodge = 2)) %+%
     ggplot2::theme(
@@ -85,7 +85,8 @@ cm_heat <- function(x) {
     ) %+%
     ggplot2::geom_text(mapping = ggplot2::aes(label = Freq,
                                               color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))),
-                       size = rel(4)) %+%
+                       size = rel(15),
+                       face = "bold") %+%
     ggplot2::labs(x = axis_labels$x, y = axis_labels$y)
 }
 
