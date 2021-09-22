@@ -1,0 +1,192 @@
+---
+title: "Crop Yields"
+date: "August 31, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+# TidyTuesday
+
+Join the R4DS Online Learning Community in the weekly #TidyTuesday event!
+Every week we post a raw dataset, a chart or article related to that dataset, and ask you to explore the data.
+While the dataset will be “tamed”, it will not always be tidy! As such you might need to apply various R for Data Science techniques to wrangle the data into a true tidy format.
+The goal of TidyTuesday is to apply your R skills, get feedback, explore other’s work, and connect with the greater #RStats community!
+As such we encourage everyone of all skills to participate!
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+})
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+# Load the weekly Data
+
+Dowload the weekly data and make available in the `tt` object.
+
+```{r Load}
+
+tt <- tidytuesdayR::tt_load("2020-09-01")
+
+```
+
+
+# Readme
+
+Take a look at the readme for the weekly data to get insight on the dataset.
+This includes a data dictionary, source, and a link to an article on the data.
+
+```{r Readme, eval = interactive()}
+
+tt
+
+```
+
+
+# Glimpse Data
+
+Take an initial look at the format of the data available.
+
+```{r Glimpse, eval = FALSE}
+
+tt %>% 
+  map(glimpse)
+
+```
+
+# Wrangle
+
+Explore the data and process it into a nice format for plotting! Access each dataset by name by using a dollarsign after the `tt` object and then the name of the data set.
+
+```{r Wrangle, fig.width=12, fig.height=9}
+
+nutrient <- tt$cereal_crop_yield_vs_fertilizer_application
+
+nutrient_rates <- nutrient %>%
+  mutate(Cereal = `Cereal yield (tonnes per hectare)`,
+         Nitrogen = `Nitrogen fertilizer use (kilograms per hectare)`,           Nitrogen = if_else(is.na(Nitrogen),0,Nitrogen),
+           Efficiency = Cereal / Nitrogen, .keep = "unused") %>%
+  filter(Efficiency < 10, !is.na(Code)) %>% 
+  tidyr::nest(data = c(Efficiency, Nitrogen, Cereal, Year)) %>%
+  mutate(fit = map(.x = data,.f = ~ lm(Efficiency ~ Year, data = .))) %>%
+  mutate(slope = purrr::map_dbl(.x = fit, .f = ~broom::tidy(.)$estimate[2])) %>%
+  tidyr::unnest(data) %>%
+  group_by(Entity) %>%
+  mutate(avg_yield = mean(Cereal)) %>%
+  ungroup()
+
+btm <- quantile(nutrient_rates$slope, probs = c(0.2,0.8))[1]
+top <- quantile(nutrient_rates$slope, probs = c(0.2,0.8))[2]
+
+nutrient_rates <- nutrient_rates %>%
+  mutate(bin = case_when(
+     slope < btm ~ "Decrease",
+     slope > top ~ "Increase",
+     TRUE ~ "Flat"
+  ),
+  Year = as.integer(Year))
+
+nutrient_rates %>%
+  filter(bin %in% c("Decrease","Increase"), avg_yield > 5) %>%
+  ggplot(aes(Year, Efficiency)) +
+  geom_point() +
+  geom_smooth(aes(color = bin), 
+              method = "loess", 
+              formula = "y ~ x", 
+              alpha = 0.1, show.legend = FALSE) +
+  scale_x_continuous(n.breaks = 4) +
+  facet_wrap(~Entity) +
+  labs(title = "Nutrient Efficiency",
+       subtitle = "Cereal Yield Tonnes per Hectare divided by Nitrogen Equivalent Fertilizer kg per Hectare",
+       caption = "FAO and Our World in Data | @jim_gruman")
+
+```
+
+
+```{r}
+key_crop_yields <- tt$key_crop_yields
+
+land_use <- tt$land_use_vs_yield_change_in_cereal_production
+
+```
+
+
+```{r}
+top_countries <- land_use %>%
+  janitor::clean_names() %>% 
+  filter(!is.na(code),
+         entity != "World") %>% 
+  group_by(entity) %>% 
+  filter(year == max(year)) %>% 
+  ungroup() %>% 
+  slice_max(total_population_gapminder, n = 30) %>% 
+  pull(entity)
+```
+
+```{r}
+tidy_yields <- key_crop_yields %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(wheat_tonnes_per_hectare:bananas_tonnes_per_hectare,
+               names_to = "crop",
+               values_to = "yield") %>% 
+  mutate(crop = str_remove(crop, "_tonnes_per_hectare")) %>% 
+  filter(crop %in% c("wheat","rice","maize","barley"),
+         entity %in% top_countries,
+         !is.na(yield))
+```
+
+```{r, fig.asp = 1, warning=FALSE}
+tidy_yields %>% 
+  ggplot(aes(year, yield, color = crop)) +
+  geom_point(alpha = 0.7, size = 1.5) +
+  geom_line(alpha = 0.7, size = 1.5) +  
+  facet_wrap(~ entity) +
+  scale_x_continuous(n.breaks = 2) +
+  labs(x = NULL, 
+       subtitle = "yields (tons per hectare)",
+       title = "Global increases in yields of cereal grains")
+
+```
+
+## Many Models
+
+Let's use statistical modeling to measure the country to country differences and changes over time. In this case, a simple linear estimate is useful to compare each country's growth rates.
+
+This chart depicts the estimate of growth on the x-axis, and the p-value on the y-axis. Consider the p-value the likelihood that the growth estimate is no different than random chance. A smaller p-value is a greater confidence in the effect.
+
+```{r}
+
+tidy_lm <- tidy_yields %>% 
+  nest(yields = c(year, yield)) %>% 
+  mutate(model = map(yields, ~ lm(yield ~ year, data = .x)))
+
+slopes <- tidy_lm %>% 
+  mutate(coefs = map(model, broom::tidy)) %>%
+  unnest(coefs) %>%
+  filter(term == "year") %>% 
+  mutate(p.value = p.adjust(p.value))
+
+```
+
+```{r warning=FALSE, fig.asp=1}
+
+slopes %>% 
+  ggplot(aes(estimate, p.value, label = entity)) +
+  geom_vline(xintercept = 0, lty = 2, size = 1.5, alpha = 0.7, color = "gray50") +
+  geom_point(aes(color = crop),alpha = 0.8, size = 2.5, show.legend = FALSE) +
+  ggrepel::geom_text_repel(size = 3) +
+  scale_y_log10() +
+  facet_wrap(~ crop) +
+  labs(y = "p.value effect size: Likelihood that this slope was no different than chance, \nsmaller is more confident",
+       x = "estimate of the slope, values greater than 0 are yearly increases")
+```
+
+
