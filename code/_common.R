@@ -130,6 +130,15 @@ ggplot_imp <- function(...) {
          y = NULL,  fill = NULL,  color = NULL)
 }
 
+# ggplot categorical count helper function ----
+
+withfreq <- function(x){
+  tibble(x) %>%
+    add_count(x) %>%
+    mutate(combined = glue::glue("{ str_wrap(x, width = 20) } ({ n })")) %>%
+    pull(combined)
+}
+
 # ----
 
 tidymodels::tidymodels_prefer(quiet = TRUE)
