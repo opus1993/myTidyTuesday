@@ -87,7 +87,7 @@ university_df %>%
   scale_y_continuous(labels = scales::dollar_format()) +
   facet_wrap(~region) +  
   labs(title = "College Enrollment Category:  High Women's Enrollment",
-       subtitle = "TidyTuesday 2020 Week 11",
+       subtitle = "by Region: TidyTuesday 2020 Week 11",
        caption = paste0("Jim Gruman ", Sys.Date())) 
 
 
@@ -96,15 +96,15 @@ university_df %>%
   geom_boxplot() +
   scale_y_log10() +
   labs(title = "College Enrollment Category:  High Women's Enrollment",
-       subtitle = "TidyTuesday 2020 Week 11",
+       subtitle = "by Type:  TidyTuesday 2020 Week 11",
        caption = paste0("Jim Gruman ", Sys.Date())) +
   theme(plot.title.position = "plot")
 
 university_df %>%
   ggplot(aes(type, make_world_better_percent/100, fill = diversity)) +
   geom_boxplot() +
-  labs(title = "College Enrollment Category:  High Women's Enrollment",
-       subtitle = "TidyTuesday 2020 Week 11",
+  labs(title = "College Enrollment Category:  Making the World Better",
+       subtitle = "Alumni Sentiment: TidyTuesday 2020 Week 11",
        caption = paste0("Jim Gruman ", Sys.Date())) +
   scale_y_continuous(labels = scales::percent_format()) +
   theme(plot.title.position = "plot") +
