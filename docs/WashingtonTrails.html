@@ -15,8 +15,8 @@
 
 <title>Washington State Trails</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -313,7 +313,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-09-08
+<strong>Last updated:</strong> 2021-09-22
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -404,16 +404,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree948492911a6e96c51d4eec679ee6a38e3e9b9976targetblank9484929a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/948492911a6e96c51d4eec679ee6a38e3e9b9976" target="_blank">9484929</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree125b3981c35092516947f363595a7fb23109c74atargetblank125b398a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/125b3981c35092516947f363595a7fb23109c74a" target="_blank">125b398</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree948492911a6e96c51d4eec679ee6a38e3e9b9976targetblank9484929a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree125b3981c35092516947f363595a7fb23109c74atargetblank125b398a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/948492911a6e96c51d4eec679ee6a38e3e9b9976" target="_blank">9484929</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/125b3981c35092516947f363595a7fb23109c74a" target="_blank">125b398</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -424,7 +424,17 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    catboost_info/
     Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
     Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
 
 </code></pre>
 <p>
@@ -463,6 +473,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/125b3981c35092516947f363595a7fb23109c74a/analysis/WashingtonTrails.Rmd" target="_blank">125b398</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-22
+</td>
+<td>
+adopt stat_dots in trail lengths distribution chart
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/b30e599700bc0a74c0172cc43059aff8a611289a/docs/WashingtonTrails.html" target="_blank">b30e599</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -518,56 +562,51 @@ source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
 <pre class="r"><code>hike_data_rds &lt;- here::here(&quot;data/hike_data.rds&quot;)
 
 if (!file.exists(hike_data_rds)) {
-  
   hike_pages &lt;- 1:129
-  
-  hike_data &lt;- lapply( hike_pages - 1 , function(page){
-    
+
+  hike_data &lt;- lapply(hike_pages - 1, function(page) {
     start_int &lt;- 30 * page
-    
+
     page_url &lt;- paste0(
       &quot;https://www.wta.org/go-outside/hikes?b_start:int=&quot;,
       start_int
     )
-    
+
     page_html &lt;- read_html(page_url)
-    
-    page_html %&gt;% 
-      
-      html_nodes(&quot;.search-result-item&quot;) %&gt;% 
-      
+
+    page_html %&gt;%
+      html_nodes(&quot;.search-result-item&quot;) %&gt;%
       map(
-        function(hike){
-          
+        function(hike) {
           hike_name &lt;- hike %&gt;%
-            html_nodes(&quot;.item-header&quot;) %&gt;% 
-            html_nodes(&quot;.listitem-title&quot;) %&gt;% 
-            html_nodes(&quot;span&quot;) %&gt;%  
+            html_nodes(&quot;.item-header&quot;) %&gt;%
+            html_nodes(&quot;.listitem-title&quot;) %&gt;%
+            html_nodes(&quot;span&quot;) %&gt;%
             html_text()
 
-          hike_page &lt;- hike %&gt;% 
-            html_nodes(&quot;.item-header&quot;) %&gt;% 
-            html_nodes(&quot;.listitem-title&quot;) %&gt;% 
-            html_attr(&quot;href&quot;) 
-          
-          hike_location &lt;- hike %&gt;% 
-            html_nodes(&quot;.item-header&quot;) %&gt;% 
-            html_nodes(&quot;.region&quot;) %&gt;% 
+          hike_page &lt;- hike %&gt;%
+            html_nodes(&quot;.item-header&quot;) %&gt;%
+            html_nodes(&quot;.listitem-title&quot;) %&gt;%
+            html_attr(&quot;href&quot;)
+
+          hike_location &lt;- hike %&gt;%
+            html_nodes(&quot;.item-header&quot;) %&gt;%
+            html_nodes(&quot;.region&quot;) %&gt;%
             html_text()
 
-          hike_desc &lt;- hike %&gt;% 
-            html_nodes(&quot;.hike-detail&quot;) %&gt;% 
-            html_nodes(&quot;.listing-summary&quot;) %&gt;% 
-            html_text() %&gt;% 
+          hike_desc &lt;- hike %&gt;%
+            html_nodes(&quot;.hike-detail&quot;) %&gt;%
+            html_nodes(&quot;.listing-summary&quot;) %&gt;%
+            html_text() %&gt;%
             stringr::str_trim(side = &quot;both&quot;)
-          
-          hike_features &lt;- hike %&gt;% 
-            html_nodes(&quot;.hike-detail&quot;) %&gt;% 
-            html_nodes(&quot;.trip-features&quot;) %&gt;% 
-            html_nodes(&quot;img&quot;) %&gt;% 
-            html_attr(&quot;title&quot;) %&gt;% 
+
+          hike_features &lt;- hike %&gt;%
+            html_nodes(&quot;.hike-detail&quot;) %&gt;%
+            html_nodes(&quot;.trip-features&quot;) %&gt;%
+            html_nodes(&quot;img&quot;) %&gt;%
+            html_attr(&quot;title&quot;) %&gt;%
             list()
-          
+
           tibble(
             name = hike_name,
             location = hike_location,
@@ -575,165 +614,173 @@ if (!file.exists(hike_data_rds)) {
             description = hike_desc,
             hike_page = hike_page
           )
-        }) %&gt;% 
-      bind_rows() %&gt;% 
+        }
+      ) %&gt;%
+      bind_rows() %&gt;%
+      mutate(stats = map(hike_page, function(hike_page) {
+        print(hike_page)
 
-      mutate(stats = map(hike_page, function(hike_page){
-          print(hike_page)
+        stats_html &lt;- read_html(hike_page)
 
-          stats_html &lt;- read_html(hike_page) 
-          
-          length &lt;- stats_html %&gt;% 
-                    html_nodes(&quot;.hike-stat&quot;) %&gt;%
-                    html_nodes(&quot;#distance&quot;) %&gt;%
-                    html_nodes(&quot;span&quot;) %&gt;%
-                    html_text()
-          
-          elevation &lt;- stats_html %&gt;% 
-                       html_nodes(&quot;.hike-stat&quot;) %&gt;% 
-                       `[[`(3)
-          
-          elevation_state &lt;- case_when(
-                sum(html_text(elevation) %&gt;% str_detect(c(&quot;Gain&quot;,&quot;Point&quot;))) == 2 ~ &quot;both&quot;,
-                html_text(elevation) %&gt;% str_detect(&quot;Gain&quot;) ~ &quot;gain&quot;,
-                html_text(elevation) %&gt;% str_detect(&quot;Point&quot;) ~ &quot;highpoint&quot;,
-                TRUE ~ &quot;neither&quot;
-          )
-          
-          if ( elevation_state == &quot;both&quot;) { 
-            gain &lt;- elevation %&gt;%
-                            html_nodes(&quot;span&quot;) %&gt;% 
-                            html_text() %&gt;% 
-                            `[[`(1)
-            
-            highpoint &lt;- elevation %&gt;%
-                            html_nodes(&quot;span&quot;) %&gt;% 
-                            html_text() %&gt;% 
-                            `[[`(2)
-            
-            } else if ( elevation_state == &quot;highpoint&quot;) {
-             
-             highpoint &lt;- elevation %&gt;%
-                            html_nodes(&quot;span&quot;) %&gt;% 
-                            html_text() 
-             
-             gain &lt;- NA_character_
-             
-           } else if ( elevation_state == &quot;gain&quot;) {
-             
-             gain &lt;- elevation %&gt;%
-                            html_nodes(&quot;span&quot;) %&gt;% 
-                            html_text() 
-             
-             highpoint &lt;- NA_character_
-             
-           } else if (elevation_state == &quot;neither&quot;) {
-             highpoint &lt;- NA_character_
-             gain &lt;- NA_character_
-           }
-         
-      rating &lt;- stats_html %&gt;% 
-                      html_nodes(&quot;.hike-stat&quot;) %&gt;% 
-                      `[[`(4) %&gt;%
-                      html_nodes(&quot;.current-rating&quot;) %&gt;%
-                      html_text()
-            
-      longitude &lt;- if (is_empty(stats_html %&gt;% 
-                       html_nodes(&quot;.latlong&quot;) %&gt;%
-                       html_node(&quot;span&quot;) %&gt;% 
-                       html_text)) {NA_character_} else {
-        
-                      stats_html %&gt;% 
-                      html_nodes(&quot;.latlong&quot;) %&gt;%
-                      html_nodes(&quot;span&quot;) %&gt;% 
-                      html_text() %&gt;% 
-                      `[[`(1) }
-      
-      latitude &lt;- if (is_empty(stats_html %&gt;% 
-                       html_nodes(&quot;.latlong&quot;) %&gt;%
-                       html_node(&quot;span&quot;) %&gt;% 
-                       html_text)) {NA_character_} else {
-        
-                      stats_html %&gt;% 
-                      html_nodes(&quot;.latlong&quot;) %&gt;%
-                      html_nodes(&quot;span&quot;) %&gt;% 
-                      html_text() %&gt;% 
-                      `[[`(2) }
-      
-    stats &lt;- tibble(
-        length = length,
-        gain = gain,
-        highpoint = highpoint,
-        rating = rating,
-        longitude = longitude,
-        latitude = latitude)
-      
-    return(stats)
+        length &lt;- stats_html %&gt;%
+          html_nodes(&quot;.hike-stat&quot;) %&gt;%
+          html_nodes(&quot;#distance&quot;) %&gt;%
+          html_nodes(&quot;span&quot;) %&gt;%
+          html_text()
+
+        elevation &lt;- stats_html %&gt;%
+          html_nodes(&quot;.hike-stat&quot;) %&gt;%
+          `[[`(3)
+
+        elevation_state &lt;- case_when(
+          sum(html_text(elevation) %&gt;% str_detect(c(&quot;Gain&quot;, &quot;Point&quot;))) == 2 ~ &quot;both&quot;,
+          html_text(elevation) %&gt;% str_detect(&quot;Gain&quot;) ~ &quot;gain&quot;,
+          html_text(elevation) %&gt;% str_detect(&quot;Point&quot;) ~ &quot;highpoint&quot;,
+          TRUE ~ &quot;neither&quot;
+        )
+
+        if (elevation_state == &quot;both&quot;) {
+          gain &lt;- elevation %&gt;%
+            html_nodes(&quot;span&quot;) %&gt;%
+            html_text() %&gt;%
+            `[[`(1)
+
+          highpoint &lt;- elevation %&gt;%
+            html_nodes(&quot;span&quot;) %&gt;%
+            html_text() %&gt;%
+            `[[`(2)
+        } else if (elevation_state == &quot;highpoint&quot;) {
+          highpoint &lt;- elevation %&gt;%
+            html_nodes(&quot;span&quot;) %&gt;%
+            html_text()
+
+          gain &lt;- NA_character_
+        } else if (elevation_state == &quot;gain&quot;) {
+          gain &lt;- elevation %&gt;%
+            html_nodes(&quot;span&quot;) %&gt;%
+            html_text()
+
+          highpoint &lt;- NA_character_
+        } else if (elevation_state == &quot;neither&quot;) {
+          highpoint &lt;- NA_character_
+          gain &lt;- NA_character_
+        }
+
+        rating &lt;- stats_html %&gt;%
+          html_nodes(&quot;.hike-stat&quot;) %&gt;%
+          `[[`(4) %&gt;%
+          html_nodes(&quot;.current-rating&quot;) %&gt;%
+          html_text()
+
+        longitude &lt;- if (is_empty(stats_html %&gt;%
+          html_nodes(&quot;.latlong&quot;) %&gt;%
+          html_node(&quot;span&quot;) %&gt;%
+          html_text())) {
+          NA_character_
+        } else {
+          stats_html %&gt;%
+            html_nodes(&quot;.latlong&quot;) %&gt;%
+            html_nodes(&quot;span&quot;) %&gt;%
+            html_text() %&gt;%
+            `[[`(1)
+        }
+
+        latitude &lt;- if (is_empty(stats_html %&gt;%
+          html_nodes(&quot;.latlong&quot;) %&gt;%
+          html_node(&quot;span&quot;) %&gt;%
+          html_text())) {
+          NA_character_
+        } else {
+          stats_html %&gt;%
+            html_nodes(&quot;.latlong&quot;) %&gt;%
+            html_nodes(&quot;span&quot;) %&gt;%
+            html_text() %&gt;%
+            `[[`(2)
+        }
+
+        stats &lt;- tibble(
+          length = length,
+          gain = gain,
+          highpoint = highpoint,
+          rating = rating,
+          longitude = longitude,
+          latitude = latitude
+        )
+
+        return(stats)
       }))
-    
-  }) %&gt;% 
-    bind_rows() %&gt;% 
-    unnest_wider(stats) 
-  
-hike_data &lt;- hike_data %&gt;% 
+  }) %&gt;%
+    bind_rows() %&gt;%
+    unnest_wider(stats)
+
+  hike_data &lt;- hike_data %&gt;%
     mutate(
       trip = case_when(
-      grepl(&quot;roundtrip&quot;,length) ~ &quot;roundtrip&quot;,
-      grepl(&quot;one-way&quot;,length) ~ &quot;one-way&quot;,
-      grepl(&quot;of trails&quot;,length) ~ &quot;trails&quot;),
-     length_total = as.numeric(gsub(&quot;(\\d+[.]\\d+).*&quot;,&quot;\\1&quot;, length)) * ((trip == &quot;one-way&quot;) + 1)) %&gt;% 
-   mutate(
-    across(c(length, gain, highpoint, longitude, latitude, rating), parse_number))  
+        grepl(&quot;roundtrip&quot;, length) ~ &quot;roundtrip&quot;,
+        grepl(&quot;one-way&quot;, length) ~ &quot;one-way&quot;,
+        grepl(&quot;of trails&quot;, length) ~ &quot;trails&quot;
+      ),
+      length_total = as.numeric(gsub(&quot;(\\d+[.]\\d+).*&quot;, &quot;\\1&quot;, length)) * ((trip == &quot;one-way&quot;) + 1)
+    ) %&gt;%
+    mutate(
+      across(c(length, gain, highpoint, longitude, latitude, rating), parse_number)
+    )
   write_rds(hike_data, file = hike_data_rds)
-  
-}else{
-  
+} else {
   hike_data &lt;- read_rds(hike_data_rds)
-  
 }</code></pre>
 <p>We will further separate the location field into region and subregion, by the hyphen.</p>
-<pre class="r"><code>hike_data &lt;- hike_data %&gt;% 
-   separate(location, into = c(&quot;region&quot;,&quot;subregion&quot;), sep = &quot; -- &quot;, fill = &quot;right&quot;) %&gt;% 
-   replace_na(list(subregion = &quot;Other&quot;)) %&gt;% 
-   mutate(across(c(name, region, subregion), as_factor))</code></pre>
+<pre class="r"><code>hike_data &lt;- hike_data %&gt;%
+  separate(location, into = c(&quot;region&quot;, &quot;subregion&quot;), sep = &quot; -- &quot;, fill = &quot;right&quot;) %&gt;%
+  replace_na(list(subregion = &quot;Other&quot;)) %&gt;%
+  mutate(across(c(name, region, subregion), as_factor))</code></pre>
 <p>First, a table of summarized trail data by Region</p>
-<pre class="r"><code>rating_stars &lt;- function(rating, max_rating = 5){
+<pre class="r"><code>rating_stars &lt;- function(rating, max_rating = 5) {
   rounded_rating &lt;- floor(rating + 0.5)
-  stars &lt;- lapply(seq_len(max_rating), function(i){
-    if (i &lt;= rounded_rating) fontawesome::fa(&quot;star&quot;, fill = &quot;orange&quot;) 
-    else fontawesome::fa(&quot;star&quot;, fill = &quot;grey&quot;)
+  stars &lt;- lapply(seq_len(max_rating), function(i) {
+    if (i &lt;= rounded_rating) {
+      fontawesome::fa(&quot;star&quot;, fill = &quot;orange&quot;)
+    } else {
+      fontawesome::fa(&quot;star&quot;, fill = &quot;grey&quot;)
+    }
   })
   label &lt;- sprintf(&quot;%s out of %s&quot;, rating, max_rating)
   div_out &lt;- div(title = label, &quot;aria-label&quot; = label, role = &quot;img&quot;, stars)
-  
-  as.character(div_out) %&gt;% 
+
+  as.character(div_out) %&gt;%
     gt::html()
 }
 
-hike_data %&gt;% 
-  group_by(region, subregion) %&gt;% 
-  summarize(total_length = round(sum(length, na.rm = TRUE)),
-            average_gain = round(mean(gain, na.rm = TRUE)),
-            min_rating = round(min(rating, na.rm = TRUE),1),
-            max_rating = round(max(rating, na.rm = TRUE),1),
-            number = n(),
-            .groups = &quot;drop&quot;) %&gt;% 
-  mutate(subregion = fct_reorder(subregion, desc(number)),
-         min_rating = map(min_rating, rating_stars),
-         max_rating = map(max_rating, rating_stars)) %&gt;%    
-  select(region, subregion, number, total_length, average_gain, min_rating, max_rating) %&gt;% 
-  arrange(region, subregion) %&gt;% 
-  group_by(region) %&gt;% 
-  gt() %&gt;% 
-  tab_header(title = gt::html(&quot;&lt;span style=&#39;color:darkgreen&#39;&gt;Washington State Hiking Trail Summary by Region&lt;/span&gt;&quot;)) %&gt;% 
-  cols_label(subregion = &quot;Region&quot;,
-             number = &quot;Number of Trails&quot;,
-              total_length = md(&quot;Total Milage All Trails&quot;),
-              average_gain = md(&quot;Average Elevation Gain (Feet)&quot;),
-              min_rating = md(&quot;**Min Rating**&quot;),
-              max_rating = md(&quot;**Max Rating**&quot;)) %&gt;% 
-  opt_row_striping() %&gt;% 
-  tab_options(data_row.padding = px(3))  </code></pre>
+hike_data %&gt;%
+  group_by(region, subregion) %&gt;%
+  summarize(
+    total_length = round(sum(length, na.rm = TRUE)),
+    average_gain = round(mean(gain, na.rm = TRUE)),
+    min_rating = round(min(rating, na.rm = TRUE), 1),
+    max_rating = round(max(rating, na.rm = TRUE), 1),
+    number = n(),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  mutate(
+    subregion = fct_reorder(subregion, desc(number)),
+    min_rating = map(min_rating, rating_stars),
+    max_rating = map(max_rating, rating_stars)
+  ) %&gt;%
+  select(region, subregion, number, total_length, average_gain, min_rating, max_rating) %&gt;%
+  arrange(region, subregion) %&gt;%
+  group_by(region) %&gt;%
+  gt() %&gt;%
+  tab_header(title = gt::html(&quot;&lt;span style=&#39;color:darkgreen&#39;&gt;Washington State Hiking Trail Summary by Region&lt;/span&gt;&quot;)) %&gt;%
+  cols_label(
+    subregion = &quot;Region&quot;,
+    number = &quot;Number of Trails&quot;,
+    total_length = md(&quot;Total Milage All Trails&quot;),
+    average_gain = md(&quot;Average Elevation Gain (Feet)&quot;),
+    min_rating = md(&quot;**Min Rating**&quot;),
+    max_rating = md(&quot;**Max Rating**&quot;)
+  ) %&gt;%
+  opt_row_striping() %&gt;%
+  tab_options(data_row.padding = px(3))</code></pre>
 <div id="zmcnrudale" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
@@ -2247,84 +2294,87 @@ hike_data %&gt;%
 <p>Another table, adapted from <a href="https://github.com/kaustavSen/tidytuesday/blob/master/2020/week_48_washington_trails.Rmd">Kaustav Sen’s post</a></p>
 <pre class="r"><code>thumbs_up &lt;- function(value) {
   icon &lt;- fa(&quot;thumbs-up&quot;, fill = &quot;#38A605&quot;)
-  div(icon) %&gt;% 
-    as.character() %&gt;% 
+  div(icon) %&gt;%
+    as.character() %&gt;%
     html()
 }
 
-bar_chart &lt;- function(value, color = &quot;#DFB37D&quot;){
-    glue::glue(
-      &quot;&lt;span style=\&quot;display: inline-block; 
-      direction: ltr; border-radius: 4px; 
-      padding-right: 2px; background-color: {color}; 
+bar_chart &lt;- function(value, color = &quot;#DFB37D&quot;) {
+  glue::glue(
+    &quot;&lt;span style=\&quot;display: inline-block;
+      direction: ltr; border-radius: 4px;
+      padding-right: 2px; background-color: {color};
       color: {color}; width: {value}%\&quot;&gt; &amp;nbsp; &lt;/span&gt;&quot;
-    ) %&gt;% 
-    as.character() %&gt;% 
+  ) %&gt;%
+    as.character() %&gt;%
     gt::html()
 }
 
 
-hike_data %&gt;% 
-  group_by(region) %&gt;% 
-  arrange(desc(rating)) %&gt;% 
-  slice(1:4) %&gt;% 
-  ungroup() %&gt;% 
-  select(-description, -gain, -highpoint, -latitude, -longitude,
-         -hike_page, -subregion, -length_total, -trip) %&gt;%
-  mutate(rating = if_else(is.na(rating),0,rating), 
+hike_data %&gt;%
+  group_by(region) %&gt;%
+  arrange(desc(rating)) %&gt;%
+  slice(1:4) %&gt;%
+  ungroup() %&gt;%
+  select(
+    -description, -gain, -highpoint, -latitude, -longitude,
+    -hike_page, -subregion, -length_total, -trip
+  ) %&gt;%
+  mutate(
+    rating = if_else(is.na(rating), 0, rating),
     length_bar = map(length, bar_chart),
     rating = map(rating, rating_stars),
     feature_present = 1,
     feature_present = map(feature_present, thumbs_up)
-  ) %&gt;% 
-  unnest_longer(features) %&gt;% 
-  mutate(features = str_replace(features, pattern = &quot;/.+&quot;, replacement = &quot;&quot;)) %&gt;% 
+  ) %&gt;%
+  unnest_longer(features) %&gt;%
+  mutate(features = str_replace(features, pattern = &quot;/.+&quot;, replacement = &quot;&quot;)) %&gt;%
   pivot_wider(
     names_from = features,
     values_from = feature_present
   ) %&gt;%
-  group_by(region) %&gt;% 
-  arrange(-length) %&gt;% 
-  select(name, length, length_bar, rating, everything()) %&gt;% 
-  gt() %&gt;% 
+  group_by(region) %&gt;%
+  arrange(-length) %&gt;%
+  select(name, length, length_bar, rating, everything()) %&gt;%
+  gt() %&gt;%
   cols_width(
     &quot;name&quot; ~ px(250),
     &quot;length&quot; ~ px(75),
     &quot;length_bar&quot; ~ px(140),
     &quot;rating&quot; ~ px(140),
     4:last_col() ~ px(120)
-  ) %&gt;% 
+  ) %&gt;%
   tab_spanner(
     label = &quot;Features&quot;,
     columns = 5:last_col()
-  ) %&gt;% 
+  ) %&gt;%
   cols_label(
     name = &quot;&quot;,
     length = md(&quot;Length&lt;br/&gt;(in miles)&quot;),
     length_bar = &quot;&quot;,
     rating = &quot;Rating&quot;
-  ) %&gt;% 
+  ) %&gt;%
   tab_header(
     title = &quot;Top Hiking Trails to visit in Washington&quot;,
     subtitle = &quot;The 4 top rated trails in each of the 11 major regions of Washington State&quot;
-  ) %&gt;% 
+  ) %&gt;%
   tab_source_note(
     source_note = md(&quot;**Data:** Washington Trails Association | **Table:** Jim Gruman&quot;)
-  ) %&gt;% 
+  ) %&gt;%
   tab_style(
     style = cell_text(
       font = google_font(&quot;Alegreya Sans SC&quot;),
       weight = &quot;bold&quot;
     ),
     locations = list(cells_row_groups(), cells_column_spanners(&quot;Features&quot;))
-  ) %&gt;% 
+  ) %&gt;%
   tab_style(
     style = cell_fill(
       color = &quot;#DFB37D&quot;,
       alpha = 0.5
     ),
     locations = cells_row_groups()
-  ) %&gt;% 
+  ) %&gt;%
   tab_style(
     style = cell_text(
       font = google_font(&quot;Alegreya Sans&quot;),
@@ -2332,13 +2382,13 @@ hike_data %&gt;%
       align = &quot;center&quot;
     ),
     locations = cells_column_labels(columns = everything())
-  ) %&gt;% 
+  ) %&gt;%
   tab_style(
     style = cell_text(
       font = google_font(&quot;Alegreya Sans&quot;),
     ),
     locations = cells_body(&quot;name&quot;)
-  ) %&gt;% 
+  ) %&gt;%
   tab_style(
     style = cell_text(
       font = google_font(&quot;Alegreya Sans&quot;),
@@ -2346,7 +2396,7 @@ hike_data %&gt;%
       size = px(30)
     ),
     locations = cells_title(&quot;subtitle&quot;)
-  ) %&gt;% 
+  ) %&gt;%
   tab_style(
     style = cell_text(
       size = &quot;medium&quot;
@@ -2367,11 +2417,11 @@ hike_data %&gt;%
       size = px(50)
     ),
     locations = cells_title(&quot;title&quot;)
-  ) %&gt;% 
-  opt_table_font(font = google_font(&quot;Fira Mono&quot;)) %&gt;% 
+  ) %&gt;%
+  opt_table_font(font = google_font(&quot;Fira Mono&quot;)) %&gt;%
   tab_options(
     table.border.top.color = &quot;white&quot;,
-  ) </code></pre>
+  )</code></pre>
 <div id="aetfxibsfp" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Fira+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
@@ -2782,9 +2832,9 @@ html {
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Icicle Divide: Stevens Pass to Fourth of July</td>
 <td class="gt_row gt_right">45.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 45%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -2811,9 +2861,9 @@ color: #DFB37D; width: 45%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Little Annapurna</td>
 <td class="gt_row gt_right">7.30</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 7.3%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -2840,9 +2890,9 @@ color: #DFB37D; width: 7.3%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Blackbird Island - Waterfront Park</td>
 <td class="gt_row gt_right">2.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 2%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -2869,9 +2919,9 @@ color: #DFB37D; width: 2%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Bygone Byways Interpretive Trail</td>
 <td class="gt_row gt_right">1.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -2901,9 +2951,9 @@ color: #DFB37D; width: 1%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Kettle Crest Trail</td>
 <td class="gt_row gt_right">44.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 44%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -2930,9 +2980,9 @@ color: #DFB37D; width: 44%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Liberty Lake Regional Park - Liberty Lake Loop Trail</td>
 <td class="gt_row gt_right">8.40</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 8.4%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -2959,9 +3009,9 @@ color: #DFB37D; width: 8.4%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Wenatchee Guard Station</td>
 <td class="gt_row gt_right">5.80</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 5.8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -2988,9 +3038,9 @@ color: #DFB37D; width: 5.8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Columbia Mountain</td>
 <td class="gt_row gt_right">5.40</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 5.4%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3020,9 +3070,9 @@ color: #DFB37D; width: 5.4%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Eastside Loop</td>
 <td class="gt_row gt_right">36.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 36%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3049,9 +3099,9 @@ color: #DFB37D; width: 36%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Indian Bar - Summerland Traverse</td>
 <td class="gt_row gt_right">34.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 34%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3078,9 +3128,9 @@ color: #DFB37D; width: 34%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Wonderland Trail - Mowich Lake to Sunrise via Spray Park</td>
 <td class="gt_row gt_right">20.50</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 20.5%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3107,9 +3157,9 @@ color: #DFB37D; width: 20.5%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Old Mine Trail</td>
 <td class="gt_row gt_right">3.40</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 3.4%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3139,9 +3189,9 @@ color: #DFB37D; width: 3.4%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Seven Pass Loop (Pasayten)</td>
 <td class="gt_row gt_right">26.60</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 26.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3168,9 +3218,9 @@ color: #DFB37D; width: 26.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Glacier Peak Meadows</td>
 <td class="gt_row gt_right">25.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 25%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3197,9 +3247,9 @@ color: #DFB37D; width: 25%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">North Lake</td>
 <td class="gt_row gt_right">10.60</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 10.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3226,9 +3276,9 @@ color: #DFB37D; width: 10.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Eldorado Peak</td>
 <td class="gt_row gt_right">10.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 10%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3258,9 +3308,9 @@ color: #DFB37D; width: 10%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Capitol State Forest - McKenny Trail</td>
 <td class="gt_row gt_right">13.80</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 13.8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3287,9 +3337,9 @@ color: #DFB37D; width: 13.8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Lyre Conservation Area</td>
 <td class="gt_row gt_right">2.50</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 2.5%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3316,9 +3366,9 @@ color: #DFB37D; width: 2.5%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div><svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#38A605;overflow:visible;position:relative;"><path d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z"/></svg></div></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">High Ridge Trail</td>
 <td class="gt_row gt_right">0.80</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 0.8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3345,9 +3395,9 @@ color: #DFB37D; width: 0.8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div><svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#38A605;overflow:visible;position:relative;"><path d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z"/></svg></div></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Illahee State Park</td>
 <td class="gt_row gt_right">0.50</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 0.5%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3377,9 +3427,9 @@ color: #DFB37D; width: 0.5%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Esmeralda Peak Loop</td>
 <td class="gt_row gt_right">12.10</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 12.1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3406,9 +3456,9 @@ color: #DFB37D; width: 12.1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Mount Stuart</td>
 <td class="gt_row gt_right">11.10</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 11.1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3435,9 +3485,9 @@ color: #DFB37D; width: 11.1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Tanner Landing Park</td>
 <td class="gt_row gt_right">1.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3464,9 +3514,9 @@ color: #DFB37D; width: 1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Roaring Creek</td>
 <td class="gt_row gt_right">0.60</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 0.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3496,9 +3546,9 @@ color: #DFB37D; width: 0.6%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Ahtanum State Forest - Whites Ridge</td>
 <td class="gt_row gt_right">10.90</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 10.9%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3525,9 +3575,9 @@ color: #DFB37D; width: 10.9%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Candy Mountain Trail</td>
 <td class="gt_row gt_right">3.60</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 3.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3554,9 +3604,9 @@ color: #DFB37D; width: 3.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">East Rim Waterworks Canyon</td>
 <td class="gt_row gt_right">3.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 3%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3583,9 +3633,9 @@ color: #DFB37D; width: 3%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Ohme Gardens County Park</td>
 <td class="gt_row gt_right">1.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3615,9 +3665,9 @@ color: #DFB37D; width: 1%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Plains of Abraham - Windy Pass Loop</td>
 <td class="gt_row gt_right">9.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 9%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3644,9 +3694,9 @@ color: #DFB37D; width: 9%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Fossil Trail</td>
 <td class="gt_row gt_right">8.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3673,9 +3723,9 @@ color: #DFB37D; width: 8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Mountain Climbers Trail</td>
 <td class="gt_row gt_right">6.80</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 6.8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3702,9 +3752,9 @@ color: #DFB37D; width: 6.8%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Bench Lake Loop</td>
 <td class="gt_row gt_right">3.40</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 3.4%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3734,9 +3784,9 @@ color: #DFB37D; width: 3.4%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Lewis and Clark Discovery Trail</td>
 <td class="gt_row gt_right">7.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 7%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3763,9 +3813,9 @@ color: #DFB37D; width: 7%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div><svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#38A605;overflow:visible;position:relative;"><path d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z"/></svg></div></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Cussed Hollow</td>
 <td class="gt_row gt_right">5.00</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 5%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3792,9 +3842,9 @@ color: #DFB37D; width: 5%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">La Center Bottoms</td>
 <td class="gt_row gt_right">0.66</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 0.66%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3821,9 +3871,9 @@ color: #DFB37D; width: 0.66%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Cape Disappointment State Park - Cape Disappointment Lighthouse</td>
 <td class="gt_row gt_right">0.60</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 0.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3853,9 +3903,9 @@ color: #DFB37D; width: 0.6%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Turtleback Mountain Preserve: Turtlehead Summit</td>
 <td class="gt_row gt_right">5.70</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 5.7%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3882,9 +3932,9 @@ color: #DFB37D; width: 5.7%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div><svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#38A605;overflow:visible;position:relative;"><path d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z"/></svg></div></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Mount Grant Preserve</td>
 <td class="gt_row gt_right">4.60</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 4.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3911,9 +3961,9 @@ color: #DFB37D; width: 4.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div><svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#38A605;overflow:visible;position:relative;"><path d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z"/></svg></div></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Leque Island - Stanwood Levee Trail</td>
 <td class="gt_row gt_right">1.40</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 1.4%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3940,9 +3990,9 @@ color: #DFB37D; width: 1.4%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div><svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#38A605;overflow:visible;position:relative;"><path d="M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z"/></svg></div></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Nathan Chapman Memorial Trail</td>
 <td class="gt_row gt_right">0.60</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 0.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -3972,9 +4022,9 @@ color: #DFB37D; width: 0.6%"> &nbsp; </span></td>
     </tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Coyote Creek</td>
 <td class="gt_row gt_right">1.10</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 1.1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -4001,9 +4051,9 @@ color: #DFB37D; width: 1.1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Paw Print Connector</td>
 <td class="gt_row gt_right">1.10</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 1.1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="5 out of 5" aria-label="5 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -4030,9 +4080,9 @@ color: #DFB37D; width: 1.1%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Nike Horse Trail</td>
 <td class="gt_row gt_right">0.60</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 0.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="4.33 out of 5" aria-label="4.33 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -4059,9 +4109,9 @@ color: #DFB37D; width: 0.6%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"></td></tr>
     <tr><td class="gt_row gt_center" style="font-family: 'Alegreya Sans';">Long View Peak</td>
 <td class="gt_row gt_right">0.30</td>
-<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block; 
-direction: ltr; border-radius: 4px; 
-padding-right: 2px; background-color: #DFB37D; 
+<td class="gt_row gt_center" style="text-align: left;"><span style="display: inline-block;
+direction: ltr; border-radius: 4px;
+padding-right: 2px; background-color: #DFB37D;
 color: #DFB37D; width: 0.3%"> &nbsp; </span></td>
 <td class="gt_row gt_center" style="font-size: medium;"><div title="4.25 out of 5" aria-label="4.25 out of 5" role="img">
   <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:orange;overflow:visible;position:relative;"><path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>
@@ -4096,30 +4146,59 @@ color: #DFB37D; width: 0.3%"> &nbsp; </span></td>
 </table>
 </div>
 <p>What is the distribution of hiking trail lengths around the state regions?</p>
-<pre class="r"><code>hike_data %&gt;% 
-  filter(!is.na(length)) %&gt;% 
-  ggplot(aes(length, region, fill = region)) +
-  geom_density_ridges(alpha = 0.9, show.legend = FALSE) +
+<p>Let’s build a helper function to add sample counts to categorical charts.</p>
+<pre class="r"><code>withfreq &lt;- function(x) {
+  tibble(x) %&gt;%
+    add_count(x) %&gt;%
+    mutate(combined = glue::glue(&quot;{ str_wrap(x, width = 20) } ({ n })&quot;)) %&gt;%
+    pull(combined)
+}</code></pre>
+<pre class="r"><code>hike_data %&gt;%
+  filter(!is.na(length)) %&gt;%
+  mutate(region = withfreq(region)) %&gt;%
+  ggplot(aes(length, region, color = region)) +
+  ggdist::stat_dots(
+    ## orientation to the left
+    side = &quot;top&quot;,
+    ## move geom up
+    justification = 0.1,
+    ## adjust grouping (binning) of observations
+    binwidth = 0.02,
+    show.legend = FALSE
+  ) +
+  geom_text(
+    data = . %&gt;% filter(length &gt; 150),
+    aes(label = stringr::str_wrap(name, 12)),
+    check_overlap = TRUE,
+    nudge_y = 0.4,
+    show.legend = FALSE
+  ) +
+  #  geom_density_ridges(alpha = 0.9, show.legend = FALSE) +
   scale_x_log10(labels = scales::comma_format(accuracy = 1)) +
   coord_cartesian(clip = &quot;off&quot;) +
-  labs(x = &quot;Trail Lengths in Miles, Log Scale&quot;, y = NULL, 
-       title = &quot;Trail Lenths Available by Region&quot;, 
-       subtitle = &quot;The Cascades have more of the Longer Trails&quot;, 
-       caption = &quot;@jim_gruman | Data: TidyX&quot;) </code></pre>
-<p><img src="figure/WashingtonTrails.Rmd/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+  labs(
+    x = &quot;Trail Lengths in Miles&quot;, y = NULL,
+    title = &quot;Trail Lengths Available by Region&quot;,
+    subtitle = &quot;(Counts of trails) SW Washington and the Cascades have more of the Longer Trails&quot;,
+    caption = &quot;@jim_gruman | Data: TidyX&quot;
+  ) +
+  theme(panel.grid.major.y = element_blank())</code></pre>
+<p><img src="figure/WashingtonTrails.Rmd/dotplot-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <p>Let’s take a closer look at the features of each trail and the relationship with length:</p>
 <pre class="r"><code>hikes_complete &lt;- hike_data %&gt;%
-    filter(length &gt; 0.1) %&gt;%
-    mutate(hikeID = row_number(),
-           length = log10(length),
-           length = length %/% 0.2 * 0.2) %&gt;%
-    select(hikeID, length, features) %&gt;%
-    unnest(features) %&gt;%
-    count(length, features) %&gt;%
-    complete(length, features, fill = list(n = 0)) %&gt;%
-    group_by(length) %&gt;%
-    mutate(length_total = sum(n)) %&gt;%
-    ungroup()
+  filter(length &gt; 0.1) %&gt;%
+  mutate(
+    hikeID = row_number(),
+    length = log10(length),
+    length = length %/% 0.2 * 0.2
+  ) %&gt;%
+  select(hikeID, length, features) %&gt;%
+  unnest(features) %&gt;%
+  count(length, features) %&gt;%
+  complete(length, features, fill = list(n = 0)) %&gt;%
+  group_by(length) %&gt;%
+  mutate(length_total = sum(n)) %&gt;%
+  ungroup()
 
 hikes_complete</code></pre>
 <pre><code># A tibble: 240 x 4
@@ -4137,30 +4216,33 @@ hikes_complete</code></pre>
 10   -0.8 Ridges/passes             2          104
 # ... with 230 more rows</code></pre>
 <pre class="r"><code>slopes &lt;- hikes_complete %&gt;%
-    nest_by(features) %&gt;%
-    mutate(model = list(glm(cbind(n, length_total) ~ length, 
-                            family = &quot;binomial&quot;, 
-                            data = data))) %&gt;%
-    summarize(broom::tidy(model)) %&gt;%
-    ungroup %&gt;%
-    filter(term == &quot;length&quot;) %&gt;%
-    mutate(p.value = p.adjust(p.value)) %&gt;%
-    filter(p.value &lt; 0.05) %&gt;%
-    arrange(estimate)</code></pre>
+  nest_by(features) %&gt;%
+  mutate(model = list(glm(cbind(n, length_total) ~ length,
+    family = &quot;binomial&quot;,
+    data = data
+  ))) %&gt;%
+  summarize(broom::tidy(model)) %&gt;%
+  ungroup() %&gt;%
+  filter(term == &quot;length&quot;) %&gt;%
+  mutate(p.value = p.adjust(p.value)) %&gt;%
+  filter(p.value &lt; 0.05) %&gt;%
+  arrange(estimate)</code></pre>
 <pre class="r"><code>hikes_complete %&gt;%
-    mutate(length_percent = n / length_total) %&gt;%
-    inner_join(slopes) %&gt;%
-    mutate(features = fct_reorder(features, -estimate)) %&gt;%
-    ggplot(aes(length, length_percent)) +
-    geom_smooth(method = &quot;lm&quot;) +
-    geom_point() +
-    facet_wrap(~features) +
-    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-    labs(x = &quot;Length of each trail (log10 scale)&quot;,
-         y = &quot;% of trails with each feature&quot;,
-         title = &quot;Which features of Washington hikes are associated with longer trails?&quot;,
-         caption = &quot;@jim_gruman | Data: TidyX&quot;)</code></pre>
-<p><img src="figure/WashingtonTrails.Rmd/unnamed-chunk-7-1.png" width="648" style="display: block; margin: auto;" /></p>
+  mutate(length_percent = n / length_total) %&gt;%
+  inner_join(slopes) %&gt;%
+  mutate(features = fct_reorder(features, -estimate)) %&gt;%
+  ggplot(aes(length, length_percent)) +
+  geom_smooth(method = &quot;lm&quot;) +
+  geom_point() +
+  facet_wrap(~features) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    x = &quot;Length of each trail (log10 scale)&quot;,
+    y = &quot;% of trails with each feature&quot;,
+    title = &quot;Which features of Washington hikes are associated with longer trails?&quot;,
+    caption = &quot;@jim_gruman | Data: TidyX&quot;
+  )</code></pre>
+<p><img src="figure/WashingtonTrails.Rmd/unnamed-chunk-7-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -4192,47 +4274,49 @@ other attached packages:
 [13] tibble_3.1.4      ggplot2_3.3.5     tidyverse_1.3.1   workflowr_1.6.2  
 
 loaded via a namespace (and not attached):
-  [1] readxl_1.3.1       backports_1.2.1    systemfonts_1.0.2 
-  [4] workflows_0.2.3    plyr_1.8.6         selectr_0.4-2     
-  [7] tidytuesdayR_1.0.1 splines_4.1.1      listenv_0.8.0     
- [10] usethis_2.0.1      digest_0.6.27      foreach_1.5.1     
- [13] yardstick_0.0.8    viridis_0.6.1      parsnip_0.1.7.900 
- [16] fansi_0.5.0        magrittr_2.0.1     checkmate_2.0.0   
- [19] tune_0.1.6         tzdb_0.1.2         recipes_0.1.16    
- [22] globals_0.14.0     modelr_0.1.8       gower_0.2.2       
- [25] extrafont_0.17     extrafontdb_1.0    hardhat_0.1.6     
- [28] rsample_0.1.0      dials_0.0.9.9000   colorspace_2.0-2  
- [31] textshaping_0.3.5  haven_2.4.3        xfun_0.25         
- [34] crayon_1.4.1       jsonlite_1.7.2     survival_3.2-11   
- [37] iterators_1.0.13   glue_1.4.2         gtable_0.3.0      
- [40] ipred_0.9-11       Rttf2pt1_1.3.9     future.apply_1.8.1
- [43] scales_1.1.1       infer_1.0.0        DBI_1.1.1         
- [46] Rcpp_1.0.7         viridisLite_0.4.0  GPfit_1.0-8       
- [49] lava_1.6.10        prodlim_2019.11.13 httr_1.4.2        
- [52] ellipsis_0.3.2     farver_2.1.0       pkgconfig_2.0.3   
- [55] nnet_7.3-16        sass_0.4.0         dbplyr_2.1.1      
- [58] utf8_1.2.2         here_1.0.1         labeling_0.4.2    
- [61] tidyselect_1.1.1   rlang_0.4.11       DiceDesign_1.9    
- [64] later_1.3.0        munsell_0.5.0      cellranger_1.1.0  
- [67] tools_4.1.1        cachem_1.0.6       cli_3.0.1         
- [70] generics_0.1.0     broom_0.7.9        evaluate_0.14     
- [73] fastmap_1.1.0      yaml_2.2.1         ragg_1.1.3        
- [76] knitr_1.33         fs_1.5.0           nlme_3.1-152      
- [79] future_1.22.1      whisker_0.4        xml2_1.3.2        
- [82] compiler_4.1.1     rstudioapi_0.13    curl_4.3.2        
- [85] reprex_2.0.1       lhs_1.1.1          bslib_0.3.0       
- [88] stringi_1.7.4      highr_0.9          gdtools_0.2.3     
- [91] lattice_0.20-44    Matrix_1.3-4       commonmark_1.7    
- [94] styler_1.5.1       conflicted_1.0.4   vctrs_0.3.8       
- [97] tidymodels_0.1.3   pillar_1.6.2       lifecycle_1.0.0   
-[100] furrr_0.2.3        jquerylib_0.1.4    httpuv_1.6.2      
-[103] R6_2.5.1           promises_1.2.0.1   gridExtra_2.3     
-[106] parallelly_1.27.0  codetools_0.2-18   MASS_7.3-54       
-[109] assertthat_0.2.1   rprojroot_2.0.2    withr_2.4.2       
-[112] mgcv_1.8-36        parallel_4.1.1     hms_1.1.0         
-[115] grid_4.1.1         rpart_4.1-15       timeDate_3043.102 
-[118] class_7.3-19       rmarkdown_2.10     git2r_0.28.0      
-[121] pROC_1.18.0        lubridate_1.7.10  </code></pre>
+  [1] readxl_1.3.1         backports_1.2.1      systemfonts_1.0.2   
+  [4] workflows_0.2.3      selectr_0.4-2        plyr_1.8.6          
+  [7] tidytuesdayR_1.0.1   splines_4.1.1        listenv_0.8.0       
+ [10] usethis_2.0.1        digest_0.6.27        foreach_1.5.1       
+ [13] yardstick_0.0.8      viridis_0.6.1        parsnip_0.1.7.900   
+ [16] fansi_0.5.0          checkmate_2.0.0      magrittr_2.0.1      
+ [19] tune_0.1.6           tzdb_0.1.2           recipes_0.1.16      
+ [22] globals_0.14.0       modelr_0.1.8         gower_0.2.2         
+ [25] extrafont_0.17       R.utils_2.10.1       extrafontdb_1.0     
+ [28] hardhat_0.1.6        rsample_0.1.0        dials_0.0.10        
+ [31] colorspace_2.0-2     ggdist_3.0.0         textshaping_0.3.5   
+ [34] haven_2.4.3          xfun_0.26            crayon_1.4.1        
+ [37] jsonlite_1.7.2       survival_3.2-11      iterators_1.0.13    
+ [40] glue_1.4.2           gtable_0.3.0         ipred_0.9-12        
+ [43] distributional_0.2.2 R.cache_0.15.0       Rttf2pt1_1.3.9      
+ [46] future.apply_1.8.1   scales_1.1.1         infer_1.0.0         
+ [49] DBI_1.1.1            Rcpp_1.0.7           viridisLite_0.4.0   
+ [52] GPfit_1.0-8          lava_1.6.10          prodlim_2019.11.13  
+ [55] httr_1.4.2           ellipsis_0.3.2       farver_2.1.0        
+ [58] pkgconfig_2.0.3      R.methodsS3_1.8.1    nnet_7.3-16         
+ [61] sass_0.4.0           dbplyr_2.1.1         utf8_1.2.2          
+ [64] here_1.0.1           labeling_0.4.2       tidyselect_1.1.1    
+ [67] rlang_0.4.11         DiceDesign_1.9       later_1.3.0         
+ [70] munsell_0.5.0        cellranger_1.1.0     tools_4.1.1         
+ [73] cachem_1.0.6         cli_3.0.1            generics_0.1.0      
+ [76] broom_0.7.9          evaluate_0.14        fastmap_1.1.0       
+ [79] yaml_2.2.1           ragg_1.1.3           rematch2_2.1.2      
+ [82] knitr_1.34           fs_1.5.0             nlme_3.1-152        
+ [85] future_1.22.1        whisker_0.4          R.oo_1.24.0         
+ [88] xml2_1.3.2           compiler_4.1.1       rstudioapi_0.13     
+ [91] curl_4.3.2           reprex_2.0.1         lhs_1.1.3           
+ [94] bslib_0.3.0          stringi_1.7.4        highr_0.9           
+ [97] gdtools_0.2.3        lattice_0.20-44      Matrix_1.3-4        
+[100] commonmark_1.7       styler_1.6.1         conflicted_1.0.4    
+[103] vctrs_0.3.8          tidymodels_0.1.3     pillar_1.6.2        
+[106] lifecycle_1.0.0      furrr_0.2.3          jquerylib_0.1.4     
+[109] httpuv_1.6.3         R6_2.5.1             promises_1.2.0.1    
+[112] gridExtra_2.3        parallelly_1.28.1    codetools_0.2-18    
+[115] MASS_7.3-54          assertthat_0.2.1     rprojroot_2.0.2     
+[118] withr_2.4.2          mgcv_1.8-36          parallel_4.1.1      
+[121] hms_1.1.0            grid_4.1.1           rpart_4.1-15        
+[124] timeDate_3043.102    class_7.3-19         rmarkdown_2.11      
+[127] git2r_0.28.0         pROC_1.18.0          lubridate_1.7.10    </code></pre>
 </div>
 
 
