@@ -1,0 +1,266 @@
+---
+title: "Coffee"
+author: "Jim Gruman"
+date: 'July 7, 2020'
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(ggridges)
+
+library(widyr)
+library(ggraph)
+library(igraph)
+library(tidytext)
+})
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+```{r}
+coffee <- tidytuesdayR::tt_load("2020-07-07")
+
+coffee_ratings <- coffee$coffee_ratings %>%
+  mutate(coffee_id = row_number(),
+         country_of_origin = case_when(stringr::str_detect(country_of_origin,"Tanzania")~ "Tanzania",
+          stringr::str_detect(country_of_origin,"Hawaii")~ "US Hawaii",                            TRUE ~ country_of_origin)) %>%
+  filter(total_cup_points > 0) 
+```
+
+Let's build a helper function to add sample counts to categorical charts.
+
+```{r}
+withfreq <- function(x){
+  tibble(x) %>% 
+    add_count(x) %>% 
+    mutate(combined = glue::glue("{ str_sub(x, end = 18) } ({ n })")) %>% 
+    pull(combined)
+}
+```
+
+Cedric Scherer offers great advice on conveying distributions with boxplots and dots [here](https://www.cedricscherer.com/2021/06/06/visualizing-distributions-with-raincloud-plots-and-how-to-create-them-with-ggplot2/).
+
+```{r p1, fig.asp=1}
+coffee_ratings %>%
+  count(species, sort = TRUE) %>%
+  knitr::kable()
+
+coffee_lumped <- coffee_ratings %>%
+  filter(!is.na(variety)) %>%
+  mutate(variety = fct_lump(variety, 8), sort = TRUE)
+
+coffee_lumped %>%
+  mutate(variety = withfreq(fct_reorder(variety, total_cup_points))) %>%
+  ggplot(aes(total_cup_points, variety)) +
+  geom_boxplot(color = "#d95f0e", 
+               width = 0.1,
+               outlier.shape = NA) +
+  ggdist::stat_dots(
+    ## orientation to the left
+    side = "top", 
+    ## move geom up
+    justification = -0.1, 
+    ## adjust grouping (binning) of observations 
+    binwidth = .125,
+    color = "#d95f0e"
+  ) +
+  labs(title = "Coffee Quality Ratings",
+       subtitle = "(Count of Samples) in study",
+       caption = "https://github.com/jldbc/coffee-quality-database",
+       x = "Total Cup Points",
+       y = "Coffee Variety")
+
+
+
+```
+
+```{r p2, fig.asp=1}
+
+coffee_ratings %>%
+  filter(!is.na(color)) %>% 
+  count(color, sort = TRUE) %>%
+  knitr::kable(caption = "Count of Coffee Samples by")
+
+coffee_ratings %>%
+  filter(!is.na(country_of_origin)) %>% 
+  mutate(country = withfreq(fct_lump(country_of_origin, 12)),
+         country = fct_reorder(country, total_cup_points)) %>%
+  ggplot(aes(total_cup_points, country)) +
+  geom_boxplot(color = "#d95f0e", 
+               width = 0.1,
+               outlier.shape = NA) +
+  ggdist::stat_dots(
+    ## orientation to the left
+    side = "top", 
+    ## move geom up
+    justification = -0.1, 
+    ## adjust grouping (binning) of observations 
+    binwidth = .125,
+    color = "#d95f0e"
+  ) +
+  labs(title = "Coffee Quality Ratings by Country of Origin",
+       subtitle = "(Count of Samples) in study",
+       caption = "https://github.com/jldbc/coffee-quality-database",
+       x = "Total Cup Points",
+       y = NULL)
+
+
+```
+
+
+
+```{r p4}
+coffee_metrics <- coffee_ratings %>%
+  dplyr::select(coffee_id, total_cup_points, variety, company,
+         country_of_origin,
+         altitude_mean_meters,
+         aroma:moisture) %>%
+  pivot_longer(aroma:cupper_points, names_to = "metric", values_to = "value")
+
+coffee_metrics %>%
+  mutate(metric = fct_reorder(metric, value)) %>%
+  ggplot(aes(value, metric)) +
+  geom_boxplot(
+    width = .15, 
+    outlier.shape = NA,
+    color = "#d95f0e"
+  ) +
+  geom_point(
+    ## draw horizontal lines instead of points
+    shape = 124,
+    size = 4,
+    alpha = .1,
+    color = "#d95f0e"
+  ) +
+  scale_x_continuous(limits = c(5,10.2)) +
+  labs(title = "Coffee Quality Ratings Attribute Ranges",
+       caption = "https://github.com/jldbc/coffee-quality-database",
+       x = "Score",
+       y = "")
+```
+
+
+```{r p5}
+correlations <- coffee_metrics %>%
+  pairwise_cor(metric, coffee_id, value, sort = TRUE)
+
+correlations %>%
+  head(50) %>%
+  graph_from_data_frame() %>%
+  ggraph() +
+  geom_edge_link(aes(edge_alpha = correlation),show.legend = FALSE ) +
+  geom_node_point() +
+  geom_node_text(aes(label = name), repel = TRUE) +
+  labs(title = "Coffee Quality",
+       subtitle = "Network Diagram of Attribute Correlation",
+       caption = "https://github.com/jldbc/coffee-quality-database",
+       x = "",
+       y = "")
+```
+
+
+```{r}
+coffee_metrics %>%
+  filter(!metric %in% c("sweetness", "clean_cup", "uniformity")) %>%
+  group_by(metric) %>%
+  mutate(centered = value - mean(value)) %>%
+  ungroup() %>%
+  widely_svd(metric, coffee_id, value) %>%
+  filter(between(dimension, 1, 6)) %>%
+  mutate(metric = reorder_within(metric, value, dimension)) %>%
+  ggplot(aes(value, metric)) +
+  geom_col( fill = "#d95f0e") +
+  scale_y_reordered() +
+  facet_wrap(~ dimension, scales = "free_y") +
+  theme(plot.title.position = "plot") +
+  labs(title = "Coffee Quality",
+       subtitle = "Principal Components of Attributes",
+       caption = "https://github.com/jldbc/coffee-quality-database",
+       x = "",
+       y = "")
+```
+
+```{r p7}
+coffee_ratings %>%
+  filter(altitude_mean_meters < 10000,
+         altitude != 1) %>%
+  mutate(altitude_mean_meters = pmin(altitude_mean_meters, 3500)) %>%
+  ggplot(aes(altitude_mean_meters, total_cup_points)) +
+  geom_point(color = "#d95f0e", alpha = 0.3) +
+  geom_smooth(method = "lm",
+              formula = 'y ~ x') +
+  theme(plot.title.position = "plot") +
+  labs(title = "Coffee Quality at Altitude",
+       caption = "https://github.com/jldbc/coffee-quality-database",
+       x = "Altitude (meters)",
+       y = "Total Cup Points")
+```
+
+
+```{r p8}
+coffee_metrics %>%
+  filter(altitude_mean_meters < 10000) %>%
+  mutate(altitude_mean_meters = pmin(altitude_mean_meters, 3000)) %>%
+  mutate(km = altitude_mean_meters / 1000) %>%
+  group_by(metric) %>%
+  summarize(correlation = cor(altitude_mean_meters, value),
+            model = list(lm(value ~ km))) %>%
+  mutate(tidied = map(model, broom::tidy, conf.int = TRUE)) %>%
+  unnest(tidied) %>%
+  filter(term == "km") %>%
+  ungroup() %>%
+  mutate(metric = fct_reorder(metric, estimate)) %>%
+  ggplot(aes(estimate, metric, color = p.value < .05)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = .1) +
+  theme(legend.position = "top",
+        legend.spacing.x = unit(6, "mm"),
+        panel.grid.major.y = element_blank()) +
+  labs(title = "Coffee Quality",
+       y = "Evaluation of coffee",
+       x = "Each kilometer of altitude contributes\n this much to attribute scores (95% confidence interval)",
+       caption = "https://github.com/jldbc/coffee-quality-database")
+
+```
+
+```{r p9, fig.asp=1}
+coffee_lumped %>%
+  mutate(country_of_origin = fct_lump_lowfreq(country_of_origin, 8)) %>%
+  group_by(country_of_origin, variety) %>%
+  summarise(score = mean(total_cup_points),
+            .groups = "drop") %>%
+  ungroup() %>%
+  filter(!variety %in% c("Other", "Yellow Bourbon")) %>%
+  mutate(country_of_origin = reorder_within(country_of_origin, score, variety)) %>%
+  ggplot() +
+  geom_col(aes(x = score, 
+              y = country_of_origin, 
+              fill = ggplot2::cut_width(score,2)), show.legend = FALSE) +
+  scale_fill_brewer(type = "seq", palette = "YlOrBr") +
+  scale_y_reordered() +
+  labs(title = "Mean Coffee Quality Total Cup Points",
+       y = "", x = "Variety",
+       caption = "#TidyTuesday 2020-07-07 @Jim_Gruman\n https://github.com/jldbc/coffee-quality-database") +
+  facet_wrap(~ variety,  scales = "free_y")
+
+```
+
+My Tidytuesday tweet:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1280690395752644608")
+```
+
