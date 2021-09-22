@@ -1,0 +1,279 @@
+---
+title: "College Tuition and Diversity"
+author: "Jim Gruman"
+date: 'March 10, 2020'
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidymodels)
+library(tidyverse)
+})
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+# TidyTuesday 2020 Week 11 
+
+![](https://images.unsplash.com/photo-1533854775446-95c4609da544)
+
+Topic:  [College tuition, diversity, and salary outcomes](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-10/readme.md)
+
+```{r message=FALSE, warning=FALSE}
+# Get the data
+
+tuition_cost <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/tuition_cost.csv')
+
+tuition_income <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/tuition_income.csv') 
+
+salary_potential <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/salary_potential.csv')
+
+historical_tuition <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/historical_tuition.csv')
+
+diversity_school <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/diversity_school.csv')
+
+```
+
+What are the characteristics of schools that enroll and graduate more women?
+
+```{r}
+diversity_gender <- diversity_school %>%
+  filter(category == "Women") %>%
+  mutate(WomensEnrollment = enrollment / total_enrollment)
+
+diversity_gender %>%
+  ggplot(aes(WomensEnrollment)) +
+  geom_histogram() +
+  labs(title = "US College Enrollment Category: Women's Proportion",
+       subtitle = "TidyTuesday 2020 Week 11", 
+       x = "Women's Enrollment Portion",
+       y = "Count of Institutions",
+       caption = paste0("Jim Gruman ", Sys.Date())) +
+  scale_x_continuous(labels = scales::percent) 
+
+median(diversity_gender$WomensEnrollment)
+
+```
+
+How can we understand what drives higher proportions of enrollment of Women?
+
+```{r warning=FALSE}
+university_df <- diversity_gender %>%
+  transmute(diversity = case_when(WomensEnrollment > 0.586 ~ "high",
+                                  TRUE ~ "low"),
+            name, state, total_enrollment) %>%
+  inner_join(tuition_cost %>% select(name, type, degree_length, 
+                                     in_state_tuition:out_of_state_total)) %>%
+  inner_join(salary_potential %>% select(name, make_world_better_percent, stem_percent)) %>%
+  left_join(tibble(state = state.name, region = state.region)) %>%
+  select(-state, -name) %>%
+  mutate_if(is.character, factor)
+
+university_df %>%
+  ggplot(aes(type, in_state_tuition, fill = diversity)) +
+  geom_boxplot() +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  facet_wrap(~region) +  
+  labs(title = "College Enrollment Category:  High Women's Enrollment",
+       subtitle = "TidyTuesday 2020 Week 11",
+       caption = paste0("Jim Gruman ", Sys.Date())) 
+
+
+university_df %>%
+  ggplot(aes(type, total_enrollment, fill = diversity)) +
+  geom_boxplot() +
+  scale_y_log10() +
+  labs(title = "College Enrollment Category:  High Women's Enrollment",
+       subtitle = "TidyTuesday 2020 Week 11",
+       caption = paste0("Jim Gruman ", Sys.Date())) +
+  theme(plot.title.position = "plot")
+
+university_df %>%
+  ggplot(aes(type, make_world_better_percent/100, fill = diversity)) +
+  geom_boxplot() +
+  labs(title = "College Enrollment Category:  High Women's Enrollment",
+       subtitle = "TidyTuesday 2020 Week 11",
+       caption = paste0("Jim Gruman ", Sys.Date())) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  theme(plot.title.position = "plot") +
+  ylab("Alumni belief in making World Better")
+  
+
+skimr::skim(university_df)
+
+```
+
+Lets build several classification models, starting with pre-processing
+
+```{r}
+set.seed(42)
+
+uni_split <- initial_split(university_df, strata = diversity)
+uni_train <- training(uni_split)
+uni_test <- testing(uni_split)
+
+uni_rec <- recipe(diversity ~ ., data = uni_train) %>%
+  step_corr(all_numeric_predictors()) %>% 
+  step_dummy(all_nominal_predictors()) %>%
+  step_zv(all_predictors()) %>%
+  step_normalize(all_predictors()) 
+
+# The steps taken
+uni_rec
+
+# What the data looks like after pre-processing (similar to bake)
+uni_rec %>% prep() %>% juice()
+
+```
+
+A GLM classification model, with meaningful feature coefficients:
+
+```{r}
+glm_spec <- logistic_reg() %>%
+  set_engine("glm")
+
+glm_fit <- glm_spec %>%
+  fit(diversity ~ ., data = uni_rec %>% prep() %>% juice())
+
+glm_fit
+
+```
+
+A k-nearest neighbors model
+
+```{r}
+knn_spec <- nearest_neighbor() %>%
+  set_engine("kknn") %>%
+  set_mode("classification")
+
+knn_fit <- knn_spec %>%
+  fit(diversity ~ ., data = uni_rec %>% prep() %>% juice())
+
+knn_fit
+
+```
+
+An a decision tree model, with explainable branching. It is interesting to note here that the first split is on stem_percent.
+
+```{r}
+tree_spec <- decision_tree() %>%
+  set_engine("rpart") %>%
+  set_mode("classification")
+
+tree_fit <- tree_spec %>%
+  fit(diversity ~ ., data = uni_rec %>% prep() %>% juice())
+
+tree_fit
+
+```
+
+To measure each model, resampling is a best practice to simulate how well model performs when exposed to new data. For classification problems, the metrics available include `roc_auc`, `sen`sitivity, and `spec`ificity
+
+## Evaluate models with resampling -----
+
+We will create 10-cross validation sets
+```{r}
+set.seed(42)
+folds <- vfold_cv(uni_train, strata = diversity)
+
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+
+set.seed(42)
+glm_rs <- 
+  workflow(uni_rec, glm_spec) %>%
+  fit_resamples(folds, 
+                metrics = metric_set(roc_auc),
+                control = control_resamples(save_pred = TRUE))
+
+set.seed(42)
+knn_rs <-
+  workflow(uni_rec, knn_spec) %>%
+  fit_resamples(folds, 
+                metrics = metric_set(roc_auc),
+                control = control_resamples(save_pred = TRUE))
+
+set.seed(42)
+tree_rs <- workflow(uni_rec, tree_spec) %>%
+  fit_resamples(folds, 
+                metrics = metric_set(roc_auc),
+                control = control_resamples(save_pred = TRUE))
+
+
+```
+
+At a quick glance, the mean roc_auc is highest with the glm approach.
+
+```{r}
+glm_rs %>% collect_metrics() %>% knitr::kable()
+```
+```{r}
+knn_rs %>% collect_metrics() %>% knitr::kable()
+```
+```{r}
+tree_rs %>% collect_metrics() %>% knitr::kable()
+
+```
+
+A clearer comparison of ROC curves:
+
+```{r, fig.asp=1}
+glm_rs %>%
+  unnest(.predictions) %>%
+  mutate(model = "glm") %>%
+  bind_rows(tree_rs %>%
+              unnest(.predictions) %>%
+              mutate(model = "tree")) %>%
+  bind_rows(knn_rs %>%
+              unnest(.predictions) %>%
+              mutate(model = "knn")) %>%
+  group_by(model) %>%
+  roc_curve(diversity, .pred_high) %>%
+  autoplot()
+
+```
+
+So, choosing the glm technique, let's have a look at the predictions with testing data.
+
+```{r}
+glm_fit %>%
+  predict(new_data = bake(uni_rec %>% prep(), new_data = uni_test),
+          type = "prob") %>%
+  mutate(truth = uni_test$diversity) %>%
+  roc_auc(truth, .pred_high) %>% knitr::kable()
+
+```
+
+```{r}
+glm_fit %>%
+  predict(new_data = bake(uni_rec %>% prep(), new_data = uni_test),
+          type = "class") %>%
+  mutate(truth = uni_test$diversity) %>%
+  conf_mat(truth, .pred_class) %>%
+  autoplot() +
+  theme_jim(base_size = 18) +
+  labs(title = "Confusion Matrix of GLM model on holdout test data",
+       subtitle = "College Tuition and Diversity, where Women's Enrollment > 58.6%")
+
+```
+
+Resources:
+
+[Julia Silge's blog](https://juliasilge.com/blog/tuition-resampling/)
+
+[Meghan Hall's blog](https://meghan.rbind.io/post/tidymodels-intro/)
