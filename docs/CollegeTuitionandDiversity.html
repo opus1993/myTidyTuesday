@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-03-10" />
+
+<title>College Tuition and Diversity</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">College Tuition and Diversity</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">March 10, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-21
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb37dbc19003be2e6da2fe64b64eb86c78bcff974targetblankb37dbc1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/b37dbc19003be2e6da2fe64b64eb86c78bcff974" target="_blank">b37dbc1</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb37dbc19003be2e6da2fe64b64eb86c78bcff974targetblankb37dbc1a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/b37dbc19003be2e6da2fe64b64eb86c78bcff974" target="_blank">b37dbc1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/CollegeTuitionandDiversity.Rmd</code>) and HTML (<code>docs/CollegeTuitionandDiversity.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/b37dbc19003be2e6da2fe64b64eb86c78bcff974/analysis/CollegeTuitionandDiversity.Rmd" target="_blank">b37dbc1</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-21
+</td>
+<td>
+adopt confusion matrix autoplot method
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="tidytuesday-2020-week-11" class="section level1">
+<h1>TidyTuesday 2020 Week 11</h1>
+<p><img src="https://images.unsplash.com/photo-1533854775446-95c4609da544" /></p>
+<p>Topic: <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-10/readme.md">College tuition, diversity, and salary outcomes</a></p>
+<pre class="r"><code># Get the data
+
+tuition_cost &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/tuition_cost.csv&quot;)
+
+tuition_income &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/tuition_income.csv&quot;)
+
+salary_potential &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/salary_potential.csv&quot;)
+
+historical_tuition &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/historical_tuition.csv&quot;)
+
+diversity_school &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/diversity_school.csv&quot;)</code></pre>
+<p>What are the characteristics of schools that enroll and graduate more women?</p>
+<pre class="r"><code>diversity_gender &lt;- diversity_school %&gt;%
+  filter(category == &quot;Women&quot;) %&gt;%
+  mutate(WomensEnrollment = enrollment / total_enrollment)
+
+diversity_gender %&gt;%
+  ggplot(aes(WomensEnrollment)) +
+  geom_histogram() +
+  labs(
+    title = &quot;US College Enrollment Category: Women&#39;s Proportion&quot;,
+    subtitle = &quot;TidyTuesday 2020 Week 11&quot;,
+    x = &quot;Women&#39;s Enrollment Portion&quot;,
+    y = &quot;Count of Institutions&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+  ) +
+  scale_x_continuous(labels = scales::percent)</code></pre>
+<p><img src="figure/CollegeTuitionandDiversity.Rmd/unnamed-chunk-2-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>median(diversity_gender$WomensEnrollment)</code></pre>
+<pre><code>[1] 0.586676</code></pre>
+<p>How can we understand what drives higher proportions of enrollment of Women?</p>
+<pre class="r"><code>university_df &lt;- diversity_gender %&gt;%
+  transmute(
+    diversity = case_when(
+      WomensEnrollment &gt; 0.586 ~ &quot;high&quot;,
+      TRUE ~ &quot;low&quot;
+    ),
+    name, state, total_enrollment
+  ) %&gt;%
+  inner_join(tuition_cost %&gt;% select(
+    name, type, degree_length,
+    in_state_tuition:out_of_state_total
+  )) %&gt;%
+  inner_join(salary_potential %&gt;% select(name, make_world_better_percent, stem_percent)) %&gt;%
+  left_join(tibble(state = state.name, region = state.region)) %&gt;%
+  select(-state, -name) %&gt;%
+  mutate_if(is.character, factor)
+
+university_df %&gt;%
+  ggplot(aes(type, in_state_tuition, fill = diversity)) +
+  geom_boxplot() +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  facet_wrap(~region) +
+  labs(
+    title = &quot;College Enrollment Category:  High Women&#39;s Enrollment&quot;,
+    subtitle = &quot;TidyTuesday 2020 Week 11&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+  )</code></pre>
+<p><img src="figure/CollegeTuitionandDiversity.Rmd/unnamed-chunk-3-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>university_df %&gt;%
+  ggplot(aes(type, total_enrollment, fill = diversity)) +
+  geom_boxplot() +
+  scale_y_log10() +
+  labs(
+    title = &quot;College Enrollment Category:  High Women&#39;s Enrollment&quot;,
+    subtitle = &quot;TidyTuesday 2020 Week 11&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+  ) +
+  theme(plot.title.position = &quot;plot&quot;)</code></pre>
+<p><img src="figure/CollegeTuitionandDiversity.Rmd/unnamed-chunk-3-2.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>university_df %&gt;%
+  ggplot(aes(type, make_world_better_percent / 100, fill = diversity)) +
+  geom_boxplot() +
+  labs(
+    title = &quot;College Enrollment Category:  High Women&#39;s Enrollment&quot;,
+    subtitle = &quot;TidyTuesday 2020 Week 11&quot;,
+    caption = paste0(&quot;Jim Gruman &quot;, Sys.Date())
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  theme(plot.title.position = &quot;plot&quot;) +
+  ylab(&quot;Alumni belief in making World Better&quot;)</code></pre>
+<p><img src="figure/CollegeTuitionandDiversity.Rmd/unnamed-chunk-3-3.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>skimr::skim(university_df)</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">university_df</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">640</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">11</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">4</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">7</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">diversity</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">low: 375, hig: 265</td>
+</tr>
+<tr class="even">
+<td align="left">type</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">Pri: 398, Pub: 242</td>
+</tr>
+<tr class="odd">
+<td align="left">degree_length</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">4 Y: 637, 2 Y: 3</td>
+</tr>
+<tr class="even">
+<td align="left">region</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">4</td>
+<td align="left">Sou: 257, Nor: 170, Nor: 129, Wes: 84</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col width="18%" />
+<col width="6%" />
+<col width="9%" />
+<col width="6%" />
+<col width="6%" />
+<col width="3%" />
+<col width="6%" />
+<col width="4%" />
+<col width="6%" />
+<col width="4%" />
+<col width="28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">total_enrollment</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">7557.24</td>
+<td align="right">9286.93</td>
+<td align="right">90</td>
+<td align="right">1869.25</td>
+<td align="right">3633</td>
+<td align="right">9841.50</td>
+<td align="right">60767</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">in_state_tuition</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">26780.54</td>
+<td align="right">16365.44</td>
+<td align="right">4220</td>
+<td align="right">10095.50</td>
+<td align="right">26746</td>
+<td align="right">41130.00</td>
+<td align="right">58230</td>
+<td align="left">▇▂▅▃▃</td>
+</tr>
+<tr class="odd">
+<td align="left">in_state_total</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">37275.52</td>
+<td align="right">18746.72</td>
+<td align="right">4258</td>
+<td align="right">19664.25</td>
+<td align="right">35654</td>
+<td align="right">53057.00</td>
+<td align="right">75003</td>
+<td align="left">▆▇▅▆▅</td>
+</tr>
+<tr class="even">
+<td align="left">out_of_state_tuition</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">31059.86</td>
+<td align="right">12967.12</td>
+<td align="right">6570</td>
+<td align="right">20894.50</td>
+<td align="right">29466</td>
+<td align="right">41220.00</td>
+<td align="right">58230</td>
+<td align="left">▃▇▆▅▃</td>
+</tr>
+<tr class="odd">
+<td align="left">out_of_state_total</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">41554.84</td>
+<td align="right">15608.48</td>
+<td align="right">6670</td>
+<td align="right">29991.00</td>
+<td align="right">39114</td>
+<td align="right">53166.25</td>
+<td align="right">75003</td>
+<td align="left">▂▇▇▅▃</td>
+</tr>
+<tr class="even">
+<td align="left">make_world_better_percent</td>
+<td align="right">17</td>
+<td align="right">0.97</td>
+<td align="right">53.58</td>
+<td align="right">8.80</td>
+<td align="right">34</td>
+<td align="right">48.00</td>
+<td align="right">52</td>
+<td align="right">58.00</td>
+<td align="right">94</td>
+<td align="left">▂▇▃▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">stem_percent</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">16.84</td>
+<td align="right">15.80</td>
+<td align="right">0</td>
+<td align="right">7.00</td>
+<td align="right">13</td>
+<td align="right">22.00</td>
+<td align="right">100</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p>Lets build several classification models, starting with pre-processing</p>
+<pre class="r"><code>set.seed(42)
+
+uni_split &lt;- initial_split(university_df, strata = diversity)
+uni_train &lt;- training(uni_split)
+uni_test &lt;- testing(uni_split)
+
+uni_rec &lt;- recipe(diversity ~ ., data = uni_train) %&gt;%
+  step_corr(all_numeric_predictors()) %&gt;%
+  step_dummy(all_nominal_predictors()) %&gt;%
+  step_zv(all_predictors()) %&gt;%
+  step_normalize(all_predictors())
+
+# The steps taken
+uni_rec</code></pre>
+<pre><code>Data Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor         10
+
+Operations:
+
+Correlation filter on all_numeric_predictors()
+Dummy variables from all_nominal_predictors()
+Zero variance filter on all_predictors()
+Centering and scaling for all_predictors()</code></pre>
+<pre class="r"><code># What the data looks like after pre-processing (similar to bake)
+uni_rec %&gt;%
+  prep() %&gt;%
+  juice()</code></pre>
+<pre><code># A tibble: 479 x 10
+   total_enrollment in_state_tuition make_world_better_p~ stem_percent diversity
+              &lt;dbl&gt;            &lt;dbl&gt;                &lt;dbl&gt;        &lt;dbl&gt; &lt;fct&gt;    
+ 1             5.57           -1.23                 0.361      -0.476  high     
+ 2             3.96            0.281               -0.546      -0.541  high     
+ 3             2.78           -0.974               -0.773       0.108  high     
+ 4             2.24           -0.930                0.248      -0.281  high     
+ 5             2.22           -1.20                 0.135      -0.346  high     
+ 6             1.85            0.266                0.701      -0.476  high     
+ 7             1.64           -1.03                -0.773      -0.0866 high     
+ 8             1.51           -1.05                 0.135      -0.281  high     
+ 9             1.49           -0.902               -1.34       -0.281  high     
+10             1.39           -0.854               -1.34       -0.476  high     
+# ... with 469 more rows, and 5 more variables: type_Public &lt;dbl&gt;,
+#   degree_length_X4.Year &lt;dbl&gt;, region_South &lt;dbl&gt;,
+#   region_North.Central &lt;dbl&gt;, region_West &lt;dbl&gt;</code></pre>
+<p>A GLM classification model, with meaningful feature coefficients:</p>
+<pre class="r"><code>glm_spec &lt;- logistic_reg() %&gt;%
+  set_engine(&quot;glm&quot;)
+
+glm_fit &lt;- glm_spec %&gt;%
+  fit(diversity ~ ., data = uni_rec %&gt;% prep() %&gt;% juice())
+
+glm_fit</code></pre>
+<pre><code>parsnip model object
+
+Fit time:  20ms 
+
+Call:  stats::glm(formula = diversity ~ ., family = stats::binomial, 
+    data = data)
+
+Coefficients:
+              (Intercept)           total_enrollment  
+                  0.59108                    0.08980  
+         in_state_tuition  make_world_better_percent  
+                 -0.31729                   -0.63829  
+             stem_percent                type_Public  
+                  1.46952                   -0.12649  
+    degree_length_X4.Year               region_South  
+                 -0.03581                    0.02456  
+     region_North.Central                region_West  
+                  0.32557                    0.18007  
+
+Degrees of Freedom: 466 Total (i.e. Null);  457 Residual
+  (12 observations deleted due to missingness)
+Null Deviance:      633.3 
+Residual Deviance: 498.3    AIC: 518.3</code></pre>
+<p>A k-nearest neighbors model</p>
+<pre class="r"><code>knn_spec &lt;- nearest_neighbor() %&gt;%
+  set_engine(&quot;kknn&quot;) %&gt;%
+  set_mode(&quot;classification&quot;)
+
+knn_fit &lt;- knn_spec %&gt;%
+  fit(diversity ~ ., data = uni_rec %&gt;% prep() %&gt;% juice())
+
+knn_fit</code></pre>
+<pre><code>parsnip model object
+
+Fit time:  20ms 
+
+Call:
+kknn::train.kknn(formula = diversity ~ ., data = data, ks = min_rows(5,     data, 5))
+
+Type of response variable: nominal
+Minimal misclassification: 0.2933619
+Best kernel: optimal
+Best k: 5</code></pre>
+<p>An a decision tree model, with explainable branching. It is interesting to note here that the first split is on stem_percent.</p>
+<pre class="r"><code>tree_spec &lt;- decision_tree() %&gt;%
+  set_engine(&quot;rpart&quot;) %&gt;%
+  set_mode(&quot;classification&quot;)
+
+tree_fit &lt;- tree_spec %&gt;%
+  fit(diversity ~ ., data = uni_rec %&gt;% prep() %&gt;% juice())
+
+tree_fit</code></pre>
+<pre><code>parsnip model object
+
+Fit time:  20ms 
+n= 479 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+  1) root 479 198 low (0.4133612 0.5866388)  
+    2) stem_percent&lt; -0.1839889 264 107 high (0.5946970 0.4053030)  
+      4) make_world_better_percent&gt;=0.6447266 92  20 high (0.7826087 0.2173913)  
+        8) total_enrollment&gt;=-0.7106039 76  11 high (0.8552632 0.1447368) *
+        9) total_enrollment&lt; -0.7106039 16   7 low (0.4375000 0.5625000) *
+      5) make_world_better_percent&lt; 0.6447266 172  85 low (0.4941860 0.5058140)  
+       10) stem_percent&lt; -0.638438 51  18 high (0.6470588 0.3529412)  
+         20) in_state_tuition&gt;=-0.3271469 32   7 high (0.7812500 0.2187500) *
+         21) in_state_tuition&lt; -0.3271469 19   8 low (0.4210526 0.5789474) *
+       11) stem_percent&gt;=-0.638438 121  52 low (0.4297521 0.5702479)  
+         22) total_enrollment&gt;=-0.4352007 85  42 high (0.5058824 0.4941176)  
+           44) make_world_better_percent&gt;=0.07781393 30   8 high (0.7333333 0.2666667) *
+           45) make_world_better_percent&lt; 0.07781393 55  21 low (0.3818182 0.6181818)  
+             90) stem_percent&lt; -0.4436741 28  13 high (0.5357143 0.4642857)  
+              180) in_state_tuition&gt;=-1.057991 18   5 high (0.7222222 0.2777778) *
+              181) in_state_tuition&lt; -1.057991 10   2 low (0.2000000 0.8000000) *
+             91) stem_percent&gt;=-0.4436741 27   6 low (0.2222222 0.7777778) *
+         23) total_enrollment&lt; -0.4352007 36   9 low (0.2500000 0.7500000)  
+           46) in_state_tuition&lt; -1.142588 7   2 high (0.7142857 0.2857143) *
+           47) in_state_tuition&gt;=-1.142588 29   4 low (0.1379310 0.8620690) *
+    3) stem_percent&gt;=-0.1839889 215  41 low (0.1906977 0.8093023) *</code></pre>
+<p>To measure each model, resampling is a best practice to simulate how well model performs when exposed to new data. For classification problems, the metrics available include <code>roc_auc</code>, <code>sen</code>sitivity, and <code>spec</code>ificity</p>
+<div id="evaluate-models-with-resampling" class="section level2">
+<h2>Evaluate models with resampling —–</h2>
+<p>We will create 10-cross validation sets</p>
+<pre class="r"><code>set.seed(42)
+folds &lt;- vfold_cv(uni_train, strata = diversity)
+
+all_cores &lt;- parallelly::availableCores(omit = 1)
+all_cores</code></pre>
+<pre><code>system 
+    11 </code></pre>
+<pre class="r"><code>future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows
+
+
+set.seed(42)
+glm_rs &lt;-
+  workflow(uni_rec, glm_spec) %&gt;%
+  fit_resamples(folds,
+    metrics = metric_set(roc_auc),
+    control = control_resamples(save_pred = TRUE)
+  )
+
+set.seed(42)
+knn_rs &lt;-
+  workflow(uni_rec, knn_spec) %&gt;%
+  fit_resamples(folds,
+    metrics = metric_set(roc_auc),
+    control = control_resamples(save_pred = TRUE)
+  )
+
+set.seed(42)
+tree_rs &lt;- workflow(uni_rec, tree_spec) %&gt;%
+  fit_resamples(folds,
+    metrics = metric_set(roc_auc),
+    control = control_resamples(save_pred = TRUE)
+  )</code></pre>
+<p>At a quick glance, the mean roc_auc is highest with the glm approach.</p>
+<pre class="r"><code>glm_rs %&gt;%
+  collect_metrics() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.7811998</td>
+<td align="right">10</td>
+<td align="right">0.0138634</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knn_rs %&gt;%
+  collect_metrics() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.7583371</td>
+<td align="right">4</td>
+<td align="right">0.0207415</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>tree_rs %&gt;%
+  collect_metrics() %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">mean</th>
+<th align="right">n</th>
+<th align="right">std_err</th>
+<th align="left">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.7199981</td>
+<td align="right">10</td>
+<td align="right">0.0256697</td>
+<td align="left">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+<p>A clearer comparison of ROC curves:</p>
+<pre class="r"><code>glm_rs %&gt;%
+  unnest(.predictions) %&gt;%
+  mutate(model = &quot;glm&quot;) %&gt;%
+  bind_rows(tree_rs %&gt;%
+    unnest(.predictions) %&gt;%
+    mutate(model = &quot;tree&quot;)) %&gt;%
+  bind_rows(knn_rs %&gt;%
+    unnest(.predictions) %&gt;%
+    mutate(model = &quot;knn&quot;)) %&gt;%
+  group_by(model) %&gt;%
+  roc_curve(diversity, .pred_high) %&gt;%
+  autoplot()</code></pre>
+<p><img src="figure/CollegeTuitionandDiversity.Rmd/unnamed-chunk-12-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>So, choosing the glm technique, let’s have a look at the predictions with testing data.</p>
+<pre class="r"><code>glm_fit %&gt;%
+  predict(
+    new_data = bake(uni_rec %&gt;% prep(), new_data = uni_test),
+    type = &quot;prob&quot;
+  ) %&gt;%
+  mutate(truth = uni_test$diversity) %&gt;%
+  roc_auc(truth, .pred_high) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.metric</th>
+<th align="left">.estimator</th>
+<th align="right">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">roc_auc</td>
+<td align="left">binary</td>
+<td align="right">0.8077768</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>glm_fit %&gt;%
+  predict(
+    new_data = bake(uni_rec %&gt;% prep(), new_data = uni_test),
+    type = &quot;class&quot;
+  ) %&gt;%
+  mutate(truth = uni_test$diversity) %&gt;%
+  conf_mat(truth, .pred_class) %&gt;%
+  autoplot() +
+  theme_jim(base_size = 18) +
+  labs(
+    title = &quot;Confusion Matrix of GLM model on holdout test data&quot;,
+    subtitle = &quot;College Tuition and Diversity, where Women&#39;s Enrollment &gt; 58.6%&quot;
+  )</code></pre>
+<p><img src="figure/CollegeTuitionandDiversity.Rmd/unnamed-chunk-14-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Resources:</p>
+<p><a href="https://juliasilge.com/blog/tuition-resampling/">Julia Silge’s blog</a></p>
+<p><a href="https://meghan.rbind.io/post/tidymodels-intro/">Meghan Hall’s blog</a></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] rpart_4.1-15       kknn_1.3.1         vctrs_0.3.8        rlang_0.4.11      
+ [5] forcats_0.5.1      stringr_1.4.0      readr_2.0.1        tidyverse_1.3.1   
+ [9] yardstick_0.0.8    workflowsets_0.1.0 workflows_0.2.3    tune_0.1.6        
+[13] tidyr_1.1.3        tibble_3.1.4       rsample_0.1.0      recipes_0.1.16    
+[17] purrr_0.3.4        parsnip_0.1.7.900  modeldata_0.1.1    infer_1.0.0       
+[21] ggplot2_3.3.5      dplyr_1.0.7        dials_0.0.10       scales_1.1.1      
+[25] broom_0.7.9        tidymodels_0.1.3   workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.2.1    systemfonts_1.0.2 
+  [4] igraph_1.2.6       plyr_1.8.6         repr_1.1.3        
+  [7] splines_4.1.1      listenv_0.8.0      digest_0.6.27     
+ [10] foreach_1.5.1      htmltools_0.5.2    viridis_0.6.1     
+ [13] fansi_0.5.0        magrittr_2.0.1     tzdb_0.1.2        
+ [16] globals_0.14.0     modelr_0.1.8       gower_0.2.2       
+ [19] extrafont_0.17     R.utils_2.10.1     vroom_1.5.5       
+ [22] extrafontdb_1.0    hardhat_0.1.6      prettyunits_1.1.1 
+ [25] colorspace_2.0-2   skimr_2.1.3        rvest_1.0.1       
+ [28] textshaping_0.3.5  haven_2.4.3        xfun_0.26         
+ [31] prismatic_1.0.0    crayon_1.4.1       jsonlite_1.7.2    
+ [34] survival_3.2-11    iterators_1.0.13   glue_1.4.2        
+ [37] gtable_0.3.0       ipred_0.9-12       R.cache_0.15.0    
+ [40] Rttf2pt1_1.3.9     future.apply_1.8.1 DBI_1.1.1         
+ [43] Rcpp_1.0.7         viridisLite_0.4.0  bit_4.0.4         
+ [46] GPfit_1.0-8        lava_1.6.10        prodlim_2019.11.13
+ [49] httr_1.4.2         ellipsis_0.3.2     farver_2.1.0      
+ [52] pkgconfig_2.0.3    R.methodsS3_1.8.1  nnet_7.3-16       
+ [55] sass_0.4.0         dbplyr_2.1.1       utf8_1.2.2        
+ [58] here_1.0.1         labeling_0.4.2     tidyselect_1.1.1  
+ [61] DiceDesign_1.9     later_1.3.0        munsell_0.5.0     
+ [64] cellranger_1.1.0   tools_4.1.1        cachem_1.0.6      
+ [67] cli_3.0.1          generics_0.1.0     evaluate_0.14     
+ [70] fastmap_1.1.0      yaml_2.2.1         ragg_1.1.3        
+ [73] rematch2_2.1.2     knitr_1.34         bit64_4.0.5       
+ [76] fs_1.5.0           future_1.22.1      whisker_0.4       
+ [79] R.oo_1.24.0        xml2_1.3.2         compiler_4.1.1    
+ [82] rstudioapi_0.13    curl_4.3.2         reprex_2.0.1      
+ [85] lhs_1.1.3          bslib_0.3.0        stringi_1.7.4     
+ [88] highr_0.9          gdtools_0.2.3      hrbrthemes_0.8.0  
+ [91] lattice_0.20-44    Matrix_1.3-4       styler_1.6.1      
+ [94] conflicted_1.0.4   pillar_1.6.2       lifecycle_1.0.0   
+ [97] furrr_0.2.3        jquerylib_0.1.4    httpuv_1.6.3      
+[100] R6_2.5.1           promises_1.2.0.1   gridExtra_2.3     
+[103] parallelly_1.28.1  codetools_0.2-18   MASS_7.3-54       
+[106] assertthat_0.2.1   rprojroot_2.0.2    withr_2.4.2       
+[109] parallel_4.1.1     hms_1.1.0          grid_4.1.1        
+[112] timeDate_3043.102  class_7.3-19       rmarkdown_2.11    
+[115] git2r_0.28.0       pROC_1.18.0        base64enc_0.1-3   
+[118] lubridate_1.7.10  </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
