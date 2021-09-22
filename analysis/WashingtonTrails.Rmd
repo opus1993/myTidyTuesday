@@ -418,18 +418,45 @@ hike_data %>%
 
 What is the distribution of hiking trail lengths around the state regions?
 
+Let's build a helper function to add sample counts to categorical charts.
+
 ```{r}
+withfreq <- function(x){
+  tibble(x) %>% 
+    add_count(x) %>% 
+    mutate(combined = glue::glue("{ str_wrap(x, width = 20) } ({ n })")) %>% 
+    pull(combined)
+}
+```
+
+```{r dotplot, fig.asp=1}
 
 hike_data %>% 
   filter(!is.na(length)) %>% 
-  ggplot(aes(length, region, fill = region)) +
-  geom_density_ridges(alpha = 0.9, show.legend = FALSE) +
+  mutate(region = withfreq(region)) %>% 
+  ggplot(aes(length, region, color = region)) +
+    ggdist::stat_dots(
+    ## orientation to the left
+    side = "top", 
+    ## move geom up
+    justification = 0.1, 
+    ## adjust grouping (binning) of observations 
+    binwidth = 0.02,
+    show.legend = FALSE
+  ) +
+  geom_text(data = . %>%  filter(length > 150),
+            aes(label = stringr::str_wrap(name, 12)),
+            check_overlap = TRUE,
+            nudge_y = 0.4,
+            show.legend = FALSE) +
+#  geom_density_ridges(alpha = 0.9, show.legend = FALSE) +
   scale_x_log10(labels = scales::comma_format(accuracy = 1)) +
   coord_cartesian(clip = "off") +
-  labs(x = "Trail Lengths in Miles, Log Scale", y = NULL, 
-       title = "Trail Lenths Available by Region", 
-       subtitle = "The Cascades have more of the Longer Trails", 
-       caption = "@jim_gruman | Data: TidyX") 
+  labs(x = "Trail Lengths in Miles", y = NULL, 
+       title = "Trail Lengths Available by Region", 
+       subtitle = "(Counts of trails) SW Washington and the Cascades have more of the Longer Trails", 
+       caption = "@jim_gruman | Data: TidyX") +
+  theme(panel.grid.major.y = element_blank())
 ```
 
 Let's take a closer look at the features of each trail and the relationship with length:
@@ -450,7 +477,6 @@ hikes_complete <- hike_data %>%
 
 hikes_complete
 ```
-
 ```{r}
 slopes <- hikes_complete %>%
     nest_by(features) %>%
