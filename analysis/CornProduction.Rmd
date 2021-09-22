@@ -1,0 +1,229 @@
+---
+title: "Corn Production"
+author: "Jim Gruman"
+date: "October 9, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+> Adapted from [Mandate It and (Hope) It will Come](https://asmith.ucdavis.edu/news/ethanol-boom) by Aaron Smith @ASmithUCD
+
+```{r LoadLibraries, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(rnassqs)
+library(blscrapeR)
+library(readxl)
+library(httr)
+})
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+```
+
+
+In December 2007, President George W. Bush [signed legislation](https://georgewbush-whitehouse.archives.gov/news/releases/2007/12/20071219-6.html) essentially mandating that an area the size of Kentucky be used to grow corn to make ethanol for transportation fuel. It worked. Corn acreage increased immediately and almost 15 billion gallons of ethanol are now mixed in with our gasoline every year. 
+
+The same legislation, known as the Renewable Fuel Standard (RFS2), also required billions of gallons of cellulosic biofuels, which are made from the inedible parts of plants and reduce greenhouse gas emissions by more than corn ethanol.  This mandate didn't work. In 2019, [liquid cellulosic biofuels](https://www.epa.gov/renewable-fuel-standard-program/final-renewable-fuel-standards-2020-and-biomass-based-diesel-volume) totaled 0.2% of the mandated 8.5 billion gallons. 
+
+Why did one mandate work when the other one did not?
+
+First, a little background. The RFS2 specified that certain quantities of biofuels should be mixed in with gasoline and diesel. It was called RFS2 because it followed on the heels of 2005's RFS1.
+
+The RFS2 required that the amount of ethanol used in gasoline increase gradually to [15 billion gallons](https://www.epa.gov/renewable-fuel-standard-program/overview-renewable-fuel-standard) by 2015 and remain at that level thereafter.  Under the RFS2, the amount of ethanol used in the US has tripled. Since 2013, about 10% of essentially every gallon of US gasoline is ethanol made from corn. 
+
+```{r, include = FALSE}
+GET("https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.03&freq=m", write_disk(tf <- tempfile(fileext = ".xlsx")))
+```
+
+
+```{r}
+df <- read_excel(tf, sheet = "Annual Data", range = cell_rows(11:51)) %>%
+  select("Annual Total","Fuel Ethanol Consumption...12") %>%
+  filter(is.na(`Annual Total`) == FALSE)  %>%
+  rename(year = `Annual Total`,consumption = `Fuel Ethanol Consumption...12`) %>%
+  filter(year >= 1990) %>%
+  mutate(consumption = as.numeric(consumption) / 1000)  %>%
+  mutate(RFS1 = c(rep(NA,16),4,4.7,5.4,6.1,6.8,7.4,7.5,rep(NA,7))) %>%  
+  mutate(RFS2 = c(rep(NA,18),9.0,10.5,12.0,12.6,13.2,13.8,14.4,15.0,15.0,15.0,15.0,15.0))    
+
+
+df %>%
+  pivot_longer(cols = c("consumption","RFS1","RFS2"),
+               names_to = "series",
+               values_to = "value")  %>%
+ggplot(aes(x = year, y = value, color = series)) +
+    geom_line(aes(linetype = series, size = series), show.legend = FALSE) +
+    scale_size_manual(values = c(1.5,1,1)) +
+    scale_linetype_manual(values = c("solid", "dotted","twodash")) +
+    scale_x_continuous(breaks = seq(1990, 2020, 5),
+                       minor_breaks = seq(1990, 2020, 1)) +
+    labs(color = "",
+          x = "", 
+          y = "", 
+          title = "Ethanol Mandates and Consumption",
+          subtitle = "Billions of Gallons",
+          caption = "Data: www.eia.gov/totalenergy/ | Visualisation: @jim_gruman") +
+  annotate("text",
+           x = 2007,
+           y = 12.7,
+           label = "Consumption",
+           color = viridis::viridis_pal(option = "H")(12)[12]) +
+  annotate("text",
+           x = 2013,
+           y = 7.5,
+           label = "RFS1",
+           color = viridis::viridis_pal(option = "H")(12)[8]) +
+  annotate("text",
+           x = 2013,
+           y = 15,
+           label = "RFS2",
+           color = viridis::viridis_pal(option = "H")(12)[4]) 
+
+```
+
+Some may dispute the claim that the corn ethanol mandate worked. For the last few years, we have been stuck at 14.5 billion gallons of ethanol, which is just below the mandate. Economists write academic papers explaining why that is, but there are two main causes, (i) it is expensive to push the ethanol blend above 10% of gasoline, so the market has increased biodiesel use instead, which is allowed under the RFS2, and (ii) the Trump administration has granted exemptions to small refineries that have pushed the effective mandate below 15 billion gallons. 
+
+Producing a gallon of ethanol requires about 0.37 bushels of corn, but 0.12 of that bushel can be recycled as animal feed in the form of dried distillers grains. Thus, a gallon of ethanol extracts a net 0.37-0.12 = 0.25 bushels of corn, so producing 15 billion gallons requires 3.7 billion bushels. Back in 2006, the average acre produced 150 bushels, so making 15 billion gallons of ethanol required 25 million acres, which is approximately the entire land area of a state like Kentucky.  That's a lot of land.
+
+US farmers harvested 70 million acres per year on average from 1990-2006. Acreage jumped up in 2007 and has remained high since, averaging 83 million acres from 2007-2019.  We were already using about 5 billion gallons when the RFS2 passed, so the incremental effect of the policy was less than the full 25 million acres.  The simplest back-of-the-envelope calculation would say that RFS2 added about 13 million acres of corn. 
+
+```{r, include = FALSE}
+apikey <- Sys.getenv("NASSQS_TOKEN")
+
+nassqs_auth(apikey)
+
+comm_list <- nassqs_param_values("commodity_desc") # get commodity list
+
+years <- 1990:2020
+
+params <- list(source_desc = "SURVEY", 
+              short_desc = "CORN, GRAIN - ACRES HARVESTED", 
+              commodity_desc = "CORN", 
+              agg_level_desc = "STATE") 
+
+get_nassqs <- function(year){
+  params[["year"]] <- year
+  nassqs(params)
+}
+
+df <- map_df(years, get_nassqs) %>% 
+  select(year, 
+         state_alpha, 
+         freq_desc, 
+         reference_period_desc, 
+         unit_desc, 
+         short_desc, 
+         Value) %>% 
+  mutate(Value = parse_number(Value))
+
+df_prod <- df %>%
+  filter(freq_desc == "ANNUAL" &  reference_period_desc == "YEAR")
+
+```
+
+
+Where are these new corn acres?  Using Aaron Smith's UC Davis [Cropland Data Layer](https://asmith.ucdavis.edu/data/cropland-data-layer) app, which is based on satellite data, he mapped corn acreage in 2006 and 2019. Although the CDL is missing some states in 2006, we clearly see corn acres expanding to the north and west.
+
+```{r}
+knitr::include_graphics("https://asmith.ucdavis.edu//sites/g/files/dgvnsk7811/files/inline-images/corn_CDL_2006_0.png", error = FALSE)
+```
+
+```{r}
+knitr::include_graphics("https://asmith.ucdavis.edu//sites/g/files/dgvnsk7811/files/inline-images/corn_CDL_2020_0.png", error = FALSE)
+```
+
+The 13 million acre increase in corn acres has occurred mostly outside the central corn belt. The central cornbelt states (IA, IL, IN) increased acreage significantly during an initial 5-year transition period, but declined back to pre-RFS2 levels by 2019. The four great plains states (ND, SD, NE, KS) grew about 15 million acres of corn each year from 1996-2006. They jumped to 20 million in 2007 and increased further to 22.5 million by 2019 as central cornbelt acreage declined. The other states have also seen corn acreage increase. 
+
+```{r}
+df_prod %>% 
+  mutate(state_group = case_when(
+    state_alpha %in% c("IA","IL","IN") ~ "IA, IL, IN",
+    state_alpha%in% c("ND","SD","NE","KS") ~ "ND, SD, NE, KS",
+    is.na(state_alpha) ~ "Other",
+    TRUE ~ "Other"
+  )) %>% 
+  group_by(year, state_group) %>%
+  summarise(acres = sum(Value)/1000000,
+            .groups = "drop") %>% 
+  ggplot(aes(x = year, y = acres, color = state_group)) +
+    geom_line(size = 1.5) +
+    scale_x_continuous(breaks = seq(1990, 2020, 5),
+                       minor_breaks = seq(1990, 2020, 1)) +
+    labs(color = "",
+         x = "", y = "",
+         subtitle = "Millions of Acres",
+         title = "Corn - Total Harvested Area", 
+         caption = "Data by USDA NASS | Visualization by @jim_gruman") +
+     theme(legend.position = c(0.9, 0.2),
+           legend.background = element_rect(color = "white"))
+
+```
+
+Comparing acreage in the 6 years before RFS2 to the most recent 6 years, we see that the largest increases have come in ND, SD, NE, and KS. Corn acreage in 2014-2019 was actually lower in Illinois, Indiana, and Michigan than in 2001-2006.
+
+```{r}
+max_state <- 12
+
+df_prod %>%
+  mutate(year_group = ifelse(year > 2000 & year < 2007,
+                             "Pre_RFS",
+                             NA)) %>%
+  mutate(year_group = ifelse(year > 2014,
+                             "After",
+                             year_group)) %>%
+  group_by(year_group, state_alpha) %>%
+  summarise(acres = mean(Value/1000000),
+            .groups = "drop") %>%
+  pivot_wider(names_from = year_group,
+              values_from = acres, 
+              values_fill = 0) %>%
+  arrange(desc(Pre_RFS)) %>%
+  mutate(state_rank = row_number(),
+         state_alpha = fct_lump_n(state_alpha, 
+                                  max_state ,
+                                  w = Pre_RFS),
+         state_rank = ifelse(state_rank >= max_state + 1,
+                              max_state + 1,
+                              state_rank)) %>% 
+  group_by(state_alpha, state_rank) %>%
+  summarise(Pre_RFS = sum(Pre_RFS), 
+            After = sum(After),
+            .groups = "drop") %>% 
+  mutate(Change = After - Pre_RFS) %>% 
+  pivot_longer(cols = c("Pre_RFS","Change"),
+               names_to = "year_group", 
+               values_to = "Acres") %>% 
+  ggplot(aes(y = reorder(state_alpha, -state_rank), 
+             x = Acres,fill = year_group)) +
+    geom_bar(position = "stack", stat = "identity") +
+    labs(x = "Millions of Acres", y = NULL, fill = NULL,
+         fill = "Period",
+         title = "Change in Average Corn Acreage (2001-2006 vs 2015-2020)",
+         caption = "Data from USDA NASS | Visual by @jim_gruman") +
+  theme(legend.position = c(.8,.5),
+        legend.background = element_rect(color = "white"),
+        axis.ticks.y = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  annotate("text",
+           x = 8,
+           y = 4,
+           label = "Illinois, Indiana, and Michigan \nactually reduced acreage\nover the period")
+```
+
+Under the RFS2, ethanol use tripled and the land planted to corn increased by 13 million acres. This mandate worked because the technology already existed and it wasn't too costly to implement. The cellulosic biofuel mandate has not worked because the technology to produce those fuels cost effectively at scale does not exist.
+
+With this background, the success of California's of goal of 100% zero-emission new vehicles by 2035 will depend crucially on whether electric vehicle batteries become cheap and reliable enough. 
+
+Two of the charts in this article were generated from the UC Davis data apps, as indicated by the footnotes to those charts.  All other charges are generated from R code that grabs data directly from NASS using the Quick Stats API and from EIA. Download and run it for corn or any other commodity of your choice.
+
+
