@@ -132,10 +132,10 @@ ggplot_imp <- function(...) {
 
 # ggplot categorical count helper function ----
 
-withfreq <- function(x){
+withfreq <- function(x, width = 20){
   tibble(x) %>%
     add_count(x) %>%
-    mutate(combined = glue::glue("{ str_wrap(x, width = 20) } ({ n })")) %>%
+    mutate(combined = glue::glue("{ str_wrap(x, width = width) } ({ n })")) %>%
     pull(combined)
 }
 
