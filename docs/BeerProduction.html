@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2020-03-31" />
+
+<title>Beer Production</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Beer Production</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">March 31, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-24
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree699e663064a29b0a87f8391b38882130cddde754targetblank699e663a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/699e663064a29b0a87f8391b38882130cddde754" target="_blank">699e663</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree699e663064a29b0a87f8391b38882130cddde754targetblank699e663a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/699e663064a29b0a87f8391b38882130cddde754" target="_blank">699e663</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/YammerReach.R
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/BeerProduction.Rmd</code>) and HTML (<code>docs/BeerProduction.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/699e663064a29b0a87f8391b38882130cddde754/analysis/BeerProduction.Rmd" target="_blank">699e663</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+adopt viridis H palette and trim out the tables
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="import-this-weeks-data" class="section level2">
+<h2>Import this week’s data</h2>
+<pre class="r"><code>brewing_materials &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewing_materials.csv&quot;) %&gt;%
+  mutate(date = ymd(paste0(year, &quot;/&quot;, month, &quot;/1&quot;)))
+beer_taxed &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_taxed.csv&quot;)
+brewer_size &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewer_size.csv&quot;)
+beer_states &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_states.csv&quot;)</code></pre>
+</div>
+<div id="exploration" class="section level2">
+<h2>Exploration</h2>
+<pre class="r"><code>skimr::skim(beer_states)
+# 19 year/states with missing barrels
+
+skimr::skim(brewing_materials)
+table(brewing_materials$type)
+# opportunity to examine the proportional trends of Corn vresus Sugar/syrups use
+
+skimr::skim(beer_taxed)
+
+skimr::skim(brewer_size)
+table(brewer_size$brewer_size)</code></pre>
+<p>Total all barrels produced by state per year (regardless of type)</p>
+<pre class="r"><code>all_barrels &lt;-
+  beer_states %&gt;%
+  na.omit() %&gt;%
+  filter(state != &quot;total&quot;) %&gt;%
+  group_by(state, year) %&gt;%
+  summarise(
+    barrels = sum(barrels),
+    .groups = &quot;drop&quot;
+  )</code></pre>
+<p>The top 5 states with largest increase in barrels from 2008 to 2019</p>
+<pre class="r"><code>increase_states &lt;-
+  all_barrels %&gt;%
+  group_by(state) %&gt;%
+  mutate(total_barrels = cumsum(barrels)) %&gt;%
+  filter(year %in% c(2008, 2019)) %&gt;%
+  mutate(pct_chg = (total_barrels - lag(total_barrels)) / lag(total_barrels)) %&gt;%
+  ungroup() %&gt;%
+  top_n(5, pct_chg) %&gt;%
+  pull(state)
+
+increase_states %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AL</td>
+</tr>
+<tr class="even">
+<td align="left">CT</td>
+</tr>
+<tr class="odd">
+<td align="left">ND</td>
+</tr>
+<tr class="even">
+<td align="left">RI</td>
+</tr>
+<tr class="odd">
+<td align="left">TN</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Lets get the state names
+states &lt;- tibble(state = state.abb, state_name = state.name)
+
+beer_df &lt;-
+  beer_states %&gt;%
+  na.omit() %&gt;%
+  filter(state != &quot;total&quot;) %&gt;%
+  group_by(state, year) %&gt;%
+  summarise(
+    barrels = sum(barrels),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  mutate(total_barrels = cumsum(barrels)) %&gt;%
+  left_join(states, by = &quot;state&quot;)</code></pre>
+<p>Lets have a look at the materials trends. What ingredients are used in beer production?</p>
+<pre class="r"><code>brewing_materials %&gt;%
+  filter(
+    !str_detect(material_type, &quot;Total&quot;),
+    !(month == 12 &amp; year %in% 2014:2015)
+  ) %&gt;% # remove the subtotals) %&gt;%
+  filter(date == max(date)) %&gt;%
+  mutate(type = fct_reorder(type, month_current)) %&gt;%
+  ggplot(aes(type, month_current / 1000000, fill = type)) +
+  geom_col() +
+  scale_y_continuous(breaks = scales::pretty_breaks()) +
+  coord_flip() +
+  theme(
+    legend.position = &quot;&quot;,
+    panel.grid.major.y = element_blank()
+  ) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Million Pounds&quot;,
+    title = &quot;Ingredients in US Beer Production, in the month of December 2019&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/BeerProduction.Rmd/materialsTrends-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>brewing_materials %&gt;%
+  filter(
+    !str_detect(type, &quot;Total&quot;), year &lt; 2016,
+    !(month == 12 &amp; year %in% 2014:2015)
+  ) %&gt;% # remove the subtotals
+  mutate(type = fct_reorder2(type,
+    date,
+    month_current,
+    .fun = last2
+  )) %&gt;%
+  ggplot(aes(date,
+    month_current / 1000000,
+    color = type
+  )) +
+  geom_line() +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Million Pounds&quot;,
+    color = &quot;Material&quot;,
+    title = &quot;Ingredients in US Beer Production, 2008-2016&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  scale_radius(range = c(1, 6)) +
+  scale_x_date(
+    date_breaks = &quot;2 years&quot;,
+    date_labels = &quot;%Y&quot;
+  )</code></pre>
+<p><img src="figure/BeerProduction.Rmd/materialsTrendsChart-1.png" width="200%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="tidymetrics" class="section level2">
+<h2>Tidymetrics</h2>
+<pre class="r"><code>cross_by_dimensions &lt;- function(tbl, ..., add = TRUE, max_dimensions = NULL, collect_fun = NULL) {
+  g_vars &lt;- dplyr::group_vars(tbl)
+  columns &lt;- ensyms(...)
+  tbl &lt;- tbl %&gt;%
+    ungroup() %&gt;%
+    mutate_at(
+      vars(!!!columns),
+      as.character
+    )
+  if (!is.null(max_dimensions)) {
+    tbl &lt;- tbl %&gt;% cross_by_dimensions_limited(
+      columns,
+      max_dimensions = max_dimensions,
+      collect_fun = collect_fun
+    )
+  } else {
+    for (column in columns) {
+      tbl &lt;- tbl %&gt;%
+        mutate(`:=`(!!column, &quot;All&quot;)) %&gt;%
+        union_all(tbl)
+      if (!is.null(collect_fun)) {
+        tbl &lt;- collect_fun(tbl)
+      }
+    }
+  }
+  tbl %&gt;%
+    group_by_at(vars(all_of(g_vars))) %&gt;%
+    group_by(!!!columns,
+      .add = add
+    )
+}
+
+
+brewing_summarized &lt;- brewing_materials %&gt;%
+  rename(material = type) %&gt;%
+  filter(
+    !str_detect(material_type, &quot;Total&quot;),
+    year &lt; 2016,
+    !(month == 12 &amp; year %in% 2014:2015)
+  ) %&gt;%
+  cross_by_dimensions(material_type, material) %&gt;% # duplicates the data to summarize it
+  cross_by_periods(c(&quot;month&quot;, &quot;quarter&quot;, &quot;year&quot;)) %&gt;%
+  summarize(
+    total_pounds = sum(month_current),
+    .groups = &quot;drop&quot;
+  )
+
+brewing_summarized %&gt;%
+  filter(
+    material_type != &quot;All&quot;,
+    material != &quot;All&quot;,
+    period == &quot;month&quot;
+  ) %&gt;%
+  mutate(material = fct_reorder2(material,
+    date,
+    total_pounds,
+    .fun = last2
+  )) %&gt;%
+  ggplot(aes(date,
+    total_pounds / 1000000,
+    color = material
+  )) +
+  geom_line() +
+  scale_x_date(
+    date_breaks = &quot;2 years&quot;,
+    date_labels = &quot;%Y&quot;
+  ) +
+  labs(
+    x = &quot;Date&quot;,
+    y = &quot;Million Pounds&quot;,
+    color = &quot;Material&quot;,
+    title = &quot;Ingredients in US Beer Production, 2008-2016:  Monthly&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/BeerProduction.Rmd/brewingSummarizedChart-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>brewing_summarized %&gt;%
+  filter(
+    material_type != &quot;All&quot;,
+    material != &quot;All&quot;,
+    period == &quot;quarter&quot;
+  ) %&gt;%
+  mutate(material = fct_reorder2(material,
+    date,
+    total_pounds,
+    .fun = last2
+  )) %&gt;%
+  ggplot(aes(date,
+    total_pounds / 1000000,
+    color = material
+  )) +
+  geom_line() +
+  labs(
+    x = &quot;Date&quot;,
+    y = &quot;Million Pounds&quot;,
+    color = &quot;Material&quot;,
+    title = &quot;Ingredients in US Beer Production, 2008-2016: Quarterly&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/BeerProduction.Rmd/p4-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>brewing_summarized %&gt;%
+  filter(
+    material_type != &quot;All&quot;,
+    material != &quot;All&quot;,
+    period == &quot;year&quot;
+  ) %&gt;%
+  mutate(material = fct_reorder2(material,
+    date,
+    total_pounds,
+    .fun = last2
+  )) %&gt;%
+  ggplot(aes(date,
+    total_pounds / 1000000,
+    color = material
+  )) +
+  geom_line() +
+  labs(
+    x = &quot;Date&quot;,
+    y = &quot;Million Pounds&quot;,
+    color = &quot;Material&quot;,
+    title = &quot;Ingredients in US Beer Production, 2008-2016: Annually&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/BeerProduction.Rmd/p5-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>brewing_materials %&gt;%
+  filter(material_type == &quot;Total Used&quot;, year &lt; 2016) %&gt;%
+  mutate(month = factor(month, labels = month.abb)) %&gt;%
+  ggplot(aes(
+    x = month,
+    y = month_current / 1000000,
+    group = factor(year),
+    color = factor(year)
+  )) +
+  geom_line() +
+  expand_limits(y = 0) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Million Pounds&quot;,
+    color = &quot;Year&quot;,
+    title = &quot;Ingredients in US Beer Production, 2008-2016: Each Month&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  scale_y_continuous(labels = scales::comma_format())</code></pre>
+<p><img src="figure/BeerProduction.Rmd/materialsByYearChart-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>remotes::install_github(&quot;ramnathv/shinymetrics&quot;)
+remotes::install_github(&quot;ramnathv/shinybones&quot;)
+
+brewing_metrics &lt;- create_metrics(brewing_summarized)
+
+library(shinymetrics)
+
+# interactive plotly visualization of grouped time multi-dimensional BI
+preview_metric(brewing_metrics$production_NA_total_pounds)
+# change the dropdown from &quot;last year&quot; to &quot;all time&quot; because 2019 is not in this dataset</code></pre>
+<pre class="r"><code>brewer_size %&gt;%
+  filter(
+    brewer_size != &quot;Total&quot;,
+    !is.na(total_barrels)
+  ) %&gt;%
+  mutate(
+    brewer_size = fct_lump_n(brewer_size,
+      n = 5,
+      w = total_barrels,
+      other_level = &quot;1 to 100,000 Barrels&quot;
+    ),
+    barrel_number = coalesce(parse_number(as.character(brewer_size)), 1),
+    brewer_size = fct_reorder(brewer_size, barrel_number)
+  ) %&gt;%
+  ggplot(aes(as_factor(year),
+    total_barrels / 1000000,
+    fill = brewer_size
+  )) +
+  geom_col() +
+  scale_y_continuous(labels = scales::comma_format()) +
+  labs(
+    x = &quot;Year&quot;,
+    y = &quot;Million Barrels&quot;,
+    fill = &quot;Brewer Size&quot;,
+    title = &quot;Total Production, by US Brewer Size in 2019&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  )</code></pre>
+<p><img src="figure/BeerProduction.Rmd/byBrewerSize-1.png" width="200%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="where-is-beer-produced" class="section level2">
+<h2>Where is Beer produced?</h2>
+<pre class="r"><code>beer_df %&gt;%
+  ggplot(aes(year, barrels,
+    group = state
+  )) +
+  geom_line(aes(color = state), show.legend = FALSE) +
+  gghighlight(
+    state %in% increase_states,
+    label_key = state_name,
+    label_params = list(
+      size = 3,
+      color = &quot;black&quot;,
+      family = &quot;Arial Narrow&quot;,
+      fill = &quot;grey95&quot;,
+      width = 2,
+      alpha = 1,
+      label.r = 0.1,
+      segment.alpha = 0
+    ),
+    unhighlighted_params = list(color = &quot;grey88&quot;)
+  ) +
+  labs(
+    x = &quot;Year&quot;,
+    y = &quot;Total number of barrels produced&quot;,
+    title = &quot;States with the Largest Increase in Beer Production, 2008-2019&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  scale_y_log10(labels = scales::label_number()) +
+  theme(
+    panel.grid = element_blank(),
+    panel.grid.major = element_blank()
+  )</code></pre>
+<p><img src="figure/BeerProduction.Rmd/whereBeerProduced-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>states_percents_2019 &lt;- beer_states %&gt;%
+  filter(year == max(year), state != &quot;total&quot;) %&gt;%
+  group_by(state) %&gt;%
+  mutate(percent = barrels / sum(barrels)) %&gt;%
+  ungroup()
+
+states &lt;- st_as_sf(maps::map(&quot;state&quot;, plot = FALSE, fill = TRUE))
+
+states_percents_2019 %&gt;%
+  mutate(ID = if_else(state != &quot;DC&quot;,
+    str_to_lower(state.name[match(state, state.abb)]),
+    &quot;district of columbia&quot;
+  )) %&gt;%
+  inner_join(states, by = &quot;ID&quot;) %&gt;%
+  ggplot() +
+  geom_sf(aes(geometry = geom, fill = percent)) +
+  facet_wrap(~type, nrow = 2) +
+  scale_fill_continuous(labels = scales::percent) +
+  labs(
+    title = &quot;In Each State, What is the Highest Proportion of Beer Consumed?&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;,
+    fill = &quot;% Percent&quot;
+  ) +
+  theme_jim() +
+  theme(
+    legend.position = c(0.7, 0.2),
+    panel.grid.major = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank()
+  )</code></pre>
+<p><img src="figure/BeerProduction.Rmd/BeerStatesMaps-1.png" width="200%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="an-animated-map.-because-its-tidytuesday" class="section level2">
+<h2>An animated map. Because it’s TidyTuesday</h2>
+<pre class="r"><code>p &lt;- beer_states %&gt;%
+  filter(state != &quot;total&quot;) %&gt;%
+  group_by(state, year) %&gt;%
+  mutate(percent = barrels / sum(barrels)) %&gt;%
+  ungroup() %&gt;%
+  mutate(ID = if_else(state != &quot;DC&quot;,
+    str_to_lower(state.name[match(state, state.abb)]),
+    &quot;district of columbia&quot;
+  )) %&gt;%
+  inner_join(states, by = &quot;ID&quot;) %&gt;%
+  ggplot(aes(
+    geometry = geom,
+    fill = percent
+  )) +
+  geom_sf() +
+  transition_time(year) +
+  facet_wrap(~type, nrow = 2) +
+  labs(
+    title = &quot;In Each State, What is the Highest Proportion of Beer Consumed? {as.integer(frame_time)}&quot;,
+    subtitle = &quot;US Alcohol and Tobacco Tax and Trade Bureau, 2008-2019&quot;,
+    caption = &quot;@Jim_Gruman | #TidyTuesday&quot;,
+    fill = &quot;% Percent&quot;
+  ) +
+  theme_jim() +
+  theme(
+    legend.position = c(0.7, 0.2),
+    panel.grid.major = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank()
+  )
+
+animate(p, width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())</code></pre>
+<p><img src="figure/BeerProduction.Rmd/BeerStatesAnimated-1.gif" width="200%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="what-are-the-relationships-between-the-materials-used-using-resampling-methods" class="section level2">
+<h2>What are the relationships between the materials used? (using resampling methods)</h2>
+<p>For example, how much sugar do beer producers need per pound of malt?</p>
+<pre class="r"><code>brewing_materials %&gt;%
+  count(type, wt = month_current, sort = TRUE) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">type</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Total Used</td>
+<td align="right">53559516695</td>
+</tr>
+<tr class="even">
+<td align="left">Total Grain products</td>
+<td align="right">44734903124</td>
+</tr>
+<tr class="odd">
+<td align="left">Malt and malt products</td>
+<td align="right">32697313882</td>
+</tr>
+<tr class="even">
+<td align="left">Total Non-Grain products</td>
+<td align="right">8824613571</td>
+</tr>
+<tr class="odd">
+<td align="left">Sugar and syrups</td>
+<td align="right">6653104081</td>
+</tr>
+<tr class="even">
+<td align="left">Rice and rice products</td>
+<td align="right">5685742541</td>
+</tr>
+<tr class="odd">
+<td align="left">Corn and corn products</td>
+<td align="right">5207759409</td>
+</tr>
+<tr class="even">
+<td align="left">Hops (dry)</td>
+<td align="right">1138840132</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="right">998968470</td>
+</tr>
+<tr class="even">
+<td align="left">Barley and barley products</td>
+<td align="right">941444745</td>
+</tr>
+<tr class="odd">
+<td align="left">Wheat and wheat products</td>
+<td align="right">202642547</td>
+</tr>
+<tr class="even">
+<td align="left">Hops (used as extracts)</td>
+<td align="right">33700888</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>brewing_filtered &lt;- brewing_materials %&gt;%
+  filter(
+    !str_detect(type, &quot;Total&quot;), year &lt; 2016,
+    !(month == 12 &amp; year %in% 2014:2015)
+  )</code></pre>
+<p>Explore the relationship between ingredients</p>
+<pre class="r"><code>brewing_df &lt;- brewing_filtered %&gt;%
+  select(date, type, month_current) %&gt;%
+  pivot_wider(
+    names_from = type,
+    values_from = month_current
+  ) %&gt;%
+  janitor::clean_names()
+
+# is there a remote correlation between
+brewing_df %&gt;%
+  ggplot(aes(malt_and_malt_products, sugar_and_syrups)) +
+  geom_smooth(method = &quot;lm&quot;) +
+  geom_point() +
+  labs(title = &quot;What is the relationship between malt and sugar ingredients?&quot;)</code></pre>
+<p><img src="figure/BeerProduction.Rmd/makeSugarMaltDF-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>A simple linear model</p>
+<pre class="r"><code># force the y-intercept to be zero (no beer, no malt, no sugar)
+beer_fit &lt;- lm(sugar_and_syrups ~ 0 + malt_and_malt_products, data = brewing_df)
+
+summary(beer_fit)</code></pre>
+<pre><code>
+Call:
+lm(formula = sugar_and_syrups ~ 0 + malt_and_malt_products, data = brewing_df)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-29985291  -6468052    174001   7364462  23462837 
+
+Coefficients:
+                       Estimate Std. Error t value Pr(&gt;|t|)    
+malt_and_malt_products 0.205804   0.003446   59.72   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 11480000 on 93 degrees of freedom
+Multiple R-squared:  0.9746,    Adjusted R-squared:  0.9743 
+F-statistic:  3567 on 1 and 93 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>broom::tidy(beer_fit) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">malt_and_malt_products</td>
+<td align="right">0.205804</td>
+<td align="right">0.0034461</td>
+<td align="right">59.72037</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="bootstrap-resampling" class="section level2">
+<h2>Bootstrap Resampling</h2>
+<p>to arrive at a confidence interval for a linear model</p>
+<pre class="r"><code>beer_boot &lt;- bootstraps(data = brewing_df, times = 1e3, apparent = FALSE)</code></pre>
+<pre class="r"><code>beer_models &lt;- beer_boot %&gt;%
+  dplyr::mutate(
+    model = purrr::map(splits, ~ lm(sugar_and_syrups ~ 0 + malt_and_malt_products,
+      data = .
+    )),
+    coef_info = purrr::map(model, tidy)
+  )
+
+beer_coefs &lt;- beer_models %&gt;%
+  unnest(coef_info)</code></pre>
+</div>
+<div id="evaluate-results" class="section level2">
+<h2>Evaluate results</h2>
+<p>What is the distribution of the estimates for the model?</p>
+<pre class="r"><code>beer_coefs %&gt;%
+  ggplot(aes(estimate)) +
+  geom_histogram(alpha = 0.7) +
+  labs(title = &quot;Malt Coefficient Estimate for predicting Sugar and Syrups&quot;)</code></pre>
+<p><img src="figure/BeerProduction.Rmd/beerMaltSlopeEstimates-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Our bootstrap confidence intervals:</p>
+<pre class="r"><code>int_pctl(beer_models, coef_info)</code></pre>
+<pre><code># A tibble: 1 x 6
+  term                   .lower .estimate .upper .alpha .method   
+  &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;     
+1 malt_and_malt_products  0.199     0.206  0.213   0.05 percentile</code></pre>
+<pre class="r"><code>beer_aug &lt;- beer_models %&gt;%
+  dplyr::mutate(augmented = purrr::map(model, augment)) %&gt;%
+  unnest(augmented)
+
+beer_aug %&gt;%
+  ggplot(aes(malt_and_malt_products, sugar_and_syrups)) +
+  geom_line(aes(y = .fitted, group = id), alpha = 0.1, color = &quot;cyan3&quot;) +
+  geom_point() +
+  labs(title = &quot;Bootstrap Resampling Model Estimates Confidence Interval&quot;)</code></pre>
+<p><img src="figure/BeerProduction.Rmd/beerMaltSlopeCIplot-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>And finally, my tidytuesday tweet:</p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/jim_gruman/status/1246645041663221765&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">h/t to <a href="https://twitter.com/BrewersStats?ref_src=twsrc%5Etfw">@BrewersStats</a> for the week 14 <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> US Beer Production dataset<br><br>code: <a href="https://t.co/tAHYewQFrW">https://t.co/tAHYewQFrW</a><a href="https://twitter.com/hashtag/r4ds?src=hash&amp;ref_src=twsrc%5Etfw">#r4ds</a> <a href="https://twitter.com/hashtag/tidyverse?src=hash&amp;ref_src=twsrc%5Etfw">#tidyverse</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://t.co/cR4XpzcB5a">pic.twitter.com/cR4XpzcB5a</a></p>&mdash; Jim Gruman📚🚵‍♂️⚙ (@jim_gruman) <a href="https://twitter.com/jim_gruman/status/1246645041663221765?ref_src=twsrc%5Etfw">April 5, 2020</a></blockquote>
+
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] transformr_0.1.3   gganimate_1.0.7    sf_1.0-2           maps_3.3.0        
+ [5] yardstick_0.0.8    workflowsets_0.1.0 workflows_0.2.3    tune_0.1.6        
+ [9] rsample_0.1.0      recipes_0.1.16     parsnip_0.1.7.900  modeldata_0.1.1   
+[13] infer_1.0.0        dials_0.0.10       scales_1.1.1       broom_0.7.9       
+[17] tidymodels_0.1.3   gghighlight_0.3.2  GGally_2.1.2       tidymetrics_0.0.1 
+[21] lubridate_1.7.10   forcats_0.5.1      stringr_1.4.0      dplyr_1.0.7       
+[25] purrr_0.3.4        readr_2.0.1        tidyr_1.1.3        tibble_3.1.4      
+[29] ggplot2_3.3.5      tidyverse_1.3.1    workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.2.1    systemfonts_1.0.2 
+  [4] plyr_1.8.6         splines_4.1.1      listenv_0.8.0     
+  [7] digest_0.6.27      foreach_1.5.1      htmltools_0.5.2   
+ [10] viridis_0.6.1      fansi_0.5.0        magrittr_2.0.1    
+ [13] tzdb_0.1.2         globals_0.14.0     extrafont_0.17    
+ [16] modelr_0.1.8       gower_0.2.2        vroom_1.5.5       
+ [19] R.utils_2.10.1     extrafontdb_1.0    hardhat_0.1.6     
+ [22] lpSolve_5.6.15     prettyunits_1.1.1  colorspace_2.0-2  
+ [25] ggrepel_0.9.1      rvest_1.0.1        textshaping_0.3.5 
+ [28] haven_2.4.3        xfun_0.26          crayon_1.4.1      
+ [31] jsonlite_1.7.2     survival_3.2-11    iterators_1.0.13  
+ [34] glue_1.4.2         gtable_0.3.0       ipred_0.9-12      
+ [37] R.cache_0.15.0     tweetrmd_0.0.9     Rttf2pt1_1.3.9    
+ [40] future.apply_1.8.1 DBI_1.1.1          Rcpp_1.0.7        
+ [43] viridisLite_0.4.0  progress_1.2.2     units_0.7-2       
+ [46] bit_4.0.4          GPfit_1.0-8        proxy_0.4-26      
+ [49] lava_1.6.10        prodlim_2019.11.13 httr_1.4.2        
+ [52] RColorBrewer_1.1-2 ellipsis_0.3.2     R.methodsS3_1.8.1 
+ [55] pkgconfig_2.0.3    reshape_0.8.8      farver_2.1.0      
+ [58] nnet_7.3-16        sass_0.4.0         dbplyr_2.1.1      
+ [61] janitor_2.1.0      utf8_1.2.2         here_1.0.1        
+ [64] labeling_0.4.2     tidyselect_1.1.1   rlang_0.4.11      
+ [67] DiceDesign_1.9     later_1.3.0        cachem_1.0.6      
+ [70] munsell_0.5.0      cellranger_1.1.0   tools_4.1.1       
+ [73] cli_3.0.1          generics_0.1.0     gifski_1.4.3-1    
+ [76] evaluate_0.14      fastmap_1.1.0      ragg_1.1.3        
+ [79] yaml_2.2.1         rematch2_2.1.2     bit64_4.0.5       
+ [82] knitr_1.34         fs_1.5.0           nlme_3.1-152      
+ [85] future_1.22.1      whisker_0.4        R.oo_1.24.0       
+ [88] xml2_1.3.2         compiler_4.1.1     rstudioapi_0.13   
+ [91] curl_4.3.2         e1071_1.7-8        reprex_2.0.1      
+ [94] lhs_1.1.3          tweenr_1.0.2       bslib_0.3.0       
+ [97] stringi_1.7.4      highr_0.9          gdtools_0.2.3     
+[100] hrbrthemes_0.8.0   lattice_0.20-44    Matrix_1.3-4      
+[103] styler_1.6.1       classInt_0.4-3     conflicted_1.0.4  
+[106] vctrs_0.3.8        pillar_1.6.2       lifecycle_1.0.1   
+[109] furrr_0.2.3        jquerylib_0.1.4    httpuv_1.6.3      
+[112] R6_2.5.1           promises_1.2.0.1   KernSmooth_2.23-20
+[115] gridExtra_2.3      parallelly_1.28.1  codetools_0.2-18  
+[118] MASS_7.3-54        assertthat_0.2.1   rprojroot_2.0.2   
+[121] withr_2.4.2        mgcv_1.8-36        parallel_4.1.1    
+[124] hms_1.1.0          grid_4.1.1         rpart_4.1-15      
+[127] timeDate_3043.102  class_7.3-19       snakecase_0.11.0  
+[130] rmarkdown_2.11     git2r_0.28.0       pROC_1.18.0       </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
