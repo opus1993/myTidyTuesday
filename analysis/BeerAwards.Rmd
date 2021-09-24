@@ -1,0 +1,296 @@
+---
+title: "Beer Awards"
+author: "Jim Gruman"
+date: "October 20, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+This week's #TidyTuesday data comes from the [Great American Beer Festival](https://www.greatamericanbeerfestival.com/the-competition/winners/) via [Bart Watson](https://twitter.com/BrewersStats).
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(hrbrthemes)
+extrafont::loadfonts()
+library(kableExtra)
+library(broom)
+library(purrr)
+library(geofacet)
+
+library(tidytext)
+library(tidylo)
+
+library(ggwordcloud)
+library(cowplot)
+})
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+```
+
+The Judging Panel awards gold, silver or bronze medals for brewing excellence in five different three-hour judging sessions that take place over the three-day period during the week of the festival. Judges are assigned beers to evaluate in their specific area of expertise.
+
+```{r}
+tt <- tidytuesdayR::tt_load("2020-10-20")
+
+```
+
+```{r}
+beer_awards <- tt$beer_awards %>% 
+  mutate(brewery = case_when(
+    stringr::str_detect(brewery, "Alaskan") ~ "Alaskan Brewing",
+    TRUE ~ brewery)) %>% 
+  mutate(state = str_to_upper(state)) %>% 
+  mutate(medal = fct_relevel(medal, c("Bronze","Silver")))
+
+```
+
+## Questions to ask of this data
+
+The categories have expanded a great deal over the past 33 years. Some categories must receive less than 3 submissions in a given year and give out less than 3 medals.
+
+In the most recent years, there have been as many as 109 unique beer categories, and nearly 250 medals awarded within those categories.
+
+This data set is only the medal winners, rather than the entire set of submissions. There were even ties in two years for silver medals in a couple of categories.
+
+```{r}
+beer_awards %>% 
+  count(year, medal, category) %>%   
+  filter(n > 1) %>% 
+  knitr::kable(caption = "Beer Award Ties") %>% 
+  kable_minimal(c("striped", "hover", "responsive"))
+```
+
+The big names in brewing have accumulated the most medals:
+
+```{r}
+beer_awards %>% 
+  add_count(brewery) %>% 
+  mutate(brewery = fct_lump(brewery, w = n, n = 8)) %>% 
+  filter(brewery != "Other") %>% 
+  group_by(year, brewery) %>%
+  summarize(Medals = n(),
+            .groups = "drop") %>% 
+  ggplot(aes(year, Medals, fill = brewery)) +
+  geom_col(show.legend = FALSE ) +
+  scale_fill_manual(values = hrbrthemes::ipsum_pal()(9)) +
+  scale_y_continuous(breaks = c(2,4,6,8)) +
+  facet_wrap(~ brewery, ncol = 4) +
+  labs(title = "Beer Medal History at the Top 8 Companies",
+       subtitle = "Number of Medals total earned each year",
+       y = "", x = "",
+       caption = "Data Source: Great American Beer Festival") +
+  theme(panel.grid.minor.y = element_blank())
+```
+
+What beers have won the most awards?
+
+```{r, fig.asp=1}
+beer_counts <- beer_awards %>% 
+  count(beer_name, brewery, medal, city, state) 
+
+beer_counts %>%
+  mutate(beer_name = glue::glue("{ beer_name } ({ brewery })")) %>%
+  filter(fct_lump(beer_name, 16, w = n) != "Other") %>%
+  mutate(beer_name = fct_reorder(beer_name, n, sum)) %>%
+  ggplot(aes(n, beer_name, fill = medal)) +
+  geom_col() +
+  labs(title = "Which beers have won the most awards?",
+       subtitle = "Total Medals: Alaskan Smoked Porter \nGold Medals: Sam Adams Double Bock",
+       x = "# of awards",
+       y = "",
+       fill = "",
+       caption = "Data Source: Great American Beer Festival") +
+  theme(panel.grid.major.y = element_blank(),
+        legend.position = c(0.8,0.3),
+        legend.background = element_rect(color = "white"))
+
+beer_counts %>%
+  pivot_wider(names_from = medal, values_from = n,
+              values_fill = list(n = 0)) %>%
+  mutate(total = Bronze + Silver + Gold) %>%
+  slice_max(order_by = total, n = 10) %>% 
+  arrange(desc(total)) %>% 
+  knitr::kable(caption = "Top 10 Beers") %>% 
+  kable_minimal(c("striped", "hover", "responsive"))
+```
+
+What breweries have won the most awards?
+
+```{r, fig.asp=1}
+beer_awards %>%
+  count(brewery, medal) %>%
+  filter(fct_lump(brewery, 16, w = n) != "Other") %>%
+  mutate(brewery = fct_reorder(brewery, n, sum)) %>%
+  ggplot(aes(n, brewery, fill = medal)) +
+  geom_col() +
+  labs(title = "Which breweries have won the most awards?",
+       subtitle = "Pabst dominates",
+       x = "# of awards",
+       y = "",
+       fill = "",
+       caption = "Data Source: Great American Beer Festival") +
+  theme(panel.grid.major.y = element_blank(),
+        legend.position = c(0.8,0.3),
+        legend.background = element_rect(color = "white"))
+```
+
+What states have brewery locations that have won the most awards?
+
+```{r, fig.asp=1}
+beer_awards %>%
+  count(state, medal) %>%
+  mutate(state = state.name[match(state, state.abb)]) %>%
+  filter(fct_lump(state, 16, w = n) != "Other") %>%
+  mutate(state = fct_reorder(state, n, sum)) %>%
+  ggplot(aes(n, state, fill = medal)) +
+  geom_col() +
+  labs(title = "Which states have won the most awards?",
+       subtitle = "California, then Colorado",
+       x = "# of awards",
+       y = "",
+       fill = "",
+       caption = "Data Source: Great American Beer Festival") +
+  theme(panel.grid.major.y = element_blank(),
+        legend.position = c(0.8,0.3),
+        legend.background = element_rect(color = "white"))
+```
+
+
+```{r, fig.asp=1}
+by_year_state <- beer_awards %>%
+  add_count(year, name = "year_total") %>%
+  count(year, state, year_total, sort = TRUE) %>%  
+  mutate(pct_year = n / year_total) %>% 
+  complete(year, state, fill = list(year_total = 0, n = 0, pct_year = 0)) %>% 
+  group_by(state) %>% 
+  nest() %>% 
+  mutate(model = map(data, ~ glm(cbind(n, year_total - n) ~ year, data = .x, family = "binomial"))) %>% 
+  mutate(results = map(model, tidy, conf.int = TRUE)) %>% 
+  unnest(results) %>% ungroup() %>% 
+  unnest(data) %>% 
+  filter(term == "year")  
+
+by_year_state %>% 
+  mutate(state = state.name[match(state, state.abb)]) %>%
+  mutate(state = fct_lump(state, n = 35)) %>%  
+  filter(state != "Other") %>%
+  mutate(state = fct_reorder(state, estimate)) %>%
+  ggplot(aes(estimate, state)) +
+  geom_point(size = 4) +
+  geom_vline(xintercept = 0, lty = 2, color = "blue") +
+  geom_errorbarh(aes(xmin = conf.low, 
+                     xmax = conf.high), 
+                 height = .3, 
+                 size = 1, 
+                 show.legend = FALSE) +
+  scale_x_continuous(limits = c(-0.15, 0.15)) +
+  labs(x = "Estimated slope",
+       title = "What is the trend of medal winning by state?",
+       subtitle = "North Carolina and Virginia's proportion is growing while Wisconsin's is shrinking",
+       y = "",
+       caption = "Data Source: Great American Beer Festival") +
+  theme(panel.grid.major.y = element_blank()) 
+
+
+```
+
+
+```{r}
+by_year_state %>% 
+  mutate(fill = case_when(
+               conf.low > 0 ~ "Increasing",
+               conf.high < 0 ~ "Decreasing",
+               TRUE ~ "Flat")) %>% 
+  ggplot(aes(x = year, y = pct_year, 
+             fill = fill)) +
+  geom_area() +
+  scale_y_continuous(labels = scales::percent,
+                     n.breaks = 2) +
+  scale_x_continuous(n.breaks = 3) +
+  facet_geo(~ state, grid = "us_state_grid2") +
+  labs(title = "Beer awards proportion by year for all states",
+       subtitle = "The West coast is strong. North Carolina and Virginia are growing most quickly.",
+       fill = "", y = "", x = "",
+       caption = "Data Source: Great American Beer Festival") +
+  theme(legend.position = c(0.9, 0.3),
+        strip.text.x = element_text(size = 6),
+        axis.text.x = element_text(size = 4),
+        axis.text.y = element_text(size = 4),
+        legend.text = element_text(size = 6),
+        panel.spacing = unit(0.2, "lines"))
+
+```
+
+For each state, what are the beer category words most representative of that state?
+
+```{r}
+word_counts <- beer_awards %>%
+    mutate(category = str_remove(category, "s$")) %>% 
+    unnest_tokens(word, category) %>%
+    anti_join(get_stopwords()) %>%
+    count(state, word, sort = TRUE) %>% 
+    filter(!word %in% c("style", "beer"))
+
+state_words <- word_counts %>%
+    bind_log_odds(state, word, n) %>%
+    arrange(state, word) %>% 
+    group_by(n) %>%
+    filter(sum(n) > 6) %>%
+    ungroup() %>%
+    group_by(state) %>%
+    slice_max(order_by = log_odds_weighted, n = 3) %>%
+    ungroup() %>%
+    select(state, word, log_odds_weighted)
+```
+
+```{r p1, fig.asp=1}
+p1 <- state_words %>% 
+  mutate(log_odds_weighted = scales::rescale(log_odds_weighted, to = c(7,10))) %>% 
+  ggplot(aes(label = word, 
+             size = log_odds_weighted,
+             color = log_odds_weighted)) +
+  geom_text_wordcloud_area(shape = "triangle-upright") +
+  scale_color_steps(low = "#255E82",
+                     high = "#C58F40") +
+  facet_geo(~ state, grid = "us_state_grid2") +
+  labs(title = "Beer award winner category distinctive word usage by weighted log odds",
+       subtitle = "Who would have guessed Kolsch in Kentucky and Kellerbier in North Dakota?",
+       fill = "", y = "", x = "",
+       caption = "Data Source: Great American Beer Festival") +
+  theme(panel.spacing = unit(0, "lines"),
+        title = element_text(family = "Tw Cen MT"),
+        plot.title = element_text(size = 24,  
+                                  face = "bold", 
+                                  color = "#255E82"),
+        plot.subtitle = element_text(size = 16,  
+                                     face = "bold", 
+                                     color = "#C58F40", 
+                                     family = "Tw Cen MT"),
+        strip.text.x = element_text(size = 12, 
+                            color = "#000000", 
+                            family = "Tw Cen MT",
+                            face = "bold"))
+
+logo_file <- "https://camo.githubusercontent.com/f1141fa07f075a4186f5d71efab61012617a2ca8/68747470733a2f2f69322e77702e636f6d2f7468656265657274726176656c67756964652e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031382f30372f47726561742d416d65726963616e2d426565722d466573746976616c2d4c6f676f2e6a70673f73736c3d31"
+
+ggdraw() +
+  draw_plot(p1) +
+  draw_image(logo_file,  x = 0.37, y = -0.2, scale = .2)
+
+```
+
+And finally, the tweet:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1318945248995835907")
+```
+
+
