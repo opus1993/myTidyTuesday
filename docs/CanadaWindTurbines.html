@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2020-10-27" />
+
+<title>Canadian Wind Turbines</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Canadian Wind Turbines</h1>
+<h4 class="date">October 27, 2020</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-24
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec12a2dfd526d7da1f0b773561d6b18ea88bdbcebtargetblankc12a2dfa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/c12a2dfd526d7da1f0b773561d6b18ea88bdbceb" target="_blank">c12a2df</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreec12a2dfd526d7da1f0b773561d6b18ea88bdbcebtargetblankc12a2dfa" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/c12a2dfd526d7da1f0b773561d6b18ea88bdbceb" target="_blank">c12a2df</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/YammerReach.R
+    Untracked:  code/work list batch targets.R
+    Untracked:  figure/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/CanadaWindTurbines.Rmd</code>) and HTML (<code>docs/CanadaWindTurbines.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/c12a2dfd526d7da1f0b773561d6b18ea88bdbceb/analysis/CanadaWindTurbines.Rmd" target="_blank">c12a2df</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+adopt viridis H color palette
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The data this week comes from the <a href="https://open.canada.ca/data/en/dataset/79fdad93-9025-49ad-ba16-c26d718cc070">Government of Canada</a>.</p>
+<div id="load-the-weekly-data" class="section level1">
+<h1>Load the weekly Data</h1>
+<p>Download the weekly data and make available in the <code>tt</code> object.</p>
+<pre class="r"><code>tt &lt;- tt_load(&quot;2020-10-27&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `wind-turbine.csv`</code></pre>
+<div id="glimpse-the-data" class="section level2">
+<h2>Glimpse the Data</h2>
+<p>Let’s take an initial look at the format of the data available. There is a single table this week. Some records appear to be missing.</p>
+<pre class="r"><code>tt$`wind-turbine`</code></pre>
+<pre><code># A tibble: 6,698 x 15
+   objectid province_territory project_name   total_project_ca~ turbine_identif~
+      &lt;dbl&gt; &lt;chr&gt;              &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;           
+ 1        1 Alberta            Optimist Wind~              0.9  OWE1            
+ 2        2 Alberta            Castle River ~             44    CRW1            
+ 3        3 Alberta            Waterton Wind~              3.78 WWT1            
+ 4        4 Alberta            Waterton Wind~              3.78 WWT2            
+ 5        5 Alberta            Waterton Wind~              3.78 WWT3            
+ 6        6 Alberta            Waterton Wind~              3.78 WWT4            
+ 7        7 Alberta            Cowley North               19.5  CON1            
+ 8        8 Alberta            Cowley North               19.5  CON2            
+ 9        9 Alberta            Cowley North               19.5  CON3            
+10       10 Alberta            Cowley North               19.5  CON4            
+# ... with 6,688 more rows, and 10 more variables:
+#   turbine_number_in_project &lt;chr&gt;, turbine_rated_capacity_k_w &lt;dbl&gt;,
+#   rotor_diameter_m &lt;dbl&gt;, hub_height_m &lt;dbl&gt;, manufacturer &lt;chr&gt;,
+#   model &lt;chr&gt;, commissioning_date &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;,
+#   notes &lt;chr&gt;</code></pre>
+<pre class="r"><code>tt$`wind-turbine` %&gt;%
+  vis_miss()</code></pre>
+<p><img src="figure/CanadaWindTurbines.Rmd/Glimpse-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>The turbine identifier and year of <code>objectid</code> 1451 is consistent with the other St. Lawrence <code>project_name</code> turbines. We will impute the missing value to the dataset as St. Lawrence.</p>
+<p>Where turbine rated capacity is missing, the total rated capacity will be assumed to be spread uniformly across all turbines in a project if the model of the turbine is the same. This is the case for Armow Wind Project, South Kent Wind Farm, and Skyway8.</p>
+<p>Commissioning_dates are spread in some cases across two or three or even as many as seven years. for the purposes of this analysis, I am going to parse out the right-most, last, date as the <code>allOnlineDate</code> as an integer.</p>
+<pre class="r"><code>windTurbine &lt;- tt$`wind-turbine` %&gt;%
+  mutate(project_name = if_else(objectid == 1451,
+    &quot;St. Lawrence&quot;,
+    project_name
+  )) %&gt;%
+  group_by(project_name) %&gt;%
+  mutate(
+    turbine_rated_capacity_k_w =
+      if_else(is.na(turbine_rated_capacity_k_w),
+        total_project_capacity_mw * 1000 / n(),
+        turbine_rated_capacity_k_w
+      )
+  ) %&gt;%
+  ungroup() %&gt;%
+  mutate(allOnlineDate = as.integer(str_sub(
+    commissioning_date,
+    str_length(commissioning_date) - 3,
+    str_length(commissioning_date)
+  ))) %&gt;%
+  mutate(manufacturer = if_else(str_detect(manufacturer, &quot;Acciona&quot;),
+    &quot;Acciona&quot;,
+    manufacturer
+  ))
+
+vis_dat(windTurbine)</code></pre>
+<p><img src="figure/CanadaWindTurbines.Rmd/unnamed-chunk-1-1.png" width="200%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="visualize" class="section level1">
+<h1>Visualize</h1>
+<p>The notes contain valuable insights. Some specifications may have changed since installation. In other cases, the dataset presented here has other technical assumptions.</p>
+<pre class="r"><code>windTurbine %&gt;%
+  filter(!is.na(notes)) %&gt;%
+  distinct(project_name, notes, province_territory) %&gt;%
+  knitr::kable(caption = &quot;Canada Wind Farm Data Notes&quot;) %&gt;%
+  kable_minimal(c(&quot;striped&quot;, &quot;hover&quot;, &quot;responsive&quot;))</code></pre>
+<table class=" lightable-minimal lightable-striped lightable-hover" style="font-family: &quot;Trebuchet MS&quot;, verdana, sans-serif; margin-left: auto; margin-right: auto;">
+<caption>
+Canada Wind Farm Data Notes
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+province_territory
+</th>
+<th style="text-align:left;">
+project_name
+</th>
+<th style="text-align:left;">
+notes
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Alberta
+</td>
+<td style="text-align:left;">
+Kettles Hill
+</td>
+<td style="text-align:left;">
+This farm consists of three different hub heights; with three 50 m turbines, five 60 m turbines, and twenty-seven 67 m turbines. No information available on which turbines fall into which category
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+British Columbia
+</td>
+<td style="text-align:left;">
+Pennask
+</td>
+<td style="text-align:left;">
+Derated from 3200 kW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+British Columbia
+</td>
+<td style="text-align:left;">
+Shinish
+</td>
+<td style="text-align:left;">
+Derated from 3200 kW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+British Columbia
+</td>
+<td style="text-align:left;">
+Moose Lake
+</td>
+<td style="text-align:left;">
+Derated from 4200 kW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Little Brook
+</td>
+<td style="text-align:left;">
+Hub height approximated from manufacturer specifications
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Brookfield
+</td>
+<td style="text-align:left;">
+Hub height approximated from manufacturer specifications
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Goodwood
+</td>
+<td style="text-align:left;">
+Turbine height approximated from manufacturer specifications
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Digby Limited
+</td>
+<td style="text-align:left;">
+Turbine height approximated from manufacturer specifications
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Marshville Limited
+</td>
+<td style="text-align:left;">
+Hub height approximated from manufacturer specifications
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Tiverton Riverhurst
+</td>
+<td style="text-align:left;">
+Turbine height assumed from turbine model
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Spiddle Hill
+</td>
+<td style="text-align:left;">
+Turbine height assumed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Creignishrear
+</td>
+<td style="text-align:left;">
+Turbine height assumed based off turbine model
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Irish Mountain
+</td>
+<td style="text-align:left;">
+Turbine height estimated
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Millbrook
+</td>
+<td style="text-align:left;">
+Assumed turbine height based on similar projects/turbines
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Truro Heights
+</td>
+<td style="text-align:left;">
+Turbine height assumed from turbine model
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Cheticamp
+</td>
+<td style="text-align:left;">
+Turbine height assumed from turbine model
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Fitzpatrick
+</td>
+<td style="text-align:left;">
+Turbine derated from 1600 kW. Turbine height approximated from manufacturer specfications
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Kemptown
+</td>
+<td style="text-align:left;">
+Turbine uprated from 1600 kW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Limerock
+</td>
+<td style="text-align:left;">
+Turbine uprated from 1600 kW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+North Beaver Bank Community Wind
+</td>
+<td style="text-align:left;">
+Turbine derated from 2000 kW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Point Aconi
+</td>
+<td style="text-align:left;">
+Assumed turbine model based on rated output. Assumed turbine height based on turbine model
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Baddeck
+</td>
+<td style="text-align:left;">
+Turbine derated from 2000 kW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nova Scotia
+</td>
+<td style="text-align:left;">
+Pictou Landing
+</td>
+<td style="text-align:left;">
+Assumed turbine height based on turbine model and similar projects
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Clear Creek
+</td>
+<td style="text-align:left;">
+Turbine height approximated
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Cultus
+</td>
+<td style="text-align:left;">
+Turbine height approximated
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Frogmore
+</td>
+<td style="text-align:left;">
+Turbine height approximated
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Chatham
+</td>
+<td style="text-align:left;">
+4 of the turbines have 93 ft rotor diameter. Not known which turbines have the smaller rotor
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Raleigh Wind Energy Centre
+</td>
+<td style="text-align:left;">
+Assumed XLE model. Rotor diameter approximated.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Dufferin Wind
+</td>
+<td style="text-align:left;">
+Turbines are derated to levels of 2750/2565/2470/1600/1482/1388/1336 to a farm total of 91.4 MW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Grand Renewable Wind
+</td>
+<td style="text-align:left;">
+Wind farm consists of 65 turbines with a nameplate capacity of 2221 kW and 2 turbines with a capacity of 2126 kW. Unknown which turbines have capacity of 2126 kW.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Skyway 8
+</td>
+<td style="text-align:left;">
+All turbines are identical, but 2 operate at 1815 kW and 3 at 1950 kW. No information on which turbines operate at what output.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+South Kent Wind Farm
+</td>
+<td style="text-align:left;">
+Some turbines derated such that the farm has a maximum operating capacity of 270 MW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Armow Wind Project
+</td>
+<td style="text-align:left;">
+Some turbines derated such that the farm has an maximum operating capacity of 180 MW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Bow Lake Wind Project
+</td>
+<td style="text-align:left;">
+Turbines uprated from 1600 kW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Port Ryerse
+</td>
+<td style="text-align:left;">
+Turbines derated from 3000 kW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+Belle River
+</td>
+<td style="text-align:left;">
+Some turbines derated such that wind farm has maximum capacity of 100 MW
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ontario
+</td>
+<td style="text-align:left;">
+North Kent Wind Farm
+</td>
+<td style="text-align:left;">
+Turbine derated from 3200 kW
+</td>
+</tr>
+</tbody>
+</table>
+<p>A count of turbines by manufacturer.</p>
+<pre class="r"><code>windTurbine %&gt;%
+  group_by(manufacturer) %&gt;%
+  summarize(
+    Turbines = n(),
+    `Total Installed Capacity in kW` = sum(turbine_rated_capacity_k_w)
+  ) %&gt;%
+  arrange(desc(Turbines)) %&gt;%
+  knitr::kable(caption = &quot;Canada Wind Power Turbine Manufacturers&quot;) %&gt;%
+  kable_minimal(c(&quot;striped&quot;, &quot;hover&quot;, &quot;responsive&quot;))</code></pre>
+<table class=" lightable-minimal lightable-striped lightable-hover" style="font-family: &quot;Trebuchet MS&quot;, verdana, sans-serif; margin-left: auto; margin-right: auto;">
+<caption>
+Canada Wind Power Turbine Manufacturers
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+manufacturer
+</th>
+<th style="text-align:right;">
+Turbines
+</th>
+<th style="text-align:right;">
+Total Installed Capacity in kW
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Vestas
+</td>
+<td style="text-align:right;">
+1834
+</td>
+<td style="text-align:right;">
+3542350
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GE
+</td>
+<td style="text-align:right;">
+1725
+</td>
+<td style="text-align:right;">
+2819540
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Siemens
+</td>
+<td style="text-align:right;">
+1248
+</td>
+<td style="text-align:right;">
+2902736
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Enercon
+</td>
+<td style="text-align:right;">
+960
+</td>
+<td style="text-align:right;">
+2193980
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Senvion
+</td>
+<td style="text-align:right;">
+643
+</td>
+<td style="text-align:right;">
+1354450
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NEG Micon
+</td>
+<td style="text-align:right;">
+132
+</td>
+<td style="text-align:right;">
+99000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Acciona
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+177000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nordex
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+26000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suzlon
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+31500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vensys
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+12300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gamesa
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+16000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Windmatic
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+390
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DeWind
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+10000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Samsung Renewable Energy
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+10000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Northwind
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Turbowinds
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1800
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bonus
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EWT
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1800
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lagerwey
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Leitwind
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pfleiderer
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+650
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tacke
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+600
+</td>
+</tr>
+</tbody>
+</table>
+<p>Lets build an area chart showing the growth in capacity with an inset map:</p>
+<pre class="r"><code>western_turbines &lt;- filter(windTurbine, province_territory %in% c(&quot;Alberta&quot;, &quot;British Columbia&quot;, &quot;Manitoba&quot;, &quot;Saskatchewan&quot;))
+
+p1 &lt;- western_turbines %&gt;%
+  select(
+    province_territory,
+    allOnlineDate,
+    turbine_rated_capacity_k_w
+  ) %&gt;%
+  group_by(province_territory, allOnlineDate) %&gt;%
+  summarize(
+    SumCapacity = sum(turbine_rated_capacity_k_w),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  complete(allOnlineDate,
+    province_territory,
+    fill = list(SumCapacity = 0)
+  ) %&gt;%
+  group_by(province_territory) %&gt;%
+  mutate(CumSumCapacity = cumsum(SumCapacity)) %&gt;%
+  ungroup() %&gt;%
+  ggplot() +
+  geom_area(aes(
+    x = allOnlineDate,
+    y = CumSumCapacity / 1000,
+    fill = province_territory
+  ), show.legend = FALSE) +
+  scale_y_continuous(
+    labels = scales::comma_format(),
+    position = &quot;right&quot;,
+    expand = c(0, 0)
+  ) +
+  scale_x_continuous(
+    limits = c(1995, 2019),
+    expand = c(0, 0)
+  ) +
+  labs(
+    y = &quot;&quot;, x = &quot;&quot;, fill = &quot;&quot;,
+    title = &quot;Wind Power in Canada&#39;s Western Provinces&quot;,
+    subtitle = &quot;Cumulative sum of MW of power capacity installed at project completion&quot;,
+    caption = &quot;Data: Government of Canada | Visualization: @jim_gruman&quot;
+  )</code></pre>
+<p>Where are these turbines?</p>
+<p>Can we take a look at turbines in the western provinces?</p>
+<blockquote>
+<p>adapted from Jake Kaupp’s TidyTuesday submission this week on the Maritime provinces</p>
+</blockquote>
+<pre class="r"><code>western_provinces &lt;- ne_states(&quot;Canada&quot;, returnclass = &quot;sf&quot;) %&gt;%
+  filter(name %in% c(&quot;Alberta&quot;, &quot;British Columbia&quot;, &quot;Manitoba&quot;, &quot;Saskatchewan&quot;))
+
+wp_box &lt;- st_bbox(western_provinces)
+
+western_bbox &lt;- matrix(c(wp_box[1], wp_box[3], wp_box[2], max(western_turbines$latitude) + 1), nrow = 2, ncol = 2)
+
+western_hwy &lt;- western_bbox %&gt;%
+  opq(timeout = 6000) %&gt;%
+  add_osm_feature(
+    key = &quot;highway&quot;,
+    value = c(&quot;primary&quot;, &quot;secondary&quot;, &quot;tertiary&quot;, &quot;secondary_link&quot;, &quot;tertiary_link&quot;)
+  ) %&gt;%
+  osmdata_sf()
+
+western_hwy_clipped &lt;- st_intersection(western_hwy$osm_lines, western_provinces)
+
+p2 &lt;- ggplot() +
+  geom_sf(data = western_provinces, inherit.aes = FALSE, color = &quot;#2F394D&quot;, fill = &quot;white&quot;) +
+  geom_sf(data = western_hwy_clipped, inherit.aes = FALSE, color = &quot;#403d58&quot;, size = 0.1) +
+  geom_point(data = western_turbines, aes(x = longitude, y = latitude, color = province_territory), alpha = 0.4, size = 4, show.legend = FALSE) +
+  geom_richtext(aes(
+    x = -130, y = 58.4,
+    label = &quot;The wind turbines built since 1995 as part of&lt;br&gt;larger wind farm projects in &lt;span style=&#39;color:#F1CA3AFF&#39;&gt;British Columbia&lt;/span&gt;,&lt;br&gt; &lt;span style=&#39;color:#7A0403FF&#39;&gt;Alberta&lt;/span&gt;, &lt;span style=&#39;color:#BE2102FF&#39;&gt;Saskatchewan&lt;/span&gt; and &lt;span style=&#39;color:#1FC8DEFF&#39;&gt;Manitoba&lt;/span&gt;.&quot;
+  ), fill = &quot;white&quot;, hjust = 0, label.color = NA, size = 5, color = &quot;#464950&quot;, family = &quot;Roboto Condensed&quot;) +
+  labs(x = &quot;&quot;, y = &quot;&quot;) +
+  scale_size_area(max_size = 6) +
+  theme_map()</code></pre>
+<pre class="r"><code>ggdraw(p1) +
+  draw_plot(p2, 0, .3, .7, .7)</code></pre>
+<p><img src="figure/CanadaWindTurbines.Rmd/cowplot-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>And my tweet from that week:</p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/jim_gruman/status/1321922270072328192&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Built this week&#39;s <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> set into a quick inset map of Western Canada&#39;s wind turbines with {cowplot}.  code @ <a href="https://t.co/DvWAyxrsU4">https://t.co/DvWAyxrsU4</a> <a href="https://twitter.com/hashtag/r4ds?src=hash&amp;ref_src=twsrc%5Etfw">#r4ds</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://t.co/ILa3qiXQDI">pic.twitter.com/ILa3qiXQDI</a></p>&mdash; Jim Gruman📚🚵‍♂️⚙ (@jim_gruman) <a href="https://twitter.com/jim_gruman/status/1321922270072328192?ref_src=twsrc%5Etfw">October 29, 2020</a></blockquote>
+
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] cowplot_1.1.1       ggtext_0.1.1        rnaturalearth_0.1.0
+ [4] sf_1.0-2            osmdata_0.1.6       kableExtra_1.3.4   
+ [7] visdat_0.5.3        naniar_0.6.1        tidytuesdayR_1.0.1 
+[10] forcats_0.5.1       stringr_1.4.0       dplyr_1.0.7        
+[13] purrr_0.3.4         readr_2.0.1         tidyr_1.1.3        
+[16] tibble_3.1.4        ggplot2_3.3.5       tidyverse_1.3.1    
+[19] workflowr_1.6.2    
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1             backports_1.2.1          systemfonts_1.0.2       
+  [4] workflows_0.2.3          selectr_0.4-2            plyr_1.8.6              
+  [7] sp_1.4-5                 splines_4.1.1            listenv_0.8.0           
+ [10] usethis_2.0.1            digest_0.6.27            foreach_1.5.1           
+ [13] htmltools_0.5.2          yardstick_0.0.8          viridis_0.6.1           
+ [16] parsnip_0.1.7.900        fansi_0.5.0              magrittr_2.0.1          
+ [19] tune_0.1.6               tzdb_0.1.2               recipes_0.1.16          
+ [22] globals_0.14.0           modelr_0.1.8             gower_0.2.2             
+ [25] extrafont_0.17           vroom_1.5.5              R.utils_2.10.1          
+ [28] extrafontdb_1.0          svglite_2.0.0            hardhat_0.1.6           
+ [31] rsample_0.1.0            dials_0.0.10             colorspace_2.0-2        
+ [34] rvest_1.0.1              textshaping_0.3.5        haven_2.4.3             
+ [37] xfun_0.26                crayon_1.4.1             jsonlite_1.7.2          
+ [40] survival_3.2-11          iterators_1.0.13         glue_1.4.2              
+ [43] gtable_0.3.0             ipred_0.9-12             webshot_0.5.2           
+ [46] R.cache_0.15.0           tweetrmd_0.0.9           Rttf2pt1_1.3.9          
+ [49] future.apply_1.8.1       scales_1.1.1             infer_1.0.0             
+ [52] DBI_1.1.1                Rcpp_1.0.7               viridisLite_0.4.0       
+ [55] gridtext_0.1.4           units_0.7-2              bit_4.0.4               
+ [58] GPfit_1.0-8              proxy_0.4-26             lava_1.6.10             
+ [61] prodlim_2019.11.13       httr_1.4.2               wk_0.5.0                
+ [64] ellipsis_0.3.2           farver_2.1.0             R.methodsS3_1.8.1       
+ [67] pkgconfig_2.0.3          nnet_7.3-16              sass_0.4.0              
+ [70] dbplyr_2.1.1             utf8_1.2.2               here_1.0.1              
+ [73] labeling_0.4.2           tidyselect_1.1.1         rlang_0.4.11            
+ [76] DiceDesign_1.9           later_1.3.0              cachem_1.0.6            
+ [79] munsell_0.5.0            cellranger_1.1.0         tools_4.1.1             
+ [82] cli_3.0.1                generics_0.1.0           broom_0.7.9             
+ [85] evaluate_0.14            fastmap_1.1.0            ragg_1.1.3              
+ [88] yaml_2.2.1               bit64_4.0.5              knitr_1.34              
+ [91] fs_1.5.0                 s2_1.0.6                 future_1.22.1           
+ [94] whisker_0.4              R.oo_1.24.0              xml2_1.3.2              
+ [97] compiler_4.1.1           rstudioapi_0.13          curl_4.3.2              
+[100] e1071_1.7-8              reprex_2.0.1             lhs_1.1.3               
+[103] bslib_0.3.0              stringi_1.7.4            highr_0.9               
+[106] rgeos_0.5-7              gdtools_0.2.3            hrbrthemes_0.8.0        
+[109] lattice_0.20-44          rnaturalearthhires_0.2.0 Matrix_1.3-4            
+[112] markdown_1.1             styler_1.6.1             classInt_0.4-3          
+[115] conflicted_1.0.4         vctrs_0.3.8              tidymodels_0.1.3        
+[118] pillar_1.6.2             lifecycle_1.0.0          furrr_0.2.3             
+[121] jquerylib_0.1.4          httpuv_1.6.3             R6_2.5.1                
+[124] promises_1.2.0.1         KernSmooth_2.23-20       gridExtra_2.3           
+[127] parallelly_1.28.1        codetools_0.2-18         MASS_7.3-54             
+[130] assertthat_0.2.1         rprojroot_2.0.2          withr_2.4.2             
+[133] parallel_4.1.1           hms_1.1.0                grid_4.1.1              
+[136] rpart_4.1-15             timeDate_3043.102        class_7.3-19            
+[139] rmarkdown_2.11           git2r_0.28.0             pROC_1.18.0             
+[142] lubridate_1.7.10        </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
