@@ -1,0 +1,290 @@
+---
+title: "Astronaut Missions"
+author: "Jim Gruman"
+date: "July 15, 2020"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+This week's R4DS Online Learning Community #TidyTuesday event is Astronaut missions. The goal of TidyTuesday is to apply your R skills, get feedback, explore other’s work, and connect with the greater #RStats community!
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(tidymodels)
+library(baguette)
+
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+
+```
+
+# Load the weekly Data
+
+Download the weekly data and make available in the `tt` object.
+
+```{r Load}
+
+tt <- tidytuesdayR::tt_load("2020-07-14")
+
+```
+
+# Readme
+
+Take a look at the readme for the weekly data to get insight on the dataset. This includes a data dictionary, source, and a link to an article on the data.
+
+# Glimpse Data
+
+Take an initial look at the format of the data available.
+
+```{r Glimpse}
+astronauts <- tt$astronauts
+
+astronauts %>%
+  count(in_orbit, sort = TRUE) %>% 
+  dplyr::slice(1:10) %>% 
+  knitr::kable()
+
+```
+
+How has the duration of missions changed over time?
+
+```{r p1, fig.asp=1}
+p1 <- astronauts %>%
+  mutate(
+    year_of_mission = 10 * (year_of_mission %/% 10),
+    year_of_mission = factor(year_of_mission)
+  ) %>%
+  ggplot(aes(year_of_mission, 
+             hours_mission,
+             color = year_of_mission
+  )) +
+  ggdist::stat_dots(
+    side = "top",
+    justification = -0.1,
+    binwidth = 0.025,
+    show.legend = FALSE) +
+  geom_boxplot(
+    width = 0.1,
+    outlier.shape = NA,
+    show.legend = FALSE
+  ) +
+  scale_y_log10() +
+  labs(x = NULL, y = NULL,
+       subtitle = "Durations in hours grew dramatically in the 1990s",
+       title = "Astronaut Missions by Decade",
+       caption = "@jim_gruman #TidyTuesday") +
+  theme(panel.grid.major.x = element_blank())
+  
+p1
+```
+
+This duration is what we will to build a model to predict, using the other information in this per-astronaut-per-mission dataset. Let’s get ready for modeling next, by bucketing some of the spacecraft together and taking the logarithm of the mission length.
+
+```{r Wrangle}
+astronauts_df <- astronauts %>%
+  select(
+    name,
+    mission_title,
+    hours_mission,
+    military_civilian,
+    occupation,
+    year_of_mission,
+    in_orbit
+  ) %>%
+  mutate(in_orbit = case_when(
+    str_detect(in_orbit, "^Salyut") ~ "Salyut",
+    str_detect(in_orbit, "^STS") ~ "STS",
+    TRUE ~ in_orbit
+  )) %>%
+  filter(hours_mission > 0) %>%
+  mutate(hours_mission = log(hours_mission)) %>%
+  na.omit()
+
+
+```
+
+Julia Silge advises that it may make more sense to perform transformations like taking the logarithm of the outcome during data cleaning, before feature engineering and using any `tidymodels` packages like `recipes`. This kind of transformation is deterministic and can cause problems for tuning and resampling. OK...
+
+# Build a Model
+
+We can start by loading the `tidymodels` metapackage, and splitting our data into training and testing sets.
+
+```{r}
+astro_split <- initial_split(astronauts_df, 
+                             strata = hours_mission)
+astro_train <- training(astro_split)
+astro_test <- testing(astro_split)
+```
+Next, let’s preprocess our data to get it ready for modeling.
+
+```{r}
+astro_recipe <- recipe(hours_mission ~ ., data = astro_train) %>%
+  update_role(name, mission_title, new_role = "id") %>%
+  step_other(occupation, in_orbit,
+             threshold = 0.005, other = "Other") %>%
+  step_dummy(all_nominal(),-has_role("id"))
+```
+
+Let’s walk through the steps in this recipe.
+
+- First, we must tell the recipe() what our model is going to be (using a formula here) and what data we are using.
+
+- Next, update the role for the two columns that are not predictors or outcome. This way, we can keep them in the data for identification later.
+
+- There are a lot of different occupations and spacecraft in this dataset, so let’s collapse some of the less frequently occurring levels into an “Other” category, for each predictor.
+
+- Finally, we can create indicator variables.
+
+We’re going to use this recipe in a `workflow()` so we don’t need to stress about whether to `prep()` or not.
+
+```{r}
+astro_wf <- workflow() %>%
+  add_recipe(astro_recipe)
+
+astro_wf
+```
+
+For this analysis, we are going to build a `bagging`, i.e. bootstrap aggregating, model. This is an ensembling and model averaging method that:
+
+- improves accuracy and stability
+
+- reduces overfitting and variance
+
+In `tidymodels`, you can create bagging ensemble models with `baguette`, a parsnip-adjacent package. The `baguette` functions create new bootstrap training sets by sampling with replacement and then fit a model to each new training set. These models are combined by averaging the predictions for the regression case, like what we have here (by voting, for classification).
+
+Let’s make two bagged models, one with decision trees and one with `MARS` models.
+
+```{r}
+tree_spec <- bag_tree() %>%
+  set_engine("rpart", times = 25) %>%
+  set_mode("regression")
+
+tree_spec
+
+mars_spec <- bag_mars() %>%
+  set_engine("earth", times = 25) %>%
+  set_mode("regression")
+
+mars_spec
+```
+Let’s fit these models to the training data.
+
+```{r}
+tree_rs <- astro_wf %>%
+  add_model(tree_spec) %>%
+  fit(astro_train)
+
+tree_rs
+```
+```{r}
+mars_rs <- astro_wf %>%
+  add_model(mars_spec) %>%
+  fit(astro_train)
+
+mars_rs
+```
+The models return aggregated variable importance scores, and we can see that the spacecraft and year are importance in both models.
+
+# Evaluate the Models
+
+Let’s evaluate how well these two models did by evaluating performance on the test data.
+
+```{r}
+test_rs <- astro_test %>%
+  bind_cols(predict(tree_rs, astro_test)) %>%
+  rename(.pred_tree = .pred) %>%
+  bind_cols(predict(mars_rs, astro_test)) %>%
+  rename(.pred_mars = .pred)
+
+test_rs
+```
+
+We can use the `yardstick::metrics()` function for both sets of predictions.
+
+```{r}
+test_rs %>%
+  metrics(hours_mission, .pred_tree)
+
+test_rs %>%
+  metrics(hours_mission, .pred_mars)
+```
+Both models performed pretty similarly.
+
+Let’s make some “new” astronauts to understand the kinds of predictions our bagged tree model is making.
+
+```{r}
+new_astronauts <- 
+  tidyr::crossing(
+    in_orbit = fct_inorder(c("ISS", "STS", "Mir", "Other")),
+    military_civilian = "civilian",
+    occupation = "Other", 
+    year_of_mission = seq(1960, 2020, by = 10),
+    name = "id", mission_title = "id"
+) %>%
+  filter(
+    !(in_orbit == "ISS" & year_of_mission < 2000),
+    !(in_orbit == "Mir" & year_of_mission < 1990),
+    !(in_orbit == "STS" & year_of_mission > 2010),
+    !(in_orbit == "STS" & year_of_mission < 1980)
+  )
+```
+Let’s start with the decision tree model.
+
+```{r p2}
+p2 <- new_astronauts %>%
+  bind_cols(predict(tree_rs, new_astronauts)) %>%
+  ggplot(aes(year_of_mission, .pred, color = in_orbit)) +
+  geom_line(size = 1.5, alpha = 0.7) +
+  geom_point(size = 2) +
+  labs(
+    x = NULL, y = "Duration of mission in hours (predicted, on log scale)",
+    color = NULL, title = "How did the duration of astronauts' \nmissions change over time?",
+    subtitle = "Predicted using bagged decision tree model",
+    caption = "@jim_gruman #TidyTuesday"
+  ) +
+  theme(legend.position = c(0.73, 0.4))
+
+p2
+```
+
+What about the MARS model?
+
+```{r p3}
+p3 <- new_astronauts %>%
+  bind_cols(predict(mars_rs, new_astronauts)) %>%
+  ggplot(aes(year_of_mission, .pred, color = in_orbit)) +
+  geom_line(size = 1.5, alpha = 0.7) +
+  geom_point(size = 2) +
+  labs(
+    x = NULL, y = "Duration of mission in hours (predicted, on log scale)",
+    color = NULL, title = "How did the duration of astronauts' \nmissions change over time?",
+    subtitle = "Predicted using bagged MARS model",
+    caption = "@jim_gruman #TidyTuesday"
+  ) +
+  theme(legend.position = c(0.73, 0.35))
+
+p3
+```
+
+You can really get a sense of how these two kinds of models work from the differences in these plots (tree vs. splines with knots), but from both, we can see that missions to space stations are longer, and missions in that “Other” category change characteristics over time pretty dramatically.
+
+Finally, my tweet:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1283799248212054020")
+```
+
