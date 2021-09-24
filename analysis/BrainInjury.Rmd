@@ -1,0 +1,101 @@
+---
+title: "Brain Injury"
+author: "Jim Gruman"
+date: 'March 24, 2020'
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, message=FALSE}
+suppressPackageStartupMessages({
+library(tidymodels)
+library(tidyverse)
+library(vip)
+  
+library(gganimate)
+library(gifski)
+
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+```
+
+## Get the Data
+
+```{r loadData}
+tbi_age <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv')
+tbi_year <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_year.csv')
+tbi_military <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_military.csv')
+
+
+```
+
+# Data Exploration
+
+Brain Injury Awareness Month, observed each March, was established 3 decades ago to educate the public about the incidence of brain injury and the needs of persons with brain injuries and their families (1). Caused by a bump, blow, or jolt to the head, or penetrating head injury, a traumatic brain injury (TBI) can lead to short- or long-term changes affecting thinking, sensation, language, or emotion.
+
+The goal of this week's #TidyTuesday is to spread awareness for just how common TBIs are - both in civilian and military populations.
+
+> One of every 60 people in the U.S. lives with a TBI related disability. Moderate and severe traumatic brain injury (TBI) can lead to a lifetime of physical, cognitive, emotional, and behavioral changes.
+
+
+```{r incidenceChart}
+tbi_year %>%
+  ggplot(aes(factor(year), number_est, fill = factor(injury_mechanism))) +
+  geom_col() +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Brain Injury Incidence",
+    subtitle = "US CDC",
+    fill = "Injury",
+    y = NULL,
+    x = NULL,
+    caption = paste0("Jim Gruman ", "#TidyTuesday March 24,2020")
+  ) +
+  theme(panel.grid.major.x = element_blank()) 
+  
+```
+
+
+```{r BrainInjurygganimqdodge1}
+
+p <- tbi_year %>%
+  filter(injury_mechanism != "Total") %>%
+  ggplot(aes(x = injury_mechanism, y = number_est, fill = type)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  scale_x_discrete(
+    labels = function(x)
+      stringr::str_wrap(x, width = 20)
+  ) +
+  coord_flip() +
+  transition_states(year, 
+                    transition_length = 10, 
+                    state_length = 1) +
+  labs(
+    title = "Traumatic Brain Injury (TBI) Incidence in {closest_state}",
+    subtitle = "US CDC",
+    x = "Cause of Injury",
+    y = "Count",
+    caption = paste0("Jim Gruman ", Sys.Date())
+  ) +
+  scale_y_log10(labels = scales::comma) 
+
+animate(p,  
+        width = 900, 
+        height = 750, 
+        end_pause = 50, 
+        renderer = gifski_renderer())
+
+```
+
