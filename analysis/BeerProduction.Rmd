@@ -1,0 +1,545 @@
+---
+title: "Beer Production"
+author: "Jim Gruman"
+date: 'March 31, 2020'
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+  html_document:
+    toc: no
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+name: beer_production
+owner: jim_gruman
+metrics:
+  total_pounds:
+    title: "# of pounds in production"
+    description: "Number of pounds used in Beer Production in the US"
+dimensions:
+  material_type:
+    title: Type
+    description: Grain or nonGrain Products
+  material:
+    title: Material
+    description: Wheat, hops, malt, barley, etc.
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(lubridate)
+library(tidymetrics)  #at github ramnathv/tidymetrics
+library(GGally)
+library(gghighlight)
+library(tidymodels)
+library(maps)
+library(sf)
+library(gganimate)
+library(transformr)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+## Import this week's data
+```{r imports}
+brewing_materials <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewing_materials.csv') %>%
+    mutate(date = ymd(paste0(year, "/", month, "/1"))) 
+beer_taxed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_taxed.csv')
+brewer_size <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewer_size.csv')
+beer_states <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_states.csv')
+```
+
+## Exploration
+
+```{r, skims, eval = FALSE}
+skimr::skim(beer_states)
+# 19 year/states with missing barrels
+
+skimr::skim(brewing_materials)
+table(brewing_materials$type)
+# opportunity to examine the proportional trends of Corn vresus Sugar/syrups use
+
+skimr::skim(beer_taxed)
+
+skimr::skim(brewer_size)
+table(brewer_size$brewer_size)
+```
+
+Total all barrels produced by state per year (regardless of type)
+
+```{r allPerStatePerYear}
+all_barrels <-
+  beer_states %>%
+  na.omit() %>%
+  filter(state != 'total') %>%
+  group_by(state, year) %>%
+  summarise(barrels = sum(barrels),
+            .groups = "drop")
+```
+
+The top 5 states with largest increase in barrels from 2008 to 2019
+
+```{r topFiveStates}
+increase_states <-
+  all_barrels %>%
+  group_by(state) %>% 
+  mutate(total_barrels = cumsum(barrels)) %>%
+  filter(year %in% c(2008, 2019)) %>%
+  mutate(pct_chg = (total_barrels - lag(total_barrels)) / lag(total_barrels)) %>%
+  ungroup() %>%
+  top_n(5, pct_chg) %>%
+  pull(state)    
+
+increase_states %>% 
+  knitr::kable()
+```
+
+```{r makeBeerDf}
+#Lets get the state names
+states <- tibble(state = state.abb, state_name = state.name)
+
+beer_df <- 
+  beer_states %>%
+  na.omit() %>%
+  filter(state != 'total') %>%
+  group_by(state, year) %>%
+  summarise(barrels = sum(barrels),
+            .groups = "drop") %>%
+  mutate(total_barrels = cumsum(barrels)) %>%
+  left_join(states, by = 'state')
+```
+
+Lets have a look at the materials trends. What ingredients are used in beer production?
+
+```{r materialsTrends}
+brewing_materials %>%
+  filter(!str_detect(material_type, "Total"),
+         !(month == 12 & year %in% 2014:2015)) %>%  # remove the subtotals) %>%
+  filter(date == max(date)) %>%
+  mutate(type = fct_reorder(type, month_current)) %>%
+  ggplot(aes(type, month_current/1000000, fill =  type)) +
+  geom_col() +
+  scale_y_continuous(breaks = scales::pretty_breaks()) +
+  coord_flip() +
+  theme(legend.position = "",
+        panel.grid.major.y =  element_blank()) +
+  labs(
+    x = '',
+    y = 'Million Pounds',
+    title = 'Ingredients in US Beer Production, in the month of December 2019',
+    subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
+    caption = '@Jim_Gruman | #TidyTuesday'
+  )
+
+```
+
+
+```{r materialsTrendsChart}
+brewing_materials %>%
+  filter(!str_detect(type, "Total"), year < 2016,
+         !(month == 12 & year %in% 2014:2015)) %>%  # remove the subtotals
+  mutate(type = fct_reorder2(type, 
+                             date,
+                             month_current,
+                             .fun = last2)) %>% 
+  ggplot(aes(date, 
+             month_current/1000000, 
+             color = type)) +
+  geom_line() +
+    labs(
+    x = '',
+    y = 'Million Pounds',
+    color = "Material",
+    title = 'Ingredients in US Beer Production, 2008-2016',
+    subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
+    caption = '@Jim_Gruman | #TidyTuesday'
+  ) +
+  scale_radius(range = c(1,6)) +
+  scale_x_date(date_breaks = "2 years",
+               date_labels = "%Y") 
+
+```
+
+## Tidymetrics
+
+```{r brewingSummarizedChart}
+
+cross_by_dimensions <- function (tbl, ..., add = TRUE, max_dimensions = NULL, collect_fun = NULL) 
+{
+    g_vars <- dplyr::group_vars(tbl)
+    columns <- ensyms(...)
+    tbl <- tbl %>% ungroup() %>% mutate_at(vars(!!!columns), 
+        as.character)
+    if (!is.null(max_dimensions)) {
+        tbl <- tbl %>% cross_by_dimensions_limited(
+          columns,   
+          max_dimensions = max_dimensions, 
+          collect_fun = collect_fun)
+    }
+    else {
+        for (column in columns) {
+            tbl <- tbl %>% mutate(`:=`(!!column, "All")) %>% 
+                union_all(tbl)
+            if (!is.null(collect_fun)) {
+                tbl <- collect_fun(tbl)
+            }
+        }
+    }
+    tbl %>% group_by_at(vars(all_of(g_vars))) %>% group_by(!!!columns, 
+        .add = add)
+}
+
+
+brewing_summarized <- brewing_materials %>%
+  rename(material = type) %>%
+  filter(!str_detect(material_type, "Total"),
+         year < 2016,
+         !(month == 12 & year %in% 2014:2015)) %>%
+  cross_by_dimensions(material_type, material) %>%  # duplicates the data to summarize it
+  cross_by_periods(c("month", "quarter", "year")) %>%
+  summarize(total_pounds = sum(month_current),
+            .groups = "drop")
+
+brewing_summarized %>%
+  filter(material_type != "All", 
+         material != "All", 
+         period == "month") %>%
+  mutate(material = fct_reorder2(material, 
+                             date,
+                             total_pounds,
+                             .fun = last2)) %>% 
+  ggplot(aes(date, 
+             total_pounds/1000000, 
+             color = material)) +
+  geom_line() +
+  scale_x_date(date_breaks = "2 years",
+               date_labels = "%Y") +
+  labs(
+    x = 'Date',
+    y = 'Million Pounds',
+    color = "Material",
+    title = 'Ingredients in US Beer Production, 2008-2016:  Monthly',
+    subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
+    caption = '@Jim_Gruman | #TidyTuesday'
+) 
+```
+
+
+```{r p4}
+brewing_summarized %>%
+  filter(material_type != "All", 
+         material != "All", 
+         period == "quarter") %>%
+  mutate(material = fct_reorder2(material, 
+                             date,
+                             total_pounds,
+                             .fun = last2)) %>% 
+  ggplot(aes(date, 
+             total_pounds/1000000, 
+             color = material)) +
+  geom_line() +
+    labs(
+    x = 'Date',
+    y = 'Million Pounds',
+    color = "Material",
+    title = 'Ingredients in US Beer Production, 2008-2016: Quarterly',
+    subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
+    caption = '@Jim_Gruman | #TidyTuesday'
+  ) 
+```
+
+```{r p5}
+brewing_summarized %>%
+  filter(material_type != "All", 
+         material != "All", 
+         period == "year") %>%
+  mutate(material = fct_reorder2(material, 
+                             date,
+                             total_pounds,
+                             .fun = last2)) %>% 
+  ggplot(aes(date, 
+             total_pounds/1000000, 
+             color = material)) +
+  geom_line() +
+    labs(
+    x = 'Date',
+    y = 'Million Pounds',
+    color = "Material",
+    title = 'Ingredients in US Beer Production, 2008-2016: Annually',
+    subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
+    caption = '@Jim_Gruman | #TidyTuesday'
+  )  
+```
+
+```{r materialsByYearChart}
+brewing_materials %>%
+  filter(material_type == "Total Used", year < 2016) %>%
+  mutate(month = factor(month, labels = month.abb)) %>%
+  ggplot(aes(x = month,
+             y = month_current/1000000, 
+             group = factor(year), 
+             color = factor(year))) +
+  geom_line() +
+  expand_limits(y = 0) +
+    labs(x = '',
+    y = 'Million Pounds',
+    color = "Year",
+    title = 'Ingredients in US Beer Production, 2008-2016: Each Month',
+    subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
+    caption = '@Jim_Gruman | #TidyTuesday') +  
+  scale_y_continuous(labels = scales::comma_format())  
+
+
+```
+
+
+```{r, shinymetrics, eval=FALSE}
+remotes::install_github("ramnathv/shinymetrics")
+remotes::install_github("ramnathv/shinybones")
+
+brewing_metrics<-create_metrics(brewing_summarized)
+
+library(shinymetrics)
+
+# interactive plotly visualization of grouped time multi-dimensional BI 
+preview_metric(brewing_metrics$production_NA_total_pounds)
+# change the dropdown from "last year" to "all time" because 2019 is not in this dataset
+```
+
+```{r byBrewerSize}
+brewer_size %>%
+  filter(brewer_size != "Total", 
+         !is.na(total_barrels)) %>%
+  mutate(brewer_size = fct_lump_n(brewer_size, 
+                                  n = 5, 
+                                  w = total_barrels,
+                                  other_level = "1 to 100,000 Barrels"),
+         barrel_number = coalesce(parse_number(as.character(brewer_size)),1),
+         brewer_size = fct_reorder(brewer_size, barrel_number)) %>% 
+  ggplot(aes(as_factor(year), 
+             total_barrels/1000000, 
+             fill = brewer_size)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::comma_format())  +
+    labs(x = 'Year',
+    y = 'Million Barrels',
+    fill = "Brewer Size",
+    title = 'Total Production, by US Brewer Size in 2019',
+    subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
+    caption = '@Jim_Gruman | #TidyTuesday')  
+
+```
+
+
+
+## Where is Beer produced?
+
+```{r whereBeerProduced}
+beer_df %>% 
+  ggplot(aes(year, barrels, 
+                 group = state)) +
+  geom_line(aes(color = state), show.legend = FALSE) +
+  gghighlight(                               
+    state %in% increase_states,
+    label_key = state_name,
+    label_params = list(size = 3, 
+                        color = "black",
+                        family = 'Arial Narrow',
+                        fill = 'grey95', 
+                        width = 2,
+                        alpha = 1, 
+                        label.r = 0.1, 
+                        segment.alpha = 0),
+    unhighlighted_params = list(color = 'grey88')
+  ) +
+  labs(
+    x = 'Year',
+    y = 'Total number of barrels produced',
+    title = 'States with the Largest Increase in Beer Production, 2008-2019',
+    subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
+    caption = '@Jim_Gruman | #TidyTuesday'
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  scale_y_log10(labels = scales::label_number()) +
+  theme(panel.grid = element_blank(),
+        panel.grid.major = element_blank())
+
+```
+
+```{r BeerStatesMaps}
+states_percents_2019 <- beer_states %>%
+  filter( year == max(year), state != "total") %>%
+  group_by(state) %>%
+  mutate(percent = barrels / sum(barrels)) %>%
+  ungroup() 
+
+states <- st_as_sf(maps::map("state", plot = FALSE, fill = TRUE))
+
+states_percents_2019 %>%
+   mutate(ID = if_else(state != "DC",
+            str_to_lower(state.name[match(state,state.abb)]),
+            "district of columbia")
+          ) %>%
+   inner_join(states, by = "ID") %>% 
+   ggplot() +
+   geom_sf(aes(geometry = geom, fill = percent)) +
+   facet_wrap(~ type, nrow = 2) +
+      scale_fill_continuous(labels = scales::percent) +
+   labs(title = "In Each State, What is the Highest Proportion of Beer Consumed?",
+        subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau',
+        caption = '@Jim_Gruman | #TidyTuesday',
+        fill = "% Percent") +
+   theme_jim() +
+   theme(legend.position = c(0.7,0.2),
+         panel.grid.major = element_blank(),
+         axis.text.x = element_blank(),
+         axis.text.y = element_blank()) 
+
+   
+```
+
+## An animated map.  Because it's TidyTuesday
+
+```{r BeerStatesAnimated}
+p <- beer_states %>%
+  filter(state != "total") %>%
+  group_by(state, year) %>%
+  mutate(percent = barrels / sum(barrels)) %>%
+  ungroup() %>%
+  mutate(ID = if_else(state != "DC",
+            str_to_lower(state.name[match(state,state.abb)]),
+            "district of columbia")
+          ) %>%
+  inner_join(states, by = "ID") %>% 
+  ggplot(aes(geometry = geom, 
+             fill = percent)) +
+  geom_sf() +
+  transition_time(year) +
+  facet_wrap(~ type, nrow = 2) +
+  labs(title = "In Each State, What is the Highest Proportion of Beer Consumed? {as.integer(frame_time)}",
+        subtitle = 'US Alcohol and Tobacco Tax and Trade Bureau, 2008-2019',
+        caption = '@Jim_Gruman | #TidyTuesday',
+        fill = "% Percent") +
+   theme_jim() +
+   theme(legend.position = c(0.7,0.2),
+         panel.grid.major = element_blank(),
+         axis.text.x = element_blank(),
+         axis.text.y = element_blank()) 
+
+animate(p,  width = 900, height = 750, end_pause = 50, renderer = gifski_renderer())
+
+
+```
+
+## What are the relationships between the materials used? (using resampling methods)
+
+For example, how much sugar do beer producers need per pound of malt?
+
+```{r howMuchsugarPerMalt}
+brewing_materials %>% 
+  count(type, wt = month_current,  sort = TRUE) %>% 
+    knitr::kable()
+
+brewing_filtered <- brewing_materials %>%
+  filter(!str_detect(type, "Total"), year < 2016,
+         !(month == 12 & year %in% 2014:2015))
+
+```
+
+Explore the relationship between ingredients
+
+```{r makeSugarMaltDF}
+brewing_df <- brewing_filtered %>%
+  select(date, type, month_current) %>%
+  pivot_wider(names_from = type, 
+              values_from = month_current) %>%
+  janitor::clean_names()
+
+# is there a remote correlation between
+brewing_df %>%
+  ggplot(aes(malt_and_malt_products, sugar_and_syrups)) +
+  geom_smooth(method = "lm") +
+  geom_point() +
+  labs(title = "What is the relationship between malt and sugar ingredients?")
+  
+```
+
+
+A simple linear model
+```{r sugarMaltLinearModel}
+# force the y-intercept to be zero (no beer, no malt, no sugar)
+beer_fit <- lm(sugar_and_syrups ~ 0 + malt_and_malt_products, data = brewing_df)
+
+summary(beer_fit)
+```
+
+
+```{r sugarMaltLinearModelTidyFits}
+broom::tidy(beer_fit) %>% 
+    knitr::kable()
+```
+
+## Bootstrap Resampling
+
+to arrive at a confidence interval for a linear model
+
+```{r setupBeerMaltBootstrap}
+beer_boot <- bootstraps(data = brewing_df, times = 1e3, apparent = FALSE)
+```
+
+```{r beerMaltModelsOnBootstraps}
+beer_models <- beer_boot %>% 
+  dplyr::mutate(model = purrr::map(splits, ~ lm(sugar_and_syrups ~ 0 + malt_and_malt_products, 
+                                  data = . )),
+  coef_info = purrr::map(model, tidy))
+
+beer_coefs <- beer_models %>%
+     unnest(coef_info) 
+     
+```
+
+## Evaluate results
+
+What is the distribution of the estimates for the model?
+
+```{r beerMaltSlopeEstimates}
+beer_coefs %>%
+  ggplot(aes(estimate)) +
+  geom_histogram(alpha = 0.7) +
+  labs(title = "Malt Coefficient Estimate for predicting Sugar and Syrups")
+```
+
+Our bootstrap confidence intervals:
+
+```{r beerMaltSlopeConfidenceIntervals}
+int_pctl(beer_models, coef_info)
+```
+
+
+```{r beerMaltSlopeCIplot}
+beer_aug <- beer_models %>%
+  dplyr::mutate(augmented = purrr::map(model, augment)) %>%
+  unnest(augmented)
+
+beer_aug %>%
+  ggplot(aes(malt_and_malt_products, sugar_and_syrups)) +
+  geom_line(aes(y = .fitted, group = id), alpha = 0.1, color = "cyan3") +
+  geom_point() +
+  labs(title = "Bootstrap Resampling Model Estimates Confidence Interval") 
+```
+
+And finally, my tidytuesday tweet:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1246645041663221765")
+```
+
+
