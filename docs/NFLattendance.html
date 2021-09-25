@@ -404,16 +404,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreecb9348bd7a813f426342f1458ab47a22abfec073targetblankcb9348ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/cb9348bd7a813f426342f1458ab47a22abfec073" target="_blank">cb9348b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree85b6337e94c9f6f028fd154a254e01f7c2a88166targetblank85b6337a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/85b6337e94c9f6f028fd154a254e01f7c2a88166" target="_blank">85b6337</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreecb9348bd7a813f426342f1458ab47a22abfec073targetblankcb9348ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree85b6337e94c9f6f028fd154a254e01f7c2a88166targetblank85b6337a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/cb9348bd7a813f426342f1458ab47a22abfec073" target="_blank">cb9348b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/85b6337e94c9f6f028fd154a254e01f7c2a88166" target="_blank">85b6337</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -477,6 +477,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/85b6337e94c9f6f028fd154a254e01f7c2a88166/analysis/NFLattendance.Rmd" target="_blank">85b6337</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+move text annotations slightly
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/6ded23835fef4b6aa77317569afc4c13fb33a793/docs/NFLattendance.html" target="_blank">6ded238</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -602,7 +636,7 @@ attendance_joined &lt;- attendance %&gt;%
   labs(
     title = &quot;NFL Weekly Attendance&quot;,
     caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
-    x = &quot;&quot;,
+    x = &quot;&quot;, fill = NULL,
     y = &quot;Weekly Attendance&quot;
   ) +
   theme(legend.position = &quot;bottom&quot;)</code></pre>
@@ -644,6 +678,7 @@ attendance_joined &lt;- attendance %&gt;%
     aes(label = glue::glue(&quot;{team} {year}&quot;)),
     check_overlap = TRUE,
     nudge_x = .6,
+    nudge_y = 1000,
     face = &quot;bold&quot;,
     show.legend = FALSE
   ) +
@@ -677,487 +712,18 @@ attendance_joined &lt;- attendance %&gt;%
 
 nfl_train &lt;- training(attendance_split)
 nfl_test &lt;- testing(attendance_split)</code></pre>
-<p>A simple linear model is specified and fit, and the estimates of coefficients are shown here:</p>
+<p>A simple linear model is specified and fit here:</p>
 <pre class="r"><code>lm_spec &lt;- linear_reg(mode = &quot;regression&quot;) %&gt;%
   set_engine(engine = &quot;lm&quot;)
 
 lm_fit &lt;- lm_spec %&gt;%
-  fit(weekly_attendance ~ ., data = nfl_train)
-
-tidy(lm_fit) %&gt;%
-  arrange(-p.value) %&gt;%
-  filter(p.value &lt; 0.05) %&gt;%
-  knitr::kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">team_namePanthers</td>
-<td align="right">1788.47742</td>
-<td align="right">766.51134</td>
-<td align="right">2.333269</td>
-<td align="right">0.0196599</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameEagles</td>
-<td align="right">1867.67406</td>
-<td align="right">781.27721</td>
-<td align="right">2.390540</td>
-<td align="right">0.0168478</td>
-</tr>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">-81456.07886</td>
-<td align="right">33471.27892</td>
-<td align="right">-2.433611</td>
-<td align="right">0.0149719</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameChiefs</td>
-<td align="right">2123.44169</td>
-<td align="right">771.24254</td>
-<td align="right">2.753274</td>
-<td align="right">0.0059142</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameRams</td>
-<td align="right">-2619.25130</td>
-<td align="right">757.80765</td>
-<td align="right">-3.456354</td>
-<td align="right">0.0005505</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameBroncos</td>
-<td align="right">2772.20172</td>
-<td align="right">764.62900</td>
-<td align="right">3.625551</td>
-<td align="right">0.0002902</td>
-</tr>
-<tr class="odd">
-<td align="left">strength_of_schedule</td>
-<td align="right">222.75149</td>
-<td align="right">61.34503</td>
-<td align="right">3.631126</td>
-<td align="right">0.0002840</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameLions</td>
-<td align="right">-2864.45966</td>
-<td align="right">760.61254</td>
-<td align="right">-3.765991</td>
-<td align="right">0.0001671</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameVikings</td>
-<td align="right">-2991.38247</td>
-<td align="right">768.17257</td>
-<td align="right">-3.894154</td>
-<td align="right">0.0000994</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameBears</td>
-<td align="right">-3080.42995</td>
-<td align="right">773.12053</td>
-<td align="right">-3.984411</td>
-<td align="right">0.0000683</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameJaguars</td>
-<td align="right">-3120.72506</td>
-<td align="right">766.39104</td>
-<td align="right">-4.071975</td>
-<td align="right">0.0000471</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameSteelers</td>
-<td align="right">-3311.75689</td>
-<td align="right">766.55313</td>
-<td align="right">-4.320323</td>
-<td align="right">0.0000158</td>
-</tr>
-<tr class="odd">
-<td align="left">week</td>
-<td align="right">-86.43370</td>
-<td align="right">19.26394</td>
-<td align="right">-4.486813</td>
-<td align="right">0.0000073</td>
-</tr>
-<tr class="even">
-<td align="left">year</td>
-<td align="right">74.82422</td>
-<td align="right">16.65373</td>
-<td align="right">4.492941</td>
-<td align="right">0.0000071</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameColts</td>
-<td align="right">-3449.02877</td>
-<td align="right">764.99840</td>
-<td align="right">-4.508544</td>
-<td align="right">0.0000066</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameBuccaneers</td>
-<td align="right">-3516.29291</td>
-<td align="right">766.37815</td>
-<td align="right">-4.588196</td>
-<td align="right">0.0000045</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameBengals</td>
-<td align="right">-4321.88943</td>
-<td align="right">773.42204</td>
-<td align="right">-5.588009</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameJets</td>
-<td align="right">4745.24063</td>
-<td align="right">768.62954</td>
-<td align="right">6.173638</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">margin_of_victory</td>
-<td align="right">146.78930</td>
-<td align="right">23.15908</td>
-<td align="right">6.338305</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameChargers</td>
-<td align="right">-5655.03038</td>
-<td align="right">758.66937</td>
-<td align="right">-7.453880</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameRedskins</td>
-<td align="right">5931.63951</td>
-<td align="right">767.66935</td>
-<td align="right">7.726816</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameRaiders</td>
-<td align="right">-6343.25992</td>
-<td align="right">775.39938</td>
-<td align="right">-8.180636</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameGiants</td>
-<td align="right">6407.18859</td>
-<td align="right">769.46531</td>
-<td align="right">8.326806</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameCardinals</td>
-<td align="right">-6470.53879</td>
-<td align="right">758.95065</td>
-<td align="right">-8.525638</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameCowboys</td>
-<td align="right">6613.72537</td>
-<td align="right">763.52992</td>
-<td align="right">8.662038</td>
-<td align="right">0.0000000</td>
-</tr>
-</tbody>
-</table>
+  fit(weekly_attendance ~ ., data = nfl_train)</code></pre>
 <p>A comparable random forest regression is specified and fit here:</p>
 <pre class="r"><code>rf_spec &lt;- rand_forest(mode = &quot;regression&quot;) %&gt;%
   set_engine(engine = &quot;ranger&quot;)
 
 rf_fit &lt;- rf_spec %&gt;%
-  fit(weekly_attendance ~ ., data = nfl_train)
-
-tidy(lm_fit) %&gt;%
-  arrange(-estimate) %&gt;%
-  knitr::kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">team_nameCowboys</td>
-<td align="right">6613.72537</td>
-<td align="right">763.52992</td>
-<td align="right">8.6620382</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameGiants</td>
-<td align="right">6407.18859</td>
-<td align="right">769.46531</td>
-<td align="right">8.3268063</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameRedskins</td>
-<td align="right">5931.63951</td>
-<td align="right">767.66935</td>
-<td align="right">7.7268156</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameJets</td>
-<td align="right">4745.24063</td>
-<td align="right">768.62954</td>
-<td align="right">6.1736382</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameBroncos</td>
-<td align="right">2772.20172</td>
-<td align="right">764.62900</td>
-<td align="right">3.6255514</td>
-<td align="right">0.0002902</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameChiefs</td>
-<td align="right">2123.44169</td>
-<td align="right">771.24254</td>
-<td align="right">2.7532736</td>
-<td align="right">0.0059142</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameEagles</td>
-<td align="right">1867.67406</td>
-<td align="right">781.27721</td>
-<td align="right">2.3905395</td>
-<td align="right">0.0168478</td>
-</tr>
-<tr class="even">
-<td align="left">team_namePanthers</td>
-<td align="right">1788.47742</td>
-<td align="right">766.51134</td>
-<td align="right">2.3332694</td>
-<td align="right">0.0196599</td>
-</tr>
-<tr class="odd">
-<td align="left">team_namePackers</td>
-<td align="right">971.42811</td>
-<td align="right">760.29413</td>
-<td align="right">1.2777004</td>
-<td align="right">0.2013940</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameSaints</td>
-<td align="right">637.54436</td>
-<td align="right">762.73835</td>
-<td align="right">0.8358625</td>
-<td align="right">0.4032585</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameTexans</td>
-<td align="right">355.51809</td>
-<td align="right">785.64903</td>
-<td align="right">0.4525152</td>
-<td align="right">0.6509108</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameDolphins</td>
-<td align="right">332.35203</td>
-<td align="right">762.20818</td>
-<td align="right">0.4360384</td>
-<td align="right">0.6628212</td>
-</tr>
-<tr class="odd">
-<td align="left">strength_of_schedule</td>
-<td align="right">222.75149</td>
-<td align="right">61.34503</td>
-<td align="right">3.6311255</td>
-<td align="right">0.0002840</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameBrowns</td>
-<td align="right">222.40629</td>
-<td align="right">773.64517</td>
-<td align="right">0.2874784</td>
-<td align="right">0.7737538</td>
-</tr>
-<tr class="odd">
-<td align="left">margin_of_victory</td>
-<td align="right">146.78930</td>
-<td align="right">23.15908</td>
-<td align="right">6.3383047</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">year</td>
-<td align="right">74.82422</td>
-<td align="right">16.65373</td>
-<td align="right">4.4929414</td>
-<td align="right">0.0000071</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameFalcons</td>
-<td align="right">-68.93885</td>
-<td align="right">773.47578</td>
-<td align="right">-0.0891286</td>
-<td align="right">0.9289820</td>
-</tr>
-<tr class="even">
-<td align="left">week</td>
-<td align="right">-86.43370</td>
-<td align="right">19.26394</td>
-<td align="right">-4.4868125</td>
-<td align="right">0.0000073</td>
-</tr>
-<tr class="odd">
-<td align="left">playoffsPlayoffs</td>
-<td align="right">-211.03783</td>
-<td align="right">288.70801</td>
-<td align="right">-0.7309732</td>
-<td align="right">0.4648180</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameRavens</td>
-<td align="right">-278.23920</td>
-<td align="right">772.80223</td>
-<td align="right">-0.3600393</td>
-<td align="right">0.7188277</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameBills</td>
-<td align="right">-416.98841</td>
-<td align="right">763.14401</td>
-<td align="right">-0.5464085</td>
-<td align="right">0.5848011</td>
-</tr>
-<tr class="even">
-<td align="left">team_namePatriots</td>
-<td align="right">-545.67186</td>
-<td align="right">786.66152</td>
-<td align="right">-0.6936552</td>
-<td align="right">0.4879196</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameTitans</td>
-<td align="right">-807.91944</td>
-<td align="right">762.16059</td>
-<td align="right">-1.0600383</td>
-<td align="right">0.2891608</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameSeahawks</td>
-<td align="right">-1442.91948</td>
-<td align="right">779.67975</td>
-<td align="right">-1.8506566</td>
-<td align="right">0.0642577</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameRams</td>
-<td align="right">-2619.25130</td>
-<td align="right">757.80765</td>
-<td align="right">-3.4563537</td>
-<td align="right">0.0005505</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameLions</td>
-<td align="right">-2864.45966</td>
-<td align="right">760.61254</td>
-<td align="right">-3.7659906</td>
-<td align="right">0.0001671</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameVikings</td>
-<td align="right">-2991.38247</td>
-<td align="right">768.17257</td>
-<td align="right">-3.8941542</td>
-<td align="right">0.0000994</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameBears</td>
-<td align="right">-3080.42995</td>
-<td align="right">773.12053</td>
-<td align="right">-3.9844110</td>
-<td align="right">0.0000683</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameJaguars</td>
-<td align="right">-3120.72506</td>
-<td align="right">766.39104</td>
-<td align="right">-4.0719749</td>
-<td align="right">0.0000471</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameSteelers</td>
-<td align="right">-3311.75689</td>
-<td align="right">766.55313</td>
-<td align="right">-4.3203227</td>
-<td align="right">0.0000158</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameColts</td>
-<td align="right">-3449.02877</td>
-<td align="right">764.99840</td>
-<td align="right">-4.5085438</td>
-<td align="right">0.0000066</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameBuccaneers</td>
-<td align="right">-3516.29291</td>
-<td align="right">766.37815</td>
-<td align="right">-4.5881957</td>
-<td align="right">0.0000045</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameBengals</td>
-<td align="right">-4321.88943</td>
-<td align="right">773.42204</td>
-<td align="right">-5.5880091</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameChargers</td>
-<td align="right">-5655.03038</td>
-<td align="right">758.66937</td>
-<td align="right">-7.4538799</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">team_nameRaiders</td>
-<td align="right">-6343.25992</td>
-<td align="right">775.39938</td>
-<td align="right">-8.1806358</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">team_nameCardinals</td>
-<td align="right">-6470.53879</td>
-<td align="right">758.95065</td>
-<td align="right">-8.5256383</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">-81456.07886</td>
-<td align="right">33471.27892</td>
-<td align="right">-2.4336112</td>
-<td align="right">0.0149719</td>
-</tr>
-</tbody>
-</table>
+  fit(weekly_attendance ~ ., data = nfl_train)</code></pre>
 </div>
 <div id="evaluate-models" class="section level2">
 <h2>Evaluate Models</h2>
@@ -1250,8 +816,16 @@ results_test &lt;- lm_fit %&gt;%
   bind_rows(results_train %&gt;%
     mutate(train = &quot;training&quot;)) %&gt;%
   ggplot(aes(truth, .pred, color = model)) +
+  geom_point(alpha = 0.5, shape = 20) +
   geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
-  geom_point(alpha = 0.5) +
+  scale_x_continuous(
+    n.breaks = 5,
+    labels = scales::comma
+  ) +
+  scale_y_continuous(
+    n.breaks = 5,
+    labels = scales::comma
+  ) +
   facet_wrap(~train)</code></pre>
 <p><img src="figure/NFLattendance.Rmd/unnamed-chunk-12-1.png" width="200%" style="display: block; margin: auto;" /> ### Lets try again, with resampling on the training</p>
 <pre class="r"><code>all_cores &lt;- parallelly::availableCores(omit = 1)
@@ -1304,16 +878,20 @@ rf_res %&gt;%
 <pre class="r"><code>rf_res %&gt;%
   unnest(.predictions) %&gt;%
   ggplot(aes(weekly_attendance, .pred, color = id)) +
+  geom_point(alpha = 0.5, shape = 20) +
   geom_abline(lty = 2, color = &quot;gray80&quot;, size = 1.5) +
-  geom_point(alpha = 0.5) +
   labs(
     title = &quot;Model Accuracy&quot;,
+    color = NULL,
     caption = paste0(&quot;Jim Gruman &quot;, Sys.Date()),
     x = &quot;Attendance Truth&quot;, y = &quot;Attendance Prediction&quot;
   ) +
   theme(legend.position = &quot;bottom&quot;) +
   scale_y_continuous(labels = scales::label_comma()) +
-  scale_x_continuous(labels = scales::label_comma())</code></pre>
+  scale_x_continuous(
+    labels = scales::label_comma(),
+    n.breaks = 3
+  )</code></pre>
 <p><img src="figure/NFLattendance.Rmd/unnamed-chunk-14-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <p>After resampling, the root mean squared error of the random forest model on test data is improved only marginally, compared to the conventional linear model.</p>
 <p>Credits: Julia Silge, RStudio Thomas Mock, RStudio</p>
