@@ -1,0 +1,290 @@
+---
+title: "Kenya Census"
+date: "January 19, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+# rKenyaCensus
+
+The data this week was compiled by [Shel Kariuki](https://twitter.com/Shel_Kariuki) from figures released by the Kenya National Bureau of Statistics in February 2020, originally published in four different pdf files (Volume 1 - Volume 4). Beyond the sample `#TidyTuesday` sets, I've pulled additional agricultural figures from her [web data portal](https://shel-kariuki.shinyapps.io/KenyaCensus2019/) and `rKenyaCensus` package.
+
+the Tidytuesday tweet:
+
+```{r echo=FALSE}
+tweetrmd::tweet_embed('https://twitter.com/jim_gruman/status/1352015728019435522')
+```
+
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(systemfonts)
+library(waffle)
+library(hrbrthemes)
+
+library(tidyverse)
+library(tidytuesdayR)
+library(tweetrmd)
+library(sf)
+library(cartogram)
+
+library(spdep)
+
+library(rKenyaCensus)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+theme_set(theme_jim())
+
+```
+
+```{r Load}
+shapefiles <- rKenyaCensus::KenyaCounties_SHP %>% sf::st_as_sf() %>% 
+  st_simplify(dTolerance = 1000)
+
+# Distribution of area (hectares) of Agricultural land and Farming Households by purpose of production, County and Sub-County
+
+ag_land <- rKenyaCensus::V4_T2.25 %>% 
+    dplyr::filter(AdminArea == "County") %>%   
+    select(County, LandSize_Subsistence, LandSize_Commercial,
+           No.FHS_Subsistence, No.FHS_Commercial) %>%
+    mutate(AvgArea_Subsistence = 
+           if_else(LandSize_Subsistence > 0.1,
+                   No.FHS_Subsistence/LandSize_Subsistence,
+                   NA_real_),
+         AvgArea_Commercial = 
+           if_else(LandSize_Commercial > 0.1,
+                   No.FHS_Commercial/LandSize_Commercial,
+                   NA_real_)) %>%   
+      pivot_longer(-County,
+                 names_sep = "_",
+                 names_to = c("Metric","FarmType")) 
+   
+ag_area_sf <- shapefiles %>% 
+  inner_join(ag_land, by = "County") %>% 
+  mutate(County = stringr::str_to_title(County)) 
+
+landsize_dorling <-
+  cartogram_dorling(
+    x = filter(ag_area_sf,Metric == "LandSize"),
+    weight = "value",
+    k = 0.5,
+    itermax = 100
+  )
+
+families_dorling <-
+    cartogram_dorling(
+    x = filter(ag_area_sf,Metric == "No.FHS"),
+    weight = "value",
+    k = 0.5,
+    itermax = 100
+  )
+```
+
+```{r maps, fig.asp=1}
+subs <- sf::st_drop_geometry(landsize_dorling) %>% 
+  group_by(FarmType) %>% 
+  summarize(Total = sum(value))
+
+landsize_dorling %>% 
+  left_join(subs, by = "FarmType") %>% 
+  mutate(CountyLabel = if_else(ntile(value, 10) > 8 , County, NA_character_)) %>% 
+    ggplot(aes(fill = value)) +
+      geom_sf(color = NA) +
+      geom_sf(data = filter(ag_area_sf, Metric == "LandSize"),
+              color = "grey30", fill = NA, alpha = 0.3) +
+      ggrepel::geom_text_repel(
+        aes(label = CountyLabel, geometry = geometry),
+        stat = "sf_coordinates",
+        nudge_x = 0.5,
+        nudge_y = 0.5,
+        box.padding = 1,
+        segment.curvature = -0.1,
+        segment.ncp = 3,
+        segment.angle = 20,
+        arrow = arrow(length = unit(0.02, "npc")),
+        family = "Roboto Condensed",
+        size = 4,
+        min.segment.length = 0,
+        color = "gray50",
+        segment.color = "gray50",
+        na.rm = TRUE
+      ) +
+      coord_sf(label_axes = "----") +
+  geom_text(aes(label = paste0(scales::comma_format()(Total), " ha")),
+        x = st_bbox(landsize_dorling)[1] + 0.05*(st_bbox(landsize_dorling)[3] - st_bbox(landsize_dorling)[1]) , 
+                y = st_bbox(landsize_dorling)[2],
+        hjust = 0,
+        family = "Roboto Condensed",
+        size = 4) +
+      facet_wrap(~ FarmType) + 
+      scale_fill_stepsn(colors = terrain.colors(5, rev = TRUE), 
+                        n.breaks = 5,
+                        label = scales::comma_format(),
+                        trans = "log10", guide = "legend") +
+      labs(x = NULL, y = NULL, fill = "Hectares",
+           title = "Crop Farming in Kenya, by County",
+           caption = "2019 Kenya Population and Housing Census") +
+      theme(panel.grid.major =  element_blank(),
+            legend.position = "bottom") 
+
+subs <- sf::st_drop_geometry(families_dorling) %>% 
+  group_by(FarmType) %>% 
+  summarize(Total = sum(value))
+
+families_dorling %>% 
+  left_join(subs, by = "FarmType") %>% 
+  mutate(CountyLabel = if_else(ntile(value, 10) > 7, County, NA_character_)) %>% 
+    ggplot(aes(fill = value)) +
+      geom_sf(color = NA) +
+      geom_sf(data = dplyr::filter(ag_area_sf, Metric == "No.FHS"),
+              color = "grey30", fill = NA, alpha = 0.3) +
+  ggrepel::geom_text_repel(
+    aes(label = CountyLabel, geometry = geometry),
+    stat = "sf_coordinates",
+    nudge_x = 0.5,
+    nudge_y = 0.5,
+    box.padding = 1,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20,
+    arrow = arrow(length = unit(0.02, "npc")),
+    family = "Roboto Condensed",
+    size = 4,
+    min.segment.length = 0,
+    colour = "gray50",
+    segment.colour = "gray50",
+    na.rm = TRUE
+  ) +
+  coord_sf(label_axes = "----") +
+  geom_text(aes(label = paste0(scales::comma_format()(Total), " households")),
+        x = st_bbox(landsize_dorling)[1] + 0.05*(st_bbox(landsize_dorling)[3] - st_bbox(landsize_dorling)[1]) , 
+                y = st_bbox(landsize_dorling)[2],
+        hjust = 0,
+        family = "Roboto Condensed",
+        size = 4) +
+    facet_wrap(~ FarmType) +
+  scale_fill_stepsn(colors = terrain.colors(5, rev = TRUE), 
+                    label = scales::comma_format(),
+                    limits = c(5e4,2.5e5), n.breaks = 5,
+                    guide = "legend") +
+  labs(x = NULL, y = NULL, fill = "Households",
+       title = paste0("Farmers ", emojifont::emoji("woman_farmer") ," raising crops in Kenya, by County"),
+       caption = "2019 Kenya Population and Housing Census") +
+  theme(panel.grid.major =  element_blank(),
+        legend.position = "bottom")
+ 
+ag_area_sf %>% 
+  filter(Metric == "AvgArea") %>% 
+  mutate(CountyLabel = if_else(ntile(value, 10) > 8 ,County, NA_character_)) %>% 
+  ggplot() + 
+  geom_sf(aes(fill = value), color = "grey30", alpha = 0.8) +
+  ggrepel::geom_text_repel(
+    aes(label = CountyLabel, geometry = geometry),
+    stat = "sf_coordinates",
+    nudge_x = 0.5,
+    nudge_y = 0.5,
+    box.padding = 1,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20,
+    arrow = arrow(length = unit(0.02, "npc")),
+    family = "Roboto Condensed",
+    size = 4,
+    min.segment.length = 0,
+    colour = "black",
+    segment.colour = "black",
+    na.rm = TRUE
+  ) +
+  coord_sf(label_axes = "----") +
+  facet_wrap(~ FarmType) +
+  scale_fill_stepsn(colors = terrain.colors(5, rev = TRUE), 
+                    n.breaks = 5,
+                    label = scales::label_number(), guide = "legend") +
+  labs(x = NULL, y = NULL, fill = "Average \nFarm Size \nHectares",
+       title = "Crop Farming in Kenya, by County",
+       caption = "2019 Kenya Population and Housing Census") +
+  theme(panel.grid.major =  element_blank(),
+        legend.position = "bottom")
+
+```
+
+Let's take a close look at the livestock datasets, and focus first on poultry. As a general rule, broilers are breeds raised commercially for meat and layers are raised commercially for eggs. The meat and eggs are packaged and subsequently sold at markets, often in more urban areas. Indigenous chicken breeds are often fed and raised in small numbers as part of a household.
+
+```{r poultryMap, fig.asp=1}
+livestock <- rKenyaCensus::V4_T2.24 %>% 
+    filter(AdminArea == "County") %>%   
+    select(-SubCounty, -AdminArea) %>% 
+    rename("Dairy" = "ExoticCattle_Dairy",
+           "Beef" = "ExoticCattle_Beef",
+           "Layers" = "ExoticChicken_Layers",
+           "Broilers" = "ExoticChicken_Broilers") %>% 
+    rename_with(~paste0(.,"_stock"), Farming:FishCages) 
+
+livestock <- rKenyaCensus::V4_T2.23 %>% 
+    filter(AdminArea == "County") %>%   
+    select(-SubCounty, -AdminArea) %>% 
+    rename("Dairy" = "ExoticCattle_Dairy",
+           "Beef" = "ExoticCattle_Beef",
+           "Layers" = "ExoticChicken_Layers",
+           "Broilers" = "ExoticChicken_Broilers") %>% 
+    rename_with(~paste0(.,"_households"), Farming:FishCages) %>% 
+    inner_join(livestock, by = "County") %>% 
+    pivot_longer(-County,
+                 names_sep = "_",
+                 names_to = c("Industry","Metric")) %>% 
+   pivot_wider(names_from = "Metric",
+               values_from = "value") %>% 
+   mutate(per_household = stock / households) %>% 
+   remove_missing() %>% 
+   filter(Industry != "Farming") %>%  # remove the County subtotals 
+   complete(County, Industry, fill = list(households = 1,
+                                             stock = 1,
+                                             per_household = 0.01))  
+
+livestock <- livestock %>% 
+  filter(Industry %in% c("IndigenousChicken", "Layers", "Broilers")) %>% 
+  mutate(Industry = str_replace_all(Industry, "([a-z])([A-Z])", "\\1 \\2"))
+
+stock_ls_dorling <-  cartogram_dorling(
+    x = shapefiles %>% 
+      inner_join(livestock, by = "County"),
+    weight = "stock",
+    k = 1,
+    itermax = 100) 
+
+shapefiles %>% 
+   inner_join(livestock, by = "County") %>% 
+   mutate(Metric = "per_household") %>% 
+   group_by(Industry, Metric) %>% 
+   mutate(CountyLabel = if_else(ntile(per_household, 10) > 8,County, NA_character_)) %>%    ungroup() %>% 
+   ggplot() + 
+     geom_sf(aes(fill = per_household), color = "grey30") +
+     scale_fill_stepsn(colors = terrain.colors(5, rev = TRUE), 
+                        n.breaks = 5, limits = c(0, 100),
+                        label = scales::label_number(), guide = "legend") + 
+     geom_sf(data = stock_ls_dorling,
+             fill = "midnightblue", 
+#             color = NULL,
+             alpha = 0.3) +
+      coord_sf(label_axes = "----") +
+      guides(size = guide_legend()) +
+      facet_wrap(~ Industry, ncol = 3) +
+      labs(x = NULL, y = NULL, fill = "Average count \nper farming household",
+           title = paste0("Poultry ", emojifont::emoji("chicken") , " Farming in Kenya"),
+           subtitle = "Many egg laying chickens are produced near Nairobi. Elsewhere, households keep \nsmall numbers of indigenous birds. The circle size represents the total birds.",
+           caption = "2019 Kenya Population and Housing Census") +
+      theme(panel.grid.major =  element_blank(),
+            legend.position = "bottom")
+
+
+```
+
+
+
