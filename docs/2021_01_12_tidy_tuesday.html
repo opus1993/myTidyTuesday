@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2021-01-12" />
+
+<title>Tate Art Collection</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Tate Art Collection</h1>
+<h4 class="date">January 12, 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-24
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea2779cd48bbbfc24a0de08ed516065ac0a752fc7targetblanka2779cda"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/a2779cd48bbbfc24a0de08ed516065ac0a752fc7" target="_blank">a2779cd</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreea2779cd48bbbfc24a0de08ed516065ac0a752fc7targetblanka2779cda" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/a2779cd48bbbfc24a0de08ed516065ac0a752fc7" target="_blank">a2779cd</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/YammerReach.R
+    Untracked:  code/work list batch targets.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2021_01_12_tidy_tuesday.Rmd</code>) and HTML (<code>docs/2021_01_12_tidy_tuesday.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/a2779cd48bbbfc24a0de08ed516065ac0a752fc7/analysis/2021_01_12_tidy_tuesday.Rmd" target="_blank">a2779cd</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+add Tate art collection TidyTuesday
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The data this week comes from the <a href="https://github.com/tategallery/collection">Tate Art Collections</a>. It consists of metadata for around 70,000 artworks that Tate owns or jointly owns with the National Galleries of Scotland as part of <a href="http://www.tate.org.uk/artist-rooms">ARTIST ROOMS</a>. Metadata for around 3,500 associated artists is also included.</p>
+<p>The post will be in two sections. The first is an exploration of the content of the dataset and a submission to Twitter. The second is a machine learning model that helps us better understand the importance of changes in art materials over time.</p>
+<div id="load-the-weekly-data" class="section level2">
+<h2>Load the weekly Data</h2>
+<p>Download from the R4DS github website and make available in the <code>tt</code> object.</p>
+<pre class="r"><code>tt &lt;- tt_load(&quot;2021-01-12&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 2: `artists.csv`
+    Downloading file 2 of 2: `artwork.csv`</code></pre>
+<pre class="r"><code>art &lt;- tt$artwork %&gt;%
+  rename(art_url = url) %&gt;%
+  left_join(tt$artists, by = c(&quot;artistId&quot; = &quot;id&quot;)) %&gt;%
+  mutate(
+    gender = factor(gender),
+    on = str_sub(medium, start = str_locate(medium, &quot; on &quot;)[, 2])
+  )</code></pre>
+</div>
+<div id="visualize" class="section level2">
+<h2>Visualize</h2>
+<p>What is the distribution of artwork over creation year?</p>
+<pre class="r"><code>art %&gt;%
+  ggplot(aes(year)) +
+  geom_histogram(alpha = 0.8) +
+  labs(title = &quot;The Tate Collection acquisitions are bimodally distributed across years&quot;)</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-1-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>A treemap of major Tate artists</p>
+<pre class="r"><code>art %&gt;%
+  mutate(birthDecade = yearOfBirth %/% 10 * 10) %&gt;%
+  count(artist, birthDecade) %&gt;%
+  slice_max(order_by = n, n = 60) %&gt;%
+  filter(!is.na(birthDecade), artist != &quot;Turner, Joseph Mallord William&quot;) %&gt;%
+  ggplot(aes(area = n, fill = birthDecade, label = artist, subgroup = birthDecade)) +
+  geom_treemap() +
+  geom_treemap_subgroup_border() +
+  geom_treemap_text(color = &quot;black&quot;, place = &quot;top&quot;, reflow = TRUE) +
+  geom_treemap_subgroup_text(
+    color = &quot;gray40&quot;, place = &quot;bottomright&quot;,
+    fontface = &quot;italic&quot;, min.size = 0, alpha = 0.3
+  ) +
+  scale_fill_fermenter(
+    palette = &quot;YlOrRd&quot;, direction = -1,
+    guide = &quot;colorsteps&quot;
+  ) +
+  labs(
+    fill = NULL, title = &quot;The Tate Collection&#39;s Artists by birth year (Non-Turner)&quot;,
+    subtitle = &quot;Born in 1775, Joseph Mallord William Turner&#39;s works account for 57% alone. The size of\nthe box corresponds to the number of pieces of each non-Turner artist in the collection.&quot;,
+    caption = &quot;Data Source: Tate Art Collection&quot;
+  )</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/Visualize-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>And the Tidytuesday tweet:</p>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">A quick shot on this <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> displaying Artists birth decade and the number of works in the <a href="https://twitter.com/Tate?ref_src=twsrc%5Etfw">@Tate</a> collection <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a><a href="https://t.co/cKOY5zVGQC">https://t.co/cKOY5zVGQC</a> <a href="https://t.co/4SP27wHK0z">pic.twitter.com/4SP27wHK0z</a></p>&mdash; Jim Gruman📚🚵‍♂️⚙ (@jim_gruman) <a href="https://twitter.com/jim_gruman/status/1349150540610076673?ref_src=twsrc%5Etfw">January 13, 2021</a></blockquote>
+
+<hr />
+</div>
+<div id="a-machine-learning-model" class="section level1">
+<h1>A machine learning model</h1>
+<p>Let’s focus on just a couple of variables for modeling, and at least focus on just the art created after 1750.</p>
+<pre class="r"><code>tate_df &lt;- art %&gt;%
+  filter(year &gt; 1750) %&gt;%
+  select(year, medium, width, height) %&gt;%
+  na.omit() %&gt;%
+  arrange(year)</code></pre>
+<p>What are the most common words used in describing the media?</p>
+<pre class="r"><code>tate_df %&gt;%
+  unnest_tokens(word, medium) %&gt;%
+  count(word, sort = TRUE)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["word"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"on","2":"53651"},{"1":"paper","2":"48645"},{"1":"graphite","2":"29279"},{"1":"and","2":"9668"},{"1":"watercolour","2":"5216"},{"1":"paint","2":"4856"},{"1":"oil","2":"4318"},{"1":"canvas","2":"3622"},{"1":"screenprint","2":"3366"},{"1":"lithograph","2":"2987"},{"1":"print","2":"2823"},{"1":"etching","2":"2622"},{"1":"ink","2":"2571"},{"1":"gouache","2":"1822"},{"1":"photograph","2":"1450"},{"1":"chalk","2":"1423"},{"1":"engraving","2":"1275"},{"1":"pen","2":"1120"},{"1":"aquatint","2":"1084"},{"1":"silver","2":"1012"},{"1":"wood","2":"902"},{"1":"gelatin","2":"819"},{"1":"intaglio","2":"801"},{"1":"line","2":"671"},{"1":"board","2":"498"},{"1":"acrylic","2":"472"},{"1":"bronze","2":"452"},{"1":"colour","2":"384"},{"1":"copper","2":"360"},{"1":"mezzotint","2":"340"},{"1":"plate","2":"340"},{"1":"drypoint","2":"339"},{"1":"steel","2":"310"},{"1":"digital","2":"297"},{"1":"pastel","2":"280"},{"1":"crayon","2":"247"},{"1":"woodcut","2":"244"},{"1":"plastic","2":"220"},{"1":"metal","2":"217"},{"1":"mounted","2":"196"},{"1":"aluminium","2":"184"},{"1":"charcoal","2":"183"},{"1":"printed","2":"182"},{"1":"chromogenic","2":"176"},{"1":"gelatine","2":"174"},{"1":"plaster","2":"170"},{"1":"white","2":"162"},{"1":"black","2":"161"},{"1":"linocut","2":"154"},{"1":"glass","2":"153"},{"1":"base","2":"144"},{"1":"photographs","2":"144"},{"1":"painted","2":"135"},{"1":"relief","2":"128"},{"1":"onto","2":"120"},{"1":"tempera","2":"119"},{"1":"hardboard","2":"118"},{"1":"verso","2":"117"},{"1":"mahogany","2":"110"},{"1":"2","2":"107"},{"1":"perspex","2":"105"},{"1":"card","2":"103"},{"1":"stone","2":"103"},{"1":"papers","2":"101"},{"1":"with","2":"101"},{"1":"wooden","2":"98"},{"1":"marble","2":"96"},{"1":"plywood","2":"85"},{"1":"fabric","2":"81"},{"1":"photo","2":"80"},{"1":"cardboard","2":"72"},{"1":"stoneware","2":"63"},{"1":"reduced","2":"59"},{"1":"resin","2":"57"},{"1":"dye","2":"53"},{"1":"enamel","2":"52"},{"1":"wax","2":"52"},{"1":"4","2":"51"},{"1":"foam","2":"51"},{"1":"media","2":"51"},{"1":"mixed","2":"51"},{"1":"3","2":"48"},{"1":"monoprint","2":"46"},{"1":"monotype","2":"45"},{"1":"brass","2":"42"},{"1":"bodycolour","2":"41"},{"1":"gold","2":"41"},{"1":"letterpress","2":"41"},{"1":"works","2":"40"},{"1":"lead","2":"38"},{"1":"string","2":"38"},{"1":"ceramic","2":"37"},{"1":"rubber","2":"36"},{"1":"silkscreen","2":"36"},{"1":"terracotta","2":"36"},{"1":"wash","2":"36"},{"1":"fibreboard","2":"35"},{"1":"wire","2":"34"},{"1":"oak","2":"33"},{"1":"stainless","2":"33"},{"1":"tape","2":"33"},{"1":"fibreglass","2":"32"},{"1":"iron","2":"32"},{"1":"acetate","2":"31"},{"1":"canvases","2":"31"},{"1":"panel","2":"31"},{"1":"from","2":"30"},{"1":"polyester","2":"30"},{"1":"thread","2":"30"},{"1":"felt","2":"29"},{"1":"nylon","2":"29"},{"1":"blueprint","2":"27"},{"1":"wool","2":"26"},{"1":"pigment","2":"24"},{"1":"6","2":"23"},{"1":"cibachrome","2":"23"},{"1":"coloured","2":"23"},{"1":"household","2":"23"},{"1":"leather","2":"23"},{"1":"sand","2":"23"},{"1":"carborundum","2":"22"},{"1":"paperclips","2":"22"},{"1":"slate","2":"22"},{"1":"transfer","2":"22"},{"1":"emulsion","2":"21"},{"1":"light","2":"21"},{"1":"limestone","2":"21"},{"1":"sheets","2":"21"},{"1":"tile","2":"21"},{"1":"motor","2":"20"},{"1":"polyvinyl","2":"20"},{"1":"veneer","2":"20"},{"1":"collotype","2":"19"},{"1":"cotton","2":"19"},{"1":"of","2":"19"},{"1":"collage","2":"18"},{"1":"cover","2":"18"},{"1":"lightbox","2":"18"},{"1":"prints","2":"18"},{"1":"varnish","2":"18"},{"1":"embossed","2":"17"},{"1":"gum","2":"17"},{"1":"leaf","2":"17"},{"1":"lights","2":"17"},{"1":"arabic","2":"16"},{"1":"cellulose","2":"16"},{"1":"film","2":"16"},{"1":"postcard","2":"16"},{"1":"stencil","2":"16"},{"1":"tracing","2":"16"},{"1":"transparency","2":"16"},{"1":"9","2":"15"},{"1":"clay","2":"15"},{"1":"concrete","2":"15"},{"1":"fibre","2":"15"},{"1":"foil","2":"15"},{"1":"glue","2":"15"},{"1":"lettering","2":"15"},{"1":"neon","2":"15"},{"1":"polaroid","2":"15"},{"1":"typescript","2":"15"},{"1":"video","2":"15"},{"1":"5","2":"14"},{"1":"blind","2":"14"},{"1":"box","2":"14"},{"1":"conté","2":"14"},{"1":"rope","2":"14"},{"1":"textile","2":"14"},{"1":"books","2":"13"},{"1":"hand","2":"13"},{"1":"muslin","2":"13"},{"1":"other","2":"13"},{"1":"vinyl","2":"13"},{"1":"alabaster","2":"12"},{"1":"cord","2":"12"},{"1":"fluorescent","2":"12"},{"1":"metallic","2":"12"},{"1":"pencil","2":"12"},{"1":"portland","2":"12"},{"1":"book","2":"11"},{"1":"hoptonwood","2":"11"},{"1":"panels","2":"11"},{"1":"porcelain","2":"11"},{"1":"roneo","2":"11"},{"1":"silk","2":"11"},{"1":"strings","2":"11"},{"1":"16","2":"10"},{"1":"cut","2":"10"},{"1":"detachable","2":"10"},{"1":"dust","2":"10"},{"1":"grip","2":"10"},{"1":"hair","2":"10"},{"1":"materials","2":"10"},{"1":"millboard","2":"10"},{"1":"mirror","2":"10"},{"1":"pins","2":"10"},{"1":"powder","2":"10"},{"1":"pvc","2":"10"},{"1":"woodblock","2":"10"},{"1":"zinc","2":"10"},{"1":"8","2":"9"},{"1":"blood","2":"9"},{"1":"carbon","2":"9"},{"1":"cast","2":"9"},{"1":"chipboard","2":"9"},{"1":"dry","2":"9"},{"1":"elm","2":"9"},{"1":"epoxy","2":"9"},{"1":"polystyrene","2":"9"},{"1":"projection","2":"9"},{"1":"table","2":"9"},{"1":"tip","2":"9"},{"1":"12","2":"8"},{"1":"adhesive","2":"8"},{"1":"aluminuim","2":"8"},{"1":"ash","2":"8"},{"1":"beads","2":"8"},{"1":"brush","2":"8"},{"1":"earthenware","2":"8"},{"1":"fat","2":"8"},{"1":"feathers","2":"8"},{"1":"lithographs","2":"8"},{"1":"map","2":"8"},{"1":"spray","2":"8"},{"1":"thumbprint","2":"8"},{"1":"tubes","2":"8"},{"1":"type","2":"8"},{"1":"10","2":"7"},{"1":"alkyd","2":"7"},{"1":"bulbs","2":"7"},{"1":"cork","2":"7"},{"1":"correction","2":"7"},{"1":"electric","2":"7"},{"1":"fluid","2":"7"},{"1":"gesso","2":"7"},{"1":"pine","2":"7"},{"1":"polyurethane","2":"7"},{"1":"postcards","2":"7"},{"1":"shellac","2":"7"},{"1":"shells","2":"7"},{"1":"silicone","2":"7"},{"1":"stamp","2":"7"},{"1":"stick","2":"7"},{"1":"tin","2":"7"},{"1":"wall","2":"7"},{"1":"water","2":"7"},{"1":"wires","2":"7"},{"1":"35","2":"6"},{"1":"7","2":"6"},{"1":"audio","2":"6"},{"1":"bath","2":"6"},{"1":"bound","2":"6"},{"1":"cards","2":"6"},{"1":"coffee","2":"6"},{"1":"colouring","2":"6"},{"1":"commercial","2":"6"},{"1":"earth","2":"6"},{"1":"hemp","2":"6"},{"1":"human","2":"6"},{"1":"ingrained","2":"6"},{"1":"letratone","2":"6"},{"1":"lining","2":"6"},{"1":"mm","2":"6"},{"1":"nails","2":"6"},{"1":"oxide","2":"6"},{"1":"pigments","2":"6"},{"1":"ribbon","2":"6"},{"1":"slide","2":"6"},{"1":"sound","2":"6"},{"1":"staple","2":"6"},{"1":"synthetic","2":"6"},{"1":"threads","2":"6"},{"1":"21","2":"5"},{"1":"ball","2":"5"},{"1":"bone","2":"5"},{"1":"bottle","2":"5"},{"1":"boxes","2":"5"},{"1":"cable","2":"5"},{"1":"cedar","2":"5"},{"1":"cement","2":"5"},{"1":"chair","2":"5"},{"1":"chine","2":"5"},{"1":"electrical","2":"5"},{"1":"flock","2":"5"},{"1":"frame","2":"5"},{"1":"gloss","2":"5"},{"1":"in","2":"5"},{"1":"lacquer","2":"5"},{"1":"linen","2":"5"},{"1":"photocopies","2":"5"},{"1":"photographic","2":"5"},{"1":"record","2":"5"},{"1":"rods","2":"5"},{"1":"soap","2":"5"},{"1":"velvet","2":"5"},{"1":"15","2":"4"},{"1":"acquatint","2":"4"},{"1":"between","2":"4"},{"1":"bitumen","2":"4"},{"1":"blocks","2":"4"},{"1":"brazed","2":"4"},{"1":"bulb","2":"4"},{"1":"cabinet","2":"4"},{"1":"chrome","2":"4"},{"1":"drawing","2":"4"},{"1":"feather","2":"4"},{"1":"ferric","2":"4"},{"1":"formica","2":"4"},{"1":"gauze","2":"4"},{"1":"glitter","2":"4"},{"1":"granite","2":"4"},{"1":"handcolouring","2":"4"},{"1":"harvey","2":"4"},{"1":"ivory","2":"4"},{"1":"laminate","2":"4"},{"1":"latex","2":"4"},{"1":"linoleum","2":"4"},{"1":"machine","2":"4"},{"1":"maps","2":"4"},{"1":"marker","2":"4"},{"1":"melamine","2":"4"},{"1":"mesh","2":"4"},{"1":"michael","2":"4"},{"1":"moulded","2":"4"},{"1":"oxidised","2":"4"},{"1":"papier","2":"4"},{"1":"paraffin","2":"4"},{"1":"platinum","2":"4"},{"1":"polythene","2":"4"},{"1":"rod","2":"4"},{"1":"rosewood","2":"4"},{"1":"salt","2":"4"},{"1":"screenprints","2":"4"},{"1":"speakers","2":"4"},{"1":"stones","2":"4"},{"1":"tea","2":"4"},{"1":"textiles","2":"4"},{"1":"tights","2":"4"},{"1":"13","2":"3"},{"1":"32","2":"3"},{"1":"42","2":"3"},{"1":"alloy","2":"3"},{"1":"ancaster","2":"3"},{"1":"artificial","2":"3"},{"1":"as","2":"3"},{"1":"ballpoint","2":"3"},{"1":"banknote","2":"3"},{"1":"beeswax","2":"3"},{"1":"blackboard","2":"3"},{"1":"breeze","2":"3"},{"1":"brick","2":"3"},{"1":"bucket","2":"3"},{"1":"caption","2":"3"},{"1":"carrara","2":"3"},{"1":"cassette","2":"3"},{"1":"celluloid","2":"3"},{"1":"clock","2":"3"},{"1":"coal","2":"3"},{"1":"coated","2":"3"},{"1":"collé","2":"3"},{"1":"components","2":"3"},{"1":"damar","2":"3"},{"1":"egg","2":"3"},{"1":"envelope","2":"3"},{"1":"excrement","2":"3"},{"1":"flat","2":"3"},{"1":"gary","2":"3"},{"1":"gas","2":"3"},{"1":"hardwood","2":"3"},{"1":"hessian","2":"3"},{"1":"hincks","2":"3"},{"1":"jamie","2":"3"},{"1":"laid","2":"3"},{"1":"lignum","2":"3"},{"1":"mâché","2":"3"},{"1":"mdf","2":"3"},{"1":"monitors","2":"3"},{"1":"nitrate","2":"3"},{"1":"oakwood","2":"3"},{"1":"pin","2":"3"},{"1":"player","2":"3"},{"1":"plexiglas","2":"3"},{"1":"safety","2":"3"},{"1":"sandstone","2":"3"},{"1":"sargeant","2":"3"},{"1":"screens","2":"3"},{"1":"screws","2":"3"},{"1":"seat","2":"3"},{"1":"sheet","2":"3"},{"1":"shell","2":"3"},{"1":"shown","2":"3"},{"1":"software","2":"3"},{"1":"stand","2":"3"},{"1":"straw","2":"3"},{"1":"tar","2":"3"},{"1":"text","2":"3"},{"1":"transfert","2":"3"},{"1":"typewritten","2":"3"},{"1":"18","2":"2"},{"1":"24","2":"2"},{"1":"25","2":"2"},{"1":"26","2":"2"},{"1":"30","2":"2"},{"1":"49","2":"2"},{"1":"76","2":"2"},{"1":"a","2":"2"},{"1":"acacia","2":"2"},{"1":"animal","2":"2"},{"1":"bag","2":"2"},{"1":"balls","2":"2"},{"1":"bamboo","2":"2"},{"1":"bark","2":"2"},{"1":"bars","2":"2"},{"1":"basketballs","2":"2"},{"1":"beechwood","2":"2"},{"1":"belt","2":"2"},{"1":"bicycle","2":"2"},{"1":"block","2":"2"},{"1":"boards","2":"2"},{"1":"brackets","2":"2"},{"1":"bricks","2":"2"},{"1":"cables","2":"2"},{"1":"can","2":"2"},{"1":"candlegrease","2":"2"},{"1":"cardboad","2":"2"},{"1":"case","2":"2"},{"1":"casein","2":"2"},{"1":"cell","2":"2"},{"1":"chain","2":"2"},{"1":"china","2":"2"},{"1":"cigarette","2":"2"},{"1":"circuit","2":"2"},{"1":"clothes","2":"2"},{"1":"collagraph","2":"2"},{"1":"compressor","2":"2"},{"1":"container","2":"2"},{"1":"copperplate","2":"2"},{"1":"core","2":"2"},{"1":"cot","2":"2"},{"1":"crepe","2":"2"},{"1":"crystal","2":"2"},{"1":"cumberland","2":"2"},{"1":"cylinder","2":"2"},{"1":"de","2":"2"},{"1":"disc","2":"2"},{"1":"doll","2":"2"},{"1":"dolls","2":"2"},{"1":"dolomite","2":"2"},{"1":"door","2":"2"},{"1":"doors","2":"2"},{"1":"duck","2":"2"},{"1":"dung","2":"2"},{"1":"elastic","2":"2"},{"1":"elephant","2":"2"},{"1":"emitting","2":"2"},{"1":"enamelac","2":"2"},{"1":"encre","2":"2"},{"1":"envelopes","2":"2"},{"1":"fibres","2":"2"},{"1":"fishing","2":"2"},{"1":"floor","2":"2"},{"1":"foils","2":"2"},{"1":"food","2":"2"},{"1":"funnel","2":"2"},{"1":"galvanized","2":"2"},{"1":"glove","2":"2"},{"1":"gordon","2":"2"},{"1":"gravure","2":"2"},{"1":"halftone","2":"2"},{"1":"hornton","2":"2"},{"1":"huntly","2":"2"},{"1":"image","2":"2"},{"1":"knife","2":"2"},{"1":"labels","2":"2"},{"1":"lamps","2":"2"},{"1":"legs","2":"2"},{"1":"lids","2":"2"},{"1":"limewood","2":"2"},{"1":"lineblock","2":"2"},{"1":"linotype","2":"2"},{"1":"liquid","2":"2"},{"1":"mannequin","2":"2"},{"1":"monitor","2":"2"},{"1":"motors","2":"2"},{"1":"mud","2":"2"},{"1":"natural","2":"2"},{"1":"newsprint","2":"2"},{"1":"nicholas","2":"2"},{"1":"ochre","2":"2"},{"1":"plasticine","2":"2"},{"1":"plates","2":"2"},{"1":"polychromed","2":"2"},{"1":"polymer","2":"2"},{"1":"poster","2":"2"},{"1":"potato","2":"2"},{"1":"precious","2":"2"},{"1":"prosthetic","2":"2"},{"1":"pulp","2":"2"},{"1":"pump","2":"2"},{"1":"putty","2":"2"},{"1":"red","2":"2"},{"1":"roof","2":"2"},{"1":"roofing","2":"2"},{"1":"ropes","2":"2"},{"1":"satin","2":"2"},{"1":"sawdust","2":"2"},{"1":"scarf","2":"2"},{"1":"scrim","2":"2"},{"1":"seeds","2":"2"},{"1":"semi","2":"2"},{"1":"serpentine","2":"2"},{"1":"serravezza","2":"2"},{"1":"sewing","2":"2"},{"1":"shale","2":"2"},{"1":"sheep","2":"2"},{"1":"shelf","2":"2"},{"1":"shelving","2":"2"},{"1":"shoe","2":"2"},{"1":"shoes","2":"2"},{"1":"skateboards","2":"2"},{"1":"sloan","2":"2"},{"1":"sofa","2":"2"},{"1":"sprayed","2":"2"},{"1":"stereo","2":"2"},{"1":"straps","2":"2"},{"1":"strip","2":"2"},{"1":"sugar","2":"2"},{"1":"super","2":"2"},{"1":"system","2":"2"},{"1":"tampon","2":"2"},{"1":"tampons","2":"2"},{"1":"tapes","2":"2"},{"1":"tarpaulin","2":"2"},{"1":"teapot","2":"2"},{"1":"thermometer","2":"2"},{"1":"top","2":"2"},{"1":"travertine","2":"2"},{"1":"tripod","2":"2"},{"1":"unit","2":"2"},{"1":"units","2":"2"},{"1":"vacuum","2":"2"},{"1":"vinylite","2":"2"},{"1":"vitae","2":"2"},{"1":"walnut","2":"2"},{"1":"washing","2":"2"},{"1":"woollen","2":"2"},{"1":"1000","2":"1"},{"1":"11","2":"1"},{"1":"114","2":"1"},{"1":"14","2":"1"},{"1":"19","2":"1"},{"1":"2000","2":"1"},{"1":"22","2":"1"},{"1":"220","2":"1"},{"1":"23","2":"1"},{"1":"252","2":"1"},{"1":"28","2":"1"},{"1":"29","2":"1"},{"1":"36","2":"1"},{"1":"40","2":"1"},{"1":"41","2":"1"},{"1":"47","2":"1"},{"1":"50","2":"1"},{"1":"54","2":"1"},{"1":"55","2":"1"},{"1":"56","2":"1"},{"1":"62","2":"1"},{"1":"70","2":"1"},{"1":"73","2":"1"},{"1":"77","2":"1"},{"1":"80","2":"1"},{"1":"81","2":"1"},{"1":"90","2":"1"},{"1":"94","2":"1"},{"1":"abacus","2":"1"},{"1":"adhered","2":"1"},{"1":"aerials","2":"1"},{"1":"aerosol","2":"1"},{"1":"african","2":"1"},{"1":"air","2":"1"},{"1":"alarm","2":"1"},{"1":"altered","2":"1"},{"1":"aluminum","2":"1"},{"1":"amplifier","2":"1"},{"1":"andrew","2":"1"},{"1":"aquatints","2":"1"},{"1":"armenian","2":"1"},{"1":"arms","2":"1"},{"1":"arrows","2":"1"},{"1":"artist's","2":"1"},{"1":"ashtray","2":"1"},{"1":"asphalt","2":"1"},{"1":"audiotrack","2":"1"},{"1":"back","2":"1"},{"1":"backboard","2":"1"},{"1":"bacon","2":"1"},{"1":"badge","2":"1"},{"1":"badges","2":"1"},{"1":"ballasts","2":"1"},{"1":"balloon","2":"1"},{"1":"basalt","2":"1"},{"1":"battery","2":"1"},{"1":"beacons","2":"1"},{"1":"beans","2":"1"},{"1":"beech","2":"1"},{"1":"beet","2":"1"},{"1":"belisha","2":"1"},{"1":"bench","2":"1"},{"1":"binding","2":"1"},{"1":"bindis","2":"1"},{"1":"binoculars","2":"1"},{"1":"birdhouse","2":"1"},{"1":"birds","2":"1"},{"1":"biscuit","2":"1"},{"1":"blad","2":"1"},{"1":"blockboard","2":"1"},{"1":"blossom","2":"1"},{"1":"boat","2":"1"},{"1":"bolts","2":"1"},{"1":"bones","2":"1"},{"1":"bookmarks","2":"1"},{"1":"bostick","2":"1"},{"1":"bow","2":"1"},{"1":"bowl","2":"1"},{"1":"bowls","2":"1"},{"1":"bracket","2":"1"},{"1":"brake","2":"1"},{"1":"branches","2":"1"},{"1":"bread","2":"1"},{"1":"breasts","2":"1"},{"1":"breccia","2":"1"},{"1":"brillants","2":"1"},{"1":"bronzed","2":"1"},{"1":"bronzing","2":"1"},{"1":"brooches","2":"1"},{"1":"brushes","2":"1"},{"1":"buckles","2":"1"},{"1":"buckram","2":"1"},{"1":"building","2":"1"},{"1":"buoy","2":"1"},{"1":"burlaq","2":"1"},{"1":"burner","2":"1"},{"1":"burnt","2":"1"},{"1":"bus","2":"1"},{"1":"busts","2":"1"},{"1":"button","2":"1"},{"1":"buttons","2":"1"},{"1":"caen","2":"1"},{"1":"calacatta","2":"1"},{"1":"camera","2":"1"},{"1":"cane","2":"1"},{"1":"cans","2":"1"},{"1":"caps","2":"1"},{"1":"car","2":"1"},{"1":"cases","2":"1"},{"1":"casserole","2":"1"},{"1":"castor","2":"1"},{"1":"catalogue","2":"1"},{"1":"ceiling","2":"1"},{"1":"cello","2":"1"},{"1":"central","2":"1"},{"1":"certificate","2":"1"},{"1":"chairs","2":"1"},{"1":"channels","2":"1"},{"1":"chesy","2":"1"},{"1":"chloride","2":"1"},{"1":"cigar","2":"1"},{"1":"cigarettes","2":"1"},{"1":"clamp","2":"1"},{"1":"cleaner","2":"1"},{"1":"cleaners","2":"1"},{"1":"clip","2":"1"},{"1":"clips","2":"1"},{"1":"clocks","2":"1"},{"1":"cloth","2":"1"},{"1":"cloves","2":"1"},{"1":"coat","2":"1"},{"1":"coca","2":"1"},{"1":"coconut","2":"1"},{"1":"cogs","2":"1"},{"1":"cola","2":"1"},{"1":"collotypes","2":"1"},{"1":"comb","2":"1"},{"1":"combs","2":"1"},{"1":"composite","2":"1"},{"1":"contact","2":"1"},{"1":"control","2":"1"},{"1":"copperplated","2":"1"},{"1":"coral","2":"1"},{"1":"cords","2":"1"},{"1":"corsehill","2":"1"},{"1":"cosmetic","2":"1"},{"1":"costume","2":"1"},{"1":"counters","2":"1"},{"1":"covering","2":"1"},{"1":"cowhide","2":"1"},{"1":"crate","2":"1"},{"1":"creosote","2":"1"},{"1":"crystalline","2":"1"},{"1":"cuttlefish","2":"1"},{"1":"deck","2":"1"},{"1":"definition","2":"1"},{"1":"delabole","2":"1"},{"1":"denim","2":"1"},{"1":"derby","2":"1"},{"1":"derbyshire","2":"1"},{"1":"diagrams","2":"1"},{"1":"diamante","2":"1"},{"1":"diode","2":"1"},{"1":"diodes","2":"1"},{"1":"dispersion","2":"1"},{"1":"distemper","2":"1"},{"1":"doily","2":"1"},{"1":"dool","2":"1"},{"1":"dowelling","2":"1"},{"1":"dowels","2":"1"},{"1":"duralumin","2":"1"},{"1":"eames","2":"1"},{"1":"earrings","2":"1"},{"1":"eching","2":"1"},{"1":"electrodes","2":"1"},{"1":"electronic","2":"1"},{"1":"electrotype","2":"1"},{"1":"embossing","2":"1"},{"1":"engine","2":"1"},{"1":"engraved","2":"1"},{"1":"engravings","2":"1"},{"1":"etchings","2":"1"},{"1":"exchangeable","2":"1"},{"1":"expanding","2":"1"},{"1":"eyebrow","2":"1"},{"1":"eyelashes","2":"1"},{"1":"eyes","2":"1"},{"1":"eyeshadow","2":"1"},{"1":"false","2":"1"},{"1":"fan","2":"1"},{"1":"farthing","2":"1"},{"1":"feet","2":"1"},{"1":"file","2":"1"},{"1":"filings","2":"1"},{"1":"firebricks","2":"1"},{"1":"fish","2":"1"},{"1":"fitting","2":"1"},{"1":"flakes","2":"1"},{"1":"flax","2":"1"},{"1":"flies","2":"1"},{"1":"flint","2":"1"},{"1":"float","2":"1"},{"1":"floodlight","2":"1"},{"1":"florescent","2":"1"},{"1":"flowers","2":"1"},{"1":"fluff","2":"1"},{"1":"foliage","2":"1"},{"1":"forged","2":"1"},{"1":"fork","2":"1"},{"1":"formaldehyde","2":"1"},{"1":"fossil","2":"1"},{"1":"fragments","2":"1"},{"1":"fresco","2":"1"},{"1":"fringe","2":"1"},{"1":"fronds","2":"1"},{"1":"frying","2":"1"},{"1":"fur","2":"1"},{"1":"galvanised","2":"1"},{"1":"gel","2":"1"},{"1":"gerberas","2":"1"},{"1":"gilded","2":"1"},{"1":"glaze","2":"1"},{"1":"globe","2":"1"},{"1":"gloves","2":"1"},{"1":"gneiss","2":"1"},{"1":"greek","2":"1"},{"1":"green","2":"1"},{"1":"grit","2":"1"},{"1":"ground","2":"1"},{"1":"grpahite","2":"1"},{"1":"guarea","2":"1"},{"1":"guitar","2":"1"},{"1":"gunmetal","2":"1"},{"1":"gunpowder","2":"1"},{"1":"hairpiece","2":"1"},{"1":"hairs","2":"1"},{"1":"handles","2":"1"},{"1":"harcboard","2":"1"},{"1":"hardbacked","2":"1"},{"1":"hat","2":"1"},{"1":"head","2":"1"},{"1":"headpho","2":"1"},{"1":"headphone","2":"1"},{"1":"headphones","2":"1"},{"1":"heliogravure","2":"1"},{"1":"high","2":"1"},{"1":"hinges","2":"1"},{"1":"holly","2":"1"},{"1":"honeycomb","2":"1"},{"1":"hook","2":"1"},{"1":"hooks","2":"1"},{"1":"horn","2":"1"},{"1":"horse","2":"1"},{"1":"hydraulic","2":"1"},{"1":"index","2":"1"},{"1":"intestine","2":"1"},{"1":"intestines","2":"1"},{"1":"iris","2":"1"},{"1":"irish","2":"1"},{"1":"ironing","2":"1"},{"1":"ironstone","2":"1"},{"1":"jacket","2":"1"},{"1":"jar","2":"1"},{"1":"jaw","2":"1"},{"1":"john","2":"1"},{"1":"juice","2":"1"},{"1":"julie","2":"1"},{"1":"jute","2":"1"},{"1":"kapok","2":"1"},{"1":"kilkenny","2":"1"},{"1":"kitchen","2":"1"},{"1":"knitting","2":"1"},{"1":"knives","2":"1"},{"1":"ladder","2":"1"},{"1":"lamb","2":"1"},{"1":"lamp","2":"1"},{"1":"lapis","2":"1"},{"1":"lazuli","2":"1"},{"1":"lcd","2":"1"},{"1":"leaded","2":"1"},{"1":"leaves","2":"1"},{"1":"lectern","2":"1"},{"1":"leg","2":"1"},{"1":"lightboxes","2":"1"},{"1":"lighter","2":"1"},{"1":"lime","2":"1"},{"1":"limestones","2":"1"},{"1":"lines","2":"1"},{"1":"linoprint","2":"1"},{"1":"lipstick","2":"1"},{"1":"lithographic","2":"1"},{"1":"m","2":"1"},{"1":"maché","2":"1"},{"1":"machete","2":"1"},{"1":"machinery","2":"1"},{"1":"magnesium","2":"1"},{"1":"magnets","2":"1"},{"1":"mahoghany","2":"1"},{"1":"mango","2":"1"},{"1":"mannequins","2":"1"},{"1":"mansfield","2":"1"},{"1":"mark","2":"1"},{"1":"masking","2":"1"},{"1":"mate","2":"1"},{"1":"materi","2":"1"},{"1":"materia","2":"1"},{"1":"material","2":"1"},{"1":"matter","2":"1"},{"1":"me","2":"1"},{"1":"measure","2":"1"},{"1":"meccano","2":"1"},{"1":"mechanical","2":"1"},{"1":"melanine","2":"1"},{"1":"melinex","2":"1"},{"1":"metalised","2":"1"},{"1":"metallised","2":"1"},{"1":"meter","2":"1"},{"1":"metronome","2":"1"},{"1":"mica","2":"1"},{"1":"microphone","2":"1"},{"1":"milk","2":"1"},{"1":"mini","2":"1"},{"1":"minicomputer","2":"1"},{"1":"mirrors","2":"1"},{"1":"mobile","2":"1"},{"1":"modelling","2":"1"},{"1":"mono","2":"1"},{"1":"motorised","2":"1"},{"1":"moun","2":"1"},{"1":"mugs","2":"1"},{"1":"mussel","2":"1"},{"1":"mustard","2":"1"},{"1":"mylar","2":"1"},{"1":"nabresina","2":"1"},{"1":"necklace","2":"1"},{"1":"needles","2":"1"},{"1":"negative","2":"1"},{"1":"negatives","2":"1"},{"1":"net","2":"1"},{"1":"newspaper","2":"1"},{"1":"nib","2":"1"},{"1":"o","2":"1"},{"1":"onyx","2":"1"},{"1":"open","2":"1"},{"1":"operated","2":"1"},{"1":"or","2":"1"},{"1":"ore","2":"1"},{"1":"ornaments","2":"1"},{"1":"ostrich","2":"1"},{"1":"oth","2":"1"},{"1":"over","2":"1"},{"1":"p","2":"1"},{"1":"padding","2":"1"},{"1":"paintbrush","2":"1"},{"1":"painting","2":"1"},{"1":"paintings","2":"1"},{"1":"paints","2":"1"},{"1":"paintstik","2":"1"},{"1":"palm","2":"1"},{"1":"pan","2":"1"},{"1":"paperboard","2":"1"},{"1":"paperr","2":"1"},{"1":"parafin","2":"1"},{"1":"parchment","2":"1"},{"1":"part","2":"1"},{"1":"particle","2":"1"},{"1":"particles","2":"1"},{"1":"paste","2":"1"},{"1":"pasted","2":"1"},{"1":"patches","2":"1"},{"1":"pavatex","2":"1"},{"1":"pearls","2":"1"},{"1":"pebbles","2":"1"},{"1":"pencils","2":"1"},{"1":"pentelican","2":"1"},{"1":"pentelicon","2":"1"},{"1":"petal","2":"1"},{"1":"pewter","2":"1"},{"1":"pho","2":"1"},{"1":"phosphor","2":"1"},{"1":"piano","2":"1"},{"1":"pig","2":"1"},{"1":"pillow","2":"1"},{"1":"pills","2":"1"},{"1":"pipes","2":"1"},{"1":"planks","2":"1"},{"1":"plant","2":"1"},{"1":"plants","2":"1"},{"1":"plaque","2":"1"},{"1":"plaques","2":"1"},{"1":"platform","2":"1"},{"1":"platinium","2":"1"},{"1":"plexiglass","2":"1"},{"1":"plug","2":"1"},{"1":"plyboard","2":"1"},{"1":"pneumatic","2":"1"},{"1":"pochoir","2":"1"},{"1":"pole","2":"1"},{"1":"polish","2":"1"},{"1":"polyfibre","2":"1"},{"1":"polyfiller","2":"1"},{"1":"polyphant","2":"1"},{"1":"poplar","2":"1"},{"1":"popper","2":"1"},{"1":"porcelaine","2":"1"},{"1":"porphyry","2":"1"},{"1":"portorino","2":"1"},{"1":"pot","2":"1"},{"1":"potatoes","2":"1"},{"1":"powdered","2":"1"},{"1":"ppaer","2":"1"},{"1":"printers","2":"1"},{"1":"printon","2":"1"},{"1":"prisms","2":"1"},{"1":"processing","2":"1"},{"1":"program","2":"1"},{"1":"projections","2":"1"},{"1":"projectors","2":"1"},{"1":"pulped","2":"1"},{"1":"pumpkin","2":"1"},{"1":"purbeck","2":"1"},{"1":"pynkado","2":"1"},{"1":"q","2":"1"},{"1":"quartz","2":"1"},{"1":"radio","2":"1"},{"1":"rakes","2":"1"},{"1":"rams","2":"1"},{"1":"recorded","2":"1"},{"1":"reinforced","2":"1"},{"1":"rivets","2":"1"},{"1":"roll","2":"1"},{"1":"roman","2":"1"},{"1":"rosary","2":"1"},{"1":"rose","2":"1"},{"1":"roulette","2":"1"},{"1":"sachet","2":"1"},{"1":"sack","2":"1"},{"1":"sacking","2":"1"},{"1":"sanguine","2":"1"},{"1":"sax","2":"1"},{"1":"scaffold","2":"1"},{"1":"scanachrome","2":"1"},{"1":"scissors","2":"1"},{"1":"screen","2":"1"},{"1":"sea","2":"1"},{"1":"seals","2":"1"},{"1":"search","2":"1"},{"1":"sedimentary","2":"1"},{"1":"selenium","2":"1"},{"1":"sellotape","2":"1"},{"1":"sequins","2":"1"},{"1":"shaving","2":"1"},{"1":"shelves","2":"1"},{"1":"shingle","2":"1"},{"1":"shirt","2":"1"},{"1":"shoeboxes","2":"1"},{"1":"shoelace","2":"1"},{"1":"shovel","2":"1"},{"1":"siena","2":"1"},{"1":"silkcreen","2":"1"},{"1":"silverpoint","2":"1"},{"1":"sisal","2":"1"},{"1":"skin","2":"1"},{"1":"sleeve","2":"1"},{"1":"slippers","2":"1"},{"1":"small","2":"1"},{"1":"snakeskin","2":"1"},{"1":"soapground","2":"1"},{"1":"soapstone","2":"1"},{"1":"socks","2":"1"},{"1":"solution","2":"1"},{"1":"spangles","2":"1"},{"1":"spinning","2":"1"},{"1":"spiral","2":"1"},{"1":"splints","2":"1"},{"1":"sponge","2":"1"},{"1":"spool","2":"1"},{"1":"spoon","2":"1"},{"1":"spotlight","2":"1"},{"1":"springs","2":"1"},{"1":"sreenprint","2":"1"},{"1":"stack","2":"1"},{"1":"stamps","2":"1"},{"1":"starfish","2":"1"},{"1":"stars","2":"1"},{"1":"stems","2":"1"},{"1":"steps","2":"1"},{"1":"stewart","2":"1"},{"1":"stockings","2":"1"},{"1":"strips","2":"1"},{"1":"structure","2":"1"},{"1":"stuffed","2":"1"},{"1":"styrene","2":"1"},{"1":"styrofoam","2":"1"},{"1":"suede","2":"1"},{"1":"suitcases","2":"1"},{"1":"sulphate","2":"1"},{"1":"sulphur","2":"1"},{"1":"support","2":"1"},{"1":"sweater","2":"1"},{"1":"sweet","2":"1"},{"1":"swing","2":"1"},{"1":"tables","2":"1"},{"1":"tacks","2":"1"},{"1":"taxidermy","2":"1"},{"1":"telegram","2":"1"},{"1":"telescope","2":"1"},{"1":"tennis","2":"1"},{"1":"tent","2":"1"},{"1":"texts","2":"1"},{"1":"textured","2":"1"},{"1":"tickets","2":"1"},{"1":"timber","2":"1"},{"1":"timer","2":"1"},{"1":"tinfoil","2":"1"},{"1":"tinted","2":"1"},{"1":"tippex","2":"1"},{"1":"to","2":"1"},{"1":"tobacco","2":"1"},{"1":"toilet","2":"1"},{"1":"towers","2":"1"},{"1":"toys","2":"1"},{"1":"traced","2":"1"},{"1":"tracking","2":"1"},{"1":"trains","2":"1"},{"1":"tram","2":"1"},{"1":"transformers","2":"1"},{"1":"transmitter","2":"1"},{"1":"transparent","2":"1"},{"1":"trash","2":"1"},{"1":"tray","2":"1"},{"1":"tree","2":"1"},{"1":"trestle","2":"1"},{"1":"trousers","2":"1"},{"1":"tube","2":"1"},{"1":"tufa","2":"1"},{"1":"tulipwood","2":"1"},{"1":"twig","2":"1"},{"1":"twigs","2":"1"},{"1":"two","2":"1"},{"1":"typescripts","2":"1"},{"1":"underlay","2":"1"},{"1":"upholstery","2":"1"},{"1":"urine","2":"1"},{"1":"urn","2":"1"},{"1":"ustensils","2":"1"},{"1":"vegetable","2":"1"},{"1":"vegetation","2":"1"},{"1":"vehicle","2":"1"},{"1":"velcro","2":"1"},{"1":"vessel","2":"1"},{"1":"vitea","2":"1"},{"1":"voice","2":"1"},{"1":"waercolour","2":"1"},{"1":"walking","2":"1"},{"1":"walkman","2":"1"},{"1":"walls","2":"1"},{"1":"washers","2":"1"},{"1":"watering","2":"1"},{"1":"watermark","2":"1"},{"1":"weatherbed","2":"1"},{"1":"web","2":"1"},{"1":"webbing","2":"1"},{"1":"wedgwood","2":"1"},{"1":"western","2":"1"},{"1":"wheels","2":"1"},{"1":"wicker","2":"1"},{"1":"wig","2":"1"},{"1":"willow","2":"1"},{"1":"window","2":"1"},{"1":"wonderstone","2":"1"},{"1":"woodcuts","2":"1"},{"1":"wrappers","2":"1"},{"1":"wrapping","2":"1"},{"1":"yew","2":"1"},{"1":"yoghurt","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Lots of paper, graphite, oil and watercolour paints.</p>
+<p>We can start by splitting our data into training and testing sets, and creating resamples.</p>
+<pre class="r"><code>art_split &lt;- initial_split(tate_df, strata = year)
+art_train &lt;- training(art_split)
+art_test &lt;- testing(art_split)
+
+art_folds &lt;- vfold_cv(art_train, strata = year)</code></pre>
+<p>Next, let’s preprocess to get it ready for modeling. We can use specialized steps from <code>textrecipes</code>, along with the general recipe steps.</p>
+<pre class="r"><code>art_rec &lt;- recipe(year ~ ., data = art_train) %&gt;%
+  step_tokenize(medium) %&gt;%
+  step_stopwords(medium) %&gt;%
+  #  step_stem(medium) %&gt;%
+  step_ngram(medium, num_tokens = 3, min_num_tokens = 1) %&gt;%
+  step_tokenfilter(medium, max_tokens = 700) %&gt;%
+  step_tfidf(medium) # a normalized input is required for regularized regression
+
+art_rec</code></pre>
+<pre><code>Data Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor          3
+
+Operations:
+
+Tokenization for medium
+Stop word removal for medium
+ngramming for medium
+Text filtering for medium
+Term frequency-inverse document frequency with medium</code></pre>
+<p>Let’s walk through the steps in this recipe, which are what are sensible defaults for training a model with text features.</p>
+<ul>
+<li><p>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what data we are using.</p></li>
+<li><p>Next, we tokenize our text, with the default tokenization into single words.</p></li>
+<li><p>Next, we remove stop words (just the default set, to remove “on” and “and”).</p></li>
+<li><p>Next, we stem words to a similar base word. In this case, I am going to leave stemming out, as the medium words are mostly technical materials.</p></li>
+<li><p>Next, we form ngram combinations back. In this case, “acrylic paint paper” results in features for <em>acrylic</em>, <em>paint</em>, <em>paper</em>, <em>acrylic paint</em>, <em>paint paper</em>, <em>acrylic paper</em>, and <em>arylic paint paper</em>.</p></li>
+<li><p>It wouldn’t be practical to keep all the tokens from this whole dataset in our model, so we can filter down to only keep, in this case, the top 700 most-used tokens (after removing stop words).</p></li>
+<li><p>We need to decide on some kind of weighting for these tokens next, either something like term frequency or, what we used here, tf-idf.</p></li>
+</ul>
+<p>Next, it’s time to specify our model and put it together with our recipe into a workflow. To use a fast, compact sparse data structure, we will create a hardhat blueprint with <code>composition = "dgCMatrix"</code>.</p>
+<pre class="r"><code>sparse_bp &lt;- hardhat::default_recipe_blueprint(composition = &quot;dgCMatrix&quot;)
+
+lasso_spec &lt;- linear_reg(penalty = tune(), mixture = 1) %&gt;%
+  set_engine(&quot;glmnet&quot;)
+
+art_wf &lt;- workflow() %&gt;%
+  add_recipe(art_rec, blueprint = sparse_bp) %&gt;%
+  add_model(lasso_spec)
+
+art_wf</code></pre>
+<pre><code>== Workflow ====================================================================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ----------------------------------------------------------------
+5 Recipe Steps
+
+* step_tokenize()
+* step_stopwords()
+* step_ngram()
+* step_tokenfilter()
+* step_tfidf()
+
+-- Model -----------------------------------------------------------------------
+Linear Regression Model Specification (regression)
+
+Main Arguments:
+  penalty = tune()
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+<p>The only other piece we need to get ready for model fitting is values for the regularization penalty to try. The default goes down to very tiny penalties and I don’t think we’ll need that, so let’s change the <code>range()</code>.</p>
+<pre class="r"><code>lambda_grid &lt;- grid_regular(penalty(range = c(-3, 0)), levels = 20)</code></pre>
+<p>Now let’s tune the lasso model on the resampled datasets we created.</p>
+<pre class="r"><code>all_cores &lt;- parallelly::availableCores(omit = 1)
+all_cores</code></pre>
+<pre><code>system 
+    11 </code></pre>
+<pre class="r"><code>future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows
+
+lasso_rs &lt;- tune_grid(
+  art_wf,
+  resamples = art_folds,
+  grid = lambda_grid
+)
+
+lasso_rs</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["splits"],"name":[1],"type":["list"],"align":["right"]},{"label":["id"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".metrics"],"name":[3],"type":["list"],"align":["right"]},{"label":[".notes"],"name":[4],"type":["list"],"align":["right"]}],"data":[{"1":"<S3: vfold_split>","2":"Fold01","3":"<tibble[,5]>","4":"<tibble[,1]>"},{"1":"<S3: vfold_split>","2":"Fold02","3":"<tibble[,5]>","4":"<tibble[,1]>"},{"1":"<S3: vfold_split>","2":"Fold03","3":"<tibble[,5]>","4":"<tibble[,1]>"},{"1":"<S3: vfold_split>","2":"Fold04","3":"<tibble[,5]>","4":"<tibble[,1]>"},{"1":"<S3: vfold_split>","2":"Fold05","3":"<tibble[,5]>","4":"<tibble[,1]>"},{"1":"<S3: vfold_split>","2":"Fold06","3":"<tibble[,5]>","4":"<tibble[,1]>"},{"1":"<S3: vfold_split>","2":"Fold07","3":"<tibble[,5]>","4":"<tibble[,1]>"},{"1":"<S3: vfold_split>","2":"Fold08","3":"<tibble[,5]>","4":"<tibble[,1]>"},{"1":"<S3: vfold_split>","2":"Fold09","3":"<tibble[,5]>","4":"<tibble[,1]>"},{"1":"<S3: vfold_split>","2":"Fold10","3":"<tibble[,5]>","4":"<tibble[,1]>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>That was quite fast, because it’s a linear model and we used the sparse data structure.</p>
+<div id="evaluate-model" class="section level2">
+<h2>Evaluate model</h2>
+<p>Now we can do what we really came here for, which is to talk about how we can evaluate a model like this and see if it was a good idea. How do the results look?</p>
+<pre class="r"><code>autoplot(lasso_rs)</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-10-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>The best $ R^2 $ is around 0.80, and is a measure of how well the model fits the training data. The best RMSE is around 31.5 or so, and is on the scale of the original outcome, i.e. years. What are some of the best penalty values, in terms of RMSE?</p>
+<pre class="r"><code>show_best(lasso_rs, &quot;rmse&quot;)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["penalty"],"name":[1],"type":["dbl"],"align":["right"]},{"label":[".metric"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[3],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[5],"type":["int"],"align":["right"]},{"label":["std_err"],"name":[6],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"0.03792690","2":"rmse","3":"standard","4":"31.79179","5":"10","6":"0.1824157","7":"Preprocessor1_Model11"},{"1":"0.02636651","2":"rmse","3":"standard","4":"31.79217","5":"10","6":"0.1826874","7":"Preprocessor1_Model10"},{"1":"0.05455595","2":"rmse","3":"standard","4":"31.79591","5":"10","6":"0.1828629","7":"Preprocessor1_Model12"},{"1":"0.01832981","2":"rmse","3":"standard","4":"31.79680","5":"10","6":"0.1822312","7":"Preprocessor1_Model09"},{"1":"0.01274275","2":"rmse","3":"standard","4":"31.80454","5":"10","6":"0.1818293","7":"Preprocessor1_Model08"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>We can select the best penalty, and finalize the workflow with it.</p>
+<pre class="r"><code>best_rmse &lt;- select_best(lasso_rs, &quot;rmse&quot;)
+
+final_lasso &lt;- finalize_workflow(art_wf, best_rmse)
+final_lasso</code></pre>
+<pre><code>== Workflow ====================================================================
+Preprocessor: Recipe
+Model: linear_reg()
+
+-- Preprocessor ----------------------------------------------------------------
+5 Recipe Steps
+
+* step_tokenize()
+* step_stopwords()
+* step_ngram()
+* step_tokenfilter()
+* step_tfidf()
+
+-- Model -----------------------------------------------------------------------
+Linear Regression Model Specification (regression)
+
+Main Arguments:
+  penalty = 0.0379269019073225
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+<p>The function <code>last_fit()</code> fits this finalized lasso model one last time to the training data and evaluates one last time on the testing data. The metrics are computed on the testing data.</p>
+<pre class="r"><code>art_final &lt;- last_fit(final_lasso, art_split)
+collect_metrics(art_final)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"rmse","2":"standard","3":"31.5879168","4":"Preprocessor1_Model1"},{"1":"rsq","2":"standard","3":"0.8070862","4":"Preprocessor1_Model1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>We can use the fitted workflow in art_final to explore variable importance using the vip package.</p>
+<pre class="r"><code>art_vip &lt;- pull_workflow_fit(art_final$.workflow[[1]]) %&gt;%
+  vi()</code></pre>
+<p>another visualization, this time of variable importance in ascertaining the year of the artwork:</p>
+<pre class="r"><code>art_vip %&gt;%
+  group_by(Sign) %&gt;%
+  slice_max(abs(Importance), n = 20) %&gt;%
+  ungroup() %&gt;%
+  mutate(
+    Variable = str_remove(Variable, &quot;tfidf_medium_&quot;),
+    Importance = abs(Importance),
+    Variable = fct_reorder(Variable, Importance),
+    Sign = if_else(Sign == &quot;POS&quot;, &quot;in later art&quot;, &quot;in earlier art&quot;)
+  ) %&gt;%
+  ggplot(aes(Importance, Variable, fill = Sign)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~Sign, scales = &quot;free&quot;) +
+  labs(y = NULL)</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-15-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>This tells quite a story about what predictors are most important in pushing the prediction for an observation up or down the most.</p>
+<p>How well does the model actually do, though? Let’s plot true and predicted values for years, for the testing data.</p>
+<pre class="r"><code>collect_predictions(art_final) %&gt;%
+  ggplot(aes(year, .pred)) +
+  geom_abline(lty = 2, color = &quot;gray50&quot;, size = 1.2) +
+  geom_point(size = 1.5, alpha = 0.3) +
+  coord_fixed()</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-16-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>There are clumps of artwork that are predicted well at the high and low end, but notice that prominent horizontal line of observations that are all predicted to be created at about ~1900. Let’s dig more into misclassifications.</p>
+<pre class="r"><code>misclassified &lt;- collect_predictions(art_final) %&gt;%
+  bind_cols(art_test %&gt;% select(medium)) %&gt;%
+  filter(abs(year - .pred) &gt; 100)
+
+misclassified %&gt;%
+  arrange(year)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["id"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".pred"],"name":[2],"type":["dbl"],"align":["right"]},{"label":[".row"],"name":[3],"type":["int"],"align":["right"]},{"label":["year"],"name":[4],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[5],"type":["chr"],"align":["left"]},{"label":["medium"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"train/test split","2":"1883.145","3":"2","4":"1751","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1882.100","3":"5","4":"1751","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1896.056","3":"15","4":"1753","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1893.656","3":"21","4":"1754","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.984","3":"25","4":"1755","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.373","3":"27","4":"1756","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.745","3":"29","4":"1756","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1886.913","3":"31","4":"1757","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1881.887","3":"34","4":"1758","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1895.967","3":"41","4":"1759","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1908.059","3":"42","4":"1759","5":"Preprocessor1_Model1","6":"Oil paint on paper"},{"1":"train/test split","2":"1930.804","3":"44","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1904.281","3":"46","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1881.663","3":"47","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1899.751","3":"48","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.516","3":"52","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1888.149","3":"54","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1943.634","3":"67","4":"1761","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1889.919","3":"78","4":"1763","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.633","3":"85","4":"1764","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1886.147","3":"87","4":"1764","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1905.130","3":"93","4":"1765","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1901.105","3":"104","4":"1765","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1895.831","3":"115","4":"1766","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1941.577","3":"119","4":"1766","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1884.491","3":"126","4":"1768","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1921.215","3":"128","4":"1768","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.491","3":"139","4":"1769","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.633","3":"149","4":"1770","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1885.986","3":"153","4":"1770","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1923.185","3":"155","4":"1770","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1921.943","3":"156","4":"1770","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1870.843","3":"158","4":"1770","5":"Preprocessor1_Model1","6":"Watercolour, ink and graphite on paper"},{"1":"train/test split","2":"1899.945","3":"168","4":"1770","5":"Preprocessor1_Model1","6":"Graphite and crayon on paper"},{"1":"train/test split","2":"1898.756","3":"169","4":"1770","5":"Preprocessor1_Model1","6":"Watercolour and ink on paper"},{"1":"train/test split","2":"1879.896","3":"181","4":"1772","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1896.182","3":"186","4":"1772","5":"Preprocessor1_Model1","6":"Mezzotint and gouache on paper"},{"1":"train/test split","2":"1943.328","3":"190","4":"1773","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.115","3":"192","4":"1773","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1912.028","3":"197","4":"1773","5":"Preprocessor1_Model1","6":"Watercolour, graphite and ink on paper"},{"1":"train/test split","2":"1890.888","3":"203","4":"1774","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1952.873","3":"206","4":"1774","5":"Preprocessor1_Model1","6":"Enamel on metal"},{"1":"train/test split","2":"1899.500","3":"221","4":"1774","5":"Preprocessor1_Model1","6":"Watercolour and ink on paper"},{"1":"train/test split","2":"1890.398","3":"227","4":"1775","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.729","3":"228","4":"1775","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.633","3":"234","4":"1775","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1972.682","3":"248","4":"1775","5":"Preprocessor1_Model1","6":"Etching and aquatint on paper"},{"1":"train/test split","2":"1972.682","3":"249","4":"1775","5":"Preprocessor1_Model1","6":"Etching and aquatint on paper"},{"1":"train/test split","2":"1892.486","3":"257","4":"1776","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1888.975","3":"260","4":"1776","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.765","3":"275","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1916.732","3":"277","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1891.143","3":"280","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1892.615","3":"281","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1913.247","3":"285","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on paper"},{"1":"train/test split","2":"1891.723","3":"298","4":"1778","5":"Preprocessor1_Model1","6":"Ink, watercolour and gouache on paper"},{"1":"train/test split","2":"1909.053","3":"301","4":"1778","5":"Preprocessor1_Model1","6":"Oil paint on copper"},{"1":"train/test split","2":"1893.940","3":"306","4":"1778","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1921.556","3":"336","4":"1779","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1946.250","3":"339","4":"1779","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1946.250","3":"340","4":"1779","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1900.250","3":"350","4":"1780","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1886.262","3":"354","4":"1780","5":"Preprocessor1_Model1","6":"Oil paint on wood"},{"1":"train/test split","2":"1899.324","3":"366","4":"1780","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1906.262","3":"368","4":"1780","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1900.366","3":"403","4":"1782","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1945.595","3":"410","4":"1782","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1893.573","3":"421","4":"1783","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1902.923","3":"424","4":"1783","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1926.883","3":"463","4":"1785","5":"Preprocessor1_Model1","6":"Pastel on paper"},{"1":"train/test split","2":"1958.709","3":"483","4":"1785","5":"Preprocessor1_Model1","6":"Aquatint and etching on paper"},{"1":"train/test split","2":"1900.373","3":"577","4":"1786","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1921.873","3":"592","4":"1787","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1891.347","3":"605","4":"1788","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.888","3":"608","4":"1788","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1894.067","3":"610","4":"1788","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1906.747","3":"667","4":"1789","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1905.422","3":"673","4":"1789","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.776","3":"674","4":"1789","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.511","3":"715","4":"1790","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1905.668","3":"801","4":"1791","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1933.005","3":"804","4":"1791","5":"Preprocessor1_Model1","6":"Pastel on paper"},{"1":"train/test split","2":"1893.258","3":"908","4":"1792","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1911.187","3":"1002","4":"1793","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1942.117","3":"1184","4":"1794","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1924.948","3":"1369","4":"1795","5":"Preprocessor1_Model1","6":"Colour print, ink, tempera and watercolour on paper"},{"1":"train/test split","2":"1898.928","3":"1383","4":"1795","5":"Preprocessor1_Model1","6":"Watercolour and ink on paper"},{"1":"train/test split","2":"1907.529","3":"1385","4":"1795","5":"Preprocessor1_Model1","6":"Oil paint on paper"},{"1":"train/test split","2":"1908.170","3":"1394","4":"1795","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1942.049","3":"1404","4":"1795","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1906.021","3":"1966","4":"1797","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1899.819","3":"2574","4":"1798","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1934.496","3":"2575","4":"1798","5":"Preprocessor1_Model1","6":"Watercolour, gouache, ink and gold paint on paper"},{"1":"train/test split","2":"1903.463","3":"3145","4":"1799","5":"Preprocessor1_Model1","6":"Tempera on canvas mounted onto cardboard"},{"1":"train/test split","2":"1915.168","3":"3151","4":"1799","5":"Preprocessor1_Model1","6":"Tempera on iron"},{"1":"train/test split","2":"1906.468","3":"3152","4":"1799","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1910.098","3":"5553","4":"1805","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1915.305","3":"5585","4":"1805","5":"Preprocessor1_Model1","6":"Oil paint on paper on wood"},{"1":"train/test split","2":"1943.737","3":"5609","4":"1805","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1907.049","3":"5924","4":"1806","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1943.917","3":"5966","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1919.634","3":"6310","4":"1807","5":"Preprocessor1_Model1","6":"Oil paint on card"},{"1":"train/test split","2":"1942.943","3":"6321","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.945","3":"6325","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.982","3":"6330","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.945","3":"6338","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.946","3":"6344","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.946","3":"6356","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.168","3":"6359","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.945","3":"6360","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.039","3":"6371","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.963","3":"6375","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.925","3":"6377","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.963","3":"6381","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.943","3":"6382","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.962","3":"6390","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.962","3":"6397","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.962","3":"6403","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.037","3":"6408","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.036","3":"6413","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.890","3":"6417","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.037","3":"6422","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.038","3":"6423","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.001","3":"6425","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1913.782","3":"6970","4":"1808","5":"Preprocessor1_Model1","6":"Oil paint on board"},{"1":"train/test split","2":"1912.312","3":"7773","4":"1810","5":"Preprocessor1_Model1","6":"Oil paint on board"},{"1":"train/test split","2":"1914.199","3":"7782","4":"1810","5":"Preprocessor1_Model1","6":"Oil paint on board"},{"1":"train/test split","2":"1967.546","3":"7858","4":"1811","5":"Preprocessor1_Model1","6":"Print on paper"},{"1":"train/test split","2":"1942.055","3":"8578","4":"1812","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1921.331","3":"8586","4":"1812","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1943.291","3":"10003","4":"1814","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1919.047","3":"10018","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.257","3":"10021","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.277","3":"10022","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1919.811","3":"10024","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.373","3":"10027","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.393","3":"10028","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.450","3":"10035","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.449","3":"10038","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.450","3":"10039","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.449","3":"10042","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.348","3":"10048","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.350","3":"10050","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.369","3":"10052","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.368","3":"10054","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.371","3":"10056","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.411","3":"10058","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.411","3":"10059","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.451","3":"10060","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.433","3":"10061","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1919.560","3":"10062","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.064","3":"10068","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.529","3":"10194","4":"1815","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.529","3":"10196","4":"1815","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1943.530","3":"11262","4":"1816","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1919.494","3":"11272","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1919.495","3":"11277","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.455","3":"11278","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.508","3":"11280","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.671","3":"11289","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1943.472","3":"12709","4":"1818","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1920.139","3":"12718","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.418","3":"12719","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.613","3":"12720","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1922.002","3":"12730","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.710","3":"12733","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.729","3":"12735","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.653","3":"12739","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1943.863","3":"12749","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1941.708","3":"12761","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.570","3":"15439","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1945.347","3":"15464","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1944.051","3":"15474","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1944.114","3":"15486","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1944.095","3":"15494","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.712","3":"15521","4":"1820","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1944.147","3":"15981","4":"1820","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.765","3":"15987","4":"1820","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1920.634","3":"16004","4":"1820","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1927.879","3":"16297","4":"1821","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1983.959","3":"16581","4":"1822","5":"Preprocessor1_Model1","6":"Drypoint on paper"},{"1":"train/test split","2":"1943.493","3":"17989","4":"1824","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.318","3":"17991","4":"1824","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1968.821","3":"19005","4":"1825","5":"Preprocessor1_Model1","6":"Print on paper"},{"1":"train/test split","2":"1943.361","3":"19031","4":"1825","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1940.648","3":"20053","4":"1826","5":"Preprocessor1_Model1","6":"Ink and gouache on card"},{"1":"train/test split","2":"1943.419","3":"20087","4":"1826","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1935.627","3":"20685","4":"1827","5":"Preprocessor1_Model1","6":"Oil paint and metal leaf on canvas"},{"1":"train/test split","2":"1943.278","3":"20695","4":"1827","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.672","3":"20699","4":"1827","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.673","3":"20705","4":"1827","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.579","3":"20707","4":"1827","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.637","3":"21952","4":"1828","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.602","3":"21960","4":"1828","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.672","3":"21961","4":"1828","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.620","3":"24521","4":"1830","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.596","3":"24535","4":"1830","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.539","3":"26971","4":"1832","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.600","3":"26974","4":"1832","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1941.496","3":"29471","4":"1834","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1941.603","3":"30470","4":"1835","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1944.838","3":"30862","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.622","3":"30893","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.132","3":"30899","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.169","3":"30909","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.152","3":"30913","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.272","3":"30927","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.206","3":"30947","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.189","3":"30958","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.021","3":"30963","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1961.804","3":"32139","4":"1839","5":"Preprocessor1_Model1","6":"Pastel on paper. Verso: pastel on paper"},{"1":"train/test split","2":"1952.295","3":"34394","4":"1844","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1958.054","3":"35057","4":"1847","5":"Preprocessor1_Model1","6":"Graphite and oil pastel on paper"},{"1":"train/test split","2":"1968.102","3":"35097","4":"1850","5":"Preprocessor1_Model1","6":"Print on paper"},{"1":"train/test split","2":"1969.494","3":"35534","4":"1863","5":"Preprocessor1_Model1","6":"Print on paper"},{"1":"train/test split","2":"2020.639","3":"37345","4":"1915","5":"Preprocessor1_Model1","6":"Oil, lead, dust and varnish on glass"},{"1":"train/test split","2":"1828.898","3":"38296","4":"1929","5":"Preprocessor1_Model1","6":"Engraving on paper"},{"1":"train/test split","2":"1825.448","3":"38425","4":"1930","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1828.420","3":"38488","4":"1932","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1825.119","3":"38541","4":"1933","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1824.961","3":"38543","4":"1933","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1825.239","3":"38546","4":"1933","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1828.451","3":"38547","4":"1933","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1825.497","3":"38765","4":"1935","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1825.531","3":"38776","4":"1935","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1828.910","3":"38887","4":"1937","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1816.733","3":"38977","4":"1937","5":"Preprocessor1_Model1","6":"Graphite, watercolour and ink on paper"},{"1":"train/test split","2":"1825.005","3":"39009","4":"1937","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1824.678","3":"39097","4":"1938","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1828.196","3":"39215","4":"1940","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1827.533","3":"39326","4":"1941","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.361","3":"39364","4":"1942","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1824.866","3":"39420","4":"1942","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1832.152","3":"39509","4":"1944","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.313","3":"39521","4":"1944","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.313","3":"39522","4":"1944","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1823.847","3":"39644","4":"1946","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1838.166","3":"39885","4":"1949","5":"Preprocessor1_Model1","6":"Graphite, watercolour and gouache on paper"},{"1":"train/test split","2":"1850.030","3":"40111","4":"1951","5":"Preprocessor1_Model1","6":"Bronze and graphite on paper"},{"1":"train/test split","2":"1824.449","3":"40137","4":"1952","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1827.470","3":"40236","4":"1953","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1849.796","3":"40397","4":"1954","5":"Preprocessor1_Model1","6":"Graphite, ink and watercolour on paper"},{"1":"train/test split","2":"1840.076","3":"40443","4":"1954","5":"Preprocessor1_Model1","6":"Watercolour on paper"},{"1":"train/test split","2":"1832.374","3":"40448","4":"1954","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1828.967","3":"40553","4":"1955","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.199","3":"40566","4":"1955","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1824.969","3":"40695","4":"1956","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.453","3":"40816","4":"1957","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1824.443","3":"40822","4":"1958","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1827.888","3":"40965","4":"1958","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.888","3":"40969","4":"1958","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.910","3":"40981","4":"1959","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.275","3":"41311","4":"1961","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1835.245","3":"41427","4":"1961","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1824.666","3":"41493","4":"1961","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.386","3":"42393","4":"1965","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1855.093","3":"42409","4":"1966","5":"Preprocessor1_Model1","6":"Fat, copper oxide and graphite on paper"},{"1":"train/test split","2":"1826.706","3":"42652","4":"1966","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1831.408","3":"42657","4":"1966","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.591","3":"42658","4":"1966","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1833.583","3":"42674","4":"1966","5":"Preprocessor1_Model1","6":"Gouache and graphite on paper"},{"1":"train/test split","2":"1834.311","3":"43054","4":"1967","5":"Preprocessor1_Model1","6":"Watercolour on paper"},{"1":"train/test split","2":"1837.831","3":"43093","4":"1967","5":"Preprocessor1_Model1","6":"Graphite and chalk on paper"},{"1":"train/test split","2":"1825.969","3":"43347","4":"1968","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.553","3":"43375","4":"1968","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1825.494","3":"43382","4":"1968","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.515","3":"43383","4":"1968","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"2122.156","3":"43557","4":"1969","5":"Preprocessor1_Model1","6":"Screenprint on paper"},{"1":"train/test split","2":"1821.816","3":"43790","4":"1969","5":"Preprocessor1_Model1","6":"Etching and watercolour on paper"},{"1":"train/test split","2":"2071.574","3":"44422","4":"1970","5":"Preprocessor1_Model1","6":"Lithograph on paper"},{"1":"train/test split","2":"1829.877","3":"44561","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.929","3":"44562","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.082","3":"44578","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.039","3":"44585","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.043","3":"44586","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.037","3":"44587","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.064","3":"44588","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.365","3":"44597","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.365","3":"44598","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1828.155","3":"45225","4":"1972","5":"Preprocessor1_Model1","6":"Leaves, ink and graphite on paper"},{"1":"train/test split","2":"1833.936","3":"45814","4":"1972","5":"Preprocessor1_Model1","6":"Engraving on paper"},{"1":"train/test split","2":"1829.169","3":"45996","4":"1972","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1830.123","3":"45997","4":"1972","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.456","3":"45998","4":"1972","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.900","3":"46118","4":"1973","5":"Preprocessor1_Model1","6":"Etching and mezzotint on paper"},{"1":"train/test split","2":"1841.636","3":"46578","4":"1974","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1677.374","3":"46579","4":"1974","5":"Preprocessor1_Model1","6":"Chalk on blackboard"},{"1":"train/test split","2":"1867.474","3":"47069","4":"1975","5":"Preprocessor1_Model1","6":"Pastel and graphite on paper"},{"1":"train/test split","2":"1867.396","3":"47490","4":"1976","5":"Preprocessor1_Model1","6":"Pastel and graphite on paper"},{"1":"train/test split","2":"1835.971","3":"47955","4":"1976","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1834.810","3":"47966","4":"1976","5":"Preprocessor1_Model1","6":"Graphite, watercolour and gouache on paper"},{"1":"train/test split","2":"1834.828","3":"47967","4":"1976","5":"Preprocessor1_Model1","6":"Graphite, watercolour and gouache on paper"},{"1":"train/test split","2":"1867.464","3":"48312","4":"1977","5":"Preprocessor1_Model1","6":"Graphite and ink on paper"},{"1":"train/test split","2":"1853.990","3":"48868","4":"1979","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1846.419","3":"48982","4":"1979","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1850.692","3":"49195","4":"1980","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1850.692","3":"49200","4":"1980","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"2176.346","3":"49637","4":"1981","5":"Preprocessor1_Model1","6":"Metal, wood, glass, plastic and food"},{"1":"train/test split","2":"1849.446","3":"49928","4":"1982","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1845.633","3":"49969","4":"1982","5":"Preprocessor1_Model1","6":"Gravure and aquatint on paper"},{"1":"train/test split","2":"1838.106","3":"50216","4":"1983","5":"Preprocessor1_Model1","6":"Engraving on paper"},{"1":"train/test split","2":"1873.315","3":"50277","4":"1983","5":"Preprocessor1_Model1","6":"Graphite and ink on paper"},{"1":"train/test split","2":"1881.802","3":"50299","4":"1983","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1847.904","3":"50434","4":"1984","5":"Preprocessor1_Model1","6":"Graphite, ink and watercolour on paper"},{"1":"train/test split","2":"1826.802","3":"50436","4":"1984","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1849.672","3":"50723","4":"1986","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1869.729","3":"50814","4":"1986","5":"Preprocessor1_Model1","6":"Pastel and graphite on paper"},{"1":"train/test split","2":"1869.861","3":"50815","4":"1986","5":"Preprocessor1_Model1","6":"Pastel and graphite on paper"},{"1":"train/test split","2":"1846.038","3":"50821","4":"1986","5":"Preprocessor1_Model1","6":"Graphite, chalk and watercolour on paper"},{"1":"train/test split","2":"1825.703","3":"50842","4":"1986","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1810.180","3":"50972","4":"1987","5":"Preprocessor1_Model1","6":"Etching and engraving on paper"},{"1":"train/test split","2":"1886.430","3":"50991","4":"1987","5":"Preprocessor1_Model1","6":"Gouache on paper"},{"1":"train/test split","2":"1869.790","3":"51013","4":"1987","5":"Preprocessor1_Model1","6":"Ink and watercolour on paper"},{"1":"train/test split","2":"1840.269","3":"51029","4":"1987","5":"Preprocessor1_Model1","6":"Watercolour on paper"},{"1":"train/test split","2":"1850.975","3":"51051","4":"1988","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1846.567","3":"51112","4":"1988","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1871.299","3":"51442","4":"1990","5":"Preprocessor1_Model1","6":"Mezzotint on paper"},{"1":"train/test split","2":"1883.989","3":"51852","4":"1991","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1883.951","3":"51935","4":"1992","5":"Preprocessor1_Model1","6":"Drypoint and watercolour on paper"},{"1":"train/test split","2":"1846.827","3":"51940","4":"1992","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1842.947","3":"51945","4":"1992","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1887.499","3":"52054","4":"1993","5":"Preprocessor1_Model1","6":"Etching, aquatint and mezzotint on paper"},{"1":"train/test split","2":"1846.307","3":"52470","4":"1995","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1887.821","3":"52613","4":"1995","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1842.380","3":"52781","4":"1996","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1842.380","3":"52785","4":"1996","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1897.045","3":"53428","4":"1998","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1895.339","3":"53485","4":"1998","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1833.561","3":"53488","4":"1998","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1833.561","3":"53490","4":"1998","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1866.870","3":"53564","4":"1999","5":"Preprocessor1_Model1","6":"Mezzotint on paper"},{"1":"train/test split","2":"1867.341","3":"53567","4":"1999","5":"Preprocessor1_Model1","6":"Mezzotint on paper"},{"1":"train/test split","2":"1867.014","3":"53574","4":"1999","5":"Preprocessor1_Model1","6":"Mezzotint on paper"},{"1":"train/test split","2":"1864.326","3":"53711","4":"1999","5":"Preprocessor1_Model1","6":"Ink, graphite and watercolour on paper"},{"1":"train/test split","2":"1829.657","3":"53715","4":"1999","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1895.032","3":"53737","4":"2000","5":"Preprocessor1_Model1","6":"Wood engraving on paper"},{"1":"train/test split","2":"1832.773","3":"53896","4":"2000","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.239","3":"53912","4":"2000","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1857.479","3":"53913","4":"2000","5":"Preprocessor1_Model1","6":"Graphite and ink on paper. Verso: ink on paper"},{"1":"train/test split","2":"1879.216","3":"53919","4":"2000","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.474","3":"54231","4":"2001","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1898.418","3":"54358","4":"2002","5":"Preprocessor1_Model1","6":"Marble"},{"1":"train/test split","2":"1827.293","3":"54416","4":"2003","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1897.855","3":"54481","4":"2004","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1886.784","3":"54485","4":"2004","5":"Preprocessor1_Model1","6":"Graphite, coloured graphite and ink on paper"},{"1":"train/test split","2":"1833.288","3":"54812","4":"2007","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1832.857","3":"54875","4":"2008","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1899.718","3":"54886","4":"2008","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1880.297","3":"55001","4":"2010","5":"Preprocessor1_Model1","6":"Oil paint on wood"},{"1":"train/test split","2":"1834.666","3":"55041","4":"2011","5":"Preprocessor1_Model1","6":"Watercolour on paper"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>These are pieces of art that were created very early but predicted much later. In fact, notice that “Oil paint on canvas” also predicts to 1886 (with small influence of width and height features); that is about the mean or median of this whole dataset, that was one of the most common media, and this is how a linear model works!</p>
+<pre class="r"><code>misclassified %&gt;%
+  arrange(-year)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["id"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".pred"],"name":[2],"type":["dbl"],"align":["right"]},{"label":[".row"],"name":[3],"type":["int"],"align":["right"]},{"label":["year"],"name":[4],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[5],"type":["chr"],"align":["left"]},{"label":["medium"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"train/test split","2":"1834.666","3":"55041","4":"2011","5":"Preprocessor1_Model1","6":"Watercolour on paper"},{"1":"train/test split","2":"1880.297","3":"55001","4":"2010","5":"Preprocessor1_Model1","6":"Oil paint on wood"},{"1":"train/test split","2":"1832.857","3":"54875","4":"2008","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1899.718","3":"54886","4":"2008","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1833.288","3":"54812","4":"2007","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1897.855","3":"54481","4":"2004","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1886.784","3":"54485","4":"2004","5":"Preprocessor1_Model1","6":"Graphite, coloured graphite and ink on paper"},{"1":"train/test split","2":"1827.293","3":"54416","4":"2003","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1898.418","3":"54358","4":"2002","5":"Preprocessor1_Model1","6":"Marble"},{"1":"train/test split","2":"1890.474","3":"54231","4":"2001","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1895.032","3":"53737","4":"2000","5":"Preprocessor1_Model1","6":"Wood engraving on paper"},{"1":"train/test split","2":"1832.773","3":"53896","4":"2000","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.239","3":"53912","4":"2000","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1857.479","3":"53913","4":"2000","5":"Preprocessor1_Model1","6":"Graphite and ink on paper. Verso: ink on paper"},{"1":"train/test split","2":"1879.216","3":"53919","4":"2000","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1866.870","3":"53564","4":"1999","5":"Preprocessor1_Model1","6":"Mezzotint on paper"},{"1":"train/test split","2":"1867.341","3":"53567","4":"1999","5":"Preprocessor1_Model1","6":"Mezzotint on paper"},{"1":"train/test split","2":"1867.014","3":"53574","4":"1999","5":"Preprocessor1_Model1","6":"Mezzotint on paper"},{"1":"train/test split","2":"1864.326","3":"53711","4":"1999","5":"Preprocessor1_Model1","6":"Ink, graphite and watercolour on paper"},{"1":"train/test split","2":"1829.657","3":"53715","4":"1999","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1897.045","3":"53428","4":"1998","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1895.339","3":"53485","4":"1998","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1833.561","3":"53488","4":"1998","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1833.561","3":"53490","4":"1998","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1842.380","3":"52781","4":"1996","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1842.380","3":"52785","4":"1996","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1846.307","3":"52470","4":"1995","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1887.821","3":"52613","4":"1995","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1887.499","3":"52054","4":"1993","5":"Preprocessor1_Model1","6":"Etching, aquatint and mezzotint on paper"},{"1":"train/test split","2":"1883.951","3":"51935","4":"1992","5":"Preprocessor1_Model1","6":"Drypoint and watercolour on paper"},{"1":"train/test split","2":"1846.827","3":"51940","4":"1992","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1842.947","3":"51945","4":"1992","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1883.989","3":"51852","4":"1991","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1871.299","3":"51442","4":"1990","5":"Preprocessor1_Model1","6":"Mezzotint on paper"},{"1":"train/test split","2":"1850.975","3":"51051","4":"1988","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1846.567","3":"51112","4":"1988","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1810.180","3":"50972","4":"1987","5":"Preprocessor1_Model1","6":"Etching and engraving on paper"},{"1":"train/test split","2":"1886.430","3":"50991","4":"1987","5":"Preprocessor1_Model1","6":"Gouache on paper"},{"1":"train/test split","2":"1869.790","3":"51013","4":"1987","5":"Preprocessor1_Model1","6":"Ink and watercolour on paper"},{"1":"train/test split","2":"1840.269","3":"51029","4":"1987","5":"Preprocessor1_Model1","6":"Watercolour on paper"},{"1":"train/test split","2":"1849.672","3":"50723","4":"1986","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1869.729","3":"50814","4":"1986","5":"Preprocessor1_Model1","6":"Pastel and graphite on paper"},{"1":"train/test split","2":"1869.861","3":"50815","4":"1986","5":"Preprocessor1_Model1","6":"Pastel and graphite on paper"},{"1":"train/test split","2":"1846.038","3":"50821","4":"1986","5":"Preprocessor1_Model1","6":"Graphite, chalk and watercolour on paper"},{"1":"train/test split","2":"1825.703","3":"50842","4":"1986","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1847.904","3":"50434","4":"1984","5":"Preprocessor1_Model1","6":"Graphite, ink and watercolour on paper"},{"1":"train/test split","2":"1826.802","3":"50436","4":"1984","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1838.106","3":"50216","4":"1983","5":"Preprocessor1_Model1","6":"Engraving on paper"},{"1":"train/test split","2":"1873.315","3":"50277","4":"1983","5":"Preprocessor1_Model1","6":"Graphite and ink on paper"},{"1":"train/test split","2":"1881.802","3":"50299","4":"1983","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1849.446","3":"49928","4":"1982","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1845.633","3":"49969","4":"1982","5":"Preprocessor1_Model1","6":"Gravure and aquatint on paper"},{"1":"train/test split","2":"2176.346","3":"49637","4":"1981","5":"Preprocessor1_Model1","6":"Metal, wood, glass, plastic and food"},{"1":"train/test split","2":"1850.692","3":"49195","4":"1980","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1850.692","3":"49200","4":"1980","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1853.990","3":"48868","4":"1979","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1846.419","3":"48982","4":"1979","5":"Preprocessor1_Model1","6":"Aquatint on paper"},{"1":"train/test split","2":"1867.464","3":"48312","4":"1977","5":"Preprocessor1_Model1","6":"Graphite and ink on paper"},{"1":"train/test split","2":"1867.396","3":"47490","4":"1976","5":"Preprocessor1_Model1","6":"Pastel and graphite on paper"},{"1":"train/test split","2":"1835.971","3":"47955","4":"1976","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1834.810","3":"47966","4":"1976","5":"Preprocessor1_Model1","6":"Graphite, watercolour and gouache on paper"},{"1":"train/test split","2":"1834.828","3":"47967","4":"1976","5":"Preprocessor1_Model1","6":"Graphite, watercolour and gouache on paper"},{"1":"train/test split","2":"1867.474","3":"47069","4":"1975","5":"Preprocessor1_Model1","6":"Pastel and graphite on paper"},{"1":"train/test split","2":"1841.636","3":"46578","4":"1974","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1677.374","3":"46579","4":"1974","5":"Preprocessor1_Model1","6":"Chalk on blackboard"},{"1":"train/test split","2":"1826.900","3":"46118","4":"1973","5":"Preprocessor1_Model1","6":"Etching and mezzotint on paper"},{"1":"train/test split","2":"1828.155","3":"45225","4":"1972","5":"Preprocessor1_Model1","6":"Leaves, ink and graphite on paper"},{"1":"train/test split","2":"1833.936","3":"45814","4":"1972","5":"Preprocessor1_Model1","6":"Engraving on paper"},{"1":"train/test split","2":"1829.169","3":"45996","4":"1972","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1830.123","3":"45997","4":"1972","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.456","3":"45998","4":"1972","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"2071.574","3":"44422","4":"1970","5":"Preprocessor1_Model1","6":"Lithograph on paper"},{"1":"train/test split","2":"1829.877","3":"44561","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.929","3":"44562","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.082","3":"44578","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.039","3":"44585","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.043","3":"44586","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.037","3":"44587","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.064","3":"44588","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.365","3":"44597","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.365","3":"44598","4":"1970","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"2122.156","3":"43557","4":"1969","5":"Preprocessor1_Model1","6":"Screenprint on paper"},{"1":"train/test split","2":"1821.816","3":"43790","4":"1969","5":"Preprocessor1_Model1","6":"Etching and watercolour on paper"},{"1":"train/test split","2":"1825.969","3":"43347","4":"1968","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.553","3":"43375","4":"1968","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1825.494","3":"43382","4":"1968","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.515","3":"43383","4":"1968","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1834.311","3":"43054","4":"1967","5":"Preprocessor1_Model1","6":"Watercolour on paper"},{"1":"train/test split","2":"1837.831","3":"43093","4":"1967","5":"Preprocessor1_Model1","6":"Graphite and chalk on paper"},{"1":"train/test split","2":"1855.093","3":"42409","4":"1966","5":"Preprocessor1_Model1","6":"Fat, copper oxide and graphite on paper"},{"1":"train/test split","2":"1826.706","3":"42652","4":"1966","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1831.408","3":"42657","4":"1966","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.591","3":"42658","4":"1966","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1833.583","3":"42674","4":"1966","5":"Preprocessor1_Model1","6":"Gouache and graphite on paper"},{"1":"train/test split","2":"1826.386","3":"42393","4":"1965","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.275","3":"41311","4":"1961","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1835.245","3":"41427","4":"1961","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1824.666","3":"41493","4":"1961","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.910","3":"40981","4":"1959","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1824.443","3":"40822","4":"1958","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1827.888","3":"40965","4":"1958","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.888","3":"40969","4":"1958","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1826.453","3":"40816","4":"1957","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1824.969","3":"40695","4":"1956","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1828.967","3":"40553","4":"1955","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.199","3":"40566","4":"1955","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1849.796","3":"40397","4":"1954","5":"Preprocessor1_Model1","6":"Graphite, ink and watercolour on paper"},{"1":"train/test split","2":"1840.076","3":"40443","4":"1954","5":"Preprocessor1_Model1","6":"Watercolour on paper"},{"1":"train/test split","2":"1832.374","3":"40448","4":"1954","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.470","3":"40236","4":"1953","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1824.449","3":"40137","4":"1952","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1850.030","3":"40111","4":"1951","5":"Preprocessor1_Model1","6":"Bronze and graphite on paper"},{"1":"train/test split","2":"1838.166","3":"39885","4":"1949","5":"Preprocessor1_Model1","6":"Graphite, watercolour and gouache on paper"},{"1":"train/test split","2":"1823.847","3":"39644","4":"1946","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1832.152","3":"39509","4":"1944","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.313","3":"39521","4":"1944","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.313","3":"39522","4":"1944","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1829.361","3":"39364","4":"1942","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1824.866","3":"39420","4":"1942","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1827.533","3":"39326","4":"1941","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1828.196","3":"39215","4":"1940","5":"Preprocessor1_Model1","6":"Graphite and watercolour on paper"},{"1":"train/test split","2":"1824.678","3":"39097","4":"1938","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1828.910","3":"38887","4":"1937","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1816.733","3":"38977","4":"1937","5":"Preprocessor1_Model1","6":"Graphite, watercolour and ink on paper"},{"1":"train/test split","2":"1825.005","3":"39009","4":"1937","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1825.497","3":"38765","4":"1935","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1825.531","3":"38776","4":"1935","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1825.119","3":"38541","4":"1933","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1824.961","3":"38543","4":"1933","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1825.239","3":"38546","4":"1933","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1828.451","3":"38547","4":"1933","5":"Preprocessor1_Model1","6":"Chalk on paper"},{"1":"train/test split","2":"1828.420","3":"38488","4":"1932","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1825.448","3":"38425","4":"1930","5":"Preprocessor1_Model1","6":"Graphite on paper"},{"1":"train/test split","2":"1828.898","3":"38296","4":"1929","5":"Preprocessor1_Model1","6":"Engraving on paper"},{"1":"train/test split","2":"2020.639","3":"37345","4":"1915","5":"Preprocessor1_Model1","6":"Oil, lead, dust and varnish on glass"},{"1":"train/test split","2":"1969.494","3":"35534","4":"1863","5":"Preprocessor1_Model1","6":"Print on paper"},{"1":"train/test split","2":"1968.102","3":"35097","4":"1850","5":"Preprocessor1_Model1","6":"Print on paper"},{"1":"train/test split","2":"1958.054","3":"35057","4":"1847","5":"Preprocessor1_Model1","6":"Graphite and oil pastel on paper"},{"1":"train/test split","2":"1952.295","3":"34394","4":"1844","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1961.804","3":"32139","4":"1839","5":"Preprocessor1_Model1","6":"Pastel on paper. Verso: pastel on paper"},{"1":"train/test split","2":"1944.838","3":"30862","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.622","3":"30893","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.132","3":"30899","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.169","3":"30909","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.152","3":"30913","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.272","3":"30927","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.206","3":"30947","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.189","3":"30958","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.021","3":"30963","4":"1836","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1941.603","3":"30470","4":"1835","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1941.496","3":"29471","4":"1834","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.539","3":"26971","4":"1832","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.600","3":"26974","4":"1832","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.620","3":"24521","4":"1830","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.596","3":"24535","4":"1830","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.637","3":"21952","4":"1828","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.602","3":"21960","4":"1828","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.672","3":"21961","4":"1828","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1935.627","3":"20685","4":"1827","5":"Preprocessor1_Model1","6":"Oil paint and metal leaf on canvas"},{"1":"train/test split","2":"1943.278","3":"20695","4":"1827","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.672","3":"20699","4":"1827","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.673","3":"20705","4":"1827","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.579","3":"20707","4":"1827","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1940.648","3":"20053","4":"1826","5":"Preprocessor1_Model1","6":"Ink and gouache on card"},{"1":"train/test split","2":"1943.419","3":"20087","4":"1826","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1968.821","3":"19005","4":"1825","5":"Preprocessor1_Model1","6":"Print on paper"},{"1":"train/test split","2":"1943.361","3":"19031","4":"1825","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.493","3":"17989","4":"1824","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.318","3":"17991","4":"1824","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1983.959","3":"16581","4":"1822","5":"Preprocessor1_Model1","6":"Drypoint on paper"},{"1":"train/test split","2":"1927.879","3":"16297","4":"1821","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1943.712","3":"15521","4":"1820","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1944.147","3":"15981","4":"1820","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.765","3":"15987","4":"1820","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1920.634","3":"16004","4":"1820","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1943.863","3":"12749","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1941.708","3":"12761","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.570","3":"15439","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1945.347","3":"15464","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1944.051","3":"15474","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1944.114","3":"15486","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1944.095","3":"15494","4":"1819","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.472","3":"12709","4":"1818","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1920.139","3":"12718","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.418","3":"12719","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.613","3":"12720","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1922.002","3":"12730","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.710","3":"12733","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.729","3":"12735","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.653","3":"12739","4":"1818","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1943.530","3":"11262","4":"1816","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1919.494","3":"11272","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1919.495","3":"11277","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.455","3":"11278","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.508","3":"11280","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.671","3":"11289","4":"1816","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.529","3":"10194","4":"1815","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.529","3":"10196","4":"1815","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1943.291","3":"10003","4":"1814","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1919.047","3":"10018","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.257","3":"10021","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.277","3":"10022","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1919.811","3":"10024","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.373","3":"10027","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.393","3":"10028","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.450","3":"10035","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.449","3":"10038","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.450","3":"10039","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.449","3":"10042","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.348","3":"10048","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.350","3":"10050","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.369","3":"10052","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.368","3":"10054","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.371","3":"10056","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.411","3":"10058","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.411","3":"10059","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.451","3":"10060","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.433","3":"10061","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1919.560","3":"10062","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1920.064","3":"10068","4":"1814","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1942.055","3":"8578","4":"1812","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1921.331","3":"8586","4":"1812","5":"Preprocessor1_Model1","6":"Intaglio print on paper"},{"1":"train/test split","2":"1967.546","3":"7858","4":"1811","5":"Preprocessor1_Model1","6":"Print on paper"},{"1":"train/test split","2":"1912.312","3":"7773","4":"1810","5":"Preprocessor1_Model1","6":"Oil paint on board"},{"1":"train/test split","2":"1914.199","3":"7782","4":"1810","5":"Preprocessor1_Model1","6":"Oil paint on board"},{"1":"train/test split","2":"1913.782","3":"6970","4":"1808","5":"Preprocessor1_Model1","6":"Oil paint on board"},{"1":"train/test split","2":"1943.917","3":"5966","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1919.634","3":"6310","4":"1807","5":"Preprocessor1_Model1","6":"Oil paint on card"},{"1":"train/test split","2":"1942.943","3":"6321","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.945","3":"6325","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.982","3":"6330","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.945","3":"6338","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.946","3":"6344","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.946","3":"6356","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.168","3":"6359","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.945","3":"6360","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.039","3":"6371","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.963","3":"6375","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.925","3":"6377","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.963","3":"6381","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.943","3":"6382","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.962","3":"6390","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.962","3":"6397","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.962","3":"6403","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.037","3":"6408","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.036","3":"6413","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.890","3":"6417","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.037","3":"6422","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.038","3":"6423","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.001","3":"6425","4":"1807","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1907.049","3":"5924","4":"1806","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1910.098","3":"5553","4":"1805","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1915.305","3":"5585","4":"1805","5":"Preprocessor1_Model1","6":"Oil paint on paper on wood"},{"1":"train/test split","2":"1943.737","3":"5609","4":"1805","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1903.463","3":"3145","4":"1799","5":"Preprocessor1_Model1","6":"Tempera on canvas mounted onto cardboard"},{"1":"train/test split","2":"1915.168","3":"3151","4":"1799","5":"Preprocessor1_Model1","6":"Tempera on iron"},{"1":"train/test split","2":"1906.468","3":"3152","4":"1799","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1899.819","3":"2574","4":"1798","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1934.496","3":"2575","4":"1798","5":"Preprocessor1_Model1","6":"Watercolour, gouache, ink and gold paint on paper"},{"1":"train/test split","2":"1906.021","3":"1966","4":"1797","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1924.948","3":"1369","4":"1795","5":"Preprocessor1_Model1","6":"Colour print, ink, tempera and watercolour on paper"},{"1":"train/test split","2":"1898.928","3":"1383","4":"1795","5":"Preprocessor1_Model1","6":"Watercolour and ink on paper"},{"1":"train/test split","2":"1907.529","3":"1385","4":"1795","5":"Preprocessor1_Model1","6":"Oil paint on paper"},{"1":"train/test split","2":"1908.170","3":"1394","4":"1795","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1942.049","3":"1404","4":"1795","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1942.117","3":"1184","4":"1794","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1911.187","3":"1002","4":"1793","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1893.258","3":"908","4":"1792","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1905.668","3":"801","4":"1791","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1933.005","3":"804","4":"1791","5":"Preprocessor1_Model1","6":"Pastel on paper"},{"1":"train/test split","2":"1890.511","3":"715","4":"1790","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1906.747","3":"667","4":"1789","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1905.422","3":"673","4":"1789","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.776","3":"674","4":"1789","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1891.347","3":"605","4":"1788","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.888","3":"608","4":"1788","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1894.067","3":"610","4":"1788","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1921.873","3":"592","4":"1787","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.373","3":"577","4":"1786","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1926.883","3":"463","4":"1785","5":"Preprocessor1_Model1","6":"Pastel on paper"},{"1":"train/test split","2":"1958.709","3":"483","4":"1785","5":"Preprocessor1_Model1","6":"Aquatint and etching on paper"},{"1":"train/test split","2":"1893.573","3":"421","4":"1783","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1902.923","3":"424","4":"1783","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.366","3":"403","4":"1782","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1945.595","3":"410","4":"1782","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1900.250","3":"350","4":"1780","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1886.262","3":"354","4":"1780","5":"Preprocessor1_Model1","6":"Oil paint on wood"},{"1":"train/test split","2":"1899.324","3":"366","4":"1780","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1906.262","3":"368","4":"1780","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1921.556","3":"336","4":"1779","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1946.250","3":"339","4":"1779","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1946.250","3":"340","4":"1779","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1891.723","3":"298","4":"1778","5":"Preprocessor1_Model1","6":"Ink, watercolour and gouache on paper"},{"1":"train/test split","2":"1909.053","3":"301","4":"1778","5":"Preprocessor1_Model1","6":"Oil paint on copper"},{"1":"train/test split","2":"1893.940","3":"306","4":"1778","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.765","3":"275","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1916.732","3":"277","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1891.143","3":"280","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1892.615","3":"281","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1913.247","3":"285","4":"1777","5":"Preprocessor1_Model1","6":"Oil paint on paper"},{"1":"train/test split","2":"1892.486","3":"257","4":"1776","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1888.975","3":"260","4":"1776","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.398","3":"227","4":"1775","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.729","3":"228","4":"1775","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.633","3":"234","4":"1775","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1972.682","3":"248","4":"1775","5":"Preprocessor1_Model1","6":"Etching and aquatint on paper"},{"1":"train/test split","2":"1972.682","3":"249","4":"1775","5":"Preprocessor1_Model1","6":"Etching and aquatint on paper"},{"1":"train/test split","2":"1890.888","3":"203","4":"1774","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1952.873","3":"206","4":"1774","5":"Preprocessor1_Model1","6":"Enamel on metal"},{"1":"train/test split","2":"1899.500","3":"221","4":"1774","5":"Preprocessor1_Model1","6":"Watercolour and ink on paper"},{"1":"train/test split","2":"1943.328","3":"190","4":"1773","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1943.115","3":"192","4":"1773","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1912.028","3":"197","4":"1773","5":"Preprocessor1_Model1","6":"Watercolour, graphite and ink on paper"},{"1":"train/test split","2":"1879.896","3":"181","4":"1772","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1896.182","3":"186","4":"1772","5":"Preprocessor1_Model1","6":"Mezzotint and gouache on paper"},{"1":"train/test split","2":"1890.633","3":"149","4":"1770","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1885.986","3":"153","4":"1770","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1923.185","3":"155","4":"1770","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1921.943","3":"156","4":"1770","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1870.843","3":"158","4":"1770","5":"Preprocessor1_Model1","6":"Watercolour, ink and graphite on paper"},{"1":"train/test split","2":"1899.945","3":"168","4":"1770","5":"Preprocessor1_Model1","6":"Graphite and crayon on paper"},{"1":"train/test split","2":"1898.756","3":"169","4":"1770","5":"Preprocessor1_Model1","6":"Watercolour and ink on paper"},{"1":"train/test split","2":"1900.491","3":"139","4":"1769","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1884.491","3":"126","4":"1768","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1921.215","3":"128","4":"1768","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1895.831","3":"115","4":"1766","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1941.577","3":"119","4":"1766","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1905.130","3":"93","4":"1765","5":"Preprocessor1_Model1","6":"Ink on paper"},{"1":"train/test split","2":"1901.105","3":"104","4":"1765","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.633","3":"85","4":"1764","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1886.147","3":"87","4":"1764","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1889.919","3":"78","4":"1763","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1943.634","3":"67","4":"1761","5":"Preprocessor1_Model1","6":"Etching on paper"},{"1":"train/test split","2":"1930.804","3":"44","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1904.281","3":"46","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1881.663","3":"47","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1899.751","3":"48","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1890.516","3":"52","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1888.149","3":"54","4":"1760","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1895.967","3":"41","4":"1759","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1908.059","3":"42","4":"1759","5":"Preprocessor1_Model1","6":"Oil paint on paper"},{"1":"train/test split","2":"1881.887","3":"34","4":"1758","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1886.913","3":"31","4":"1757","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.373","3":"27","4":"1756","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.745","3":"29","4":"1756","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1900.984","3":"25","4":"1755","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1893.656","3":"21","4":"1754","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1896.056","3":"15","4":"1753","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1883.145","3":"2","4":"1751","5":"Preprocessor1_Model1","6":"Oil paint on canvas"},{"1":"train/test split","2":"1882.100","3":"5","4":"1751","5":"Preprocessor1_Model1","6":"Oil paint on canvas"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>These are pieces of art that were created very recently but predicted much earlier. Notice that they have used what we might think of as antique or traditional techniques.</p>
+<p>Now, finally, it is time for the residuals. We can compute residuals for the test set with the <code>augment()</code> function.</p>
+<pre class="r"><code>augment(art_final) %&gt;%
+  ggplot(aes(.pred, .resid)) +
+  geom_hline(yintercept = 0, lty = 2, color = &quot;gray50&quot;, size = 1.2) +
+  geom_point(size = 1.5, alpha = 0.3) +
+  geom_smooth(color = &quot;midnightblue&quot;) +
+  labs(title = &quot;Heterscedasticity in Regularized Regression&quot;)</code></pre>
+<p><img src="figure/2021_01_12_tidy_tuesday.Rmd/unnamed-chunk-19-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>This plot exhibits significant heteroscedasticity, with lower variance for recent artwork and higher variance for artwork in other time periods. If the model predicts a recent year, we can be more confident that it is right than if the model predicts an older year, and there is basically no time information in the fact that an artwork was created with a medium like oil on canvas. So is this model bad and not useful? It’s not great, for most goals I can think of, but it’s interesting to notice how much we can learn about our data even from such a model.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] glmnet_4.1-2       Matrix_1.3-4       vctrs_0.3.8        rlang_0.4.11      
+ [5] stopwords_2.2      vip_0.3.2          textrecipes_0.4.1  yardstick_0.0.8   
+ [9] workflowsets_0.1.0 workflows_0.2.3    tune_0.1.6         rsample_0.1.0     
+[13] recipes_0.1.16     parsnip_0.1.7.900  modeldata_0.1.1    infer_1.0.0       
+[17] dials_0.0.10       scales_1.1.1       broom_0.7.9        tidymodels_0.1.3  
+[21] tidytext_0.3.1     tweetrmd_0.0.9     countrycode_1.3.0  hrbrthemes_0.8.0  
+[25] treemapify_2.5.5   tidytuesdayR_1.0.1 forcats_0.5.1      stringr_1.4.0     
+[29] dplyr_1.0.7        purrr_0.3.4        readr_2.0.1        tidyr_1.1.3       
+[33] tibble_3.1.4       ggplot2_3.3.5      tidyverse_1.3.1    workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.2.1    systemfonts_1.0.2 
+  [4] selectr_0.4-2      plyr_1.8.6         splines_4.1.1     
+  [7] listenv_0.8.0      SnowballC_0.7.0    usethis_2.0.1     
+ [10] digest_0.6.27      foreach_1.5.1      htmltools_0.5.2   
+ [13] viridis_0.6.1      fansi_0.5.0        magrittr_2.0.1    
+ [16] tzdb_0.1.2         globals_0.14.0     ggfittext_0.9.1   
+ [19] modelr_0.1.8       gower_0.2.2        extrafont_0.17    
+ [22] vroom_1.5.5        R.utils_2.10.1     extrafontdb_1.0   
+ [25] hardhat_0.1.6      colorspace_2.0-2   rvest_1.0.1       
+ [28] textshaping_0.3.5  haven_2.4.3        xfun_0.26         
+ [31] crayon_1.4.1       jsonlite_1.7.2     survival_3.2-11   
+ [34] iterators_1.0.13   glue_1.4.2         gtable_0.3.0      
+ [37] ipred_0.9-12       R.cache_0.15.0     Rttf2pt1_1.3.9    
+ [40] shape_1.4.6        future.apply_1.8.1 DBI_1.1.1         
+ [43] Rcpp_1.0.7         viridisLite_0.4.0  bit_4.0.4         
+ [46] GPfit_1.0-8        lava_1.6.10        prodlim_2019.11.13
+ [49] httr_1.4.2         RColorBrewer_1.1-2 ellipsis_0.3.2    
+ [52] farver_2.1.0       R.methodsS3_1.8.1  pkgconfig_2.0.3   
+ [55] nnet_7.3-16        sass_0.4.0         dbplyr_2.1.1      
+ [58] utf8_1.2.2         here_1.0.1         labeling_0.4.2    
+ [61] tidyselect_1.1.1   DiceDesign_1.9     later_1.3.0       
+ [64] munsell_0.5.0      cellranger_1.1.0   tools_4.1.1       
+ [67] cachem_1.0.6       cli_3.0.1          generics_0.1.0    
+ [70] evaluate_0.14      fastmap_1.1.0      ragg_1.1.3        
+ [73] yaml_2.2.1         rematch2_2.1.2     bit64_4.0.5       
+ [76] knitr_1.34         fs_1.5.0           nlme_3.1-152      
+ [79] future_1.22.1      whisker_0.4        R.oo_1.24.0       
+ [82] xml2_1.3.2         tokenizers_0.2.1   compiler_4.1.1    
+ [85] rstudioapi_0.13    curl_4.3.2         reprex_2.0.1      
+ [88] lhs_1.1.3          bslib_0.3.0        stringi_1.7.4     
+ [91] highr_0.9          gdtools_0.2.3      lattice_0.20-44   
+ [94] styler_1.6.1       conflicted_1.0.4   pillar_1.6.2      
+ [97] lifecycle_1.0.1    furrr_0.2.3        jquerylib_0.1.4   
+[100] httpuv_1.6.3       R6_2.5.1           promises_1.2.0.1  
+[103] gridExtra_2.3      janeaustenr_0.1.5  parallelly_1.28.1 
+[106] codetools_0.2-18   MASS_7.3-54        assertthat_0.2.1  
+[109] rprojroot_2.0.2    withr_2.4.2        mgcv_1.8-36       
+[112] parallel_4.1.1     hms_1.1.0          grid_4.1.1        
+[115] rpart_4.1-15       timeDate_3043.102  class_7.3-19      
+[118] rmarkdown_2.11     git2r_0.28.0       pROC_1.18.0       
+[121] lubridate_1.7.10  </code></pre>
+</div>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlRhdGUgQXJ0IENvbGxlY3Rpb24iDQpkYXRlOiAiSmFudWFyeSAxMiwgMjAyMSINCm91dHB1dDoNCiAgd29ya2Zsb3dyOjp3Zmxvd19odG1sOg0KICAgIHRvYzogbm8NCiAgICBjb2RlX2ZvbGRpbmc6IGhpZGUNCiAgICBjb2RlX2Rvd25sb2FkOiB0cnVlDQogICAgZGZfcHJpbnQ6IHBhZ2VkDQplZGl0b3Jfb3B0aW9uczoNCiAgY2h1bmtfb3V0cHV0X3R5cGU6IGNvbnNvbGUNCi0tLQ0KDQpUaGUgZGF0YSB0aGlzIHdlZWsgY29tZXMgZnJvbSB0aGUgW1RhdGUgQXJ0IENvbGxlY3Rpb25zXShodHRwczovL2dpdGh1Yi5jb20vdGF0ZWdhbGxlcnkvY29sbGVjdGlvbikuIEl0IGNvbnNpc3RzIG9mIG1ldGFkYXRhIGZvciBhcm91bmQgNzAsMDAwIGFydHdvcmtzIHRoYXQgVGF0ZSBvd25zIG9yIGpvaW50bHkgb3ducyB3aXRoIHRoZSBOYXRpb25hbCBHYWxsZXJpZXMgb2YgU2NvdGxhbmQgYXMgcGFydCBvZiBbQVJUSVNUIFJPT01TXShodHRwOi8vd3d3LnRhdGUub3JnLnVrL2FydGlzdC1yb29tcykuIE1ldGFkYXRhIGZvciBhcm91bmQgMyw1MDAgYXNzb2NpYXRlZCBhcnRpc3RzIGlzIGFsc28gaW5jbHVkZWQuDQoNClRoZSBwb3N0IHdpbGwgYmUgaW4gdHdvIHNlY3Rpb25zLiBUaGUgZmlyc3QgaXMgYW4gZXhwbG9yYXRpb24gb2YgdGhlIGNvbnRlbnQgb2YgdGhlIGRhdGFzZXQgYW5kIGEgc3VibWlzc2lvbiB0byBUd2l0dGVyLiBUaGUgc2Vjb25kIGlzIGEgbWFjaGluZSBsZWFybmluZyBtb2RlbCB0aGF0IGhlbHBzIHVzIGJldHRlciB1bmRlcnN0YW5kIHRoZSBpbXBvcnRhbmNlIG9mIGNoYW5nZXMgaW4gYXJ0IG1hdGVyaWFscyBvdmVyIHRpbWUuDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Kc3VwcHJlc3NQYWNrYWdlU3RhcnR1cE1lc3NhZ2VzKHsNCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeSh0aWR5dHVlc2RheVIpDQpsaWJyYXJ5KHRyZWVtYXBpZnkpDQpsaWJyYXJ5KGhyYnJ0aGVtZXMpDQpsaWJyYXJ5KGNvdW50cnljb2RlKQ0KbGlicmFyeSh0d2VldHJtZCkNCg0KbGlicmFyeSh0aWR5dGV4dCkNCmxpYnJhcnkodGlkeW1vZGVscykNCmxpYnJhcnkodGV4dHJlY2lwZXMpDQpsaWJyYXJ5KHZpcCkNCn0pDQpleHRyYWZvbnQ6OmxvYWRmb250cyhxdWlldCA9IFRSVUUpDQoNCnNvdXJjZShoZXJlOjpoZXJlKCJjb2RlIiwiX2NvbW1vbi5SIiksDQogICAgICAgdmVyYm9zZSA9IEZBTFNFLA0KICAgICAgIGxvY2FsID0ga25pdHI6OmtuaXRfZ2xvYmFsKCkpDQoNCnRoZW1lX3NldCh0aGVtZV9qaW0oYmFzZV9zaXplID0gOSkpDQoNCmBgYA0KDQojIyBMb2FkIHRoZSB3ZWVrbHkgRGF0YQ0KDQpEb3dubG9hZCBmcm9tIHRoZSBSNERTIGdpdGh1YiB3ZWJzaXRlIGFuZCBtYWtlIGF2YWlsYWJsZSBpbiB0aGUgYHR0YCBvYmplY3QuDQoNCmBgYHtyIExvYWR9DQoNCnR0IDwtIHR0X2xvYWQoIjIwMjEtMDEtMTIiKQ0KDQpgYGANCg0KDQpgYGB7ciBwcmVwYXJlfQ0KYXJ0IDwtIHR0JGFydHdvcmsgJT4lIA0KICByZW5hbWUoYXJ0X3VybCA9IHVybCkgJT4lIA0KICBsZWZ0X2pvaW4odHQkYXJ0aXN0cywgYnkgPSBjKCJhcnRpc3RJZCIgPSAiaWQiKSkgJT4lIA0KICBtdXRhdGUoZ2VuZGVyID0gZmFjdG9yKGdlbmRlciksDQogICAgICAgICBvbiA9IHN0cl9zdWIobWVkaXVtLCBzdGFydCA9IHN0cl9sb2NhdGUobWVkaXVtLCAiIG9uICIpWywyXSkpIA0KDQpgYGANCg0KDQojIyBWaXN1YWxpemUNCg0KV2hhdCBpcyB0aGUgZGlzdHJpYnV0aW9uIG9mIGFydHdvcmsgb3ZlciBjcmVhdGlvbiB5ZWFyPw0KDQpgYGB7cn0NCmFydCAlPiUNCiAgZ2dwbG90KGFlcyh5ZWFyKSkgKw0KICBnZW9tX2hpc3RvZ3JhbShhbHBoYSA9IDAuOCkgKw0KICBsYWJzKHRpdGxlID0gIlRoZSBUYXRlIENvbGxlY3Rpb24gYWNxdWlzaXRpb25zIGFyZSBiaW1vZGFsbHkgZGlzdHJpYnV0ZWQgYWNyb3NzIHllYXJzIikNCmBgYA0KDQpBIHRyZWVtYXAgb2YgbWFqb3IgVGF0ZSBhcnRpc3RzDQoNCmBgYHtyIFZpc3VhbGl6ZSwgZmlnLmFzcD0xfQ0KDQphcnQgJT4lIA0KICBtdXRhdGUoYmlydGhEZWNhZGUgPSB5ZWFyT2ZCaXJ0aCAlLyUgMTAgKiAxMCkgJT4lIA0KICBjb3VudChhcnRpc3QsIGJpcnRoRGVjYWRlKSAlPiUgDQogIHNsaWNlX21heChvcmRlcl9ieSA9IG4sIG4gPSA2MCkgJT4lIA0KICBmaWx0ZXIoIWlzLm5hKGJpcnRoRGVjYWRlKSwgYXJ0aXN0ICE9ICJUdXJuZXIsIEpvc2VwaCBNYWxsb3JkIFdpbGxpYW0iKSAlPiUgDQogIGdncGxvdChhZXMoYXJlYSA9IG4sIGZpbGwgPSBiaXJ0aERlY2FkZSwgbGFiZWwgPSBhcnRpc3QsIHN1Ymdyb3VwID0gYmlydGhEZWNhZGUpKSArDQogIGdlb21fdHJlZW1hcCgpICsNCiAgZ2VvbV90cmVlbWFwX3N1Ymdyb3VwX2JvcmRlcigpICsNCiAgZ2VvbV90cmVlbWFwX3RleHQoY29sb3IgPSAiYmxhY2siLCBwbGFjZSA9ICJ0b3AiLCByZWZsb3cgPSBUUlVFKSArDQogIGdlb21fdHJlZW1hcF9zdWJncm91cF90ZXh0KGNvbG9yID0gImdyYXk0MCIsIHBsYWNlID0gImJvdHRvbXJpZ2h0IiwgDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZvbnRmYWNlID0gIml0YWxpYyIsIG1pbi5zaXplID0gMCwgYWxwaGEgPSAwLjMpICsNCiAgc2NhbGVfZmlsbF9mZXJtZW50ZXIocGFsZXR0ZSA9ICJZbE9yUmQiLCBkaXJlY3Rpb24gPSAtMSwNCiAgICAgICAgICAgICAgICAgICAgICAgZ3VpZGUgPSAiY29sb3JzdGVwcyIpICsNCiAgbGFicyhmaWxsID0gTlVMTCwgdGl0bGUgPSAiVGhlIFRhdGUgQ29sbGVjdGlvbidzIEFydGlzdHMgYnkgYmlydGggeWVhciAoTm9uLVR1cm5lcikiLA0KICAgICAgIHN1YnRpdGxlID0gIkJvcm4gaW4gMTc3NSwgSm9zZXBoIE1hbGxvcmQgV2lsbGlhbSBUdXJuZXIncyB3b3JrcyBhY2NvdW50IGZvciA1NyUgYWxvbmUuIFRoZSBzaXplIG9mXG50aGUgYm94IGNvcnJlc3BvbmRzIHRvIHRoZSBudW1iZXIgb2YgcGllY2VzIG9mIGVhY2ggbm9uLVR1cm5lciBhcnRpc3QgaW4gdGhlIGNvbGxlY3Rpb24uIiwNCiAgICAgICBjYXB0aW9uID0gIkRhdGEgU291cmNlOiBUYXRlIEFydCBDb2xsZWN0aW9uIikNCiAgDQpgYGANCg0KQW5kIHRoZSBUaWR5dHVlc2RheSB0d2VldDoNCg0KYGBge3IgZWNobz1GQUxTRX0NCnR3ZWV0X2VtYmVkKCdodHRwczovL3R3aXR0ZXIuY29tL2ppbV9ncnVtYW4vc3RhdHVzLzEzNDkxNTA1NDA2MTAwNzY2NzMnKQ0KYGBgDQoNCi0tLS0NCiMgQSBtYWNoaW5lIGxlYXJuaW5nIG1vZGVsIA0KDQpMZXTigJlzIGZvY3VzIG9uIGp1c3QgYSBjb3VwbGUgb2YgdmFyaWFibGVzIGZvciBtb2RlbGluZywgYW5kIGF0IGxlYXN0IGZvY3VzIG9uIGp1c3QgdGhlIGFydCBjcmVhdGVkIGFmdGVyIDE3NTAuDQoNCmBgYHtyfQ0KdGF0ZV9kZiA8LSBhcnQgJT4lDQogIGZpbHRlcih5ZWFyID4gMTc1MCkgJT4lDQogIHNlbGVjdCh5ZWFyLCBtZWRpdW0sIHdpZHRoLCBoZWlnaHQpICU+JQ0KICBuYS5vbWl0KCkgJT4lDQogIGFycmFuZ2UoeWVhcikNCmBgYA0KDQpXaGF0IGFyZSB0aGUgbW9zdCBjb21tb24gd29yZHMgdXNlZCBpbiBkZXNjcmliaW5nIHRoZSBtZWRpYT8NCg0KYGBge3J9DQp0YXRlX2RmICU+JSANCiAgdW5uZXN0X3Rva2Vucyh3b3JkLCBtZWRpdW0pICU+JSANCiAgY291bnQod29yZCwgc29ydCA9IFRSVUUpDQpgYGANCg0KTG90cyBvZiBwYXBlciwgZ3JhcGhpdGUsIG9pbCBhbmQgd2F0ZXJjb2xvdXIgcGFpbnRzLg0KDQpXZSBjYW4gc3RhcnQgYnkgc3BsaXR0aW5nIG91ciBkYXRhIGludG8gdHJhaW5pbmcgYW5kIHRlc3Rpbmcgc2V0cywgYW5kIGNyZWF0aW5nIHJlc2FtcGxlcy4NCg0KYGBge3J9DQphcnRfc3BsaXQgPC0gaW5pdGlhbF9zcGxpdCh0YXRlX2RmLCBzdHJhdGEgPSB5ZWFyKQ0KYXJ0X3RyYWluIDwtIHRyYWluaW5nKGFydF9zcGxpdCkNCmFydF90ZXN0IDwtIHRlc3RpbmcoYXJ0X3NwbGl0KQ0KDQphcnRfZm9sZHMgPC0gdmZvbGRfY3YoYXJ0X3RyYWluLCBzdHJhdGEgPSB5ZWFyKQ0KYGBgDQoNCk5leHQsIGxldOKAmXMgcHJlcHJvY2VzcyB0byBnZXQgaXQgcmVhZHkgZm9yIG1vZGVsaW5nLiBXZSBjYW4gdXNlIHNwZWNpYWxpemVkIHN0ZXBzIGZyb20gYHRleHRyZWNpcGVzYCwgYWxvbmcgd2l0aCB0aGUgZ2VuZXJhbCByZWNpcGUgc3RlcHMuDQoNCmBgYHtyfQ0KYXJ0X3JlYyA8LSByZWNpcGUoeWVhciB+IC4sIGRhdGEgPSBhcnRfdHJhaW4pICU+JQ0KICBzdGVwX3Rva2VuaXplKG1lZGl1bSkgJT4lDQogIHN0ZXBfc3RvcHdvcmRzKG1lZGl1bSkgJT4lDQojICBzdGVwX3N0ZW0obWVkaXVtKSAlPiUNCiAgc3RlcF9uZ3JhbShtZWRpdW0sIG51bV90b2tlbnMgPSAzLCBtaW5fbnVtX3Rva2VucyA9IDEpICU+JSANCiAgc3RlcF90b2tlbmZpbHRlcihtZWRpdW0sIG1heF90b2tlbnMgPSA3MDApICU+JQ0KICBzdGVwX3RmaWRmKG1lZGl1bSkgICAjIGEgbm9ybWFsaXplZCBpbnB1dCBpcyByZXF1aXJlZCBmb3IgcmVndWxhcml6ZWQgcmVncmVzc2lvbg0KDQphcnRfcmVjDQpgYGANCg0KTGV04oCZcyB3YWxrIHRocm91Z2ggdGhlIHN0ZXBzIGluIHRoaXMgcmVjaXBlLCB3aGljaCBhcmUgd2hhdCBhcmUgc2Vuc2libGUgZGVmYXVsdHMgZm9yIHRyYWluaW5nIGEgbW9kZWwgd2l0aCB0ZXh0IGZlYXR1cmVzLg0KDQotIEZpcnN0LCB3ZSBtdXN0IHRlbGwgdGhlIGByZWNpcGUoKWAgd2hhdCBvdXIgbW9kZWwgaXMgZ29pbmcgdG8gYmUgKHVzaW5nIGEgZm9ybXVsYSBoZXJlKSBhbmQgd2hhdCBkYXRhIHdlIGFyZSB1c2luZy4NCg0KLSBOZXh0LCB3ZSB0b2tlbml6ZSBvdXIgdGV4dCwgd2l0aCB0aGUgZGVmYXVsdCB0b2tlbml6YXRpb24gaW50byBzaW5nbGUgd29yZHMuDQoNCi0gTmV4dCwgd2UgcmVtb3ZlIHN0b3Agd29yZHMgKGp1c3QgdGhlIGRlZmF1bHQgc2V0LCB0byByZW1vdmUg4oCcb27igJ0gYW5kIOKAnGFuZOKAnSkuDQoNCi0gTmV4dCwgd2Ugc3RlbSB3b3JkcyB0byBhIHNpbWlsYXIgYmFzZSB3b3JkLiBJbiB0aGlzIGNhc2UsIEkgYW0gZ29pbmcgdG8gbGVhdmUgc3RlbW1pbmcgb3V0LCBhcyB0aGUgbWVkaXVtIHdvcmRzIGFyZSBtb3N0bHkgdGVjaG5pY2FsIG1hdGVyaWFscy4NCg0KLSBOZXh0LCB3ZSBmb3JtIG5ncmFtIGNvbWJpbmF0aW9ucyBiYWNrLiBJbiB0aGlzIGNhc2UsICJhY3J5bGljIHBhaW50IHBhcGVyIiByZXN1bHRzIGluIGZlYXR1cmVzIGZvciAqYWNyeWxpYyosICpwYWludCosICpwYXBlciosICphY3J5bGljIHBhaW50KiwgKnBhaW50IHBhcGVyKiwgKmFjcnlsaWMgcGFwZXIqLCBhbmQgKmFyeWxpYyBwYWludCBwYXBlciouDQoNCi0gSXQgd291bGRu4oCZdCBiZSBwcmFjdGljYWwgdG8ga2VlcCBhbGwgdGhlIHRva2VucyBmcm9tIHRoaXMgd2hvbGUgZGF0YXNldCBpbiBvdXIgbW9kZWwsIHNvIHdlIGNhbiBmaWx0ZXIgZG93biB0byBvbmx5IGtlZXAsIGluIHRoaXMgY2FzZSwgdGhlIHRvcCA3MDAgbW9zdC11c2VkIHRva2VucyAoYWZ0ZXIgcmVtb3Zpbmcgc3RvcCB3b3JkcykuDQoNCi0gV2UgbmVlZCB0byBkZWNpZGUgb24gc29tZSBraW5kIG9mIHdlaWdodGluZyBmb3IgdGhlc2UgdG9rZW5zIG5leHQsIGVpdGhlciBzb21ldGhpbmcgbGlrZSB0ZXJtIGZyZXF1ZW5jeSBvciwgd2hhdCB3ZSB1c2VkIGhlcmUsIHRmLWlkZi4NCg0KTmV4dCwgaXTigJlzIHRpbWUgdG8gc3BlY2lmeSBvdXIgbW9kZWwgYW5kIHB1dCBpdCB0b2dldGhlciB3aXRoIG91ciByZWNpcGUgaW50byBhIHdvcmtmbG93LiBUbyB1c2UgYSBmYXN0LCBjb21wYWN0IHNwYXJzZSBkYXRhIHN0cnVjdHVyZSwgd2Ugd2lsbCBjcmVhdGUgYSBoYXJkaGF0IGJsdWVwcmludCB3aXRoIGBjb21wb3NpdGlvbiA9ICJkZ0NNYXRyaXgiYC4NCg0KYGBge3J9DQpzcGFyc2VfYnAgPC0gaGFyZGhhdDo6ZGVmYXVsdF9yZWNpcGVfYmx1ZXByaW50KGNvbXBvc2l0aW9uID0gImRnQ01hdHJpeCIpDQoNCmxhc3NvX3NwZWMgPC0gbGluZWFyX3JlZyhwZW5hbHR5ID0gdHVuZSgpLCBtaXh0dXJlID0gMSkgJT4lDQogIHNldF9lbmdpbmUoImdsbW5ldCIpDQoNCmFydF93ZiA8LSB3b3JrZmxvdygpICU+JQ0KICBhZGRfcmVjaXBlKGFydF9yZWMsIGJsdWVwcmludCA9IHNwYXJzZV9icCkgJT4lDQogIGFkZF9tb2RlbChsYXNzb19zcGVjKQ0KDQphcnRfd2YNCmBgYA0KDQpUaGUgb25seSBvdGhlciBwaWVjZSB3ZSBuZWVkIHRvIGdldCByZWFkeSBmb3IgbW9kZWwgZml0dGluZyBpcyB2YWx1ZXMgZm9yIHRoZSByZWd1bGFyaXphdGlvbiBwZW5hbHR5IHRvIHRyeS4gVGhlIGRlZmF1bHQgZ29lcyBkb3duIHRvIHZlcnkgdGlueSBwZW5hbHRpZXMgYW5kIEkgZG9u4oCZdCB0aGluayB3ZeKAmWxsIG5lZWQgdGhhdCwgc28gbGV04oCZcyBjaGFuZ2UgdGhlIGByYW5nZSgpYC4NCg0KYGBge3J9DQpsYW1iZGFfZ3JpZCA8LSBncmlkX3JlZ3VsYXIocGVuYWx0eShyYW5nZSA9IGMoLTMsIDApKSwgbGV2ZWxzID0gMjApDQpgYGANCg0KTm93IGxldOKAmXMgdHVuZSB0aGUgbGFzc28gbW9kZWwgb24gdGhlIHJlc2FtcGxlZCBkYXRhc2V0cyB3ZSBjcmVhdGVkLg0KDQpgYGB7cn0NCmFsbF9jb3JlcyA8LSBwYXJhbGxlbGx5OjphdmFpbGFibGVDb3JlcyhvbWl0ID0gMSkNCmFsbF9jb3Jlcw0KDQpmdXR1cmU6OnBsYW4oIm11bHRpc2Vzc2lvbiIsIHdvcmtlcnMgPSBhbGxfY29yZXMpICMgb24gV2luZG93cw0KDQpsYXNzb19ycyA8LSB0dW5lX2dyaWQoDQogIGFydF93ZiwNCiAgcmVzYW1wbGVzID0gYXJ0X2ZvbGRzLA0KICBncmlkID0gbGFtYmRhX2dyaWQNCikNCg0KbGFzc29fcnMNCmBgYA0KDQpUaGF0IHdhcyBxdWl0ZSBmYXN0LCBiZWNhdXNlIGl04oCZcyBhIGxpbmVhciBtb2RlbCBhbmQgd2UgdXNlZCB0aGUgc3BhcnNlIGRhdGEgc3RydWN0dXJlLg0KDQojIyBFdmFsdWF0ZSBtb2RlbA0KDQpOb3cgd2UgY2FuIGRvIHdoYXQgd2UgcmVhbGx5IGNhbWUgaGVyZSBmb3IsIHdoaWNoIGlzIHRvIHRhbGsgYWJvdXQgaG93IHdlIGNhbiBldmFsdWF0ZSBhIG1vZGVsIGxpa2UgdGhpcyBhbmQgc2VlIGlmIGl0IHdhcyBhIGdvb2QgaWRlYS4gSG93IGRvIHRoZSByZXN1bHRzIGxvb2s/DQoNCmBgYHtyfQ0KYXV0b3Bsb3QobGFzc29fcnMpDQpgYGANCg0KVGhlIGJlc3QgJCBSXjIgJCBpcyBhcm91bmQgMC44MCwgYW5kIGlzIGEgbWVhc3VyZSBvZiBob3cgd2VsbCB0aGUgbW9kZWwgZml0cyB0aGUgdHJhaW5pbmcgZGF0YS4gVGhlIGJlc3QgUk1TRSBpcyBhcm91bmQgMzEuNSBvciBzbywgYW5kIGlzIG9uIHRoZSBzY2FsZSBvZiB0aGUgb3JpZ2luYWwgb3V0Y29tZSwgaS5lLiB5ZWFycy4gV2hhdCBhcmUgc29tZSBvZiB0aGUgYmVzdCBwZW5hbHR5IHZhbHVlcywgaW4gdGVybXMgb2YgUk1TRT8NCg0KYGBge3J9DQpzaG93X2Jlc3QobGFzc29fcnMsICJybXNlIikNCmBgYA0KDQpXZSBjYW4gc2VsZWN0IHRoZSBiZXN0IHBlbmFsdHksIGFuZCBmaW5hbGl6ZSB0aGUgd29ya2Zsb3cgd2l0aCBpdC4NCg0KYGBge3J9DQpiZXN0X3Jtc2UgPC0gc2VsZWN0X2Jlc3QobGFzc29fcnMsICJybXNlIikNCg0KZmluYWxfbGFzc28gPC0gZmluYWxpemVfd29ya2Zsb3coYXJ0X3dmLCBiZXN0X3Jtc2UpDQpmaW5hbF9sYXNzbw0KYGBgDQoNClRoZSBmdW5jdGlvbiBgbGFzdF9maXQoKWAgZml0cyB0aGlzIGZpbmFsaXplZCBsYXNzbyBtb2RlbCBvbmUgbGFzdCB0aW1lIHRvIHRoZSB0cmFpbmluZyBkYXRhIGFuZCBldmFsdWF0ZXMgb25lIGxhc3QgdGltZSBvbiB0aGUgdGVzdGluZyBkYXRhLiBUaGUgbWV0cmljcyBhcmUgY29tcHV0ZWQgb24gdGhlIHRlc3RpbmcgZGF0YS4NCg0KYGBge3J9DQphcnRfZmluYWwgPC0gbGFzdF9maXQoZmluYWxfbGFzc28sIGFydF9zcGxpdCkNCmNvbGxlY3RfbWV0cmljcyhhcnRfZmluYWwpDQpgYGANCg0KV2UgY2FuIHVzZSB0aGUgZml0dGVkIHdvcmtmbG93IGluIGFydF9maW5hbCB0byBleHBsb3JlIHZhcmlhYmxlIGltcG9ydGFuY2UgdXNpbmcgdGhlIHZpcCBwYWNrYWdlLg0KDQpgYGB7cn0NCmFydF92aXAgPC0gcHVsbF93b3JrZmxvd19maXQoYXJ0X2ZpbmFsJC53b3JrZmxvd1tbMV1dKSAlPiUNCiAgdmkoKQ0KYGBgDQoNCmFub3RoZXIgdmlzdWFsaXphdGlvbiwgdGhpcyB0aW1lIG9mIHZhcmlhYmxlIGltcG9ydGFuY2UgaW4gYXNjZXJ0YWluaW5nIHRoZSB5ZWFyIG9mIHRoZSBhcnR3b3JrOg0KDQpgYGB7cn0NCmFydF92aXAgJT4lDQogIGdyb3VwX2J5KFNpZ24pICU+JQ0KICBzbGljZV9tYXgoYWJzKEltcG9ydGFuY2UpLCBuID0gMjApICU+JQ0KICB1bmdyb3VwKCkgJT4lDQogIG11dGF0ZSgNCiAgICBWYXJpYWJsZSA9IHN0cl9yZW1vdmUoVmFyaWFibGUsICJ0ZmlkZl9tZWRpdW1fIiksDQogICAgSW1wb3J0YW5jZSA9IGFicyhJbXBvcnRhbmNlKSwNCiAgICBWYXJpYWJsZSA9IGZjdF9yZW9yZGVyKFZhcmlhYmxlLCBJbXBvcnRhbmNlKSwNCiAgICBTaWduID0gaWZfZWxzZShTaWduID09ICJQT1MiLCAiaW4gbGF0ZXIgYXJ0IiwgImluIGVhcmxpZXIgYXJ0IikNCiAgKSAlPiUNCiAgZ2dwbG90KGFlcyhJbXBvcnRhbmNlLCBWYXJpYWJsZSwgZmlsbCA9IFNpZ24pKSArDQogIGdlb21fY29sKHNob3cubGVnZW5kID0gRkFMU0UpICsNCiAgZmFjZXRfd3JhcCh+U2lnbiwgc2NhbGVzID0gImZyZWUiKSArDQogIGxhYnMoeSA9IE5VTEwpDQpgYGANCg0KVGhpcyB0ZWxscyBxdWl0ZSBhIHN0b3J5IGFib3V0IHdoYXQgcHJlZGljdG9ycyBhcmUgbW9zdCBpbXBvcnRhbnQgaW4gcHVzaGluZyB0aGUgcHJlZGljdGlvbiBmb3IgYW4gb2JzZXJ2YXRpb24gdXAgb3IgZG93biB0aGUgbW9zdC4NCg0KSG93IHdlbGwgZG9lcyB0aGUgbW9kZWwgYWN0dWFsbHkgZG8sIHRob3VnaD8gTGV04oCZcyBwbG90IHRydWUgYW5kIHByZWRpY3RlZCB2YWx1ZXMgZm9yIHllYXJzLCBmb3IgdGhlIHRlc3RpbmcgZGF0YS4NCg0KYGBge3J9DQpjb2xsZWN0X3ByZWRpY3Rpb25zKGFydF9maW5hbCkgJT4lDQogIGdncGxvdChhZXMoeWVhciwgLnByZWQpKSArDQogIGdlb21fYWJsaW5lKGx0eSA9IDIsIGNvbG9yID0gImdyYXk1MCIsIHNpemUgPSAxLjIpICsNCiAgZ2VvbV9wb2ludChzaXplID0gMS41LCBhbHBoYSA9IDAuMykgKw0KICBjb29yZF9maXhlZCgpDQpgYGANCg0KVGhlcmUgYXJlIGNsdW1wcyBvZiBhcnR3b3JrIHRoYXQgYXJlIHByZWRpY3RlZCB3ZWxsIGF0IHRoZSBoaWdoIGFuZCBsb3cgZW5kLCBidXQgbm90aWNlIHRoYXQgcHJvbWluZW50IGhvcml6b250YWwgbGluZSBvZiBvYnNlcnZhdGlvbnMgdGhhdCBhcmUgYWxsIHByZWRpY3RlZCB0byBiZSBjcmVhdGVkIGF0IGFib3V0IH4xOTAwLiBMZXTigJlzIGRpZyBtb3JlIGludG8gbWlzY2xhc3NpZmljYXRpb25zLg0KDQpgYGB7cn0NCm1pc2NsYXNzaWZpZWQgPC0gY29sbGVjdF9wcmVkaWN0aW9ucyhhcnRfZmluYWwpICU+JQ0KICBiaW5kX2NvbHMoYXJ0X3Rlc3QgJT4lIHNlbGVjdChtZWRpdW0pKSAlPiUNCiAgZmlsdGVyKGFicyh5ZWFyIC0gLnByZWQpID4gMTAwKQ0KDQptaXNjbGFzc2lmaWVkICU+JQ0KICBhcnJhbmdlKHllYXIpDQpgYGANCg0KVGhlc2UgYXJlIHBpZWNlcyBvZiBhcnQgdGhhdCB3ZXJlIGNyZWF0ZWQgdmVyeSBlYXJseSBidXQgcHJlZGljdGVkIG11Y2ggbGF0ZXIuIEluIGZhY3QsIG5vdGljZSB0aGF0IOKAnE9pbCBwYWludCBvbiBjYW52YXPigJ0gYWxzbyBwcmVkaWN0cyB0byAxODg2ICh3aXRoIHNtYWxsIGluZmx1ZW5jZSBvZiB3aWR0aCBhbmQgaGVpZ2h0IGZlYXR1cmVzKTsgdGhhdCBpcyBhYm91dCB0aGUgbWVhbiBvciBtZWRpYW4gb2YgdGhpcyB3aG9sZSBkYXRhc2V0LCB0aGF0IHdhcyBvbmUgb2YgdGhlIG1vc3QgY29tbW9uIG1lZGlhLCBhbmQgdGhpcyBpcyBob3cgYSBsaW5lYXIgbW9kZWwgd29ya3MhDQoNCmBgYHtyfQ0KbWlzY2xhc3NpZmllZCAlPiUNCiAgYXJyYW5nZSgteWVhcikNCmBgYA0KDQpUaGVzZSBhcmUgcGllY2VzIG9mIGFydCB0aGF0IHdlcmUgY3JlYXRlZCB2ZXJ5IHJlY2VudGx5IGJ1dCBwcmVkaWN0ZWQgbXVjaCBlYXJsaWVyLiBOb3RpY2UgdGhhdCB0aGV5IGhhdmUgdXNlZCB3aGF0IHdlIG1pZ2h0IHRoaW5rIG9mIGFzIGFudGlxdWUgb3IgdHJhZGl0aW9uYWwgdGVjaG5pcXVlcy4NCg0KTm93LCBmaW5hbGx5LCBpdCBpcyB0aW1lIGZvciB0aGUgcmVzaWR1YWxzLiBXZSBjYW4gY29tcHV0ZSByZXNpZHVhbHMgZm9yIHRoZSB0ZXN0IHNldCB3aXRoIHRoZSBgYXVnbWVudCgpYCBmdW5jdGlvbi4NCg0KYGBge3J9DQphdWdtZW50KGFydF9maW5hbCkgJT4lDQogIGdncGxvdChhZXMoLnByZWQsIC5yZXNpZCkpICsNCiAgZ2VvbV9obGluZSh5aW50ZXJjZXB0ID0gMCwgbHR5ID0gMiwgY29sb3IgPSAiZ3JheTUwIiwgc2l6ZSA9IDEuMikgKw0KICBnZW9tX3BvaW50KHNpemUgPSAxLjUsIGFscGhhID0gMC4zKSArDQogIGdlb21fc21vb3RoKGNvbG9yID0gIm1pZG5pZ2h0Ymx1ZSIpICsNCiAgbGFicyh0aXRsZSA9ICJIZXRlcnNjZWRhc3RpY2l0eSBpbiBSZWd1bGFyaXplZCBSZWdyZXNzaW9uIikNCmBgYA0KDQpUaGlzIHBsb3QgZXhoaWJpdHMgc2lnbmlmaWNhbnQgaGV0ZXJvc2NlZGFzdGljaXR5LCB3aXRoIGxvd2VyIHZhcmlhbmNlIGZvciByZWNlbnQgYXJ0d29yayBhbmQgaGlnaGVyIHZhcmlhbmNlIGZvciBhcnR3b3JrIGluIG90aGVyIHRpbWUgcGVyaW9kcy4gSWYgdGhlIG1vZGVsIHByZWRpY3RzIGEgcmVjZW50IHllYXIsIHdlIGNhbiBiZSBtb3JlIGNvbmZpZGVudCB0aGF0IGl0IGlzIHJpZ2h0IHRoYW4gaWYgdGhlIG1vZGVsIHByZWRpY3RzIGFuIG9sZGVyIHllYXIsIGFuZCB0aGVyZSBpcyBiYXNpY2FsbHkgbm8gdGltZSBpbmZvcm1hdGlvbiBpbiB0aGUgZmFjdCB0aGF0IGFuIGFydHdvcmsgd2FzIGNyZWF0ZWQgd2l0aCBhIG1lZGl1bSBsaWtlIG9pbCBvbiBjYW52YXMuIFNvIGlzIHRoaXMgbW9kZWwgYmFkIGFuZCBub3QgdXNlZnVsPyBJdOKAmXMgbm90IGdyZWF0LCBmb3IgbW9zdCBnb2FscyBJIGNhbiB0aGluayBvZiwgYnV0IGl04oCZcyBpbnRlcmVzdGluZyB0byBub3RpY2UgaG93IG11Y2ggd2UgY2FuIGxlYXJuIGFib3V0IG91ciBkYXRhIGV2ZW4gZnJvbSBzdWNoIGEgbW9kZWwuDQoNCg0K</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2021_01_12_tidy_tuesday.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
