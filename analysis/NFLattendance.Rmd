@@ -13,11 +13,12 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
 suppressPackageStartupMessages({
 library(tidyverse)
 library(tidymodels)
 })
+
 source(here::here("code","_common.R"),  
        verbose = FALSE,
        local = knitr::knit_global())
@@ -67,10 +68,11 @@ In this histogram, playoff-bound teams generally have higher point spread margin
 
 ```{r}
 attendance_joined %>%
-  distinct(team_name, year, margin_of_victory, playoffs)%>%
-  ggplot(aes(margin_of_victory, fill = playoffs))+
-  geom_histogram(position = "identity", alpha = 0.7)+
+  distinct(team_name, year, margin_of_victory, playoffs) %>%
+  ggplot(aes(margin_of_victory, fill = playoffs)) +
+  geom_histogram(position = "identity", alpha = 0.7) +
   labs(title = "NFL Team Margin of Victory",
+       fill = NULL,
       caption = paste0("Jim Gruman ",Sys.Date()),
       x = "Point Spread", y = "Game Count") +
   theme(legend.position = "bottom")
@@ -80,14 +82,37 @@ Across the weeks of the season, this data visualization shows the distribution o
 
 ```{r}
 attendance_joined %>%
-  mutate(week = factor(week))%>%
-  ggplot(aes(week, weekly_attendance, fill = "blue"))+
-  geom_boxplot(show.legend = FALSE, outlier.alpha = 0.4)+
+  ggplot(aes(x = factor(week), 
+             y = weekly_attendance)) +
+  ggdist::stat_dots(
+    side = "top",
+    justification = -0.1,
+    binwidth = 250,
+    show.legend = FALSE,
+    color = "#30123BFF"
+  ) +
+  geom_boxplot(
+    width = 0.1,
+    outlier.shape = NA,
+    show.legend = FALSE,
+    color = "#F1CA3AFF"
+  ) +
+  geom_text(data = . %>% filter(weekly_attendance > 100000),
+            aes(label = glue::glue("{team} {year}")),
+            check_overlap = TRUE,
+            nudge_x = .6,
+            face = "bold",
+            show.legend = FALSE) +
+  stat_summary(fun = median,
+               color = "#4454C4FF",
+               show.legend = FALSE) +
+  scale_y_continuous(labels = scales::label_comma()) +
   labs(title = "NFL Weekly Game Attendance",
+       subtitle = "Boxplot dots show the median for all years.",
       caption = paste0("Jim Gruman ",Sys.Date()),
-      x = "Week of Season", y = "Attendance")+
-  theme(legend.position = "bottom")+
-  scale_y_continuous(labels = scales::label_comma())
+      x = "Week of Season", 
+      y = "Attendance") 
+
 
 ```
 
