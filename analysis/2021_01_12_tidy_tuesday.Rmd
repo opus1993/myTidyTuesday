@@ -1,0 +1,307 @@
+---
+title: "Tate Art Collection"
+date: "January 12, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+The data this week comes from the [Tate Art Collections](https://github.com/tategallery/collection). It consists of metadata for around 70,000 artworks that Tate owns or jointly owns with the National Galleries of Scotland as part of [ARTIST ROOMS](http://www.tate.org.uk/artist-rooms). Metadata for around 3,500 associated artists is also included.
+
+The post will be in two sections. The first is an exploration of the content of the dataset and a submission to Twitter. The second is a machine learning model that helps us better understand the importance of changes in art materials over time.
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(tidytuesdayR)
+library(treemapify)
+library(hrbrthemes)
+library(countrycode)
+library(tweetrmd)
+
+library(tidytext)
+library(tidymodels)
+library(textrecipes)
+library(vip)
+})
+extrafont::loadfonts(quiet = TRUE)
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+theme_set(theme_jim(base_size = 9))
+
+```
+
+## Load the weekly Data
+
+Download from the R4DS github website and make available in the `tt` object.
+
+```{r Load}
+
+tt <- tt_load("2021-01-12")
+
+```
+
+
+```{r prepare}
+art <- tt$artwork %>% 
+  rename(art_url = url) %>% 
+  left_join(tt$artists, by = c("artistId" = "id")) %>% 
+  mutate(gender = factor(gender),
+         on = str_sub(medium, start = str_locate(medium, " on ")[,2])) 
+
+```
+
+
+## Visualize
+
+What is the distribution of artwork over creation year?
+
+```{r}
+art %>%
+  ggplot(aes(year)) +
+  geom_histogram(alpha = 0.8) +
+  labs(title = "The Tate Collection acquisitions are bimodally distributed across years")
+```
+
+A treemap of major Tate artists
+
+```{r Visualize, fig.asp=1}
+
+art %>% 
+  mutate(birthDecade = yearOfBirth %/% 10 * 10) %>% 
+  count(artist, birthDecade) %>% 
+  slice_max(order_by = n, n = 60) %>% 
+  filter(!is.na(birthDecade), artist != "Turner, Joseph Mallord William") %>% 
+  ggplot(aes(area = n, fill = birthDecade, label = artist, subgroup = birthDecade)) +
+  geom_treemap() +
+  geom_treemap_subgroup_border() +
+  geom_treemap_text(color = "black", place = "top", reflow = TRUE) +
+  geom_treemap_subgroup_text(color = "gray40", place = "bottomright", 
+                             fontface = "italic", min.size = 0, alpha = 0.3) +
+  scale_fill_fermenter(palette = "YlOrRd", direction = -1,
+                       guide = "colorsteps") +
+  labs(fill = NULL, title = "The Tate Collection's Artists by birth year (Non-Turner)",
+       subtitle = "Born in 1775, Joseph Mallord William Turner's works account for 57% alone. The size of\nthe box corresponds to the number of pieces of each non-Turner artist in the collection.",
+       caption = "Data Source: Tate Art Collection")
+  
+```
+
+And the Tidytuesday tweet:
+
+```{r echo=FALSE}
+tweet_embed('https://twitter.com/jim_gruman/status/1349150540610076673')
+```
+
+----
+# A machine learning model 
+
+Let’s focus on just a couple of variables for modeling, and at least focus on just the art created after 1750.
+
+```{r}
+tate_df <- art %>%
+  filter(year > 1750) %>%
+  select(year, medium, width, height) %>%
+  na.omit() %>%
+  arrange(year)
+```
+
+What are the most common words used in describing the media?
+
+```{r}
+tate_df %>% 
+  unnest_tokens(word, medium) %>% 
+  count(word, sort = TRUE)
+```
+
+Lots of paper, graphite, oil and watercolour paints.
+
+We can start by splitting our data into training and testing sets, and creating resamples.
+
+```{r}
+art_split <- initial_split(tate_df, strata = year)
+art_train <- training(art_split)
+art_test <- testing(art_split)
+
+art_folds <- vfold_cv(art_train, strata = year)
+```
+
+Next, let’s preprocess to get it ready for modeling. We can use specialized steps from `textrecipes`, along with the general recipe steps.
+
+```{r}
+art_rec <- recipe(year ~ ., data = art_train) %>%
+  step_tokenize(medium) %>%
+  step_stopwords(medium) %>%
+#  step_stem(medium) %>%
+  step_ngram(medium, num_tokens = 3, min_num_tokens = 1) %>% 
+  step_tokenfilter(medium, max_tokens = 700) %>%
+  step_tfidf(medium)   # a normalized input is required for regularized regression
+
+art_rec
+```
+
+Let’s walk through the steps in this recipe, which are what are sensible defaults for training a model with text features.
+
+- First, we must tell the `recipe()` what our model is going to be (using a formula here) and what data we are using.
+
+- Next, we tokenize our text, with the default tokenization into single words.
+
+- Next, we remove stop words (just the default set, to remove “on” and “and”).
+
+- Next, we stem words to a similar base word. In this case, I am going to leave stemming out, as the medium words are mostly technical materials.
+
+- Next, we form ngram combinations back. In this case, "acrylic paint paper" results in features for *acrylic*, *paint*, *paper*, *acrylic paint*, *paint paper*, *acrylic paper*, and *arylic paint paper*.
+
+- It wouldn’t be practical to keep all the tokens from this whole dataset in our model, so we can filter down to only keep, in this case, the top 700 most-used tokens (after removing stop words).
+
+- We need to decide on some kind of weighting for these tokens next, either something like term frequency or, what we used here, tf-idf.
+
+Next, it’s time to specify our model and put it together with our recipe into a workflow. To use a fast, compact sparse data structure, we will create a hardhat blueprint with `composition = "dgCMatrix"`.
+
+```{r}
+sparse_bp <- hardhat::default_recipe_blueprint(composition = "dgCMatrix")
+
+lasso_spec <- linear_reg(penalty = tune(), mixture = 1) %>%
+  set_engine("glmnet")
+
+art_wf <- workflow() %>%
+  add_recipe(art_rec, blueprint = sparse_bp) %>%
+  add_model(lasso_spec)
+
+art_wf
+```
+
+The only other piece we need to get ready for model fitting is values for the regularization penalty to try. The default goes down to very tiny penalties and I don’t think we’ll need that, so let’s change the `range()`.
+
+```{r}
+lambda_grid <- grid_regular(penalty(range = c(-3, 0)), levels = 20)
+```
+
+Now let’s tune the lasso model on the resampled datasets we created.
+
+```{r}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+lasso_rs <- tune_grid(
+  art_wf,
+  resamples = art_folds,
+  grid = lambda_grid
+)
+
+lasso_rs
+```
+
+That was quite fast, because it’s a linear model and we used the sparse data structure.
+
+## Evaluate model
+
+Now we can do what we really came here for, which is to talk about how we can evaluate a model like this and see if it was a good idea. How do the results look?
+
+```{r}
+autoplot(lasso_rs)
+```
+
+The best $ R^2 $ is around 0.80, and is a measure of how well the model fits the training data. The best RMSE is around 31.5 or so, and is on the scale of the original outcome, i.e. years. What are some of the best penalty values, in terms of RMSE?
+
+```{r}
+show_best(lasso_rs, "rmse")
+```
+
+We can select the best penalty, and finalize the workflow with it.
+
+```{r}
+best_rmse <- select_best(lasso_rs, "rmse")
+
+final_lasso <- finalize_workflow(art_wf, best_rmse)
+final_lasso
+```
+
+The function `last_fit()` fits this finalized lasso model one last time to the training data and evaluates one last time on the testing data. The metrics are computed on the testing data.
+
+```{r}
+art_final <- last_fit(final_lasso, art_split)
+collect_metrics(art_final)
+```
+
+We can use the fitted workflow in art_final to explore variable importance using the vip package.
+
+```{r}
+art_vip <- pull_workflow_fit(art_final$.workflow[[1]]) %>%
+  vi()
+```
+
+another visualization, this time of variable importance in ascertaining the year of the artwork:
+
+```{r}
+art_vip %>%
+  group_by(Sign) %>%
+  slice_max(abs(Importance), n = 20) %>%
+  ungroup() %>%
+  mutate(
+    Variable = str_remove(Variable, "tfidf_medium_"),
+    Importance = abs(Importance),
+    Variable = fct_reorder(Variable, Importance),
+    Sign = if_else(Sign == "POS", "in later art", "in earlier art")
+  ) %>%
+  ggplot(aes(Importance, Variable, fill = Sign)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~Sign, scales = "free") +
+  labs(y = NULL)
+```
+
+This tells quite a story about what predictors are most important in pushing the prediction for an observation up or down the most.
+
+How well does the model actually do, though? Let’s plot true and predicted values for years, for the testing data.
+
+```{r}
+collect_predictions(art_final) %>%
+  ggplot(aes(year, .pred)) +
+  geom_abline(lty = 2, color = "gray50", size = 1.2) +
+  geom_point(size = 1.5, alpha = 0.3) +
+  coord_fixed()
+```
+
+There are clumps of artwork that are predicted well at the high and low end, but notice that prominent horizontal line of observations that are all predicted to be created at about ~1900. Let’s dig more into misclassifications.
+
+```{r}
+misclassified <- collect_predictions(art_final) %>%
+  bind_cols(art_test %>% select(medium)) %>%
+  filter(abs(year - .pred) > 100)
+
+misclassified %>%
+  arrange(year)
+```
+
+These are pieces of art that were created very early but predicted much later. In fact, notice that “Oil paint on canvas” also predicts to 1886 (with small influence of width and height features); that is about the mean or median of this whole dataset, that was one of the most common media, and this is how a linear model works!
+
+```{r}
+misclassified %>%
+  arrange(-year)
+```
+
+These are pieces of art that were created very recently but predicted much earlier. Notice that they have used what we might think of as antique or traditional techniques.
+
+Now, finally, it is time for the residuals. We can compute residuals for the test set with the `augment()` function.
+
+```{r}
+augment(art_final) %>%
+  ggplot(aes(.pred, .resid)) +
+  geom_hline(yintercept = 0, lty = 2, color = "gray50", size = 1.2) +
+  geom_point(size = 1.5, alpha = 0.3) +
+  geom_smooth(color = "midnightblue") +
+  labs(title = "Heterscedasticity in Regularized Regression")
+```
+
+This plot exhibits significant heteroscedasticity, with lower variance for recent artwork and higher variance for artwork in other time periods. If the model predicts a recent year, we can be more confident that it is right than if the model predicts an older year, and there is basically no time information in the fact that an artwork was created with a medium like oil on canvas. So is this model bad and not useful? It’s not great, for most goals I can think of, but it’s interesting to notice how much we can learn about our data even from such a model.
+
+
