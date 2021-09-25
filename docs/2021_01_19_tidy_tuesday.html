@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2021-01-19" />
+
+<title>Kenya Census</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Kenya Census</h1>
+<h4 class="date">January 19, 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-24
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreece3af39a2ac583e6cf79f772e321495b5e17e365targetblankce3af39a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/ce3af39a2ac583e6cf79f772e321495b5e17e365" target="_blank">ce3af39</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreece3af39a2ac583e6cf79f772e321495b5e17e365targetblankce3af39a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/ce3af39a2ac583e6cf79f772e321495b5e17e365" target="_blank">ce3af39</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/YammerReach.R
+    Untracked:  code/work list batch targets.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2021_01_19_tidy_tuesday.Rmd</code>) and HTML (<code>docs/2021_01_19_tidy_tuesday.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/ce3af39a2ac583e6cf79f772e321495b5e17e365/analysis/2021_01_19_tidy_tuesday.Rmd" target="_blank">ce3af39</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+add tweet
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="rkenyacensus" class="section level1">
+<h1>rKenyaCensus</h1>
+<p>The data this week was compiled by <a href="https://twitter.com/Shel_Kariuki">Shel Kariuki</a> from figures released by the Kenya National Bureau of Statistics in February 2020, originally published in four different pdf files (Volume 1 - Volume 4). Beyond the sample <code>#TidyTuesday</code> sets, I’ve pulled additional agricultural figures from her <a href="https://shel-kariuki.shinyapps.io/KenyaCensus2019/">web data portal</a> and <code>rKenyaCensus</code> package.</p>
+<p>the Tidytuesday tweet:</p>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> Week04<br>Poultry 🐔farming 👩‍🌾in Kenya 🇰🇪<br><br>code: <a href="https://t.co/ARmfFPwRm6">https://t.co/ARmfFPwRm6</a> <a href="https://twitter.com/hashtag/RStats?src=hash&amp;ref_src=twsrc%5Etfw">#RStats</a> <a href="https://twitter.com/hashtag/R4DS?src=hash&amp;ref_src=twsrc%5Etfw">#R4DS</a><br><br> Thanks to <a href="https://twitter.com/Shel_Kariuki?ref_src=twsrc%5Etfw">@Shel_Kariuki</a> for her awesome work on the <a href="https://twitter.com/hashtag/rKenyaCensus?src=hash&amp;ref_src=twsrc%5Etfw">#rKenyaCensus</a> package <a href="https://t.co/gSaaWjiAYY">pic.twitter.com/gSaaWjiAYY</a></p>&mdash; Jim Gruman📚🚵‍♂️⚙ (@jim_gruman) <a href="https://twitter.com/jim_gruman/status/1352015728019435522?ref_src=twsrc%5Etfw">January 20, 2021</a></blockquote>
+
+<pre class="r"><code>shapefiles &lt;- rKenyaCensus::KenyaCounties_SHP %&gt;%
+  sf::st_as_sf() %&gt;%
+  st_simplify(dTolerance = 1000)
+
+# Distribution of area (hectares) of Agricultural land and Farming Households by purpose of production, County and Sub-County
+
+ag_land &lt;- rKenyaCensus::V4_T2.25 %&gt;%
+  dplyr::filter(AdminArea == &quot;County&quot;) %&gt;%
+  select(
+    County, LandSize_Subsistence, LandSize_Commercial,
+    No.FHS_Subsistence, No.FHS_Commercial
+  ) %&gt;%
+  mutate(
+    AvgArea_Subsistence =
+      if_else(LandSize_Subsistence &gt; 0.1,
+        No.FHS_Subsistence / LandSize_Subsistence,
+        NA_real_
+      ),
+    AvgArea_Commercial =
+      if_else(LandSize_Commercial &gt; 0.1,
+        No.FHS_Commercial / LandSize_Commercial,
+        NA_real_
+      )
+  ) %&gt;%
+  pivot_longer(-County,
+    names_sep = &quot;_&quot;,
+    names_to = c(&quot;Metric&quot;, &quot;FarmType&quot;)
+  )
+
+ag_area_sf &lt;- shapefiles %&gt;%
+  inner_join(ag_land, by = &quot;County&quot;) %&gt;%
+  mutate(County = stringr::str_to_title(County))
+
+landsize_dorling &lt;-
+  cartogram_dorling(
+    x = filter(ag_area_sf, Metric == &quot;LandSize&quot;),
+    weight = &quot;value&quot;,
+    k = 0.5,
+    itermax = 100
+  )
+
+families_dorling &lt;-
+  cartogram_dorling(
+    x = filter(ag_area_sf, Metric == &quot;No.FHS&quot;),
+    weight = &quot;value&quot;,
+    k = 0.5,
+    itermax = 100
+  )</code></pre>
+<pre class="r"><code>subs &lt;- sf::st_drop_geometry(landsize_dorling) %&gt;%
+  group_by(FarmType) %&gt;%
+  summarize(Total = sum(value))
+
+landsize_dorling %&gt;%
+  left_join(subs, by = &quot;FarmType&quot;) %&gt;%
+  mutate(CountyLabel = if_else(ntile(value, 10) &gt; 8, County, NA_character_)) %&gt;%
+  ggplot(aes(fill = value)) +
+  geom_sf(color = NA) +
+  geom_sf(
+    data = filter(ag_area_sf, Metric == &quot;LandSize&quot;),
+    color = &quot;grey30&quot;, fill = NA, alpha = 0.3
+  ) +
+  ggrepel::geom_text_repel(
+    aes(label = CountyLabel, geometry = geometry),
+    stat = &quot;sf_coordinates&quot;,
+    nudge_x = 0.5,
+    nudge_y = 0.5,
+    box.padding = 1,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20,
+    arrow = arrow(length = unit(0.02, &quot;npc&quot;)),
+    family = &quot;Roboto Condensed&quot;,
+    size = 4,
+    min.segment.length = 0,
+    color = &quot;gray50&quot;,
+    segment.color = &quot;gray50&quot;,
+    na.rm = TRUE
+  ) +
+  coord_sf(label_axes = &quot;----&quot;) +
+  geom_text(aes(label = paste0(scales::comma_format()(Total), &quot; ha&quot;)),
+    x = st_bbox(landsize_dorling)[1] + 0.05 * (st_bbox(landsize_dorling)[3] - st_bbox(landsize_dorling)[1]),
+    y = st_bbox(landsize_dorling)[2],
+    hjust = 0,
+    family = &quot;Roboto Condensed&quot;,
+    size = 4
+  ) +
+  facet_wrap(~FarmType) +
+  scale_fill_stepsn(
+    colors = terrain.colors(5, rev = TRUE),
+    n.breaks = 5,
+    label = scales::comma_format(),
+    trans = &quot;log10&quot;, guide = &quot;legend&quot;
+  ) +
+  labs(
+    x = NULL, y = NULL, fill = &quot;Hectares&quot;,
+    title = &quot;Crop Farming in Kenya, by County&quot;,
+    caption = &quot;2019 Kenya Population and Housing Census&quot;
+  ) +
+  theme(
+    panel.grid.major = element_blank(),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<p><img src="figure/2021_01_19_tidy_tuesday.Rmd/maps-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>subs &lt;- sf::st_drop_geometry(families_dorling) %&gt;%
+  group_by(FarmType) %&gt;%
+  summarize(Total = sum(value))
+
+families_dorling %&gt;%
+  left_join(subs, by = &quot;FarmType&quot;) %&gt;%
+  mutate(CountyLabel = if_else(ntile(value, 10) &gt; 7, County, NA_character_)) %&gt;%
+  ggplot(aes(fill = value)) +
+  geom_sf(color = NA) +
+  geom_sf(
+    data = dplyr::filter(ag_area_sf, Metric == &quot;No.FHS&quot;),
+    color = &quot;grey30&quot;, fill = NA, alpha = 0.3
+  ) +
+  ggrepel::geom_text_repel(
+    aes(label = CountyLabel, geometry = geometry),
+    stat = &quot;sf_coordinates&quot;,
+    nudge_x = 0.5,
+    nudge_y = 0.5,
+    box.padding = 1,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20,
+    arrow = arrow(length = unit(0.02, &quot;npc&quot;)),
+    family = &quot;Roboto Condensed&quot;,
+    size = 4,
+    min.segment.length = 0,
+    colour = &quot;gray50&quot;,
+    segment.colour = &quot;gray50&quot;,
+    na.rm = TRUE
+  ) +
+  coord_sf(label_axes = &quot;----&quot;) +
+  geom_text(aes(label = paste0(scales::comma_format()(Total), &quot; households&quot;)),
+    x = st_bbox(landsize_dorling)[1] + 0.05 * (st_bbox(landsize_dorling)[3] - st_bbox(landsize_dorling)[1]),
+    y = st_bbox(landsize_dorling)[2],
+    hjust = 0,
+    family = &quot;Roboto Condensed&quot;,
+    size = 4
+  ) +
+  facet_wrap(~FarmType) +
+  scale_fill_stepsn(
+    colors = terrain.colors(5, rev = TRUE),
+    label = scales::comma_format(),
+    limits = c(5e4, 2.5e5), n.breaks = 5,
+    guide = &quot;legend&quot;
+  ) +
+  labs(
+    x = NULL, y = NULL, fill = &quot;Households&quot;,
+    title = paste0(&quot;Farmers &quot;, emojifont::emoji(&quot;woman_farmer&quot;), &quot; raising crops in Kenya, by County&quot;),
+    caption = &quot;2019 Kenya Population and Housing Census&quot;
+  ) +
+  theme(
+    panel.grid.major = element_blank(),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<p><img src="figure/2021_01_19_tidy_tuesday.Rmd/maps-2.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ag_area_sf %&gt;%
+  filter(Metric == &quot;AvgArea&quot;) %&gt;%
+  mutate(CountyLabel = if_else(ntile(value, 10) &gt; 8, County, NA_character_)) %&gt;%
+  ggplot() +
+  geom_sf(aes(fill = value), color = &quot;grey30&quot;, alpha = 0.8) +
+  ggrepel::geom_text_repel(
+    aes(label = CountyLabel, geometry = geometry),
+    stat = &quot;sf_coordinates&quot;,
+    nudge_x = 0.5,
+    nudge_y = 0.5,
+    box.padding = 1,
+    segment.curvature = -0.1,
+    segment.ncp = 3,
+    segment.angle = 20,
+    arrow = arrow(length = unit(0.02, &quot;npc&quot;)),
+    family = &quot;Roboto Condensed&quot;,
+    size = 4,
+    min.segment.length = 0,
+    colour = &quot;black&quot;,
+    segment.colour = &quot;black&quot;,
+    na.rm = TRUE
+  ) +
+  coord_sf(label_axes = &quot;----&quot;) +
+  facet_wrap(~FarmType) +
+  scale_fill_stepsn(
+    colors = terrain.colors(5, rev = TRUE),
+    n.breaks = 5,
+    label = scales::label_number(), guide = &quot;legend&quot;
+  ) +
+  labs(
+    x = NULL, y = NULL, fill = &quot;Average \nFarm Size \nHectares&quot;,
+    title = &quot;Crop Farming in Kenya, by County&quot;,
+    caption = &quot;2019 Kenya Population and Housing Census&quot;
+  ) +
+  theme(
+    panel.grid.major = element_blank(),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<p><img src="figure/2021_01_19_tidy_tuesday.Rmd/maps-3.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Let’s take a close look at the livestock datasets, and focus first on poultry. As a general rule, broilers are breeds raised commercially for meat and layers are raised commercially for eggs. The meat and eggs are packaged and subsequently sold at markets, often in more urban areas. Indigenous chicken breeds are often fed and raised in small numbers as part of a household.</p>
+<pre class="r"><code>livestock &lt;- rKenyaCensus::V4_T2.24 %&gt;%
+  filter(AdminArea == &quot;County&quot;) %&gt;%
+  select(-SubCounty, -AdminArea) %&gt;%
+  rename(
+    &quot;Dairy&quot; = &quot;ExoticCattle_Dairy&quot;,
+    &quot;Beef&quot; = &quot;ExoticCattle_Beef&quot;,
+    &quot;Layers&quot; = &quot;ExoticChicken_Layers&quot;,
+    &quot;Broilers&quot; = &quot;ExoticChicken_Broilers&quot;
+  ) %&gt;%
+  rename_with(~ paste0(., &quot;_stock&quot;), Farming:FishCages)
+
+livestock &lt;- rKenyaCensus::V4_T2.23 %&gt;%
+  filter(AdminArea == &quot;County&quot;) %&gt;%
+  select(-SubCounty, -AdminArea) %&gt;%
+  rename(
+    &quot;Dairy&quot; = &quot;ExoticCattle_Dairy&quot;,
+    &quot;Beef&quot; = &quot;ExoticCattle_Beef&quot;,
+    &quot;Layers&quot; = &quot;ExoticChicken_Layers&quot;,
+    &quot;Broilers&quot; = &quot;ExoticChicken_Broilers&quot;
+  ) %&gt;%
+  rename_with(~ paste0(., &quot;_households&quot;), Farming:FishCages) %&gt;%
+  inner_join(livestock, by = &quot;County&quot;) %&gt;%
+  pivot_longer(-County,
+    names_sep = &quot;_&quot;,
+    names_to = c(&quot;Industry&quot;, &quot;Metric&quot;)
+  ) %&gt;%
+  pivot_wider(
+    names_from = &quot;Metric&quot;,
+    values_from = &quot;value&quot;
+  ) %&gt;%
+  mutate(per_household = stock / households) %&gt;%
+  remove_missing() %&gt;%
+  filter(Industry != &quot;Farming&quot;) %&gt;% # remove the County subtotals
+  complete(County, Industry, fill = list(
+    households = 1,
+    stock = 1,
+    per_household = 0.01
+  ))
+
+livestock &lt;- livestock %&gt;%
+  filter(Industry %in% c(&quot;IndigenousChicken&quot;, &quot;Layers&quot;, &quot;Broilers&quot;)) %&gt;%
+  mutate(Industry = str_replace_all(Industry, &quot;([a-z])([A-Z])&quot;, &quot;\\1 \\2&quot;))
+
+stock_ls_dorling &lt;- cartogram_dorling(
+  x = shapefiles %&gt;%
+    inner_join(livestock, by = &quot;County&quot;),
+  weight = &quot;stock&quot;,
+  k = 1,
+  itermax = 100
+)
+
+shapefiles %&gt;%
+  inner_join(livestock, by = &quot;County&quot;) %&gt;%
+  mutate(Metric = &quot;per_household&quot;) %&gt;%
+  group_by(Industry, Metric) %&gt;%
+  mutate(CountyLabel = if_else(ntile(per_household, 10) &gt; 8, County, NA_character_)) %&gt;%
+  ungroup() %&gt;%
+  ggplot() +
+  geom_sf(aes(fill = per_household), color = &quot;grey30&quot;) +
+  scale_fill_stepsn(
+    colors = terrain.colors(5, rev = TRUE),
+    n.breaks = 5, limits = c(0, 100),
+    label = scales::label_number(), guide = &quot;legend&quot;
+  ) +
+  geom_sf(
+    data = stock_ls_dorling,
+    fill = &quot;midnightblue&quot;,
+    #             color = NULL,
+    alpha = 0.3
+  ) +
+  coord_sf(label_axes = &quot;----&quot;) +
+  guides(size = guide_legend()) +
+  facet_wrap(~Industry, ncol = 3) +
+  labs(
+    x = NULL, y = NULL, fill = &quot;Average count \nper farming household&quot;,
+    title = paste0(&quot;Poultry &quot;, emojifont::emoji(&quot;chicken&quot;), &quot; Farming in Kenya&quot;),
+    subtitle = &quot;Many egg laying chickens are produced near Nairobi. Elsewhere, households keep \nsmall numbers of indigenous birds. The circle size represents the total birds.&quot;,
+    caption = &quot;2019 Kenya Population and Housing Census&quot;
+  ) +
+  theme(
+    panel.grid.major = element_blank(),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<p><img src="figure/2021_01_19_tidy_tuesday.Rmd/poultryMap-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19043)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] rKenyaCensus_0.0.2 spdep_1.1-11       spData_0.3.10      sp_1.4-5          
+ [5] cartogram_0.2.2    sf_1.0-2           tweetrmd_0.0.9     tidytuesdayR_1.0.1
+ [9] forcats_0.5.1      stringr_1.4.0      dplyr_1.0.7        purrr_0.3.4       
+[13] readr_2.0.1        tidyr_1.1.3        tibble_3.1.4       tidyverse_1.3.1   
+[17] hrbrthemes_0.8.0   waffle_0.7.0       ggplot2_3.3.5      systemfonts_1.0.2 
+[21] workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2         proto_1.0.0        R.utils_2.10.1    
+  [4] tidyselect_1.1.1   grid_4.1.1         pROC_1.18.0       
+  [7] munsell_0.5.0      codetools_0.2-18   ragg_1.1.3        
+ [10] units_0.7-2        dials_0.0.10       future_1.22.1     
+ [13] withr_2.4.2        colorspace_2.0-2   highr_0.9         
+ [16] knitr_1.34         rstudioapi_0.13    wk_0.5.0          
+ [19] Rttf2pt1_1.3.9     listenv_0.8.0      labeling_0.4.2    
+ [22] git2r_0.28.0       DiceDesign_1.9     farver_2.1.0      
+ [25] rprojroot_2.0.2    coda_0.19-4        parallelly_1.28.1 
+ [28] LearnBayes_2.15.1  vctrs_0.3.8        generics_0.1.0    
+ [31] ipred_0.9-12       xfun_0.26          R6_2.5.1          
+ [34] lhs_1.1.3          cachem_1.0.6       assertthat_0.2.1  
+ [37] showtext_0.9-4     promises_1.2.0.1   scales_1.1.1      
+ [40] nnet_7.3-16        emojifont_0.5.5    gtable_0.3.0      
+ [43] globals_0.14.0     timeDate_3043.102  rlang_0.4.11      
+ [46] workflows_0.2.3    splines_4.1.1      extrafontdb_1.0   
+ [49] yardstick_0.0.8    broom_0.7.9        s2_1.0.6          
+ [52] yaml_2.2.1         modelr_0.1.8       backports_1.2.1   
+ [55] httpuv_1.6.3       extrafont_0.17     tools_4.1.1       
+ [58] lava_1.6.10        usethis_2.0.1      infer_1.0.0       
+ [61] ellipsis_0.3.2     raster_3.4-13      jquerylib_0.1.4   
+ [64] RColorBrewer_1.1-2 proxy_0.4-26       Rcpp_1.0.7        
+ [67] parsnip_0.1.7.900  plyr_1.8.6         classInt_0.4-3    
+ [70] rpart_4.1-15       deldir_0.2-10      viridis_0.6.1     
+ [73] haven_2.4.3        ggrepel_0.9.1      fs_1.5.0          
+ [76] here_1.0.1         furrr_0.2.3        magrittr_2.0.1    
+ [79] gmodels_2.18.1     reprex_2.0.1       GPfit_1.0-8       
+ [82] whisker_0.4        R.cache_0.15.0     packcircles_0.3.4 
+ [85] hms_1.1.0          evaluate_0.14      readxl_1.3.1      
+ [88] gridExtra_2.3      compiler_4.1.1     KernSmooth_2.23-20
+ [91] crayon_1.4.1       R.oo_1.24.0        htmltools_0.5.2   
+ [94] later_1.3.0        tzdb_0.1.2         expm_0.999-6      
+ [97] tidymodels_0.1.3   lubridate_1.7.10   DBI_1.1.1         
+[100] dbplyr_2.1.1       MASS_7.3-54        boot_1.3-28       
+[103] Matrix_1.3-4       cli_3.0.1          R.methodsS3_1.8.1 
+[106] gdata_2.18.0       parallel_4.1.1     gower_0.2.2       
+[109] pkgconfig_2.0.3    recipes_0.1.16     xml2_1.3.2        
+[112] foreach_1.5.1      bslib_0.3.0        hardhat_0.1.6     
+[115] prodlim_2019.11.13 rvest_1.0.1        digest_0.6.27     
+[118] showtextdb_3.0     rmarkdown_2.11     cellranger_1.1.0  
+[121] gdtools_0.2.3      curl_4.3.2         gtools_3.9.2      
+[124] lifecycle_1.0.1    nlme_3.1-152       jsonlite_1.7.2    
+[127] viridisLite_0.4.0  tune_0.1.6         fansi_0.5.0       
+[130] pillar_1.6.2       lattice_0.20-44    fastmap_1.1.0     
+[133] httr_1.4.2         survival_3.2-11    glue_1.4.2        
+[136] conflicted_1.0.4   iterators_1.0.13   class_7.3-19      
+[139] stringi_1.7.4      sass_0.4.0         rematch2_2.1.2    
+[142] textshaping_0.3.5  rsample_0.1.0      styler_1.6.1      
+[145] e1071_1.7-8        future.apply_1.8.1 sysfonts_0.8.5    </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
