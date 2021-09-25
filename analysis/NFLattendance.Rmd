@@ -44,7 +44,7 @@ attendance_joined <- attendance %>%
 
 Explore the files and look for trends. In this boxplot visual, some teams certainly expect higher weekly attendance.
 
-```{r, fig.asp=1}
+```{r, fig.asp=1.5}
 attendance_joined %>%
   filter(!is.na(weekly_attendance)) %>%
   ggplot(aes(
@@ -57,7 +57,7 @@ attendance_joined %>%
   labs(
     title = "NFL Weekly Attendance",
     caption = paste0("Jim Gruman ", Sys.Date()),
-    x = "",
+    x = "", fill = NULL,
     y = "Weekly Attendance"
   ) +
   theme(legend.position = "bottom") 
@@ -80,7 +80,7 @@ attendance_joined %>%
 
 Across the weeks of the season, this data visualization shows the distribution of attendance by week number.
 
-```{r}
+```{r, fig.asp=1}
 attendance_joined %>%
   ggplot(aes(x = factor(week), 
              y = weekly_attendance)) +
@@ -101,6 +101,7 @@ attendance_joined %>%
             aes(label = glue::glue("{team} {year}")),
             check_overlap = TRUE,
             nudge_x = .6,
+            nudge_y = 1000,
             face = "bold",
             show.legend = FALSE) +
   stat_summary(fun = median,
@@ -141,7 +142,7 @@ nfl_test <- testing(attendance_split)
 
 ```
 
-A simple linear model is specified and fit, and the estimates of coefficients are shown here:
+A simple linear model is specified and fit here:
 
 ```{r}
 lm_spec <- linear_reg(mode = "regression") %>%
@@ -149,11 +150,6 @@ lm_spec <- linear_reg(mode = "regression") %>%
 
 lm_fit <- lm_spec %>%
   fit(weekly_attendance ~ ., data = nfl_train)
-
-tidy(lm_fit) %>% 
-  arrange(-p.value) %>% 
-  filter(p.value < 0.05) %>% 
-  knitr::kable()
 
 ```
 
@@ -165,10 +161,6 @@ rf_spec <- rand_forest(mode = "regression") %>%
 
 rf_fit <- rf_spec %>%
   fit(weekly_attendance ~ ., data = nfl_train)
-
-tidy(lm_fit) %>% 
-  arrange(-estimate) %>% 
-  knitr::kable()
 
 ```
 
@@ -221,8 +213,12 @@ results_test %>%
   bind_rows(results_train %>%
               mutate(train = "training")) %>%
   ggplot(aes(truth, .pred, color = model)) +
-  geom_abline(lty = 2, color = "gray80", size = 1.5) +
-  geom_point(alpha = 0.5) +
+  geom_point(alpha = 0.5, shape = 20) +
+  geom_abline(lty = 2, color = "gray80", size = 1.5) + 
+  scale_x_continuous(n.breaks = 5, 
+                     labels = scales::comma) +
+  scale_y_continuous(n.breaks = 5, 
+                     labels = scales::comma) +
   facet_wrap(~train)
 
 ```
@@ -247,18 +243,20 @@ rf_res %>%
   knitr::kable()
 ```
 
-```{r}
+```{r, fig.asp=1}
 rf_res %>%
   unnest(.predictions) %>%
   ggplot(aes(weekly_attendance, .pred, color = id)) +
+  geom_point(alpha = 0.5, shape = 20) +
   geom_abline(lty = 2, color = "gray80", size = 1.5) +
-  geom_point(alpha = 0.5) +
   labs(title = "Model Accuracy",
+       color = NULL,
       caption = paste0("Jim Gruman ",Sys.Date()),
       x = "Attendance Truth", y = "Attendance Prediction") +
   theme(legend.position = "bottom") +
   scale_y_continuous(labels = scales::label_comma()) +
-  scale_x_continuous(labels = scales::label_comma())
+  scale_x_continuous(labels = scales::label_comma(),
+                     n.breaks = 3)
 
 ```
 
