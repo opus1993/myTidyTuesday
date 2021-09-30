@@ -404,16 +404,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreef6cba8ed01e5643e55ad399e6dd01f21d485dcb8targetblankf6cba8ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/f6cba8ed01e5643e55ad399e6dd01f21d485dcb8" target="_blank">f6cba8e</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree5a1c95ed86b0bf9f43c74aeddc5fd068d5864142targetblank5a1c95ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/5a1c95ed86b0bf9f43c74aeddc5fd068d5864142" target="_blank">5a1c95e</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreef6cba8ed01e5643e55ad399e6dd01f21d485dcb8targetblankf6cba8ea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree5a1c95ed86b0bf9f43c74aeddc5fd068d5864142targetblank5a1c95ea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/f6cba8ed01e5643e55ad399e6dd01f21d485dcb8" target="_blank">f6cba8e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/5a1c95ed86b0bf9f43c74aeddc5fd068d5864142" target="_blank">5a1c95e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -480,6 +480,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/5a1c95ed86b0bf9f43c74aeddc5fd068d5864142/analysis/2021_03_07_geographic_animated_introduction.Rmd" target="_blank">5a1c95e</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-29
+</td>
+<td>
+remove assets folder content with animation
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/b3528521c6aa239658fa233e84e47cef45f1771a/docs/2021_03_07_geographic_animated_introduction.html" target="_blank">b352852</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-29
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -668,7 +702,7 @@ base_map</code></pre>
     state_length = 10
   )</code></pre>
 <p>The options for gganimate that work for me include the use of the new <code>ragg_png</code> device and the <code>magick_renderer</code>.</p>
-<pre class="r"><code>animation &lt;- animate(anim,
+<pre class="r"><code>animate(anim,
   nframes = 30,
   height = 2,
   width = 3,
@@ -678,6 +712,7 @@ base_map</code></pre>
   res = 150,
   renderer = magick_renderer()
 )</code></pre>
+<p><img src="figure/2021_03_07_geographic_animated_introduction.Rmd/animation-1.gif" width="200%" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
