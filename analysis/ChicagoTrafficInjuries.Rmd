@@ -220,7 +220,6 @@ crash_rec <- recipe(injuries ~ ., data = crash_train) %>%
     weather_condition,
     first_crash_type,
     trafficway_type,
-    trafficway_type,
     prim_contributory_cause,
     other = "OTHER"
   ) %>%
