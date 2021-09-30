@@ -1,0 +1,159 @@
+---
+title: "Video Games and Sliced"
+date: "March 16, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+The #TidyTuesday data this week comes from Steam by way of Kaggle and originally came from SteamCharts. The data was scraped and uploaded to Kaggle.
+
+```{r setup, message=FALSE, warning=FALSE}
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(tidymodels)
+library(lubridate)
+library(hrbrthemes)
+library(systemfonts)
+ })
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+```{r}
+tt <- tidytuesdayR::tt_load("2021-03-16")
+```
+
+
+```{r, eval = interactive()}
+tt
+```
+
+```{r}
+games <- tt$games %>%
+  mutate(date = ym(paste0(as.character(year), month))) %>%
+  complete(nesting(date, gamename), 
+           fill = list(avg = 0, peak = 0))
+```
+
+Let's have a look at the games themselves
+
+## Common games {.tabset}
+
+### Plot
+
+```{r}
+games %>% 
+  filter(avg > 0) %>% 
+  count(gamename, sort = TRUE) %>% 
+  ggplot(aes(n)) +
+  geom_histogram(bins = 30) +
+  labs(y = "Count of Months in dataset",
+       x = "Number of Titles")
+```
+
+## {-}
+
+Discoveries:
+
+1. There are some non-UTF characters in the game names.
+
+1. There are 1248 distinct game names. 
+
+1. About 200 of the games appear in all 104 months of the study(??)
+
+
+```{r}
+games %>%
+  group_by(date) %>%
+  summarise(engagement = sum(avg)) %>%
+  ggplot(aes(date, engagement)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_date(date_breaks = "year",
+               date_labels = "%Y") +
+  labs(x = NULL, y = NULL, title = "Steam Engagement, Sum of Monthly Avg", 
+       caption = paste0("Source: Kaggle"))
+```
+
+The Sid Meier series:
+
+```{r}
+games %>%
+  filter(str_detect(gamename, "Sid Meier")) %>%
+  mutate(name = str_remove(gamename, "Sid Meier's Civilization"),
+         name = str_remove(name, "\\: ")) %>% 
+  ggplot(aes(date, peak, color = name)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_date(date_breaks = "year",
+               date_labels = "%Y") +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Sid Meier's Civilization Peak Engagement on Steam",
+    caption = paste0("Source: Kaggle")
+  ) +
+  theme(legend.position = c(0.8,0.75),
+        legend.background = element_rect(color = "white"))
+```
+
+
+```{r}
+games %>%
+  filter(str_detect(gamename, "Sid Meier")) %>%
+  mutate(name = str_remove(gamename, "Sid Meier's Civilization"),
+         name = str_remove(name, "\\: ")) %>% 
+  ggplot(aes(date, peak, color = name)) +
+  geom_line(show.legend = FALSE) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_date(date_breaks = "3 years",
+               date_labels = "%Y") +
+  facet_wrap(~ name, scales = "free_y") +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Sid Meier's Civilization Peak Engagement on Steam",
+    caption = paste0("Source: Kaggle")
+  ) 
+```
+
+I wonder if the all of the game engagement has a seasonal peak, like at a given month?
+
+```{r}
+games %>%
+  mutate(month = factor(month, levels = month.name),
+         month = fct_relabel(month, ~ month.abb)) %>%
+  group_by(year, month) %>%
+  summarise(avg = median(avg),
+            .groups = "drop") %>%
+  filter(row_number() != first(row_number())) %>%
+  mutate(pandemic = case_when(year %in% 2020:2021 ~ "pandemic",
+                              TRUE ~ "the before times")) %>%
+  ggplot(aes(month, avg, group = year, color = pandemic)) +
+  geom_line(size = 1.4, alpha = 0.7) +
+  labs(
+    x = NULL,
+    color = NULL,
+    y = "Median concurrent players for all games",
+    title = "Video games on Steam and the pandemic",
+    subtitle = "The overall median number of concurrent players is higher during the pandemic",
+    caption = "Source: Kaggle"
+  ) +
+  theme(legend.position = "top")
+```
+
+
+
+
