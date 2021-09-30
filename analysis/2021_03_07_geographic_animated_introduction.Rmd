@@ -189,7 +189,7 @@ anim <- base_map +
 The options for gganimate that work for me include the use of the new `ragg_png` device and the `magick_renderer`.
 
 ```{r animation}
-animation <- animate(anim, 
+animate(anim, 
                      nframes = 30, 
                      height = 2, 
                      width = 3, 
