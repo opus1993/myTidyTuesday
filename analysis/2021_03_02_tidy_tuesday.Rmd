@@ -113,9 +113,9 @@ youtube_intervals
 
 We can use visualization to explore these results.
 
-### Plot
+### Plot {.active}
 
-```{r}
+```{r, fig.asp=1}
 youtube_intervals %>%
   mutate(
     term = str_remove(term, "TRUE"),
