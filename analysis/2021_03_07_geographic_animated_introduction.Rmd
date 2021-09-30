@@ -1,0 +1,204 @@
+---
+title: "Animating a geographic introduction"
+date: "March 7, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup}
+suppressPackageStartupMessages({
+library(tidyverse)
+library(hrbrthemes)
+library(gganimate)
+library(ggtext)
+library(glue)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+I was inspired by Sharon Pileggi's Rladies introdution, where she prepared a gif to introduce herself on Twitter for her week as host of the handle, as described at this [post](https://www.pipinghotdata.com/posts/2021-02-15-gganimating-a-geographic-introduction/).  I will follow a similar workflow, but for my own history and with my own choices of font and theme.
+
+```{r}
+us_states <- ggplot2::map_data("state") %>% 
+  filter(region %in% c("iowa",  "wisconsin", "illinois",
+                       "indiana","michigan"))
+  
+residences <- tribble(
+  ~city, ~state, ~long, ~lat, ~years, ~description,
+  "Lamont", "IA", -91.6476, 42.59999, 18, "Childhood",
+  "Ames", "IA", -93.62018, 42.026802, 4, "Engineering Undergrad",
+  "Muscatine", "IA", -91.04485, 41.42045, 2, "HON Chairs",
+  "Racine", "WI", -87.791916, 42.72062, 5, "Case Corporation<br>Magnum Engineering",
+  "Kenosha", "WI", -87.821185, 42.5847425, 2, "UW Parkside MBA",
+  "Racine", "WI", -87.791916, 42.72062, 6, "CNH Industrial<br>Strategic Sourcing",
+  "Burr Ridge", "IL", -87.9155, 41.74993, 8, "CNH Industrial<br>4WD Tractor",
+  "Chicago", "IL", -87.623177, 41.881832, 1, "Notre Dame Mendoza",
+  "Burr Ridge", "IL", -87.9155, 41.74993, 3, "CNH Industrial<br>Digital Operations",
+)
+```
+
+Let's create a transition state for gganimate (city_order) as well as indicate connections between residences for the arrows.
+
+```{r}
+residence_connections_prelim <- residences %>% 
+  mutate(
+    # need this to create transition state ----
+    city_order = row_number() + 1,
+    # where I moved to next, for curved arrows ----
+    lat_next = lead(lat),
+    long_next = lead(long),
+    # label to show in plot, styled using ggtext ---
+    label = glue::glue("**{city}, {state}** ({years} yrs)<br>*{description}*"),
+    # label of next location ----
+    label_next = lead(label)
+  ) 
+```
+
+Let's modify this data a bit so that the first residence shows the label at the residence with no arrow and all remaining residences show an arrow with the label positioned at the next residence.
+
+```{r}
+residence_connections <- residence_connections_prelim %>%
+  # get first row of residence ----
+  slice(1) %>% 
+  # manually modify for plotting ----
+  mutate(
+    city_order = 1,
+    label_next = label,
+    lat_next = lat,
+    long_next = long,
+    ) %>% 
+  # combine with all other residences ----
+  bind_rows(residence_connections_prelim) %>% 
+  # last (9th) row irrelevant ----
+  slice(1:9) %>% 
+  # keep what we neeed ----
+  dplyr::select(city_order, lat, long, lat_next, long_next, label_next)
+
+residence_connections
+```
+
+## Base map
+
+The static base map is drawn in light gray with white state borders. Each marker is a line segment plus a point in a sort of lollipop.
+
+```{r}
+base_map <- ggplot() +
+  geom_polygon(
+    data = us_states,
+    aes(
+      x     = long, 
+      y     = lat, 
+      group = group
+      ),
+    fill  = "gray80",
+    color = "white"
+  ) +
+  geom_segment(
+    data = residences,
+    aes(
+      x    = long,
+      xend = long,
+      y    = lat,
+      yend = lat + 0.2
+      ),
+    color = "midnightblue",
+    size = 0.3
+    ) +
+  geom_point(
+    data = residences,
+    aes(
+      x = long, 
+      y = lat + 0.2
+      ),
+    size = 0.5,
+    color = "red"
+  ) +
+#  coord_map() +
+  coord_fixed() +
+#  coord_sf(label_axes = "----") +
+  theme(panel.grid.major = element_blank()) +
+  labs(x = NULL, y = NULL) +
+  theme_void()
+
+base_map
+```
+
+## The animation
+
+The two layers of plot elements in the animation draw richtext labels and curved arrows in sequence.
+
+```{r}
+anim <- base_map +
+  # add in labels for pins, with inward positioning ----
+  # show labels either top left or top right of pin ----
+  geom_richtext(
+    data = residence_connections,
+    aes(
+      x     = ifelse(long_next < -92, long_next + 1, 
+                     long_next - 1),
+      y     = ifelse(lat_next < 42, lat_next - 1.5,
+                     lat_next + 3),
+      label = label_next,
+      vjust = "top",
+      hjust = ifelse(long_next < -92, 0, 1),
+      # group is used to create the transition ----
+      group = seq_along(city_order)
+    ),
+    size = 2,
+    label.colour = "white",
+    color = "midnightblue",
+  ) +
+  # show arrows connecting residences ----
+  geom_curve(
+    # do not include 1st residence in arrows as no arrow is intended ----
+    # and inclusion messes up transition ---
+    data = residence_connections %>% slice(-1),
+    # add slight adjustment to arrow positioning ----
+    aes(
+      y     = lat - 0.1,
+      x     = long,
+      yend  = lat_next - 0.1,
+      xend  = long_next,
+      # group is used to create the transition ----
+      group = seq_along(city_order)
+    ),
+    color = "midnightblue",
+    curvature = -0.5,
+    arrow = arrow(length = unit(0.01, "npc")),
+    size  = 0.2
+  ) +
+  # create animation ----
+  transition_states(
+    city_order,
+    transition_length = 2,
+    state_length = 10
+    ) 
+```
+
+The options for gganimate that work for me include the use of the new `ragg_png` device and the `magick_renderer`.
+
+```{r animation}
+animation <- animate(anim, 
+                     nframes = 30, 
+                     height = 2, 
+                     width = 3, 
+                     duration = 60,
+                     units = "in",
+                     device = "ragg_png",
+                     res = 150,
+                     renderer = magick_renderer())
+
+```
+
+
