@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2021-03-16" />
+
+<title>Video Games and Sliced</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Video Games and Sliced</h1>
+<h4 class="date">March 16, 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-29
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree835d1e6118b9ccec07c4dc6f2a02709abe213128targetblank835d1e6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/835d1e6118b9ccec07c4dc6f2a02709abe213128" target="_blank">835d1e6</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree835d1e6118b9ccec07c4dc6f2a02709abe213128targetblank835d1e6a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/835d1e6118b9ccec07c4dc6f2a02709abe213128" target="_blank">835d1e6</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-09-08/
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/YammerReach.R
+    Untracked:  code/work list batch targets.R
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2021_03_15_tidy_tuesday.Rmd</code>) and HTML (<code>docs/2021_03_15_tidy_tuesday.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/835d1e6118b9ccec07c4dc6f2a02709abe213128/analysis/2021_03_15_tidy_tuesday.Rmd" target="_blank">835d1e6</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-29
+</td>
+<td>
+adopt _common.R color palette
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The #TidyTuesday data this week comes from Steam by way of Kaggle and originally came from SteamCharts. The data was scraped and uploaded to Kaggle.</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse)
+library(tidymodels)
+library(lubridate)
+library(hrbrthemes)
+library(systemfonts)
+ })
+
+source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))</code></pre>
+<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2021-03-16&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `games.csv`</code></pre>
+<pre class="r"><code>tt</code></pre>
+<pre class="r"><code>games &lt;- tt$games %&gt;%
+  mutate(date = ym(paste0(as.character(year), month))) %&gt;%
+  complete(nesting(date, gamename),
+    fill = list(avg = 0, peak = 0)
+  )</code></pre>
+<p>Let’s have a look at the games themselves</p>
+<div id="common-games" class="section level2 tabset">
+<h2 class="tabset">Common games</h2>
+<div id="plot" class="section level3">
+<h3>Plot</h3>
+<pre class="r"><code>games %&gt;%
+  filter(avg &gt; 0) %&gt;%
+  count(gamename, sort = TRUE) %&gt;%
+  ggplot(aes(n)) +
+  geom_histogram(bins = 30) +
+  labs(
+    y = &quot;Count of Months in dataset&quot;,
+    x = &quot;Number of Titles&quot;
+  )</code></pre>
+<p><img src="figure/2021_03_15_tidy_tuesday.Rmd/unnamed-chunk-4-1.png" width="200%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="section" class="section level2 unnumbered">
+<h2 class="unnumbered"></h2>
+<p>Discoveries:</p>
+<ol style="list-style-type: decimal">
+<li><p>There are some non-UTF characters in the game names.</p></li>
+<li><p>There are 1248 distinct game names.</p></li>
+<li><p>About 200 of the games appear in all 104 months of the study(??)</p></li>
+</ol>
+<pre class="r"><code>games %&gt;%
+  group_by(date) %&gt;%
+  summarise(engagement = sum(avg)) %&gt;%
+  ggplot(aes(date, engagement)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_date(
+    date_breaks = &quot;year&quot;,
+    date_labels = &quot;%Y&quot;
+  ) +
+  labs(
+    x = NULL, y = NULL, title = &quot;Steam Engagement, Sum of Monthly Avg&quot;,
+    caption = paste0(&quot;Source: Kaggle&quot;)
+  )</code></pre>
+<p><img src="figure/2021_03_15_tidy_tuesday.Rmd/unnamed-chunk-5-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>The Sid Meier series:</p>
+<pre class="r"><code>games %&gt;%
+  filter(str_detect(gamename, &quot;Sid Meier&quot;)) %&gt;%
+  mutate(
+    name = str_remove(gamename, &quot;Sid Meier&#39;s Civilization&quot;),
+    name = str_remove(name, &quot;\\: &quot;)
+  ) %&gt;%
+  ggplot(aes(date, peak, color = name)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_date(
+    date_breaks = &quot;year&quot;,
+    date_labels = &quot;%Y&quot;
+  ) +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = &quot;Sid Meier&#39;s Civilization Peak Engagement on Steam&quot;,
+    caption = paste0(&quot;Source: Kaggle&quot;)
+  ) +
+  theme(
+    legend.position = c(0.8, 0.75),
+    legend.background = element_rect(color = &quot;white&quot;)
+  )</code></pre>
+<p><img src="figure/2021_03_15_tidy_tuesday.Rmd/unnamed-chunk-6-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>games %&gt;%
+  filter(str_detect(gamename, &quot;Sid Meier&quot;)) %&gt;%
+  mutate(
+    name = str_remove(gamename, &quot;Sid Meier&#39;s Civilization&quot;),
+    name = str_remove(name, &quot;\\: &quot;)
+  ) %&gt;%
+  ggplot(aes(date, peak, color = name)) +
+  geom_line(show.legend = FALSE) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_date(
+    date_breaks = &quot;3 years&quot;,
+    date_labels = &quot;%Y&quot;
+  ) +
+  facet_wrap(~name, scales = &quot;free_y&quot;) +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = &quot;Sid Meier&#39;s Civilization Peak Engagement on Steam&quot;,
+    caption = paste0(&quot;Source: Kaggle&quot;)
+  )</code></pre>
+<p><img src="figure/2021_03_15_tidy_tuesday.Rmd/unnamed-chunk-7-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>I wonder if the all of the game engagement has a seasonal peak, like at a given month?</p>
+<pre class="r"><code>games %&gt;%
+  mutate(
+    month = factor(month, levels = month.name),
+    month = fct_relabel(month, ~month.abb)
+  ) %&gt;%
+  group_by(year, month) %&gt;%
+  summarise(
+    avg = median(avg),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  filter(row_number() != first(row_number())) %&gt;%
+  mutate(pandemic = case_when(
+    year %in% 2020:2021 ~ &quot;pandemic&quot;,
+    TRUE ~ &quot;the before times&quot;
+  )) %&gt;%
+  ggplot(aes(month, avg, group = year, color = pandemic)) +
+  geom_line(size = 1.4, alpha = 0.7) +
+  labs(
+    x = NULL,
+    color = NULL,
+    y = &quot;Median concurrent players for all games&quot;,
+    title = &quot;Video games on Steam and the pandemic&quot;,
+    subtitle = &quot;The overall median number of concurrent players is higher during the pandemic&quot;,
+    caption = &quot;Source: Kaggle&quot;
+  ) +
+  theme(legend.position = &quot;top&quot;)</code></pre>
+<p><img src="figure/2021_03_15_tidy_tuesday.Rmd/unnamed-chunk-8-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] systemfonts_1.0.2  hrbrthemes_0.8.0   lubridate_1.7.10   yardstick_0.0.8   
+ [5] workflowsets_0.1.0 workflows_0.2.3    tune_0.1.6         rsample_0.1.0     
+ [9] recipes_0.1.17     parsnip_0.1.7.900  modeldata_0.1.1    infer_1.0.0       
+[13] dials_0.0.10       scales_1.1.1       broom_0.7.9        tidymodels_0.1.3  
+[17] forcats_0.5.1      stringr_1.4.0      dplyr_1.0.7        purrr_0.3.4       
+[21] readr_2.0.2        tidyr_1.1.4        tibble_3.1.4       ggplot2_3.3.5     
+[25] tidyverse_1.3.1    workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.2.1    selectr_0.4-2     
+  [4] plyr_1.8.6         tidytuesdayR_1.0.1 splines_4.1.1     
+  [7] listenv_0.8.0      usethis_2.0.1      digest_0.6.27     
+ [10] foreach_1.5.1      htmltools_0.5.2    viridis_0.6.1     
+ [13] fansi_0.5.0        magrittr_2.0.1     tzdb_0.1.2        
+ [16] globals_0.14.0     modelr_0.1.8       gower_0.2.2       
+ [19] extrafont_0.17     vroom_1.5.5        R.utils_2.11.0    
+ [22] extrafontdb_1.0    hardhat_0.1.6      colorspace_2.0-2  
+ [25] rvest_1.0.1        textshaping_0.3.5  haven_2.4.3       
+ [28] xfun_0.26          crayon_1.4.1       jsonlite_1.7.2    
+ [31] survival_3.2-11    iterators_1.0.13   glue_1.4.2        
+ [34] gtable_0.3.0       ipred_0.9-12       R.cache_0.15.0    
+ [37] Rttf2pt1_1.3.9     future.apply_1.8.1 DBI_1.1.1         
+ [40] Rcpp_1.0.7         viridisLite_0.4.0  bit_4.0.4         
+ [43] GPfit_1.0-8        lava_1.6.10        prodlim_2019.11.13
+ [46] httr_1.4.2         ellipsis_0.3.2     farver_2.1.0      
+ [49] pkgconfig_2.0.3    R.methodsS3_1.8.1  nnet_7.3-16       
+ [52] sass_0.4.0         dbplyr_2.1.1       utf8_1.2.2        
+ [55] here_1.0.1         labeling_0.4.2     tidyselect_1.1.1  
+ [58] rlang_0.4.11       DiceDesign_1.9     later_1.3.0       
+ [61] munsell_0.5.0      cellranger_1.1.0   tools_4.1.1       
+ [64] cachem_1.0.6       cli_3.0.1          generics_0.1.0    
+ [67] evaluate_0.14      fastmap_1.1.0      yaml_2.2.1        
+ [70] ragg_1.1.3         bit64_4.0.5        knitr_1.36        
+ [73] fs_1.5.0           future_1.22.1      whisker_0.4       
+ [76] R.oo_1.24.0        xml2_1.3.2         compiler_4.1.1    
+ [79] rstudioapi_0.13    curl_4.3.2         reprex_2.0.1      
+ [82] lhs_1.1.3          bslib_0.3.0        stringi_1.7.4     
+ [85] highr_0.9          gdtools_0.2.3      lattice_0.20-44   
+ [88] Matrix_1.3-4       styler_1.6.2       conflicted_1.0.4  
+ [91] vctrs_0.3.8        pillar_1.6.3       lifecycle_1.0.1   
+ [94] furrr_0.2.3        jquerylib_0.1.4    httpuv_1.6.3      
+ [97] R6_2.5.1           promises_1.2.0.1   gridExtra_2.3     
+[100] parallelly_1.28.1  codetools_0.2-18   MASS_7.3-54       
+[103] assertthat_0.2.1   rprojroot_2.0.2    withr_2.4.2       
+[106] parallel_4.1.1     hms_1.1.1          grid_4.1.1        
+[109] rpart_4.1-15       timeDate_3043.102  class_7.3-19      
+[112] rmarkdown_2.11     git2r_0.28.0       pROC_1.18.0       </code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlZpZGVvIEdhbWVzIGFuZCBTbGljZWQiDQpkYXRlOiAiTWFyY2ggMTYsIDIwMjEiDQpvdXRwdXQ6DQogIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICB0b2M6IG5vDQogICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgIGRmX3ByaW50OiBwYWdlZA0KZWRpdG9yX29wdGlvbnM6DQogIGNodW5rX291dHB1dF90eXBlOiBjb25zb2xlDQotLS0NCg0KVGhlICNUaWR5VHVlc2RheSBkYXRhIHRoaXMgd2VlayBjb21lcyBmcm9tIFN0ZWFtIGJ5IHdheSBvZiBLYWdnbGUgYW5kIG9yaWdpbmFsbHkgY2FtZSBmcm9tIFN0ZWFtQ2hhcnRzLiBUaGUgZGF0YSB3YXMgc2NyYXBlZCBhbmQgdXBsb2FkZWQgdG8gS2FnZ2xlLg0KDQpgYGB7ciBzZXR1cCwgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0NCg0Kc3VwcHJlc3NQYWNrYWdlU3RhcnR1cE1lc3NhZ2VzKHsNCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeSh0aWR5bW9kZWxzKQ0KbGlicmFyeShsdWJyaWRhdGUpDQpsaWJyYXJ5KGhyYnJ0aGVtZXMpDQpsaWJyYXJ5KHN5c3RlbWZvbnRzKQ0KIH0pDQoNCnNvdXJjZShoZXJlOjpoZXJlKCJjb2RlIiwiX2NvbW1vbi5SIiksDQogICAgICAgdmVyYm9zZSA9IEZBTFNFLA0KICAgICAgIGxvY2FsID0ga25pdHI6OmtuaXRfZ2xvYmFsKCkpDQoNCmdncGxvdDI6OnRoZW1lX3NldCh0aGVtZV9qaW0oYmFzZV9zaXplID0gMTIpKQ0KDQpgYGANCg0KYGBge3J9DQp0dCA8LSB0aWR5dHVlc2RheVI6OnR0X2xvYWQoIjIwMjEtMDMtMTYiKQ0KYGBgDQoNCg0KYGBge3IsIGV2YWwgPSBpbnRlcmFjdGl2ZSgpfQ0KdHQNCmBgYA0KDQpgYGB7cn0NCmdhbWVzIDwtIHR0JGdhbWVzICU+JQ0KICBtdXRhdGUoZGF0ZSA9IHltKHBhc3RlMChhcy5jaGFyYWN0ZXIoeWVhciksIG1vbnRoKSkpICU+JQ0KICBjb21wbGV0ZShuZXN0aW5nKGRhdGUsIGdhbWVuYW1lKSwgDQogICAgICAgICAgIGZpbGwgPSBsaXN0KGF2ZyA9IDAsIHBlYWsgPSAwKSkNCmBgYA0KDQpMZXQncyBoYXZlIGEgbG9vayBhdCB0aGUgZ2FtZXMgdGhlbXNlbHZlcw0KDQojIyBDb21tb24gZ2FtZXMgey50YWJzZXR9DQoNCiMjIyBQbG90DQoNCmBgYHtyfQ0KZ2FtZXMgJT4lIA0KICBmaWx0ZXIoYXZnID4gMCkgJT4lIA0KICBjb3VudChnYW1lbmFtZSwgc29ydCA9IFRSVUUpICU+JSANCiAgZ2dwbG90KGFlcyhuKSkgKw0KICBnZW9tX2hpc3RvZ3JhbShiaW5zID0gMzApICsNCiAgbGFicyh5ID0gIkNvdW50IG9mIE1vbnRocyBpbiBkYXRhc2V0IiwNCiAgICAgICB4ID0gIk51bWJlciBvZiBUaXRsZXMiKQ0KYGBgDQoNCiMjIHstfQ0KDQpEaXNjb3ZlcmllczoNCg0KMS4gVGhlcmUgYXJlIHNvbWUgbm9uLVVURiBjaGFyYWN0ZXJzIGluIHRoZSBnYW1lIG5hbWVzLg0KDQoxLiBUaGVyZSBhcmUgMTI0OCBkaXN0aW5jdCBnYW1lIG5hbWVzLiANCg0KMS4gQWJvdXQgMjAwIG9mIHRoZSBnYW1lcyBhcHBlYXIgaW4gYWxsIDEwNCBtb250aHMgb2YgdGhlIHN0dWR5KD8/KQ0KDQoNCmBgYHtyfQ0KZ2FtZXMgJT4lDQogIGdyb3VwX2J5KGRhdGUpICU+JQ0KICBzdW1tYXJpc2UoZW5nYWdlbWVudCA9IHN1bShhdmcpKSAlPiUNCiAgZ2dwbG90KGFlcyhkYXRlLCBlbmdhZ2VtZW50KSkgKw0KICBnZW9tX2xpbmUoKSArDQogIHNjYWxlX3lfY29udGludW91cyhsYWJlbHMgPSBzY2FsZXM6OmNvbW1hKSArDQogIHNjYWxlX3hfZGF0ZShkYXRlX2JyZWFrcyA9ICJ5ZWFyIiwNCiAgICAgICAgICAgICAgIGRhdGVfbGFiZWxzID0gIiVZIikgKw0KICBsYWJzKHggPSBOVUxMLCB5ID0gTlVMTCwgdGl0bGUgPSAiU3RlYW0gRW5nYWdlbWVudCwgU3VtIG9mIE1vbnRobHkgQXZnIiwgDQogICAgICAgY2FwdGlvbiA9IHBhc3RlMCgiU291cmNlOiBLYWdnbGUiKSkNCmBgYA0KDQpUaGUgU2lkIE1laWVyIHNlcmllczoNCg0KYGBge3J9DQpnYW1lcyAlPiUNCiAgZmlsdGVyKHN0cl9kZXRlY3QoZ2FtZW5hbWUsICJTaWQgTWVpZXIiKSkgJT4lDQogIG11dGF0ZShuYW1lID0gc3RyX3JlbW92ZShnYW1lbmFtZSwgIlNpZCBNZWllcidzIENpdmlsaXphdGlvbiIpLA0KICAgICAgICAgbmFtZSA9IHN0cl9yZW1vdmUobmFtZSwgIlxcOiAiKSkgJT4lIA0KICBnZ3Bsb3QoYWVzKGRhdGUsIHBlYWssIGNvbG9yID0gbmFtZSkpICsNCiAgZ2VvbV9saW5lKCkgKw0KICBzY2FsZV95X2NvbnRpbnVvdXMobGFiZWxzID0gc2NhbGVzOjpjb21tYSkgKw0KICBzY2FsZV94X2RhdGUoZGF0ZV9icmVha3MgPSAieWVhciIsDQogICAgICAgICAgICAgICBkYXRlX2xhYmVscyA9ICIlWSIpICsNCiAgbGFicygNCiAgICB4ID0gTlVMTCwNCiAgICB5ID0gTlVMTCwNCiAgICB0aXRsZSA9ICJTaWQgTWVpZXIncyBDaXZpbGl6YXRpb24gUGVhayBFbmdhZ2VtZW50IG9uIFN0ZWFtIiwNCiAgICBjYXB0aW9uID0gcGFzdGUwKCJTb3VyY2U6IEthZ2dsZSIpDQogICkgKw0KICB0aGVtZShsZWdlbmQucG9zaXRpb24gPSBjKDAuOCwwLjc1KSwNCiAgICAgICAgbGVnZW5kLmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoY29sb3IgPSAid2hpdGUiKSkNCmBgYA0KDQoNCmBgYHtyfQ0KZ2FtZXMgJT4lDQogIGZpbHRlcihzdHJfZGV0ZWN0KGdhbWVuYW1lLCAiU2lkIE1laWVyIikpICU+JQ0KICBtdXRhdGUobmFtZSA9IHN0cl9yZW1vdmUoZ2FtZW5hbWUsICJTaWQgTWVpZXIncyBDaXZpbGl6YXRpb24iKSwNCiAgICAgICAgIG5hbWUgPSBzdHJfcmVtb3ZlKG5hbWUsICJcXDogIikpICU+JSANCiAgZ2dwbG90KGFlcyhkYXRlLCBwZWFrLCBjb2xvciA9IG5hbWUpKSArDQogIGdlb21fbGluZShzaG93LmxlZ2VuZCA9IEZBTFNFKSArDQogIHNjYWxlX3lfY29udGludW91cyhsYWJlbHMgPSBzY2FsZXM6OmNvbW1hKSArDQogIHNjYWxlX3hfZGF0ZShkYXRlX2JyZWFrcyA9ICIzIHllYXJzIiwNCiAgICAgICAgICAgICAgIGRhdGVfbGFiZWxzID0gIiVZIikgKw0KICBmYWNldF93cmFwKH4gbmFtZSwgc2NhbGVzID0gImZyZWVfeSIpICsNCiAgbGFicygNCiAgICB4ID0gTlVMTCwNCiAgICB5ID0gTlVMTCwNCiAgICB0aXRsZSA9ICJTaWQgTWVpZXIncyBDaXZpbGl6YXRpb24gUGVhayBFbmdhZ2VtZW50IG9uIFN0ZWFtIiwNCiAgICBjYXB0aW9uID0gcGFzdGUwKCJTb3VyY2U6IEthZ2dsZSIpDQogICkgDQpgYGANCg0KSSB3b25kZXIgaWYgdGhlIGFsbCBvZiB0aGUgZ2FtZSBlbmdhZ2VtZW50IGhhcyBhIHNlYXNvbmFsIHBlYWssIGxpa2UgYXQgYSBnaXZlbiBtb250aD8NCg0KYGBge3J9DQpnYW1lcyAlPiUNCiAgbXV0YXRlKG1vbnRoID0gZmFjdG9yKG1vbnRoLCBsZXZlbHMgPSBtb250aC5uYW1lKSwNCiAgICAgICAgIG1vbnRoID0gZmN0X3JlbGFiZWwobW9udGgsIH4gbW9udGguYWJiKSkgJT4lDQogIGdyb3VwX2J5KHllYXIsIG1vbnRoKSAlPiUNCiAgc3VtbWFyaXNlKGF2ZyA9IG1lZGlhbihhdmcpLA0KICAgICAgICAgICAgLmdyb3VwcyA9ICJkcm9wIikgJT4lDQogIGZpbHRlcihyb3dfbnVtYmVyKCkgIT0gZmlyc3Qocm93X251bWJlcigpKSkgJT4lDQogIG11dGF0ZShwYW5kZW1pYyA9IGNhc2Vfd2hlbih5ZWFyICVpbiUgMjAyMDoyMDIxIH4gInBhbmRlbWljIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRSVUUgfiAidGhlIGJlZm9yZSB0aW1lcyIpKSAlPiUNCiAgZ2dwbG90KGFlcyhtb250aCwgYXZnLCBncm91cCA9IHllYXIsIGNvbG9yID0gcGFuZGVtaWMpKSArDQogIGdlb21fbGluZShzaXplID0gMS40LCBhbHBoYSA9IDAuNykgKw0KICBsYWJzKA0KICAgIHggPSBOVUxMLA0KICAgIGNvbG9yID0gTlVMTCwNCiAgICB5ID0gIk1lZGlhbiBjb25jdXJyZW50IHBsYXllcnMgZm9yIGFsbCBnYW1lcyIsDQogICAgdGl0bGUgPSAiVmlkZW8gZ2FtZXMgb24gU3RlYW0gYW5kIHRoZSBwYW5kZW1pYyIsDQogICAgc3VidGl0bGUgPSAiVGhlIG92ZXJhbGwgbWVkaWFuIG51bWJlciBvZiBjb25jdXJyZW50IHBsYXllcnMgaXMgaGlnaGVyIGR1cmluZyB0aGUgcGFuZGVtaWMiLA0KICAgIGNhcHRpb24gPSAiU291cmNlOiBLYWdnbGUiDQogICkgKw0KICB0aGVtZShsZWdlbmQucG9zaXRpb24gPSAidG9wIikNCmBgYA0KDQoNCg0KDQo=</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2021_03_15_tidy_tuesday.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
