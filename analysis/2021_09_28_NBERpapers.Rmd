@@ -97,7 +97,7 @@ First, though, let's explore the data with some visuals. Julia Silge's approach 
 ```{r title_log_odds}
 
 #| fig.width: 12
-#| fig.asp: 1
+#| fig.asp: 1.2
 #| fig.align: "center"
 #| out.width: "250%"
 #| fig.cap: "NBER Data Source: `nberwp` package by Ben Davies"
