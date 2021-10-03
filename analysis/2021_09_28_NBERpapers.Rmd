@@ -95,12 +95,10 @@ The data are not balanced, so we will investigate strategies for finding feature
 First, though, let's explore the data with some visuals. Julia Silge's approach to text modeling often goes down a path of exploring the log odds uniqueness of works within the document categories. Let's try her approach, [found here](https://juliasilge.com/blog/nber-papers/).
 
 ```{r title_log_odds}
-
 #| fig.width: 12
-#| fig.asp: 1.2
+#| fig.asp: 1.5
 #| fig.align: "center"
-#| out.width: "250%"
-#| fig.cap: "NBER Data Source: `nberwp` package by Ben Davies"
+#| out.width: "300%"
 #| fig.alt: >
 #|  A faceted bar plot showing the relationships between
 #|  words found in National Bureau of Economics Research
@@ -205,9 +203,14 @@ ggraph_theme <- theme_jim(base_size = 12) +
   theme(
     legend.position = "none",
     axis.title = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
     axis.text = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
     panel.grid = element_blank(),
     panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
   ) 
 
 fun_net <- function(yr){
@@ -521,7 +524,16 @@ collect_metrics(final_rs)
 
 We can visualize the difference in performance across classes with a confusion matrix.
 
-```{r}
+```{r large_confusion_matrix}
+#| fig.width: 12
+#| fig.asp: 1
+#| fig.align: "center"
+#| out.width: "300%"
+#| fig.alt: >
+#|   A confusion matrix illustrating the counts of predictions
+#|   versus the truth for the training set used in 
+#|   creating the model
+
 collect_predictions(final_rs) %>%
   conf_mat(program_desc, .pred_class) %>%
   autoplot() +
@@ -566,3 +578,10 @@ predict(final_fitted, nber_test[85, ], type = "prob") %>%
 ```
 
 The test data's correct answer (truth) is `r nber_test[85, ]$program_desc`
+
+My tweet for the week:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1444715803631357958")
+```
+
