@@ -94,7 +94,20 @@ The data are not balanced, so we will investigate strategies for finding feature
 
 First, though, let's explore the data with some visuals. Julia Silge's approach to text modeling often goes down a path of exploring the log odds uniqueness of works within the document categories. Let's try her approach, [found here](https://juliasilge.com/blog/nber-papers/).
 
-```{r title_log_odds, fig.asp=1}
+```{r title_log_odds}
+
+#| fig.width: 7
+#| fig.asp: 1
+#| fig.align: "center"
+#| out.width: "80%"
+#| fig.cap: "NBER Data Source: `nberwp` package by Ben Davies"
+#| fig.alt: >
+#|  A faceted bar plot showing the relationships between
+#|  words found in National Bureau of Economics Research
+#|  papers titles and the programs that the papers were
+#|  submitted into, using counts and log odds to find
+#|  those that are most distinctively associated
+
 title_log_odds <-
   papers_joined %>%
   unnest_tokens(word, title) %>%
