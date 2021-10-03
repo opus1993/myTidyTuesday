@@ -96,10 +96,10 @@ First, though, let's explore the data with some visuals. Julia Silge's approach 
 
 ```{r title_log_odds}
 
-#| fig.width: 7
+#| fig.width: 12
 #| fig.asp: 1
 #| fig.align: "center"
-#| out.width: "80%"
+#| out.width: "250%"
 #| fig.cap: "NBER Data Source: `nberwp` package by Ben Davies"
 #| fig.alt: >
 #|  A faceted bar plot showing the relationships between
@@ -115,7 +115,7 @@ title_log_odds <-
   count(program_desc, word, sort = TRUE) %>%
   bind_log_odds(program_desc, word, n)
 
-title_log_odds %>%
+p <- title_log_odds %>%
   group_by(program_desc) %>%
   slice_max(log_odds_weighted, n = 5) %>%
   ungroup() %>%
@@ -143,6 +143,22 @@ title_log_odds %>%
   theme(panel.grid.major.y = element_blank(),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())
+
+imglogo <- magick::image_read("https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-09-28/nber-logo.png?raw=true")
+tidy_logo <- magick::image_read("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/static/plot_logo.png") %>%
+  magick::image_resize("300x300")
+
+cowplot::ggdraw() +
+  cowplot::draw_plot(p) +
+  cowplot::draw_image(imglogo,
+                      x = 0.01,
+                      y = -0.48,
+                      width = 0.2) +
+  cowplot::draw_image(tidy_logo,
+                      x = 0.2,
+                      y = -0.48,
+                      width = .1)
+
 ```
 
 With this many categorical variables, lets take a look at counts in a treemap:
