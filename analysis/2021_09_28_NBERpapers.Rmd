@@ -126,7 +126,7 @@ title_log_odds %>%
   labs(x = "Log odds (weighted)", y = NULL,
        title = "NBER Paper Titles Most Descriptive Words by Program",
        caption = "Data Source: `nberwp` package by Ben Davies") +
-  theme_jim(base_size = 12) +
+  theme_jim(base_size = 10) +
   theme(panel.grid.major.y = element_blank(),
         axis.title.y = element_blank(),
         axis.text.y = element_blank())
@@ -172,7 +172,8 @@ To speed up the process of plotting every year, let's build a function:
 
 ```{r fun_net}
 
-ggraph_theme <- theme(
+ggraph_theme <- theme_jim(base_size = 12) +
+  theme(
     legend.position = "none",
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -502,9 +503,9 @@ collect_predictions(final_rs) %>%
 
 We can also visualize the ROC curves for each class.
 
-```{r}
+```{r roc_curve, fig.asp=1}
 
-p <- collect_predictions(final_rs) %>% 
+collect_predictions(final_rs) %>% 
   roc_curve(truth = program_desc,
             `.pred_Asset Pricing`:`.pred_Public Economics`) %>%
   ggplot(aes(1 - specificity, sensitivity, color = .level)) +
@@ -520,7 +521,6 @@ p <- collect_predictions(final_rs) %>%
   coord_fixed() +
   labs(title = "ROC better for Development Economics than most others")
 
-ggplotly(p)
 ```
 
 Finally, we can extract (and save, if we like) the fitted workflow from our results to use for predicting on new data.
