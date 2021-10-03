@@ -1,0 +1,539 @@
+---
+title: "National Bureau of Economic Research working papers"
+author: "Jim Gruman"
+date: "September 30, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+The #TidyTuesday data sets this week come from the National Bureau of Economic Research [NBER](https://www2.nber.org/RePEc/nbr/nberwo/) by way of the [`nberwp` package by Ben Davies](https://github.com/bldavies/nberwp).
+
+<img alt="National Bureau of Economic Research" aria-label="NBER logo" src="https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-09-28/nber-logo.png?raw=true">
+
+Ben also has a detailed [blogpost](https://bldavies.com/blog/female-representation-collaboration-nber/) looking at this data, and NBER discusses the history of the organization here [here](https://www.nber.org/about-nber/history).
+
+My plan here is to learn something about the documents in the set and explore some R package functionality.  Let's load up R packages:
+
+```{r setup}
+
+suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(treemapify)
+
+library(tidytext)
+library(tidylo) 
+  
+library(tidygraph)
+library(ggraph)
+library(igraph)
+library(patchwork)
+  
+library(tidymodels) # machine learning tools
+library(textrecipes)
+library(finetune) # racing methods for accelerating hyperparameter tuning
+
+library(themis) # ml prep tools for handling unbalanced datasets
+library(plotly)
+  })
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+theme_set(theme_jim(base_size = 14))
+
+```
+
+
+```{r loadData}
+papers <-
+  readr::read_csv(
+    "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-09-28/papers.csv"
+  )
+programs <-
+  readr::read_csv(
+    "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-09-28/programs.csv"
+  )
+paper_authors <-
+  readr::read_csv(
+    "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-09-28/paper_authors.csv"
+  )
+paper_programs <-
+  readr::read_csv(
+    "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-09-28/paper_programs.csv"
+  )
+```
+
+Let’s start by joining up these datasets to find the info we need. The papers are grouped into twenty one programs so let's train a multiclass predictive model to better understand them. I am going to choose to omit the technical working papers. 
+
+```{r papers_joined}
+papers_joined <-
+  paper_programs %>%
+  left_join(programs) %>%
+  left_join(papers) %>%
+  filter(!is.na(program_desc)) %>%
+  mutate(pub_date = lubridate::ym(paste(year,"-",month))) %>% 
+  distinct(paper, pub_date, title, program_desc, program_category) %>% 
+  filter(program_desc != "Technical Working Papers",
+         !is.na(pub_date),
+         !is.na(title),
+         !is.na(program_desc)) %>% 
+  mutate(program_desc = factor(program_desc))
+
+papers_joined %>% 
+  count(program_desc, sort = TRUE) 
+```
+
+The data are not balanced, so we will investigate strategies for finding features that work accordingly.
+
+First, though, let's explore the data with some visuals. Julia Silge's approach to text modeling often goes down a path of exploring the log odds uniqueness of works within the document categories. Let's try her approach, [found here](https://juliasilge.com/blog/nber-papers/).
+
+```{r title_log_odds, fig.asp=1}
+title_log_odds <-
+  papers_joined %>%
+  unnest_tokens(word, title) %>%
+  filter(!is.na(program_desc)) %>%
+  count(program_desc, word, sort = TRUE) %>%
+  bind_log_odds(program_desc, word, n)
+
+title_log_odds %>%
+  group_by(program_desc) %>%
+  slice_max(log_odds_weighted, n = 5) %>%
+  ungroup() %>%
+  mutate(word = reorder_within(word, log_odds_weighted, program_desc)) %>% 
+  ggplot(aes(log_odds_weighted, 
+             word,
+             fill = program_desc
+  )) +
+  geom_col(show.legend = FALSE) +
+  scale_y_reordered() +
+  geom_text(aes(label = str_extract(word, "[:alnum:]*"),
+                color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))),
+            x = 0,
+            size = rel(5),
+            hjust = 0,
+            nudge_x = 40) +
+  scale_fill_manual(values = viridis::viridis_pal(option = "H")(21)[c(1,8,15,2,9,16,3,10,17,4,11,18,5,12,19,6,13,20,7,14,21)]) +
+  facet_wrap(vars(program_desc), 
+             scales = "free",
+             labeller = label_wrap_gen()) +
+  labs(x = "Log odds (weighted)", y = NULL,
+       title = "NBER Paper Titles Most Descriptive Words by Program",
+       caption = "Data Source: `nberwp` package by Ben Davies") +
+  theme_jim(base_size = 12) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank())
+```
+
+With this many categorical variables, lets take a look at counts in a treemap:
+
+```{r treemap}
+papers_joined %>% 
+  group_by(program_desc, program_category) %>%
+  summarise(n = n(),
+            last_paper = last(pub_date),
+            .groups = "drop") %>% 
+  slice_max(order_by = n, n = 60) %>%
+  ggplot(aes(area = n, 
+             fill = last_paper, 
+             label = program_desc, 
+             subgroup = program_category)) +
+  geom_treemap() +
+  geom_treemap_subgroup_border() +
+  geom_treemap_text(color = "black", 
+                    place = "top", 
+                    reflow = TRUE) +
+  geom_treemap_subgroup_text(
+    color = "white", 
+    place = "bottomleft",
+    fontface = "italic", 
+    min.size = 0, 
+    alpha = 0.7
+  ) +
+  scale_fill_viridis_c(option = "H") +
+  labs(
+    fill = NULL, title = "National Bureau of Economic Research Papers",
+    subtitle = "Three primary program categories cover 20 programs. The area corresponds to the number of papers of each in the dataset.",
+    caption = "Data Source: Ben Davies {nberwp}"
+  ) +
+  theme(legend.position = "none")
+```
+
+We could create a co-authorship network graphic straight from the paper_authors table that makes the link between the papers and their authors.
+
+To speed up the process of plotting every year, let's build a function:
+
+```{r fun_net}
+
+ggraph_theme <- theme(
+    legend.position = "none",
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    panel.grid = element_blank(),
+    panel.grid.major = element_blank(),
+  ) 
+
+fun_net <- function(yr){
+  paper_authors_year <- paper_authors %>% 
+    left_join(papers) %>% 
+    filter(year == yr)
+  
+  edges_list <- paper_authors_year %>% 
+    mutate(author_id = as.integer(as.factor(author)))
+  
+  edges_list <- edges_list %>% 
+    left_join(edges_list, by = 'paper') %>% 
+    count(author_id.x, author_id.y) %>% 
+    mutate(
+    max = pmax(author_id.x, author_id.y),
+    min = pmin(author_id.x, author_id.y)
+  ) %>% 
+  unite(check, c(min, max), remove = FALSE) %>% 
+  distinct(check, .keep_all = TRUE) %>% 
+  mutate(n = case_when(
+    (author_id.x==author_id.y) ~ 0L,
+    TRUE~n
+  )) %>% 
+  rename(
+    from = author_id.x,
+    to = author_id.y
+  ) %>% 
+  select(from, to, n)
+  
+  network <- as_tbl_graph(edges_list, directed = FALSE)
+  
+  return(network)
+}
+
+```
+
+```{r first_ggraph}
+plot80 <- ggraph(graph = fun_net(1980),
+                 layout = "kk") +
+  geom_node_point() +
+  geom_edge_diagonal(color = "dimgrey", alpha = 0.8) +
+  ggraph_theme
+
+plot00 <- ggraph(graph = fun_net(2000),
+                 layout = "kk") +
+  geom_node_point() +
+  geom_edge_diagonal(color = "dimgrey", alpha = 0.8) +
+  ggraph_theme
+
+layout <- c(area(
+  t = 1,
+  l = 1,
+  b = 4,
+  r = 2
+),
+area(
+  t = 1,
+  l = 3,
+  b = 4,
+  r = 4
+))
+
+plot80 + plot00 +
+  plot_layout(design = layout) +
+  plot_annotation(
+    title = "Evolution of co-authorship networks for NBER papers",
+    subtitle = "Algorithm: Kamda-Kawai",
+    caption = "Data Source: `nberwp` package by Ben Davies",
+    tag_levels = list(c("1980","2000"))
+  )
+```
+
+What can be done to further annotate the visual with metrics? In network analysis, the most common metric for each node is degree, that is the number of connections for each node. 
+
+```{r number_of_connections_at_each_node}
+net80 <- fun_net(1980) %>%
+  activate(edges) %>%
+  mutate(weights = case_when(
+    # Solo-authored set to weight=0
+    n == 0 ~ 0,
+    # Weight = 1 for all others collaborations
+    TRUE ~1
+  )) %>%
+  # Now activate nodes
+  activate(nodes) %>%
+  # Compute degree for each node
+  mutate(deg = centrality_degree(weights = weights)) %>%
+  # Find author with most collaboration
+  # (highest-degree node)
+  mutate(max_deg = max(deg)) %>%
+  mutate(max_author = case_when(
+    deg == max_deg ~ 1,
+    TRUE ~ 0
+  ))
+
+# Same steps for year 2000
+net00 <- fun_net(2000) %>%
+  activate(edges) %>%
+  mutate(weights = case_when(
+    n==0 ~ 0,
+    TRUE ~1
+  )) %>%
+  activate(nodes) %>%
+  mutate(deg = centrality_degree(weights = weights)) %>%
+  mutate(max_deg = max(deg)) %>%
+  mutate(max_author = case_when(
+    deg == max_deg ~ 1,
+    TRUE ~ 0
+  ))
+
+```
+We may now calculate the average degree for each network.
+
+```{r}
+stat_deg_80 <- net80 %>%
+  activate(nodes) %>%
+  as_tibble() %>%
+  summarise(
+    year = '1980',
+    mean_deg = mean(deg),
+    max_deg = mean(max_deg))
+
+stat_deg_00 <- net00 %>%
+  activate(nodes) %>%
+  as_tibble() %>%
+  summarise(
+    year = '2000',
+    mean_deg = mean(deg),
+    max_deg = mean(max_deg))
+
+bind_rows(stat_deg_80, stat_deg_00)
+```
+
+The number of connection is increasing between 1980 and 2000. For papers published in 2000, each author collaborated on average with approximately two other authors.
+
+We may now add these information to the plots.
+
+```{r}
+p80 <- ggraph(net80,
+              layout = "kk") +
+  geom_node_point(aes(col = deg, size = max_author)) +
+  geom_edge_diagonal(color = "dimgrey", alpha = 0.8) +
+  scale_color_viridis_b(option = "H") +
+  guides(size = "none", color = "none") +
+  ggraph_theme
+
+p00 <- ggraph(net00,
+              layout = "kk") +
+  geom_node_point(aes(col = deg, size = max_author)) +
+  guides(size = "none") +
+  labs(color = "Degree") +
+  scale_color_viridis_b(option = "H") +
+  geom_edge_diagonal(color = "dimgrey", alpha = 0.8) +
+  ggraph_theme
+
+p80 + p00 +
+  plot_layout(design = layout,
+              guides = "collect") +
+  plot_annotation(
+    title = "Evolution of co-authorship networks for NBER papers",
+    subtitle = "Largest points show node with maximum degree. Algorithm: Kamda-Kawai",
+    caption = "Data Source: `nberwp` package by Ben Davies",
+    
+    tag_levels = list(c('1980', '2000'))
+  )
+```
+
+More metrics regarding these networks are described in [Ben Davies’ blog post](https://bldavies.com/blog/female-representation-collaboration-nber/).
+
+Ben Nowak's superb complete network diagram submission:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/BjnNowak/status/1442807060396134408")
+```
+
+The types of relationships, as inferences, between program and title words are what we want to discover more about in our predictive model.
+
+## Build and Tune a Model
+
+Let’s start our modeling by setting up our “data budget.” We’ll stratify by our outcome `program_desc`.
+
+```{r}
+nber_split <- initial_split(papers_joined, 
+                            strata = program_desc)
+nber_train <- training(nber_split)
+nber_test <- testing(nber_split)
+
+set.seed(2021)
+nber_folds <- vfold_cv(nber_train, strata = program_desc)
+
+```
+
+Next, let’s set up feature engineering. We will need to [transform our text data](https://textrecipes.tidymodels.org/articles/Working-with-n-grams.html) into features useful for our model by tokenizing and computing either term frequency or tf-idf. Let’s also upsample since our dataset is imbalanced, with many more of some of the categories than others. 
+
+```{r}
+nber_rec_tfidf <-
+  recipe(program_desc ~ title + pub_date, 
+         data = nber_train) %>%
+  step_tokenize(title) %>%
+  step_stem(title) %>% 
+  step_ngram(title, num_tokens = 3) %>% 
+  step_tokenfilter(title, max_tokens = 200) %>%
+  step_tfidf(title) %>%
+  step_date(pub_date,
+            features = c("month","year"),
+            keep_original_cols = FALSE) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_upsample(program_desc) %>%
+  step_zv(all_predictors())
+
+```
+
+Then, let’s create our model specification for a lasso model. We need to use a model specification that can handle multiclass data, in this case `multinom_reg()`.
+
+```{r}
+multi_spec <-
+  multinom_reg(penalty = tune(), 
+               mixture = 1) %>%
+  set_mode("classification") %>%
+  set_engine("glmnet")
+
+```
+
+Since the lasso regularization `penalty` is a hyperparameter of the model (we can’t find the best value from fitting the model a single time), let’s tune over a grid of possible penalty parameters.
+
+```{r}
+nber_grid <- grid_regular(penalty(range = c(-5, 0)), 
+                          levels = 16)
+
+```
+
+To speed things up, we will use all but one of the computer's cores.
+
+```{r parallel, eval = FALSE}
+ctrl <- control_race(parallel_over = "everything",
+                     save_pred = TRUE)
+
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+```
+
+Tidymodels will model every penalty parameter over the first couple of folds, but will begin to drop values unlikely to perform to save processing time.
+
+```{r eval=FALSE}
+
+nber_wf <-
+  workflow(nber_rec_tfidf, multi_spec)
+
+nber_rs <-
+  nber_wf %>% 
+  tune_grid(
+    resamples = nber_folds,
+    verbose = TRUE,
+    metric = metric_set(roc_aunu),
+    grid = nber_grid   
+  )
+
+```
+
+```{r include=FALSE}
+nber_wf <-
+  workflow(nber_rec_tfidf, multi_spec)
+
+if (file.exists(here::here("data","nber_rs.rmd"))) {
+  nber_rs <- read_rds(here::here("data","nber_rs.rmd"))
+} else {
+
+nber_rs <-
+  nber_wf %>% 
+  tune_grid(
+    resamples = nber_folds,
+    verbose = TRUE,
+    metric = metric_set(roc_aunu),
+    grid = nber_grid   
+  )
+
+write_rds(nber_rs, 
+          here::here("data", "nber_rs.rmd"))
+}
+```
+
+
+How did it turn out?
+
+```{r}
+autoplot(nber_rs)
+
+(final_penalty <- select_by_one_std_err(nber_rs, 
+                      metric = "roc_auc",
+                      desc(penalty)))
+```
+
+
+
+```{r}
+final_rs <-
+  nber_wf %>%
+  finalize_workflow(final_penalty) %>%
+  last_fit(nber_split)
+
+final_rs
+```
+
+How did our final model perform on the training data?
+
+```{r}
+collect_metrics(final_rs)
+```
+
+We can visualize the difference in performance across classes with a confusion matrix.
+
+```{r}
+collect_predictions(final_rs) %>%
+  conf_mat(program_desc, .pred_class) %>%
+  autoplot() +
+  theme_jim(base_size = 12) +
+  theme(axis.text.x = element_blank()) +
+  labs(title = "NBER Classification Confusion Matrix on Training")
+```
+
+We can also visualize the ROC curves for each class.
+
+```{r}
+
+p <- collect_predictions(final_rs) %>% 
+  roc_curve(truth = program_desc,
+            `.pred_Asset Pricing`:`.pred_Public Economics`) %>%
+  ggplot(aes(1 - specificity, sensitivity, color = .level)) +
+  geom_abline(
+    slope = 1,
+    color = "gray50",
+    lty = 2,
+    alpha = 0.8
+  ) +
+  geom_path(size = 1.5, alpha = 0.7) +
+  scale_color_manual(values = viridis::viridis_pal(option = "H")(21)[c(1,8,15,2,9,16,3,10,17,4,11,18,5,12,19,6,13,20,7,14,21)]) +
+  labs(color = NULL) +
+  coord_fixed() +
+  labs(title = "ROC better for Development Economics than most others")
+
+ggplotly(p)
+```
+
+Finally, we can extract (and save, if we like) the fitted workflow from our results to use for predicting on new data.
+
+For paper w0456, `r nber_test[85, ]$title`, the model makes the following prediction probabilities:
+
+```{r}
+final_fitted <- extract_workflow(final_rs)
+## can save this for prediction later with readr::write_rds()
+
+predict(final_fitted, nber_test[85, ], type = "prob") %>% 
+  pivot_longer(cols = everything()) %>% 
+  arrange(desc(value))
+```
+
+The test data's correct answer (truth) is `r nber_test[85, ]$program_desc`
