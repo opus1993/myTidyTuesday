@@ -37,6 +37,8 @@ options(
   hrbrthemes.loadfonts = TRUE
 )
 
+Sys.setenv(`_R_S3_METHOD_REGISTRATION_NOTE_OVERWRITES_` = "false")
+
 hrbrthemes::update_geom_font_defaults(hrbrthemes::font_rc_light)
 
 theme_jim <- function(base_size = 12){
@@ -85,7 +87,7 @@ cm_heat <- function(x) {
     ) %+%
     ggplot2::geom_text(mapping = ggplot2::aes(label = Freq,
                                               color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))),
-                       size = rel(15),
+                       size = rel(5),
                        face = "bold") %+%
     ggplot2::labs(x = axis_labels$x, y = axis_labels$y)
 }
