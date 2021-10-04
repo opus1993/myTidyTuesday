@@ -21,11 +21,15 @@ Ben also has a detailed [blogpost](https://bldavies.com/blog/female-representati
 My plan here is to learn something about the documents in the set and explore some R package functionality.  Let's load up R packages:
 
 ```{r setup}
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
 
 suppressPackageStartupMessages({
+
 library(tidyverse) # clean and transform rectangular data
 library(treemapify)
-
+library(extrafont)
 library(tidytext)
 library(tidylo) 
   
@@ -39,12 +43,9 @@ library(textrecipes)
 library(finetune) # racing methods for accelerating hyperparameter tuning
 
 library(themis) # ml prep tools for handling unbalanced datasets
-library(plotly)
   })
 
-source(here::here("code","_common.R"),
-       verbose = FALSE,
-       local = knitr::knit_global())
+extrafont::loadfonts(quiet = TRUE)
 
 theme_set(theme_jim(base_size = 14))
 
@@ -118,24 +119,24 @@ p <- title_log_odds %>%
   slice_max(log_odds_weighted, n = 5) %>%
   ungroup() %>%
   mutate(word = reorder_within(word, log_odds_weighted, program_desc)) %>% 
-  ggplot(aes(log_odds_weighted, 
-             word,
-             fill = program_desc
-  )) +
-  geom_col(show.legend = FALSE) +
+  ggplot(aes(log_odds_weighted, word)) +
+  geom_col(aes(color = program_desc,
+               fill = stage(program_desc, after_scale = alpha(fill, 0.1))),
+           show.legend = FALSE) +
   scale_y_reordered() +
-  geom_text(aes(label = str_extract(word, "[:alnum:]*"),
-                color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))),
-            x = 0,
-            size = rel(5),
+  geom_text(aes(label = str_extract(word, "[:alnum:]*")),
+            x = 0.2,
+            size = rel(4),
+            show.legend = FALSE,
             hjust = 0,
             nudge_x = 40) +
+  scale_color_manual(values = viridis::viridis_pal(option = "H")(21)[c(1,8,15,2,9,16,3,10,17,4,11,18,5,12,19,6,13,20,7,14,21)]) +
   scale_fill_manual(values = viridis::viridis_pal(option = "H")(21)[c(1,8,15,2,9,16,3,10,17,4,11,18,5,12,19,6,13,20,7,14,21)]) +
   facet_wrap(vars(program_desc), 
              scales = "free",
              labeller = label_wrap_gen()) +
   labs(x = "Log odds (weighted)", y = NULL,
-       title = "NBER Paper Titles Most Descriptive Words by Program",
+       title = "NBER Paper Titles: Most Descriptive Words by Program",
        caption = "Data Source: `nberwp` package by Ben Davies") +
   theme_jim(base_size = 10) +
   theme(panel.grid.major.y = element_blank(),
@@ -386,7 +387,7 @@ Ben Nowak's superb complete network diagram submission:
 tweetrmd::include_tweet("https://twitter.com/BjnNowak/status/1442807060396134408")
 ```
 
-The types of relationships, as inferences, between program and title words are what we want to discover more about in our predictive model.
+The types of relationships, as inferences, between program and title words are what we want to discover more about in a predictive model.
 
 ## Build and Tune a Model
 
@@ -557,10 +558,12 @@ collect_predictions(final_rs) %>%
     alpha = 0.8
   ) +
   geom_path(size = 1.5, alpha = 0.7) +
-  scale_color_manual(values = viridis::viridis_pal(option = "H")(21)[c(1,8,15,2,9,16,3,10,17,4,11,18,5,12,19,6,13,20,7,14,21)]) +
+  scale_color_manual(values = viridis::viridis_pal(option = "H")(21)[c(1,8,15,2,9,16,3,10,17,4,11,18,5,12,19,6,13,20,7,14,21)], labels = scales::label_wrap(width = 12)) +
   labs(color = NULL) +
   coord_fixed() +
-  labs(title = "ROC better for Development Economics than most others")
+  labs(title = "ROC better for Development Economics than most others") +
+  guides(color = guide_legend(ncol = 2)) +
+  theme(legend.text = element_text(size = 8))
 
 ```
 
