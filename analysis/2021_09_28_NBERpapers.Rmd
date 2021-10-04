@@ -325,7 +325,7 @@ net00 <- fun_net(2000) %>%
 ```
 We may now calculate the average degree for each network.
 
-```{r}
+```{r average_degree_each_network}
 stat_deg_80 <- net80 %>%
   activate(nodes) %>%
   as_tibble() %>%
@@ -349,7 +349,7 @@ The number of connection is increasing between 1980 and 2000. For papers publish
 
 We may now add these information to the plots.
 
-```{r}
+```{r patchworked_kk_network_plots}
 p80 <- ggraph(net80,
               layout = "kk") +
   geom_node_point(aes(col = deg, size = max_author)) +
@@ -383,7 +383,7 @@ More metrics regarding these networks are described in [Ben Davies’ blog post]
 
 Ben Nowak's superb complete network diagram submission:
 
-```{r}
+```{r Ben_Nowaks_tweet}
 tweetrmd::include_tweet("https://twitter.com/BjnNowak/status/1442807060396134408")
 ```
 
@@ -393,7 +393,7 @@ The types of relationships, as inferences, between program and title words are w
 
 Let’s start our modeling by setting up our “data budget.” We’ll stratify by our outcome `program_desc`.
 
-```{r}
+```{r initial_split}
 nber_split <- initial_split(papers_joined, 
                             strata = program_desc)
 nber_train <- training(nber_split)
@@ -404,9 +404,10 @@ nber_folds <- vfold_cv(nber_train, strata = program_desc)
 
 ```
 
-Next, let’s set up feature engineering. We will need to [transform our text data](https://textrecipes.tidymodels.org/articles/Working-with-n-grams.html) into features useful for our model by tokenizing and computing either term frequency or tf-idf. Let’s also upsample since our dataset is imbalanced, with many more of some of the categories than others. 
+Next, let’s set up feature engineering. We will need to [transform our text data](https://textrecipes.tidymodels.org/articles/Working-with-n-grams.html) into features useful for our model by tokenizing and computing either term frequency or tf-idf. Let’s also upsample since our dataset is imbalanced, with many more of some of the categories than others. Finally, for GLMnet penalties to work properly, all features must be normalized.
 
-```{r}
+```{r recipe}
+
 nber_rec_tfidf <-
   recipe(program_desc ~ title + pub_date, 
          data = nber_train) %>%
@@ -420,13 +421,14 @@ nber_rec_tfidf <-
             keep_original_cols = FALSE) %>%
   step_dummy(all_nominal_predictors()) %>%
   step_upsample(program_desc) %>%
+  step_normalize(all_numeric_predictors()) %>% 
   step_zv(all_predictors())
 
 ```
 
 Then, let’s create our model specification for a lasso model. We need to use a model specification that can handle multiclass data, in this case `multinom_reg()`.
 
-```{r}
+```{r multi_spec}
 multi_spec <-
   multinom_reg(penalty = tune(), 
                mixture = 1) %>%
@@ -437,7 +439,7 @@ multi_spec <-
 
 Since the lasso regularization `penalty` is a hyperparameter of the model (we can’t find the best value from fitting the model a single time), let’s tune over a grid of possible penalty parameters.
 
-```{r}
+```{r regular_grid}
 nber_grid <- grid_regular(penalty(range = c(-5, 0)), 
                           levels = 16)
 
@@ -457,7 +459,7 @@ future::plan("multisession", workers = all_cores) # on Windows
 
 Tidymodels will model every penalty parameter over the first couple of folds, but will begin to drop values unlikely to perform to save processing time.
 
-```{r eval=FALSE}
+```{r tuning, eval=FALSE}
 
 nber_wf <-
   workflow(nber_rec_tfidf, multi_spec)
@@ -473,7 +475,7 @@ nber_rs <-
 
 ```
 
-```{r include=FALSE}
+```{r tuning_run, include=FALSE}
 nber_wf <-
   workflow(nber_rec_tfidf, multi_spec)
 
@@ -498,7 +500,7 @@ write_rds(nber_rs,
 
 How did it turn out?
 
-```{r}
+```{r autoplot_train_results}
 autoplot(nber_rs)
 
 (final_penalty <- select_by_one_std_err(nber_rs, 
@@ -508,7 +510,7 @@ autoplot(nber_rs)
 
 
 
-```{r}
+```{r finalize_fit}
 final_rs <-
   nber_wf %>%
   finalize_workflow(final_penalty) %>%
@@ -519,7 +521,7 @@ final_rs
 
 How did our final model perform on the training data?
 
-```{r}
+```{r metrics}
 collect_metrics(final_rs)
 ```
 
