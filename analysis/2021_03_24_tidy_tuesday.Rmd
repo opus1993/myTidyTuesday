@@ -1,0 +1,168 @@
+---
+title: "UN Votes"
+author: "Jim Gruman"
+date: "March 24, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+# TidyTuesday United Nations voting patterns
+
+```{r setup, message=FALSE, warning=FALSE}
+
+suppressPackageStartupMessages({
+library(tidyverse)
+
+library(tidymodels)
+library(embed)
+
+library(lubridate)
+library(hrbrthemes)
+library(extrafont)
+  
+library(countrycode)
+ })
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+This post is loosely based on Julia Silge's series of screencasts demonstrating how to use `tidymodels` packages, and [this post](https://juliasilge.com/blog/un-voting/) in particular.
+
+Before embarking on this post, I plan to explore how the affinity groupings of countries changes over time.
+
+This past Tuesday, David Robinson in his Youtube series demonstrated a quick way of unnesting tokens for exploring pairwise correlations between countries and topics. I'd like to try UMAP clustering to understand if this other path can be better.  Let's get started by loading the datasets.
+
+```{r, message=FALSE}
+
+tt <- tidytuesdayR::tt_load("2021-03-23")
+
+unvotes_df <- left_join(tt$unvotes,
+                                tt$roll_calls,
+                                by = "rcid") %>%
+                      inner_join(tt$issues,
+                                by = "rcid") %>% 
+                      mutate(continent = countrycode(country,
+                                                     origin = "country.name",
+                                                     destination = "continent")) %>% 
+  mutate(continent = case_when(!is.na(continent) ~ continent,
+                               country == "Czechoslovakia" ~ "Europe",
+                               country == "German Democratic Republic" ~ "Europe",
+                               country == "Yemen Arab Republic" ~ "Asia",
+                               country == "Yemen People's Republic" ~ "Asia",
+                               country == "Yugoslavia" ~ "Europe",
+                               country == "Zanzibar" ~ "Africa")) %>% 
+  select(country, continent, issue, rcid, vote) %>%
+  mutate(
+    vote = match(vote, c("no", "abstain", "yes")) - 2,
+    rcid = paste0("rcid_", rcid)
+  ) 
+  # select(country, continent, issue, rcid, vote) %>% 
+  # pivot_wider(names_from = "rcid", values_from = "vote", values_fill = 0)
+
+```
+
+Julia's analysis only uses the `recipes` package, the `tidymodels` package for data preprocessing and feature engineering. `step_umap` creates a specification of a recipe step that will project a set of features into a two dimensional feature space.
+
+```{r}
+umap_rec <- recipe(~., data = unvotes_df %>% 
+                     select(country, rcid, vote) %>% 
+                     pivot_wider(names_from = "rcid", 
+                                 values_from = "vote", 
+                                 values_fn = length,
+                                 values_fill = 0)
+                     ) %>%
+  update_role(country, new_role = "id") %>%
+  step_umap(all_predictors(), 
+            num_comp = 2,
+            retain = FALSE)
+
+umap_prep <- prep(umap_rec)
+
+umap_prep
+```
+
+Let's visualize where countries are in the space created by this dimensionality reduction approach, for the first two components.
+
+```{r}
+bake(umap_prep, new_data = NULL) %>%
+  ggplot(aes(umap_1, umap_2, label = country)) +
+  geom_point(fill = NA, 
+             pch = 21,  
+             size = 4, 
+             color = "gray70",
+             stroke = 0.6) +
+  geom_text(check_overlap = TRUE, 
+            hjust = "inward") +
+  labs(color = NULL,
+       title = "The first two UMAP components of UN Vote role calls",
+       caption = "Source: unvotes R Package")
+```
+
+An interesting clustering perspective on countries with similar voting records on the issues for the entire history since 1946. 
+
+I'd like to take another look, leveraging the UMAP clustered features and dates to build a model to predict the vote. Before we take that step, let's look at a couple of visuals that others have built on a similar thought path.
+
+First, Jenn Schilling built this beautiful faceted visual of the issues:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/datasciencejenn/status/1375892344604528640")
+```
+
+And Andy Baker built on Julia Silge's UMAP reduction, but faceted by issue and continent:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/Andy_A_Baker/status/1376165962932649985")
+```
+
+Andy's code filtered for each issue individually, ran the model for each issue, plotted for each issue, and then patchworked the visuals back together. I wonder what the result would be with the issue and continent in the model as Id's:
+
+```{r}
+umap_rec_full <- recipe(~., data = unvotes_df %>% 
+                     select(country, issue, continent, rcid, vote) %>% 
+                     pivot_wider(names_from = "rcid", 
+                                 values_from = "vote", 
+                                 values_fn = length,
+                                 values_fill = 0)
+                     ) %>%
+  update_role(country, new_role = "id") %>%
+  update_role(continent, new_role = "id") %>%
+  step_umap(starts_with("rcid_"), 
+            num_comp = 2,
+            retain = FALSE)
+
+umap_prep_full <- prep(umap_rec_full)
+
+umap_prep_full
+```
+
+```{r, fig.asp=1}
+bake(umap_prep_full, new_data = NULL) %>%
+  ggplot(aes(umap_1, umap_2, label = country,fill = continent)) +
+  geom_point(pch = 21,  
+             size = 4, 
+             color = "white",
+             stroke = 0.6) +
+  geom_text(check_overlap = TRUE, 
+            hjust = "inward") +
+  facet_wrap(~issue, scales = "free") +
+  labs(color = NULL, fill = NULL,
+       title = "The first two UMAP components of UN Vote role calls",
+       caption = "Source: unvotes R Package") +
+  theme(legend.position = "top")
+```
+
+I am going to cut this analysis short. There is so much more that could be explored. For example, pairwise correlations, or resampling in time series, or resampling by geography in building predictive models.  Shoutout to Jenn Schilling and Andy Baker for the great work this week.
+
+
+
