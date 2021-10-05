@@ -148,17 +148,29 @@ umap_prep_full
 
 ```{r, fig.asp=1}
 bake(umap_prep_full, new_data = NULL) %>%
-  ggplot(aes(umap_1, umap_2, label = country,fill = continent)) +
-  geom_point(pch = 21,  
-             size = 4, 
-             color = "white",
-             stroke = 0.6) +
-  geom_text(check_overlap = TRUE, 
-            hjust = "inward") +
-  facet_wrap(~issue, scales = "free") +
-  labs(color = NULL, fill = NULL,
-       title = "The first two UMAP components of UN Vote role calls",
-       caption = "Source: unvotes R Package") +
+  ggplot(aes(umap_1, 
+             umap_2, 
+             label = country, 
+             fill = continent)) +
+  geom_point(
+    pch = 21,
+    size = 4,
+    color = "white",
+    stroke = 0.6
+  ) +
+  geom_text(check_overlap = TRUE,
+            hjust = "inward",
+            size = 3
+            ) +
+  facet_wrap( ~ issue,
+              scales = "free",
+              labeller = label_wrap_gen()) +
+  labs(
+    color = NULL,
+    fill = NULL,
+    title = "The first two UMAP components of UN Vote role calls",
+    caption = "Source: unvotes R Package"
+  ) +
   theme(legend.position = "top")
 ```
 
