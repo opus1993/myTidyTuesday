@@ -93,7 +93,7 @@ papers_joined %>%
 
 The data are not balanced, so we will investigate strategies for finding features that work accordingly.
 
-First, though, let's explore the data with some visuals. Julia Silge's approach to text modeling often goes down a path of exploring the log odds uniqueness of works within the document categories. Let's try her approach, [found here](https://juliasilge.com/blog/nber-papers/).
+First, though, let's explore the data with some visuals. Julia Silge's approach to text modeling often goes down a path of exploring the log odds uniqueness of words within the document categories. Let's try her approach, [found here](https://juliasilge.com/blog/nber-papers/). And Emil Hvitfeldt's `prismatic` package offers a nice method of building contrasting text on the bars.
 
 ```{r title_log_odds}
 #| fig.width: 12
@@ -119,16 +119,14 @@ p <- title_log_odds %>%
   slice_max(log_odds_weighted, n = 5) %>%
   ungroup() %>%
   mutate(word = reorder_within(word, log_odds_weighted, program_desc)) %>% 
-  ggplot(aes(log_odds_weighted, word)) +
-  geom_col(aes(color = program_desc,
-               fill = stage(program_desc, after_scale = alpha(fill, 0.1))),
-           show.legend = FALSE) +
+  ggplot(aes(log_odds_weighted, word, fill = program_desc)) +
+  geom_col(show.legend = FALSE) +
   scale_y_reordered() +
-  geom_text(aes(label = str_extract(word, "[:alnum:]*")),
+  geom_text(aes(label = str_extract(word, "[:alnum:]*"),
+                color = after_scale(map_chr(fill, best_contrast)), hjust = 0),
             x = 0.2,
             size = rel(4),
             show.legend = FALSE,
-            hjust = 0,
             nudge_x = 40) +
   scale_color_manual(values = viridis::viridis_pal(option = "H")(21)[c(1,8,15,2,9,16,3,10,17,4,11,18,5,12,19,6,13,20,7,14,21)]) +
   scale_fill_manual(values = viridis::viridis_pal(option = "H")(21)[c(1,8,15,2,9,16,3,10,17,4,11,18,5,12,19,6,13,20,7,14,21)]) +
