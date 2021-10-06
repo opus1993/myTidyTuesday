@@ -33,8 +33,7 @@ options(
   ggplot2.discrete.fill = viridis::viridis_pal(option = "H")(12)[color_index],
   ggplot2.discrete.colour = viridis::viridis_pal(option = "H")(12)[color_index],
   ggplot2.continuous.fill = alpha_viridis,
-  ggplot2.continuous.colour = alpha_viridis,
-  hrbrthemes.loadfonts = TRUE
+  ggplot2.continuous.colour = alpha_viridis
 )
 
 # Package Rttf2pt1 version 1.3.9 interferes with
@@ -360,6 +359,17 @@ withfreq <- function(x, width = 20){
     mutate(combined = glue::glue("{ str_wrap(x, width = width) } ({ n })")) %>%
     pull(combined)
 }
+
+# ----
+
+# for contrasting geom_text over colored bars
+
+best_contrast <- function(x, y = c("#010101","#FFFFFF")){
+  contrasts <- prismatic::contrast_ratio(x, y)
+  y[max(contrasts) == contrasts][1]
+}
+
+# geom_text(aes(x, label, color = after_scale(map_chr(fill, best_contrast)), hjust = 0))
 
 # ----
 
