@@ -13,7 +13,7 @@ editor_options:
 ---
 
 ```{r netflix_logo}
-knitr::include_graphics("assets/netflix.png", error = FALSE)
+knitr::include_graphics("figure/2021_04_20.Rmd/Netflix_Logo_RGB.png", error = FALSE)
 ```
 
 The #TidyTuesday data this week is Netflix's streaming catalog titles with descriptions, genre classifications, actors, directors, dates, and other metadata.
