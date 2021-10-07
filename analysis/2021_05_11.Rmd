@@ -1,0 +1,97 @@
+---
+title: "US Broadband Access"
+author: "Jim Gruman"
+date: "May 5, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+The #TidyTuesday data this week is on Internet Access, from Microsoft by way of The Verge. 
+
+> If broadband access was a problem before 2020, the pandemic turned it into a crisis. As everyday businesses moved online, city council meetings or court proceedings became near-inaccessible to anyone whose connection couldn’t support a Zoom call. Some school districts started providing Wi-Fi hotspots to students without a reliable home connection. In other districts, kids set up in McDonald’s parking lots just to get a reliable enough signal to do their homework. After years of slowly widening, the broadband gap became impossible to ignore.
+
+First, let's load libraries and set a ggplot theme:
+
+```{r setup, warning=FALSE}
+
+options(tigris_use_cache = TRUE)
+suppressPackageStartupMessages({
+library(tidyverse)
+library(hrbrthemes)
+library(tidycensus)
+  
+library(sf)
+library(patchwork)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+Loading the data 
+
+```{r load, message=FALSE}
+broadband_il <- tidytuesdayR::tt_load("2021-05-11")$broadband %>%
+  janitor::clean_names() %>%
+  filter(st == "IL") %>% 
+  transmute(GEOID = as.character(county_id),
+            usage = parse_number(broadband_usage, na = "-" )) %>% 
+  left_join(get_acs(geography = "county",
+                    variables = "B19013_001",
+                    state = "IL",
+                    geometry = TRUE))
+```
+
+```{r}
+plot_il <- function(variable) {
+  broadband_il %>%
+    st_as_sf() %>%
+    ggplot(aes(fill = {{variable}} )) +
+    geom_sf(color = "gray80", size = 0.2) +
+    coord_sf(label_axes = "----",
+             label_graticule = "----") +
+    theme(panel.grid.major = element_blank())
+}
+
+plot_il(estimate) +
+  scale_fill_viridis_b(option = "plasma",
+                       n.breaks = 8,
+                       labels = scales::comma) +
+  labs(subtitle = "Median Household Income",
+       fill = "$US") +
+  plot_il(usage) +
+  scale_fill_viridis_b(n.breaks = 8,
+                       labels = scales::percent_format(accuracy = 1)) +
+  labs(subtitle = "High Speed Broadband Usage",
+       fill = NULL) +
+  plot_annotation(
+    title = "High Speed Broadband in Illinois",
+    caption = "Data Sources: Microsoft and US Census ACS 2019 \n
+                  Percent of people per county that use the internet at more than 25 Mbps/3 Mbps"
+  ) &
+  theme(plot.margin = margin (0.5, 0, 0, 0, "cm"),
+        plot.title = element_text(size = 30))
+```
+
+Related tweets and inspirations:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jrosecalabrese/status/1392299000401858563")
+
+tweetrmd::include_tweet("https://twitter.com/juliasilge/status/1392324410082689026")
+
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1392486129786572801")
+
+```
+
+
