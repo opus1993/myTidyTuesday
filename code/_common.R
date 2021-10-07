@@ -267,6 +267,20 @@ theme_jim <- function(base_size = 12,
 
 }
 
+# ---- best_contrast
+
+# for contrasting geom_text over colored bars
+
+best_contrast <- function(x, y = c("#010101","#FFFFFF")){
+  contrasts <- prismatic::contrast_ratio(x, y)
+  y[max(contrasts) == contrasts][1]
+}
+
+# geom_text(aes(x, label, color = after_scale(map_chr(fill, best_contrast)), hjust = 0))
+
+
+# ----autoplot method for confusion matrices
+
 autoplot.conf_mat <- function(object, type = "heatmap", ...) {
   cm_heat(object)
 }
@@ -306,10 +320,12 @@ cm_heat <- function(x) {
       legend.position = "none"
     ) %+%
     ggplot2::geom_text(mapping = ggplot2::aes(label = Freq,
-                                              color = after_scale(prismatic::clr_desaturate(prismatic::clr_negate(fill), 0.5))),
+                                              color = after_scale(map_chr(fill, best_contrast))),
+                       hjust = "middle",
                        size = rel(5)) %+%
     ggplot2::labs(x = axis_labels$x, y = axis_labels$y)
 }
+
 
 # VariableImportance----
 # https://www.tmwr.org/explain.html from Tidy Modeling With R
@@ -332,7 +348,7 @@ ggplot_imp <- function(...) {
     dplyr::filter(variable != "_full_model_") %>%
     dplyr::mutate(variable = fct_reorder(variable, dropout_loss)) %>%
     ggplot2::ggplot(ggplot2::aes(dropout_loss, variable))
-  if(length(obj) > 1) {
+  if (length(obj) > 1) {
     p <- p +
       ggplot2::facet_wrap(vars(label)) +
       ggplot2::geom_vline(data = perm_vals, ggplot2::aes(xintercept = dropout_loss, color = label),
@@ -362,17 +378,6 @@ withfreq <- function(x, width = 20){
 
 # ----
 
-# for contrasting geom_text over colored bars
-
-best_contrast <- function(x, y = c("#010101","#FFFFFF")){
-  contrasts <- prismatic::contrast_ratio(x, y)
-  y[max(contrasts) == contrasts][1]
-}
-
-# geom_text(aes(x, label, color = after_scale(map_chr(fill, best_contrast)), hjust = 0))
-
-# ----
-
 tidymodels::tidymodels_prefer(quiet = TRUE)
 conflicted::conflict_prefer("vi", "vip", quiet = TRUE)
 conflicted::conflict_prefer("explain", "lime", quiet = TRUE)
@@ -380,4 +385,5 @@ conflicted::conflict_prefer("select", "dplyr", quiet = TRUE)
 conflicted::conflict_prefer("filter", "dplyr", quiet = TRUE)
 conflicted::conflict_prefer("spec", "yardstick", quiet = TRUE)
 conflicted::conflict_prefer("lag", "dplyr", quiet = TRUE)
+conflicted::conflict_prefer("degree", "dials", quiet = TRUE)
 
