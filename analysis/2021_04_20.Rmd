@@ -1,0 +1,588 @@
+---
+title: "Netflix Titles NLP"
+author: "Jim Gruman"
+date: "April 20, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r netflix_logo}
+knitr::include_graphics("assets/netflix.png", error = FALSE)
+```
+
+The #TidyTuesday data this week is Netflix's streaming catalog titles with descriptions, genre classifications, actors, directors, dates, and other metadata.
+
+# Introduction
+
+First, I want to acknowledge that I benefited from the guidance and work of the following:
+
+1. David Robinson's Youtube screencast and code at the [repo here](https://github.com/dgrtwo/data-screencasts/blob/master/2021_04_20_netflix_titles.Rmd).
+
+1. Julia Silge's [Which #TidyTuesday Netflix titles are movies and which are TV shows?](https://juliasilge.com/blog/netflix-titles/)
+
+1. Mark H White, PhD's blog post [EXPLORING THE STAR WARS "PREQUEL RENAISSANCE" USING TIDYMODELS AND WORKFLOWSETS](https://www.markhw.com/blog/prequel-renaissance)
+
+1. Max Kuhn and Julia Silge's in-progres book Tidy Modeling With R [Chapter 15: Screening Many Models](https://www.tmwr.org/workflow-sets.html)
+
+1. Max Kuhn's LA R User Group talk on 18May2021
+
+My goal is to explore and classify using the `tidymodels` framework and `workflowsets` to predict the genre of the titles on the streaming services. Dr. Silge hinted in her broadcast that a multi-class prediction would be possible with a neural net. Let's explore that path.
+
+First, let's load libraries and set a ggplot theme:
+
+```{r setup, warning=FALSE}
+
+suppressPackageStartupMessages({
+library(tidyverse)
+
+library(lubridate)
+library(hrbrthemes)
+
+library(tidytext)
+
+library(tidymodels)
+library(themis)
+library(textrecipes)
+
+library(discrim) 
+
+library(finetune)  #  fast hyperparameter selection
+library(workflowsets)
+library(tidyposterior)
+  
+library(stacks)
+
+ })
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+Let's load the data and clean up the duration movie field and date_added fields.
+
+```{r load, message=FALSE}
+
+netflix_titles <-
+  tidytuesdayR::tt_load("2021-04-20")$netflix_titles %>%
+  separate(duration,
+           c("duration", "duration_units"),
+           sep = " ",
+           convert = TRUE) %>%
+  mutate(date_added = mdy(date_added),
+         year_added = year(date_added)) 
+
+```
+
+# Exploration {.tabset .tabset-pills}
+
+## Skimming
+
+The dataset includes `r scales::comma(nrow(netflix_titles))` titles, both as movies and TV shows. Other summary details of the dataset, as provided by `skimr`
+
+```{r skim}
+skimr::skim(netflix_titles) 
+```
+
+## Genres
+
+The `listed_in` character field associates individual titles with one or more genres. When separated out, the count of titles in each genre includes:
+
+```{r genres}
+netflix_titles %>%
+  separate_rows(listed_in, sep = ", ") %>% 
+  count(listed_in, sort = TRUE)
+```
+
+## Film Duration {.active}
+
+Let's take a quick peek at the median time duration of only the movies for each genre. Note again that the same title can often be counted in more than one genre grouping.
+
+```{r netflix_titles}
+#| fig.width: 9
+#| fig.asp: 1
+#| fig.align: "center"
+#| out.width: "300%"
+#| fig.alt: >
+#|  A dotplot and boxplotshowing movie playlength
+#|  distributions across genres
+
+netflix_titles %>%
+  separate_rows(listed_in, sep = ", ") %>%
+  filter(type == "Movie") %>%
+  group_by(type, genre = listed_in) %>%
+  mutate(
+    n = n()
+  ) %>% 
+  ungroup() %>% 
+  mutate(
+    genre = glue::glue("{ genre } ({ n })"),
+    genre = fct_reorder(genre, duration)
+  ) %>%
+  filter(genre != "Movies") %>%  
+  ungroup() %>% 
+  ggplot(aes(duration, genre)) +
+  ggdist::stat_dots(
+    aes(color = genre),
+    side = "top",
+    justification = -0.1,
+    binwidth = 0.5,
+    show.legend = FALSE
+  ) +
+  geom_boxplot(aes(color = genre,
+                   fill = stage(genre, 
+                        after_scale = ggplot2::alpha(fill, 0.1))),
+    width = 0.1,
+    outlier.shape = NA,
+    show.legend = FALSE
+  ) +
+    scale_color_manual(values = viridis::viridis_pal(option = "H")(21)[c(1, 8, 15, 2, 9, 16, 3, 10, 17, 4, 11, 18, 5, 12, 19, 6, 13, 20, 7, 14, 21)]) +
+  scale_fill_manual(values = viridis::viridis_pal(option = "H")(21)[c(1, 8, 15, 2, 9, 16, 3, 10, 17, 4, 11, 18, 5, 12, 19, 6, 13, 20, 7, 14, 21)]) +
+  labs(x = "Media Streaming Netflix Movie Duration (Minutes)",
+           y = NULL,
+       title = "NETFLIX movie playlength by genre",
+       subtitle = "(Count of titles) within the genre"
+      )
+```
+
+The median of Netflix titles labeled as Documentaries and Stand-Up Comedy movies are shorter in duration than Dramas and Classic Movies.  
+
+# {-}
+
+# Feature Engineering {.tabset .tabset-pills}
+
+Given the description, cast members, director, and release_year, can we build a useful model to predict the genre?
+
+Unbalanced multi-class problems are especially challenging. And in the Netflix dataset, most movies belong to two or three genres at the same time. To make this problem just a little less complex, we will bundle some genre's into logical groupings. I am also only using the first `listed_in` genre, as the primary. The result is 20 genres.
+
+```{r dataframe}
+netflix_df <- netflix_titles %>% 
+  select(genre = listed_in, 
+         show_id, 
+         description, 
+         cast, 
+         director, 
+         release_year) %>% 
+  separate_rows(genre, sep = ", ") %>% 
+  mutate(genre = case_when(
+        str_detect(genre, "International") ~ "International",
+        str_detect(genre, "Romantic") ~ "Romantic",
+        str_detect(genre, "Drama") ~ "Drama",
+        str_detect(genre, "Action") ~ "Action",
+        str_detect(genre, "Comed") ~ "Comedy",
+        str_detect(genre, "Cult") ~ "Cult",
+        str_detect(genre, "Thrill") ~ "Thriller",
+        str_detect(genre, "Teen|Children|Kids") ~ "Children",
+        str_detect(genre, "Science|Docu") ~ "Documentary",
+        str_detect(genre, "Anime") ~ "Anime",
+        str_detect(genre, "Horror") ~ "Horror",
+        str_detect(genre, "Independent") ~ "Independent",
+        str_detect(genre, "Crime") ~ "Crime",
+        str_detect(genre, "Music") ~ "Music",
+        str_detect(genre, "British") ~ "British",
+        str_detect(genre, "Reality") ~ "Reality",
+        str_detect(genre, "Classic") ~ "Classic",
+        str_detect(genre, "Myster") ~ "Mysteries",
+        str_detect(genre, "Faith") ~ "Faith",
+        TRUE ~ "Other"
+      )) %>% 
+    group_by(show_id) %>% 
+    mutate(position = row_number()) %>% 
+    ungroup() %>% 
+    pivot_wider(names_from = position,
+                values_from = genre,
+                names_prefix = "genre") %>% 
+    mutate(genre1 = as.factor(genre1))
+
+```
+
+```{r count_genres}
+netflix_df %>%
+  count(genre1) %>% 
+  mutate(pct = n / sum(n)) %>% 
+  ggplot(aes(pct, fct_reorder(genre1, pct))) +
+  geom_col(fill = "lightblue") +
+  scale_x_continuous(labels = scales::percent) +
+  geom_label(aes(label = scales::percent(pct, accuracy = .1))) +
+  labs(title = "Severe Imbalance in Media Genre Classification",
+       y = NULL, x = NULL)
+```
+
+Let’s split the data using the default 3:1 ratio of training-to-test and resample the training set using 5-fold cross-validation. V-fold cross-validation randomly splits the data into V groups (5) of roughly equal size (called "folds"). A resample of the analysis data consists of V-1 (4) of the folds while the assessment set contains the final fold. In basic V-fold cross-validation (i.e. no repeats), the number of resamples is equal to V.
+
+## Cross Validation {.active}
+
+The strata argument causes the random sampling to be conducted within the stratification variable, in this case genre1. 
+
+```{r cross_validation}
+set.seed(1501)
+netflix_split <- initial_split(netflix_df, strata = genre1)
+netflix_train <- training(netflix_split)
+netflix_test  <- testing(netflix_split)
+
+netflix_folds <- vfold_cv(netflix_train,
+                          v = 5, strata = genre1)
+```
+
+```{r resampling_strategy}
+ggplot(netflix_folds %>%  tidy(), 
+       aes(Fold, Row, fill = Data)) +
+  geom_tile() +
+  labs(caption = "Resampling strategy")
+
+```
+
+Our dataset will be pre-processed through several different recipes that engineer text features by tokenizing the description, cast, and the director fields.
+
+The first recipe applies filters to use the words, cast members, and director with the 30 highest term frequencies after removing stop words and stemming.
+
+The second filter the description words to remove stopwords and then builds 25 word embeddings with [Glove Twitter 27B](https://www.aclweb.org/anthology/D14-1162/). Learn more about word embeddings and pre-trained model transfer learning [here](https://www.youtube.com/watch?v=oUpuABKoElw). The recipe goes on to hash the cast member and director features into numeric variables with the hashing trick. All models are centered and scaled. There are no missing values. 
+
+With a big multi-class challenge, we need to take action to balance the classes. `smote` upsamples members of the minority classes with nearest neighbors imputation (in the training set only). `upsampling` replicates rows of the minority classes to match the count of the members of the largest class member. 
+
+## Pre-processing
+
+```{r recipes}
+(token_rec <- recipe(genre1 ~ description + cast + director, 
+                     data = netflix_train) %>%
+  # upsample training set so each class has the same number of rows
+  step_upsample(genre1) %>% 
+  # work with description character field
+  step_tokenize(description) %>%
+  step_stopwords(description) %>%
+  step_stem(description) %>% 
+  step_word_embeddings(description,
+                       embeddings = textdata::embedding_glove27b()) %>% 
+  # work with the cast members character field
+  step_tokenize(cast,
+                token = "regex",
+                options = list(pattern = ", ")) %>%
+  step_tokenfilter(cast, max_tokens = 200) %>% 
+  step_texthash(cast, num_terms = 6) %>% 
+  # work with the director member character field
+  step_tokenize(director,
+                token = "regex",
+                options = list(pattern = ", ")) %>%
+  step_tokenfilter(director, max_tokens = 200) %>% 
+  step_texthash(director, num_terms = 10) %>% 
+  # normalize for any engine with regularization
+  step_normalize(all_numeric())
+)
+
+```
+
+## Text Embeddings Recipe
+
+And a look at the features of the upsampled "embeddings" recipe:
+
+```{r embeddings_rec}
+token_rec %>% 
+  prep() %>% 
+  bake(new_data = NULL) %>% 
+  glimpse()
+```
+
+# {-}
+
+# Machine Learning {.tabset .tabset-pills}
+
+For the models themselves, we use the the `parsnip` package to create sets of model specifications.  All are setup for multi-class classification. 
+
+```{r machine_learning_specs}
+
+logistic_reg_glmnet_spec <-
+  multinom_reg(penalty = tune(), 
+               mixture = 0.01) %>%
+  set_engine('glmnet') %>% 
+  set_mode("classification")
+
+nb_spec <- naive_Bayes() %>%
+  set_mode("classification") %>%
+  set_engine("naivebayes")
+
+svm_spec <-
+  svm_linear() %>%
+  set_mode("classification") %>%
+  set_engine("LiblineaR")
+
+```
+
+## Workflowsets 
+
+This is where the cool part comes in: We now define a “workflow set.” We apply `cross = TRUE` to look at all combinations of recipes and models. 
+
+```{r workflowsets}
+(wfs <-
+     workflow_set(
+       preproc = list(embeddings = token_rec),
+       models = list(
+         nb_spec, 
+         logistic_reg_glmnet_spec,
+         svm_spec)
+    )
+)
+
+```
+
+And we see we have our six different workflows set up. 
+
+## Tuning and Cross Validation
+
+The engines chosen here require no tuning. We will load register a parallel backend to speed the computations across the cross validation folds.
+
+```{r tune_grid, eval = FALSE}
+
+all_cores <- parallelly::availableCores(omit = 1)
+future::plan("multisession", workers = all_cores) # on Windows
+
+ctrl <-
+   control_grid(
+      save_pred = FALSE,
+      parallel_over = "everything",
+      save_workflow = FALSE
+   )
+
+system.time(
+
+      cv_res <- wfs %>%
+        workflow_map("tune_grid",
+                     seed = 2021,
+                     resamples = netflix_folds,
+                     control = ctrl,
+                     grid = 20,
+                     metrics = metric_set(accuracy, 
+                                          sensitivity,
+                                          specificity,
+                                          j_index
+                                          ), 
+                     verbose = TRUE)
+)
+
+future::plan(strategy = "sequential")
+
+```
+
+```{r tune_grid2_eval, include = FALSE}
+if (file.exists(here::here("data","netflixTitles.rmd"))) {
+cv_res <- read_rds(here::here("data","netflixTitles.rmd"))
+} else {
+
+all_cores <- parallelly::availableCores(omit = 1)
+future::plan("multisession", workers = all_cores) # on Windows
+
+ctrl <-
+   control_grid(
+      save_pred = FALSE,
+      parallel_over = "everything",
+      save_workflow = FALSE
+   )
+
+system.time(
+
+      cv_res <- wfs %>%
+        workflow_map("tune_grid",
+                     seed = 2021,
+                     resamples = netflix_folds,
+                     control = ctrl,
+                     grid = 20,
+                     metrics = metric_set(accuracy, 
+                                          sensitivity,
+                                          specificity,
+                                          j_index
+                                          ), 
+                     verbose = TRUE)
+)
+
+future::plan(strategy = "sequential")
+write_rds(cv_res, here::here("data","netflixTitles.rmd"))
+}
+```
+
+```
+i	No tuning parameters. `fit_resamples()` will be attempted
+i 1 of 3 resampling: embeddings_naive_Bayes
+v 1 of 3 resampling: embeddings_naive_Bayes (30.8s)
+i 2 of 3 tuning:     embeddings_multinom_reg
+v 2 of 3 tuning:     embeddings_multinom_reg (2m 29.2s)
+i	No tuning parameters. `fit_resamples()` will be attempted
+i 3 of 3 resampling: embeddings_svm_linear
+v 3 of 3 resampling: embeddings_svm_linear (4m 27.1s)
+   user  system elapsed 
+ 448.23    0.31  449.03 
+```
+
+Note the run times.
+
+## Compare the models 
+
+We can then look at the results. What are the top workflows?
+
+```{r}
+autoplot(cv_res)
+
+cv_res %>% 
+  rank_results(select_best = TRUE) %>% 
+  pivot_wider(id_cols = wflow_id,
+              names_from = .metric,
+              values_from = mean) %>% 
+  select(wflow_id, accuracy, j_index, sens, spec)
+
+```
+
+So the GLMnet runs fast and delivers the best results of the three engines used.  Let's see what we can do to improve it, still using the same resample folds.
+
+```{r GLMnet_noeval, eval=FALSE}
+logistic_reg_glmnet_spec <-
+  multinom_reg(penalty = tune(), 
+               mixture = tune()) %>%
+  set_engine('glmnet') %>% 
+  set_mode("classification")
+
+glm_wf <- workflow(token_rec, logistic_reg_glmnet_spec)
+
+ctrl <-
+   control_grid(
+      save_pred = TRUE,
+      parallel_over = "everything",
+      save_workflow = FALSE
+   )
+
+all_cores <- parallelly::availableCores(omit = 1)
+future::plan("multisession", workers = all_cores) # on Windows
+
+
+cv_glmnet <- glm_wf %>% 
+        tune_grid(resamples = netflix_folds,
+                  control = ctrl,
+                  grid = 20,
+                  metrics = metric_set(roc_auc,
+                                       accuracy,
+                                       sensitivity,
+                                       specificity,
+                                       mn_log_loss
+                                          )
+)
+
+future::plan(strategy = "sequential")
+
+autoplot(cv_glmnet)
+
+```
+
+```{r GLMnet_eval, include=FALSE}
+logistic_reg_glmnet_spec <-
+  multinom_reg(penalty = tune(), 
+               mixture = tune()) %>%
+  set_engine('glmnet') %>% 
+  set_mode("classification")
+
+glm_wf <- workflow(token_rec, logistic_reg_glmnet_spec)
+
+ctrl <-
+   control_grid(
+      save_pred = TRUE,
+      parallel_over = "everything",
+      save_workflow = FALSE
+   )
+
+if (file.exists(here::here("data","netflixTitles2.rds"))) {
+cv_glmnet <- read_rds(here::here("data","netflixTitles2.rds")) 
+} else {
+
+all_cores <- parallelly::availableCores(omit = 1)
+future::plan("multisession", workers = all_cores) # on Windows
+
+
+cv_glmnet <- glm_wf %>% 
+        tune_grid(resamples = netflix_folds,
+                  control = ctrl,
+                  grid = 20,
+                  metrics = metric_set(roc_auc,
+                                       accuracy,
+                                       sensitivity,
+                                       specificity,
+                                       mn_log_loss
+                                          )
+)
+
+future::plan(strategy = "sequential")
+
+write_rds(cv_glmnet, here::here("data","netflixTitles2.rds"))
+}
+
+autoplot(cv_glmnet)
+
+```
+
+Not bad. Let's look more closely at performance across cross validation folds and prediction classes next.
+
+## Performance {.active}
+
+We can look at ROC curves by genre class for the set of 5 cross-validation folds of the best model:
+
+```{r ROC_curves, fig.asp=1}
+cv_glmnet %>% 
+  collect_predictions() %>% 
+  group_by(id) %>%
+  roc_curve(truth = genre1, .pred_Action:.pred_Thriller) %>%
+  autoplot() +
+  labs(
+    color = NULL,
+    title = glue::glue("ROC curve for Netflix Movie GLMnet Predictor"),
+    subtitle = "Each resample fold is shown in a different color"
+  )
+```
+
+This model predicts Documentaries and International films very well. On the other extreme, Romantic Movies and "Other" are not predicted well in every cross validation fold.
+
+We can also create a confusion matrix from the resamples using `conf_mat_resampled()`, which computes a separate confusion matrix for each resample and then averages the cell counts.
+
+```{r confusion_matrix, message=FALSE, warning=FALSE, fig.asp=1}
+show_best(cv_glmnet, metric = "mn_log_loss") %>% 
+  select(-.estimator)
+
+show_best(cv_glmnet, metric = "roc_auc") %>% 
+  select(-.estimator)
+
+cv_glmnet %>% 
+  conf_mat_resampled(tidy = FALSE,
+                     parameters = select_best(cv_glmnet,
+                                              metric = "mn_log_loss")) %>% 
+  autoplot(type = "heatmap") + 
+  labs(title = "Confusion Matrix, all resamples, best mn_log_loss results")
+  
+```
+
+Generally, it is a good idea to evaluate the models over multiple metrics so that different aspects of the model fit are taken into account. Also, it often makes sense to choose a slightly suboptimal parameter combination that is associated with a simpler model. For this model, simplicity corresponds to larger penalty values.
+
+```{r}
+best_results <- cv_glmnet %>% 
+  select_best(metric = "mn_log_loss")
+
+test_results <- glm_wf %>% 
+  finalize_workflow(best_results) %>% 
+  last_fit(split = netflix_split)
+
+```
+
+The test results show:
+
+```{r}
+collect_metrics(test_results)
+
+```
+
+This is a good test result, as the model run on unseen data delivers performance comparable to the training figures, so does not over-fit. Even so, I'd like to explore other machine learning engines, including deep learning, to improve classificaiton accuracy.
+
+
+
+
