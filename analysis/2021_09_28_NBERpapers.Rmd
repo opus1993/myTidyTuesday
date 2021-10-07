@@ -173,20 +173,19 @@ papers_joined %>%
              subgroup = program_category)) +
   geom_treemap() +
   geom_treemap_subgroup_border() +
-  geom_treemap_text(color = "black", 
+  geom_treemap_text(aes(color = after_scale(map_chr(fill, best_contrast))), 
                     place = "top", 
                     reflow = TRUE) +
   geom_treemap_subgroup_text(
     color = "white", 
     place = "bottomleft",
     fontface = "italic", 
-    min.size = 0, 
-    alpha = 0.7
+    min.size = 0
   ) +
   scale_fill_viridis_c(option = "H") +
   labs(
     fill = NULL, title = "National Bureau of Economic Research Papers",
-    subtitle = "Three primary program categories cover 20 programs. The area corresponds to the number of papers of each in the dataset.",
+    subtitle = "Three primary program categories cover 20 programs. The area corresponds to the\nnumber of papers of each in the dataset.",
     caption = "Data Source: Ben Davies {nberwp}"
   ) +
   theme(legend.position = "none")
