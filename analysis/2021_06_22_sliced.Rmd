@@ -1,0 +1,651 @@
+---
+title: "Sliced Australia Weather"
+author: "Jim Gruman"
+date: "June 22, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+[SLICED](https://www.notion.so/SLICED-Show-c7bd26356e3a42279e2dfbafb0480073) is like the TV Show Chopped but for data science. Competitors get a never-before-seen dataset and two-hours to code a solution to a prediction challenge. Contestants get points for the best model plus bonus points for data visualization, votes from the audience, and more.
+ 
+[Season 1 Episode 4](https://www.kaggle.com/c/sliced-s01e04-knyna9) featured [David Robinson](https://twitter.com/drob), [Craig Mann](https://twitter.com/creeeeeeeeeeg), [Greg Matthews](https://twitter.com/statsinthewild), and [Jesse Mostipak](https://twitter.com/kierisi) in a challenge to predict whether it will rain tomorrow in several cities in Australia from daily data. 
+
+There are several choices of algorithmic approaches available.  For example, each location city could be modeled as it's own time series. Pooling the effects across all cities geographically would be a computational challenge this way. If we were looking for climactic shifts and large weather patterns, it might be worth the time. But we only have 2 hours.
+
+In a real-world project, we would map out the costs of correct and incorrect predictions, model for ROC (area under the curve), and then adjust the cutoff value for sensitivity and specificity (ratios of false positive rates and false negative rates). The evaluation metric in this competition is simply to minimize the mean LogLoss values of the probabilities of the classifier.
+
+To make the best use of the resources that we have, we will explore the data set features to select those with the most predictive power, build and tune several fast GLMnet regularized models to confirm the receipe, and then use the rest of the time to build one or more XGBoost ensemble models.  If we have time, we will stack several of the 
+
+Let's load up some packages:
+
+```{r setup}
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(hrbrthemes)
+library(lubridate)
+  
+library(tidymodels)
+library(textrecipes)
+library(treesnip)
+library(finetune)
+library(stacks)
+library(themis)
+  
+library(tidycensus)
+options(tigris_use_cache = TRUE)
+
+library(patchwork)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+#create a data directory
+data_dir <- here::here("data",Sys.Date())
+if (!file.exists(data_dir)) dir.create(data_dir)
+
+# set a competition metric
+mset <- metric_set(mn_log_loss)
+
+# set the competition name from the web address
+competition_name <- "sliced-s01e04-knyna9"
+
+zipfile <- paste0(data_dir,"/", competition_name, ".zip")
+
+path_export <- here::here("data",Sys.Date(),paste0(competition_name,".csv"))
+```
+
+A quick reminder before downloading the dataset:  Go to the web site and accept the competition terms!!!
+
+
+# Import and EDA {.tabset}
+
+Unlike the contestants, I built a template hoping to get a jump on model building when the dataset became available. I learned that my approach needs more work to finish within 2 hours. I am impressed with the skills of the contestants. 
+
+This file is the result of a full day of reflecting on my mistakes and includes some of the best parts of what the contestants demonstrated, live coding from scratch.
+
+## Direct Import and Skim
+
+We have basic shell commands available to interact with Kaggle here:
+
+```{r kaggle competitions terminal commands, eval=FALSE}
+# from the Kaggle api https://github.com/Kaggle/kaggle-api
+
+# the leaderboard
+shell(glue::glue('kaggle competitions leaderboard { competition_name } -s'))
+
+# the files to download
+shell(glue::glue('kaggle competitions files -c { competition_name }'))
+
+# the command to download files
+shell(glue::glue('kaggle competitions download -c { competition_name } -p { data_dir }'))
+
+# unzip the files received
+shell(glue::glue('unzip { zipfile } -d { data_dir }'))
+
+```
+
+Reading in the contents of the datafiles here:
+
+```{r}
+train_df <- read_csv(file = glue::glue({ data_dir }, "/train.csv")) %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(rain_tomorrow = as.factor(rain_tomorrow),
+         rain_today = as.factor(rain_today))
+
+test_df <- read_csv(file = glue::glue({ data_dir }, "/test.csv")) %>% 
+    mutate_if(is.character, as.factor) %>% 
+    mutate(rain_today = as.factor(rain_today))
+
+```
+
+Some questions to answer here:
+What features have missing data, and imputations may be required?
+What does the outcome variable look like, in terms of imbalance?
+
+```{r skimr, eval=FALSE}
+skimr::skim(train_df)
+```
+
+## Feature plots {.active}
+
+Let's explore the relationships between the features and the rainfall likelihood. First, let's build a function to summarize the counts of rainfall days and the ratio of rainfall days within a grouping.
+
+```{r}
+
+summarize_rainfall <- function(tbl) {
+  ret <- tbl %>%
+    summarize(n_rain = sum(rain_tomorrow == 1),
+              n = n(),
+              .groups = "drop") %>%
+    arrange(desc(n)) %>%
+    mutate(pct_rain = n_rain / n,
+           low = qbeta(.025, n_rain + 5, n - n_rain + .5),
+           high = qbeta(.975, n_rain + 5, n - n_rain + .5)) %>%
+    mutate(pct = n / sum(n))
+  ret
+}
+
+train_df %>%
+  summarize_rainfall()
+```
+
+```{r, fig.asp=1.2}
+train_df %>%
+  group_by(location = fct_lump(location, 30)) %>%
+  summarize_rainfall() %>%
+  mutate(location = fct_reorder(location, pct_rain)) %>%
+  ggplot(aes(pct_rain, location)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = low, xmax = high), height = .3) +
+  scale_size_continuous(labels = percent, 
+                        guide = "none", 
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  labs(x = "Probability of raining tomorrow",
+       y = "",
+       title = "What locations get the most rain?",
+       subtitle = "Including 95% confidence intervals. Size of points is proportional to frequency") +
+  theme(panel.grid.major.y = element_blank())
+```
+
+A plot of the time series by year and the range within the year
+
+```{r}
+train_df %>%
+  group_by(year = year(date)) %>%
+  summarize_rainfall() %>%
+  ggplot(aes(year, pct_rain)) +
+  geom_point(aes(size = n)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = low, ymax = high), alpha = .1) +
+  expand_limits(y = 0) +
+  scale_x_continuous(breaks = seq(2007, 2017, 2)) +
+  scale_y_continuous(labels = percent_format()) +
+  scale_size_continuous(guide = "none") +
+  coord_cartesian(ylim = c(0, .35)) +
+  labs(x = "Year", y = NULL,
+       title = "% days rain tomorrow in each year")
+```
+
+
+
+```{r, fig.asp=1}
+train_numeric <- train_df %>% keep(is.numeric) %>% colnames()
+
+chart <- c(train_numeric, "rain_tomorrow")
+
+train_df %>%
+  select_at(vars(all_of(chart))) %>%
+  select(-id) %>%
+  pivot_longer(
+    cols = c(
+      min_temp,
+      max_temp,
+      rainfall,
+      contains("speed"),
+      contains("humidity"),
+      contains("pressure"),
+      contains("cloud"),
+      contains("temp")
+    ),
+    names_to = "key",
+    values_to = "value"
+  ) %>% 
+  filter(!is.na(value)) %>% 
+  ggplot() +
+  geom_histogram(mapping = aes(x = value, 
+                               fill = rain_tomorrow),
+                 bins = 50, 
+                 show.legend = FALSE) +
+  facet_wrap(~ key, 
+             scales = "free", 
+             ncol = 4) +
+  scale_x_continuous(n.breaks = 3) +
+  scale_y_continuous(n.breaks = 3) +
+  theme(plot.subtitle = ggtext::element_textbox_simple(),
+        plot.background = element_rect(color = "white")) +
+  labs(title = "Numeric Feature Histogram Distributions",
+       subtitle = "<span style = 'color:#F1CA3AFF'>Rainy days</span> and <span style = 'color:#7A0403FF'> not rainy days</span>",
+       x = NULL, y = NULL)
+
+
+```
+
+
+```{r}
+train_df %>%
+  group_by(week = as.Date("2020-01-01") + week(date) * 7) %>%
+  summarize_rainfall() %>%
+  ggplot(aes(week, pct_rain)) +
+  geom_point(aes(size = n)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = low, ymax = high), alpha = .2) +
+  expand_limits(y = 0) +
+  scale_x_date(date_labels = "%b",
+               date_breaks = "month",
+               minor_breaks = NULL) +
+  scale_y_continuous(labels = percent) +
+  scale_size_continuous(guide = "none") +
+  labs(x = NULL,
+       y = "% days rain (tomorrow)",
+       title = "Rain is more common in the summer!",
+       subtitle = glue::glue("Ribbon shows 95% confidence bound by week for { min(train_df$date) } thru { max(train_df$date) }."))
+```
+
+David Robinson's beautiful compass rose
+
+```{r}
+compass_directions <- c("N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S",
+  "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW")
+as_angle <- function(direction) {
+  (match(direction, compass_directions) - 1) * 360 / length(compass_directions)
+}
+```
+
+```{r, fig.asp=1}
+train_df %>%
+  pivot_longer(cols = contains("dir"),
+               names_to = "type",
+               values_to = "direction") %>% 
+  mutate(type = str_remove(type, "wind_dir"),
+         type = ifelse(type == "wind_gust_dir", "Overall", type)) %>%
+  group_by(type, direction) %>%
+  summarize_rainfall() %>%
+  filter(!is.na(direction)) %>% 
+  mutate(angle = as_angle(direction)) %>%
+  ggplot(aes(angle)) +
+  geom_line(aes(y = pct_rain, color = type),
+            show.legend = FALSE) +
+  geom_text(aes(y = .35, label = direction), 
+            size = 6, hjust = 0.5) +
+  annotate("text",
+                x = 120, 
+                y = c(0, 0.1, 0.2, 0.3),
+                label = c(0, 10, 20, 30),
+                size = 3) +
+  scale_y_continuous(labels = percent) +
+  expand_limits(x = c(0,360), y = 0) +
+  coord_polar(start = 0, theta = "x",
+              ) +
+  labs(x = NULL,
+       y = "% when wind is in this direction",
+       title = "Rain tomorrow depends upon the compass direction",
+       subtitle = "<span style = 'color:#F1CA3AFF'>3pm </span>, <span style = 'color:#7A0403FF'> 9am</span>, and <span style = 'color:#1FC8DEFF'> Overall</span>",
+       color = "Time") +
+  theme(plot.subtitle = ggtext::element_textbox_simple(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank())
+```
+
+Looking for interaction terms in change over day!
+
+```{r, fig.asp=1}
+spread_time <- train_df %>%
+  select(id, rain_tomorrow, contains("3"), contains("9")) %>%
+  select(-contains("dir")) %>%
+  pivot_longer(cols = c(-rain_tomorrow, -id),
+               names_to = "metric",
+               values_to = "value") %>%
+  separate(metric, c("metric", "time"), sep = -3) %>%
+  mutate(time = paste0("at_", time)) %>%
+  filter(!is.na(value)) %>% 
+  pivot_wider(names_from = "time",
+              values_from = "value") 
+
+spread_time %>%
+  filter(!is.na(at_9am), !is.na(at_3pm)) %>% 
+  ggplot(aes(at_9am, at_3pm)) +
+  geom_point(shape = 21, alpha = 0.1) +
+  geom_smooth(aes(color = rain_tomorrow), 
+              method = "lm", 
+              formula = "y ~ x",
+              show.legend = FALSE) +
+  facet_wrap(~ metric, scales = "free") +
+  theme(plot.subtitle = ggtext::element_textbox_simple()) +
+  labs(x = "9 AM",
+       y = "3 PM",
+       title = "Does the difference in time of day change rain/won't rain?",
+       subtitle = "<span style = 'color:#F1CA3AFF'>Rainy days</span> and <span style = 'color:#7A0403FF'> not rainy days</span>",
+       color = "") 
+
+spread_time %>%
+  filter(!is.na(at_9am), !is.na(at_3pm)) %>% 
+  ggplot(aes(at_3pm - at_9am)) +
+  geom_density(aes(color = rain_tomorrow), show.legend = FALSE) +
+  facet_wrap(~ metric, scales = "free") +
+  theme(plot.subtitle = ggtext::element_textbox_simple()) +
+  labs(x = "Difference between 3 PM - 9 AM",
+       title = "Does the difference in time of day change rain/won't rain?",
+       subtitle = "<span style = 'color:#F1CA3AFF'>Rainy days</span> and <span style = 'color:#7A0403FF'> not rainy days</span>",
+       color = NULL, fill = NULL)
+```
+
+## Numeric Feature Correlations
+
+```{r, fig.asp=1}
+cr1 <- train_df %>%
+  select(-id) %>%
+  keep(is.numeric) %>%
+  cor(use = "pair")
+
+corrplot::corrplot(cr1, type = "upper")
+
+```
+
+# {-}
+
+Conclusions:
+
+* If humidity increased between 9am and 3pm, likely to rain
+* If temp increased between 9am and 3pm, less likely to rain
+* If cloud cover increased between 9am and 3pm, more likely to rain
+* Little effect of change in wind speed or pressure from 9am to 3pm
+
+# Preprocessiong {.tabset}
+
+## The recipe framework
+
+I am going to train on almost all of the train data. The 1% left is a quick confirmation of validity.  The provided file labeled test has no labels.
+
+```{r}
+set.seed(2021)
+split <- initial_split(train_df, 
+                       strata = rain_tomorrow,
+                       prop = .99)
+train <- training(split)
+valid <- testing(split)
+```
+
+There are only `r nrow(valid)` held out from training as a last check before submission.
+
+```{r}
+rec <-
+  recipe(rain_tomorrow ~ ., train) %>%
+  # ---- set aside the row id's
+  update_role(id, new_role = 'id') %>%
+  step_date(date,
+            features = c("doy", "year"),
+            keep_original_cols = FALSE) %>%
+  step_rm(evaporation, sunshine) %>%
+  step_log(rainfall, offset = 1, base = 2) %>% 
+  step_impute_median(all_numeric_predictors()) %>%
+  step_ns(date_doy, deg_free = 4) %>% 
+  step_ns(date_year, deg_free = 2) %>% 
+  step_mutate(wind_gust_dir = str_sub(wind_gust_dir, 1, 1)) %>%
+  step_mutate(wind_dir9am = str_sub(wind_dir9am, 1, 1)) %>%
+  step_mutate(wind_dir3pm = str_sub(wind_dir3pm, 1, 1)) %>%
+  step_mutate(cloud9am = if_else(is.na(cloud9am),
+                                 0, cloud9am),
+              cloud3pm = if_else(is.na(cloud3pm),
+                                 0, cloud3pm),
+              cloud_change = cloud3pm - cloud9am) %>%
+  step_rm(cloud9am, cloud3pm) %>% 
+  step_mutate(humidity9am = if_else(is.na(humidity9am),
+                                 0, humidity9am),
+              humidity3pm = if_else(is.na(humidity3pm),
+                                 0, humidity3pm),
+              humidity_change = humidity3pm - humidity9am) %>%
+  step_rm(humidity9am, humidity3pm) %>% 
+  step_novel(all_nominal_predictors()) %>%     
+  step_unknown(all_nominal_predictors()) %>%   
+  step_dummy(all_nominal_predictors())  %>% 
+  step_upsample(rain_tomorrow)
+```
+
+## the pre-processed data
+
+```{r}
+rec %>% 
+#  finalize_recipe(list(num_comp = 2)) %>% 
+  prep() %>% 
+  juice() 
+```
+
+## Cross Validation
+
+We will use 5-fold cross validation and stratify between the rain and no-rain classes.
+
+```{r}
+train_folds <- vfold_cv(data = train,
+                        strata = rain_tomorrow,
+                        v = 5)
+
+```
+
+```{r resampling_strategy}
+ggplot(train_folds %>%  tidy(), 
+       aes(Fold, Row, fill = Data)) +
+  geom_tile() +
+  labs(caption = "Resampling strategy")
+
+```
+
+# {-}
+
+# Machine Learning {.tabset}
+
+## Model Specifications
+
+We will build a specification for regularized logistic regression as GLMnet and a specification for XGboost. 
+
+```{r}
+# see parsnip::parsnip_addin()
+xgboost_spec <- boost_tree(mtry = tune(),
+                       trees = tune(),
+                       min_n = tune(),
+                       tree_depth = tune(),
+                       learn_rate = .01) %>% 
+  set_engine("xgboost") %>% 
+  set_mode("classification")
+
+glmnet_spec <-
+  logistic_reg(penalty = tune(), mixture = tune()) %>%
+  set_engine('glmnet') %>% 
+  set_mode("classification")
+
+```
+
+## Parallel backend
+
+To speed up computation we will use a parallel backend.
+
+```{r}
+all_cores <- parallelly::availableCores(omit = 1)
+future::plan("multisession", workers = all_cores) # on Windows
+
+```
+
+## Tuning GLMnet
+
+Let's look each modeling technique individually, glmnet first. With so many predictors, I expect to see some drop out.
+
+```{r}
+cv_res_glm <-
+  workflow() %>% 
+  add_recipe(rec) %>% 
+  add_model(glmnet_spec) %>% 
+  tune_grid(
+    resamples = train_folds,
+    control = control_stack_resamples(),
+    grid = crossing(penalty = 10 ^ seq(-7, -1, 1),
+                    mixture = 0.1),
+    metrics = mset
+  )
+
+autoplot(cv_res_glm)
+
+show_best(cv_res_glm) %>% 
+  select(-.estimator)
+
+```
+
+When mixture = 1 the glmnet model regularization is pure lasso, without any ridge terms.
+
+What feature coefficients does the lasso keep?
+
+```{r}
+workflow() %>% 
+  add_recipe(rec) %>% 
+  add_model(glmnet_spec) %>% 
+  finalize_workflow(select_best(cv_res_glm)) %>%
+  fit(train) %>%
+  extract_fit_engine() %>%
+  tidy() %>% 
+  filter(!str_detect(term, "Intercept")) %>%
+  ggplot() +
+  geom_line(aes(lambda, estimate, color = term),
+            show.legend = FALSE) +
+  scale_x_log10() +
+  geom_vline(xintercept = select_best(cv_res_glm)$penalty) +
+  annotate("text", hjust = 0,
+           x = select_best(cv_res_glm)$penalty,
+           y = 1,
+           label = "Optimal Lasso penalty") +
+  labs(title = "GLMNet model retains all of the features")
+
+```
+
+## Tuning XGBoost
+
+Now that we have some confidence that the features have predictive power, lets tune up a set of XGBoost models. 
+
+```{r xgboost_tuning, eval=FALSE}
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_grid(    
+    resamples = train_folds,
+    control = control_race(verbose_elim = TRUE,
+                           save_pred = TRUE, 
+                           save_workflow = TRUE),
+    iter = 4,
+    metrics = mset
+)
+```
+
+```{r xgboost_tuning_with_save, include = FALSE}
+if (file.exists(here::here("data","australiaweather.rds"))) {
+cv_res_xgboost <- read_rds(here::here("data","australiaweather.rds"))
+} else {
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_grid(    
+    resamples = train_folds,
+    control = control_race(verbose_elim = TRUE,
+                           save_pred = TRUE, 
+                           save_workflow = TRUE),
+    iter = 4,
+    metrics = mset
+) 
+write_rds(cv_res_xgboost, here::here("data","australiaweather.rds"))  
+}
+
+```
+
+
+
+```{r xgboost_tune_results}
+autoplot(cv_res_xgboost)
+
+show_best(cv_res_xgboost) %>% 
+  select(-.estimator)
+
+xg_wf_best <-   
+  workflow() %>% 
+  add_recipe(rec) %>% 
+  add_model(xgboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_xgboost))
+
+xg_fit_best <- xg_wf_best %>%
+  fit(train)
+
+vip::vip(xg_fit_best$fit$fit$fit) +
+  labs("XGBoost Feature Importance")
+
+predict(xg_fit_best, new_data = valid, type = "prob") %>% 
+  cbind(valid) %>%
+  mn_log_loss(rain_tomorrow, `.pred_0`)
+
+```
+
+The best XGBoost model has a considerably better performance, at least on the training data.
+
+Next steps:
+
+* Blend linear and xgboost into an ensemble
+
+# {-}
+
+# Stack the Ensemble {.tabset}
+
+The stacks package will select from all of the candidate models used in hyperparameter tuning from the GLMnet and the XGBoost sessions above and blend a weighted subset of several.
+
+## Blend the Predictions
+
+```{r}
+stacked_model <- stacks() %>% 
+  add_candidates(cv_res_glm) %>% 
+  add_candidates(cv_res_xgboost) %>%
+  blend_predictions()
+  
+autoplot(stacked_model, type = "weights")
+```
+
+## Fit the members
+
+```{r}
+final_model <- stacked_model %>% 
+  fit_members()
+```
+
+# {-}
+
+A quick confirmation look at the predictions on the held out data as a confusion matrix:
+
+```{r}
+
+bind_cols(predict(final_model, valid), valid) %>% 
+  yardstick::conf_mat(truth = rain_tomorrow, 
+                      estimate = .pred_class) %>% 
+  autoplot()
+
+bind_cols(predict(final_model, valid, type = "prob"), valid) %>% 
+  yardstick::mn_log_loss(truth = rain_tomorrow, 
+                      estimate = .pred_0)
+
+```
+
+Lastly, we build the submission file 
+
+```{r}
+
+bind_cols(predict(final_model, test_df, type = "prob"), test_df) %>% 
+  select(id, rain_tomorrow = .pred_0) %>% 
+  write_csv(file = path_export)
+
+```
+
+and make the submission to the Kaggle board
+
+```{r, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "My Submission Message"'))
+```
+
+I am not entirely satisfied with the results. Even so, we only had two hours, and the logloss figure here is among the top rankings.
+
+
