@@ -306,7 +306,7 @@ train_df %>%
   labs(x = NULL, y = "Price", title = "NYC Airbnb")
 ```
 
-## Map of prices 
+## Map of prices {.active}
 
 Adapted from Julia Silge's demonstration
 
@@ -318,7 +318,7 @@ train_df %>%
   stat_summary_hex(bins = 100) +
   labs(fill = "Mean price(log10)") +
   cowplot::theme_map() +
-  labs(title = "NYC Airbnb Price Ranges")
+  labs(title = "NYC Airbnb Price Ranges") +
   theme(legend.position = c(0.1, 0.8),
         legend.background = element_rect(color = "white"))
 ```
@@ -345,7 +345,7 @@ Conclusions:
 * the numeric features do not provide as much predictive power alone
 * there are AirBNB listings that have neither reviews nor last_review dates. 
 
-# Preprocessiong {.tabset}
+# Preprocessing {.tabset}
 
 ## The recipe framework
 
