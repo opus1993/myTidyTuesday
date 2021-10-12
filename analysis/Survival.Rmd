@@ -33,7 +33,7 @@ Survival analysis is one of the oldest [subfields of statistics](https://www.ama
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/v1QqpG0rR1k" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-As of this post's publication, Justin Zeltzer has released [3 episodes to a playlist](https://www.youtube.com/playlist?list=PLTNMv857s9WUclZLm6OFUW3QcXgRa97jx).
+As of this post's publication, Justin Zeltzer has released [4 episodes to a playlist](https://www.youtube.com/playlist?list=PLTNMv857s9WUclZLm6OFUW3QcXgRa97jx).
 
 ## What is Survival Analysis?
 
@@ -56,6 +56,8 @@ Censored subjects still provide information so must be appropriately included in
 In industry it is common to track component warranty claims and cost on machines sold. Warranty datasets are heavily censored because the study period rarely aligns with the warranty period for each machine delivered. The study time period and fleet population membership must be carefully considered and explicitly defined. In most cases, **exposure** is aligned to zero at the warranty start date. 
 
 The survival **rate** is proportion of the study population that has NOT (yet) experienced the event of interest divided by the whole study population membership within the study timeframe.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/K-_sblQZ5rE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ----
 
@@ -146,6 +148,14 @@ ggsurvplot(fit = km, conf.int = FALSE,
   caption = "source: GBSG2 dataset",
   x = "Time in days")
 ```
+
+----
+
+# Confidence Intervals and Logrank Test 
+
+Many survival analysis questions start with some form of asking whether subsets of populations are statistically different from one another, given the available data. We have to be careful to avoid jumping immediately to causal conclusions. Justin Zeltzer's fourth video walks through the math.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lxoWsVco_iM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ----
 
