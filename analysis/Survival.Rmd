@@ -117,6 +117,10 @@ months?
 
 All of the questions are expressed along the dimensions of the Survival Probability and the duration time to reach that threshold. In many cases, Survival quartiles convey a reasonable sense of the distribution of outcomes. 
 
+Jessica Streeter delivered a short 2020 talk covering other applications of survival analysis techniques, here:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/TDwNI2xx7SE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 The survival function can be expressed mathematically as the Probability that the duration is longer than *t*, or as 1 minus the probability of Failure for a duration longer than *t*.
 
 $$S(t)=1-F(t)=P(T>t)$$
