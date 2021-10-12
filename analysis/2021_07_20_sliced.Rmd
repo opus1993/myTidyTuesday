@@ -1,0 +1,928 @@
+---
+title: "Sliced Spotify Track Popularity"
+author: "Jim Gruman"
+date: "July 20, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+[Season 1 Episode 8](https://www.kaggle.com/c/sliced-s01e08-KJSEks/data) features a challenge to predict the popularity of Spotify tracks. The evaluation metric for submissions in this competition is residual mean squared error.
+
+![](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F7f7ba5f9-d7bd-4101-8933-a112b4f78570%2FFrame_3.png?table=block&id=c7bd2635-6e3a-4227-9e2d-fbafb0480073&spaceId=2cc404e6-fe20-483d-9ea5-5d44eb3dd586&width=1510&userId=&cache=v2)
+
+[SLICED](https://www.notion.so/SLICED-Show-c7bd26356e3a42279e2dfbafb0480073) is like the TV Show Chopped but for data science. Competitors get a never-before-seen dataset and two-hours to code a solution to a prediction challenge. Contestants get points for the best model plus bonus points for data visualization, votes from the audience, and more.
+
+The audience is invited to participate as well. This file consists of my submissions with cleanup and commentary added.
+
+To make the best use of the resources that we have, we will explore the data set for features to select those with the most predictive power, build a random forest to confirm the recipe, and then build one or more ensemble models. If there is time, we will craft some visuals for model explainability.
+
+Let's load up packages:
+
+```{r setup}
+
+suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(hrbrthemes) # plot theming
+
+library(corrr) # visualize numeric correlations
+  
+library(tidymodels) # machine learning tools
+library(finetune) # racing methods for accelerating hyperparameter tuning
+library(textrecipes) # ml tools for text models
+
+library(themis) # ml prep tools for handling unbalanced datasets
+library(baguette) # ml tools for bagged decision tree models
+  
+library(vip) # interpret model performance
+library(SHAPforxgboost) # model explainability
+library(DALEXtra) # for model explainability
+
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+#create a data directory
+data_dir <- here::here("data",Sys.Date())
+if (!file.exists(data_dir)) dir.create(data_dir)
+
+# set a competition metric
+mset <- metric_set(rmse)
+
+# set the competition name from the web address
+competition_name <- "sliced-s01e08-KJSEks"
+
+zipfile <- paste0(data_dir,"/", competition_name, ".zip")
+
+path_export <- here::here("data",Sys.Date(),paste0(competition_name,".csv"))
+```
+
+# Import and Exploratory Data Analysis {.tabset}
+
+A quick reminder before downloading the dataset:  Go to the web site and accept the competition terms!!!
+
+## Import and Skim
+
+We have basic shell commands available to interact with Kaggle here:
+
+```{r kaggle competitions terminal commands, eval=FALSE}
+# from the Kaggle api https://github.com/Kaggle/kaggle-api
+
+# the leaderboard
+shell(glue::glue('kaggle competitions leaderboard { competition_name } -s'))
+
+# the files to download
+shell(glue::glue('kaggle competitions files -c { competition_name }'))
+
+# the command to download files
+shell(glue::glue('kaggle competitions download -c { competition_name } -p { data_dir }'))
+
+# unzip the files received
+shell(glue::glue('unzip { zipfile } -d { data_dir }'))
+
+```
+
+We are reading in the contents of the three datafiles here, unnesting the id_artists column, joining the artists table to each id of the artists, cleaning the genres text, and finally collapsing the genres back.
+
+```{r read kaggle files}
+artists <-
+  read_csv(file = glue::glue({
+    data_dir
+  }, "/artists.csv")) %>%
+  mutate(genres = str_remove_all(genres, "\\[|\\]|\\'|\\,"))
+
+train_df <-
+  read_csv(file = glue::glue({
+    data_dir
+  }, "/train.csv")) %>%
+  mutate(id_artists = str_remove_all(id_artists, "\\[|\\]|\\'")) %>%
+  tidytext::unnest_tokens(id_artists, id_artists, to_lower = FALSE) %>%
+  left_join(artists %>% select(id_artists = id, followers, genres)) %>%
+  group_by(
+    id,
+    popularity,
+    name,
+    artists,
+    duration_ms,
+    danceability,
+    energy,
+    key,
+    loudness,
+    speechiness,
+    acousticness,
+    instrumentalness,
+    liveness,
+    valence,
+    tempo,
+    release_year
+  ) %>%
+  summarize(
+    genres = str_c(genres, collapse = " "),
+    followers = mean(followers),
+    .groups = "drop"
+  )
+
+test_df <-
+  read_csv(file = glue::glue({
+    data_dir
+  }, "/test.csv")) %>%
+  mutate(id_artists = str_remove_all(id_artists, "\\[|\\]|\\'")) %>%
+  tidytext::unnest_tokens(id_artists, id_artists, to_lower = FALSE) %>%
+  left_join(artists %>% select(id_artists = id, followers, genres)) %>%
+  group_by(
+    id,
+    name,
+    artists,
+    duration_ms,
+    danceability,
+    energy,
+    key,
+    loudness,
+    speechiness,
+    acousticness,
+    instrumentalness,
+    liveness,
+    valence,
+    tempo,
+    release_year
+  ) %>%
+  summarize(
+    genres = str_c(genres, collapse = " "),
+    followers = mean(followers),
+    .groups = "drop"
+  )
+```
+
+Some questions to answer here:
+What features have missing data, and imputations may be required?
+What does the outcome variable look like, in terms of imbalance?
+
+```{r skim, eval=FALSE}
+skimr::skim(train_df)
+```
+
+Outcome variable `popularity` ranges from 0 to 100. Only `followers` is missing obvious data. We will take a closer look at the categorical variable levels in a moment.
+
+Field descriptions, from Kaggle:
+
+**train**
+`id` (Unique identifier of track)
+
+`name` (Name of the song)
+
+`popularity` (Ranges from 0 to 100)
+
+`duration_ms` (Integer typically ranging from 200k to 300k)
+
+`artists` (List of artists mentioned)
+
+`id_artists` (Ids of mentioned artists)
+
+`danceability` (Ranges from 0 to 1)
+
+`energy` (Ranges from 0 to 1)
+
+`key` (All keys on octave encoded as values ranging from 0 to 11, starting on C as 0, C# as 1 and so on...)
+
+`loudness` (Float typically ranging from -60 to 0)
+
+`speechiness` (Ranges from 0 to 1)
+
+`acousticness` (Ranges from 0 to 1)
+
+`instrumentalness` (Ranges from 0 to 1)
+
+`liveness` (Ranges from 0 to 1)
+
+`valence` (Ranges from 0 to 1)
+
+`tempo` (Float typically ranging from 50 to 150)
+
+`release_year` (Year of release)
+
+`release_month` (Month of year released)
+
+`release_day` (Day of month released)
+
+**artists**
+
+`id` (Id of artist)
+
+`followers` (Total number of followers of artist)
+
+`genres` (Genres associated with this artist)
+
+`name` (Name of artist)
+
+`popularity` (Popularity of given artist based on all his/her tracks)
+
+## Outcome Variable Distribution
+
+Popularity is left skewed with a lot of zero values. Let's look at the distribution with mean and median:
+
+```{r summarize outcome}
+summarize_popularity <- function(tbl){
+  tbl %>% 
+    summarize(median_popularity = median(popularity),
+              n = n(),
+              mean_popularity = mean(popularity),
+              .groups = "drop") %>% 
+    arrange(desc(n))
+}
+
+train_df %>%
+  summarize_popularity()
+
+train_df %>% 
+  ggplot(aes(popularity + .1 )) +
+  geom_histogram(bins = 30) +
+  scale_x_log10(labels = scales::pretty_breaks()) +
+  labs(title = "Spotify Playlist Tracks Popularity Distribution",
+       x = "Popularity")
+```
+
+We will work with tree-based machine learning techniques that tolerate more of this than others.
+
+## Categorical Feature Plots
+
+```{r categorical feature plots, fig.asp=1}
+train_df %>%
+  tidytext::unnest_tokens(genres, genres, to_lower = FALSE) %>% 
+  group_by(genres = withfreq(genres)) %>%
+  summarize_popularity() %>% 
+  mutate(genres = fct_lump(genres, w = n, 12),
+         genres = fct_reorder(genres, mean_popularity)) %>% 
+  slice_max(order_by = n, n = 11) %>% 
+  ggplot(aes(mean_popularity, genres)) +
+  geom_point(aes(size = n)) +
+  scale_size_continuous(guide = "none",
+                        range = c(1, 6)) +
+  labs(
+    x = "Popularity",
+    y = "",
+    title = "What of the 11 common genres are most popular?",
+    subtitle = "Size of points is proportional to frequency in the dataset. Frequency of occurances in (parenthesis)"
+  )
+
+train_df %>%
+  group_by(name = withfreq(name)) %>%
+  summarize_popularity() %>% 
+  mutate(name = fct_lump(name, w = n, 12),
+         name = fct_reorder(name, mean_popularity)) %>% 
+  slice_max(order_by = n, n = 11) %>% 
+  ggplot(aes(mean_popularity, name)) +
+  geom_point(aes(size = n)) +
+  scale_size_continuous(guide = "none",
+                        range = c(1, 6)) +
+  labs(
+    x = "Popularity",
+    y = "",
+    title = "What of the 11 most common track names are most popular?",
+    subtitle = "Size of points is proportional to frequency in the dataset. Frequency of occurances in (parenthesis)"
+  )
+
+```
+
+## Numeric Feature Plots
+
+```{r numeric feature plots, fig.asp=1}
+train_numeric <- train_df %>% keep(is.numeric) %>% colnames()
+
+train_df %>%
+  select_at(all_of(train_numeric)) %>%
+  select(-id, -popularity) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "key",
+    values_to = "value"
+  ) %>%
+  filter(!is.na(value)) %>%
+  ggplot(mapping = aes(value, 
+                      after_stat(density), fill = key, color = key)) +
+  geom_histogram(
+    position = "identity",
+    bins = 30,
+    show.legend = FALSE
+  ) +
+  facet_wrap( ~ key, scales = "free", ncol = 3) +
+  theme(
+    plot.subtitle = ggtext::element_textbox_simple(),
+    plot.background = element_rect(color = "white")
+  ) +
+  labs(
+    title = "Numeric Feature Histogram Distributions",
+    x = "Numeric Feature",
+    y = NULL
+  )
+
+```
+
+A facet plot for all numeric features of popularity over time by numeric feature.
+
+```{r faceted numeric feature with outcome}
+train_df %>% 
+  select(id, popularity, duration_ms:release_year) %>% 
+  pivot_longer(cols = -c(id, popularity, release_year),
+               names_to = "key",
+               values_to = "value") %>% 
+  ggplot(aes(release_year, value, z = popularity)) +
+  stat_summary_hex(alpha = 0.9, bins = 30) +
+  scale_x_continuous(n.breaks = 3) +
+  facet_wrap(~ key, scales = "free") +
+  labs(fill = "Mean popularity", 
+       title = "Spotify Numeric Features") +
+  theme(legend.position = c(0.9, 0.2))
+
+```
+
+
+
+## Numeric Feature Correlations
+
+```{r correlations, fig.asp=1}
+train_df %>% 
+  select(danceability:release_year) %>% 
+  correlate(method = "pearson",
+            use = "everything") %>% 
+  rearrange() %>% 
+  shave() %>% 
+  rplot(shape = 16, 
+        print_cor = TRUE, 
+        legend = TRUE) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))
+```
+
+Acousticness, loudness, danceability, and release_year are correlated. Acousticness is anti-correlated with energy.
+
+# {-}
+
+Conclusion:
+
+* The `followers` of the artist feature requires an imputation for missing data and would benefit from a log transformation. 
+* We will attempt to use some number of the most frequent genres. Let's start with 50.
+
+----
+
+# Preprocessing {.tabset}
+
+## The recipe
+
+To move quickly, this basic recipe tunes nothing, takes all of the numeric features, and uses only 50 genres.
+
+```{r basic recipe}
+basic_rec <-
+  recipe(
+    popularity ~ duration_ms + danceability + energy + key + loudness + speechiness + acousticness + instrumentalness + liveness + valence + tempo + release_year + followers + genres,
+    data = train_df
+  ) %>%
+  step_tokenize(genres) %>%
+  step_tokenfilter(genres, max_tokens = 50) %>%
+  step_tf(genres, weight_scheme = "binary") %>%
+  step_mutate_at(contains("tf_genres"),
+              fn = ~ if_else(. == TRUE, 1, 0)) %>%
+  step_impute_median(followers) %>%
+  step_log(followers, duration_ms, offset =  1)
+
+```
+
+## dataset for modeling
+
+```{r juice the dataset}
+basic_rec %>% 
+#  finalize_recipe(list(num_comp = 2)) %>% 
+  prep() %>% 
+  juice() 
+
+```
+
+## Cross Validation
+
+We will use 5-fold cross validation and stratify on popularity to build models that are less likely to over-fit the training data.
+
+Proper business modeling practice would holdout a sample from training entirely for assessing model performance. On the Kaggle competitions, the holdout is the "test" itself in the form of the the competitor submission.
+
+```{r cross validation}
+set.seed(2021)
+
+(folds <- vfold_cv(train_df, v = 5, strata = popularity))
+
+```
+
+# {-}
+
+# Machine Learning: Random Forest {.tabset}
+
+Let's run models in two steps. The first is a simple, fast shallow random forest, to confirm that the model will run and observe feature importance scores. The second will use `xgboost`. Both use the basic recipe preprocessor for now.
+
+## Model Specification
+
+This first model is a bagged tree, where the number of predictors to consider for each split of a tree (i.e., mtry) equals the number of all available predictors. The `min_n` of 10 means that each tree branch of the 50 decision trees built have at least 10 observations. As a result, the decision trees in the ensemble all are relatively shallow.
+
+```{r random forest spec}
+
+(bag_spec <-
+  bag_tree(min_n = 10) %>%
+  set_engine("rpart", times = 50) %>%
+  set_mode("regression"))
+
+```
+
+## Parallel backend
+
+To speed up computation we will use a parallel backend.
+
+```{r parallel backend}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+```
+
+## Fit and Variable Importance
+
+Lets make a cursory check of the recipe and variable importance, which comes out of `rpart` for free. This workflow also handles factors without dummies.
+
+```{r fit random forest}
+bag_wf <-
+  workflow() %>%
+  add_recipe(basic_rec) %>%
+  add_model(bag_spec)
+
+bag_fit <- parsnip::fit(bag_wf, data = train_df)
+
+extract_fit_parsnip(bag_fit)$fit$imp %>%
+  mutate(term = fct_reorder(term, value)) %>%
+  ggplot(aes(value, term)) +
+  geom_point() +
+  geom_errorbarh(aes(
+    xmin = value - `std.error` / 2,
+    xmax = value + `std.error` / 2
+  ),
+  height = .3) +
+  labs(title = "Feature Importance",
+       x = NULL, y = NULL)
+
+```
+
+
+```{r performance of random forest}
+augment(bag_fit, train_df) %>% 
+  select(id, popularity, .pred) %>% 
+  rmse(truth = popularity, estimate = .pred)
+```
+
+The RMSE here is not a great result. It suggests that for this model, songs where the popularity is near the mean of 27, the prediction yields an error of around 5.8 on the training data. Even worse, the model is likely over-fit and would perform worse on holdout data.
+
+Even so, let's bank this first submission to Kaggle as-is, and work more with `xgboost` to do better.
+
+```{r write csv random forest, eval = FALSE}
+augment(bag_fit, test_df) %>% 
+  select(id, popularity = .pred) %>% 
+  write_csv(file = path_export)
+```
+
+```{r post csv random forest, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "First model"'))
+```
+
+# {-}
+
+# Machine Learning: XGBoost Model 1 {.tabset}
+
+## Model Specification
+
+Let's start with a boosted model that runs fast and gives an early indication of which hyperparameters make the most difference in model performance.
+
+```{r xgboost spec one}
+(xgboost_spec <- boost_tree(trees = tune(),
+                            min_n = tune(),
+                            learn_rate = tune(),
+                            tree_depth = tune(),
+                            stop_iter = 20) %>% 
+  set_engine("xgboost", validation = 0.2) %>%
+  set_mode("regression"))
+```
+
+## Tuning and Performance
+
+The grid here is only 7 combinations of the default parameters and the `tune_grid` process is setup to stop early.
+
+```{r tune grid xgboost one}
+set.seed(2021)
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_grid(    
+    resamples = folds,
+    grid = 7,
+    metrics = mset
+)
+```
+
+```{r one performance}
+autoplot(cv_res_xgboost)
+
+collect_metrics(cv_res_xgboost) %>% 
+  arrange(mean)
+```
+
+The best learning rates are very small, around 0.013. Setting trees at 753 and depth at 2 appears to give stable results.
+
+# {-}
+
+# Machine Learning: XGBoost Model 2 {.tabset}
+
+Let's use what we learned above to set the learning rate, the number of trees and tree depth, and add back other hyperparameters for further tuning. This time, let's also try the`tune_race_anova` technique for skipping the parts of the grid search that do not perform well.
+
+## Model Specification
+
+```{r spec xgboost two}
+(xgboost_spec <- boost_tree(trees = 753,
+                            min_n = tune(),
+                            learn_rate = 0.013,
+                            tree_depth = 2,
+                            sample_size = tune(),
+                            loss_reduction = tune(),
+                            stop_iter = 20) %>% 
+  set_engine("xgboost", validation = 0.1) %>%
+  set_mode("regression"))
+
+xgboost_param <- parameters(xgboost_spec) %>%
+  update(
+    min_n = min_n(c(4, 39))
+  )
+```
+
+## Tuning and Performance
+
+```{r tune grid xgboost two noeval, eval = FALSE}
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = xgboost_param %>% grid_max_entropy(size = 12),
+    control = control_race(verbose = FALSE,
+                           save_pred = TRUE, 
+                           save_workflow = TRUE,
+                           extract = extract_model,
+                           parallel_over = "resamples"),
+    metrics = mset
+)
+```
+
+
+```{r tune grid xgboost two noinclude, include=FALSE}
+if (file.exists(here::here("data", "spotifyxgboost.rds"))) {
+cv_res_xgboost <- read_rds(here::here("data", "spotifyxgboost.rds"))  
+} else {
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = xgboost_param %>% grid_max_entropy(size = 12),
+    control = control_race(verbose = FALSE,
+                           save_pred = TRUE, 
+                           save_workflow = TRUE,
+                           extract = extract_model,
+                           parallel_over = "resamples"),
+    metrics = mset
+)
+write_rds(cv_res_xgboost, here::here("data", "spotifyxgboost.rds"))
+}
+
+
+```
+
+
+```{r performance xgboost two}
+autoplot(cv_res_xgboost)
+
+collect_metrics(cv_res_xgboost) %>% 
+  arrange(mean)
+
+```
+
+The best mean rmse across folds is about 12, which is discouraging. This figure is likely more robust and a better estimate of performance on holdout data. Let's fit on the entire training set at these hyperparameters to get a single RMSE performance estimate on the best model so far.
+
+```{r fit xgboost two and performance}
+xgb_wf_best <-   
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_xgboost))
+
+fit_best <- xgb_wf_best %>%
+  parsnip::fit(data = train_df)
+
+augment(fit_best, train_df) %>% 
+  select(id, popularity, .pred) %>% 
+  rmse(truth = popularity, estimate = .pred)
+```
+
+Let's bank this second submission to Kaggle, and work even more with `xgboost` to do better.
+
+```{r write xgboost two, eval=FALSE}
+augment(fit_best, test_df) %>% 
+  select(id, popularity = .pred) %>% 
+  write_csv(file = path_export)
+```
+
+```{r submit xgboost two, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Second model"'))
+```
+
+## SHAPley Variable Importance
+
+Let's take a deeper dive into the XGBoost variable importance.
+
+```{r variable importance xgboost two}
+fit_best %>% 
+  extract_fit_parsnip() %>% 
+  vip(geom = "point") +
+  labs(title = "XGBoost model Variable Importance",
+       subtitle = "VIP package")
+
+```
+
+For inference, the XGBoost model suggests that after `release_year` and `followers`, the underlying features that drive the popularity are somewhat different.  Let's look closer to understand what is going on to improve the model further.
+
+```{r shapley xgboost two, fig.asp=1}
+some_training_data <- basic_rec %>% prep() %>% bake(new_data = slice_sample(train_df, n = 500) , composition = "matrix") 
+
+parsnip_fit <-  extract_fit_parsnip(fit_best)
+
+# remove the outcome variable
+shap <- shap.prep(parsnip_fit$fit, X_train = some_training_data[,-14])
+
+# shap.importance(shap, names_only = TRUE)
+
+shap.plot.summary(shap)
+
+```
+
+As mentioned before, `release_year` and the artist's `followers` (log scale) have a large influence on popularity in the model output. Let's look at individual features.
+
+```{r xgboost two release year pd}
+shap.plot.dependence(shap, "release_year",
+                     color_feature = "auto", alpha = 0.6,
+                     jitter_width = 0.1)
+```
+
+The release year SHAP values are almost linear. There may be an interaction with `energy` that would improve the model.
+
+```{r xgboost two followers pd}
+shap.plot.dependence(shap, "followers",
+                     color_feature = "auto", alpha = 0.6,
+                     jitter_width = 0.1)
+```
+
+The log transformation of followers was justified, though something strange must be happening at 12. There may be an interaction with `release_year` that could improve the model.
+
+And for the feature `instrumentalness`:
+
+```{r xgboost two instrumentalness pd}
+shap.plot.dependence(shap, "instrumentalness",
+                     color_feature = "auto", alpha = 0.6,
+                     jitter_width = 0.02)
+```
+
+## DALEX Partial Dependence Plots
+
+What is the aggregated effect of the `release_year` feature over 500 examples?
+
+```{r xgboost two DALEX release_year}
+explainer_xgb <- explain_tidymodels(
+  fit_best,
+  train_df %>% select(-popularity),
+  train_df$popularity
+)
+
+pdp_year <- model_profile(explainer_xgb,
+              N = 500,
+              variables = "release_year")
+
+as_tibble(pdp_year$agr_profiles) %>% 
+  ggplot(aes(`_x_`, `_yhat_`)) +
+  geom_line(data = as_tibble(
+     pdp_year$cp_profiles),
+     aes(release_year, group = `_ids_`),
+     size = 0.5, alpha = 0.1, color = "gray30"
+   ) +
+  geom_line(size = 1.2, alpha = 0.8, color = "orange") +
+  labs(x = "Year", y = "Predicted Popularity")
+  
+```
+
+What is the aggregated effect of the `followers` feature over 500 examples?
+
+```{r xgboost two DALEX followers}
+pdp_followers <- model_profile(explainer_xgb,
+              N = 500,
+              variables = "followers")
+
+as_tibble(pdp_followers$agr_profiles) %>% 
+  ggplot(aes(`_x_`, `_yhat_`)) +
+  geom_line(data = as_tibble(
+     pdp_followers$cp_profiles),
+     aes(followers, group = `_ids_`),
+     size = 0.5, alpha = 0.1, color = "gray30"
+   ) +
+  geom_line(size = 1.2, alpha = 0.8, color = "darkblue") +
+  labs(x = "Artist Followers", y = "Predicted Popularity")
+  
+```
+
+What is the aggregated effect of the `acousticness` feature over 500 examples?
+
+```{r xgboost two DALEX acousticness}
+pdp_acousticness <- model_profile(explainer_xgb,
+              N = 500,
+              variables = "acousticness")
+
+as_tibble(pdp_acousticness$agr_profiles) %>% 
+  ggplot(aes(`_x_`, `_yhat_`)) +
+  geom_line(data = as_tibble(
+     pdp_acousticness$cp_profiles),
+     aes(acousticness, group = `_ids_`),
+     size = 0.5, alpha = 0.1, color = "gray30"
+   ) +
+  geom_line(size = 1.2, alpha = 0.8, color = "green") +
+  labs(x = "Artist acousticness", y = "Predicted Popularity")
+  
+```
+
+What is the aggregated effect of the `duration` feature over 500 examples?
+
+```{r xgboost two DALEX duration}
+pdp_duration <- model_profile(explainer_xgb,
+              N = 500,
+              variables = "duration_ms")
+
+as_tibble(pdp_duration$agr_profiles) %>% 
+  ggplot(aes(`_x_`, `_yhat_`)) +
+  geom_line(data = as_tibble(
+     pdp_duration$cp_profiles),
+     aes(duration_ms, group = `_ids_`),
+     size = 0.5, alpha = 0.1, color = "gray30"
+   ) +
+  geom_line(size = 1.2, alpha = 0.8, color = "darkgreen") +
+  labs(x = "Song Duration (ms)", y = "Predicted Popularity")
+  
+```
+
+# {-}
+
+# Machine Learning XGBoost 3 {.tabset}
+
+Let's add our interactions from above and introduce dimensionality reduction.
+
+## Recipe
+
+Principal component analysis (PCA) is a transformation of a group of variables that produces a new set of artificial features or components. These components are designed to capture the maximum amount of information (i.e. variance) in the original variables. Also, the components are statistically independent from one another. This means that they can be used to combat large inter-variable correlations in a data set.
+
+```{r advanced_recipe, fig.asp=1}
+(advanced_rec <-
+  basic_rec %>% 
+  step_interact(terms = ~ release_year:energy) %>% 
+  step_interact(terms = ~ release_year:followers) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_numeric_predictors(), threshold = 0.9))
+
+tidy_coef <- tidy(prep(advanced_rec), 10, type = "coef")
+
+tidy_coef %>% 
+  filter(component %in% paste0("PC",1:6)) %>% 
+  group_by(component) %>% 
+  slice_max(abs(value), n = 12) %>% 
+  ungroup() %>% 
+  mutate(terms = tidytext::reorder_within(terms, abs(value), component)) %>% 
+  ggplot(aes(abs(value), terms, fill = value > 0)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ component, scales = "free_y") +
+  tidytext::scale_y_reordered() +
+  labs(title = "What features drive the top 6 principal components?",
+       subtitle = "Note the presence of the interactions. Recent, high energy, loud tracks are most popular.",
+       y = NULL)
+  
+bake(prep(advanced_rec), new_data = NULL) %>% 
+  ggplot(aes(PC01, PC02, z = popularity)) +
+  stat_summary_hex(alpha = 0.9, bins = 40) +
+  scale_fill_viridis_c(option = "E") +
+  labs(fill = "Popularity",
+       title = "First two principal components")
+  
+```
+
+## Tuning and Performance
+
+The clean advanced preprocessor with interactions should yield a better model. Let's see.
+
+```{r xgboost3 advanced spec}
+(xgboost_spec <- boost_tree(trees = tune(),
+                            min_n = tune(),
+                            learn_rate = 0.02,
+                            tree_depth = tune(),
+                            sample_size = tune(),
+                            loss_reduction = tune()) %>% 
+  set_engine("xgboost") %>%
+  set_mode("regression"))
+```
+
+```{r xgboost3 noeval, eval = FALSE}
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(advanced_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = 10,
+    control = control_race(verbose = FALSE,
+                           save_pred = TRUE, 
+                           save_workflow = TRUE,
+                           extract = extract_model,
+                           parallel_over = "resamples"),
+    metrics = mset
+)
+```
+
+```{r xgboost3 noinclude, include = FALSE}
+if (file.exists(here::here("data", "spotifyxgboostadvanced.rds"))) {
+cv_res_xgboost <- read_rds(here::here("data", "spotifyxgboostadvanced.rds"))
+} else {
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(advanced_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = 10,
+    control = control_race(verbose = FALSE,
+                           save_pred = TRUE, 
+                           save_workflow = TRUE,
+                           extract = extract_model,
+                           parallel_over = "resamples"),
+    metrics = mset
+)
+write_rds(cv_res_xgboost, here::here("data", "spotifyxgboostadvanced.rds"))
+}
+```
+
+```{r performance advanced}
+autoplot(cv_res_xgboost)
+
+collect_metrics(cv_res_xgboost) %>% 
+  arrange(mean)
+
+```
+
+The best mean rmse averaged across folds is about 12.1.
+
+```{r xgboost3 fit}
+xgb_wf_best <-   
+  workflow() %>% 
+  add_recipe(advanced_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_xgboost))
+
+fit_best <- xgb_wf_best %>%
+  parsnip::fit(data = train_df)
+
+augment(fit_best, train_df) %>% 
+  select(id, popularity, .pred) %>% 
+  rmse(truth = popularity, estimate = .pred)
+```
+
+We're out of time. This will be as good as it gets. Our final submission:
+
+```{r xgboost3 write, eval = FALSE}
+augment(fit_best, test_df) %>% 
+  select(id, popularity = .pred) %>% 
+  write_csv(file = path_export)
+```
+
+```{r xgboost3 submit, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Third model"'))
+```
+
+# {-}
+
+----
+
+It turns out that an RMSE in the neighbornood of 10 is competitive with the others on the leaderboard.
+
+
