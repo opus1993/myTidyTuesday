@@ -1,0 +1,845 @@
+---
+title: "Sliced Baseball Home Runs"
+author: "Jim Gruman"
+date: "July 27, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+[Season 1 Episode 9](https://www.kaggle.com/c/sliced-s01e09-playoffs-1/data) of #SLICED features a Major League Baseball challenge to predict whether a batter's hit results in a home run. Each row represents a unique pitch and ball in play. The evaluation metric for submissions in this competition is classification mean `logloss`.
+
+![](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F7f7ba5f9-d7bd-4101-8933-a112b4f78570%2FFrame_3.png?table=block&id=c7bd2635-6e3a-4227-9e2d-fbafb0480073&spaceId=2cc404e6-fe20-483d-9ea5-5d44eb3dd586&width=1510&userId=&cache=v2)
+
+[SLICED](https://www.notion.so/SLICED-Show-c7bd26356e3a42279e2dfbafb0480073) is like the TV Show Chopped but for data science. The four competitors get a never-before-seen dataset and two-hours to code a solution to a prediction challenge. Contestants get points for the best model plus bonus points for data visualization, votes from the audience, and more.
+
+The audience is invited to participate as well. This file consists of my submissions with cleanup and commentary added.
+
+To make the best use of the resources that we have, we will explore the data set for features to select those with the most predictive power, build a random forest to confirm the recipe, and then build one or more ensemble models. If there is time, we will craft some visuals for model explainability.
+
+Let's load up packages:
+
+```{r setup}
+
+suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(hrbrthemes) # plot theming
+
+library(tidymodels) # machine learning tools
+library(finetune) # racing methods for accelerating hyperparameter tuning
+
+library(themis) # ml prep tools for handling unbalanced datasets
+library(baguette) # ml tools for bagged decision tree models
+  
+library(vip) # interpret model performance
+library(DALEXtra)
+
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+#create a data directory
+data_dir <- here::here("data",Sys.Date())
+if (!file.exists(data_dir)) dir.create(data_dir)
+
+# set a competition metric
+mset <- metric_set(mn_log_loss)
+
+# set the competition name from the web address
+competition_name <- "sliced-s01e09-playoffs-1"
+
+zipfile <- paste0(data_dir,"/", competition_name, ".zip")
+
+path_export <- here::here("data",Sys.Date(),paste0(competition_name,".csv"))
+```
+
+## Get the Data
+
+A quick reminder before downloading the dataset:  Go to the web site and accept the competition terms!!!
+
+For more on other ways of predicting baseball stats, check out David Robinson's book, [Introduction to Empirical Bayes, Examples from Baseball Statistics!](https://www.amazon.com/Introduction-Empirical-Bayes-Examples-Statistics-ebook/dp/B06WP26J8Q)
+
+We have basic shell commands available to interact with Kaggle here:
+
+```{r kaggle competitions terminal commands, eval=FALSE}
+# from the Kaggle api https://github.com/Kaggle/kaggle-api
+
+# the leaderboard
+shell(glue::glue('kaggle competitions leaderboard { competition_name } -s'))
+
+# the files to download
+shell(glue::glue('kaggle competitions files -c { competition_name }'))
+
+# the command to download files
+shell(glue::glue('kaggle competitions download -c { competition_name } -p { data_dir }'))
+
+# unzip the files received
+shell(glue::glue('unzip { zipfile } -d { data_dir }'))
+
+```
+
+We are reading in the contents of the three datafiles here, unnesting the id_artists column, joining the artists table to each id of the artists, cleaning the genres text, and finally collapsing the genres back.
+
+```{r read kaggle files}
+
+park_dimensions <- read_csv(file = glue::glue({ data_dir }, "/park_dimensions.csv")) 
+
+train_df <- read_csv(file = glue::glue({ data_dir }, "/train.csv")) %>% 
+  left_join(park_dimensions, by = "park") %>% 
+  mutate(across(ends_with("_team"), as_factor)) %>% 
+  mutate(across(ends_with("_name"), as_factor)) %>% 
+  mutate(across(ends_with("_id"), as_factor)) %>% 
+  mutate(across(ends_with("is_"), as_factor)) %>% 
+  mutate(Cover = as_factor(Cover)) %>% 
+  mutate(bb_type = as_factor(bb_type)) %>% 
+  mutate(bearing = as_factor(bearing)) %>% 
+  select(is_home_run, everything()) %>% 
+  mutate(is_home_run = factor(if_else(is_home_run == 1, "yes", "no"))) %>%
+  janitor::clean_names()
+
+holdout_df <- read_csv(file = glue::glue({ data_dir }, "/test.csv")) %>% 
+  left_join(park_dimensions, by = "park") %>% 
+  mutate(across(ends_with("_team"), as_factor)) %>% 
+  mutate(across(ends_with("_name"), as_factor)) %>% 
+  mutate(across(ends_with("_id"), as_factor)) %>% 
+  mutate(across(ends_with("is_"), as_factor)) %>% 
+  mutate(Cover = as_factor(Cover)) %>% 
+  mutate(bb_type = as_factor(bb_type)) %>% 
+  mutate(bearing = as_factor(bearing)) %>%
+  janitor::clean_names()
+```
+
+Some questions to answer here:
+What features have missing data, and imputations may be required?
+What does the outcome variable look like, in terms of imbalance?
+
+```{r skim, eval = FALSE}
+skimr::skim(train_df)
+```
+
+Outcome variable `is_home_run` is a binary class. `bb_type`, `launch_speed`, and `launch_angle` are missing some data. We will take a closer look at what missingness means in this context.
+
+## Outcome Variable Distribution
+
+```{r summarize outcome}
+summarize_is_home_run <- function(tbl){
+  ret <- tbl %>%
+    summarize(
+      n_is_home_run = sum(is_home_run == "yes"),
+      n = n(),
+      .groups = "drop"
+    ) %>%
+    arrange(desc(n)) %>%
+    mutate(
+      pct_is_home_run = n_is_home_run / n,
+      low = qbeta(.025, n_is_home_run + 5, n - n_is_home_run + .5),
+      high = qbeta(.975, n_is_home_run + 5, n - n_is_home_run + .5)
+    ) %>%
+    mutate(pct = n / sum(n))
+  ret
+}
+
+```
+
+```{r, fig.asp=1}
+train_df %>%
+  group_by(batter_team) %>%
+  summarize_is_home_run() %>% 
+  mutate(batter_team = fct_reorder(batter_team, pct_is_home_run)) %>%
+  ggplot(aes(pct_is_home_run, batter_team)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = low, xmax = high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent) +
+  labs(
+    x = "Proportion of at bats",
+    y = "",
+    title = "What teams get the most home runs?",
+    subtitle = "Including 95% intervals. Size of points is proportional to at-bat frequency in the dataset"
+  )
+
+train_df %>%
+  group_by(name ) %>%
+  summarize_is_home_run() %>% 
+  mutate(name = fct_reorder(name, pct_is_home_run)) %>%
+  ggplot(aes(pct_is_home_run, name)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = low, xmax = high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent) +
+  labs(
+    x = "Proportion of at bats",
+    y = "",
+    title = "What ballparks get the most home runs?",
+    subtitle = "Including 95% intervals. Size of points is proportional to at-bat frequency in the dataset"
+  )
+
+train_df %>%
+  group_by(inning = pmin(inning, 10)) %>%
+  summarize_is_home_run() %>% 
+  arrange(inning) %>% 
+#  mutate(inning = fct_reorder(inning, -as.numeric(inning))) %>% 
+  ggplot(aes(pct_is_home_run, inning)) +
+  geom_point(aes(size = pct), show.legend = FALSE) +
+  geom_line(orientation = "y") +
+  geom_ribbon(aes(xmin = low, xmax = high), alpha = .2) +
+  scale_x_continuous(labels = percent) +
+  scale_y_continuous(breaks = 1:10, labels = c(1:9, "10+")) +
+  labs(
+    x = "Proportion of at bats that are home runs",
+    y = "",
+    title = "What innings get the most home runs?",
+    subtitle = "Including 95% intervals. Size of points is proportional to at-bat frequency in the dataset"
+  ) +
+  theme(legend.position = c(0.8, 0.8),
+        legend.background = element_rect(color = "white"))
+
+train_df %>%
+  group_by(balls, strikes ) %>%
+  summarize_is_home_run() %>% 
+  mutate(pitch_count = paste0(strikes, "-",balls)) %>% 
+  ggplot(aes(pct_is_home_run, pitch_count)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = low, xmax = high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(1, 7)) +
+  scale_x_continuous(labels = percent) +
+  geom_text(data = . %>% filter(pitch_count == "2-3"),
+            label = "Home runs are likely with a full count",
+            check_overlap = TRUE,
+            nudge_y = -0.3) +
+    geom_text(data = . %>% filter(pitch_count == "0-3"),
+            label = "Home runs are likely with the batter ahead",
+            check_overlap = TRUE,
+            nudge_y = -0.3) +
+  labs(
+    x = "Proportion of at bats",
+    y = "Strikes - Balls",
+    title = "At what levels of pitch count are there more home runs?",
+    subtitle = "Including 95% intervals. Size of points is proportional to at-bat frequency in the dataset"
+  )
+
+train_df %>%
+  group_by(balls, strikes) %>%
+  summarize_is_home_run() %>%
+  ggplot(aes(balls, strikes, fill = pct_is_home_run)) +
+  geom_tile() +
+  labs(x = "# of balls",
+       y = "# of strikes",
+       title = 'Home runs are more likely with many balls, fewer strikes',
+       fill = "% HR")
+
+train_df %>%
+  group_by(balls, strikes) %>%
+  summarize(pct_hr = mean(is_home_run == "yes"),
+            avg_height = mean((plate_z), na.rm = TRUE),
+            avg_abs_distance_center = mean(abs(plate_x), na.rm = TRUE),
+            .groups = "drop") %>%
+  mutate(count = paste0(balls, "-", strikes)) %>%
+  ggplot(aes(avg_abs_distance_center, 
+             avg_height, 
+             color = pct_hr)) +
+  geom_point(size = 5, shape = 20) +
+  scale_color_viridis_b(option = "H") +  
+  ggrepel::geom_text_repel(aes(label = count)) +
+  labs(x = "Average distance from center plate (feet)",
+       y = "Average height (feet)",
+       fill = "% home run",
+       subtitle = "The count affects where a pitcher throws the ball, & therefore probability of HR")
+
+train_df %>%
+  group_by(bb_type) %>%
+  summarize_is_home_run() %>%
+  filter(!is.na(bb_type)) %>%
+  ggplot(aes(bb_type, pct_is_home_run)) +
+  geom_col() +
+  scale_y_continuous(labels = percent) +
+  labs(y = "% home run",
+       subtitle = "Ground balls and pop-ups are (literally) *never* home runs. Fly balls often are") +
+  theme(panel.grid.major.x = element_blank())
+
+train_df %>%
+  group_by(bearing ) %>%
+  summarize_is_home_run() %>% 
+  mutate(bearing = fct_relevel(bearing, "right", "center", "left")) %>% 
+  ggplot(aes(pct_is_home_run, bearing)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = low, xmax = high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent) +
+  labs(
+    x = "Proportion of at bats",
+    y = "",
+    title = "What bearings get the most home runs?",
+    subtitle = "Including 95% intervals. Size of points is proportional to at-bat frequency in the dataset"
+  ) +
+  theme(panel.grid.major.y = element_blank())
+
+train_df %>%
+  group_by(pitch_name ) %>%
+  summarize_is_home_run() %>%
+  filter(n > 10) %>% 
+  mutate(pitch_name = fct_reorder(pitch_name, pct_is_home_run)) %>% 
+  ggplot(aes(pct_is_home_run, pitch_name)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = low, xmax = high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent) +
+  labs(
+    x = "Proportion of at bats",
+    y = "",
+    title = "What pitch names get the most home runs?",
+    subtitle = "Including 95% intervals. Size of points is proportional to at-bat frequency in the dataset"
+  ) +
+  theme(panel.grid.major.y = element_blank())
+
+train_df %>% 
+  count(is_home_run) %>% 
+  ggplot(aes(n, is_home_run, fill = is_home_run)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_viridis_d(option = "H") +
+  labs(subtitle = "There are a lot more non-home runs in this dataset than home runs.
+", fill = NULL, y = NULL)
+
+```
+
+## Time series 
+
+```{r}
+train_df %>%
+  group_by(week = as.Date("2020-01-01") + lubridate::week(game_date) * 7) %>%
+  summarize_is_home_run() %>%
+  ggplot(aes(week, pct_is_home_run)) +
+  geom_point(aes(size = n)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = low, ymax = high), alpha = .2) +
+  expand_limits(y = 0) +
+  scale_x_date(date_labels = "%b",
+               date_breaks = "month",
+               minor_breaks = NULL) +
+  scale_y_continuous(labels = percent) +
+  scale_size_continuous(guide = "none") +
+  labs(x = NULL,
+       y = "% home runs",
+       title = "Home Runs are more common later in the season!",
+       subtitle = glue::glue("Ribbon shows 95% confidence bound by week for dataset spanning { min(train_df$game_date) } thru { max(train_df$game_date) }."))
+
+```
+
+```{r numeric feature plots, fig.asp=1}
+
+train_df %>%
+  group_by(name, lf_dim, cf_dim, rf_dim, lf_w, cf_w, rf_w) %>%
+  summarize_is_home_run() %>% 
+  pivot_longer(cols = lf_dim:rf_w, names_to = "metric", values_to = "value") %>%
+  ggplot(aes(value, pct_is_home_run)) +
+  geom_point() +
+  geom_text(aes(label = name), 
+            check_overlap = TRUE, 
+            vjust = 1, 
+            hjust = 1) +
+  facet_wrap(~ metric, scales = "free_x") +
+  labs(subtitle = "No trends where a park's dimensions are statistically significant")
+
+train_df %>%
+  group_by(name, lf_dim, cf_dim, rf_dim, lf_w, cf_w, rf_w) %>%
+  summarize_is_home_run() %>% 
+  pivot_longer(cols = lf_dim:rf_w, names_to = "metric", values_to = "value") %>%
+  group_by(metric) %>%
+  summarize(tidy(cor.test(value, pct_is_home_run )))
+
+```
+
+```{r}
+train_df %>%
+  select(is_home_run, plate_x:launch_angle) %>%
+  pivot_longer(cols = -is_home_run,names_to = "feature",values_to =  "value") %>%
+  ggplot(aes(value, fill = is_home_run)) +
+  geom_density(alpha = .5) +
+  scale_fill_viridis_d(option = "H") +
+  facet_wrap(~ feature, scales = "free") +
+  labs(subtitle = "There's a sweet spot of launch angle & speed where home runs happen",
+       fill = "Home Run") +
+  theme(legend.position = c(0.8, 0.3))
+```
+
+
+```{r}
+train_df %>%
+  group_by(launch_angle_bucket = round(launch_angle * 2, -1) / 2,
+           launch_speed_bucket = round(launch_speed * 2, -1) / 2) %>%
+  summarize_is_home_run() %>%
+  filter(n >= 30) %>%
+  filter(complete.cases(.)) %>%
+  ggplot(aes(launch_speed_bucket, launch_angle_bucket, fill = pct_is_home_run)) +
+  geom_tile() +
+  scale_fill_viridis_c(option = "H", labels = scales::percent)  +
+  labs(x = "Launch Speed",
+       y = "Launch Angle",
+       title = "There is a sweet spot of high speed + moderate angle",
+       subtitle = "Rounded to the nearest 5 on each scale; no buckets shown with <30 data points",
+       fill = "% HR")
+```
+
+
+```{r}
+train_df %>%
+  group_by(plate_x = round(plate_x, 1),
+           plate_z = round(plate_z, 1)) %>%
+  summarize_is_home_run() %>%
+  filter(n >= 30) %>%
+  filter(complete.cases(.)) %>%
+  ggplot(aes(plate_x, plate_z, z = pct_is_home_run)) +
+  stat_summary_hex(alpha = 0.9, bins = 10) +
+  scale_fill_viridis_c(option = "H", labels = scales::percent)  +
+  geom_vline(xintercept = 0, lty = 2) +
+  labs(x = "Relative position from center plate (in feet)",
+       y = "Distance above plate (in feet)",
+       title = "The best place is center plate, about 2.5-3.5 feet up",
+       subtitle = "Rounded to the nearest 5 on each scale; no buckets shown with <30 data points",
+       fill = "% HR")
+```
+
+----
+
+# Machine Learning: Random Forest {.tabset}
+
+Let's run models in two steps. The first is a simple, fast shallow random forest, to confirm that the model will run and observe feature importance scores. The second will use `xgboost`. Both use the basic recipe preprocessor for now.
+
+## The recipe
+
+To move quickly I started with this basic recipe.
+
+```{r basic recipe}
+basic_rec <-
+  recipe(
+    is_home_run ~ bb_type + 
+      pitch_mph + 
+      launch_speed +
+      launch_angle +
+      plate_x +
+      plate_z +
+      is_batter_lefty + 
+      is_pitcher_lefty ,
+    data = train_df
+  ) 
+
+```
+
+## Dataset for modeling
+
+```{r juice the dataset}
+basic_rec %>% 
+#  finalize_recipe(list(num_comp = 2)) %>% 
+  prep() %>% 
+  juice() 
+
+```
+
+## Cross Validation
+
+We will use 5-fold cross validation and stratify on the outcome to build models that are less likely to over-fit the training data.
+
+Proper business modeling practice would holdout a sample from training entirely for assessing model performance. I've made an exception here for Kaggle.
+
+```{r cross validation}
+set.seed(2021)
+
+(folds <- vfold_cv(train_df, v = 5, strata = is_home_run))
+
+```
+
+## Model Specification
+
+This first model is a bagged tree, where the number of predictors to consider for each split of a tree (i.e., mtry) equals the number of all available predictors. The `min_n` of 10 means that each tree branch of the 50 decision trees built have at least 10 observations. As a result, the decision trees in the ensemble all are relatively shallow.
+
+```{r random forest spec}
+
+(bag_spec <-
+  bag_tree(min_n = 10) %>%
+  set_engine("rpart", times = 50) %>%
+  set_mode("classification"))
+
+```
+
+## Parallel backend
+
+To speed up computation we will use a parallel backend.
+
+```{r parallel backend}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+```
+
+## Fit and Variable Importance
+
+Lets make a cursory check of the recipe and variable importance, which comes out of `rpart` for free. This workflow also handles factors without dummies.
+
+```{r fit random forest, fig.asp=1}
+bag_wf <-
+  workflow() %>%
+  add_recipe(basic_rec) %>%
+  add_model(bag_spec)
+
+bag_fit <- parsnip::fit(bag_wf, data = train_df)
+
+extract_fit_parsnip(bag_fit)$fit$imp %>%
+  mutate(term = fct_reorder(term, value)) %>%
+  ggplot(aes(value, term)) +
+  geom_point() +
+  geom_errorbarh(aes(
+    xmin = value - `std.error` / 2,
+    xmax = value + `std.error` / 2
+  ),
+  height = .3) +
+  labs(title = "Feature Importance",
+       x = NULL, y = NULL)
+
+```
+
+
+```{r performance of random forest}
+augment(bag_fit, train_df) %>% 
+  select(is_home_run, .pred_yes) %>% 
+  mn_log_loss(truth = is_home_run, estimate = .pred_yes, event_level = "second")
+```
+
+Wow, that's not too shabby. Of course, this may have overfitted. Let's bank this first submission to Kaggle as-is, and work more with `xgboost` to do better.
+
+```{r write csv random forest, eval = FALSE}
+submission <- augment(bag_fit, holdout_df) %>% 
+  select(bip_id, is_home_run = .pred_yes) 
+
+ write_csv(submission, file = path_export)
+
+```
+
+```{r post csv random forest, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "First model"'))
+```
+
+# {-}
+
+----
+
+# Machine Learning: XGBoost Model 1 {.tabset}
+
+## Model Specification
+
+Let's start with a boosted model that runs fast and gives an early indication of which hyperparameters make the most difference in model performance.
+
+```{r xgboost spec one}
+(xgboost_spec <- boost_tree(trees = tune(),
+                            min_n = tune(),
+                            learn_rate = tune(),
+                            tree_depth = tune(),
+                            stop_iter = 20) %>% 
+  set_engine("xgboost", validation = 0.2) %>%
+  set_mode("classification"))
+```
+
+## Tuning and Performance
+
+We will use the basic recipe from above and simply dummy the categorical predictors.
+
+```{r tune grid xgboost one rec}
+second_rec <-
+  recipe(
+    is_home_run ~ bb_type + 
+      pitch_mph + 
+      launch_speed +
+      launch_angle +
+      plate_x +
+      plate_z +
+      is_batter_lefty + 
+      is_pitcher_lefty ,
+    data = train_df
+  ) %>% 
+  step_unknown(all_nominal_predictors()) %>% 
+  step_dummy(all_nominal_predictors()) %>% 
+  step_impute_linear(launch_angle, launch_speed,
+    impute_with = imp_vars(plate_x, plate_z, pitch_mph)
+  ) %>%
+  step_nzv(all_predictors())
+```
+
+```{r tune grid xgboost one noeval, eval = FALSE}
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(second_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_grid(    
+    resamples = folds,
+    grid = 7,
+    metrics = mset
+)
+```
+
+```{r tune grid xgboost one noinclude, include = FALSE}
+if (file.exists(here::here("data", "baseballHRxgboost.rds"))) {
+cv_res_xgboost <- read_rds(here::here("data", "baseballHRxgboost.rds"))
+} else {
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(second_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_grid(    
+    resamples = folds,
+    grid = 7,
+    metrics = mset
+)
+write_rds(cv_res_xgboost, here::here("data", "baseballHRxgboost.rds"))
+}
+```
+
+```{r xgboost one performance}
+autoplot(cv_res_xgboost)
+
+collect_metrics(cv_res_xgboost) %>% 
+  arrange(mean)
+
+xgb_wf_best <-   
+  workflow() %>% 
+  add_recipe(second_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_xgboost))
+
+fit_best <- xgb_wf_best %>%
+  parsnip::fit(data = train_df)
+
+augment(fit_best, train_df) %>% 
+  select(is_home_run, .pred_yes) %>% 
+  mn_log_loss(truth = is_home_run, 
+              estimate = .pred_yes, 
+              event_level = "second")
+
+```
+
+On training data, this log loss figure is not an improvement. I am going to attempt to post this second submission to Kaggle anyway, and work more with `xgboost` and a more advanced recipe to do better.
+
+```{r write csv xgboost1, eval = FALSE}
+submission <- augment(fit_best, holdout_df) %>% 
+  select(bip_id, is_home_run = .pred_yes) 
+
+write_csv(submission, file = path_export)
+
+```
+
+```{r post csv xgboost1, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Second model"'))
+```
+
+# {-}
+
+----
+
+# Machine Learning: XGBoost Model 2 {.tabset}
+
+Let's use what we learned above to set a more advanced recipe. This time, let's also try the`tune_race_anova` technique for skipping the parts of the grid search that do not perform well.
+
+## Advanced Recipe
+
+```{r}
+
+advanced_rec <-
+  recipe(
+    is_home_run ~ bb_type + pitch_mph + launch_speed + launch_angle +
+      plate_x + plate_z + inning + balls + strikes +
+      is_pitcher_lefty + is_batter_lefty +
+      game_date + home_team + batter_team + bearing ,
+    data = train_df
+  ) %>%
+  step_date(game_date, features = "week", keep_original_cols = FALSE) %>% 
+  step_mutate(is_home_team = home_team == batter_team) %>% 
+  step_rm(home_team) %>% 
+  step_unknown(all_nominal_predictors()) %>%
+  step_dummy(all_nominal_predictors()) %>% 
+  step_impute_linear(launch_angle, launch_speed,
+    impute_with = imp_vars(plate_x, plate_z, pitch_mph)
+  ) %>%
+  step_nzv(all_predictors())
+```
+
+## Model Specification
+
+```{r spec xgboost two}
+
+(xgboost_spec <- boost_tree(trees = tune(),
+                            min_n = tune(),
+                            mtry = tune(),
+                            learn_rate = 0.01) %>% 
+  set_engine("xgboost") %>%
+  set_mode("classification"))
+
+```
+
+## Tuning and Performance
+
+```{r tune grid xgboost two noeval, eval = FALSE}
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(advanced_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = 12,
+    control = control_race(verbose_elim = TRUE,
+                           parallel_over = "resamples"),
+    metrics = mset
+)
+```
+
+```{r tune grid xgboost two noinclude, include = FALSE}
+if (file.exists(here::here("data", "baseballHRxgboost2.rds"))) {
+cv_res_xgboost <- read_rds(here::here("data", "baseballHRxgboost2.rds"))
+} else {
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(advanced_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = 12,
+    control = control_race(verbose_elim = TRUE,
+                           parallel_over = "resamples"),
+    metrics = mset
+)
+write_rds(cv_res_xgboost, here::here("data", "baseballHRxgboost2.rds"))
+}
+```
+
+We can visualize how the possible parameter combinations we tried did during the “race.” Notice how we saved a TON of time by not evaluating the parameter combinations that were clearly doing poorly on all the resamples; we only kept going with the good parameter combinations.
+
+```{r}
+plot_race(cv_res_xgboost)
+```
+
+And we can look at the top results
+
+```{r}
+autoplot(cv_res_xgboost)
+
+show_best(cv_res_xgboost)
+
+```
+
+The best here is still discouraging. This figure is likely more robust and a better estimate of performance on holdout data. Let's fit on the entire training set at these hyperparameters to get a single performance estimate on the best model so far.
+
+```{r fit xgboost two and performance}
+xgb_wf_best <-   
+  workflow() %>% 
+  add_recipe(advanced_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_xgboost))
+
+fit_best <- xgb_wf_best %>%
+  parsnip::fit(data = train_df)
+
+augment(fit_best, train_df) %>% 
+  select(is_home_run, .pred_yes) %>% 
+  mn_log_loss(truth = is_home_run, estimate = .pred_yes, event_level = "second")
+
+```
+
+# {-}
+
+----
+
+## Variable Importance
+
+Let's take a deeper dive into the XGBoost variable importance.
+
+```{r variable importance xgboost two}
+fit_best %>% 
+  extract_fit_parsnip() %>% 
+  vip(geom = "point", num_features = 15) +
+  labs(title = "XGBoost model Variable Importance",
+       subtitle = "VIP package")
+
+```
+
+## DALEX Partial Dependence Plots
+
+What is the aggregated effect of the `launch_angle` feature over 500 examples?
+
+```{r xgboost two DALEX release_year}
+explainer_xgb <- explain_tidymodels(
+  fit_best,
+  train_df %>% select(-is_home_run),
+  as.numeric(train_df$is_home_run)
+)
+
+pdp_angle <- model_profile(explainer_xgb,
+              N = 500,
+              variables = "launch_angle")
+
+as_tibble(pdp_angle$agr_profiles) %>% 
+  ggplot(aes(`_x_`, `_yhat_`)) +
+  geom_line(data = as_tibble(
+     pdp_angle$cp_profiles),
+     aes(launch_angle, group = `_ids_`),
+     size = 0.5, alpha = 0.1, color = "gray30"
+   ) +
+  geom_line(size = 1.2, alpha = 0.8, color = "orange") +
+  labs(x = "Launch Angle", y = "Predicted Home Runs")
+  
+```
+
+What is the aggregated effect of the `launch_speed` feature over 500 examples?
+
+```{r xgboost two DALEX followers}
+pdp_speed <- model_profile(explainer_xgb,
+              N = 500,
+              variables = "launch_speed")
+
+as_tibble(pdp_speed$agr_profiles) %>% 
+  ggplot(aes(`_x_`, `_yhat_`)) +
+  geom_line(data = as_tibble(
+     pdp_speed$cp_profiles),
+     aes(launch_speed, group = `_ids_`),
+     size = 0.5, alpha = 0.1, color = "gray30"
+   ) +
+  geom_line(size = 1.2, alpha = 0.8, color = "darkblue") +
+  labs(x = "Launch Speed", y = "Predicted Home Runs")
+  
+```
+
+We're out of time. This will be as good as it gets. Our final submission:
+
+Let's post this final submission to Kaggle.
+
+```{r write xgboost two, eval = FALSE}
+submission <- augment(fit_best, holdout_df) %>% 
+  select(bip_id, is_home_run = .pred_yes) 
+
+write_csv(submission, file = path_export)
+```
+
+```{r submit xgboost two, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Final model"'))
+```
+
+
+
