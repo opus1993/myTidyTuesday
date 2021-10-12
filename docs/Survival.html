@@ -404,16 +404,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeaff51b1af7590b17399c4f34a7f2a9f47c1f6c57targetblankaff51b1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/aff51b1af7590b17399c4f34a7f2a9f47c1f6c57" target="_blank">aff51b1</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree4fc6d48a761f4f95204b411ae63f9ec4e156880etargetblank4fc6d48a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/4fc6d48a761f4f95204b411ae63f9ec4e156880e" target="_blank">4fc6d48</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeaff51b1af7590b17399c4f34a7f2a9f47c1f6c57targetblankaff51b1a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree4fc6d48a761f4f95204b411ae63f9ec4e156880etargetblank4fc6d48a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/aff51b1af7590b17399c4f34a7f2a9f47c1f6c57" target="_blank">aff51b1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/4fc6d48a761f4f95204b411ae63f9ec4e156880e" target="_blank">4fc6d48</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -487,6 +487,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/4fc6d48a761f4f95204b411ae63f9ec4e156880e/analysis/Survival.Rmd" target="_blank">4fc6d48</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-10-12
+</td>
+<td>
+add Jessice Streeter DC satRdays
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/bff04a3f3e81f702221d51559212a649cc47e158/docs/Survival.html" target="_blank">bff04a3</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-10-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -689,6 +723,9 @@ ggsurvplot(
 <li>What is the typical number of pitches for a relief pitcher in a Major League baseball game?</li>
 </ul>
 <p>All of the questions are expressed along the dimensions of the Survival Probability and the duration time to reach that threshold. In many cases, Survival quartiles convey a reasonable sense of the distribution of outcomes.</p>
+<p>Jessica Streeter delivered a short 2020 talk covering other applications of survival analysis techniques, here:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/TDwNI2xx7SE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
 <p>The survival function can be expressed mathematically as the Probability that the duration is longer than <em>t</em>, or as 1 minus the probability of Failure for a duration longer than <em>t</em>.</p>
 <p><span class="math display">\[S(t)=1-F(t)=P(T&gt;t)\]</span></p>
 <p>Let’s pause here and consider what the x-axis duration units can be. It would be easy to see how the duration would be calendar time in years, months, or even days. But survival problems can also be modeled in hours or minutes. And in some cases, series like a sequence of pitches in baseball or engine operating hours are suitable for survival analysis. A pitcher that is not pitching and an engine that is not running will not likely experience events of interest.</p>
