@@ -1,0 +1,796 @@
+---
+title: "Sliced Pet Shelter Adoptions"
+author: "Jim Gruman"
+date: "August 3, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+[Season 1 Episode 10](https://www.kaggle.com/c/sliced-s01e10-playoffs-2/data) of #SLICED features a multi-class challenge to predict the outcomes of pet shelter animals (adoption, transfer, or no outcome). The evaluation metric for submissions in this competition is classification mean `logloss`.
+
+![](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F7f7ba5f9-d7bd-4101-8933-a112b4f78570%2FFrame_3.png?table=block&id=c7bd2635-6e3a-4227-9e2d-fbafb0480073&spaceId=2cc404e6-fe20-483d-9ea5-5d44eb3dd586&width=1510&userId=&cache=v2)
+
+[SLICED](https://www.notion.so/SLICED-Show-c7bd26356e3a42279e2dfbafb0480073) is like the TV Show Chopped but for data science. The four competitors get a never-before-seen dataset and two-hours to code a solution to a prediction challenge. Contestants get points for the best model plus bonus points for data visualization, votes from the audience, and more.
+
+The audience is invited to participate as well. This file consists of my submissions with cleanup and commentary added.
+
+To make the best use of the resources that we have, we will explore the data set for features to select those with the most predictive power, build a random forest to confirm the recipe, and then build one or more ensemble models. If there is time, we will craft some visuals for model explainability.
+
+Let's load up packages:
+
+```{r setup}
+
+suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(hrbrthemes) # plot theming
+library(lubridate) # date and time transformations
+
+library(tidymodels) # machine learning tools
+library(finetune) # racing methods for accelerating hyperparameter tuning
+
+library(textrecipes)
+  
+library(tidylo)
+library(tidytext)
+  
+library(themis) # ml prep tools for handling unbalanced datasets
+library(baguette) # ml tools for bagged decision tree models
+  
+library(vip) # interpret model performance
+library(DALEXtra)
+
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+#create a data directory
+data_dir <- here::here("data",Sys.Date())
+if (!file.exists(data_dir)) dir.create(data_dir)
+
+# set a competition metric
+mset <- metric_set(mn_log_loss, accuracy, roc_auc)
+
+# set the competition name from the web address
+competition_name <- "sliced-s01e10-playoffs-2"
+
+zipfile <- paste0(data_dir,"/", competition_name, ".zip")
+
+path_export <- here::here("data",Sys.Date(),paste0(competition_name,".csv"))
+```
+
+## Get the Data
+
+A quick reminder before downloading the dataset:  Go to the web site and accept the competition terms!!!
+
+We have basic shell commands available to interact with Kaggle here:
+
+```{r kaggle competitions terminal commands, eval=FALSE}
+# from the Kaggle api https://github.com/Kaggle/kaggle-api
+
+# the leaderboard
+shell(glue::glue('kaggle competitions leaderboard { competition_name } -s'))
+
+# the files to download
+shell(glue::glue('kaggle competitions files -c { competition_name }'))
+
+# the command to download files
+shell(glue::glue('kaggle competitions download -c { competition_name } -p { data_dir }'))
+
+# unzip the files received
+shell(glue::glue('unzip { zipfile } -d { data_dir }'))
+
+```
+
+We are reading in the contents of the datafiles here.
+
+```{r read kaggle files}
+
+train_df <- read_csv(file = glue::glue({ data_dir }, "/train.csv")) %>% 
+    mutate(across(c("animal_type","sex","spay_neuter", "outcome_type"), as_factor)) %>%
+    mutate(datetime = as.Date(datetime))
+
+holdout_df <- read_csv(file = glue::glue({ data_dir }, "/test.csv")) %>% 
+  mutate(across(c("animal_type","sex","spay_neuter"), as_factor)) %>%
+    mutate(datetime = as.Date(datetime))
+
+
+```
+
+Some questions to answer here:
+What features have missing data, and imputations may be required?
+What does the outcome variable look like, in terms of imbalance?
+
+```{r skim, eval=FALSE}
+skimr::skim(train_df)
+```
+
+Outcome variable `outcome_type` has three classes.  We will take a closer look at what missingness means in this context.
+
+## Outcome Variable Distribution
+
+```{r summarize outcome}
+summarize_outcome <- function(tbl){
+  ret <- tbl %>%
+    summarize(
+      n_is_adoption = sum(outcome_type == "adoption"),
+      n_is_transfer = sum(outcome_type == "transfer"),
+      n_is_no_outcome = sum(outcome_type == "no outcome"),
+      n = n(),
+      .groups = "drop"
+    ) %>%
+    arrange(desc(n)) %>%
+    mutate(
+      pct_is_adoption = n_is_adoption / n,
+      adoption_low = qbeta(.025, n_is_adoption + .5, n - n_is_adoption + .5),
+      adoption_high = qbeta(.975, n_is_adoption + .5, n - n_is_adoption + .5),
+      
+      pct_is_transfer = n_is_adoption / n,
+      transfer_low = qbeta(.025, pct_is_transfer + .5, n - pct_is_transfer + .5),
+      transfer_high = qbeta(.975, pct_is_transfer + .5, n - pct_is_transfer + .5),
+      
+      pct_is_no_outcome = n_is_adoption / n,
+      no_outcome_low = qbeta(.025, pct_is_no_outcome + .5, n - pct_is_no_outcome + .5),
+      no_outcome_high = qbeta(.975, pct_is_no_outcome + .5, n - pct_is_no_outcome + .5),
+      
+    ) %>%
+    mutate(pct = n / sum(n))
+  ret
+}
+
+```
+
+```{r eda, fig.asp=1}
+train_df %>% 
+  count(outcome_type) %>% 
+  ggplot(aes(n, outcome_type, fill = outcome_type)) +
+  geom_col(show.legend = FALSE) +
+  labs(subtitle = "There are a lot more adoptions in this dataset than transfers or no outcomes (maybe censored?).
+", fill = NULL, y = NULL)
+
+train_df %>%
+  group_by(animal_type) %>%
+  summarize_outcome() %>% 
+  mutate(animal_type = fct_reorder(animal_type, pct_is_adoption)) %>%
+  ggplot(aes(pct_is_adoption, animal_type)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = adoption_low, xmax = adoption_high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent) +
+  labs(
+    x = "Proportion of dataset",
+    y = "",
+    title = "What animals get the most adoptions?",
+    subtitle = "Including 95% intervals. Size of points is proportional to frequency in the dataset"
+  )
+
+train_df %>%
+  group_by(spay_neuter ) %>%
+  summarize_outcome() %>% 
+  mutate(
+         spay_neuter  = fct_reorder(spay_neuter , n_is_adoption)) %>%
+  ggplot(aes(pct_is_adoption, spay_neuter )) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = adoption_low, xmax = adoption_high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent) +
+  labs(
+    x = "Percent adoption rate",
+    y = "",
+    title = "Does fixing get the most adoptions?",
+    subtitle = "Including 95% intervals. Size of points is proportional to frequency in the dataset"
+  )
+
+train_df %>% 
+   mutate(age = time_length(as.period(datetime - date_of_birth, unit = "day"), unit = "years")) %>% 
+   ggplot(aes(age, fill = outcome_type)) +
+   geom_density(position = "identity", alpha = 0.6, color = "white") +
+   facet_wrap(~ animal_type, scale = "free_y") +
+   labs(title = "Animal age varies by pet, and adoption rates") +
+   theme(legend.position = c(0.9, 0.2))
+  
+train_df %>%
+  mutate(adoption_month = month(datetime, label = TRUE)) %>% 
+  group_by(adoption_month) %>%
+  summarize_outcome() %>%
+  ggplot(aes(pct_is_adoption, adoption_month)) +
+  geom_point(aes(size = pct)) +
+  geom_errorbarh(aes(xmin = adoption_low, xmax = adoption_high), height = .3) +
+  scale_size_continuous(labels = percent,
+                        guide = "none",
+                        range = c(.5, 4)) +
+  scale_x_continuous(labels = percent) +
+  labs(
+    x = "Adoption proportion",
+    y = "",
+    title = "Does adoption month influence the adoption rate?",
+    subtitle = "Including 95% intervals. Size of points is proportional to frequency in the dataset"
+  )
+
+train_df %>% 
+  count(animal_type, sex, outcome_type) %>% 
+  ggplot(aes(n, outcome_type, fill = sex)) +
+  geom_col(position = position_dodge(preserve = "single"), show.legend = FALSE) +
+  facet_wrap(vars(animal_type), scales = "free_x") +
+  scale_x_continuous(n.breaks = 3) +
+  theme(plot.subtitle = ggtext::element_textbox_simple()) +
+  labs(y = NULL, x = "Number of shelter animals",
+       title = "Does the gender of the animal drive outcomes?",
+       subtitle = "Pets that are <span style = 'color:#7A0403FF'>male</span>, <span style = 'color:#F1CA3AFF'> unknown</span> and <span style = 'color:#1FC8DEFF'> female</span>.") 
+  
+```
+
+## Time series 
+
+```{r}
+train_df %>%
+  group_by(year = lubridate::year(datetime)) %>%
+  summarize_outcome() %>%
+  ggplot(aes(year, pct_is_adoption )) +
+  geom_point(aes(size = n)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = adoption_low, ymax = adoption_high), alpha = .2) +
+  expand_limits(y = 0) +
+  scale_y_continuous(labels = percent) +
+  scale_size_continuous(guide = "none") +
+  labs(x = "Birth Year",
+       y = "% adoptions",
+       title = "Adoption rates are getting better",
+       subtitle = glue::glue("Ribbon shows 95% confidence bound by week for dataset spanning { min(train_df$datetime) } thru { max(train_df$datetime) }."))
+
+train_df %>%
+  mutate(outcome_type = outcome_type == "adoption") %>%
+  group_by(
+    week = week(datetime),
+    wday = wday(datetime, label = TRUE)
+  ) %>%
+  summarise(outcome_type = mean(outcome_type),
+            .groups = "drop") %>%
+  ggplot(aes(week, wday, fill = outcome_type)) +
+  geom_tile(alpha = 0.8) +
+  scale_fill_viridis_c(labels = scales::percent_format(accuracy = 1), 
+                       option = "H") +
+  labs(fill = "% adopted", x = "week of the year", y = "week day",
+       title = "Greater proportions of adoption actions on weekends")
+
+```
+
+## Text analysis
+
+`Julia Silge` and team deserve a huge amount of credit for both the package development and the many demonstrations of text log odds on their blogs and YouTube.
+
+```{r}
+color_log_odds <- train_df %>% 
+  unnest_tokens(color_word, color) %>% 
+  count(outcome_type, color_word) %>% 
+  bind_log_odds(outcome_type, color_word, n)
+
+color_log_odds %>% 
+  group_by(outcome_type) %>% 
+  slice_max(log_odds_weighted, n = 10) %>% 
+  mutate(color_word = reorder_within(color_word, log_odds_weighted, n)) %>% 
+  ggplot(aes(log_odds_weighted, color_word, fill = outcome_type)) +
+  geom_col(show.legend = FALSE) +
+  scale_y_reordered() +
+  facet_wrap(~outcome_type, scales = "free") +
+  labs(y = NULL, title = "Most impactful color words")
+
+key_colors <- color_log_odds %>% 
+  group_by(outcome_type) %>% 
+  slice_max(log_odds_weighted, n = 10) %>% 
+  mutate(color_word = stringr::str_to_title(color_word)) %>% 
+  pull(color_word)
+```
+
+```{r}
+breed_log_odds <- train_df %>% 
+  unnest_tokens(breed_word, breed) %>% 
+  count(outcome_type, breed_word) %>% 
+  bind_log_odds(outcome_type, breed_word, n)
+
+breed_log_odds %>% 
+  group_by(outcome_type) %>% 
+  slice_max(log_odds_weighted, n = 10) %>% 
+  mutate(breed_word = reorder_within(breed_word, log_odds_weighted, n)) %>% 
+  ggplot(aes(log_odds_weighted, breed_word, fill = outcome_type)) +
+  geom_col(show.legend = FALSE) +
+  scale_y_reordered() +
+  facet_wrap(~outcome_type, scales = "free") +
+  labs(y = NULL, title = "Most impactful breed words")
+
+key_breeds <- breed_log_odds %>% 
+  group_by(outcome_type) %>% 
+  slice_max(log_odds_weighted, n = 20) %>% 
+  mutate(breed_word = stringr::str_to_title(breed_word)) %>% 
+  pull(breed_word)
+```
+
+----
+
+# Machine Learning: Random Forest {.tabset}
+
+Let's run models in two steps. The first is a simple, fast shallow random forest, to confirm that the model will run and observe feature importance scores. The second will use `xgboost`. Both use the basic recipe preprocessor for now.
+
+## Cross Validation
+
+We will use 5-fold cross validation and stratify on the outcome to build models that are less likely to over-fit the training data.  As a sound modeling practice, I am going to hold 10% of the training data out to better assess the model performance prior to submission.
+
+```{r cross validation}
+set.seed(2021)
+
+split <- initial_split(train_df, prop = 0.9)
+
+training <- training(split)
+testing <- testing(split)
+
+(folds <- vfold_cv(training, v = 5, strata = outcome_type))
+
+```
+
+## The recipe
+
+To move quickly I start with this basic recipe.
+
+```{r basic recipe}
+basic_rec <-
+  recipe(
+    outcome_type ~  animal_type + sex + spay_neuter + date_of_birth + datetime + breed + color,
+    data = training
+  ) %>% 
+  step_mutate(age = time_length(as.period(datetime - date_of_birth), unit = "years")) %>% 
+  step_novel(all_nominal_predictors()) %>% 
+  step_other(breed) %>% 
+  step_other(color) %>% 
+  step_date(datetime, features = c("year","month","dow"), keep_original_cols = FALSE) %>% 
+  step_rm(date_of_birth) 
+
+```
+
+## Dataset for modeling
+
+```{r juice the dataset}
+basic_rec %>% 
+#  finalize_recipe(list(num_comp = 2)) %>% 
+  prep() %>%
+  juice() 
+
+```
+
+## Model Specification
+
+This first model is a bagged tree, where the number of predictors to consider for each split of a tree (i.e., mtry) equals the number of all available predictors. The `min_n` of 10 means that each tree branch of the 50 decision trees built have at least 10 observations. As a result, the decision trees in the ensemble all are relatively shallow.
+
+```{r random forest spec}
+
+(bag_spec <-
+  bag_tree(min_n = 10) %>%
+  set_engine("rpart", times = 50) %>%
+  set_mode("classification"))
+
+```
+
+## Parallel backend
+
+To speed up computation we will use a parallel backend.
+
+```{r parallel backend}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+```
+
+## Fit and Variable Importance
+
+Lets make a cursory check of the recipe and variable importance, which comes out of `rpart` for free. This workflow also handles factors without dummies.
+
+Let's have a quick peek at the performance. 
+
+```{r fit random forest}
+bag_wf <-
+  workflow() %>%
+  add_recipe(basic_rec) %>%
+  add_model(bag_spec)
+
+system.time(
+  
+bag_fit_rs <- fit_resamples(
+  bag_wf,
+  resamples = folds,
+  metrics = mset,
+  control = control_resamples(save_pred = TRUE)
+   )
+
+)
+```
+
+How did these results turn out? The metrics are across the cross validation holdouts, and the confusion matrix is on the training data.
+
+```{r visualize random forest}
+collect_metrics(bag_fit_rs)
+
+bag_fit_rs %>% 
+  collect_predictions() %>% 
+  conf_mat(outcome_type, .pred_class) %>% 
+  autoplot() +
+  labs(title = "Confusion Matrix on CV fold holdouts")
+```
+
+That's not great. Even on the training set, the random forest failed to properly classify many pets. Let's bank this first submission to Kaggle as-is.
+
+```{r full fit random forest}
+bag_fit_best <-   
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(bag_spec) %>% 
+  finalize_workflow(select_best(bag_fit_rs, "mn_log_loss"))
+
+bag_fit <- last_fit(bag_fit_best, split)
+
+```
+
+```{r performance random forest}
+
+collect_metrics(bag_fit, summarize = TRUE)
+
+```
+
+Let's take a look at variable importance to explore additional feature engineering possibilities.
+
+```{r variable importance random forest, fig.asp=1}
+
+extract_fit_parsnip(bag_fit)$fit$imp %>%
+  mutate(term = fct_reorder(term, value)) %>%
+  ggplot(aes(value, term)) +
+  geom_point() +
+  geom_errorbarh(aes(
+    xmin = value - `std.error` / 2,
+    xmax = value + `std.error` / 2
+  ),
+  height = .3) +
+  labs(title = "Feature Importance",
+       x = NULL, y = NULL)
+
+collect_predictions(bag_fit) %>%
+  roc_curve(outcome_type, .pred_adoption:.pred_transfer) %>%
+  ggplot(aes(1 - specificity, sensitivity, color = .level)) +
+  geom_abline(lty = 2, color = "gray80", size = 1.5) +
+  geom_path(alpha = 0.8, size = 1) +
+  coord_equal() +
+  labs(color = NULL)
+
+```
+
+
+```{r submission random forest, eval = FALSE}
+
+best_fit <- fit(bag_fit_best, data = train_df)
+
+holdout_result <- augment(best_fit, holdout_df)
+
+submission <- holdout_result %>% 
+    select(id, adoption = .pred_adoption, `no outcome` = `.pred_no outcome`, `transfer` = .pred_transfer)
+
+```
+
+
+```{r write csv random forest, eval = FALSE}
+
+write_csv(submission, file = path_export)
+
+```
+
+```{r post csv random forest, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Simple random forest model 4"'))
+```
+
+# {-}
+
+----
+
+# Machine Learning: XGBoost Model 1 {.tabset}
+
+## Model Specification
+
+Let's start with a boosted early stopping XGBoost model that runs fast and gives an early indication of which hyperparameters make the most difference in model performance.
+
+```{r xgboost spec one}
+(xgboost_spec <- boost_tree(trees = 500,
+                            mtry = tune(),
+                            learn_rate = tune(),
+                            stop_iter = tune()) %>% 
+  set_engine("xgboost", validation = 0.2) %>%
+  set_mode("classification"))
+```
+
+## Tuning and Performance
+
+We will start with the basic recipe from above. The tuning grid will evaluate hyperparameter combinations across our resample folds and report on the best average. The confusion matrix reported here is on the 10% of training_df held out.
+
+```{r tune grid xgboost one recipe}
+
+xgboost_rec <- basic_rec %>% 
+  step_dummy(all_nominal_predictors(), one_hot = TRUE)
+
+stopping_grid <-
+  grid_latin_hypercube(
+    mtry(range = c(5L, 20L)), ## for the number of columns in juiced training set
+    learn_rate(range = c(-5, -1)), ## keep pretty big
+    stop_iter(range = c(10L, 50L)), ## bigger than default
+    size = 10
+  )
+```
+
+
+```{r tune grid xgboost one noeval, eval = FALSE}
+system.time(
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_grid(    
+    resamples = folds,
+    grid = stopping_grid,
+    metrics = mset,
+    control = control_grid(save_pred = TRUE)
+   )
+
+)
+```
+
+```{r tune grid xgboost one noinclude, include = FALSE}
+if (file.exists(here::here("data","pets.rds"))){
+cv_res_xgboost <- read_rds(here::here("data","pets.rds"))
+} else {
+
+system.time(
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_grid(    
+    resamples = folds,
+    grid = stopping_grid,
+    metrics = mset,
+    control = control_grid(save_pred = TRUE)
+   )
+
+)
+
+write_rds(cv_res_xgboost, here::here("data","pets.rds"))
+}
+```
+
+
+```{r xgboost one performance}
+autoplot(cv_res_xgboost)
+
+show_best(cv_res_xgboost, metric = "mn_log_loss")
+
+cv_res_xgboost %>%
+  collect_predictions() %>%
+  conf_mat(outcome_type, .pred_class) %>% 
+  autoplot() +
+  labs(title = "XGBoost Confusion Matrix on CV fold holdouts")
+```
+
+On the surface, this first XGBoost pass is not quite as good as the random forest was. Let’s use `last_fit()` to fit one final time to the training data and evaluate one final time on the testing data, with the numerically optimal result. 
+
+```{r xgboost one last fit, eval = FALSE}
+fit_best_xg1 <-  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_xgboost, metric = "mn_log_loss")) %>% 
+  fit(train_df)
+
+```
+
+```{r xgboost one fit, eval=FALSE}
+
+holdout_result <- augment(fit_best_xg1, holdout_df)
+
+submission <- holdout_result %>% 
+    select(id, adoption = .pred_adoption, `no outcome` = `.pred_no outcome`, `transfer` = .pred_transfer)
+
+```
+
+I am going to attempt to post this second submission to Kaggle, and work more with `xgboost` and a more advanced recipe to do better.
+
+```{r write csv xgboost1, eval=FALSE}
+
+write_csv(submission, file = path_export)
+
+```
+
+```{r post csv xgboost, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Simple random forest model 2"'))
+```
+
+# {-}
+
+----
+
+# Machine Learning: XGBoost Model 2 {.tabset}
+
+Let's use what we learned above to set a more advanced recipe. This time, let's also try the`tune_race_anova` technique for skipping the parts of the grid search that do not perform well.
+
+## Advanced Recipe
+
+There may be an opportunity to add `breed` and `color` features to improve the model.
+
+```{r}
+advanced_rec <-
+  recipe(
+    outcome_type ~  animal_type + sex + spay_neuter + date_of_birth + datetime + breed + color,
+    data = train_df
+  ) %>% 
+  step_mutate(age = time_length(as.period(datetime - date_of_birth), unit = "years")) %>% 
+  step_novel(all_nominal_predictors()) %>% 
+
+  step_mutate(key_breed = if_else(str_detect(breed, str_flatten(key_breeds, collapse = "|")),
+                                  str_match(breed, str_flatten(key_breeds, collapse = "|")),
+                                  "OtherBreed")) %>% 
+
+  step_mutate(key_color = if_else(str_detect(color, str_flatten(key_colors, collapse = "|")),
+                                  str_match(color, str_flatten(key_colors, collapse = "|")),
+                                  "OtherColor")) %>% 
+  step_string2factor(key_breed, key_color ) %>% 
+  step_date(datetime, features = c("year","month","dow"), keep_original_cols = FALSE) %>% 
+  step_rm(date_of_birth, breed, color) %>% 
+  step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
+  step_zv(all_predictors())
+
+```
+
+## Model Specification
+
+```{r spec xgboost two}
+
+(xgboost_spec <- boost_tree(trees = 500,
+                            min_n = tune(),
+                            mtry = tune(),
+                            tree_depth = 10,
+                            learn_rate = tune()) %>% 
+  set_engine("xgboost") %>%
+  set_mode("classification"))
+
+```
+
+## Tuning and Performance
+
+```{r tune grid xgboost two}
+
+race_anova_grid <-
+  grid_latin_hypercube(
+    min_n(),
+    mtry(range = c(12L, 20L)), ## for the number of columns in juiced training set
+    learn_rate(range = c(-2, -1)), 
+    size = 10
+  )
+```
+
+
+```{r tune grid xgboost two noeval, eval=FALSE}
+system.time(
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(advanced_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = race_anova_grid,
+    control = control_race(verbose_elim = TRUE,
+                           parallel_over = "resamples",
+                           save_pred = TRUE),
+    metrics = mset
+    )
+
+)
+```
+
+```{r tune grid xgboost two noinclude, include=FALSE}
+if (file.exists(here::here("data", "pets2.rds"))) {
+cv_res_xgboost <- read_rds(here::here("data", "pets2.rds"))
+} else {
+
+system.time(
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(advanced_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = race_anova_grid,
+    control = control_race(verbose_elim = TRUE,
+                           parallel_over = "resamples",
+                           save_pred = TRUE),
+    metrics = mset
+    )
+)
+write_rds(cv_res_xgboost, here::here("data", "pets2.rds"))
+}
+```
+
+
+We can visualize how the possible parameter combinations we tried did during the “race.” Notice how we saved a TON of time by not evaluating the parameter combinations that were clearly doing poorly on all the resamples; we only kept going with the good parameter combinations.
+
+```{r}
+plot_race(cv_res_xgboost)
+```
+
+Let's look at the top results
+
+```{r}
+autoplot(cv_res_xgboost)
+
+show_best(cv_res_xgboost, metric = "mn_log_loss")
+
+```
+
+This figure is likely more robust and a better estimate of performance on holdout data. Let's fit on the entire training set at these hyperparameters to get a single performance estimate on the best model so far.
+
+```{r xgboost two last fit}
+fit_best_xg2 <-  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_xgboost, metric = "mn_log_loss")) %>% 
+  fit(train_df)
+
+```
+
+```{r xgboost two fit, eval = FALSE}
+
+holdout_result <- augment(fit_best_xg2, holdout_df)
+
+submission <- holdout_result %>% 
+    select(id, adoption = .pred_adoption, `no outcome` = `.pred_no outcome`, `transfer` = .pred_transfer)
+
+```
+
+# {-}
+
+----
+
+## Variable Importance
+
+Let's take a deeper dive into the XGBoost variable importance. That is, which features appear to drive towards higher pet adoption rates?
+
+```{r variable importance xgboost two}
+fit_best_xg2 %>% 
+  extract_fit_parsnip() %>% 
+  vip(geom = "point", num_features = 15) +
+  labs(title = "XGBoost model Variable Importance",
+       subtitle = "Pet adoption outcome is driven by spay/neuter status and pet age")
+
+```
+
+After pet age, the type of animal being adopted is most important. The bat is a strange entry. People that make adoptions on Saturdays and Sundays appear to be more driven. Finally, pit bulls and mixed breeds are significant features.
+
+We're out of time. This will be as good as it gets. Our final submission:
+
+Let's post this final submission to Kaggle.
+
+```{r post csv xgboost2, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "XGboost with advanced preprocessing model 2"'))
+```
+
+
