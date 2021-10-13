@@ -1,0 +1,894 @@
+---
+title: "Sliced Austin Home Value Classification"
+author: "Jim Gruman"
+date: "August 10, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+[Season 1 Episode 11](https://www.kaggle.com/c/sliced-s01e11-semifinals/data) of #SLICED features a multi-class challenge with Zillow data on Austin, TX area property listings. Contestants are to use a variety of features to predict which pricing category houses are listed in. Each row represents a unique property valuation. The evaluation metric for submissions in this competition is classification mean `logloss`.
+
+![](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F7f7ba5f9-d7bd-4101-8933-a112b4f78570%2FFrame_3.png?table=block&id=c7bd2635-6e3a-4227-9e2d-fbafb0480073&spaceId=2cc404e6-fe20-483d-9ea5-5d44eb3dd586&width=1510&userId=&cache=v2)
+
+[SLICED](https://www.notion.so/SLICED-Show-c7bd26356e3a42279e2dfbafb0480073) is like the TV Show Chopped but for data science. The four competitors get a never-before-seen dataset and two-hours to code a solution to a prediction challenge. Contestants get points for the best model plus bonus points for data visualization, votes from the audience, and more.
+
+The audience is invited to participate as well. This file consists of my submissions with cleanup and commentary added.
+
+To make the best use of the resources that we have, we will explore the data set for features to select those with the most predictive power, build a random forest to confirm the recipe, and then build one or more ensemble models. If there is time, we will craft some visuals for model explainability.
+
+Let's load up packages:
+
+```{r setup}
+
+suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(hrbrthemes) # plot theming
+library(lubridate) # date and time transformations
+
+library(patchwork)
+  
+library(tidymodels) # machine learning tools
+library(finetune) # racing methods for accelerating hyperparameter tuning
+
+library(textrecipes)
+  
+library(tidylo)
+library(tidytext)
+  
+library(themis) # ml prep tools for handling unbalanced datasets
+library(baguette) # ml tools for bagged decision tree models
+  
+library(vip) # interpret model performance
+
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+#create a data directory
+data_dir <- here::here("data",Sys.Date())
+if (!file.exists(data_dir)) dir.create(data_dir)
+
+# set a competition metric
+mset <- metric_set(mn_log_loss, accuracy, roc_auc)
+
+# set the competition name from the web address
+competition_name <- "sliced-s01e11-semifinals"
+
+zipfile <- paste0(data_dir,"/", competition_name, ".zip")
+
+path_export <- here::here("data",Sys.Date(),paste0(competition_name,".csv"))
+```
+
+## Get the Data
+
+A quick reminder before downloading the dataset:  Go to the web site and accept the competition terms!!!
+
+We have basic shell commands available to interact with Kaggle here:
+
+```{r kaggle competitions terminal commands, eval=FALSE}
+# from the Kaggle api https://github.com/Kaggle/kaggle-api
+
+# the leaderboard
+shell(glue::glue('kaggle competitions leaderboard { competition_name } -s'))
+
+# the files to download
+shell(glue::glue('kaggle competitions files -c { competition_name }'))
+
+# the command to download files
+shell(glue::glue('kaggle competitions download -c { competition_name } -p { data_dir }'))
+
+# unzip the files received
+shell(glue::glue('unzip { zipfile } -d { data_dir }'))
+
+```
+
+We are reading in the contents of the datafiles here.
+
+```{r read kaggle files}
+
+train_df <- arrow::read_csv_arrow(file = glue::glue({ data_dir }, "/train.csv")) %>% 
+    mutate(zip_code = str_extract(description, "[:digit:]{5}")) %>% 
+    mutate(priceRange = fct_reorder(priceRange, parse_number(priceRange))) %>% 
+    mutate(description = str_to_lower(description)) %>% 
+    mutate(across(c("city","homeType", "zip_code", "hasSpa"), as_factor)) 
+
+holdout_df <- arrow::read_csv_arrow(file = glue::glue({ data_dir }, "/test.csv")) %>% 
+    mutate(zip_code = str_extract(description, "[:digit:]{5}")) %>% 
+    mutate(description = str_to_lower(description)) %>% 
+    mutate(across(c("city","homeType", "zip_code", "hasSpa"), as_factor))
+
+```
+
+Some questions to answer here:
+What features have missing data, and imputations may be required?
+What does the outcome variable look like, in terms of imbalance?
+
+```{r skim, eval=FALSE}
+skimr::skim(train_df)
+```
+
+The zip_code parsing was not perfect here. We could easily knn impute the zip using latitude and longitudes if we choose to use them as features.
+
+Outcome variable `priceRange` has five classes. 
+
+## Outcome Variable Distribution
+
+The price range class 
+
+```{r}
+train_df %>% 
+  count(priceRange) %>% 
+  mutate(priceRange = fct_reorder(priceRange, parse_number(as.character(priceRange)))) %>% 
+  ggplot(aes(n, priceRange, fill = priceRange)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_viridis_d(option = "H") +
+  labs(title = "General Distribution of Home Price Classes", fill = NULL, y = NULL, x = "Number of Properties")
+
+train_df %>% 
+  mutate(priceRange = parse_number(as.character(priceRange)) + 100000) %>% 
+  ggplot(aes(longitude, latitude, z = priceRange)) +
+  stat_summary_hex(bins = 40) +
+  scale_fill_viridis_b(option = "H", labels = scales::dollar) +
+  labs(fill = "mean", title = "Property Pricing")
+
+```
+
+## Numeric features
+
+```{r summarize numeric outcome, fig.asp=1}
+numeric_plot <- function(tbl, numeric_var, factor_var = priceRange, color_var = priceRange){
+  tbl %>% 
+    ggplot(aes({{numeric_var}}, {{factor_var}}, 
+               color = {{color_var}})) +
+    geom_boxplot(show.legend = FALSE, outlier.size = 0.1) +
+    geom_jitter(size = 0.1, alpha = 0.1,show.legend = FALSE) +
+    scale_color_viridis_d(option = "H") +
+    facet_wrap(vars(priceRange)) +
+    theme(legend.position = "top",
+          strip.text.x = element_text(size = 24/.pt)) +
+    labs(x = NULL, y = NULL)
+}
+
+numeric_histogram <- function(tbl, numeric_var){
+  tbl %>%  
+    ggplot(aes({{numeric_var}}, 
+               after_stat(density),
+               fill = fct_rev(priceRange))) +
+    geom_density(position = "identity", 
+                 color = "white", 
+                 show.legend = FALSE) +
+    scale_fill_viridis_d(option = "H") +
+    scale_y_continuous(labels = scales::percent) +
+    labs(y = NULL, x = NULL, title = "Distribution") +
+    theme_bw() 
+}
+
+numeric_plot(train_df, garageSpaces, factor_var = homeType) +
+inset_element(numeric_histogram(train_df, garageSpaces),
+              left = 0.6, bottom = 0, right = 1, top = 0.5) +
+  labs(x = "Garage Spaces")
+
+numeric_plot(train_df, numOfPatioAndPorchFeatures, factor_var = homeType) +
+inset_element(numeric_histogram(train_df, numOfPatioAndPorchFeatures),
+              left = 0.6, bottom = 0, right = 1, top = 0.5) +
+   labs(x = "Patio and Porch Features")
+
+numeric_plot(train_df, lotSizeSqFt, factor_var = homeType) +
+   scale_x_log10() +
+inset_element(numeric_histogram(train_df, lotSizeSqFt) +
+                scale_x_log10(),
+              left = 0.6, bottom = 0, right = 1, top = 0.5) +
+   labs(x = "Lot Size in SqFt")
+
+numeric_plot(train_df, avgSchoolRating, factor_var = homeType) +
+  inset_element(numeric_histogram(train_df, avgSchoolRating),
+              left = 0.6, bottom = 0, right = 1, top = 0.5) +
+   labs(x = "School Rating")
+
+numeric_plot(train_df, MedianStudentsPerTeacher, factor_var = homeType) +
+    inset_element(numeric_histogram(train_df, MedianStudentsPerTeacher),
+              left = 0.6, bottom = 0, right = 1, top = 0.5) +
+   labs(x = "Median Students\nPer Teacher")
+
+numeric_plot(train_df, numOfBathrooms, factor_var = homeType) +
+      inset_element(numeric_histogram(train_df, numOfBathrooms),
+              left = 0.6, bottom = 0, right = 1, top = 0.5) +
+   labs(x = "Bathrooms")
+
+numeric_plot(train_df, numOfBedrooms, factor_var = homeType) +
+        inset_element(numeric_histogram(train_df, numOfBedrooms),
+              left = 0.6, bottom = 0, right = 1, top = 0.5) +
+   labs(x = "Bedrooms")
+
+numeric_plot(train_df, yearBuilt, factor_var = homeType) +
+  scale_x_continuous(n.breaks = 4) +
+          inset_element(numeric_histogram(train_df, yearBuilt) +
+                          scale_x_continuous(n.breaks = 4),
+              left = 0.66, bottom = 0, right = 1, top = 0.5) +
+   labs(x = "Year Built")
+
+timeline_plot <- function(tbl, numeric_var, factor_var = priceRange){
+  tbl %>% 
+    group_by({{factor_var}}, decade = 10 * yearBuilt %/% 10) %>% 
+    summarize(n = n(),
+              mean = mean({{numeric_var}}, na.rm = TRUE),
+              high = quantile({{numeric_var}}, probs = 0.9, na.rm = TRUE),
+              low = quantile({{numeric_var}}, probs = 0.1, na.rm = TRUE),
+              .groups = "drop") %>% 
+    ggplot(aes(decade, mean, color = priceRange)) +
+    geom_line() +
+    geom_ribbon(aes(ymin = low, ymax = high, fill = priceRange), 
+                alpha = .1, size = 0.1) +
+    scale_y_log10(labels = scales::comma) +
+    scale_fill_viridis_d(option = "H")
+}
+
+timeline_plot(train_df, lotSizeSqFt) +
+  scale_x_continuous(breaks = seq(1900, 2020, 20)) +
+  theme(legend.position = c(0.15, 0.8),
+        legend.background = element_rect(color = "white")) +
+  labs(y = "Mean Lot Size in Square Feet",
+       title = "There must be an outlier lot size transaction in the 1980s")
+
+```
+
+## Maps
+
+```{r}
+map_plot <- function(tbl, numeric_var) {
+  tbl %>%
+    group_by(latitude = round(latitude, digits = 2),
+             longitude = round(longitude, digits = 2)) %>%
+    summarize(n = n(),
+              mean = mean({{numeric_var}}, na.rm = TRUE),
+              .groups = "drop")  %>%
+     filter(n < 10) %>% 
+     ggplot(aes(longitude, latitude, z = mean)) +
+     stat_summary_hex(alpha = 0.9, bins = 20) +
+     scale_fill_viridis_b(option = "H", labels = scales::comma) +
+    coord_cartesian()
+}
+
+map_plot(train_df, lotSizeSqFt ) +
+  labs(fill = "Mean Lot Sizes",
+       title = "One large entity, valued in the lowest price class",
+       subtitle = "The One Condo parcel is 34 million Sq Ft, or 780 acres")
+    
+map_plot(train_df, avgSchoolRating ) +
+  labs(fill = "Average School Rating",
+       title = "Schools on the West Side Score Better")
+
+map_plot(train_df, numOfPatioAndPorchFeatures  ) +
+  labs(fill = "Mean No. Patio & Porches",
+       title = "Lakeside properties have more patio features") 
+
+map_plot(train_df, log(lotSizeSqFt)  ) +
+  labs(fill = "Mean log(lot size)",
+       title = "Austin Area Home Lot Size")
+
+```
+
+I am going to take the unusual step of removing the uid 9244 condo from the training dataset, as an exceptional outlier. The histograms of condo prices and of lot sizes is more consistent, and I suspect more predictive of price class, with the outlier removed.
+
+```{r}
+train_df %>% 
+  filter(uid != 9244L) %>% 
+  map_plot(lotSizeSqFt ) +
+  labs(fill = "Mean Lot Sizes",
+       title = "Lot Sizes",
+       subtitle = "Property UID 9244 removed") 
+```
+
+## Text analysis
+
+`Julia Silge` and team deserve a huge amount of credit for both the package development and the many demonstrations of text analysis on their blogs and YouTube.
+
+```{r text analysis, fig.asp=1}
+description_tidy <- train_df %>% 
+  mutate(priceRange = parse_number(as.character(priceRange)) + 100000) %>% 
+  unnest_tokens(word, description) %>% 
+  filter(!str_detect(word,"[:digit:]" )) %>% 
+  anti_join(stop_words)
+
+top_description <- description_tidy %>% 
+  count(word, sort = TRUE) %>% 
+  slice_max(n, n = 200) %>% 
+  pull(word)
+
+word_freqs <- description_tidy %>% 
+  count(word, priceRange) %>% 
+  complete(word, priceRange, fill = list(n = 0)) %>% 
+  group_by(priceRange) %>% 
+  mutate(price_total = sum(n),
+         proportion = n / price_total) %>% 
+  ungroup() %>% 
+  filter(word %in% top_description)
+
+word_models <- word_freqs %>% 
+  nest(data = -word) %>% 
+  mutate(model = map(data, ~ glm(cbind(n, price_total) ~ priceRange, ., family = "binomial")),
+         model = map(model, tidy)) %>% 
+  unnest(model) %>% 
+  filter(term == "priceRange") %>% 
+  mutate(p.value = p.adjust(p.value)) %>% 
+  arrange(-estimate)
+
+word_models %>% 
+  ggplot(aes(estimate, p.value)) +
+  geom_vline(xintercept = 0, lty = 2, alpha = 0.7, color = "gray50") +
+  geom_point(alpha = 0.8, size = 1.5) +
+  scale_y_log10() +
+  ggrepel::geom_text_repel(aes(label = word)) +
+  labs(title = "Most impactful description words for each price range") 
+
+highest_words <-
+  word_models %>% 
+  filter(p.value < 0.05) %>% 
+  slice_max(estimate, n = 12) %>% 
+  pull(word)
+
+lowest_words <-
+  word_models %>% 
+  filter(p.value < 0.05) %>% 
+  slice_max(-estimate, n = 12) %>% 
+  pull(word)
+
+word_freqs %>% 
+  filter(word %in% highest_words) %>% 
+  ggplot(aes(priceRange, proportion, color = word)) +
+  geom_line(size = 2.5, alpha = 0.7, show.legend = FALSE) +
+  facet_wrap(~ word) +
+  scale_color_viridis_d(option = "H") +
+  scale_x_continuous(labels = scales::dollar, n.breaks = 3) +
+  scale_y_continuous(labels = scales::percent, n.breaks = 3) +
+  labs(title = "Expensive Home Description Words")
+
+word_freqs %>% 
+  filter(word %in% lowest_words) %>% 
+  ggplot(aes(priceRange, proportion, color = word)) +
+  geom_line(size = 2.5, alpha = 0.7, show.legend = FALSE) +
+  facet_wrap(~ word) +
+  scale_color_viridis_d(option = "H") +
+  scale_x_continuous(labels = scales::dollar, n.breaks = 3) +
+  scale_y_continuous(labels = scales::percent, n.breaks = 3) +
+  labs(title = "Cheap Home Description Words")
+
+```
+
+----
+
+# Machine Learning: Random Forest {.tabset}
+
+Let's run models in two steps. The first is a simple, fast shallow random forest, to confirm that the model will run and observe feature importance scores. The second will use `xgboost`. Both use the basic recipe preprocessor for now.
+
+## Cross Validation
+
+We will use 5-fold cross validation and stratify on the outcome to build models that are less likely to over-fit the training data.  As a sound modeling practice, I am going to hold 10% of the training data out to better assess the model performance prior to submission.
+
+```{r cross validation}
+set.seed(2021)
+
+split <- initial_split(train_df, prop = 0.9)
+
+training <- training(split)
+testing <- testing(split)
+
+(folds <- vfold_cv(training, v = 5, strata = priceRange))
+
+```
+
+## The recipe
+
+To move quickly I start with this basic recipe.
+
+```{r basic recipe}
+basic_rec <-
+  recipe(
+    priceRange ~  uid + latitude + longitude + garageSpaces + hasSpa + yearBuilt + numOfPatioAndPorchFeatures  + lotSizeSqFt  + avgSchoolRating + MedianStudentsPerTeacher   + numOfBathrooms + numOfBedrooms + homeType,
+    data = training
+  ) %>% 
+  update_role(uid, new_role = "ID") %>% 
+  step_filter(uid != 9244L) %>% 
+  step_log(lotSizeSqFt) %>% 
+  step_novel(all_nominal_predictors()) %>% 
+  step_ns(latitude, longitude, deg_free = 5)
+
+```
+
+## Dataset for modeling
+
+```{r juice the dataset}
+basic_rec %>% 
+#  finalize_recipe(list(num_comp = 2)) %>% 
+  prep() %>%
+  juice() 
+
+```
+
+## Model Specification
+
+This first model is a bagged tree, where the number of predictors to consider for each split of a tree (i.e., mtry) equals the number of all available predictors. The `min_n` of 10 means that each tree branch of the 50 decision trees built have at least 10 observations. As a result, the decision trees in the ensemble all are relatively shallow.
+
+```{r random forest spec}
+
+(bag_spec <-
+  bag_tree(min_n = 10) %>%
+  set_engine("rpart", times = 50) %>%
+  set_mode("classification"))
+
+```
+
+## Parallel backend
+
+To speed up computation we will use a parallel backend.
+
+```{r parallel backend}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+```
+
+## Fit and Variable Importance
+
+Lets make a cursory check of the recipe and variable importance, which comes out of `rpart` for free. This workflow also handles factors without dummies.
+
+```{r fit random forest}
+bag_wf <-
+  workflow() %>%
+  add_recipe(basic_rec) %>%
+  add_model(bag_spec)
+
+system.time(
+  
+bag_fit_rs <- fit_resamples(
+  bag_wf,
+  resamples = folds,
+  metrics = mset,
+  control = control_resamples(save_pred = TRUE)
+   )
+
+)
+```
+
+How did these results turn out? The metrics are across the cross validation holdouts, and the confidence matrix here is on the training data.
+
+```{r visualize random forest}
+collect_metrics(bag_fit_rs)
+
+```
+
+That's not great. What happened?
+
+```{r full fit random forest}
+bag_fit_best <-   
+  workflow() %>% 
+  add_recipe(basic_rec) %>% 
+  add_model(bag_spec) %>% 
+  finalize_workflow(select_best(bag_fit_rs, "mn_log_loss"))
+
+bag_last_fit <- last_fit(bag_fit_best, split)
+
+collect_metrics(bag_last_fit)
+
+collect_predictions(bag_last_fit) %>% 
+  conf_mat(priceRange, .pred_class) %>% 
+  autoplot(type = "heatmap") 
+
+```
+
+Although 59% accuracy on the cross validation holdouts is not great, the performance seems to make sense, where the errors are mostly one class off of the truth.
+
+Let's take a look at variable importance to explore additional feature engineering possibilities. Also, which price ranges does this model predict the best?
+
+```{r variable importance random forest}
+
+extract_fit_parsnip(bag_last_fit)$fit$imp %>%
+  mutate(term = fct_reorder(term, value)) %>%
+  ggplot(aes(value, term)) +
+  geom_point() +
+  geom_errorbarh(aes(
+    xmin = value - `std.error` / 2,
+    xmax = value + `std.error` / 2
+  ),
+  height = .3) +
+  labs(title = "Feature Importance",
+       x = NULL, y = NULL)
+
+collect_predictions(bag_last_fit) %>%
+  roc_curve(priceRange, `.pred_0-250000`:`.pred_650000+`) %>%
+  ggplot(aes(1 - specificity, sensitivity, color = .level)) +
+  geom_abline(lty = 2, color = "gray80", size = 1.5) +
+  geom_path(alpha = 0.8, size = 1) +
+  coord_equal() +
+  labs(color = NULL,
+       title = "Performs Well with Highest & Lowest Classes")
+
+```
+
+```{r submission random forest, eval = FALSE}
+
+best_fit <- fit(bag_fit_best, data = train_df)
+
+holdout_result <- augment(best_fit, holdout_df)
+
+submission <- holdout_result %>% 
+    select(uid, `0-250000` = `.pred_0-250000`,
+           `250000-350000` = `.pred_250000-350000`,
+           `350000-450000` = `.pred_350000-450000`,
+           `450000-650000` = `.pred_450000-650000`,
+           `650000+` = `.pred_650000+`)
+```
+
+
+```{r write csv random forest, eval = FALSE}
+
+write_csv(submission, file = path_export)
+
+```
+
+```{r post csv random forest, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "Simple random forest model 1"'))
+```
+
+# {-}
+
+----
+
+# Machine Learning: XGBoost Model 1 {.tabset}
+
+## Model Specification
+
+Let's start with a boosted early stopping XGBoost model that runs fast and gives an early indication of which hyperparameters make the most difference in model performance.
+
+```{r xgboost spec one}
+(
+  xgboost_spec <- boost_tree(
+    trees = 500,
+    tree_depth = tune(),
+    min_n = tune(),
+    loss_reduction = tune(), ## first three: model complexity
+    sample_size = tune(),
+    mtry = tune(), ## randomness
+    learn_rate = tune(), ## step size
+    stop_iter = tune()
+  ) %>%
+    set_engine("xgboost", validation = 0.2) %>%
+    set_mode("classification")
+)
+```
+
+## Tuning and Performance
+
+We will start with the basic recipe from above. The tuning grid will evaluate hyperparameter combinations across our resample folds and report on the best average. 
+
+```{r tune grid xgboost one recipe}
+
+xgboost_rec <-
+  recipe(
+    priceRange ~ uid + latitude + longitude + garageSpaces + hasSpa + yearBuilt + numOfPatioAndPorchFeatures  + lotSizeSqFt  + avgSchoolRating + MedianStudentsPerTeacher   + numOfBathrooms + numOfBedrooms + description + homeType,
+    data = training
+  ) %>%
+  step_filter(uid != 9244L) %>% 
+  update_role(uid, new_role = "ID") %>% 
+  step_log(lotSizeSqFt) %>% 
+  step_ns(latitude, longitude, deg_free = 5) %>% 
+  step_regex(description, 
+             pattern = str_flatten(highest_words, collapse = "|"),
+             result = "high_price_words") %>% 
+  step_regex(description, 
+             pattern = str_flatten(lowest_words, collapse = "|"),
+             result = "low_price_words") %>% 
+  step_rm(description) %>%
+  step_novel(all_nominal_predictors()) %>%
+  step_unknown(all_nominal_predictors()) %>% 
+  step_other(homeType, threshold = 0.02) %>% 
+  step_dummy(all_nominal_predictors(), one_hot = TRUE) %>%
+  step_nzv(all_predictors()) 
+    
+stopping_grid <-
+  grid_latin_hypercube(
+    finalize(mtry(), xgboost_rec %>% prep() %>% juice()), ## for the ~68 columns in the juiced training set
+    learn_rate(range = c(-2, -1)), ## keep pretty big
+    stop_iter(range = c(10L, 50L)), ## bigger than default
+    tree_depth(c(5L, 10L)),
+    min_n(c(10L, 40L)),
+    loss_reduction(), ## first three: model complexity
+    sample_size = sample_prop(c(0.5, 1.0)),
+    size = 30
+  )
+```
+
+
+```{r r tune grid xgboost one noeval, eval=FALSE}
+system.time(
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_grid(    
+    resamples = folds,
+    grid = stopping_grid,
+    metrics = mset,
+    control = control_grid(save_pred = TRUE)
+   )
+
+)
+```
+
+```{r r tune grid xgboost one noinclude, include=FALSE}
+if (file.exists(here::here("data","austinHomeValue.rds"))) {
+cv_res_xgboost <- read_rds(here::here("data","austinHomeValue.rds"))
+} else {
+  
+system.time(
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_grid(    
+    resamples = folds,
+    grid = stopping_grid,
+    metrics = mset,
+    control = control_grid(save_pred = TRUE)
+   )
+
+)
+write_rds(cv_res_xgboost, here::here("data","austinHomeValue.rds"))
+}
+  
+```
+
+```{r r tune grid xgboost one performance}
+autoplot(cv_res_xgboost) +
+  theme(strip.text.x = element_text(size = 12/.pt))
+
+show_best(cv_res_xgboost, metric = "mn_log_loss") 
+
+```
+
+On the surface, this first XGBoost pass does not quite appear to be as good as the random forest was. Let’s use `last_fit()` to fit one final time to the training data and evaluate on the testing data, with the numerically optimal result. 
+
+```{r xgboost one last fit}
+best_xg1_wf <-  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_xgboost, metric = "mn_log_loss")) 
+
+xg1_last_fit <- last_fit(best_xg1_wf, split)
+
+collect_predictions(xg1_last_fit) %>% 
+  conf_mat(priceRange, .pred_class) %>% 
+  autoplot(type = "heatmap") 
+
+collect_predictions(xg1_last_fit) %>% 
+  roc_curve(priceRange, `.pred_0-250000`:`.pred_650000+`) %>% 
+  ggplot(aes(1 - specificity, sensitivity, color = .level)) +
+  geom_path(alpha = 0.8, size = 1.2) +
+  coord_equal() +
+  labs(color = NULL)
+
+collect_predictions(xg1_last_fit) %>% 
+  mn_log_loss(priceRange, `.pred_0-250000`:`.pred_650000+`)
+
+```
+
+And the variable importance
+
+```{r, fig.asp=1}
+extract_workflow(xg1_last_fit) %>% 
+  extract_fit_parsnip() %>% 
+  vip(geom = "point", num_features = 18)
+
+```
+
+It's interesting to me how the lot size is the most important feature in this model, and that the description words are so low in the list.
+
+I will try to submit this to Kaggle, but it's not likely to take it because the performance is worse.
+
+```{r xgboost one fit, eval = FALSE}
+best_xg1_fit <- fit(best_xg1_wf, data = train_df)
+
+holdout_result <- augment(best_xg1_fit, holdout_df)
+
+submission <- holdout_result %>% 
+    select(uid, `0-250000` = `.pred_0-250000`,
+           `250000-350000` = `.pred_250000-350000`,
+           `350000-450000` = `.pred_350000-450000`,
+           `450000-650000` = `.pred_450000-650000`,
+           `650000+` = `.pred_650000+`)
+```
+
+I am going to attempt to post this second submission to Kaggle, and work more with `xgboost` and a more advanced recipe to do better.
+
+```{r write csv xgboost1, eval = FALSE}
+
+write_csv(submission, file = path_export)
+
+```
+
+```{r post csv xgboost, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "First XGBoost Model"'))
+```
+
+# {-}
+
+----
+
+# Machine Learning: XGBoost Model 2 {.tabset}
+
+Let's use what we learned above to choose better hyperparameters. This time, let's try the`tune_race_anova` technique for skipping the parts of the grid search that do not perform well.
+
+## Model Specification
+
+```{r spec xgboost two}
+
+(xgboost_spec <- boost_tree(trees = 500,
+                            min_n = tune(),
+                            loss_reduction = 0.337,
+                            mtry = tune(),
+                            sample_size = .970,
+                            tree_depth = 6,
+                            stop_iter = 29,
+                            learn_rate = .05) %>% 
+  set_engine("xgboost") %>%
+  set_mode("classification"))
+
+```
+
+## Tuning and Performance
+
+```{r race grid xgboost two}
+
+race_anova_grid <-
+  grid_latin_hypercube(
+    mtry(range = c(40,66)),
+    min_n(range = c(8, 20)),
+    size = 20
+  )
+```
+
+```{r race grid xgboost two noeval, eval=FALSE}
+system.time(
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = race_anova_grid,
+    control = control_race(verbose_elim = TRUE,
+                           parallel_over = "resamples",
+                           save_pred = TRUE),
+    metrics = mset
+    )
+
+)
+```
+
+```{r race grid xgboost two noinclude, include=FALSE}
+if (file.exists(here::here("data","austinHomeValue2.rds"))) {
+cv_res_xgboost <- read_rds(here::here("data","austinHomeValue2.rds"))
+} else {
+system.time(
+
+cv_res_xgboost <-
+  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  tune_race_anova(    
+    resamples = folds,
+    grid = race_anova_grid,
+    control = control_race(verbose_elim = TRUE,
+                           parallel_over = "resamples",
+                           save_pred = TRUE),
+    metrics = mset
+    )
+
+)
+write_rds(cv_res_xgboost, here::here("data","austinHomeValue2.rds"))
+}
+```
+
+We can visualize how the possible parameter combinations we tried did during the “race.” Notice how we saved a TON of time by not evaluating the parameter combinations that were clearly doing poorly on all the resamples; we only kept going with the good parameter combinations.
+
+```{r}
+plot_race(cv_res_xgboost)
+```
+
+Let's look at the top results
+
+```{r}
+autoplot(cv_res_xgboost) +
+  theme(strip.text.x = element_text(size = 12/.pt))
+
+show_best(cv_res_xgboost,
+          metric = "mn_log_loss")
+
+```
+
+I'm not making much progress here in improving logloss.
+
+```{r xgboost two last fit}
+best_xg2_wf <-  workflow() %>% 
+  add_recipe(xgboost_rec) %>% 
+  add_model(xgboost_spec) %>% 
+  finalize_workflow(select_best(cv_res_xgboost, metric = "mn_log_loss")) 
+
+xg2_last_fit <- last_fit(best_xg2_wf, split)
+
+collect_predictions(xg2_last_fit) %>% 
+  conf_mat(priceRange, .pred_class) %>% 
+  autoplot(type = "heatmap") 
+
+collect_predictions(xg2_last_fit) %>% 
+  roc_curve(priceRange, `.pred_0-250000`:`.pred_650000+`) %>% 
+  ggplot(aes(1 - specificity, sensitivity, color = .level)) +
+  geom_path(alpha = 0.8, size = 1.2) +
+  coord_equal() +
+  labs(color = NULL)
+
+collect_predictions(xg2_last_fit) %>% 
+  mn_log_loss(priceRange, `.pred_0-250000`:`.pred_650000+`)
+
+```
+
+And the variable importance
+
+```{r}
+extract_workflow(xg2_last_fit) %>% 
+  extract_fit_parsnip() %>% 
+  vip(geom = "point", num_features = 15)
+
+best_xg2_fit <- fit(best_xg2_wf, data = train_df)
+
+```
+
+Strange that this model changes up variable importance yet again. Let's submit to Kaggle.
+
+```{r xgboost two fit, eval = FALSE}
+
+holdout_result <- augment(best_xg2_fit, holdout_df)
+
+submission <- holdout_result %>% 
+    select(uid, `0-250000` = `.pred_0-250000`,
+           `250000-350000` = `.pred_250000-350000`,
+           `350000-450000` = `.pred_350000-450000`,
+           `450000-650000` = `.pred_450000-650000`,
+           `650000+` = `.pred_650000+`)
+```
+
+# {-}
+
+```{r, fig.asp=1}
+collect_predictions(xg2_last_fit) %>%
+  roc_curve(priceRange, `.pred_0-250000`:`.pred_650000+`) %>%
+  ggplot(aes(1 - specificity, sensitivity, color = .level)) +
+  geom_abline(lty = 2, color = "gray80", size = 1.5) +
+  geom_path(alpha = 0.8, size = 1) +
+  coord_equal() +
+  labs(color = NULL,
+       title = "Performs Well with Highest & Lowest Classes")
+```
+
+We're out of time. This will be as good as it gets, and our final submission.
+
+```{r post csv xgboost2, eval = FALSE}
+shell(glue::glue('kaggle competitions submit -c { competition_name } -f { path_export } -m "XGboost with advanced preprocessing model 2"'))
+```
+
+
