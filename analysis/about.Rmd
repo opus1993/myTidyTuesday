@@ -7,10 +7,114 @@ editor_options:
   chunk_output_type: console
 ---
 
-TidyTuesday code and data visualization
+This is my personal website. 
 
-This is my personal website. Nothing here is endorsed by my employers, funders, or any organizations I am part of.
+## Did you make this website all by yourself?
+
+No. I could not have built this site without lots of help. This site is gratefully built using a variety of open-source resources and inspirations. [John Blischak](https://www.linkedin.com/in/jdblischak/)'s [`workflowr`](https://jdblischak.github.io/workflowr/) package, blog posts, and talks provide the reproducible github pages framework that this is built on. I rely a great deal on the work of the worldwide open source R community.
+
+## Do you own everything on this website?
+
+Mostly. I own all work on this site and any site wherein I share content, unless I attributed it to someone else, in which case then they hold the copyrights. I try to capture the source of that which I share but sometimes I forget to, and then all I have is the content itself without a trackback for attribution. This does not mean that I imply ownership. If you feel that I have posted something without permission, please let me know and I will correct it.
+
+Copyright is at once a simple and a complicated matter. Most of the 📜 legal framework around copyright was set into place before the Internet came onto the scene and is biased towards large corporations rather than creative individuals. No matter what my opinion on the matter is, the current copyright regime is the law and affects almost all usage of creative materials. Wikipedia’s copyright page has a lot of good information. (As an aside, you should donate to Wikimedia, and you should also support efforts to keep Wikipedia complete.) Basically, none of the content here can be reprinted without letting folks know where you got it.
 
 You may re-use this content as long as you indicate my authorship and provide a link back to the original material. Source code of the site is provided under the MIT license and may be reused without restriction.
 
-This site is gratefully built using a variety of open-source resources and inspirations. 
+## Do you have a privacy policy?
+
+No. I also don't keep any information about you. That’s a policy, I guess. Voilà.
+
+For what it's worth, if you have not been careful about your browsing habits and setup, I 🕵 can probably see a lot of "anonymized" information about you. It's 😱 pretty scary when you think about it. You can use Tor if you want to keep your connection information anonymous and protect your privacy. You can also opt out of many of these services. You should also know that I use many intermediary services to make this page possible, and accept no responsibility for any liability attributable to any of them. As far as I'm aware, all services I knowingly use have a privacy and protection compliant data retention policy. There are also services I could use because they are bundled with other services I use to build and host this page. There are no affiliate links and I do not make (even fractional) money from anything you click on this website.
+
+## Whose opinions are these?
+
+All mine. Any views or opinions presented herein are solely mine and do not  represent those of any company I have been, currently am, or will ever be associated with. The postings on this site and any site wherein I share content, including but not limited to Twitter, LinkedIn, etc. are my own and don't represent my employer's (or anyone else's) positions, strategies, or opinions.
+
+My opinions are my own; I'm not online to represent anyone or anything other than myself. I love my job in particular and gainful employment in general; please do not endanger any of them.
+
+## How do you measure things?
+
+Carefully. When I talk about 💰 monetary quantities, please note that they are discussed in original year indices, and do not account for price-index, capital market, or inflation adjustments.
+
+## Can I trust what you say?
+
+Sometimes. We can't escape the matter of semantic and semiotic instabilities, which are only compounded by the fallibility of our sensory mechanisms in [objectively describing reality](http://theinvisiblegorilla.com/gorilla_experiment.html).
+
+Frankly, in the grand scheme of things (with regards to the vast majority of human knowledge), most of the time 🤠 I have no idea what I'm talking about. As an engineer, an individually contributing data scientist, and even a Boy Scout leader, I tend to simplify things in order to be able to understand them. I may also be bound here and there by non-disclosure, non-disparagement, and other negotiated and non-negotiated agreements. So... take it all in with a grain of salt.
+
+Please keep in mind at all times that I am not a lawyer ⚖, a doctor 💉, or a journalist 🗞; There are more things that I am not an expert in than there are things in which I am an expert. Don’t blame me if you lack common sense.
+
+I make no guarantees as to the accuracy, relevance, or quality of the content herein. I make no guarantees as to anything else herein either. I accept no liability for issues with the content of links (due to reasons including but not limited to deprecation, machine error, human error, human success, or meteor impact), or for the consequences of any actions taken on the basis of the information provided. Risks are inherent in the use of the Internet 🛰. Contact your vendors for additional information.
+
+## Can I quote you on that?
+
+Maybe. Not everything I share publicly happened exactly as I said it did. There are many reasons why this could be true 🤥, not least of which are that my memory is fallible; sometimes I'm sharing a composite anecdote; sometimes I may be trying to protect the innocent (and the guilty for reasons that may be none of your business); and sometimes I'll say something hyperbolically or in jest and [you shouldn't take everything you read or see on the internet at face value](https://www.economist.com/news/science-and-technology/21724370-generating-convincing-audio-and-video-fake-events-fake-news-you-aint-seen). There are very few oaths I've taken in my life, and those I take very very seriously; anything else might just be a shitpost.
+
+If you want to 💬 quote me, ask me for confirmation before alleging I said something and meant it?
+
+## Do you agree with or endorse everything you share?
+
+No. I come across a large amount of content every day; this content may contain objectionable material, even stuff I don’t agree with. For instance, sometimes I feel it's important to call attention to the absurd, bizarre, fanciful, fantastic, foolish, nonsensical, preposterous, unreal, and/or wild.
+
+This site and any site wherein I share content are merely a collection of thoughts upon which I choose to impose categorization and archival.
+
+Essentially:
+
+·         🔄 shares and/or RTs are not endorsements; they could be 😒 ironic re-readings with ambivalent undertones intended to 🤔 confuse and 😲 amaze.
+
+·         ❤️ Faves and/or likes are not concurrence; they are my way of saying "thank you for sharing your views in a polite and civil way." Unless they aren't.
+
+## Why won't you reply to my messages?
+
+Who knows? But just so you know, if you choose to comment or tweet at me about stuff I'm not interested in or in an aggressive, [sea-lioning](http://wondermark.com/1k62/) manner, then I’ll just mute you. 😏 You won't even know. Or I'll block you. If you have an opinion, good for you—you don’t necessarily need to tell me about it. You do you.
+
+Fun fact: [that’s not censorship](https://xkcd.com/1357/).
+
+I also do not reply to 🗑 cold emails from vendors or service providers. If you're looking for a surefire way of getting on my "mute" list, this would be it.
+
+## I'm blocked?! How come you blocked me on social media?
+
+I've seriously no idea.  If I have blocked you, it is very unlikely that it implies that I believe you are some combination of ignorant or evil; I might simply mean that I don’t want to hear from you anymore and I want the algorithm to know about it. I don’t mean to censure you or to curtail your ability to talk to others. I just, for whatever reason, at some point, thought that I would likely rather not want to risk a bad interaction. You could even take it as a compliment; maybe I’m scared of you and I want to make sure we don’t ever cross paths because I can’t be trusted not to say something stupid that’ll get me in trouble.
+
+It might have been a misunderstanding on my part. Oh well, we'll live.
+
+## Wait, I remember you said something before but can't find it now. Where did it go?
+
+Again, no idea. I reserve the right to evolve my opinions and to change my mind altogether on any topic at any time with no notice. Listening and learning and thinking and growing 🤓 are inherently good things and I refuse to steadfastly hold onto an idea simply because it's the way it's always been idea'ed. Consequently, I delete my bad tweets. I delete good ones too, in case they didn't land quite right or if I want to rephrase them.
+
+I also delete ✂️ conversations that are no longer relevant, especially if I've tried to have a constructive dialog with you only to realize that you're not actually having a conversation in good faith and are rather demonstrating a willful and pervasive form of aggressive cluelessness masquerading as a sincere desire to understand.
+
+## I noticed an issue with the website. How can I tell you about it?
+
+Write a [github issue](https://github.com/opus1993/myTidyTuesday/issues). But I'm zen 😌 about it: the formatting is just going to be bad sometimes. Call it personal growth: I'm allowing it to stay bad and not obsessing over it. Really, I'm not secretly obsessing 😳 over each and every broken carriage return.
+
+## Do you have any terms under which you provide this website?
+
+You betcha. By loading and continuing to use this webpage and any platform wherein I share content, you agree to comply with my terms, as such may be revised from time to time without notice.
+
+You agree to 🔓 release me from all obligations and waivers arising from any and all non-negotiated agreements, licenses, terms-of-service, shrinkwrap, clickwrap, browsewrap, confidentiality, non-disclosure, non-compete, and acceptable use policies that I have entered into with you or your employer, its partners, licensors, agents and assigns, in perpetuity and throughout the universe, in any timeline, without prejudice to my ongoing rights and privileges.
+
+You further represent that you have the authority ✍️ to release me from any such agreements on behalf of your past, current, and future employers.
+
+You also agree to release me from all arbitration and/or moderation dispute clauses, even those which I may have previously agreed to in non-negotiated contracts.
+
+And since I'm on a roll 🎲, I'd also like to take this opportunity to notify all service providers involved in the creation, distribution, and storage of this site and any platform wherein I share content of my decision to opt out of arbitration with them too.
+
+## Can we connect on LinkedIn?
+
+Not really, unless we've worked together. Basically, if it'd feel inappropriate for me to ask you a professional favor, or if it'd be awkward if I did you a favor just because... then it's unlikely that we'll connect on LinkedIn.
+
+## Can I advertise on your website? Can I help you market it?
+
+No. There is no advertising on my site. In fact, I pay someone to host this, so you are actually costing me money being here. You should feel bad 😞 for doubting my integrity.
+
+I also do not pay for marketing. 🙅 Please do not inquire.
+
+## What's next?
+
+Well... Since you've been reading this far, I feel empowered to ask you to support live, local music and the youth organizations in your own communities. Adopt a pet from a shelter and care for it. Join a recreational biking or hiking club. Invest in making your community a place where others want to be.
+
+Citation:
+
+> Blischak JD, Carbonetto P, and Stephens M. Creating and sharing reproducible research code the workflowr way [version 1; peer review: 3 approved]. F1000Research 2019, 8:1749 (https://doi.org/10.12688/f1000research.20843.1)

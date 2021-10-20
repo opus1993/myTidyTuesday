@@ -279,7 +279,7 @@ $(document).ready(function () {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -288,7 +288,7 @@ $(document).ready(function () {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -297,10 +297,10 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-09-24
+<strong>Last updated:</strong> 2021-10-19
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -316,28 +316,28 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree3f1025073698bc7594ffff1642a60381b2ae4503targetblank3f10250a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/3f1025073698bc7594ffff1642a60381b2ae4503" target="_blank">3f10250</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree485e8676b51a2260ea1083fd133a4c92b3960ff8targetblank485e867a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/485e8676b51a2260ea1083fd133a4c92b3960ff8" target="_blank">485e867</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree3f1025073698bc7594ffff1642a60381b2ae4503targetblank3f10250a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree485e8676b51a2260ea1083fd133a4c92b3960ff8targetblank485e867a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/3f1025073698bc7594ffff1642a60381b2ae4503" target="_blank">3f10250</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/485e8676b51a2260ea1083fd133a4c92b3960ff8" target="_blank">485e867</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -347,15 +347,30 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    catboost_info/
-    Ignored:    data/2021-09-08/
+    Ignored:    data/2021-10-12/
+    Ignored:    data/2021-10-13/
     Ignored:    data/CNHI_Excel_Chart.xlsx
     Ignored:    data/CommunityTreemap.jpeg
     Ignored:    data/Community_Roles.jpeg
     Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/accountchurn.rds
     Ignored:    data/acs_poverty.rds
+    Ignored:    data/advancedaccountchurn.rds
+    Ignored:    data/airbnbcatboost.rds
+    Ignored:    data/austinHomeValue.rds
+    Ignored:    data/austinHomeValue2.rds
+    Ignored:    data/australiaweather.rds
+    Ignored:    data/baseballHRxgboost.rds
+    Ignored:    data/baseballHRxgboost2.rds
     Ignored:    data/fmhpi.rds
     Ignored:    data/grainstocks.rds
     Ignored:    data/hike_data.rds
+    Ignored:    data/nber_rs.rmd
+    Ignored:    data/netflixTitles2.rds
+    Ignored:    data/pets.rds
+    Ignored:    data/pets2.rds
+    Ignored:    data/spotifyxgboost.rds
+    Ignored:    data/spotifyxgboostadvanced.rds
     Ignored:    data/us_states.rds
     Ignored:    data/us_states_hexgrid.geojson
     Ignored:    data/weatherstats_toronto_daily.csv
@@ -363,7 +378,9 @@ Ignored files:
 Untracked files:
     Untracked:  code/YammerReach.R
     Untracked:  code/work list batch targets.R
-    Untracked:  figure/
+
+Unstaged changes:
+    Modified:   analysis/about.Rmd
 
 </code></pre>
 <p>
@@ -402,6 +419,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/fa6e99d22058a55e83118c39e7715fb41dc8e0d3/docs/about.html" target="_blank">fa6e99d</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+refresh About page for personal note and license for word wraps
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -511,10 +545,96 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>TidyTuesday code and data visualization</p>
-<p>This is my personal website. Nothing here is endorsed by my employers, funders, or any organizations I am part of.</p>
+<p>This is my personal website.</p>
+<div id="did-you-make-this-website-all-by-yourself" class="section level2">
+<h2>Did you make this website all by yourself?</h2>
+<p>No. I could not have built this site without lots of help. This site is gratefully built using a variety of open-source resources and inspirations. <a href="https://www.linkedin.com/in/jdblischak/">John Blischak</a>’s <a href="https://jdblischak.github.io/workflowr/"><code>workflowr</code></a> package, blog posts, and talks provide the reproducible github pages framework that this is built on. I rely a great deal on the work of the worldwide open source R community.</p>
+</div>
+<div id="do-you-own-everything-on-this-website" class="section level2">
+<h2>Do you own everything on this website?</h2>
+<p>Mostly. I own all work on this site and any site wherein I share content, unless I attributed it to someone else, in which case then they hold the copyrights. I try to capture the source of that which I share but sometimes I forget to, and then all I have is the content itself without a trackback for attribution. This does not mean that I imply ownership. If you feel that I have posted something without permission, please let me know and I will correct it.</p>
+<p>Copyright is at once a simple and a complicated matter. Most of the 📜 legal framework around copyright was set into place before the Internet came onto the scene and is biased towards large corporations rather than creative individuals. No matter what my opinion on the matter is, the current copyright regime is the law and affects almost all usage of creative materials. Wikipedia’s copyright page has a lot of good information. (As an aside, you should donate to Wikimedia, and you should also support efforts to keep Wikipedia complete.) Basically, none of the content here can be reprinted without letting folks know where you got it.</p>
 <p>You may re-use this content as long as you indicate my authorship and provide a link back to the original material. Source code of the site is provided under the MIT license and may be reused without restriction.</p>
-<p>This site is gratefully built using a variety of open-source resources and inspirations.</p>
+</div>
+<div id="do-you-have-a-privacy-policy" class="section level2">
+<h2>Do you have a privacy policy?</h2>
+<p>No. I also don’t keep any information about you. That’s a policy, I guess. Voilà.</p>
+<p>For what it’s worth, if you have not been careful about your browsing habits and setup, I 🕵 can probably see a lot of “anonymized” information about you. It’s 😱 pretty scary when you think about it. You can use Tor if you want to keep your connection information anonymous and protect your privacy. You can also opt out of many of these services. You should also know that I use many intermediary services to make this page possible, and accept no responsibility for any liability attributable to any of them. As far as I’m aware, all services I knowingly use have a privacy and protection compliant data retention policy. There are also services I could use because they are bundled with other services I use to build and host this page. There are no affiliate links and I do not make (even fractional) money from anything you click on this website.</p>
+</div>
+<div id="whose-opinions-are-these" class="section level2">
+<h2>Whose opinions are these?</h2>
+<p>All mine. Any views or opinions presented herein are solely mine and do not represent those of any company I have been, currently am, or will ever be associated with. The postings on this site and any site wherein I share content, including but not limited to Twitter, LinkedIn, etc. are my own and don’t represent my employer’s (or anyone else’s) positions, strategies, or opinions.</p>
+<p>My opinions are my own; I’m not online to represent anyone or anything other than myself. I love my job in particular and gainful employment in general; please do not endanger any of them.</p>
+</div>
+<div id="how-do-you-measure-things" class="section level2">
+<h2>How do you measure things?</h2>
+<p>Carefully. When I talk about 💰 monetary quantities, please note that they are discussed in original year indices, and do not account for price-index, capital market, or inflation adjustments.</p>
+</div>
+<div id="can-i-trust-what-you-say" class="section level2">
+<h2>Can I trust what you say?</h2>
+<p>Sometimes. We can’t escape the matter of semantic and semiotic instabilities, which are only compounded by the fallibility of our sensory mechanisms in <a href="http://theinvisiblegorilla.com/gorilla_experiment.html">objectively describing reality</a>.</p>
+<p>Frankly, in the grand scheme of things (with regards to the vast majority of human knowledge), most of the time 🤠 I have no idea what I’m talking about. As an engineer, an individually contributing data scientist, and even a Boy Scout leader, I tend to simplify things in order to be able to understand them. I may also be bound here and there by non-disclosure, non-disparagement, and other negotiated and non-negotiated agreements. So… take it all in with a grain of salt.</p>
+<p>Please keep in mind at all times that I am not a lawyer ⚖, a doctor 💉, or a journalist 🗞; There are more things that I am not an expert in than there are things in which I am an expert. Don’t blame me if you lack common sense.</p>
+<p>I make no guarantees as to the accuracy, relevance, or quality of the content herein. I make no guarantees as to anything else herein either. I accept no liability for issues with the content of links (due to reasons including but not limited to deprecation, machine error, human error, human success, or meteor impact), or for the consequences of any actions taken on the basis of the information provided. Risks are inherent in the use of the Internet 🛰. Contact your vendors for additional information.</p>
+</div>
+<div id="can-i-quote-you-on-that" class="section level2">
+<h2>Can I quote you on that?</h2>
+<p>Maybe. Not everything I share publicly happened exactly as I said it did. There are many reasons why this could be true 🤥, not least of which are that my memory is fallible; sometimes I’m sharing a composite anecdote; sometimes I may be trying to protect the innocent (and the guilty for reasons that may be none of your business); and sometimes I’ll say something hyperbolically or in jest and <a href="https://www.economist.com/news/science-and-technology/21724370-generating-convincing-audio-and-video-fake-events-fake-news-you-aint-seen">you shouldn’t take everything you read or see on the internet at face value</a>. There are very few oaths I’ve taken in my life, and those I take very very seriously; anything else might just be a shitpost.</p>
+<p>If you want to 💬 quote me, ask me for confirmation before alleging I said something and meant it?</p>
+</div>
+<div id="do-you-agree-with-or-endorse-everything-you-share" class="section level2">
+<h2>Do you agree with or endorse everything you share?</h2>
+<p>No. I come across a large amount of content every day; this content may contain objectionable material, even stuff I don’t agree with. For instance, sometimes I feel it’s important to call attention to the absurd, bizarre, fanciful, fantastic, foolish, nonsensical, preposterous, unreal, and/or wild.</p>
+<p>This site and any site wherein I share content are merely a collection of thoughts upon which I choose to impose categorization and archival.</p>
+<p>Essentially:</p>
+<p>· 🔄 shares and/or RTs are not endorsements; they could be 😒 ironic re-readings with ambivalent undertones intended to 🤔 confuse and 😲 amaze.</p>
+<p>· ❤️ Faves and/or likes are not concurrence; they are my way of saying “thank you for sharing your views in a polite and civil way.” Unless they aren’t.</p>
+</div>
+<div id="why-wont-you-reply-to-my-messages" class="section level2">
+<h2>Why won’t you reply to my messages?</h2>
+<p>Who knows? But just so you know, if you choose to comment or tweet at me about stuff I’m not interested in or in an aggressive, <a href="http://wondermark.com/1k62/">sea-lioning</a> manner, then I’ll just mute you. 😏 You won’t even know. Or I’ll block you. If you have an opinion, good for you—you don’t necessarily need to tell me about it. You do you.</p>
+<p>Fun fact: <a href="https://xkcd.com/1357/">that’s not censorship</a>.</p>
+<p>I also do not reply to 🗑 cold emails from vendors or service providers. If you’re looking for a surefire way of getting on my “mute” list, this would be it.</p>
+</div>
+<div id="im-blocked-how-come-you-blocked-me-on-social-media" class="section level2">
+<h2>I’m blocked?! How come you blocked me on social media?</h2>
+<p>I’ve seriously no idea. If I have blocked you, it is very unlikely that it implies that I believe you are some combination of ignorant or evil; I might simply mean that I don’t want to hear from you anymore and I want the algorithm to know about it. I don’t mean to censure you or to curtail your ability to talk to others. I just, for whatever reason, at some point, thought that I would likely rather not want to risk a bad interaction. You could even take it as a compliment; maybe I’m scared of you and I want to make sure we don’t ever cross paths because I can’t be trusted not to say something stupid that’ll get me in trouble.</p>
+<p>It might have been a misunderstanding on my part. Oh well, we’ll live.</p>
+</div>
+<div id="wait-i-remember-you-said-something-before-but-cant-find-it-now.-where-did-it-go" class="section level2">
+<h2>Wait, I remember you said something before but can’t find it now. Where did it go?</h2>
+<p>Again, no idea. I reserve the right to evolve my opinions and to change my mind altogether on any topic at any time with no notice. Listening and learning and thinking and growing 🤓 are inherently good things and I refuse to steadfastly hold onto an idea simply because it’s the way it’s always been idea’ed. Consequently, I delete my bad tweets. I delete good ones too, in case they didn’t land quite right or if I want to rephrase them.</p>
+<p>I also delete ✂️ conversations that are no longer relevant, especially if I’ve tried to have a constructive dialog with you only to realize that you’re not actually having a conversation in good faith and are rather demonstrating a willful and pervasive form of aggressive cluelessness masquerading as a sincere desire to understand.</p>
+</div>
+<div id="i-noticed-an-issue-with-the-website.-how-can-i-tell-you-about-it" class="section level2">
+<h2>I noticed an issue with the website. How can I tell you about it?</h2>
+<p>Write a <a href="https://github.com/opus1993/myTidyTuesday/issues">github issue</a>. But I’m zen 😌 about it: the formatting is just going to be bad sometimes. Call it personal growth: I’m allowing it to stay bad and not obsessing over it. Really, I’m not secretly obsessing 😳 over each and every broken carriage return.</p>
+</div>
+<div id="do-you-have-any-terms-under-which-you-provide-this-website" class="section level2">
+<h2>Do you have any terms under which you provide this website?</h2>
+<p>You betcha. By loading and continuing to use this webpage and any platform wherein I share content, you agree to comply with my terms, as such may be revised from time to time without notice.</p>
+<p>You agree to 🔓 release me from all obligations and waivers arising from any and all non-negotiated agreements, licenses, terms-of-service, shrinkwrap, clickwrap, browsewrap, confidentiality, non-disclosure, non-compete, and acceptable use policies that I have entered into with you or your employer, its partners, licensors, agents and assigns, in perpetuity and throughout the universe, in any timeline, without prejudice to my ongoing rights and privileges.</p>
+<p>You further represent that you have the authority ✍️ to release me from any such agreements on behalf of your past, current, and future employers.</p>
+<p>You also agree to release me from all arbitration and/or moderation dispute clauses, even those which I may have previously agreed to in non-negotiated contracts.</p>
+<p>And since I’m on a roll 🎲, I’d also like to take this opportunity to notify all service providers involved in the creation, distribution, and storage of this site and any platform wherein I share content of my decision to opt out of arbitration with them too.</p>
+</div>
+<div id="can-we-connect-on-linkedin" class="section level2">
+<h2>Can we connect on LinkedIn?</h2>
+<p>Not really, unless we’ve worked together. Basically, if it’d feel inappropriate for me to ask you a professional favor, or if it’d be awkward if I did you a favor just because… then it’s unlikely that we’ll connect on LinkedIn.</p>
+</div>
+<div id="can-i-advertise-on-your-website-can-i-help-you-market-it" class="section level2">
+<h2>Can I advertise on your website? Can I help you market it?</h2>
+<p>No. There is no advertising on my site. In fact, I pay someone to host this, so you are actually costing me money being here. You should feel bad 😞 for doubting my integrity.</p>
+<p>I also do not pay for marketing. 🙅 Please do not inquire.</p>
+</div>
+<div id="whats-next" class="section level2">
+<h2>What’s next?</h2>
+<p>Well… Since you’ve been reading this far, I feel empowered to ask you to support live, local music and the youth organizations in your own communities. Adopt a pet from a shelter and care for it. Join a recreational biking or hiking club. Invest in making your community a place where others want to be.</p>
+<p>Citation:</p>
+<blockquote>
+<p>Blischak JD, Carbonetto P, and Stephens M. Creating and sharing reproducible research code the workflowr way [version 1; peer review: 3 approved]. F1000Research 2019, 8:1749 (<a href="https://doi.org/10.12688/f1000research.20843.1" class="uri">https://doi.org/10.12688/f1000research.20843.1</a>)</p>
+</blockquote>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
