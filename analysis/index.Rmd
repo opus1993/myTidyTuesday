@@ -67,7 +67,7 @@ articlesTable <- articles %>%
   mutate(libraries = str_squish(str_sub(libraries, 
                              start = str_locate(libraries, "\\(")[,1] + 1,
                              end = str_locate(libraries, "\\)")[,1] - 1 ))) %>% 
-  filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate","here","hrbrthemes", "tweetrmd")) %>% 
+  filter(!libraries %in% c("tidyverse","tidytuesdayR","lubridate","here","hrbrthemes", "tweetrmd", "grumanlib")) %>% 
   arrange(desc(lubridate::mdy(dateline)),
           libraries) %>% 
   tidyr::nest(package = libraries) %>% 
