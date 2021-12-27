@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 
 knitr::opts_template$set(
-  fig.large = list(fig.asp = 0.8), #
+  fig.large = list(fig.asp = 0.8),
   fig.square = list(fig.asp = 1),
   fig.long = list(fig.asp = 1.5)
 )
@@ -386,4 +386,3 @@ conflicted::conflict_prefer("filter", "dplyr", quiet = TRUE)
 conflicted::conflict_prefer("spec", "yardstick", quiet = TRUE)
 conflicted::conflict_prefer("lag", "dplyr", quiet = TRUE)
 conflicted::conflict_prefer("degree", "dials", quiet = TRUE)
-
