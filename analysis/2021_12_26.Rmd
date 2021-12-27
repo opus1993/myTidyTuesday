@@ -1,0 +1,77 @@
+---
+title: "GeomTextPath"
+author: "Jim Gruman"
+date: "December 26, 2021"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+There have recently been a handful of Twitter posts on [Allan Cameron](https://twitter.com/dr_allancameron) and [Teun van den Brand](https://twitter.com/TeunvandenBrand)'s new package `geomtextpath` with new `ggplot2` geoms for overlaying text over curved lines, giving the possibility to add nicer labels to charts.
+
+One example:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/icymi_r/status/1474346205710802944")
+```
+
+I've worked in the past with economic time series and other datasets where, rather than labeling the point at the end the line, a label that adheres to it's own line would have been more visually appealing.  
+
+Let's build up some examples to showcase here. First, load up packages:
+
+```{r setup, message=FALSE}
+
+suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(grumanlib) # my plot theme
+})
+
+# remotes::install_github("AllanCameron/geomtextpath")
+
+library(geomtextpath)
+library(palmerpenguins)
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+The core functions in this package work like any other geom in `ggplot2`. They take their co-ordinates, their `y` co-ordinates and their text `label`, from an aesthetic mapping. This allows the label to be plotted on an arbitrary path, as shown in the following example:
+
+```{r, fig.asp=1}
+
+penguins %>% 
+  ggplot(aes(bill_length_mm, color = species, label = species)) +
+  geom_textdensity(size = 6, fontface = 2, hjust = 0.32, vjust = 0.3, show.legend = FALSE) +
+  labs(caption = "Data: palmerpenguins package")
+
+```
+
+The `hjust` parameter is powerful in positioning the label horizontally along each contour. Note that we have been able to “reclaim” the space normally taken up by the legend without leaving any ambiguity in the plot.
+
+We can use these geoms to get trend lines through scatterplots:
+
+```{r, fig.asp = 1}
+penguins %>% 
+  ggplot(aes(bill_length_mm, flipper_length_mm)) +
+  geom_point(alpha = 0.1) +
+  geom_textsmooth(aes(label = species, color = species),
+                  method = "loess", formula = y ~ x,
+                  size = 6, linetype = 3, fontface = 2, linewidth = 4,
+                  show.legend = FALSE) +
+  labs(caption = "Data: palmerpenguins package")
+```
+
+
+The [package github repo](https://github.com/AllanCameron/geomtextpath) vignettes cover quite a few other features, including orienting labels for polar plots and topographical contour lines.
+
+
+
