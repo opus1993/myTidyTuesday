@@ -1,0 +1,314 @@
+---
+title: "Chocolate bar ratings"
+author: "Jim Gruman"
+date: "January 17, 2022"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+This week's #TidyTuesday dataset is provided by Brandy Brelinski of the Manhattan Chocolate Society at the web site [Flavors of Cacao](http://flavorsofcacao.com/chocolate_database.html) and also at [Will Canniford's page on kaggle](https://www.kaggle.com/willcanniford/chocolate-bar-ratings-extensive-eda).
+
+The web site notes: 
+
+> From 2007-2016 the Manhattan Chocolate Society has impressively held over 65 focused tastings that examine what is responsible for particular characteristics in chocolate whether they are due to specific growing regions, cacao genetics, manufacturing or some other cause.  Their ability to meet with and support chocolate makers, authors and experts in these intimate tastings has inspired us to continue our mission and makes us a unique member in the chocolate community.
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/thomas_mock/status/1483236475370102787")
+```
+
+Let's build up some examples data visuals to showcase for ourselves here. First, load up packages:
+
+```{r setup, message=FALSE}
+
+suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(tidymodels)
+library(tidytext)
+library(textrecipes)
+library(poissonreg)
+library(grumanlib) # my plot theme
+})
+
+# remotes::install_github("AllanCameron/geomtextpath")
+
+library(geomtextpath)
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+Lets load up the data
+
+```{r}
+chocolate <- tidytuesdayR::tt_load("2022-01-18")$chocolate %>% 
+  mutate(cocoa = parse_number(cocoa_percent),
+         review_date = lubridate::ymd(paste(review_date, 1, 1, sep = "-"))) %>% 
+  separate(ingredients, 
+           into = c("ingredient_complexity", "ingredients"),
+           convert = TRUE,
+           sep = "-") %>% 
+  mutate(Beans = str_detect(ingredients, "B"),
+         Sugar = str_detect(ingredients, "S"),
+         Sweetener = str_detect(ingredients, "S*"),
+         CocoaButter = str_detect(ingredients, "C"),
+         Lecithin = str_detect(ingredients, "L"),
+         Vanilla = str_detect(ingredients, "V"),
+         Salt = str_detect(ingredients, "Sa"),
+         )   %>% 
+  replace_na(list(Beans = TRUE,
+                  Sugar = FALSE,
+                  Sweetener = FALSE,
+                  CocoaButter = FALSE,
+                  Lecithin = FALSE,
+                  Vanilla = FALSE,
+                  Salt = FALSE)) %>% 
+  select(country_of_bean_origin,
+         most_memorable_characteristics,
+         review_date,
+         Beans, 
+         Sugar,
+         Sweetener,
+         CocoaButter,
+         Lecithin,
+         Vanilla,
+         Salt,
+         rating,
+         cocoa)
+
+caption = "Source: Manhattan Chocolate Society Flavors of Cacao"
+```
+
+A quick overview of the types of data in the dataframe:
+
+```{r}
+skimr::skim(chocolate)
+```
+
+The pairwise correlations and histograms of the numeric features, colored by intervals of ratings scores:
+
+```{r, fig.asp=1}
+chocolate %>%
+  select(cocoa,
+         review_date,
+         rating) %>%
+  GGally::ggpairs(
+    mapping = aes(color = cut_interval(rating, 5)),
+    progress = FALSE,
+    diag = list(continuous = GGally::wrap("barDiag", bins = 20))
+  ) +
+  theme_bw() +
+  theme(panel.grid = element_blank()) +
+  labs(caption = caption) 
+```
+
+The chocolate bar ratings in this set range from 1 to 4 and the cocoa proportion ranges from 42 to 100%. I'd like to investigate how best to handle the bounded positive range of ratings values, and what contribution is inferred by each memorable characteristic.
+
+What are the most common words used to describe the most memorable characteristics of each chocolate sample?
+
+```{r, fig.asp=1}
+chocolate %>%
+  unnest_tokens(output = word,
+                input = most_memorable_characteristics,
+                token = "regex",
+                pattern = ",") %>%
+  mutate(word = str_squish(word)) %>% 
+  group_by(word) %>%
+  summarise(
+    n = n(),
+    rating = mean(rating)
+  ) %>%
+  ggplot(aes(n, rating)) +
+  geom_hline(
+    yintercept = mean(chocolate$rating), lty = 2,
+    color = "gray50", size = 1.5
+  ) +
+  geom_jitter( alpha = 0.7) +
+  geom_text(aes(label = word),
+    check_overlap = TRUE, 
+    vjust = "top", hjust = "left"
+  ) +
+  scale_x_log10() +
+  labs(caption = caption,
+       title = "Memorable characteristics of chocolate bars",
+       subtitle = "Reviewer Ratings, mean of all shown as dashed line", y = NULL, x = "Count of memorable characteristic") +
+  grumanlib::theme_jim()
+
+```
+
+Build a couple of models to predict how the rating is influenced by memorable characteristics
+
+```{r}
+chocolate <- chocolate %>% 
+  mutate(integer_rating = as.integer(rating * 4))
+
+set.seed(123)
+choco_split <- initial_split(chocolate, strata = rating)
+choco_train <- training(choco_split)
+choco_test <- testing(choco_split)
+
+choc_recipe <-
+  recipe(integer_rating ~ most_memorable_characteristics, data = choco_train) %>%
+  step_tokenize(most_memorable_characteristics) %>%
+  step_tokenfilter(most_memorable_characteristics, max_tokens = 100) %>%
+  step_tf(most_memorable_characteristics,
+          weight_scheme = "binary") %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_numeric_predictors()) %>%
+  step_zv(all_predictors())
+
+```
+
+For the bounded, positive integer dependent variable rating, let's use the poisson regression engine from the general linear model.
+
+```{r}
+pois_spec <- poisson_reg() %>% 
+  set_mode("regression") %>% 
+  set_engine("glm")
+
+```
+
+```{r}
+
+pois_wf <- workflow() %>%
+  add_recipe(choc_recipe) %>%
+  add_model(pois_spec)
+
+pois_fit <- pois_wf %>% fit(choco_train)
+
+```
+
+In the test set
+
+```{r}
+augment(pois_fit, 
+        new_data = chocolate, 
+        type.predict = "response") %>% 
+  ggplot(aes(rating, .pred/4)) +
+  geom_point(alpha = 0.1) +
+  geom_text(data = . %>% slice_max(.pred, n = 5),
+    aes(label = most_memorable_characteristics),
+    check_overlap = TRUE, 
+    vjust = "top", hjust = "left"
+  ) +
+  geom_text(data = . %>% slice_min(.pred, n = 5),
+    aes(label = most_memorable_characteristics),
+    check_overlap = TRUE, 
+    vjust = "top", hjust = "left"
+  ) +
+  geom_text(data = . %>% filter(integer_rating/4 == 1.0),
+    aes(label = most_memorable_characteristics),
+    check_overlap = TRUE, 
+    vjust = "top", hjust = "left"
+  ) +
+  geom_abline(slope = 1, 
+              size = 1, 
+              color = "grey40",
+              lty = 2) +
+  scale_x_continuous(limits = c(1,4.5)) +
+  scale_y_continuous(limits = c(1,4)) +
+  labs(title = "Predicting the bar rating using Poission from Memorable Characteristics",
+       x = "Actual", y = "Predicted")
+```
+
+
+```{r}
+augment(pois_fit, 
+        new_data = choco_test, 
+        type.predict = "response") %>% 
+  rmse(truth = rating, estimate = .pred/4)
+```
+
+As a prediction model, the poisson glm by itself isn't great. Even so, we can look at the model coefficients to get a feel for the working of the model and comparing it with our own understanding.
+
+```{r}
+pois_fit %>%
+  tidy() %>%
+  group_by(estimate > 0) %>%
+  slice_max(abs(estimate), n = 10) %>%
+  ungroup() %>%
+  filter(term != "(Intercept)") %>% 
+  mutate(term = str_remove(term, "tf_most_memorable_characteristics_"),
+         term = str_remove(term, "TRUE")) %>%
+  ggplot(aes(estimate, 
+             fct_reorder(term, estimate), 
+             fill = estimate > 0)) +
+  geom_col() +
+  scale_fill_discrete(labels = c("low ratings", "high ratings")) +
+  labs(y = NULL, fill = "More from...",
+       caption = caption,
+       title = "Memorable Characteristics of Chocolate Bars",
+       subtitle = "The influence of words on sample ratings, Poisson Model") +
+  theme(panel.grid.major.y = element_blank())
+```
+
+[Julia Silge](https://juliasilge.com/blog/chocolate-ratings/) often works with svm models in her learning blog. Let's give it a go here, but with my slightly different recipe:
+
+```{r}
+svm_spec <-
+  svm_linear() %>%
+  set_mode("regression")
+```
+
+```{r}
+svm_wf <- workflow() %>%
+  add_recipe(choc_recipe) %>%
+  add_model(svm_spec)
+
+svm_fit <- svm_wf %>% fit(choco_train)
+```
+
+```{r}
+augment(svm_fit, 
+        new_data = choco_test, 
+        type.predict = "response") %>% 
+  rmse(truth = rating, estimate = .pred/4)
+```
+
+Ok, so the error rate with the svm is more or less the same.
+
+Let's have a look at the words most influential on ratings in the svm model coefficients:
+
+```{r}
+svm_fit %>%
+  tidy() %>%
+  group_by(estimate > 0) %>%
+  slice_max(abs(estimate), n = 10) %>%
+  ungroup() %>%
+  filter(term != "Bias") %>% 
+  mutate(term = str_remove(term, "tf_most_memorable_characteristics_"),
+         term = str_remove(term, "TRUE")) %>%
+  ggplot(aes(estimate, 
+             fct_reorder(term, estimate), 
+             fill = estimate > 0)) +
+  geom_col() +
+  scale_fill_discrete(labels = c("low ratings", "high ratings")) +
+  labs(y = NULL, fill = "More from...",
+       caption = caption,
+       title = "Memorable Characteristics of Chocolate Bars",
+       subtitle = "The influence of words on sample ratings, SVM Model") +
+  theme(panel.grid.major.y = element_blank())
+```
+
+It's interesting to me how different the results are between the two algorithms.
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/leeolney3/status/1483378919957008387")
+```
+```{r}
+tweetrmd::include_tweet("https://twitter.com/danoehm/status/1483698034748039169")
+```
+
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/quite_grey/status/1483796675181350912")
+```
