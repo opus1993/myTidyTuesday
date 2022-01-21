@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2022-01-17" />
+
+<title>Chocolate bar ratings</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Chocolate bar ratings</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">January 17, 2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-01-21
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree270c6c040c70f9592096ebe1d1286ed79f4e77d2targetblank270c6c0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/270c6c040c70f9592096ebe1d1286ed79f4e77d2" target="_blank">270c6c0</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree270c6c040c70f9592096ebe1d1286ed79f4e77d2targetblank270c6c0a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/270c6c040c70f9592096ebe1d1286ed79f4e77d2" target="_blank">270c6c0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-11-27/
+    Ignored:    data/2021-11-27glm_wf_final.rds
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/accountchurn.rds
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/advancedaccountchurn.rds
+    Ignored:    data/airbnbcatboost.rds
+    Ignored:    data/austinHomeValue.rds
+    Ignored:    data/austinHomeValue2.rds
+    Ignored:    data/australiaweather.rds
+    Ignored:    data/baseballHRxgboost.rds
+    Ignored:    data/baseballHRxgboost2.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/nber_rs.rmd
+    Ignored:    data/netflixTitles2.rds
+    Ignored:    data/pets.rds
+    Ignored:    data/pets2.rds
+    Ignored:    data/spotifyxgboost.rds
+    Ignored:    data/spotifyxgboostadvanced.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+    Ignored:    gce-key.json
+
+Untracked files:
+    Untracked:  code/YammerReach.R
+    Untracked:  code/work list batch targets.R
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2022_01_18.Rmd</code>) and HTML (<code>docs/2022_01_18.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/270c6c040c70f9592096ebe1d1286ed79f4e77d2/analysis/2022_01_18.Rmd" target="_blank">270c6c0</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-01-21
+</td>
+<td>
+name chunks
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/743bf3de552850755e43c6d42fe88e3d944e1ce6/analysis/2022_01_18.Rmd" target="_blank">743bf3d</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-01-21
+</td>
+<td>
+initial commit of chocolate bar ratings
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>This week’s #TidyTuesday dataset is provided by Brandy Brelinski of the Manhattan Chocolate Society at the web site <a href="http://flavorsofcacao.com/chocolate_database.html">Flavors of Cacao</a> and also at <a href="https://www.kaggle.com/willcanniford/chocolate-bar-ratings-extensive-eda">Will Canniford’s page on kaggle</a>.</p>
+<p>The web site notes:</p>
+<blockquote>
+<p>From 2007-2016 the Manhattan Chocolate Society has impressively held over 65 focused tastings that examine what is responsible for particular characteristics in chocolate whether they are due to specific growing regions, cacao genetics, manufacturing or some other cause. Their ability to meet with and support chocolate makers, authors and experts in these intimate tastings has inspired us to continue our mission and makes us a unique member in the chocolate community.</p>
+</blockquote>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/thomas_mock/status/1483236475370102787&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">The <a href="https://twitter.com/R4DScommunity?ref_src=twsrc%5Etfw">@R4DScommunity</a> welcomes you to week 3 of <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a>!  We&#39;re exploring Chocolate bar ratings!!<br><br>📁 <a href="https://t.co/sElb4fcv3u">https://t.co/sElb4fcv3u</a><br>📰 <a href="https://t.co/aHkFwfqyOj">https://t.co/aHkFwfqyOj</a><a href="https://twitter.com/hashtag/r4ds?src=hash&amp;ref_src=twsrc%5Etfw">#r4ds</a> <a href="https://twitter.com/hashtag/tidyverse?src=hash&amp;ref_src=twsrc%5Etfw">#tidyverse</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://t.co/emAV8jVLnw">pic.twitter.com/emAV8jVLnw</a></p>&mdash; Tom Mock (@thomas_mock) <a href="https://twitter.com/thomas_mock/status/1483236475370102787?ref_src=twsrc%5Etfw">January 18, 2022</a></blockquote>
+
+<p>Let’s build up some examples data visuals to showcase for ourselves here. First, load up packages:</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(tidymodels)
+library(tidytext)
+library(textrecipes)
+library(poissonreg)
+library(grumanlib) # my plot theme
+})
+
+source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))</code></pre>
+<p>Lets load up the data</p>
+<pre class="r"><code>chocolate &lt;- tidytuesdayR::tt_load(&quot;2022-01-18&quot;)$chocolate %&gt;%
+  mutate(
+    cocoa = parse_number(cocoa_percent),
+    review_date = lubridate::ymd(paste(review_date, 1, 1, sep = &quot;-&quot;))
+  ) %&gt;%
+  separate(ingredients,
+    into = c(&quot;ingredient_complexity&quot;, &quot;ingredients&quot;),
+    convert = TRUE,
+    sep = &quot;-&quot;
+  ) %&gt;%
+  mutate(
+    Beans = str_detect(ingredients, &quot;B&quot;),
+    Sugar = str_detect(ingredients, &quot;S&quot;),
+    Sweetener = str_detect(ingredients, &quot;S*&quot;),
+    CocoaButter = str_detect(ingredients, &quot;C&quot;),
+    Lecithin = str_detect(ingredients, &quot;L&quot;),
+    Vanilla = str_detect(ingredients, &quot;V&quot;),
+    Salt = str_detect(ingredients, &quot;Sa&quot;),
+  ) %&gt;%
+  replace_na(list(
+    Beans = TRUE,
+    Sugar = FALSE,
+    Sweetener = FALSE,
+    CocoaButter = FALSE,
+    Lecithin = FALSE,
+    Vanilla = FALSE,
+    Salt = FALSE
+  )) %&gt;%
+  select(
+    country_of_bean_origin,
+    most_memorable_characteristics,
+    review_date,
+    Beans,
+    Sugar,
+    Sweetener,
+    CocoaButter,
+    Lecithin,
+    Vanilla,
+    Salt,
+    rating,
+    cocoa
+  )</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `chocolate.csv`</code></pre>
+<pre class="r"><code>caption &lt;- &quot;Source: Manhattan Chocolate Society Flavors of Cacao&quot;</code></pre>
+<p>A quick overview of the types of data in the dataframe:</p>
+<pre class="r"><code>skimr::skim(chocolate)</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">chocolate</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">2530</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">12</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Date</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">logical</td>
+<td align="left">7</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">country_of_bean_origin</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">21</td>
+<td align="right">0</td>
+<td align="right">62</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">most_memorable_characteristics</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">37</td>
+<td align="right">0</td>
+<td align="right">2487</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: Date</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">review_date</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">2006-01-01</td>
+<td align="left">2021-01-01</td>
+<td align="left">2015-01-01</td>
+<td align="right">16</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: logical</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="left">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Beans</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1.00</td>
+<td align="left">TRU: 2530</td>
+</tr>
+<tr class="even">
+<td align="left">Sugar</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.96</td>
+<td align="left">TRU: 2436, FAL: 94</td>
+</tr>
+<tr class="odd">
+<td align="left">Sweetener</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.97</td>
+<td align="left">TRU: 2443, FAL: 87</td>
+</tr>
+<tr class="even">
+<td align="left">CocoaButter</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.66</td>
+<td align="left">TRU: 1668, FAL: 862</td>
+</tr>
+<tr class="odd">
+<td align="left">Lecithin</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.19</td>
+<td align="left">FAL: 2037, TRU: 493</td>
+</tr>
+<tr class="even">
+<td align="left">Vanilla</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="left">FAL: 2177, TRU: 353</td>
+</tr>
+<tr class="odd">
+<td align="left">Salt</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.01</td>
+<td align="left">FAL: 2493, TRU: 37</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rating</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3.20</td>
+<td align="right">0.45</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">3.25</td>
+<td align="right">3.5</td>
+<td align="right">4</td>
+<td align="left">▁▁▅▇▇</td>
+</tr>
+<tr class="even">
+<td align="left">cocoa</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">71.64</td>
+<td align="right">5.62</td>
+<td align="right">42</td>
+<td align="right">70</td>
+<td align="right">70.00</td>
+<td align="right">74.0</td>
+<td align="right">100</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+</tbody>
+</table>
+<p>The pairwise correlations and histograms of the numeric features, colored by intervals of ratings scores:</p>
+<pre class="r"><code>chocolate %&gt;%
+  select(
+    cocoa,
+    review_date,
+    rating
+  ) %&gt;%
+  GGally::ggpairs(
+    mapping = aes(color = cut_interval(rating, 5)),
+    progress = FALSE,
+    diag = list(continuous = GGally::wrap(&quot;barDiag&quot;, bins = 20))
+  ) +
+  theme_bw() +
+  theme(panel.grid = element_blank()) +
+  labs(caption = caption)</code></pre>
+<p><img src="figure/2022_01_18.Rmd/ggally-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>The chocolate bar ratings in this set range from 1 to 4 and the cocoa proportion ranges from 42 to 100%. I’d like to investigate how best to handle the bounded positive range of ratings values, and what contribution is inferred by each memorable characteristic.</p>
+<p>What are the most common words used to describe the most memorable characteristics of each chocolate sample?</p>
+<pre class="r"><code>chocolate %&gt;%
+  unnest_tokens(
+    output = word,
+    input = most_memorable_characteristics,
+    token = &quot;regex&quot;,
+    pattern = &quot;,&quot;
+  ) %&gt;%
+  mutate(word = str_squish(word)) %&gt;%
+  group_by(word) %&gt;%
+  summarise(
+    n = n(),
+    rating = mean(rating)
+  ) %&gt;%
+  ggplot(aes(n, rating)) +
+  geom_hline(
+    yintercept = mean(chocolate$rating), lty = 2,
+    color = &quot;gray50&quot;, size = 1.5
+  ) +
+  geom_jitter(alpha = 0.7) +
+  geom_text(aes(label = word),
+    check_overlap = TRUE,
+    vjust = &quot;top&quot;, hjust = &quot;left&quot;
+  ) +
+  scale_x_log10() +
+  labs(
+    caption = caption,
+    title = &quot;Memorable characteristics of chocolate bars&quot;,
+    subtitle = &quot;Reviewer Ratings, mean of all shown as dashed line&quot;, y = NULL, x = &quot;Count of memorable characteristic&quot;
+  ) +
+  grumanlib::theme_jim()</code></pre>
+<p><img src="figure/2022_01_18.Rmd/unnamed-chunk-1-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Build a couple of models to predict how the rating is influenced by memorable characteristics</p>
+<pre class="r"><code>chocolate &lt;- chocolate %&gt;%
+  mutate(integer_rating = as.integer(rating * 4))
+
+set.seed(123)
+choco_split &lt;- initial_split(chocolate, strata = rating)
+choco_train &lt;- training(choco_split)
+choco_test &lt;- testing(choco_split)
+
+choc_recipe &lt;-
+  recipe(integer_rating ~ most_memorable_characteristics, data = choco_train) %&gt;%
+  step_tokenize(most_memorable_characteristics) %&gt;%
+  step_tokenfilter(most_memorable_characteristics, max_tokens = 100) %&gt;%
+  step_tf(most_memorable_characteristics,
+    weight_scheme = &quot;binary&quot;
+  ) %&gt;%
+  step_dummy(all_nominal_predictors()) %&gt;%
+  step_normalize(all_numeric_predictors()) %&gt;%
+  step_zv(all_predictors())</code></pre>
+<p>For the bounded, positive integer dependent variable rating, let’s use the poisson regression engine from the general linear model.</p>
+<pre class="r"><code>pois_spec &lt;- poisson_reg() %&gt;%
+  set_mode(&quot;regression&quot;) %&gt;%
+  set_engine(&quot;glm&quot;)</code></pre>
+<pre class="r"><code>pois_wf &lt;- workflow() %&gt;%
+  add_recipe(choc_recipe) %&gt;%
+  add_model(pois_spec)
+
+pois_fit &lt;- pois_wf %&gt;% fit(choco_train)</code></pre>
+<p>In the test set</p>
+<pre class="r"><code>augment(pois_fit,
+  new_data = chocolate,
+  type.predict = &quot;response&quot;
+) %&gt;%
+  ggplot(aes(rating, .pred / 4)) +
+  geom_point(alpha = 0.1) +
+  geom_text(
+    data = . %&gt;% slice_max(.pred, n = 5),
+    aes(label = most_memorable_characteristics),
+    check_overlap = TRUE,
+    vjust = &quot;top&quot;, hjust = &quot;left&quot;
+  ) +
+  geom_text(
+    data = . %&gt;% slice_min(.pred, n = 5),
+    aes(label = most_memorable_characteristics),
+    check_overlap = TRUE,
+    vjust = &quot;top&quot;, hjust = &quot;left&quot;
+  ) +
+  geom_text(
+    data = . %&gt;% filter(integer_rating / 4 == 1.0),
+    aes(label = most_memorable_characteristics),
+    check_overlap = TRUE,
+    vjust = &quot;top&quot;, hjust = &quot;left&quot;
+  ) +
+  geom_abline(
+    slope = 1,
+    size = 1,
+    color = &quot;grey40&quot;,
+    lty = 2
+  ) +
+  scale_x_continuous(limits = c(1, 4.5)) +
+  scale_y_continuous(limits = c(1, 4)) +
+  labs(
+    title = &quot;Predicting the bar rating using Poission from Memorable Characteristics&quot;,
+    x = &quot;Actual&quot;, y = &quot;Predicted&quot;
+  )</code></pre>
+<p><img src="figure/2022_01_18.Rmd/unnamed-chunk-5-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>augment(pois_fit,
+  new_data = choco_test,
+  type.predict = &quot;response&quot;
+) %&gt;%
+  rmse(truth = rating, estimate = .pred / 4)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"rmse","2":"standard","3":"0.3755852"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>As a prediction model, the poisson glm by itself isn’t great. Even so, we can look at the model coefficients to get a feel for the working of the model and comparing it with our own understanding.</p>
+<pre class="r"><code>pois_fit %&gt;%
+  tidy() %&gt;%
+  group_by(estimate &gt; 0) %&gt;%
+  slice_max(abs(estimate), n = 10) %&gt;%
+  ungroup() %&gt;%
+  filter(term != &quot;(Intercept)&quot;) %&gt;%
+  mutate(
+    term = str_remove(term, &quot;tf_most_memorable_characteristics_&quot;),
+    term = str_remove(term, &quot;TRUE&quot;)
+  ) %&gt;%
+  ggplot(aes(estimate,
+    fct_reorder(term, estimate),
+    fill = estimate &gt; 0
+  )) +
+  geom_col() +
+  scale_fill_discrete(labels = c(&quot;low ratings&quot;, &quot;high ratings&quot;)) +
+  labs(
+    y = NULL, fill = &quot;More from...&quot;,
+    caption = caption,
+    title = &quot;Memorable Characteristics of Chocolate Bars&quot;,
+    subtitle = &quot;The influence of words on sample ratings, Poisson Model&quot;
+  ) +
+  theme(panel.grid.major.y = element_blank())</code></pre>
+<p><img src="figure/2022_01_18.Rmd/unnamed-chunk-7-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p><a href="https://juliasilge.com/blog/chocolate-ratings/">Julia Silge</a> often works with svm models in her learning blog. Let’s give it a go here, but with my slightly different recipe:</p>
+<pre class="r"><code>svm_spec &lt;-
+  svm_linear() %&gt;%
+  set_mode(&quot;regression&quot;)</code></pre>
+<pre class="r"><code>svm_wf &lt;- workflow() %&gt;%
+  add_recipe(choc_recipe) %&gt;%
+  add_model(svm_spec)
+
+svm_fit &lt;- svm_wf %&gt;% fit(choco_train)</code></pre>
+<pre class="r"><code>augment(svm_fit,
+  new_data = choco_test,
+  type.predict = &quot;response&quot;
+) %&gt;%
+  rmse(truth = rating, estimate = .pred / 4)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"rmse","2":"standard","3":"0.3760941"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Ok, so the error rate with the svm is more or less the same.</p>
+<p>Let’s have a look at the words most influential on ratings in the svm model coefficients:</p>
+<pre class="r"><code>svm_fit %&gt;%
+  tidy() %&gt;%
+  group_by(estimate &gt; 0) %&gt;%
+  slice_max(abs(estimate), n = 10) %&gt;%
+  ungroup() %&gt;%
+  filter(term != &quot;Bias&quot;) %&gt;%
+  mutate(
+    term = str_remove(term, &quot;tf_most_memorable_characteristics_&quot;),
+    term = str_remove(term, &quot;TRUE&quot;)
+  ) %&gt;%
+  ggplot(aes(estimate,
+    fct_reorder(term, estimate),
+    fill = estimate &gt; 0
+  )) +
+  geom_col() +
+  scale_fill_discrete(labels = c(&quot;low ratings&quot;, &quot;high ratings&quot;)) +
+  labs(
+    y = NULL, fill = &quot;More from...&quot;,
+    caption = caption,
+    title = &quot;Memorable Characteristics of Chocolate Bars&quot;,
+    subtitle = &quot;The influence of words on sample ratings, SVM Model&quot;
+  ) +
+  theme(panel.grid.major.y = element_blank())</code></pre>
+<p><img src="figure/2022_01_18.Rmd/unnamed-chunk-11-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>It’s interesting to me how different the results are between the two algorithms.</p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/leeolney3/status/1483378919957008387&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> week 3, data from Flavors of Cacao by way of Georgios and Kelsey. This week I learned inline boxplot from <a href="https://t.co/RDFvUZo8FV">https://t.co/RDFvUZo8FV</a><a href="https://twitter.com/hashtag/Rstats?src=hash&amp;ref_src=twsrc%5Etfw">#Rstats</a> code: <a href="https://t.co/uHhvaEwsMq">https://t.co/uHhvaEwsMq</a> <a href="https://t.co/t9l9kW6SDW">pic.twitter.com/t9l9kW6SDW</a></p>&mdash; Lee Olney (@leeolney3) <a href="https://twitter.com/leeolney3/status/1483378919957008387?ref_src=twsrc%5Etfw">January 18, 2022</a></blockquote>
+
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/danoehm/status/1483698034748039169&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> week 3: The best 🍫 is...<br><br>Rich, creamy, fruity, and spicy!<br><br>I fit a simple model to see which words were more or less associated with higher ratings. I focused on the 20 most prevalent words<a href="https://twitter.com/hashtag/RStats?src=hash&amp;ref_src=twsrc%5Etfw">#RStats</a> <a href="https://twitter.com/hashtag/ggplot?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://t.co/XVW1x5mvsp">pic.twitter.com/XVW1x5mvsp</a></p>&mdash; Dan Oehm 🌲⛰️ (@danoehm) <a href="https://twitter.com/danoehm/status/1483698034748039169?ref_src=twsrc%5Etfw">January 19, 2022</a></blockquote>
+
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/quite_grey/status/1483796675181350912&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Let me take your tastebuds on a journey. We begin at Why Bother and ease through to our destination, WTF.<br><br>Code: <a href="https://t.co/MzGi93Y56L">https://t.co/MzGi93Y56L</a><a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> <a href="https://twitter.com/hashtag/RStats?src=hash&amp;ref_src=twsrc%5Etfw">#RStats</a> <a href="https://twitter.com/hashtag/DataViz?src=hash&amp;ref_src=twsrc%5Etfw">#DataViz</a> <a href="https://twitter.com/hashtag/Chocolate?src=hash&amp;ref_src=twsrc%5Etfw">#Chocolate</a> <a href="https://t.co/17xSO0wHkP">pic.twitter.com/17xSO0wHkP</a></p>&mdash; not quite my grey (@quite_grey) <a href="https://twitter.com/quite_grey/status/1483796675181350912?ref_src=twsrc%5Etfw">January 19, 2022</a></blockquote>
+
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.2 (2021-11-01)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] grumanlib_0.1.0.9999 poissonreg_0.1.1     textrecipes_0.4.1   
+ [4] tidytext_0.3.2       yardstick_0.0.9      workflowsets_0.1.0  
+ [7] workflows_0.2.4      tune_0.1.6           rsample_0.1.1       
+[10] recipes_0.1.17       parsnip_0.1.7        modeldata_0.1.1     
+[13] infer_1.0.0          dials_0.0.10         scales_1.1.1        
+[16] broom_0.7.11         tidymodels_0.1.4     forcats_0.5.1       
+[19] stringr_1.4.0        dplyr_1.0.7          purrr_0.3.4         
+[22] readr_2.1.1          tidyr_1.1.4          tibble_3.1.6        
+[25] ggplot2_3.3.5        tidyverse_1.3.1      workflowr_1.7.0     
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1            backports_1.4.1         systemfonts_1.0.3      
+  [4] selectr_0.4-2           plyr_1.8.6              repr_1.1.4             
+  [7] tidytuesdayR_1.0.1.9000 splines_4.1.2           listenv_0.8.0          
+ [10] SnowballC_0.7.0         usethis_2.1.5           digest_0.6.29          
+ [13] foreach_1.5.1           htmltools_0.5.2         viridis_0.6.2          
+ [16] fansi_1.0.2             magrittr_2.0.1          memoise_2.0.1          
+ [19] tzdb_0.2.0              globals_0.14.0          modelr_0.1.8           
+ [22] gower_0.2.2             vroom_1.5.7             R.utils_2.11.0         
+ [25] hardhat_0.1.6           colorspace_2.0-2        skimr_2.1.3            
+ [28] rvest_1.0.2             textshaping_0.3.6       haven_2.4.3            
+ [31] xfun_0.29               callr_3.7.0             crayon_1.4.2           
+ [34] jsonlite_1.7.3          survival_3.2-13         iterators_1.0.13       
+ [37] glue_1.6.0              gtable_0.3.0            ipred_0.9-12           
+ [40] R.cache_0.15.0          tweetrmd_0.0.9          future.apply_1.8.1     
+ [43] GGally_2.1.2            DBI_1.1.2               Rcpp_1.0.8             
+ [46] viridisLite_0.4.0       bit_4.0.4               GPfit_1.0-8            
+ [49] lava_1.6.10             prodlim_2019.11.13      httr_1.4.2             
+ [52] RColorBrewer_1.1-2      ellipsis_0.3.2          farver_2.1.0           
+ [55] reshape_0.8.8           R.methodsS3_1.8.1       pkgconfig_2.0.3        
+ [58] nnet_7.3-16             sass_0.4.0              dbplyr_2.1.1           
+ [61] utf8_1.2.2              here_1.0.1              labeling_0.4.2         
+ [64] tidyselect_1.1.1        rlang_0.4.12            DiceDesign_1.9         
+ [67] later_1.3.0             munsell_0.5.0           cellranger_1.1.0       
+ [70] tools_4.1.2             cachem_1.0.6            cli_3.1.0              
+ [73] generics_0.1.1          evaluate_0.14           fastmap_1.1.0          
+ [76] yaml_2.2.1              ragg_1.2.1              bit64_4.0.5            
+ [79] processx_3.5.2          knitr_1.37              fs_1.5.2               
+ [82] future_1.23.0           whisker_0.4             R.oo_1.24.0            
+ [85] xml2_1.3.3              tokenizers_0.2.1        compiler_4.1.2         
+ [88] rstudioapi_0.13         curl_4.3.2              reprex_2.0.1           
+ [91] lhs_1.1.3               bslib_0.3.1             stringi_1.7.6          
+ [94] highr_0.9               ps_1.6.0                lattice_0.20-45        
+ [97] Matrix_1.3-4            styler_1.6.2            conflicted_1.1.0       
+[100] vctrs_0.3.8             pillar_1.6.4            lifecycle_1.0.1        
+[103] furrr_0.2.3             LiblineaR_2.10-12       jquerylib_0.1.4        
+[106] httpuv_1.6.5            R6_2.5.1                promises_1.2.0.1       
+[109] gridExtra_2.3           janeaustenr_0.1.5       parallelly_1.30.0      
+[112] codetools_0.2-18        MASS_7.3-54             assertthat_0.2.1       
+[115] rprojroot_2.0.2         withr_2.4.3             parallel_4.1.2         
+[118] hms_1.1.1               grid_4.1.2              rpart_4.1-15           
+[121] timeDate_3043.102       class_7.3-19            rmarkdown_2.11         
+[124] git2r_0.29.0            getPass_0.2-2           pROC_1.18.0            
+[127] base64enc_0.1-3         lubridate_1.8.0        </code></pre>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNob2NvbGF0ZSBiYXIgcmF0aW5ncyINCmF1dGhvcjogIkppbSBHcnVtYW4iDQpkYXRlOiAiSmFudWFyeSAxNywgMjAyMiINCm91dHB1dDoNCiAgd29ya2Zsb3dyOjp3Zmxvd19odG1sOg0KICAgIHRvYzogbm8NCiAgICBjb2RlX2ZvbGRpbmc6IGhpZGUNCiAgICBjb2RlX2Rvd25sb2FkOiB0cnVlDQogICAgZGZfcHJpbnQ6IHBhZ2VkDQplZGl0b3Jfb3B0aW9uczoNCiAgY2h1bmtfb3V0cHV0X3R5cGU6IGNvbnNvbGUNCi0tLQ0KDQpUaGlzIHdlZWsncyAjVGlkeVR1ZXNkYXkgZGF0YXNldCBpcyBwcm92aWRlZCBieSBCcmFuZHkgQnJlbGluc2tpIG9mIHRoZSBNYW5oYXR0YW4gQ2hvY29sYXRlIFNvY2lldHkgYXQgdGhlIHdlYiBzaXRlIFtGbGF2b3JzIG9mIENhY2FvXShodHRwOi8vZmxhdm9yc29mY2FjYW8uY29tL2Nob2NvbGF0ZV9kYXRhYmFzZS5odG1sKSBhbmQgYWxzbyBhdCBbV2lsbCBDYW5uaWZvcmQncyBwYWdlIG9uIGthZ2dsZV0oaHR0cHM6Ly93d3cua2FnZ2xlLmNvbS93aWxsY2Fubmlmb3JkL2Nob2NvbGF0ZS1iYXItcmF0aW5ncy1leHRlbnNpdmUtZWRhKS4NCg0KVGhlIHdlYiBzaXRlIG5vdGVzOiANCg0KPiBGcm9tIDIwMDctMjAxNiB0aGUgTWFuaGF0dGFuIENob2NvbGF0ZSBTb2NpZXR5IGhhcyBpbXByZXNzaXZlbHkgaGVsZCBvdmVyIDY1IGZvY3VzZWQgdGFzdGluZ3MgdGhhdCBleGFtaW5lIHdoYXQgaXMgcmVzcG9uc2libGUgZm9yIHBhcnRpY3VsYXIgY2hhcmFjdGVyaXN0aWNzIGluIGNob2NvbGF0ZSB3aGV0aGVyIHRoZXkgYXJlIGR1ZSB0byBzcGVjaWZpYyBncm93aW5nIHJlZ2lvbnMsIGNhY2FvIGdlbmV0aWNzLCBtYW51ZmFjdHVyaW5nIG9yIHNvbWUgb3RoZXIgY2F1c2UuICBUaGVpciBhYmlsaXR5IHRvIG1lZXQgd2l0aCBhbmQgc3VwcG9ydCBjaG9jb2xhdGUgbWFrZXJzLCBhdXRob3JzIGFuZCBleHBlcnRzIGluIHRoZXNlIGludGltYXRlIHRhc3RpbmdzIGhhcyBpbnNwaXJlZCB1cyB0byBjb250aW51ZSBvdXIgbWlzc2lvbiBhbmQgbWFrZXMgdXMgYSB1bmlxdWUgbWVtYmVyIGluIHRoZSBjaG9jb2xhdGUgY29tbXVuaXR5Lg0KDQpgYGB7ciBhbm5vdW5jZW1lbnRfdHdlZXR9DQp0d2VldHJtZDo6aW5jbHVkZV90d2VldCgiaHR0cHM6Ly90d2l0dGVyLmNvbS90aG9tYXNfbW9jay9zdGF0dXMvMTQ4MzIzNjQ3NTM3MDEwMjc4NyIpDQpgYGANCg0KTGV0J3MgYnVpbGQgdXAgc29tZSBleGFtcGxlcyBkYXRhIHZpc3VhbHMgdG8gc2hvd2Nhc2UgZm9yIG91cnNlbHZlcyBoZXJlLiBGaXJzdCwgbG9hZCB1cCBwYWNrYWdlczoNCg0KYGBge3Igc2V0dXAsIG1lc3NhZ2U9RkFMU0V9DQoNCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyh7DQpsaWJyYXJ5KHRpZHl2ZXJzZSkgIyBjbGVhbiBhbmQgdHJhbnNmb3JtIHJlY3Rhbmd1bGFyIGRhdGENCmxpYnJhcnkodGlkeW1vZGVscykNCmxpYnJhcnkodGlkeXRleHQpDQpsaWJyYXJ5KHRleHRyZWNpcGVzKQ0KbGlicmFyeShwb2lzc29ucmVnKQ0KbGlicmFyeShncnVtYW5saWIpICMgbXkgcGxvdCB0aGVtZQ0KfSkNCg0Kc291cmNlKGhlcmU6OmhlcmUoImNvZGUiLCJfY29tbW9uLlIiKSwNCiAgICAgICB2ZXJib3NlID0gRkFMU0UsDQogICAgICAgbG9jYWwgPSBrbml0cjo6a25pdF9nbG9iYWwoKSkNCg0KZ2dwbG90Mjo6dGhlbWVfc2V0KHRoZW1lX2ppbShiYXNlX3NpemUgPSAxMikpDQoNCmBgYA0KDQpMZXRzIGxvYWQgdXAgdGhlIGRhdGENCg0KYGBge3IgbG9hZF9kYXRhfQ0KY2hvY29sYXRlIDwtIHRpZHl0dWVzZGF5Ujo6dHRfbG9hZCgiMjAyMi0wMS0xOCIpJGNob2NvbGF0ZSAlPiUgDQogIG11dGF0ZShjb2NvYSA9IHBhcnNlX251bWJlcihjb2NvYV9wZXJjZW50KSwNCiAgICAgICAgIHJldmlld19kYXRlID0gbHVicmlkYXRlOjp5bWQocGFzdGUocmV2aWV3X2RhdGUsIDEsIDEsIHNlcCA9ICItIikpKSAlPiUgDQogIHNlcGFyYXRlKGluZ3JlZGllbnRzLCANCiAgICAgICAgICAgaW50byA9IGMoImluZ3JlZGllbnRfY29tcGxleGl0eSIsICJpbmdyZWRpZW50cyIpLA0KICAgICAgICAgICBjb252ZXJ0ID0gVFJVRSwNCiAgICAgICAgICAgc2VwID0gIi0iKSAlPiUgDQogIG11dGF0ZShCZWFucyA9IHN0cl9kZXRlY3QoaW5ncmVkaWVudHMsICJCIiksDQogICAgICAgICBTdWdhciA9IHN0cl9kZXRlY3QoaW5ncmVkaWVudHMsICJTIiksDQogICAgICAgICBTd2VldGVuZXIgPSBzdHJfZGV0ZWN0KGluZ3JlZGllbnRzLCAiUyoiKSwNCiAgICAgICAgIENvY29hQnV0dGVyID0gc3RyX2RldGVjdChpbmdyZWRpZW50cywgIkMiKSwNCiAgICAgICAgIExlY2l0aGluID0gc3RyX2RldGVjdChpbmdyZWRpZW50cywgIkwiKSwNCiAgICAgICAgIFZhbmlsbGEgPSBzdHJfZGV0ZWN0KGluZ3JlZGllbnRzLCAiViIpLA0KICAgICAgICAgU2FsdCA9IHN0cl9kZXRlY3QoaW5ncmVkaWVudHMsICJTYSIpLA0KICAgICAgICAgKSAgICU+JSANCiAgcmVwbGFjZV9uYShsaXN0KEJlYW5zID0gVFJVRSwNCiAgICAgICAgICAgICAgICAgIFN1Z2FyID0gRkFMU0UsDQogICAgICAgICAgICAgICAgICBTd2VldGVuZXIgPSBGQUxTRSwNCiAgICAgICAgICAgICAgICAgIENvY29hQnV0dGVyID0gRkFMU0UsDQogICAgICAgICAgICAgICAgICBMZWNpdGhpbiA9IEZBTFNFLA0KICAgICAgICAgICAgICAgICAgVmFuaWxsYSA9IEZBTFNFLA0KICAgICAgICAgICAgICAgICAgU2FsdCA9IEZBTFNFKSkgJT4lIA0KICBzZWxlY3QoY291bnRyeV9vZl9iZWFuX29yaWdpbiwNCiAgICAgICAgIG1vc3RfbWVtb3JhYmxlX2NoYXJhY3RlcmlzdGljcywNCiAgICAgICAgIHJldmlld19kYXRlLA0KICAgICAgICAgQmVhbnMsIA0KICAgICAgICAgU3VnYXIsDQogICAgICAgICBTd2VldGVuZXIsDQogICAgICAgICBDb2NvYUJ1dHRlciwNCiAgICAgICAgIExlY2l0aGluLA0KICAgICAgICAgVmFuaWxsYSwNCiAgICAgICAgIFNhbHQsDQogICAgICAgICByYXRpbmcsDQogICAgICAgICBjb2NvYSkNCg0KY2FwdGlvbiA9ICJTb3VyY2U6IE1hbmhhdHRhbiBDaG9jb2xhdGUgU29jaWV0eSBGbGF2b3JzIG9mIENhY2FvIg0KYGBgDQoNCkEgcXVpY2sgb3ZlcnZpZXcgb2YgdGhlIHR5cGVzIG9mIGRhdGEgaW4gdGhlIGRhdGFmcmFtZToNCg0KYGBge3Igc2tpbXJ9DQpza2ltcjo6c2tpbShjaG9jb2xhdGUpDQpgYGANCg0KVGhlIHBhaXJ3aXNlIGNvcnJlbGF0aW9ucyBhbmQgaGlzdG9ncmFtcyBvZiB0aGUgbnVtZXJpYyBmZWF0dXJlcywgY29sb3JlZCBieSBpbnRlcnZhbHMgb2YgcmF0aW5ncyBzY29yZXM6DQoNCmBgYHtyIGdnYWxseSwgZmlnLmFzcD0xfQ0KY2hvY29sYXRlICU+JQ0KICBzZWxlY3QoY29jb2EsDQogICAgICAgICByZXZpZXdfZGF0ZSwNCiAgICAgICAgIHJhdGluZykgJT4lDQogIEdHYWxseTo6Z2dwYWlycygNCiAgICBtYXBwaW5nID0gYWVzKGNvbG9yID0gY3V0X2ludGVydmFsKHJhdGluZywgNSkpLA0KICAgIHByb2dyZXNzID0gRkFMU0UsDQogICAgZGlhZyA9IGxpc3QoY29udGludW91cyA9IEdHYWxseTo6d3JhcCgiYmFyRGlhZyIsIGJpbnMgPSAyMCkpDQogICkgKw0KICB0aGVtZV9idygpICsNCiAgdGhlbWUocGFuZWwuZ3JpZCA9IGVsZW1lbnRfYmxhbmsoKSkgKw0KICBsYWJzKGNhcHRpb24gPSBjYXB0aW9uKSANCmBgYA0KDQpUaGUgY2hvY29sYXRlIGJhciByYXRpbmdzIGluIHRoaXMgc2V0IHJhbmdlIGZyb20gMSB0byA0IGFuZCB0aGUgY29jb2EgcHJvcG9ydGlvbiByYW5nZXMgZnJvbSA0MiB0byAxMDAlLiBJJ2QgbGlrZSB0byBpbnZlc3RpZ2F0ZSBob3cgYmVzdCB0byBoYW5kbGUgdGhlIGJvdW5kZWQgcG9zaXRpdmUgcmFuZ2Ugb2YgcmF0aW5ncyB2YWx1ZXMsIGFuZCB3aGF0IGNvbnRyaWJ1dGlvbiBpcyBpbmZlcnJlZCBieSBlYWNoIG1lbW9yYWJsZSBjaGFyYWN0ZXJpc3RpYy4NCg0KV2hhdCBhcmUgdGhlIG1vc3QgY29tbW9uIHdvcmRzIHVzZWQgdG8gZGVzY3JpYmUgdGhlIG1vc3QgbWVtb3JhYmxlIGNoYXJhY3RlcmlzdGljcyBvZiBlYWNoIGNob2NvbGF0ZSBzYW1wbGU/DQoNCmBgYHtyLCBmaWcuYXNwPTF9DQpjaG9jb2xhdGUgJT4lDQogIHVubmVzdF90b2tlbnMob3V0cHV0ID0gd29yZCwNCiAgICAgICAgICAgICAgICBpbnB1dCA9IG1vc3RfbWVtb3JhYmxlX2NoYXJhY3RlcmlzdGljcywNCiAgICAgICAgICAgICAgICB0b2tlbiA9ICJyZWdleCIsDQogICAgICAgICAgICAgICAgcGF0dGVybiA9ICIsIikgJT4lDQogIG11dGF0ZSh3b3JkID0gc3RyX3NxdWlzaCh3b3JkKSkgJT4lIA0KICBncm91cF9ieSh3b3JkKSAlPiUNCiAgc3VtbWFyaXNlKA0KICAgIG4gPSBuKCksDQogICAgcmF0aW5nID0gbWVhbihyYXRpbmcpDQogICkgJT4lDQogIGdncGxvdChhZXMobiwgcmF0aW5nKSkgKw0KICBnZW9tX2hsaW5lKA0KICAgIHlpbnRlcmNlcHQgPSBtZWFuKGNob2NvbGF0ZSRyYXRpbmcpLCBsdHkgPSAyLA0KICAgIGNvbG9yID0gImdyYXk1MCIsIHNpemUgPSAxLjUNCiAgKSArDQogIGdlb21faml0dGVyKCBhbHBoYSA9IDAuNykgKw0KICBnZW9tX3RleHQoYWVzKGxhYmVsID0gd29yZCksDQogICAgY2hlY2tfb3ZlcmxhcCA9IFRSVUUsIA0KICAgIHZqdXN0ID0gInRvcCIsIGhqdXN0ID0gImxlZnQiDQogICkgKw0KICBzY2FsZV94X2xvZzEwKCkgKw0KICBsYWJzKGNhcHRpb24gPSBjYXB0aW9uLA0KICAgICAgIHRpdGxlID0gIk1lbW9yYWJsZSBjaGFyYWN0ZXJpc3RpY3Mgb2YgY2hvY29sYXRlIGJhcnMiLA0KICAgICAgIHN1YnRpdGxlID0gIlJldmlld2VyIFJhdGluZ3MsIG1lYW4gb2YgYWxsIHNob3duIGFzIGRhc2hlZCBsaW5lIiwgeSA9IE5VTEwsIHggPSAiQ291bnQgb2YgbWVtb3JhYmxlIGNoYXJhY3RlcmlzdGljIikgKw0KICBncnVtYW5saWI6OnRoZW1lX2ppbSgpDQoNCmBgYA0KDQpCdWlsZCBhIGNvdXBsZSBvZiBtb2RlbHMgdG8gcHJlZGljdCBob3cgdGhlIHJhdGluZyBpcyBpbmZsdWVuY2VkIGJ5IG1lbW9yYWJsZSBjaGFyYWN0ZXJpc3RpY3MNCg0KYGBge3J9DQpjaG9jb2xhdGUgPC0gY2hvY29sYXRlICU+JSANCiAgbXV0YXRlKGludGVnZXJfcmF0aW5nID0gYXMuaW50ZWdlcihyYXRpbmcgKiA0KSkNCg0Kc2V0LnNlZWQoMTIzKQ0KY2hvY29fc3BsaXQgPC0gaW5pdGlhbF9zcGxpdChjaG9jb2xhdGUsIHN0cmF0YSA9IHJhdGluZykNCmNob2NvX3RyYWluIDwtIHRyYWluaW5nKGNob2NvX3NwbGl0KQ0KY2hvY29fdGVzdCA8LSB0ZXN0aW5nKGNob2NvX3NwbGl0KQ0KDQpjaG9jX3JlY2lwZSA8LQ0KICByZWNpcGUoaW50ZWdlcl9yYXRpbmcgfiBtb3N0X21lbW9yYWJsZV9jaGFyYWN0ZXJpc3RpY3MsIGRhdGEgPSBjaG9jb190cmFpbikgJT4lDQogIHN0ZXBfdG9rZW5pemUobW9zdF9tZW1vcmFibGVfY2hhcmFjdGVyaXN0aWNzKSAlPiUNCiAgc3RlcF90b2tlbmZpbHRlcihtb3N0X21lbW9yYWJsZV9jaGFyYWN0ZXJpc3RpY3MsIG1heF90b2tlbnMgPSAxMDApICU+JQ0KICBzdGVwX3RmKG1vc3RfbWVtb3JhYmxlX2NoYXJhY3RlcmlzdGljcywNCiAgICAgICAgICB3ZWlnaHRfc2NoZW1lID0gImJpbmFyeSIpICU+JQ0KICBzdGVwX2R1bW15KGFsbF9ub21pbmFsX3ByZWRpY3RvcnMoKSkgJT4lDQogIHN0ZXBfbm9ybWFsaXplKGFsbF9udW1lcmljX3ByZWRpY3RvcnMoKSkgJT4lDQogIHN0ZXBfenYoYWxsX3ByZWRpY3RvcnMoKSkNCg0KYGBgDQoNCkZvciB0aGUgYm91bmRlZCwgcG9zaXRpdmUgaW50ZWdlciBkZXBlbmRlbnQgdmFyaWFibGUgcmF0aW5nLCBsZXQncyB1c2UgdGhlIHBvaXNzb24gcmVncmVzc2lvbiBlbmdpbmUgZnJvbSB0aGUgZ2VuZXJhbCBsaW5lYXIgbW9kZWwuDQoNCmBgYHtyfQ0KcG9pc19zcGVjIDwtIHBvaXNzb25fcmVnKCkgJT4lIA0KICBzZXRfbW9kZSgicmVncmVzc2lvbiIpICU+JSANCiAgc2V0X2VuZ2luZSgiZ2xtIikNCg0KYGBgDQoNCmBgYHtyfQ0KDQpwb2lzX3dmIDwtIHdvcmtmbG93KCkgJT4lDQogIGFkZF9yZWNpcGUoY2hvY19yZWNpcGUpICU+JQ0KICBhZGRfbW9kZWwocG9pc19zcGVjKQ0KDQpwb2lzX2ZpdCA8LSBwb2lzX3dmICU+JSBmaXQoY2hvY29fdHJhaW4pDQoNCmBgYA0KDQpJbiB0aGUgdGVzdCBzZXQNCg0KYGBge3J9DQphdWdtZW50KHBvaXNfZml0LCANCiAgICAgICAgbmV3X2RhdGEgPSBjaG9jb2xhdGUsIA0KICAgICAgICB0eXBlLnByZWRpY3QgPSAicmVzcG9uc2UiKSAlPiUgDQogIGdncGxvdChhZXMocmF0aW5nLCAucHJlZC80KSkgKw0KICBnZW9tX3BvaW50KGFscGhhID0gMC4xKSArDQogIGdlb21fdGV4dChkYXRhID0gLiAlPiUgc2xpY2VfbWF4KC5wcmVkLCBuID0gNSksDQogICAgYWVzKGxhYmVsID0gbW9zdF9tZW1vcmFibGVfY2hhcmFjdGVyaXN0aWNzKSwNCiAgICBjaGVja19vdmVybGFwID0gVFJVRSwgDQogICAgdmp1c3QgPSAidG9wIiwgaGp1c3QgPSAibGVmdCINCiAgKSArDQogIGdlb21fdGV4dChkYXRhID0gLiAlPiUgc2xpY2VfbWluKC5wcmVkLCBuID0gNSksDQogICAgYWVzKGxhYmVsID0gbW9zdF9tZW1vcmFibGVfY2hhcmFjdGVyaXN0aWNzKSwNCiAgICBjaGVja19vdmVybGFwID0gVFJVRSwgDQogICAgdmp1c3QgPSAidG9wIiwgaGp1c3QgPSAibGVmdCINCiAgKSArDQogIGdlb21fdGV4dChkYXRhID0gLiAlPiUgZmlsdGVyKGludGVnZXJfcmF0aW5nLzQgPT0gMS4wKSwNCiAgICBhZXMobGFiZWwgPSBtb3N0X21lbW9yYWJsZV9jaGFyYWN0ZXJpc3RpY3MpLA0KICAgIGNoZWNrX292ZXJsYXAgPSBUUlVFLCANCiAgICB2anVzdCA9ICJ0b3AiLCBoanVzdCA9ICJsZWZ0Ig0KICApICsNCiAgZ2VvbV9hYmxpbmUoc2xvcGUgPSAxLCANCiAgICAgICAgICAgICAgc2l6ZSA9IDEsIA0KICAgICAgICAgICAgICBjb2xvciA9ICJncmV5NDAiLA0KICAgICAgICAgICAgICBsdHkgPSAyKSArDQogIHNjYWxlX3hfY29udGludW91cyhsaW1pdHMgPSBjKDEsNC41KSkgKw0KICBzY2FsZV95X2NvbnRpbnVvdXMobGltaXRzID0gYygxLDQpKSArDQogIGxhYnModGl0bGUgPSAiUHJlZGljdGluZyB0aGUgYmFyIHJhdGluZyB1c2luZyBQb2lzc2lvbiBmcm9tIE1lbW9yYWJsZSBDaGFyYWN0ZXJpc3RpY3MiLA0KICAgICAgIHggPSAiQWN0dWFsIiwgeSA9ICJQcmVkaWN0ZWQiKQ0KYGBgDQoNCg0KYGBge3J9DQphdWdtZW50KHBvaXNfZml0LCANCiAgICAgICAgbmV3X2RhdGEgPSBjaG9jb190ZXN0LCANCiAgICAgICAgdHlwZS5wcmVkaWN0ID0gInJlc3BvbnNlIikgJT4lIA0KICBybXNlKHRydXRoID0gcmF0aW5nLCBlc3RpbWF0ZSA9IC5wcmVkLzQpDQpgYGANCg0KQXMgYSBwcmVkaWN0aW9uIG1vZGVsLCB0aGUgcG9pc3NvbiBnbG0gYnkgaXRzZWxmIGlzbid0IGdyZWF0LiBFdmVuIHNvLCB3ZSBjYW4gbG9vayBhdCB0aGUgbW9kZWwgY29lZmZpY2llbnRzIHRvIGdldCBhIGZlZWwgZm9yIHRoZSB3b3JraW5nIG9mIHRoZSBtb2RlbCBhbmQgY29tcGFyaW5nIGl0IHdpdGggb3VyIG93biB1bmRlcnN0YW5kaW5nLg0KDQpgYGB7cn0NCnBvaXNfZml0ICU+JQ0KICB0aWR5KCkgJT4lDQogIGdyb3VwX2J5KGVzdGltYXRlID4gMCkgJT4lDQogIHNsaWNlX21heChhYnMoZXN0aW1hdGUpLCBuID0gMTApICU+JQ0KICB1bmdyb3VwKCkgJT4lDQogIGZpbHRlcih0ZXJtICE9ICIoSW50ZXJjZXB0KSIpICU+JSANCiAgbXV0YXRlKHRlcm0gPSBzdHJfcmVtb3ZlKHRlcm0sICJ0Zl9tb3N0X21lbW9yYWJsZV9jaGFyYWN0ZXJpc3RpY3NfIiksDQogICAgICAgICB0ZXJtID0gc3RyX3JlbW92ZSh0ZXJtLCAiVFJVRSIpKSAlPiUNCiAgZ2dwbG90KGFlcyhlc3RpbWF0ZSwgDQogICAgICAgICAgICAgZmN0X3Jlb3JkZXIodGVybSwgZXN0aW1hdGUpLCANCiAgICAgICAgICAgICBmaWxsID0gZXN0aW1hdGUgPiAwKSkgKw0KICBnZW9tX2NvbCgpICsNCiAgc2NhbGVfZmlsbF9kaXNjcmV0ZShsYWJlbHMgPSBjKCJsb3cgcmF0aW5ncyIsICJoaWdoIHJhdGluZ3MiKSkgKw0KICBsYWJzKHkgPSBOVUxMLCBmaWxsID0gIk1vcmUgZnJvbS4uLiIsDQogICAgICAgY2FwdGlvbiA9IGNhcHRpb24sDQogICAgICAgdGl0bGUgPSAiTWVtb3JhYmxlIENoYXJhY3RlcmlzdGljcyBvZiBDaG9jb2xhdGUgQmFycyIsDQogICAgICAgc3VidGl0bGUgPSAiVGhlIGluZmx1ZW5jZSBvZiB3b3JkcyBvbiBzYW1wbGUgcmF0aW5ncywgUG9pc3NvbiBNb2RlbCIpICsNCiAgdGhlbWUocGFuZWwuZ3JpZC5tYWpvci55ID0gZWxlbWVudF9ibGFuaygpKQ0KYGBgDQoNCltKdWxpYSBTaWxnZV0oaHR0cHM6Ly9qdWxpYXNpbGdlLmNvbS9ibG9nL2Nob2NvbGF0ZS1yYXRpbmdzLykgb2Z0ZW4gd29ya3Mgd2l0aCBzdm0gbW9kZWxzIGluIGhlciBsZWFybmluZyBibG9nLiBMZXQncyBnaXZlIGl0IGEgZ28gaGVyZSwgYnV0IHdpdGggbXkgc2xpZ2h0bHkgZGlmZmVyZW50IHJlY2lwZToNCg0KYGBge3J9DQpzdm1fc3BlYyA8LQ0KICBzdm1fbGluZWFyKCkgJT4lDQogIHNldF9tb2RlKCJyZWdyZXNzaW9uIikNCmBgYA0KDQpgYGB7cn0NCnN2bV93ZiA8LSB3b3JrZmxvdygpICU+JQ0KICBhZGRfcmVjaXBlKGNob2NfcmVjaXBlKSAlPiUNCiAgYWRkX21vZGVsKHN2bV9zcGVjKQ0KDQpzdm1fZml0IDwtIHN2bV93ZiAlPiUgZml0KGNob2NvX3RyYWluKQ0KYGBgDQoNCmBgYHtyfQ0KYXVnbWVudChzdm1fZml0LCANCiAgICAgICAgbmV3X2RhdGEgPSBjaG9jb190ZXN0LCANCiAgICAgICAgdHlwZS5wcmVkaWN0ID0gInJlc3BvbnNlIikgJT4lIA0KICBybXNlKHRydXRoID0gcmF0aW5nLCBlc3RpbWF0ZSA9IC5wcmVkLzQpDQpgYGANCg0KT2ssIHNvIHRoZSBlcnJvciByYXRlIHdpdGggdGhlIHN2bSBpcyBtb3JlIG9yIGxlc3MgdGhlIHNhbWUuDQoNCkxldCdzIGhhdmUgYSBsb29rIGF0IHRoZSB3b3JkcyBtb3N0IGluZmx1ZW50aWFsIG9uIHJhdGluZ3MgaW4gdGhlIHN2bSBtb2RlbCBjb2VmZmljaWVudHM6DQoNCmBgYHtyfQ0Kc3ZtX2ZpdCAlPiUNCiAgdGlkeSgpICU+JQ0KICBncm91cF9ieShlc3RpbWF0ZSA+IDApICU+JQ0KICBzbGljZV9tYXgoYWJzKGVzdGltYXRlKSwgbiA9IDEwKSAlPiUNCiAgdW5ncm91cCgpICU+JQ0KICBmaWx0ZXIodGVybSAhPSAiQmlhcyIpICU+JSANCiAgbXV0YXRlKHRlcm0gPSBzdHJfcmVtb3ZlKHRlcm0sICJ0Zl9tb3N0X21lbW9yYWJsZV9jaGFyYWN0ZXJpc3RpY3NfIiksDQogICAgICAgICB0ZXJtID0gc3RyX3JlbW92ZSh0ZXJtLCAiVFJVRSIpKSAlPiUNCiAgZ2dwbG90KGFlcyhlc3RpbWF0ZSwgDQogICAgICAgICAgICAgZmN0X3Jlb3JkZXIodGVybSwgZXN0aW1hdGUpLCANCiAgICAgICAgICAgICBmaWxsID0gZXN0aW1hdGUgPiAwKSkgKw0KICBnZW9tX2NvbCgpICsNCiAgc2NhbGVfZmlsbF9kaXNjcmV0ZShsYWJlbHMgPSBjKCJsb3cgcmF0aW5ncyIsICJoaWdoIHJhdGluZ3MiKSkgKw0KICBsYWJzKHkgPSBOVUxMLCBmaWxsID0gIk1vcmUgZnJvbS4uLiIsDQogICAgICAgY2FwdGlvbiA9IGNhcHRpb24sDQogICAgICAgdGl0bGUgPSAiTWVtb3JhYmxlIENoYXJhY3RlcmlzdGljcyBvZiBDaG9jb2xhdGUgQmFycyIsDQogICAgICAgc3VidGl0bGUgPSAiVGhlIGluZmx1ZW5jZSBvZiB3b3JkcyBvbiBzYW1wbGUgcmF0aW5ncywgU1ZNIE1vZGVsIikgKw0KICB0aGVtZShwYW5lbC5ncmlkLm1ham9yLnkgPSBlbGVtZW50X2JsYW5rKCkpDQpgYGANCg0KSXQncyBpbnRlcmVzdGluZyB0byBtZSBob3cgZGlmZmVyZW50IHRoZSByZXN1bHRzIGFyZSBiZXR3ZWVuIHRoZSB0d28gYWxnb3JpdGhtcy4NCg0KYGBge3J9DQp0d2VldHJtZDo6aW5jbHVkZV90d2VldCgiaHR0cHM6Ly90d2l0dGVyLmNvbS9sZWVvbG5leTMvc3RhdHVzLzE0ODMzNzg5MTk5NTcwMDgzODciKQ0KYGBgDQpgYGB7cn0NCnR3ZWV0cm1kOjppbmNsdWRlX3R3ZWV0KCJodHRwczovL3R3aXR0ZXIuY29tL2Rhbm9laG0vc3RhdHVzLzE0ODM2OTgwMzQ3NDgwMzkxNjkiKQ0KYGBgDQoNCg0KYGBge3J9DQp0d2VldHJtZDo6aW5jbHVkZV90d2VldCgiaHR0cHM6Ly90d2l0dGVyLmNvbS9xdWl0ZV9ncmV5L3N0YXR1cy8xNDgzNzk2Njc1MTgxMzUwOTEyIikNCmBgYA0K</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2022_01_18.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
