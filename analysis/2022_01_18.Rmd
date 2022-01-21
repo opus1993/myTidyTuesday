@@ -18,7 +18,7 @@ The web site notes:
 
 > From 2007-2016 the Manhattan Chocolate Society has impressively held over 65 focused tastings that examine what is responsible for particular characteristics in chocolate whether they are due to specific growing regions, cacao genetics, manufacturing or some other cause.  Their ability to meet with and support chocolate makers, authors and experts in these intimate tastings has inspired us to continue our mission and makes us a unique member in the chocolate community.
 
-```{r}
+```{r announcement_tweet}
 tweetrmd::include_tweet("https://twitter.com/thomas_mock/status/1483236475370102787")
 ```
 
@@ -35,10 +35,6 @@ library(poissonreg)
 library(grumanlib) # my plot theme
 })
 
-# remotes::install_github("AllanCameron/geomtextpath")
-
-library(geomtextpath)
-
 source(here::here("code","_common.R"),
        verbose = FALSE,
        local = knitr::knit_global())
@@ -49,7 +45,7 @@ ggplot2::theme_set(theme_jim(base_size = 12))
 
 Lets load up the data
 
-```{r}
+```{r load_data}
 chocolate <- tidytuesdayR::tt_load("2022-01-18")$chocolate %>% 
   mutate(cocoa = parse_number(cocoa_percent),
          review_date = lubridate::ymd(paste(review_date, 1, 1, sep = "-"))) %>% 
@@ -90,13 +86,13 @@ caption = "Source: Manhattan Chocolate Society Flavors of Cacao"
 
 A quick overview of the types of data in the dataframe:
 
-```{r}
+```{r skimr}
 skimr::skim(chocolate)
 ```
 
 The pairwise correlations and histograms of the numeric features, colored by intervals of ratings scores:
 
-```{r, fig.asp=1}
+```{r ggally, fig.asp=1}
 chocolate %>%
   select(cocoa,
          review_date,
