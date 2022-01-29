@@ -1,0 +1,264 @@
+---
+title: "Chocolate bar ratings"
+author: "Jim Gruman"
+date: "January 28, 2022"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+This week's #TidyTuesday dataset is on Board Games, provided by [Alyssa Goldberg](https://rpubs.com/thewiremonkey/476630).
+
+Let's build up some examples data visuals to showcase for ourselves here, and the make a machine learning model. I am going to follow Julia Silge's post, [here](https://juliasilge.com/blog/board-games/), as a startign point. First, load up packages:
+
+```{r setup, message=FALSE}
+
+suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(tidymodels)
+library(tidytext)
+library(textrecipes)
+library(finetune)
+library(vip)
+library(SHAPforxgboost)
+library(grumanlib) # my plot theme
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))
+
+```
+
+Lets load up the data
+
+```{r load_data}
+tt <- tidytuesdayR::tt_load("2022-01-25")
+
+ratings_joined <- tt$ratings %>% 
+  left_join(tt$details, by = "id") %>% 
+  select(name, average, matches("min|max"), boardgamecategory, boardgamemechanic) 
+
+caption = "Data from Kaggle via Board Games Geek"
+```
+
+We are going to focus on the adjusted `average` figure instead fo the `bayes_average` that applies an empirical bayes correction towards the group average for games with few observations, just as in baseball where a rookie pitcher should be reported with more of a group average than his personal stats.
+
+# Explore the data
+
+Our modeling goal is to predict ratings for board games based on the main characteristics like number of players and game category. How are the ratings distributed?
+
+```{r}
+ratings_joined %>%
+  ggplot(aes(average)) +
+  geom_histogram(bins = 50) +
+  labs(caption = caption)
+```
+
+Let's look at a couple of other possible numeric correlations:
+
+```{r ggally, fig.asp=1}
+ratings_joined %>%
+  select(average,
+         matches("min|max")) %>%
+  GGally::ggpairs(
+    mapping = aes(color = cut_interval(average, 5)),
+    progress = FALSE,
+    diag = list(continuous = GGally::wrap("barDiag", bins = 20))
+  ) +
+  theme_bw() +
+  theme(panel.grid = element_blank()) +
+  labs(caption = caption) 
+```
+
+
+Ratings here are bounded and always positive. This is a pretty sizeable rectangular dataset so let’s use an xgboost model. How is a characteristic like the minimum recommended age for the game related to the rating?
+
+```{r, fig.asp=1}
+ratings_joined %>%
+  filter(!is.na(minage)) %>%
+  mutate(minage = cut_number(minage, 4)) %>%
+  ggplot(aes(minage, average, fill = minage)) +
+  ggdist::stat_dots(
+    side = "top",
+    justification = -0.1,
+    show.legend = FALSE
+  ) +
+  geom_boxplot(
+    width = 0.1,
+    outlier.shape = NA,
+    show.legend = FALSE
+  ) +
+  labs(caption = caption)
+```
+
+This kind of relationship is what we hope our xgboost model can use.
+
+# Modeling
+
+Let’s start our modeling by setting up our “data budget.” We’ll subset down to only variables like minimum/maximum age and playing time, and stratify by our outcome average.
+
+```{r}
+set.seed(123)
+game_split <-
+  ratings_joined %>%
+  na.omit() %>%
+  initial_split(strata = average)
+
+game_train <- training(game_split)
+game_test <- testing(game_split)
+
+set.seed(234)
+game_folds <- vfold_cv(game_train, strata = average)
+
+```
+
+Next, let’s set up our feature engineering. Sometimes a dataset requires more care and custom feature engineering; the `tidymodels` ecosystem provides lots of fluent options for common use cases and then the ability to extend our framework for more specific needs while maintaining good statistical practice.
+
+```{r}
+split_category <- function(x) {
+  x %>%
+    str_split(", ") %>%
+    map(str_remove_all, "[:punct:]") %>%
+    map(str_squish) %>%
+    map(str_to_lower) %>%
+    map(str_replace_all, " ", "_")
+}
+
+game_rec <-
+  recipe(average ~ ., data = game_train) %>%
+  update_role(name, new_role = "id") %>%
+  step_tokenize(boardgamecategory, custom_token = split_category) %>%
+  step_tokenfilter(boardgamecategory, max_tokens = 30) %>%
+  step_tf(boardgamecategory) %>% 
+  step_tokenize(boardgamemechanic , custom_token = split_category) %>% 
+  step_tokenfilter(boardgamemechanic, max_tokens = 30) %>% 
+  step_tf(boardgamemechanic)
+
+```
+
+Now let’s create a tunable xgboost model specification, with only some of the most important hyperparameters tunable, and combine it with our preprocessing recipe in a workflow(). To achieve higher performance, we could try more careful and/or extensive choices for hyperparameter tuning.
+
+```{r}
+xgb_spec <-
+  boost_tree(
+    trees = tune(),
+    mtry = tune(),
+    min_n = tune(),
+    learn_rate = 0.005
+  ) %>%
+  set_engine("xgboost") %>%
+  set_mode("regression")
+
+xgb_wf <- workflow(game_rec, xgb_spec)
+
+```
+
+To speed up computation we will use a parallel backend.
+
+```{r parallel backend}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+
+```
+
+Now we can use `tune_race_anova()` to eliminate parameter combinations that are not doing well.
+
+```{r}
+
+set.seed(2022)
+
+xgb_game_rs <-
+  tune_race_anova(
+    xgb_wf,
+    game_folds,
+    grid = 20,
+    control = control_race(verbose_elim = TRUE)
+  )
+
+```
+
+# Evaluate Models
+
+We can visualize how the possible parameter combinations we tried did during the “race.” Notice how we saved time by not evaluating the parameter combinations that were clearly doing poorly on all the resamples; we only kept going with the good parameter combinations.
+
+```{r}
+plot_race(xgb_game_rs)
+
+```
+
+We ended up with three hyperparameter configurations in the end, all of which are pretty much the same.
+
+```{r}
+show_best(xgb_game_rs)
+```
+
+Let’s use last_fit() to fit one final time to the training data and evaluate one final time on the **testing** data.
+
+```{r}
+xgb_last <-
+  xgb_wf %>%
+  finalize_workflow(select_best(xgb_game_rs, "rmse")) %>%
+  last_fit(game_split)
+
+```
+
+An `xgboost` model is not directly interpretable but we have several options for understanding why the model makes the predictions it does. 
+
+Let’s start with model-based variable importance using the `vip` package.
+
+```{r, fig.asp=1}
+xgb_fit <- extract_fit_parsnip(xgb_last)
+vip(xgb_fit, geom = "point", num_features = 15)
+```
+
+The maximum playing time, roll/spin/move mechanics, and minimum age are the most important predictors driving the predicted game rating.
+
+We can also use a model-agnostic approach like Shapley Additive Explanations, where the average contributions of features are computed under different combinations or “coalitions” of feature orderings. The SHAPforxgboost package makes setting this up for an xgboost model particularly nice.
+
+We start by computing what we need for SHAP values, with the underlying xgboost engine fit and the predictors in a matrix format.
+
+```{r}
+game_shap <-
+  shap.prep(
+    xgb_model = extract_fit_engine(xgb_fit),
+    X_train = bake(prep(game_rec),
+      has_role("predictor"),
+      new_data = NULL,
+      composition = "matrix"
+    )
+  )
+```
+
+We can look at an overall summary:
+
+```{r, fig.asp=1}
+shap.plot.summary(game_shap)
+```
+
+Points to the right of zero increase the average rating, while points to the left decrease it. 
+
+Or we can create partial dependence plots for specific variables:
+
+```{r, fig.asp=1}
+shap.plot.dependence(
+  game_shap,
+  x = "minage",
+  color_feature = "tf_boardgamemechanic_roll_spin_and_move",
+  size0 = 1.2,
+  smooth = FALSE, add_hist = TRUE
+)
+```
+
+Learning this kind of complex, non-linear behavior is where xgboost shines.
+
+
