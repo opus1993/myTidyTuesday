@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2022-01-28" />
+
+<title>Chocolate bar ratings</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Chocolate bar ratings</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">January 28, 2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-01-28
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree231678be4152919204f3a542c44222f74f0d4adetargetblank231678ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/231678be4152919204f3a542c44222f74f0d4ade" target="_blank">231678b</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree231678be4152919204f3a542c44222f74f0d4adetargetblank231678ba" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/231678be4152919204f3a542c44222f74f0d4ade" target="_blank">231678b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-11-27/
+    Ignored:    data/2021-11-27glm_wf_final.rds
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/accountchurn.rds
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/advancedaccountchurn.rds
+    Ignored:    data/airbnbcatboost.rds
+    Ignored:    data/austinHomeValue.rds
+    Ignored:    data/austinHomeValue2.rds
+    Ignored:    data/australiaweather.rds
+    Ignored:    data/baseballHRxgboost.rds
+    Ignored:    data/baseballHRxgboost2.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/nber_rs.rmd
+    Ignored:    data/netflixTitles2.rds
+    Ignored:    data/pets.rds
+    Ignored:    data/pets2.rds
+    Ignored:    data/spotifyxgboost.rds
+    Ignored:    data/spotifyxgboostadvanced.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+    Ignored:    gce-key.json
+
+Untracked files:
+    Untracked:  code/YammerReach.R
+    Untracked:  code/work list batch targets.R
+
+Unstaged changes:
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2022_01_28.Rmd</code>) and HTML (<code>docs/2022_01_28.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/231678be4152919204f3a542c44222f74f0d4ade/analysis/2022_01_28.Rmd" target="_blank">231678b</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-01-28
+</td>
+<td>
+wflow_publish("analysis/2022_01_28.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>This week’s #TidyTuesday dataset is on Board Games, provided by <a href="https://rpubs.com/thewiremonkey/476630">Alyssa Goldberg</a>.</p>
+<p>Let’s build up some examples data visuals to showcase for ourselves here, and the make a machine learning model. I am going to follow Julia Silge’s post, <a href="https://juliasilge.com/blog/board-games/">here</a>, as a startign point. First, load up packages:</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(tidymodels)
+library(tidytext)
+library(textrecipes)
+library(finetune)
+library(vip)
+library(SHAPforxgboost)
+library(grumanlib) # my plot theme
+})
+
+source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(theme_jim(base_size = 12))</code></pre>
+<p>Lets load up the data</p>
+<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2022-01-25&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 2: `details.csv`
+    Downloading file 2 of 2: `ratings.csv`</code></pre>
+<pre class="r"><code>ratings_joined &lt;- tt$ratings %&gt;%
+  left_join(tt$details, by = &quot;id&quot;) %&gt;%
+  select(name, average, matches(&quot;min|max&quot;), boardgamecategory, boardgamemechanic)
+
+caption &lt;- &quot;Data from Kaggle via Board Games Geek&quot;</code></pre>
+<p>We are going to focus on the adjusted <code>average</code> figure instead fo the <code>bayes_average</code> that applies an empirical bayes correction towards the group average for games with few observations, just as in baseball where a rookie pitcher should be reported with more of a group average than his personal stats.</p>
+<div id="explore-the-data" class="section level1">
+<h1>Explore the data</h1>
+<p>Our modeling goal is to predict ratings for board games based on the main characteristics like number of players and game category. How are the ratings distributed?</p>
+<pre class="r"><code>ratings_joined %&gt;%
+  ggplot(aes(average)) +
+  geom_histogram(bins = 50) +
+  labs(caption = caption)</code></pre>
+<p><img src="figure/2022_01_28.Rmd/unnamed-chunk-1-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Let’s look at a couple of other possible numeric correlations:</p>
+<pre class="r"><code>ratings_joined %&gt;%
+  select(
+    average,
+    matches(&quot;min|max&quot;)
+  ) %&gt;%
+  GGally::ggpairs(
+    mapping = aes(color = cut_interval(average, 5)),
+    progress = FALSE,
+    diag = list(continuous = GGally::wrap(&quot;barDiag&quot;, bins = 20))
+  ) +
+  theme_bw() +
+  theme(panel.grid = element_blank()) +
+  labs(caption = caption)</code></pre>
+<p><img src="figure/2022_01_28.Rmd/ggally-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Ratings here are bounded and always positive. This is a pretty sizeable rectangular dataset so let’s use an xgboost model. How is a characteristic like the minimum recommended age for the game related to the rating?</p>
+<pre class="r"><code>ratings_joined %&gt;%
+  filter(!is.na(minage)) %&gt;%
+  mutate(minage = cut_number(minage, 4)) %&gt;%
+  ggplot(aes(minage, average, fill = minage)) +
+  ggdist::stat_dots(
+    side = &quot;top&quot;,
+    justification = -0.1,
+    show.legend = FALSE
+  ) +
+  geom_boxplot(
+    width = 0.1,
+    outlier.shape = NA,
+    show.legend = FALSE
+  ) +
+  labs(caption = caption)</code></pre>
+<p><img src="figure/2022_01_28.Rmd/unnamed-chunk-2-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>This kind of relationship is what we hope our xgboost model can use.</p>
+</div>
+<div id="modeling" class="section level1">
+<h1>Modeling</h1>
+<p>Let’s start our modeling by setting up our “data budget.” We’ll subset down to only variables like minimum/maximum age and playing time, and stratify by our outcome average.</p>
+<pre class="r"><code>set.seed(123)
+game_split &lt;-
+  ratings_joined %&gt;%
+  na.omit() %&gt;%
+  initial_split(strata = average)
+
+game_train &lt;- training(game_split)
+game_test &lt;- testing(game_split)
+
+set.seed(234)
+game_folds &lt;- vfold_cv(game_train, strata = average)</code></pre>
+<p>Next, let’s set up our feature engineering. Sometimes a dataset requires more care and custom feature engineering; the <code>tidymodels</code> ecosystem provides lots of fluent options for common use cases and then the ability to extend our framework for more specific needs while maintaining good statistical practice.</p>
+<pre class="r"><code>split_category &lt;- function(x) {
+  x %&gt;%
+    str_split(&quot;, &quot;) %&gt;%
+    map(str_remove_all, &quot;[:punct:]&quot;) %&gt;%
+    map(str_squish) %&gt;%
+    map(str_to_lower) %&gt;%
+    map(str_replace_all, &quot; &quot;, &quot;_&quot;)
+}
+
+game_rec &lt;-
+  recipe(average ~ ., data = game_train) %&gt;%
+  update_role(name, new_role = &quot;id&quot;) %&gt;%
+  step_tokenize(boardgamecategory, custom_token = split_category) %&gt;%
+  step_tokenfilter(boardgamecategory, max_tokens = 30) %&gt;%
+  step_tf(boardgamecategory) %&gt;%
+  step_tokenize(boardgamemechanic, custom_token = split_category) %&gt;%
+  step_tokenfilter(boardgamemechanic, max_tokens = 30) %&gt;%
+  step_tf(boardgamemechanic)</code></pre>
+<p>Now let’s create a tunable xgboost model specification, with only some of the most important hyperparameters tunable, and combine it with our preprocessing recipe in a workflow(). To achieve higher performance, we could try more careful and/or extensive choices for hyperparameter tuning.</p>
+<pre class="r"><code>xgb_spec &lt;-
+  boost_tree(
+    trees = tune(),
+    mtry = tune(),
+    min_n = tune(),
+    learn_rate = 0.005
+  ) %&gt;%
+  set_engine(&quot;xgboost&quot;) %&gt;%
+  set_mode(&quot;regression&quot;)
+
+xgb_wf &lt;- workflow(game_rec, xgb_spec)</code></pre>
+<p>To speed up computation we will use a parallel backend.</p>
+<pre class="r"><code>all_cores &lt;- parallelly::availableCores(omit = 1)
+all_cores</code></pre>
+<pre><code>system 
+    11 </code></pre>
+<pre class="r"><code>future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows</code></pre>
+<p>Now we can use <code>tune_race_anova()</code> to eliminate parameter combinations that are not doing well.</p>
+<pre class="r"><code>set.seed(2022)
+
+xgb_game_rs &lt;-
+  tune_race_anova(
+    xgb_wf,
+    game_folds,
+    grid = 20,
+    control = control_race(verbose_elim = TRUE)
+  )</code></pre>
+</div>
+<div id="evaluate-models" class="section level1">
+<h1>Evaluate Models</h1>
+<p>We can visualize how the possible parameter combinations we tried did during the “race.” Notice how we saved time by not evaluating the parameter combinations that were clearly doing poorly on all the resamples; we only kept going with the good parameter combinations.</p>
+<pre class="r"><code>plot_race(xgb_game_rs)</code></pre>
+<p><img src="figure/2022_01_28.Rmd/unnamed-chunk-7-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>We ended up with three hyperparameter configurations in the end, all of which are pretty much the same.</p>
+<pre class="r"><code>show_best(xgb_game_rs)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["mtry"],"name":[1],"type":["int"],"align":["right"]},{"label":["trees"],"name":[2],"type":["int"],"align":["right"]},{"label":["min_n"],"name":[3],"type":["int"],"align":["right"]},{"label":[".metric"],"name":[4],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[5],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[7],"type":["int"],"align":["right"]},{"label":["std_err"],"name":[8],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"33","2":"1761","3":"10","4":"rmse","5":"standard","6":"0.7077870","7":"10","8":"0.006201563","9":"Preprocessor1_Model10"},{"1":"43","2":"1848","3":"39","4":"rmse","5":"standard","6":"0.7080289","7":"10","8":"0.006042384","9":"Preprocessor1_Model14"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Let’s use last_fit() to fit one final time to the training data and evaluate one final time on the <strong>testing</strong> data.</p>
+<pre class="r"><code>xgb_last &lt;-
+  xgb_wf %&gt;%
+  finalize_workflow(select_best(xgb_game_rs, &quot;rmse&quot;)) %&gt;%
+  last_fit(game_split)</code></pre>
+<p>An <code>xgboost</code> model is not directly interpretable but we have several options for understanding why the model makes the predictions it does.</p>
+<p>Let’s start with model-based variable importance using the <code>vip</code> package.</p>
+<pre class="r"><code>xgb_fit &lt;- extract_fit_parsnip(xgb_last)
+vip(xgb_fit, geom = &quot;point&quot;, num_features = 15)</code></pre>
+<p><img src="figure/2022_01_28.Rmd/unnamed-chunk-10-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>The maximum playing time, roll/spin/move mechanics, and minimum age are the most important predictors driving the predicted game rating.</p>
+<p>We can also use a model-agnostic approach like Shapley Additive Explanations, where the average contributions of features are computed under different combinations or “coalitions” of feature orderings. The SHAPforxgboost package makes setting this up for an xgboost model particularly nice.</p>
+<p>We start by computing what we need for SHAP values, with the underlying xgboost engine fit and the predictors in a matrix format.</p>
+<pre class="r"><code>game_shap &lt;-
+  shap.prep(
+    xgb_model = extract_fit_engine(xgb_fit),
+    X_train = bake(prep(game_rec),
+      has_role(&quot;predictor&quot;),
+      new_data = NULL,
+      composition = &quot;matrix&quot;
+    )
+  )</code></pre>
+<p>We can look at an overall summary:</p>
+<pre class="r"><code>shap.plot.summary(game_shap)</code></pre>
+<p><img src="figure/2022_01_28.Rmd/unnamed-chunk-12-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Points to the right of zero increase the average rating, while points to the left decrease it.</p>
+<p>Or we can create partial dependence plots for specific variables:</p>
+<pre class="r"><code>shap.plot.dependence(
+  game_shap,
+  x = &quot;minage&quot;,
+  color_feature = &quot;tf_boardgamemechanic_roll_spin_and_move&quot;,
+  size0 = 1.2,
+  smooth = FALSE, add_hist = TRUE
+)</code></pre>
+<p><img src="figure/2022_01_28.Rmd/unnamed-chunk-13-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Learning this kind of complex, non-linear behavior is where xgboost shines.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.2 (2021-11-01)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] xgboost_1.5.0.2      vctrs_0.3.8          rlang_0.4.12        
+ [4] grumanlib_0.1.0.9999 SHAPforxgboost_0.1.1 vip_0.3.2           
+ [7] finetune_0.1.0       textrecipes_0.4.1    tidytext_0.3.2      
+[10] yardstick_0.0.9      workflowsets_0.1.0   workflows_0.2.4     
+[13] tune_0.1.6           rsample_0.1.1        recipes_0.1.17      
+[16] parsnip_0.1.7        modeldata_0.1.1      infer_1.0.0         
+[19] dials_0.0.10         scales_1.1.1         broom_0.7.11        
+[22] tidymodels_0.1.4     forcats_0.5.1        stringr_1.4.0       
+[25] dplyr_1.0.7          purrr_0.3.4          readr_2.1.1         
+[28] tidyr_1.1.4          tibble_3.1.6         ggplot2_3.3.5       
+[31] tidyverse_1.3.1      workflowr_1.7.0     
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2              R.utils_2.11.0          lme4_1.1-27.1          
+  [4] tidyselect_1.1.1        grid_4.1.2              pROC_1.18.0            
+  [7] munsell_0.5.0           codetools_0.2-18        ragg_1.2.1             
+ [10] miniUI_0.1.1.1          future_1.23.0           withr_2.4.3            
+ [13] colorspace_2.0-2        highr_0.9               knitr_1.37             
+ [16] rstudioapi_0.13         ggsignif_0.6.3          listenv_0.8.0          
+ [19] labeling_0.4.2          git2r_0.29.0            polyclip_1.10-0        
+ [22] bit64_4.0.5             DiceDesign_1.9          farver_2.1.0           
+ [25] rprojroot_2.0.2         parallelly_1.30.0       generics_0.1.1         
+ [28] ipred_0.9-12            xfun_0.29               R6_2.5.1               
+ [31] reshape_0.8.8           lhs_1.1.3               cachem_1.0.6           
+ [34] assertthat_0.2.1        promises_1.2.0.1        vroom_1.5.7            
+ [37] nnet_7.3-16             ggExtra_0.9             gtable_0.3.0           
+ [40] globals_0.14.0          processx_3.5.2          timeDate_3043.102      
+ [43] BBmisc_1.11             systemfonts_1.0.3       splines_4.1.2          
+ [46] rstatix_0.7.0           selectr_0.4-2           checkmate_2.0.0        
+ [49] yaml_2.2.1              abind_1.4-5             modelr_0.1.8           
+ [52] backports_1.4.1         httpuv_1.6.5            tokenizers_0.2.1       
+ [55] tools_4.1.2             lava_1.6.10             usethis_2.1.5          
+ [58] ellipsis_0.3.2          jquerylib_0.1.4         RColorBrewer_1.1-2     
+ [61] Rcpp_1.0.8              plyr_1.8.6              ps_1.6.0               
+ [64] ggpubr_0.4.0            rpart_4.1-15            viridis_0.6.2          
+ [67] haven_2.4.3             fs_1.5.2                here_1.0.1             
+ [70] furrr_0.2.3             magrittr_2.0.1          data.table_1.14.2      
+ [73] ggdist_3.0.1            reprex_2.0.1            GPfit_1.0-8            
+ [76] SnowballC_0.7.0         whisker_0.4             R.cache_0.15.0         
+ [79] xtable_1.8-4            mime_0.12               hms_1.1.1              
+ [82] evaluate_0.14           readxl_1.3.1            gridExtra_2.3          
+ [85] compiler_4.1.2          crayon_1.4.2            minqa_1.2.4            
+ [88] R.oo_1.24.0             htmltools_0.5.2         later_1.3.0            
+ [91] tzdb_0.2.0              lubridate_1.8.0         DBI_1.1.2              
+ [94] tweenr_1.0.2            dbplyr_2.1.1            MASS_7.3-54            
+ [97] boot_1.3-28             Matrix_1.3-4            car_3.0-12             
+[100] cli_3.1.1               R.methodsS3_1.8.1       parallel_4.1.2         
+[103] gower_0.2.2             pkgconfig_2.0.3         getPass_0.2-2          
+[106] xml2_1.3.3              foreach_1.5.1           bslib_0.3.1            
+[109] hardhat_0.2.0           tidytuesdayR_1.0.1.9000 prodlim_2019.11.13     
+[112] rvest_1.0.2             distributional_0.3.0    janeaustenr_0.1.5      
+[115] callr_3.7.0             digest_0.6.29           rmarkdown_2.11         
+[118] cellranger_1.1.0        curl_4.3.2              shiny_1.7.1            
+[121] nloptr_2.0.0            nlme_3.1-153            lifecycle_1.0.1        
+[124] jsonlite_1.7.3          carData_3.0-5           viridisLite_0.4.0      
+[127] fansi_1.0.2             pillar_1.6.5            lattice_0.20-45        
+[130] GGally_2.1.2            fastmap_1.1.0           httr_1.4.2             
+[133] survival_3.2-13         glue_1.6.0              conflicted_1.1.0       
+[136] iterators_1.0.13        bit_4.0.4               ggforce_0.3.3          
+[139] class_7.3-19            stringi_1.7.6           sass_0.4.0             
+[142] rematch2_2.1.2          textshaping_0.3.6       memoise_2.0.1          
+[145] styler_1.6.2            future.apply_1.8.1     </code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNob2NvbGF0ZSBiYXIgcmF0aW5ncyINCmF1dGhvcjogIkppbSBHcnVtYW4iDQpkYXRlOiAiSmFudWFyeSAyOCwgMjAyMiINCm91dHB1dDoNCiAgd29ya2Zsb3dyOjp3Zmxvd19odG1sOg0KICAgIHRvYzogbm8NCiAgICBjb2RlX2ZvbGRpbmc6IGhpZGUNCiAgICBjb2RlX2Rvd25sb2FkOiB0cnVlDQogICAgZGZfcHJpbnQ6IHBhZ2VkDQplZGl0b3Jfb3B0aW9uczoNCiAgY2h1bmtfb3V0cHV0X3R5cGU6IGNvbnNvbGUNCi0tLQ0KDQpUaGlzIHdlZWsncyAjVGlkeVR1ZXNkYXkgZGF0YXNldCBpcyBvbiBCb2FyZCBHYW1lcywgcHJvdmlkZWQgYnkgW0FseXNzYSBHb2xkYmVyZ10oaHR0cHM6Ly9ycHVicy5jb20vdGhld2lyZW1vbmtleS80NzY2MzApLg0KDQpMZXQncyBidWlsZCB1cCBzb21lIGV4YW1wbGVzIGRhdGEgdmlzdWFscyB0byBzaG93Y2FzZSBmb3Igb3Vyc2VsdmVzIGhlcmUsIGFuZCB0aGUgbWFrZSBhIG1hY2hpbmUgbGVhcm5pbmcgbW9kZWwuIEkgYW0gZ29pbmcgdG8gZm9sbG93IEp1bGlhIFNpbGdlJ3MgcG9zdCwgW2hlcmVdKGh0dHBzOi8vanVsaWFzaWxnZS5jb20vYmxvZy9ib2FyZC1nYW1lcy8pLCBhcyBhIHN0YXJ0aWduIHBvaW50LiBGaXJzdCwgbG9hZCB1cCBwYWNrYWdlczoNCg0KYGBge3Igc2V0dXAsIG1lc3NhZ2U9RkFMU0V9DQoNCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyh7DQpsaWJyYXJ5KHRpZHl2ZXJzZSkgIyBjbGVhbiBhbmQgdHJhbnNmb3JtIHJlY3Rhbmd1bGFyIGRhdGENCmxpYnJhcnkodGlkeW1vZGVscykNCmxpYnJhcnkodGlkeXRleHQpDQpsaWJyYXJ5KHRleHRyZWNpcGVzKQ0KbGlicmFyeShmaW5ldHVuZSkNCmxpYnJhcnkodmlwKQ0KbGlicmFyeShTSEFQZm9yeGdib29zdCkNCmxpYnJhcnkoZ3J1bWFubGliKSAjIG15IHBsb3QgdGhlbWUNCn0pDQoNCnNvdXJjZShoZXJlOjpoZXJlKCJjb2RlIiwiX2NvbW1vbi5SIiksDQogICAgICAgdmVyYm9zZSA9IEZBTFNFLA0KICAgICAgIGxvY2FsID0ga25pdHI6OmtuaXRfZ2xvYmFsKCkpDQoNCmdncGxvdDI6OnRoZW1lX3NldCh0aGVtZV9qaW0oYmFzZV9zaXplID0gMTIpKQ0KDQpgYGANCg0KTGV0cyBsb2FkIHVwIHRoZSBkYXRhDQoNCmBgYHtyIGxvYWRfZGF0YX0NCnR0IDwtIHRpZHl0dWVzZGF5Ujo6dHRfbG9hZCgiMjAyMi0wMS0yNSIpDQoNCnJhdGluZ3Nfam9pbmVkIDwtIHR0JHJhdGluZ3MgJT4lIA0KICBsZWZ0X2pvaW4odHQkZGV0YWlscywgYnkgPSAiaWQiKSAlPiUgDQogIHNlbGVjdChuYW1lLCBhdmVyYWdlLCBtYXRjaGVzKCJtaW58bWF4IiksIGJvYXJkZ2FtZWNhdGVnb3J5LCBib2FyZGdhbWVtZWNoYW5pYykgDQoNCmNhcHRpb24gPSAiRGF0YSBmcm9tIEthZ2dsZSB2aWEgQm9hcmQgR2FtZXMgR2VlayINCmBgYA0KDQpXZSBhcmUgZ29pbmcgdG8gZm9jdXMgb24gdGhlIGFkanVzdGVkIGBhdmVyYWdlYCBmaWd1cmUgaW5zdGVhZCBmbyB0aGUgYGJheWVzX2F2ZXJhZ2VgIHRoYXQgYXBwbGllcyBhbiBlbXBpcmljYWwgYmF5ZXMgY29ycmVjdGlvbiB0b3dhcmRzIHRoZSBncm91cCBhdmVyYWdlIGZvciBnYW1lcyB3aXRoIGZldyBvYnNlcnZhdGlvbnMsIGp1c3QgYXMgaW4gYmFzZWJhbGwgd2hlcmUgYSByb29raWUgcGl0Y2hlciBzaG91bGQgYmUgcmVwb3J0ZWQgd2l0aCBtb3JlIG9mIGEgZ3JvdXAgYXZlcmFnZSB0aGFuIGhpcyBwZXJzb25hbCBzdGF0cy4NCg0KIyBFeHBsb3JlIHRoZSBkYXRhDQoNCk91ciBtb2RlbGluZyBnb2FsIGlzIHRvIHByZWRpY3QgcmF0aW5ncyBmb3IgYm9hcmQgZ2FtZXMgYmFzZWQgb24gdGhlIG1haW4gY2hhcmFjdGVyaXN0aWNzIGxpa2UgbnVtYmVyIG9mIHBsYXllcnMgYW5kIGdhbWUgY2F0ZWdvcnkuIEhvdyBhcmUgdGhlIHJhdGluZ3MgZGlzdHJpYnV0ZWQ/DQoNCmBgYHtyfQ0KcmF0aW5nc19qb2luZWQgJT4lDQogIGdncGxvdChhZXMoYXZlcmFnZSkpICsNCiAgZ2VvbV9oaXN0b2dyYW0oYmlucyA9IDUwKSArDQogIGxhYnMoY2FwdGlvbiA9IGNhcHRpb24pDQpgYGANCg0KTGV0J3MgbG9vayBhdCBhIGNvdXBsZSBvZiBvdGhlciBwb3NzaWJsZSBudW1lcmljIGNvcnJlbGF0aW9uczoNCg0KYGBge3IgZ2dhbGx5LCBmaWcuYXNwPTF9DQpyYXRpbmdzX2pvaW5lZCAlPiUNCiAgc2VsZWN0KGF2ZXJhZ2UsDQogICAgICAgICBtYXRjaGVzKCJtaW58bWF4IikpICU+JQ0KICBHR2FsbHk6OmdncGFpcnMoDQogICAgbWFwcGluZyA9IGFlcyhjb2xvciA9IGN1dF9pbnRlcnZhbChhdmVyYWdlLCA1KSksDQogICAgcHJvZ3Jlc3MgPSBGQUxTRSwNCiAgICBkaWFnID0gbGlzdChjb250aW51b3VzID0gR0dhbGx5Ojp3cmFwKCJiYXJEaWFnIiwgYmlucyA9IDIwKSkNCiAgKSArDQogIHRoZW1lX2J3KCkgKw0KICB0aGVtZShwYW5lbC5ncmlkID0gZWxlbWVudF9ibGFuaygpKSArDQogIGxhYnMoY2FwdGlvbiA9IGNhcHRpb24pIA0KYGBgDQoNCg0KUmF0aW5ncyBoZXJlIGFyZSBib3VuZGVkIGFuZCBhbHdheXMgcG9zaXRpdmUuIFRoaXMgaXMgYSBwcmV0dHkgc2l6ZWFibGUgcmVjdGFuZ3VsYXIgZGF0YXNldCBzbyBsZXTigJlzIHVzZSBhbiB4Z2Jvb3N0IG1vZGVsLiBIb3cgaXMgYSBjaGFyYWN0ZXJpc3RpYyBsaWtlIHRoZSBtaW5pbXVtIHJlY29tbWVuZGVkIGFnZSBmb3IgdGhlIGdhbWUgcmVsYXRlZCB0byB0aGUgcmF0aW5nPw0KDQpgYGB7ciwgZmlnLmFzcD0xfQ0KcmF0aW5nc19qb2luZWQgJT4lDQogIGZpbHRlcighaXMubmEobWluYWdlKSkgJT4lDQogIG11dGF0ZShtaW5hZ2UgPSBjdXRfbnVtYmVyKG1pbmFnZSwgNCkpICU+JQ0KICBnZ3Bsb3QoYWVzKG1pbmFnZSwgYXZlcmFnZSwgZmlsbCA9IG1pbmFnZSkpICsNCiAgZ2dkaXN0OjpzdGF0X2RvdHMoDQogICAgc2lkZSA9ICJ0b3AiLA0KICAgIGp1c3RpZmljYXRpb24gPSAtMC4xLA0KICAgIHNob3cubGVnZW5kID0gRkFMU0UNCiAgKSArDQogIGdlb21fYm94cGxvdCgNCiAgICB3aWR0aCA9IDAuMSwNCiAgICBvdXRsaWVyLnNoYXBlID0gTkEsDQogICAgc2hvdy5sZWdlbmQgPSBGQUxTRQ0KICApICsNCiAgbGFicyhjYXB0aW9uID0gY2FwdGlvbikNCmBgYA0KDQpUaGlzIGtpbmQgb2YgcmVsYXRpb25zaGlwIGlzIHdoYXQgd2UgaG9wZSBvdXIgeGdib29zdCBtb2RlbCBjYW4gdXNlLg0KDQojIE1vZGVsaW5nDQoNCkxldOKAmXMgc3RhcnQgb3VyIG1vZGVsaW5nIGJ5IHNldHRpbmcgdXAgb3VyIOKAnGRhdGEgYnVkZ2V0LuKAnSBXZeKAmWxsIHN1YnNldCBkb3duIHRvIG9ubHkgdmFyaWFibGVzIGxpa2UgbWluaW11bS9tYXhpbXVtIGFnZSBhbmQgcGxheWluZyB0aW1lLCBhbmQgc3RyYXRpZnkgYnkgb3VyIG91dGNvbWUgYXZlcmFnZS4NCg0KYGBge3J9DQpzZXQuc2VlZCgxMjMpDQpnYW1lX3NwbGl0IDwtDQogIHJhdGluZ3Nfam9pbmVkICU+JQ0KICBuYS5vbWl0KCkgJT4lDQogIGluaXRpYWxfc3BsaXQoc3RyYXRhID0gYXZlcmFnZSkNCg0KZ2FtZV90cmFpbiA8LSB0cmFpbmluZyhnYW1lX3NwbGl0KQ0KZ2FtZV90ZXN0IDwtIHRlc3RpbmcoZ2FtZV9zcGxpdCkNCg0Kc2V0LnNlZWQoMjM0KQ0KZ2FtZV9mb2xkcyA8LSB2Zm9sZF9jdihnYW1lX3RyYWluLCBzdHJhdGEgPSBhdmVyYWdlKQ0KDQpgYGANCg0KTmV4dCwgbGV04oCZcyBzZXQgdXAgb3VyIGZlYXR1cmUgZW5naW5lZXJpbmcuIFNvbWV0aW1lcyBhIGRhdGFzZXQgcmVxdWlyZXMgbW9yZSBjYXJlIGFuZCBjdXN0b20gZmVhdHVyZSBlbmdpbmVlcmluZzsgdGhlIGB0aWR5bW9kZWxzYCBlY29zeXN0ZW0gcHJvdmlkZXMgbG90cyBvZiBmbHVlbnQgb3B0aW9ucyBmb3IgY29tbW9uIHVzZSBjYXNlcyBhbmQgdGhlbiB0aGUgYWJpbGl0eSB0byBleHRlbmQgb3VyIGZyYW1ld29yayBmb3IgbW9yZSBzcGVjaWZpYyBuZWVkcyB3aGlsZSBtYWludGFpbmluZyBnb29kIHN0YXRpc3RpY2FsIHByYWN0aWNlLg0KDQpgYGB7cn0NCnNwbGl0X2NhdGVnb3J5IDwtIGZ1bmN0aW9uKHgpIHsNCiAgeCAlPiUNCiAgICBzdHJfc3BsaXQoIiwgIikgJT4lDQogICAgbWFwKHN0cl9yZW1vdmVfYWxsLCAiWzpwdW5jdDpdIikgJT4lDQogICAgbWFwKHN0cl9zcXVpc2gpICU+JQ0KICAgIG1hcChzdHJfdG9fbG93ZXIpICU+JQ0KICAgIG1hcChzdHJfcmVwbGFjZV9hbGwsICIgIiwgIl8iKQ0KfQ0KDQpnYW1lX3JlYyA8LQ0KICByZWNpcGUoYXZlcmFnZSB+IC4sIGRhdGEgPSBnYW1lX3RyYWluKSAlPiUNCiAgdXBkYXRlX3JvbGUobmFtZSwgbmV3X3JvbGUgPSAiaWQiKSAlPiUNCiAgc3RlcF90b2tlbml6ZShib2FyZGdhbWVjYXRlZ29yeSwgY3VzdG9tX3Rva2VuID0gc3BsaXRfY2F0ZWdvcnkpICU+JQ0KICBzdGVwX3Rva2VuZmlsdGVyKGJvYXJkZ2FtZWNhdGVnb3J5LCBtYXhfdG9rZW5zID0gMzApICU+JQ0KICBzdGVwX3RmKGJvYXJkZ2FtZWNhdGVnb3J5KSAlPiUgDQogIHN0ZXBfdG9rZW5pemUoYm9hcmRnYW1lbWVjaGFuaWMgLCBjdXN0b21fdG9rZW4gPSBzcGxpdF9jYXRlZ29yeSkgJT4lIA0KICBzdGVwX3Rva2VuZmlsdGVyKGJvYXJkZ2FtZW1lY2hhbmljLCBtYXhfdG9rZW5zID0gMzApICU+JSANCiAgc3RlcF90Zihib2FyZGdhbWVtZWNoYW5pYykNCg0KYGBgDQoNCk5vdyBsZXTigJlzIGNyZWF0ZSBhIHR1bmFibGUgeGdib29zdCBtb2RlbCBzcGVjaWZpY2F0aW9uLCB3aXRoIG9ubHkgc29tZSBvZiB0aGUgbW9zdCBpbXBvcnRhbnQgaHlwZXJwYXJhbWV0ZXJzIHR1bmFibGUsIGFuZCBjb21iaW5lIGl0IHdpdGggb3VyIHByZXByb2Nlc3NpbmcgcmVjaXBlIGluIGEgd29ya2Zsb3coKS4gVG8gYWNoaWV2ZSBoaWdoZXIgcGVyZm9ybWFuY2UsIHdlIGNvdWxkIHRyeSBtb3JlIGNhcmVmdWwgYW5kL29yIGV4dGVuc2l2ZSBjaG9pY2VzIGZvciBoeXBlcnBhcmFtZXRlciB0dW5pbmcuDQoNCmBgYHtyfQ0KeGdiX3NwZWMgPC0NCiAgYm9vc3RfdHJlZSgNCiAgICB0cmVlcyA9IHR1bmUoKSwNCiAgICBtdHJ5ID0gdHVuZSgpLA0KICAgIG1pbl9uID0gdHVuZSgpLA0KICAgIGxlYXJuX3JhdGUgPSAwLjAwNQ0KICApICU+JQ0KICBzZXRfZW5naW5lKCJ4Z2Jvb3N0IikgJT4lDQogIHNldF9tb2RlKCJyZWdyZXNzaW9uIikNCg0KeGdiX3dmIDwtIHdvcmtmbG93KGdhbWVfcmVjLCB4Z2Jfc3BlYykNCg0KYGBgDQoNClRvIHNwZWVkIHVwIGNvbXB1dGF0aW9uIHdlIHdpbGwgdXNlIGEgcGFyYWxsZWwgYmFja2VuZC4NCg0KYGBge3IgcGFyYWxsZWwgYmFja2VuZH0NCmFsbF9jb3JlcyA8LSBwYXJhbGxlbGx5OjphdmFpbGFibGVDb3JlcyhvbWl0ID0gMSkNCmFsbF9jb3Jlcw0KDQpmdXR1cmU6OnBsYW4oIm11bHRpc2Vzc2lvbiIsIHdvcmtlcnMgPSBhbGxfY29yZXMpICMgb24gV2luZG93cw0KDQpgYGANCg0KTm93IHdlIGNhbiB1c2UgYHR1bmVfcmFjZV9hbm92YSgpYCB0byBlbGltaW5hdGUgcGFyYW1ldGVyIGNvbWJpbmF0aW9ucyB0aGF0IGFyZSBub3QgZG9pbmcgd2VsbC4NCg0KYGBge3J9DQoNCnNldC5zZWVkKDIwMjIpDQoNCnhnYl9nYW1lX3JzIDwtDQogIHR1bmVfcmFjZV9hbm92YSgNCiAgICB4Z2Jfd2YsDQogICAgZ2FtZV9mb2xkcywNCiAgICBncmlkID0gMjAsDQogICAgY29udHJvbCA9IGNvbnRyb2xfcmFjZSh2ZXJib3NlX2VsaW0gPSBUUlVFKQ0KICApDQoNCmBgYA0KDQojIEV2YWx1YXRlIE1vZGVscw0KDQpXZSBjYW4gdmlzdWFsaXplIGhvdyB0aGUgcG9zc2libGUgcGFyYW1ldGVyIGNvbWJpbmF0aW9ucyB3ZSB0cmllZCBkaWQgZHVyaW5nIHRoZSDigJxyYWNlLuKAnSBOb3RpY2UgaG93IHdlIHNhdmVkIHRpbWUgYnkgbm90IGV2YWx1YXRpbmcgdGhlIHBhcmFtZXRlciBjb21iaW5hdGlvbnMgdGhhdCB3ZXJlIGNsZWFybHkgZG9pbmcgcG9vcmx5IG9uIGFsbCB0aGUgcmVzYW1wbGVzOyB3ZSBvbmx5IGtlcHQgZ29pbmcgd2l0aCB0aGUgZ29vZCBwYXJhbWV0ZXIgY29tYmluYXRpb25zLg0KDQpgYGB7cn0NCnBsb3RfcmFjZSh4Z2JfZ2FtZV9ycykNCg0KYGBgDQoNCldlIGVuZGVkIHVwIHdpdGggdGhyZWUgaHlwZXJwYXJhbWV0ZXIgY29uZmlndXJhdGlvbnMgaW4gdGhlIGVuZCwgYWxsIG9mIHdoaWNoIGFyZSBwcmV0dHkgbXVjaCB0aGUgc2FtZS4NCg0KYGBge3J9DQpzaG93X2Jlc3QoeGdiX2dhbWVfcnMpDQpgYGANCg0KTGV04oCZcyB1c2UgbGFzdF9maXQoKSB0byBmaXQgb25lIGZpbmFsIHRpbWUgdG8gdGhlIHRyYWluaW5nIGRhdGEgYW5kIGV2YWx1YXRlIG9uZSBmaW5hbCB0aW1lIG9uIHRoZSAqKnRlc3RpbmcqKiBkYXRhLg0KDQpgYGB7cn0NCnhnYl9sYXN0IDwtDQogIHhnYl93ZiAlPiUNCiAgZmluYWxpemVfd29ya2Zsb3coc2VsZWN0X2Jlc3QoeGdiX2dhbWVfcnMsICJybXNlIikpICU+JQ0KICBsYXN0X2ZpdChnYW1lX3NwbGl0KQ0KDQpgYGANCg0KQW4gYHhnYm9vc3RgIG1vZGVsIGlzIG5vdCBkaXJlY3RseSBpbnRlcnByZXRhYmxlIGJ1dCB3ZSBoYXZlIHNldmVyYWwgb3B0aW9ucyBmb3IgdW5kZXJzdGFuZGluZyB3aHkgdGhlIG1vZGVsIG1ha2VzIHRoZSBwcmVkaWN0aW9ucyBpdCBkb2VzLiANCg0KTGV04oCZcyBzdGFydCB3aXRoIG1vZGVsLWJhc2VkIHZhcmlhYmxlIGltcG9ydGFuY2UgdXNpbmcgdGhlIGB2aXBgIHBhY2thZ2UuDQoNCmBgYHtyLCBmaWcuYXNwPTF9DQp4Z2JfZml0IDwtIGV4dHJhY3RfZml0X3BhcnNuaXAoeGdiX2xhc3QpDQp2aXAoeGdiX2ZpdCwgZ2VvbSA9ICJwb2ludCIsIG51bV9mZWF0dXJlcyA9IDE1KQ0KYGBgDQoNClRoZSBtYXhpbXVtIHBsYXlpbmcgdGltZSwgcm9sbC9zcGluL21vdmUgbWVjaGFuaWNzLCBhbmQgbWluaW11bSBhZ2UgYXJlIHRoZSBtb3N0IGltcG9ydGFudCBwcmVkaWN0b3JzIGRyaXZpbmcgdGhlIHByZWRpY3RlZCBnYW1lIHJhdGluZy4NCg0KV2UgY2FuIGFsc28gdXNlIGEgbW9kZWwtYWdub3N0aWMgYXBwcm9hY2ggbGlrZSBTaGFwbGV5IEFkZGl0aXZlIEV4cGxhbmF0aW9ucywgd2hlcmUgdGhlIGF2ZXJhZ2UgY29udHJpYnV0aW9ucyBvZiBmZWF0dXJlcyBhcmUgY29tcHV0ZWQgdW5kZXIgZGlmZmVyZW50IGNvbWJpbmF0aW9ucyBvciDigJxjb2FsaXRpb25z4oCdIG9mIGZlYXR1cmUgb3JkZXJpbmdzLiBUaGUgU0hBUGZvcnhnYm9vc3QgcGFja2FnZSBtYWtlcyBzZXR0aW5nIHRoaXMgdXAgZm9yIGFuIHhnYm9vc3QgbW9kZWwgcGFydGljdWxhcmx5IG5pY2UuDQoNCldlIHN0YXJ0IGJ5IGNvbXB1dGluZyB3aGF0IHdlIG5lZWQgZm9yIFNIQVAgdmFsdWVzLCB3aXRoIHRoZSB1bmRlcmx5aW5nIHhnYm9vc3QgZW5naW5lIGZpdCBhbmQgdGhlIHByZWRpY3RvcnMgaW4gYSBtYXRyaXggZm9ybWF0Lg0KDQpgYGB7cn0NCmdhbWVfc2hhcCA8LQ0KICBzaGFwLnByZXAoDQogICAgeGdiX21vZGVsID0gZXh0cmFjdF9maXRfZW5naW5lKHhnYl9maXQpLA0KICAgIFhfdHJhaW4gPSBiYWtlKHByZXAoZ2FtZV9yZWMpLA0KICAgICAgaGFzX3JvbGUoInByZWRpY3RvciIpLA0KICAgICAgbmV3X2RhdGEgPSBOVUxMLA0KICAgICAgY29tcG9zaXRpb24gPSAibWF0cml4Ig0KICAgICkNCiAgKQ0KYGBgDQoNCldlIGNhbiBsb29rIGF0IGFuIG92ZXJhbGwgc3VtbWFyeToNCg0KYGBge3IsIGZpZy5hc3A9MX0NCnNoYXAucGxvdC5zdW1tYXJ5KGdhbWVfc2hhcCkNCmBgYA0KDQpQb2ludHMgdG8gdGhlIHJpZ2h0IG9mIHplcm8gaW5jcmVhc2UgdGhlIGF2ZXJhZ2UgcmF0aW5nLCB3aGlsZSBwb2ludHMgdG8gdGhlIGxlZnQgZGVjcmVhc2UgaXQuIA0KDQpPciB3ZSBjYW4gY3JlYXRlIHBhcnRpYWwgZGVwZW5kZW5jZSBwbG90cyBmb3Igc3BlY2lmaWMgdmFyaWFibGVzOg0KDQpgYGB7ciwgZmlnLmFzcD0xfQ0Kc2hhcC5wbG90LmRlcGVuZGVuY2UoDQogIGdhbWVfc2hhcCwNCiAgeCA9ICJtaW5hZ2UiLA0KICBjb2xvcl9mZWF0dXJlID0gInRmX2JvYXJkZ2FtZW1lY2hhbmljX3JvbGxfc3Bpbl9hbmRfbW92ZSIsDQogIHNpemUwID0gMS4yLA0KICBzbW9vdGggPSBGQUxTRSwgYWRkX2hpc3QgPSBUUlVFDQopDQpgYGANCg0KTGVhcm5pbmcgdGhpcyBraW5kIG9mIGNvbXBsZXgsIG5vbi1saW5lYXIgYmVoYXZpb3IgaXMgd2hlcmUgeGdib29zdCBzaGluZXMuDQoNCg0K</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2022_01_28.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
