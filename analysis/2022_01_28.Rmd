@@ -1,5 +1,5 @@
 ---
-title: "Chocolate bar ratings"
+title: "Board Games"
 author: "Jim Gruman"
 date: "January 28, 2022"
 output:
@@ -14,7 +14,7 @@ editor_options:
 
 This week's #TidyTuesday dataset is on Board Games, provided by [Alyssa Goldberg](https://rpubs.com/thewiremonkey/476630).
 
-Let's build up some examples data visuals to showcase for ourselves here, and the make a machine learning model. I am going to follow Julia Silge's post, [here](https://juliasilge.com/blog/board-games/), as a startign point. First, load up packages:
+Let's build up some examples data visuals to showcase for ourselves here, and the make a machine learning model. I am going to follow Julia Silge's post, [here](https://juliasilge.com/blog/board-games/), as a starting point. First, load up packages:
 
 ```{r setup, message=FALSE}
 
@@ -79,7 +79,7 @@ ratings_joined %>%
 ```
 
 
-Ratings here are bounded and always positive. This is a pretty sizeable rectangular dataset so let’s use an xgboost model. How is a characteristic like the minimum recommended age for the game related to the rating?
+Ratings here are bounded and always positive. This is a pretty sizable rectangular dataset so let’s use an xgboost model. How is a characteristic like the minimum recommended age for the game related to the rating?
 
 ```{r, fig.asp=1}
 ratings_joined %>%
@@ -144,7 +144,7 @@ game_rec <-
 
 ```
 
-Now let’s create a tunable xgboost model specification, with only some of the most important hyperparameters tunable, and combine it with our preprocessing recipe in a workflow(). To achieve higher performance, we could try more careful and/or extensive choices for hyperparameter tuning.
+Now let’s create a tunable xgboost model specification, with only some of the most important hyper parameters tunable, and combine it with our preprocessing recipe in a workflow(). To achieve higher performance, we could try more careful and/or extensive choices for hyperparameter tuning.
 
 ```{r}
 xgb_spec <-
