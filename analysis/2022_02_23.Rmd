@@ -12,7 +12,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-There is definitely a learning curve in both learning the craft of making great data visualizations and in finding the best way to build code with `ggplot2` to generate them.
+There is definitely a learning curve in both mastering the craft of making great data visualizations and in finding the best way to build code with `ggplot2` to generate them.
 
 [Meghan Hall](https://meghan.rbind.io/about/) of  [Hockey-Graphs](https://hockey-graphs.com/about/) recently tweeted and blogged on [Increasing the Flexibility and Robustness of Plots in `ggplot2`](https://meghan.rbind.io/blog/plot-robustness/) and I'd like to build on her work. Please check out her post and follow here:
 
@@ -21,8 +21,6 @@ tweetrmd::include_tweet(tweet_url = "https://twitter.com/MeghanMHall/status/1496
 ```
 
 I really enjoy pulling wild-caught data and working with newly released R packages to improve my understanding of what is awesome out there. As Megan did in her example, we are going to pull data through the [`hockeyR`](https://hockeyr.netlify.app/) package that scrapes play by play data from `NHL.com`.
-
-![Math. We're on it.](https://twitter.com/HockeyGraphs/header_photo)
 
 ```{r setup, message=FALSE}
 
