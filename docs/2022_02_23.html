@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2022-02-23" />
+
+<title>Plotting Hockey in a Robust Way</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Plotting Hockey in a Robust Way</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">February 23, 2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-02-23
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb29a2e87751c85bd6287f22d87bde02062dbb96dtargetblankb29a2e8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/b29a2e87751c85bd6287f22d87bde02062dbb96d" target="_blank">b29a2e8</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb29a2e87751c85bd6287f22d87bde02062dbb96dtargetblankb29a2e8a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/b29a2e87751c85bd6287f22d87bde02062dbb96d" target="_blank">b29a2e8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    catboost_info/
+    Ignored:    data/2021-11-27glm_wf_final.rds
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/accountchurn.rds
+    Ignored:    data/acs_poverty.rds
+    Ignored:    data/advancedaccountchurn.rds
+    Ignored:    data/airbnbcatboost.rds
+    Ignored:    data/austinHomeValue.rds
+    Ignored:    data/austinHomeValue2.rds
+    Ignored:    data/australiaweather.rds
+    Ignored:    data/baseballHRxgboost.rds
+    Ignored:    data/baseballHRxgboost2.rds
+    Ignored:    data/fmhpi.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/nber_rs.rmd
+    Ignored:    data/netflixTitles2.rds
+    Ignored:    data/pets.rds
+    Ignored:    data/pets2.rds
+    Ignored:    data/spotifyxgboost.rds
+    Ignored:    data/spotifyxgboostadvanced.rds
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  code/YammerReach.R
+    Untracked:  code/googleCompute.R
+    Untracked:  code/work list batch targets.R
+    Untracked:  environment.yml
+
+Unstaged changes:
+    Deleted:    analysis/2022_02_11_tabular_playground.Rmd
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/2022_02_23.Rmd</code>) and HTML (<code>docs/2022_02_23.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/b29a2e87751c85bd6287f22d87bde02062dbb96d/analysis/2022_02_23.Rmd" target="_blank">b29a2e8</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-02-23
+</td>
+<td>
+hockey initial commit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>There is definitely a learning curve in both learning the craft of making great data visualizations and in finding the best way to build code with <code>ggplot2</code> to generate them.</p>
+<p><a href="https://meghan.rbind.io/about/">Meghan Hall</a> of <a href="https://hockey-graphs.com/about/">Hockey-Graphs</a> recently tweeted and blogged on <a href="https://meghan.rbind.io/blog/plot-robustness/">Increasing the Flexibility and Robustness of Plots in <code>ggplot2</code></a> and I’d like to build on her work. Please check out her post and follow here:</p>
+<pre class="r"><code>tweetrmd::include_tweet(tweet_url = &quot;https://twitter.com/MeghanMHall/status/1496155738246467588&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">New ✨ I wrote up some tips on how to use <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> to make plots that are nicely customized but ALSO really flexible. Because having a beautiful custom plot is not that useful if your data changes! <a href="https://t.co/e8afijshLD">https://t.co/e8afijshLD</a></p>&mdash; Meghan Hall (@MeghanMHall) <a href="https://twitter.com/MeghanMHall/status/1496155738246467588?ref_src=twsrc%5Etfw">February 22, 2022</a></blockquote>
+
+<p>I really enjoy pulling wild-caught data and working with newly released R packages to improve my understanding of what is awesome out there. As Megan did in her example, we are going to pull data through the <a href="https://hockeyr.netlify.app/"><code>hockeyR</code></a> package that scrapes play by play data from <code>NHL.com</code>.</p>
+<div class="figure">
+<img src="https://twitter.com/HockeyGraphs/header_photo" alt="" />
+<p class="caption">Math. We’re on it.</p>
+</div>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(hockeyR)
+library(sportyR)
+library(cowplot)
+library(grumanlib) # my plot theme
+})
+
+source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(
+  theme_jim(base_size = 12) %+replace%
+    theme(
+      panel.background  = element_blank(),
+      plot.background = element_rect(fill = &quot;transparent&quot;, color = NA),
+      legend.background = element_rect(fill = &quot;transparent&quot;, color = NA),
+      legend.key = element_rect(fill = &quot;transparent&quot;, color = NA),
+      axis.ticks = element_blank(),
+      panel.grid.major = element_line(color = &quot;grey90&quot;, size = 0.3),
+      panel.grid.minor = element_blank()
+    )
+)</code></pre>
+<p>Lets load up the current 2021-22 season of play by play NHL data.</p>
+<pre class="r"><code>pbp &lt;- load_pbp(season = as.numeric(format(Sys.Date() + 184, &quot;%Y&quot;)))
+
+team_info &lt;- hockeyR::team_logos_colors</code></pre>
+<p>Let’s first look at a single game. In fact, I’d like to see the most recent game. An easy way to create a shot plot is through the <code>sportyR</code> package. We will also use the included <code>team_colors_logos</code> data to add color and team logos to an example plot that closely follows the <code>hockeyR</code> vignette.</p>
+<pre class="r"><code># get the most recent Chicago Blackhawks game data
+game &lt;- pbp %&gt;%
+  filter(home_abbreviation == &quot;CHI&quot;) %&gt;%
+  filter(game_date == max(game_date))
+
+# grab team logos &amp; colors
+team_logos &lt;- team_info %&gt;%
+  filter(team_abbr == unique(game$home_abbreviation) | team_abbr == unique(game$away_abbreviation)) %&gt;%
+  # add in dummy variables to put logos on the ice
+  mutate(
+    x = ifelse(full_team_name == unique(game$home_name), 50, -50),
+    y = 0
+  )
+
+# add transparency to the logo
+transparent &lt;- function(img) {
+  magick::image_fx(img, expression = &quot;0.3*a&quot;, channel = &quot;alpha&quot;)
+}
+
+# get only shot events
+events &lt;- c(&quot;MISSED_SHOT&quot;, &quot;SHOT&quot;, &quot;GOAL&quot;)
+
+shots &lt;- game %&gt;% filter(event_type %in% events) %&gt;%
+  # adding team colors
+  left_join(team_logos, by = c(&quot;event_team_abbr&quot; = &quot;team_abbr&quot;))
+
+# create shot plot
+geom_hockey(&quot;nhl&quot;) +
+  ggimage::geom_image(
+    data = team_logos,
+    aes(x = x, y = y, image = team_logo_espn),
+    image_fun = transparent, size = 0.22, asp = 2.35
+  ) +
+  geom_point(
+    data = shots,
+    aes(x_fixed, y_fixed),
+    size = 6,
+    color = shots$team_color1,
+    shape = ifelse(shots$event_type == &quot;GOAL&quot;, 19, 1)
+  ) +
+  labs(
+    title = glue::glue(&quot;{unique(game$away_name)} @ {unique(game$home_name)}&quot;),
+    subtitle = glue::glue(
+      &quot;{format(unique(game$game_date), &#39;%b %d, %Y&#39;)}\n
+    {unique(shots$away_abbreviation)} {unique(shots$away_final)} - {unique(shots$home_final)} {unique(shots$home_abbreviation)}&quot;
+    ), y = NULL, x = NULL,
+    caption = &quot;@jim_gruman | data from hockeyR | plot made with sportyR&quot;
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    plot.caption = element_text(hjust = .9),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    plot.margin = margin(b = 0),
+    panel.grid.major = element_blank()
+  )</code></pre>
+<p><img src="figure/2022_02_23.Rmd/unnamed-chunk-2-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Next, let’s create a plotting function that shows the top scorers for any single NHL team for the entire 2021-22 season so far. We are going to need to add the information from the rosters, and clean up positions.</p>
+<pre class="r"><code>roster &lt;- get_rosters(
+  team = &quot;all&quot;,
+  season = as.numeric(format(Sys.Date() + 184, &quot;%Y&quot;))
+)
+
+position &lt;- roster %&gt;%
+  select(player, position) %&gt;%
+  unique() %&gt;%
+  mutate(position = case_when(
+    position == &quot;F&quot; ~ &quot;forward&quot;,
+    TRUE ~ &quot;defenseman&quot;
+  ))</code></pre>
+<p>Let’s also calculate the total points scored for each player, much like Meghan did in her blog post.</p>
+<pre class="r"><code>points &lt;- pbp %&gt;%
+  # all goals except for those in the shootout
+  dplyr::filter(event_type == &quot;GOAL&quot; &amp; period != 5) %&gt;%
+  # event players 1-3 are those who might get points on each goal
+  select(game_id, game_date,
+    team = event_team_abbr, event_player_1_name,
+    event_player_2_name, event_player_3_name, event_player_1_type,
+    event_player_2_type, event_player_3_type
+  ) %&gt;%
+  # this will create a name/type combo for players 1 through 3
+  pivot_longer(event_player_1_name:event_player_3_type,
+    names_to = c(NA, &quot;.value&quot;),
+    names_pattern = &quot;(.+)_(.+)&quot;
+  ) %&gt;%
+  # only the players who either scored the goal or got an assist
+  dplyr::filter(type %in% c(&quot;Assist&quot;, &quot;Scorer&quot;)) %&gt;%
+  count(name, team, name = &quot;points&quot;) %&gt;%
+  mutate(name = str_replace_all(name, &quot;\\.&quot;, &quot; &quot;))</code></pre>
+<p>Similarly, lets calculate an accumulated Time on Ice (TOI) for each player much as Meghan did, but with <code>summarize(.groups = "drop")</code> and <code>slice_max()</code>.</p>
+<pre class="r"><code># calculate TOI for each player
+
+TOI &lt;- pbp %&gt;%
+  # create a variable for the length of each event
+  mutate(length = case_when(
+    lead(game_id) == game_id ~
+    lead(period_seconds) - period_seconds,
+    TRUE ~ 0
+  )) %&gt;%
+  select(
+    length,
+    game_id,
+    home_abbreviation,
+    away_abbreviation,
+    home_on_1:away_on_7
+  ) %&gt;%
+  filter(length &gt; 0) %&gt;%
+  pivot_longer(home_on_1:away_on_7,
+    names_to = &quot;team&quot;,
+    values_to = &quot;name&quot;
+  ) %&gt;%
+  filter(!is.na(name)) %&gt;%
+  mutate(team = ifelse(
+    str_detect(team, &quot;home&quot;),
+    home_abbreviation,
+    away_abbreviation
+  )) %&gt;%
+  select(-c(3:4)) %&gt;%
+  group_by(name, team) %&gt;%
+  # calculate total TOI and games played
+  summarize(
+    TOI = sum(length) / 60,
+    GP = n_distinct(game_id),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  mutate(name = str_replace_all(name, &quot;\\.&quot;, &quot; &quot;)) %&gt;%
+  filter(TOI &gt; 200 &amp; !(name %in% c(
+    &quot;Marc Andre Fleury&quot;,
+    &quot;Ukko Pekka Luukkonen&quot;
+  ))) %&gt;%
+  # make some name adjustments to account for discrepancies
+  mutate(
+    name = case_when(
+      name == &quot;Drew O Connor&quot; ~ &quot;Drew O&#39;Connor&quot;,
+      name == &quot;Logan O Connor&quot; ~ &quot;Logan O&#39;Connor&quot;,
+      name == &quot;Liam O Brien&quot; ~ &quot;Liam O&#39;Brien&quot;,
+      name == &quot;Ryan O Reilly&quot; ~ &quot;Ryan O&#39;Reilly&quot;,
+      name == &quot;Jean Gabriel Pageau&quot; ~ &quot;Jean-Gabriel Pageau&quot;,
+      name == &quot;K Andre Miller&quot; ~ &quot;K&#39;Andre Miller&quot;,
+      name == &quot;Marc Edouard Vlasic&quot; ~ &quot;Marc-Edouard Vlasic&quot;,
+      name == &quot;Pierre Edouard Bellemare&quot; ~ &quot;Pierre-Edouard Bellemare&quot;,
+      name == &quot;Nicolas Aube Kubel&quot; ~ &quot;Nicolas Aube-Kubel&quot;,
+      name == &quot;Oliver Ekman Larsson&quot; ~ &quot;Oliver Ekman-Larsson&quot;,
+      name == &quot;Pierre Luc Dubois&quot; ~ &quot;Pierre-Luc Dubois&quot;,
+      name == &quot;Ryan Nugent Hopkins&quot; ~ &quot;Ryan Nugent-Hopkins&quot;,
+      name == &quot;Zach Aston Reese&quot; ~ &quot;Zach Aston-Reese&quot;,
+      TRUE ~ name
+    )
+  ) %&gt;%
+  # join in points data to calculate rate
+  left_join(points, by = c(&quot;name&quot;, &quot;team&quot;)) %&gt;%
+  mutate(
+    points = replace_na(points, 0),
+    pts_per_60 = points * 60 / TOI
+  )
+
+top_points &lt;- TOI %&gt;%
+  left_join(position, by = c(&quot;name&quot; = &quot;player&quot;)) %&gt;%
+  # filter to only the top 10 players per team
+  group_by(team) %&gt;%
+  slice_max(n = 10, order_by = pts_per_60) %&gt;%
+  left_join(select(team_info, full_team_name, team = team_abbr),
+    by = &quot;team&quot;
+  )</code></pre>
+<p>This plot has an annotation in the lower-right corner that lists the team’s record and its rank within its division. Let’s go back and pull them together as well.</p>
+<pre class="r"><code># calculate the result of the shootouts by the team that has more goals
+SO &lt;- pbp %&gt;%
+  group_by(game_id) %&gt;%
+  filter(max(period) == 5) %&gt;%
+  filter(event_type == &quot;GOAL&quot;) %&gt;%
+  count(game_id, event_team_type) %&gt;%
+  pivot_wider(names_from = event_team_type, values_from = n) %&gt;%
+  mutate(SO_result = ifelse(home &gt; away, &quot;home&quot;, &quot;away&quot;))
+
+records &lt;- pbp %&gt;%
+  # calculate the home and away score and game type, by how many game periods
+  # 3 periods: regulation; 4: overtime; 5: shootout
+  group_by(
+    game_id,
+    home_abbreviation,
+    away_abbreviation,
+    home_division_name,
+    away_division_name
+  ) %&gt;%
+  summarize(
+    home = max(home_final),
+    away = max(away_final),
+    period = max(period),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  left_join(select(SO, -c(2:3)), by = &quot;game_id&quot;) %&gt;%
+  # get standings points per game: 2 for win, 1 for OT/SO loss, 0 for reg loss
+  mutate(
+    home = ifelse(is.na(SO_result) |
+      SO_result == &quot;away&quot;, home, home + 1),
+    away = ifelse(is.na(SO_result) |
+      SO_result == &quot;home&quot;, away, away + 1),
+    home_points = case_when(
+      home &gt; away ~ 2,
+      home &lt; away &amp; period &gt; 3 ~ 1,
+      TRUE ~ 0
+    ),
+    away_points = case_when(
+      away &gt; home ~ 2,
+      away &lt; home &amp; period &gt; 3 ~ 1,
+      TRUE ~ 0
+    )
+  ) %&gt;%
+  select(-c(home:SO_result)) %&gt;%
+  pivot_longer(
+    home_abbreviation:away_points,
+    names_to = c(NA, &quot;.value&quot;),
+    names_sep = 5
+  ) %&gt;%
+  mutate(
+    win = ifelse(points == 2, 1, 0),
+    loss = ifelse(points == 0, 1, 0),
+    OT = ifelse(points == 1, 1, 0)
+  ) %&gt;%
+  group_by(abbreviation, division_name) %&gt;%
+  # sum the points per team per division
+  summarize(
+    wins = sum(win),
+    losses = sum(loss),
+    OT = sum(OT),
+    points = sum(points),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  # create the record text that will be used on the plot
+  mutate(record = str_c(wins, losses, OT, sep = &quot;-&quot;)) %&gt;%
+  group_by(division_name) %&gt;%
+  arrange(division_name, desc(points)) %&gt;%
+  # calculate the division rank
+  mutate(rank = row_number())</code></pre>
+<p>As Meghan did, let’s build out a function that works for any team.</p>
+<pre class="r"><code>plot_fn &lt;- function(team_name) {
+  single_team &lt;- top_points %&gt;%
+    filter(team == team_name)
+
+  team_record &lt;- records %&gt;%
+    filter(abbreviation == team_name) %&gt;%
+    left_join(select(team_info, team_abbr, team_logo_espn),
+      by = c(&quot;abbreviation&quot; = &quot;team_abbr&quot;)
+    )
+
+  pts_rate_avg &lt;- TOI %&gt;%
+    group_by(team) %&gt;%
+    summarize(
+      avg = mean(pts_per_60),
+      .groups = &quot;drop&quot;
+    ) %&gt;%
+    filter(team == team_name)
+
+  plot &lt;- single_team %&gt;%
+    group_by(position) %&gt;%
+    mutate(label = ifelse(pts_per_60 == max(pts_per_60), position, NA)) %&gt;%
+    ungroup() %&gt;%
+    ggplot(aes(
+      x = pts_per_60,
+      y = reorder(name, pts_per_60),
+      fill = position
+    )) +
+    geom_bar(stat = &quot;identity&quot;) +
+    scale_fill_manual(values = c(&quot;#AD9465&quot;, &quot;#E2DED4&quot;)) +
+    annotate(
+      &quot;text&quot;,
+      x = max(single_team$pts_per_60) * 1.1,
+      y = 11,
+      vjust = 1.5,
+      label = &quot;games&quot;,
+      size = 3.5
+    ) +
+    geom_label(
+      data = single_team,
+      aes(
+        x = max(single_team$pts_per_60) * 1.1,
+        label = GP
+      ),
+      fill = &quot;#d3d3d3&quot;
+    ) +
+    labs(
+      x = &quot;Points per 60 minutes&quot;,
+      y = &quot;&quot;,
+      title = glue::glue(
+        &quot;Scoring rate leaders (200+ min.): {unique(single_team$full_team_name)}&quot;
+      ),
+      subtitle = &quot;2021-22 season, through Feb. 10&quot;
+    ) +
+    geom_vline(
+      xintercept = pts_rate_avg$avg,
+      linetype = &quot;dashed&quot;,
+      color = &quot;#a39d9d&quot;
+    ) +
+    annotate(
+      &quot;text&quot;,
+      x = pts_rate_avg$avg,
+      y = 11,
+      label = &quot;team avg.&quot;,
+      size = 3,
+      hjust = -0.1,
+      vjust = 1.5
+    ) +
+    geom_text(aes(label = label),
+      x = 0.1,
+      hjust = 0
+    ) +
+    geom_text(
+      aes(label = round(pts_per_60, 1)),
+      vjust = 0.5,
+      hjust = 1.5
+    ) +
+    annotate(
+      &quot;text&quot;,
+      x = max(single_team$pts_per_60) * 0.8,
+      y = 3,
+      label = glue::glue(
+        &quot;record: {team_record$record}
+                              division rank: {team_record$rank}&quot;
+      )
+    ) +
+    scale_x_continuous(expand = expansion(mult = c(0, .1))) +
+    theme(
+      panel.grid.major.y = element_blank(),
+      legend.position = &quot;none&quot;
+    ) +
+    labs(caption = &quot;data from hockeyR&quot;)
+
+  ggdraw() +
+    draw_plot(plot) +
+    draw_image(
+      team_record$team_logo_espn,
+      x = 0.4,
+      y = 0.42,
+      scale = 0.15
+    )
+}</code></pre>
+<p>So, current stats for the home team here in Chicago:</p>
+<pre class="r"><code>plot_fn(&quot;CHI&quot;)</code></pre>
+<p><img src="figure/2022_02_23.Rmd/unnamed-chunk-8-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<p>Riley Stillman (defenseman) and Jonathan Toews () have been on and off Injured Reserve this season and did not appear in the roster dataset.</p>
+<p>And current stats for Colorado:</p>
+<pre class="r"><code>plot_fn(&quot;COL&quot;)</code></pre>
+<p><img src="figure/2022_02_23.Rmd/unnamed-chunk-9-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.2 (2021-11-01)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] grumanlib_0.1.0.9999 cowplot_1.1.1        sportyR_1.0.1       
+ [4] hockeyR_0.1.0.9000   forcats_0.5.1        stringr_1.4.0       
+ [7] dplyr_1.0.8          purrr_0.3.4          readr_2.1.2         
+[10] tidyr_1.2.0          tibble_3.1.6         ggplot2_3.3.5       
+[13] tidyverse_1.3.1      workflowr_1.7.0     
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1       backports_1.4.1    systemfonts_1.0.4 
+  [4] workflows_0.2.4    selectr_0.4-2      plyr_1.8.6        
+  [7] splines_4.1.2      listenv_0.8.0      usethis_2.1.5     
+ [10] robotstxt_0.7.13   digest_0.6.29      yulab.utils_0.0.4 
+ [13] foreach_1.5.2      htmltools_0.5.2    yardstick_0.0.9   
+ [16] magick_2.7.3       viridis_0.6.2      parsnip_0.1.7     
+ [19] fansi_1.0.2        magrittr_2.0.2     memoise_2.0.1     
+ [22] tune_0.1.6         tzdb_0.2.0         recipes_0.2.0     
+ [25] globals_0.14.0     spiderbar_0.2.4    modelr_0.1.8      
+ [28] gower_1.0.0        R.utils_2.11.0     hardhat_0.2.0     
+ [31] rsample_0.1.1      dials_0.1.0        colorspace_2.0-3  
+ [34] rvest_1.0.2        textshaping_0.3.6  haven_2.4.3       
+ [37] xfun_0.29          polite_0.1.1       callr_3.7.0       
+ [40] crayon_1.5.0       jsonlite_1.8.0     survival_3.2-13   
+ [43] iterators_1.0.14   glue_1.6.1         gtable_0.3.0      
+ [46] ipred_0.9-12       R.cache_0.15.0     tweetrmd_0.0.9    
+ [49] future.apply_1.8.1 scales_1.1.1       infer_1.0.0       
+ [52] DBI_1.1.2          Rcpp_1.0.8         viridisLite_0.4.0 
+ [55] gridGraphics_0.5-1 GPfit_1.0-8        lava_1.6.10       
+ [58] prodlim_2019.11.13 httr_1.4.2         ellipsis_0.3.2    
+ [61] farver_2.1.0       pkgconfig_2.0.3    R.methodsS3_1.8.1 
+ [64] nnet_7.3-16        sass_0.4.0         dbplyr_2.1.1      
+ [67] janitor_2.1.0      utf8_1.2.2         here_1.0.1        
+ [70] labeling_0.4.2     ggplotify_0.1.0    tidyselect_1.1.2  
+ [73] rlang_1.0.1        DiceDesign_1.9     later_1.3.0       
+ [76] munsell_0.5.0      cellranger_1.1.0   tools_4.1.2       
+ [79] cachem_1.0.6       cli_3.2.0          generics_0.1.2    
+ [82] broom_0.7.12       evaluate_0.15      fastmap_1.1.0     
+ [85] yaml_2.3.4         ragg_1.2.2         rematch2_2.1.2    
+ [88] processx_3.5.2     knitr_1.37         fs_1.5.2          
+ [91] workflowsets_0.1.0 future_1.24.0      mime_0.12         
+ [94] whisker_0.4        R.oo_1.24.0        xml2_1.3.3        
+ [97] compiler_4.1.2     rstudioapi_0.13    curl_4.3.2        
+[100] reprex_2.0.1       lhs_1.1.4          ggimage_0.3.0     
+[103] bslib_0.3.1        stringi_1.7.6      highr_0.9         
+[106] ps_1.6.0           lattice_0.20-45    Matrix_1.3-4      
+[109] styler_1.6.2       conflicted_1.1.0   vctrs_0.3.8       
+[112] tidymodels_0.1.4   pillar_1.7.0       lifecycle_1.0.1   
+[115] furrr_0.2.3        jquerylib_0.1.4    httpuv_1.6.5      
+[118] R6_2.5.1           promises_1.2.0.1   gridExtra_2.3     
+[121] parallelly_1.30.0  codetools_0.2-18   MASS_7.3-54       
+[124] assertthat_0.2.1   rprojroot_2.0.2    withr_2.4.3       
+[127] parallel_4.1.2     hms_1.1.1          ggfun_0.0.5       
+[130] grid_4.1.2         rpart_4.1-15       timeDate_3043.102 
+[133] class_7.3-19       snakecase_0.11.0   rmarkdown_2.11    
+[136] git2r_0.29.0       getPass_0.2-2      pROC_1.18.0       
+[139] lubridate_1.8.0    ratelimitr_0.4.1  </code></pre>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlBsb3R0aW5nIEhvY2tleSBpbiBhIFJvYnVzdCBXYXkiDQphdXRob3I6ICJKaW0gR3J1bWFuIg0KZGF0ZTogIkZlYnJ1YXJ5IDIzLCAyMDIyIg0Kb3V0cHV0Og0KICB3b3JrZmxvd3I6OndmbG93X2h0bWw6DQogICAgdG9jOiBubw0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBkZl9wcmludDogcGFnZWQNCmVkaXRvcl9vcHRpb25zOg0KICBjaHVua19vdXRwdXRfdHlwZTogY29uc29sZQ0KLS0tDQoNClRoZXJlIGlzIGRlZmluaXRlbHkgYSBsZWFybmluZyBjdXJ2ZSBpbiBib3RoIGxlYXJuaW5nIHRoZSBjcmFmdCBvZiBtYWtpbmcgZ3JlYXQgZGF0YSB2aXN1YWxpemF0aW9ucyBhbmQgaW4gZmluZGluZyB0aGUgYmVzdCB3YXkgdG8gYnVpbGQgY29kZSB3aXRoIGBnZ3Bsb3QyYCB0byBnZW5lcmF0ZSB0aGVtLg0KDQpbTWVnaGFuIEhhbGxdKGh0dHBzOi8vbWVnaGFuLnJiaW5kLmlvL2Fib3V0Lykgb2YgIFtIb2NrZXktR3JhcGhzXShodHRwczovL2hvY2tleS1ncmFwaHMuY29tL2Fib3V0LykgcmVjZW50bHkgdHdlZXRlZCBhbmQgYmxvZ2dlZCBvbiBbSW5jcmVhc2luZyB0aGUgRmxleGliaWxpdHkgYW5kIFJvYnVzdG5lc3Mgb2YgUGxvdHMgaW4gYGdncGxvdDJgXShodHRwczovL21lZ2hhbi5yYmluZC5pby9ibG9nL3Bsb3Qtcm9idXN0bmVzcy8pIGFuZCBJJ2QgbGlrZSB0byBidWlsZCBvbiBoZXIgd29yay4gUGxlYXNlIGNoZWNrIG91dCBoZXIgcG9zdCBhbmQgZm9sbG93IGhlcmU6DQoNCmBgYHtyfQ0KdHdlZXRybWQ6OmluY2x1ZGVfdHdlZXQodHdlZXRfdXJsID0gImh0dHBzOi8vdHdpdHRlci5jb20vTWVnaGFuTUhhbGwvc3RhdHVzLzE0OTYxNTU3MzgyNDY0Njc1ODgiKQ0KYGBgDQoNCkkgcmVhbGx5IGVuam95IHB1bGxpbmcgd2lsZC1jYXVnaHQgZGF0YSBhbmQgd29ya2luZyB3aXRoIG5ld2x5IHJlbGVhc2VkIFIgcGFja2FnZXMgdG8gaW1wcm92ZSBteSB1bmRlcnN0YW5kaW5nIG9mIHdoYXQgaXMgYXdlc29tZSBvdXQgdGhlcmUuIEFzIE1lZ2FuIGRpZCBpbiBoZXIgZXhhbXBsZSwgd2UgYXJlIGdvaW5nIHRvIHB1bGwgZGF0YSB0aHJvdWdoIHRoZSBbYGhvY2tleVJgXShodHRwczovL2hvY2tleXIubmV0bGlmeS5hcHAvKSBwYWNrYWdlIHRoYXQgc2NyYXBlcyBwbGF5IGJ5IHBsYXkgZGF0YSBmcm9tIGBOSEwuY29tYC4NCg0KIVtNYXRoLiBXZSdyZSBvbiBpdC5dKGh0dHBzOi8vdHdpdHRlci5jb20vSG9ja2V5R3JhcGhzL2hlYWRlcl9waG90bykNCg0KYGBge3Igc2V0dXAsIG1lc3NhZ2U9RkFMU0V9DQoNCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyh7DQpsaWJyYXJ5KHRpZHl2ZXJzZSkgIyBjbGVhbiBhbmQgdHJhbnNmb3JtIHJlY3Rhbmd1bGFyIGRhdGENCmxpYnJhcnkoaG9ja2V5UikNCmxpYnJhcnkoc3BvcnR5UikNCmxpYnJhcnkoY293cGxvdCkNCmxpYnJhcnkoZ3J1bWFubGliKSAjIG15IHBsb3QgdGhlbWUNCn0pDQoNCnNvdXJjZShoZXJlOjpoZXJlKCJjb2RlIiwiX2NvbW1vbi5SIiksDQogICAgICAgdmVyYm9zZSA9IEZBTFNFLA0KICAgICAgIGxvY2FsID0ga25pdHI6OmtuaXRfZ2xvYmFsKCkpDQoNCmdncGxvdDI6OnRoZW1lX3NldCgNCiAgdGhlbWVfamltKGJhc2Vfc2l6ZSA9IDEyKSAlK3JlcGxhY2UlDQogICAgdGhlbWUoDQogICAgICBwYW5lbC5iYWNrZ3JvdW5kICA9IGVsZW1lbnRfYmxhbmsoKSwNCiAgICAgIHBsb3QuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsID0gInRyYW5zcGFyZW50IiwgY29sb3IgPSBOQSksDQogICAgICBsZWdlbmQuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsID0gInRyYW5zcGFyZW50IiwgY29sb3IgPSBOQSksDQogICAgICBsZWdlbmQua2V5ID0gZWxlbWVudF9yZWN0KGZpbGwgPSAidHJhbnNwYXJlbnQiLCBjb2xvciA9IE5BKSwNCiAgICAgIGF4aXMudGlja3MgPSBlbGVtZW50X2JsYW5rKCksDQogICAgICBwYW5lbC5ncmlkLm1ham9yID0gZWxlbWVudF9saW5lKGNvbG9yID0gImdyZXk5MCIsIHNpemUgPSAwLjMpLA0KICAgICAgcGFuZWwuZ3JpZC5taW5vciA9IGVsZW1lbnRfYmxhbmsoKQ0KICAgICkNCikNCg0KYGBgDQoNCkxldHMgbG9hZCB1cCB0aGUgY3VycmVudCAyMDIxLTIyIHNlYXNvbiBvZiBwbGF5IGJ5IHBsYXkgTkhMIGRhdGEuDQoNCmBgYHtyIGxvYWRfZGF0YX0NCnBicCA8LSBsb2FkX3BicChzZWFzb24gPSBhcy5udW1lcmljKGZvcm1hdChTeXMuRGF0ZSgpICsgMTg0LCAiJVkiKSkpDQoNCnRlYW1faW5mbyA8LSBob2NrZXlSOjp0ZWFtX2xvZ29zX2NvbG9ycw0KDQpgYGANCg0KTGV0J3MgZmlyc3QgbG9vayBhdCBhIHNpbmdsZSBnYW1lLiBJbiBmYWN0LCBJJ2QgbGlrZSB0byBzZWUgdGhlIG1vc3QgcmVjZW50IGdhbWUuIEFuIGVhc3kgd2F5IHRvIGNyZWF0ZSBhIHNob3QgcGxvdCBpcyB0aHJvdWdoIHRoZSBgc3BvcnR5UmAgcGFja2FnZS4gV2Ugd2lsbCBhbHNvIHVzZSB0aGUgaW5jbHVkZWQgYHRlYW1fY29sb3JzX2xvZ29zYCBkYXRhIHRvIGFkZCBjb2xvciBhbmQgdGVhbSBsb2dvcyB0byBhbiBleGFtcGxlIHBsb3QgdGhhdCBjbG9zZWx5IGZvbGxvd3MgdGhlIGBob2NrZXlSYCB2aWduZXR0ZS4NCg0KYGBge3J9DQojIGdldCB0aGUgbW9zdCByZWNlbnQgQ2hpY2FnbyBCbGFja2hhd2tzIGdhbWUgZGF0YQ0KZ2FtZSA8LSBwYnAgJT4lDQogIGZpbHRlcihob21lX2FiYnJldmlhdGlvbiA9PSAiQ0hJIikgJT4lIA0KICBmaWx0ZXIoZ2FtZV9kYXRlID09IG1heChnYW1lX2RhdGUpICkNCg0KIyBncmFiIHRlYW0gbG9nb3MgJiBjb2xvcnMNCnRlYW1fbG9nb3MgPC0gdGVhbV9pbmZvICU+JQ0KICBmaWx0ZXIodGVhbV9hYmJyID09IHVuaXF1ZShnYW1lJGhvbWVfYWJicmV2aWF0aW9uKSB8IHRlYW1fYWJiciA9PSB1bmlxdWUoZ2FtZSRhd2F5X2FiYnJldmlhdGlvbikpICU+JQ0KICAjIGFkZCBpbiBkdW1teSB2YXJpYWJsZXMgdG8gcHV0IGxvZ29zIG9uIHRoZSBpY2UNCiAgbXV0YXRlKHggPSBpZmVsc2UoZnVsbF90ZWFtX25hbWUgPT0gdW5pcXVlKGdhbWUkaG9tZV9uYW1lKSwgNTAsIC01MCksDQogICAgICAgICB5ID0gMCkNCg0KIyBhZGQgdHJhbnNwYXJlbmN5IHRvIHRoZSBsb2dvDQp0cmFuc3BhcmVudCA8LSBmdW5jdGlvbihpbWcpIHsNCiAgbWFnaWNrOjppbWFnZV9meChpbWcsIGV4cHJlc3Npb24gPSAiMC4zKmEiLCBjaGFubmVsID0gImFscGhhIikNCn0NCg0KIyBnZXQgb25seSBzaG90IGV2ZW50cw0KZXZlbnRzIDwtIGMoIk1JU1NFRF9TSE9UIiwiU0hPVCIsIkdPQUwiKQ0KDQpzaG90cyA8LSBnYW1lICU+JSBmaWx0ZXIoZXZlbnRfdHlwZSAlaW4lIGV2ZW50cykgJT4lDQogICMgYWRkaW5nIHRlYW0gY29sb3JzDQogIGxlZnRfam9pbih0ZWFtX2xvZ29zLCBieSA9IGMoImV2ZW50X3RlYW1fYWJiciIgPSAidGVhbV9hYmJyIikpDQoNCiMgY3JlYXRlIHNob3QgcGxvdA0KZ2VvbV9ob2NrZXkoIm5obCIpICsNCiAgZ2dpbWFnZTo6Z2VvbV9pbWFnZSgNCiAgICBkYXRhID0gdGVhbV9sb2dvcywNCiAgICBhZXMoeCA9IHgsIHkgPSB5LCBpbWFnZSA9IHRlYW1fbG9nb19lc3BuKSwNCiAgICBpbWFnZV9mdW4gPSB0cmFuc3BhcmVudCwgc2l6ZSA9IDAuMjIsIGFzcCA9IDIuMzUNCiAgICApICsNCiAgZ2VvbV9wb2ludCgNCiAgICBkYXRhID0gc2hvdHMsDQogICAgYWVzKHhfZml4ZWQsIHlfZml4ZWQpLA0KICAgIHNpemUgPSA2LA0KICAgIGNvbG9yID0gc2hvdHMkdGVhbV9jb2xvcjEsDQogICAgc2hhcGUgPSBpZmVsc2Uoc2hvdHMkZXZlbnRfdHlwZSA9PSAiR09BTCIsIDE5LCAxKQ0KICAgICkgKw0KICBsYWJzKA0KICAgIHRpdGxlID0gZ2x1ZTo6Z2x1ZSgie3VuaXF1ZShnYW1lJGF3YXlfbmFtZSl9IEAge3VuaXF1ZShnYW1lJGhvbWVfbmFtZSl9IiksDQogICAgc3VidGl0bGUgPSBnbHVlOjpnbHVlKA0KICAgICJ7Zm9ybWF0KHVuaXF1ZShnYW1lJGdhbWVfZGF0ZSksICclYiAlZCwgJVknKX1cbg0KICAgIHt1bmlxdWUoc2hvdHMkYXdheV9hYmJyZXZpYXRpb24pfSB7dW5pcXVlKHNob3RzJGF3YXlfZmluYWwpfSAtIHt1bmlxdWUoc2hvdHMkaG9tZV9maW5hbCl9IHt1bmlxdWUoc2hvdHMkaG9tZV9hYmJyZXZpYXRpb24pfSINCiAgICApLCB5ID0gTlVMTCwgeCA9IE5VTEwsDQogICAgY2FwdGlvbiA9ICJAamltX2dydW1hbiB8IGRhdGEgZnJvbSBob2NrZXlSIHwgcGxvdCBtYWRlIHdpdGggc3BvcnR5UiINCiAgICApICsNCiAgdGhlbWUoDQogICAgcGxvdC50aXRsZSA9IGVsZW1lbnRfdGV4dChoanVzdCA9IDAuNSksDQogICAgcGxvdC5zdWJ0aXRsZSA9IGVsZW1lbnRfdGV4dChoanVzdCA9IDAuNSksDQogICAgcGxvdC5jYXB0aW9uID0gZWxlbWVudF90ZXh0KGhqdXN0ID0gLjkpLA0KICAgIGF4aXMudGV4dC54ID0gZWxlbWVudF9ibGFuaygpLA0KICAgIGF4aXMudGV4dC55ID0gZWxlbWVudF9ibGFuaygpLA0KICAgIHBsb3QubWFyZ2luID0gbWFyZ2luKGIgPSAwKSwNCiAgICBwYW5lbC5ncmlkLm1ham9yID0gZWxlbWVudF9ibGFuaygpDQogICAgKQ0KYGBgDQoNCk5leHQsIGxldCdzIGNyZWF0ZSBhIHBsb3R0aW5nIGZ1bmN0aW9uIHRoYXQgc2hvd3MgdGhlIHRvcCBzY29yZXJzIGZvciBhbnkgc2luZ2xlIE5ITCB0ZWFtIGZvciB0aGUgZW50aXJlIDIwMjEtMjIgc2Vhc29uIHNvIGZhci4gV2UgYXJlIGdvaW5nIHRvIG5lZWQgdG8gYWRkIHRoZSBpbmZvcm1hdGlvbiBmcm9tIHRoZSByb3N0ZXJzLCBhbmQgY2xlYW4gdXAgcG9zaXRpb25zLg0KDQpgYGB7cn0NCnJvc3RlciA8LSBnZXRfcm9zdGVycyh0ZWFtID0gImFsbCIsIA0KICAgICAgICAgICAgICAgICAgICAgIHNlYXNvbiA9IGFzLm51bWVyaWMoZm9ybWF0KFN5cy5EYXRlKCkgKyAxODQsICIlWSIpKSkNCg0KcG9zaXRpb24gPC0gcm9zdGVyICU+JSANCiAgc2VsZWN0KHBsYXllciwgcG9zaXRpb24pICU+JSANCiAgdW5pcXVlKCkgJT4lIA0KICBtdXRhdGUocG9zaXRpb24gPSBjYXNlX3doZW4ocG9zaXRpb24gPT0gIkYiIH4gImZvcndhcmQiLCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRSVUUgfiAiZGVmZW5zZW1hbiIpKQ0KDQpgYGANCg0KTGV0J3MgYWxzbyBjYWxjdWxhdGUgdGhlIHRvdGFsIHBvaW50cyBzY29yZWQgZm9yIGVhY2ggcGxheWVyLCBtdWNoIGxpa2UgTWVnaGFuIGRpZCBpbiBoZXIgYmxvZyBwb3N0Lg0KDQpgYGB7cn0NCnBvaW50cyA8LSBwYnAgJT4lIA0KICAjIGFsbCBnb2FscyBleGNlcHQgZm9yIHRob3NlIGluIHRoZSBzaG9vdG91dA0KICBkcGx5cjo6ZmlsdGVyKGV2ZW50X3R5cGUgPT0gIkdPQUwiICYgcGVyaW9kICE9IDUpICU+JSANCiAgIyBldmVudCBwbGF5ZXJzIDEtMyBhcmUgdGhvc2Ugd2hvIG1pZ2h0IGdldCBwb2ludHMgb24gZWFjaCBnb2FsDQogIHNlbGVjdChnYW1lX2lkLCBnYW1lX2RhdGUsIHRlYW0gPSBldmVudF90ZWFtX2FiYnIsIGV2ZW50X3BsYXllcl8xX25hbWUsIA0KICAgICAgICAgZXZlbnRfcGxheWVyXzJfbmFtZSwgZXZlbnRfcGxheWVyXzNfbmFtZSwgZXZlbnRfcGxheWVyXzFfdHlwZSwgDQogICAgICAgICBldmVudF9wbGF5ZXJfMl90eXBlLCBldmVudF9wbGF5ZXJfM190eXBlKSAlPiUgDQogICMgdGhpcyB3aWxsIGNyZWF0ZSBhIG5hbWUvdHlwZSBjb21ibyBmb3IgcGxheWVycyAxIHRocm91Z2ggMw0KICBwaXZvdF9sb25nZXIoZXZlbnRfcGxheWVyXzFfbmFtZTpldmVudF9wbGF5ZXJfM190eXBlLA0KICAgICAgICAgICAgICAgbmFtZXNfdG8gPSBjKE5BLCAiLnZhbHVlIiksDQogICAgICAgICAgICAgICBuYW1lc19wYXR0ZXJuID0gIiguKylfKC4rKSIpICU+JSANCiAgIyBvbmx5IHRoZSBwbGF5ZXJzIHdobyBlaXRoZXIgc2NvcmVkIHRoZSBnb2FsIG9yIGdvdCBhbiBhc3Npc3QNCiAgZHBseXI6OmZpbHRlcih0eXBlICVpbiUgYygiQXNzaXN0IiwgIlNjb3JlciIpKSAlPiUgDQogIGNvdW50KG5hbWUsIHRlYW0sIG5hbWUgPSAicG9pbnRzIikgJT4lIA0KICBtdXRhdGUobmFtZSA9IHN0cl9yZXBsYWNlX2FsbChuYW1lLCAiXFwuIiwgIiAiKSkNCmBgYA0KDQpTaW1pbGFybHksIGxldHMgY2FsY3VsYXRlIGFuIGFjY3VtdWxhdGVkIFRpbWUgb24gSWNlIChUT0kpIGZvciBlYWNoIHBsYXllciBtdWNoIGFzIE1lZ2hhbiBkaWQsIGJ1dCB3aXRoIGBzdW1tYXJpemUoLmdyb3VwcyA9ICJkcm9wIilgIGFuZCBgc2xpY2VfbWF4KClgLg0KDQpgYGB7cn0NCiMgY2FsY3VsYXRlIFRPSSBmb3IgZWFjaCBwbGF5ZXINCg0KVE9JIDwtIHBicCAlPiUNCiAgIyBjcmVhdGUgYSB2YXJpYWJsZSBmb3IgdGhlIGxlbmd0aCBvZiBlYWNoIGV2ZW50DQogIG11dGF0ZShsZW5ndGggPSBjYXNlX3doZW4oDQogICAgbGVhZChnYW1lX2lkKSA9PSBnYW1lX2lkIH4NCiAgICAgIGxlYWQocGVyaW9kX3NlY29uZHMpIC0gcGVyaW9kX3NlY29uZHMsDQogICAgVFJVRSB+IDANCiAgKSkgJT4lDQogIHNlbGVjdChsZW5ndGgsDQogICAgICAgICBnYW1lX2lkLA0KICAgICAgICAgaG9tZV9hYmJyZXZpYXRpb24sDQogICAgICAgICBhd2F5X2FiYnJldmlhdGlvbiwNCiAgICAgICAgIGhvbWVfb25fMTphd2F5X29uXzcpICU+JQ0KICBmaWx0ZXIobGVuZ3RoID4gMCkgJT4lDQogIHBpdm90X2xvbmdlcihob21lX29uXzE6YXdheV9vbl83LA0KICAgICAgICAgICAgICAgbmFtZXNfdG8gPSAidGVhbSIsDQogICAgICAgICAgICAgICB2YWx1ZXNfdG8gPSAibmFtZSIpICU+JQ0KICBmaWx0ZXIoIWlzLm5hKG5hbWUpKSAlPiUNCiAgbXV0YXRlKHRlYW0gPSBpZmVsc2UoDQogICAgc3RyX2RldGVjdCh0ZWFtLCAiaG9tZSIpLA0KICAgIGhvbWVfYWJicmV2aWF0aW9uLA0KICAgIGF3YXlfYWJicmV2aWF0aW9uDQogICkpICU+JQ0KICBzZWxlY3QoLWMoMzo0KSkgJT4lDQogIGdyb3VwX2J5KG5hbWUsIHRlYW0pICU+JQ0KICAjIGNhbGN1bGF0ZSB0b3RhbCBUT0kgYW5kIGdhbWVzIHBsYXllZA0KICBzdW1tYXJpemUoVE9JID0gc3VtKGxlbmd0aCkgLyA2MCwNCiAgICAgICAgICAgIEdQID0gbl9kaXN0aW5jdChnYW1lX2lkKSwNCiAgICAgICAgICAgIC5ncm91cHMgPSAiZHJvcCIpICU+JQ0KICBtdXRhdGUobmFtZSA9IHN0cl9yZXBsYWNlX2FsbChuYW1lLCAiXFwuIiwgIiAiKSkgJT4lDQogIGZpbHRlcihUT0kgPiAyMDAgJiAhKG5hbWUgJWluJSBjKCJNYXJjIEFuZHJlIEZsZXVyeSIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJVa2tvIFBla2thIEx1dWtrb25lbiIpKSkgJT4lDQogICMgbWFrZSBzb21lIG5hbWUgYWRqdXN0bWVudHMgdG8gYWNjb3VudCBmb3IgZGlzY3JlcGFuY2llcyANCiAgbXV0YXRlKA0KICAgIG5hbWUgPSBjYXNlX3doZW4oDQogICAgICBuYW1lID09ICJEcmV3IE8gQ29ubm9yIiB+ICJEcmV3IE8nQ29ubm9yIiwNCiAgICAgIG5hbWUgPT0gIkxvZ2FuIE8gQ29ubm9yIiB+ICJMb2dhbiBPJ0Nvbm5vciIsDQogICAgICBuYW1lID09ICJMaWFtIE8gQnJpZW4iIH4gIkxpYW0gTydCcmllbiIsDQogICAgICBuYW1lID09ICJSeWFuIE8gUmVpbGx5IiB+ICJSeWFuIE8nUmVpbGx5IiwNCiAgICAgIG5hbWUgPT0gIkplYW4gR2FicmllbCBQYWdlYXUiIH4gIkplYW4tR2FicmllbCBQYWdlYXUiLA0KICAgICAgbmFtZSA9PSAiSyBBbmRyZSBNaWxsZXIiIH4gIksnQW5kcmUgTWlsbGVyIiwNCiAgICAgIG5hbWUgPT0gIk1hcmMgRWRvdWFyZCBWbGFzaWMiIH4gIk1hcmMtRWRvdWFyZCBWbGFzaWMiLA0KICAgICAgbmFtZSA9PSAiUGllcnJlIEVkb3VhcmQgQmVsbGVtYXJlIiB+ICJQaWVycmUtRWRvdWFyZCBCZWxsZW1hcmUiLA0KICAgICAgbmFtZSA9PSAiTmljb2xhcyBBdWJlIEt1YmVsIiB+ICJOaWNvbGFzIEF1YmUtS3ViZWwiLA0KICAgICAgbmFtZSA9PSAiT2xpdmVyIEVrbWFuIExhcnNzb24iIH4gIk9saXZlciBFa21hbi1MYXJzc29uIiwNCiAgICAgIG5hbWUgPT0gIlBpZXJyZSBMdWMgRHVib2lzIiB+ICJQaWVycmUtTHVjIER1Ym9pcyIsDQogICAgICBuYW1lID09ICJSeWFuIE51Z2VudCBIb3BraW5zIiB+ICJSeWFuIE51Z2VudC1Ib3BraW5zIiwNCiAgICAgIG5hbWUgPT0gIlphY2ggQXN0b24gUmVlc2UiIH4gIlphY2ggQXN0b24tUmVlc2UiLA0KICAgICAgVFJVRSB+IG5hbWUNCiAgICApDQogICkgJT4lDQogICMgam9pbiBpbiBwb2ludHMgZGF0YSB0byBjYWxjdWxhdGUgcmF0ZQ0KICBsZWZ0X2pvaW4ocG9pbnRzLCBieSA9IGMoIm5hbWUiLCAidGVhbSIpKSAlPiUNCiAgbXV0YXRlKHBvaW50cyA9IHJlcGxhY2VfbmEocG9pbnRzLCAwKSwNCiAgICAgICAgIHB0c19wZXJfNjAgPSBwb2ludHMgKiA2MCAvIFRPSSkNCg0KdG9wX3BvaW50cyA8LSBUT0kgJT4lDQogIGxlZnRfam9pbihwb3NpdGlvbiwgYnkgPSBjKCJuYW1lIiA9ICJwbGF5ZXIiKSkgJT4lDQogICMgZmlsdGVyIHRvIG9ubHkgdGhlIHRvcCAxMCBwbGF5ZXJzIHBlciB0ZWFtDQogIGdyb3VwX2J5KHRlYW0pICU+JQ0KICBzbGljZV9tYXgobiA9IDEwLCBvcmRlcl9ieSA9IHB0c19wZXJfNjApICU+JSANCiAgbGVmdF9qb2luKHNlbGVjdCh0ZWFtX2luZm8sIGZ1bGxfdGVhbV9uYW1lLCB0ZWFtID0gdGVhbV9hYmJyKSwNCiAgICAgICAgICAgIGJ5ID0gInRlYW0iKQ0KYGBgDQoNClRoaXMgcGxvdCBoYXMgYW4gYW5ub3RhdGlvbiBpbiB0aGUgbG93ZXItcmlnaHQgY29ybmVyIHRoYXQgbGlzdHMgdGhlIHRlYW3igJlzIHJlY29yZCBhbmQgaXRzIHJhbmsgd2l0aGluIGl0cyBkaXZpc2lvbi4gTGV0J3MgZ28gYmFjayBhbmQgcHVsbCB0aGVtIHRvZ2V0aGVyIGFzIHdlbGwuDQoNCmBgYHtyfQ0KIyBjYWxjdWxhdGUgdGhlIHJlc3VsdCBvZiB0aGUgc2hvb3RvdXRzIGJ5IHRoZSB0ZWFtIHRoYXQgaGFzIG1vcmUgZ29hbHMNClNPIDwtIHBicCAlPiUNCiAgZ3JvdXBfYnkoZ2FtZV9pZCkgJT4lDQogIGZpbHRlcihtYXgocGVyaW9kKSA9PSA1KSAlPiUNCiAgZmlsdGVyKGV2ZW50X3R5cGUgPT0gIkdPQUwiKSAlPiUNCiAgY291bnQoZ2FtZV9pZCwgZXZlbnRfdGVhbV90eXBlKSAlPiUNCiAgcGl2b3Rfd2lkZXIobmFtZXNfZnJvbSA9IGV2ZW50X3RlYW1fdHlwZSwgdmFsdWVzX2Zyb20gPSBuKSAlPiUNCiAgbXV0YXRlKFNPX3Jlc3VsdCA9IGlmZWxzZShob21lID4gYXdheSwgImhvbWUiLCAiYXdheSIpKQ0KDQpyZWNvcmRzIDwtIHBicCAlPiUNCiAgIyBjYWxjdWxhdGUgdGhlIGhvbWUgYW5kIGF3YXkgc2NvcmUgYW5kIGdhbWUgdHlwZSwgYnkgaG93IG1hbnkgZ2FtZSBwZXJpb2RzDQogICMgMyBwZXJpb2RzOiByZWd1bGF0aW9uOyA0OiBvdmVydGltZTsgNTogc2hvb3RvdXQNCiAgZ3JvdXBfYnkoDQogICAgZ2FtZV9pZCwNCiAgICBob21lX2FiYnJldmlhdGlvbiwNCiAgICBhd2F5X2FiYnJldmlhdGlvbiwNCiAgICBob21lX2RpdmlzaW9uX25hbWUsDQogICAgYXdheV9kaXZpc2lvbl9uYW1lDQogICkgJT4lDQogIHN1bW1hcml6ZSgNCiAgICBob21lID0gbWF4KGhvbWVfZmluYWwpLA0KICAgIGF3YXkgPSBtYXgoYXdheV9maW5hbCksDQogICAgcGVyaW9kID0gbWF4KHBlcmlvZCksDQogICAgLmdyb3VwcyA9ICJkcm9wIg0KICApICU+JQ0KICBsZWZ0X2pvaW4oc2VsZWN0KFNPLC1jKDI6MykpLCBieSA9ICJnYW1lX2lkIikgJT4lDQogICMgZ2V0IHN0YW5kaW5ncyBwb2ludHMgcGVyIGdhbWU6IDIgZm9yIHdpbiwgMSBmb3IgT1QvU08gbG9zcywgMCBmb3IgcmVnIGxvc3MNCiAgbXV0YXRlKA0KICAgIGhvbWUgPSBpZmVsc2UoaXMubmEoU09fcmVzdWx0KSB8DQogICAgICAgICAgICAgICAgICAgIFNPX3Jlc3VsdCA9PSAiYXdheSIsIGhvbWUsIGhvbWUgKyAxKSwNCiAgICBhd2F5ID0gaWZlbHNlKGlzLm5hKFNPX3Jlc3VsdCkgfA0KICAgICAgICAgICAgICAgICAgICBTT19yZXN1bHQgPT0gImhvbWUiLCBhd2F5LCBhd2F5ICsgMSksDQogICAgaG9tZV9wb2ludHMgPSBjYXNlX3doZW4oaG9tZSA+IGF3YXkgfiAyLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIGhvbWUgPCBhd2F5ICYgcGVyaW9kID4gMyB+IDEsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgVFJVRSB+IDApLA0KICAgIGF3YXlfcG9pbnRzID0gY2FzZV93aGVuKGF3YXkgPiBob21lIH4gMiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBhd2F5IDwgaG9tZSAmIHBlcmlvZCA+IDMgfiAxLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRSVUUgfiAwKQ0KICApICU+JQ0KICBzZWxlY3QoLWMoaG9tZTpTT19yZXN1bHQpKSAlPiUNCiAgcGl2b3RfbG9uZ2VyKA0KICAgIGhvbWVfYWJicmV2aWF0aW9uOmF3YXlfcG9pbnRzLA0KICAgIG5hbWVzX3RvID0gYyhOQSwgIi52YWx1ZSIpLA0KICAgIG5hbWVzX3NlcCA9IDUNCiAgKSAlPiUNCiAgbXV0YXRlKA0KICAgIHdpbiA9IGlmZWxzZShwb2ludHMgPT0gMiwgMSwgMCksDQogICAgbG9zcyA9IGlmZWxzZShwb2ludHMgPT0gMCwgMSwgMCksDQogICAgT1QgPSBpZmVsc2UocG9pbnRzID09IDEsIDEsIDApDQogICkgJT4lDQogIGdyb3VwX2J5KGFiYnJldmlhdGlvbiwgZGl2aXNpb25fbmFtZSkgJT4lDQogICMgc3VtIHRoZSBwb2ludHMgcGVyIHRlYW0gcGVyIGRpdmlzaW9uDQogIHN1bW1hcml6ZSgNCiAgICB3aW5zID0gc3VtKHdpbiksDQogICAgbG9zc2VzID0gc3VtKGxvc3MpLA0KICAgIE9UID0gc3VtKE9UKSwNCiAgICBwb2ludHMgPSBzdW0ocG9pbnRzKSwNCiAgICAuZ3JvdXBzID0gImRyb3AiDQogICkgJT4lDQogICMgY3JlYXRlIHRoZSByZWNvcmQgdGV4dCB0aGF0IHdpbGwgYmUgdXNlZCBvbiB0aGUgcGxvdA0KICBtdXRhdGUocmVjb3JkID0gc3RyX2Mod2lucywgbG9zc2VzLCBPVCwgc2VwID0gIi0iKSkgJT4lDQogIGdyb3VwX2J5KGRpdmlzaW9uX25hbWUpICU+JQ0KICBhcnJhbmdlKGRpdmlzaW9uX25hbWUsIGRlc2MocG9pbnRzKSkgJT4lDQogICMgY2FsY3VsYXRlIHRoZSBkaXZpc2lvbiByYW5rDQogIG11dGF0ZShyYW5rID0gcm93X251bWJlcigpKQ0KYGBgDQoNCkFzIE1lZ2hhbiBkaWQsIGxldCdzIGJ1aWxkIG91dCBhIGZ1bmN0aW9uIHRoYXQgd29ya3MgZm9yIGFueSB0ZWFtLg0KDQpgYGB7cn0NCnBsb3RfZm4gPC0gZnVuY3Rpb24odGVhbV9uYW1lKSB7DQogIHNpbmdsZV90ZWFtIDwtIHRvcF9wb2ludHMgJT4lDQogICAgZmlsdGVyKHRlYW0gPT0gdGVhbV9uYW1lKQ0KICANCiAgdGVhbV9yZWNvcmQgPC0gcmVjb3JkcyAlPiUNCiAgICBmaWx0ZXIoYWJicmV2aWF0aW9uID09IHRlYW1fbmFtZSkgJT4lDQogICAgbGVmdF9qb2luKHNlbGVjdCh0ZWFtX2luZm8sIHRlYW1fYWJiciwgdGVhbV9sb2dvX2VzcG4pLA0KICAgICAgICAgICAgICBieSA9IGMoImFiYnJldmlhdGlvbiIgPSAidGVhbV9hYmJyIikpDQogIA0KICBwdHNfcmF0ZV9hdmcgPC0gVE9JICU+JQ0KICAgIGdyb3VwX2J5KHRlYW0pICU+JQ0KICAgIHN1bW1hcml6ZShhdmcgPSBtZWFuKHB0c19wZXJfNjApLA0KICAgICAgICAgICAgICAuZ3JvdXBzID0gImRyb3AiKSAlPiUNCiAgICBmaWx0ZXIodGVhbSA9PSB0ZWFtX25hbWUpDQogIA0KICBwbG90IDwtIHNpbmdsZV90ZWFtICU+JQ0KICAgIGdyb3VwX2J5KHBvc2l0aW9uKSAlPiUNCiAgICBtdXRhdGUobGFiZWwgPSBpZmVsc2UocHRzX3Blcl82MCA9PSBtYXgocHRzX3Blcl82MCksIHBvc2l0aW9uLCBOQSkpICU+JQ0KICAgIHVuZ3JvdXAoKSAlPiUNCiAgICBnZ3Bsb3QoYWVzKA0KICAgICAgeCA9IHB0c19wZXJfNjAsDQogICAgICB5ID0gcmVvcmRlcihuYW1lLCBwdHNfcGVyXzYwKSwNCiAgICAgIGZpbGwgPSBwb3NpdGlvbg0KICAgICkpICsNCiAgICBnZW9tX2JhcihzdGF0ID0gImlkZW50aXR5IikgKw0KICAgIHNjYWxlX2ZpbGxfbWFudWFsKHZhbHVlcyA9IGMoIiNBRDk0NjUiLCAiI0UyREVENCIpKSArDQogICAgYW5ub3RhdGUoDQogICAgICAidGV4dCIsDQogICAgICB4ID0gbWF4KHNpbmdsZV90ZWFtJHB0c19wZXJfNjApICogMS4xLA0KICAgICAgeSA9IDExLA0KICAgICAgdmp1c3QgPSAxLjUsDQogICAgICBsYWJlbCA9ICJnYW1lcyIsDQogICAgICBzaXplID0gMy41DQogICAgKSArDQogICAgZ2VvbV9sYWJlbCgNCiAgICAgIGRhdGEgPSBzaW5nbGVfdGVhbSwNCiAgICAgIGFlcygNCiAgICAgICAgeCA9IG1heChzaW5nbGVfdGVhbSRwdHNfcGVyXzYwKSAqIDEuMSwNCiAgICAgICAgbGFiZWwgPSBHUA0KICAgICAgKSwNCiAgICAgIGZpbGwgPSAiI2QzZDNkMyINCiAgICApICsNCiAgICBsYWJzKA0KICAgICAgeCA9ICJQb2ludHMgcGVyIDYwIG1pbnV0ZXMiLA0KICAgICAgeSA9ICIiLA0KICAgICAgdGl0bGUgPSBnbHVlOjpnbHVlKA0KICAgICAgICAiU2NvcmluZyByYXRlIGxlYWRlcnMgKDIwMCsgbWluLik6IHt1bmlxdWUoc2luZ2xlX3RlYW0kZnVsbF90ZWFtX25hbWUpfSINCiAgICAgICksDQogICAgICBzdWJ0aXRsZSA9ICIyMDIxLTIyIHNlYXNvbiwgdGhyb3VnaCBGZWIuIDEwIg0KICAgICkgKw0KICAgIGdlb21fdmxpbmUoeGludGVyY2VwdCA9IHB0c19yYXRlX2F2ZyRhdmcsDQogICAgICAgICAgICAgICBsaW5ldHlwZSA9ICJkYXNoZWQiLA0KICAgICAgICAgICAgICAgY29sb3IgPSAiI2EzOWQ5ZCIpICsNCiAgICBhbm5vdGF0ZSgNCiAgICAgICJ0ZXh0IiwNCiAgICAgIHggPSBwdHNfcmF0ZV9hdmckYXZnLA0KICAgICAgeSA9IDExLA0KICAgICAgbGFiZWwgPSAidGVhbSBhdmcuIiwNCiAgICAgIHNpemUgPSAzLA0KICAgICAgaGp1c3QgPSAtMC4xLA0KICAgICAgdmp1c3QgPSAxLjUNCiAgICApICsNCiAgICBnZW9tX3RleHQoYWVzKGxhYmVsID0gbGFiZWwpLA0KICAgICAgICAgICAgICB4ID0gMC4xLA0KICAgICAgICAgICAgICBoanVzdCA9IDApICsNCiAgICBnZW9tX3RleHQoDQogICAgICBhZXMobGFiZWwgPSByb3VuZChwdHNfcGVyXzYwLCAxKSksDQogICAgICB2anVzdCA9IDAuNSwNCiAgICAgIGhqdXN0ID0gMS41DQogICAgKSArDQogICAgYW5ub3RhdGUoDQogICAgICAidGV4dCIsDQogICAgICB4ID0gbWF4KHNpbmdsZV90ZWFtJHB0c19wZXJfNjApICogMC44LA0KICAgICAgeSA9IDMsDQogICAgICBsYWJlbCA9IGdsdWU6OmdsdWUoDQogICAgICAgICJyZWNvcmQ6IHt0ZWFtX3JlY29yZCRyZWNvcmR9DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkaXZpc2lvbiByYW5rOiB7dGVhbV9yZWNvcmQkcmFua30iDQogICAgICApDQogICAgKSArDQogICAgc2NhbGVfeF9jb250aW51b3VzKGV4cGFuZCA9IGV4cGFuc2lvbihtdWx0ID0gYygwLCAuMSkpKSArDQogICAgdGhlbWUocGFuZWwuZ3JpZC5tYWpvci55ID0gZWxlbWVudF9ibGFuaygpLA0KICAgICAgICAgIGxlZ2VuZC5wb3NpdGlvbiA9ICJub25lIikgKw0KICAgIGxhYnMoY2FwdGlvbiA9ICJkYXRhIGZyb20gaG9ja2V5UiIpDQogIA0KICBnZ2RyYXcoKSArDQogICAgZHJhd19wbG90KHBsb3QpICsNCiAgICBkcmF3X2ltYWdlKA0KICAgICAgdGVhbV9yZWNvcmQkdGVhbV9sb2dvX2VzcG4sDQogICAgICB4ID0gMC40LA0KICAgICAgeSA9IDAuNDIsDQogICAgICBzY2FsZSA9IDAuMTUNCiAgICApDQogIA0KfQ0KYGBgDQoNClNvLCBjdXJyZW50IHN0YXRzIGZvciB0aGUgaG9tZSB0ZWFtIGhlcmUgaW4gQ2hpY2FnbzoNCg0KYGBge3J9DQpwbG90X2ZuKCJDSEkiKQ0KYGBgDQoNClJpbGV5IFN0aWxsbWFuIChkZWZlbnNlbWFuKSBhbmQgSm9uYXRoYW4gVG9ld3MgKCkgaGF2ZSBiZWVuIG9uIGFuZCBvZmYgSW5qdXJlZCBSZXNlcnZlIHRoaXMgc2Vhc29uIGFuZCBkaWQgbm90IGFwcGVhciBpbiB0aGUgcm9zdGVyIGRhdGFzZXQuDQoNCkFuZCBjdXJyZW50IHN0YXRzIGZvciBDb2xvcmFkbzoNCg0KYGBge3J9DQpwbG90X2ZuKCJDT0wiKQ0KYGBgDQoNCg0KDQoNCg==</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2022_02_23.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
