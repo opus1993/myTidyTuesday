@@ -1,5 +1,5 @@
 ---
-title: "Plotting Hockey in a Robust Way"
+title: "Plotting NHL Stats"
 author: "Jim Gruman"
 date: "February 23, 2022"
 output:
