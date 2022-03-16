@@ -1,0 +1,109 @@
+---
+title: "R Package Vignette Counts"
+author: "Jim Gruman"
+date: "March 14, 2022"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+This week's dataset comes from Dr. Robert Flight and covers the evolution of the built in R package help documentation, often called Vignettes.
+
+```{r setup, message=FALSE}
+
+suppressPackageStartupMessages({
+library(tidyverse) # clean and transform rectangular data
+library(grumanlib) # my plot theme
+library(treemapify)
+})
+
+source(here::here("code","_common.R"),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+theme_set(grumanlib::theme_jim())
+
+```
+
+Load up the data to have a look
+
+```{r}
+cran <- tidytuesdayR::tt_load("2022-03-15")$cran %>% 
+  mutate(MajorVersion = as.integer(str_extract(version, "^[0-9]\\.")),
+         VignetteCount = as.integer(rmd + rnw),
+         date = lubridate::parse_date_time(date,
+                                           orders = c("Ymd HMS","a b d HMS Y")),
+         package = str_to_lower(package),
+         ReleaseYear = lubridate::year((lubridate::floor_date(date, "year")))) %>% 
+  group_by(package, MajorVersion) %>% 
+  mutate(ReleaseType = case_when(
+           row_number(date) == 1L ~ "Major",
+           TRUE ~ "Minor")) %>% 
+  ungroup() 
+
+downloads <- cranlogs::cran_top_downloads("last-month", count = 100) %>%
+  mutate(package = str_to_lower(package))
+
+```
+
+```{r}
+cran %>% 
+  count(ReleaseYear, ReleaseType) %>% 
+  filter(ReleaseYear > 2003) %>% 
+  ggplot(aes(x = ReleaseYear, n, fill = ReleaseType)) +
+  geom_col() +
+  labs(caption = "2021 is a partial year, ending August 12th",
+       y = "Count of Releases published on CRAN")
+
+```
+
+```{r}
+
+cran %>% 
+  arrange(package, date) %>% 
+  filter(!is.na(date)) %>% 
+  inner_join(downloads, by = "package") %>% 
+  group_by(package) %>% 
+  summarise(vignettes = last(VignetteCount),
+            born_on = lubridate::year(min(date)),
+            age = round(
+              lubridate::interval(min(date), Sys.Date()) / lubridate::years(1), 1),
+            downloads = sum(count),
+            .groups = "drop") %>% 
+  mutate(package = glue::glue("{ package } \n { vignettes }")) %>% 
+  ggplot(aes(
+    area = downloads,
+    fill = born_on,
+    label = package,
+    subgroup = cut_interval(born_on, n = 4)
+  )) +
+  geom_treemap(show.legend = FALSE) +
+  geom_treemap_subgroup_border() +
+  geom_treemap_text(aes(color = after_scale(map_chr(fill, best_contrast))),
+    place = "center",
+    reflow = TRUE
+  ) +
+    geom_treemap_subgroup_text(
+    color = "white",
+    alpha = 0.2,
+    place = "bottomleft",
+    fontface = "italic",
+    min.size = 0
+  ) +
+  labs(
+    fill = NULL, title = "Top Most Downloaded R Packages from CRAN",
+    subtitle = "Package Name and Number of Vignettes labeled. Size corresponds to the Total Number of Downloads. Grouped by First Release Years.",
+    caption = "Data Source: Robert Flight and cranlogs"
+  ) +
+  theme(legend.position = "none")
+
+```
+
+
+
+
