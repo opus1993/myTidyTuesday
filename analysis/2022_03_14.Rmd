@@ -20,7 +20,11 @@ suppressPackageStartupMessages({
 library(tidyverse) # clean and transform rectangular data
 library(grumanlib) # my plot theme
 library(treemapify)
+library(tidymodels)
+library(poissonreg)
 })
+
+tidymodels_prefer()
 
 source(here::here("code","_common.R"),
        verbose = FALSE,
@@ -53,31 +57,38 @@ downloads <- cranlogs::cran_top_downloads("last-month", count = 100) %>%
 
 ```{r exploratory}
 cran %>% 
-  count(ReleaseYear, ReleaseType) %>% 
+  mutate(has_vignette = VignetteCount > 0) %>%  
+  count(ReleaseYear, ReleaseType, has_vignette,
+        name = "vignettes") %>% 
   filter(ReleaseYear > 2003) %>% 
-  ggplot(aes(x = ReleaseYear, n, fill = ReleaseType)) +
+  ggplot(aes(x = ReleaseYear, vignettes, fill = has_vignette)) +
   geom_col() +
+  facet_wrap(~ ReleaseType) +
   labs(caption = "2021 is a partial year, ending August 12th",
-       y = "Count of Releases published on CRAN")
+       y = "Count of Releases published on CRAN",
+       fill = "Has A Vignette") +
+  theme(legend.position = "top")
 
 ```
 
 ```{r final_plot, fig.asp=1}
 
-cran %>% 
+vignette_counts <- cran %>% 
   arrange(package, date) %>% 
   filter(!is.na(date)) %>% 
-  inner_join(downloads, by = "package") %>% 
   group_by(package) %>% 
   summarise(vignettes = last(VignetteCount),
             born_on = lubridate::year(min(date)),
             age = round(
-              lubridate::interval(min(date), Sys.Date()) / lubridate::years(1), 1),
-            downloads = sum(count),
+              lubridate::interval(min(date), Sys.Date()) / lubridate::years(1), 1), 
+            releases = n(),
             .groups = "drop") %>% 
+    inner_join(downloads, by = "package") 
+
+vignette_counts %>% 
   mutate(package = glue::glue("{ package } \n { vignettes }")) %>% 
   ggplot(aes(
-    area = downloads,
+    area = count,
     fill = vignettes,
     label = package,
     subgroup = cut_interval(born_on, n = 4)
@@ -97,7 +108,7 @@ cran %>%
   ) +
   labs(
     fill = NULL, title = "Top Most Downloaded R Packages from CRAN",
-    subtitle = "Package Name and Number of Vignettes labeled. Size corresponds to the Total Number of Downloads.",
+    subtitle = "Package Name and Number of Vignettes labeled. Size corresponds to the Total Number of Downloads from 14Feb-15Mar2022.",
     caption = "Data Source: Robert Flight and cranlogs"
   ) +
   theme(legend.position = "none")
@@ -109,6 +120,86 @@ cran %>%
 tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1504143273925148672")
 ```
 
+Let's build on Julia Silge's video from [this week](https://juliasilge.com/blog/rstats-vignettes/) on Machine Learning with `tidymodels`.
+
+A regression model of counts is often best modeled with the poisson distribution
+
+```{r}
+
+poisson_wf <- workflow(vignettes ~ releases , poisson_reg())
+
+fit(poisson_wf, data = vignette_counts)
+
+```
+
+Let's try a zero inflated model, with the zero inflated terms, that is, those with a probability of being zero, modeled by `born_on` year.
+
+```{r}
+
+zip_spec <- poisson_reg() %>% set_engine("zeroinfl")
+
+zip_wf <- workflow() %>% 
+  add_model(zip_spec, formula = vignettes ~ releases | releases   ) %>% 
+  add_variables(outcomes = vignettes,
+                predictors = c(releases, born_on   ))
+
+fit(zip_wf, data = vignette_counts)
+
+```
+
+Bootstrapping to better understand the model coefficients for inference
+
+```{r}
+folds <- bootstraps(vignette_counts, times = 100)
+```
+
+Let's speed this up as best as we can with parallel processing.
+
+```{r}
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+
+future::plan("multisession", workers = all_cores) # on Windows
+```
+
+
+
+```{r}
+
+get_coefficients <- function(x){
+  extract_fit_engine(x) %>% 
+    tidy(type = "zero")
+}
+
+ctrl <- control_resamples(
+  extract = get_coefficients
+)
+
+zip_res <- fit_resamples(zip_wf, 
+                         folds,
+                         control = ctrl)
+
+```
+
+For all of the bootstraps, what is the estimate of the coefficient statistic?  Let's make a plot:
+
+```{r}
+zip_res %>%
+  select(id, .extracts) %>%
+  unnest(.extracts) %>%
+  unnest(.extracts) %>%
+  ggplot(aes(x = estimate, fill = term)) +
+  geom_histogram(show.legend = FALSE, bins = 35) +
+  facet_wrap( ~ term, scales = "free_x") +
+  geom_vline(
+    xintercept = 0,
+    lty = 2,
+    size = 1.2,
+    color = "gray70"
+  ) +
+  labs(caption = "Zero Inflated Poisson model for Vignette Counts on R Packages",
+       subtitle = "More releases means more vignettes")
+```
 
 
 
