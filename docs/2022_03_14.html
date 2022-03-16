@@ -419,16 +419,16 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree7de0d3aa97ff9d22a1981b6811b5ba93bbec3c82targetblank7de0d3aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/7de0d3aa97ff9d22a1981b6811b5ba93bbec3c82" target="_blank">7de0d3a</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree94faa4e420e20448d61d1a60636d50ca07177826targetblank94faa4ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/94faa4e420e20448d61d1a60636d50ca07177826" target="_blank">94faa4e</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree7de0d3aa97ff9d22a1981b6811b5ba93bbec3c82targetblank7de0d3aa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree94faa4e420e20448d61d1a60636d50ca07177826targetblank94faa4ea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/7de0d3aa97ff9d22a1981b6811b5ba93bbec3c82" target="_blank">7de0d3a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/94faa4e420e20448d61d1a60636d50ca07177826" target="_blank">94faa4e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -512,6 +512,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/94faa4e420e20448d61d1a60636d50ca07177826/analysis/2022_03_14.Rmd" target="_blank">94faa4e</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-03-16
+</td>
+<td>
+CRAN vignette poisson coefficients
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/09fb4521e52efe679b3edf94b4a8787334c8e22c/docs/2022_03_14.html" target="_blank">09fb452</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-03-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -626,7 +660,12 @@ CRAN packages treemap
 library(tidyverse) # clean and transform rectangular data
 library(grumanlib) # my plot theme
 library(treemapify)
-})
+library(tidymodels)
+library(poissonreg)
+})</code></pre>
+<pre><code>Warning: package &#39;parsnip&#39; was built under R version 4.1.3</code></pre>
+<pre><code>Warning: package &#39;poissonreg&#39; was built under R version 4.1.3</code></pre>
+<pre class="r"><code>tidymodels_prefer()
 
 source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
        verbose = FALSE,
@@ -656,19 +695,24 @@ theme_set(grumanlib::theme_jim())</code></pre>
 <pre class="r"><code>downloads &lt;- cranlogs::cran_top_downloads(&quot;last-month&quot;, count = 100) %&gt;%
   mutate(package = str_to_lower(package))</code></pre>
 <pre class="r"><code>cran %&gt;%
-  count(ReleaseYear, ReleaseType) %&gt;%
+  mutate(has_vignette = VignetteCount &gt; 0) %&gt;%
+  count(ReleaseYear, ReleaseType, has_vignette,
+    name = &quot;vignettes&quot;
+  ) %&gt;%
   filter(ReleaseYear &gt; 2003) %&gt;%
-  ggplot(aes(x = ReleaseYear, n, fill = ReleaseType)) +
+  ggplot(aes(x = ReleaseYear, vignettes, fill = has_vignette)) +
   geom_col() +
+  facet_wrap(~ReleaseType) +
   labs(
     caption = &quot;2021 is a partial year, ending August 12th&quot;,
-    y = &quot;Count of Releases published on CRAN&quot;
-  )</code></pre>
+    y = &quot;Count of Releases published on CRAN&quot;,
+    fill = &quot;Has A Vignette&quot;
+  ) +
+  theme(legend.position = &quot;top&quot;)</code></pre>
 <p><img src="figure/2022_03_14.Rmd/exploratory-1.png" width="200%" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>cran %&gt;%
+<pre class="r"><code>vignette_counts &lt;- cran %&gt;%
   arrange(package, date) %&gt;%
   filter(!is.na(date)) %&gt;%
-  inner_join(downloads, by = &quot;package&quot;) %&gt;%
   group_by(package) %&gt;%
   summarise(
     vignettes = last(VignetteCount),
@@ -676,12 +720,15 @@ theme_set(grumanlib::theme_jim())</code></pre>
     age = round(
       lubridate::interval(min(date), Sys.Date()) / lubridate::years(1), 1
     ),
-    downloads = sum(count),
+    releases = n(),
     .groups = &quot;drop&quot;
   ) %&gt;%
+  inner_join(downloads, by = &quot;package&quot;)
+
+vignette_counts %&gt;%
   mutate(package = glue::glue(&quot;{ package } \n { vignettes }&quot;)) %&gt;%
   ggplot(aes(
-    area = downloads,
+    area = count,
     fill = vignettes,
     label = package,
     subgroup = cut_interval(born_on, n = 4)
@@ -701,7 +748,7 @@ theme_set(grumanlib::theme_jim())</code></pre>
   ) +
   labs(
     fill = NULL, title = &quot;Top Most Downloaded R Packages from CRAN&quot;,
-    subtitle = &quot;Package Name and Number of Vignettes labeled. Size corresponds to the Total Number of Downloads.&quot;,
+    subtitle = &quot;Package Name and Number of Vignettes labeled. Size corresponds to the Total Number of Downloads from 14Feb-15Mar2022.&quot;,
     caption = &quot;Data Source: Robert Flight and cranlogs&quot;
   ) +
   theme(legend.position = &quot;none&quot;)</code></pre>
@@ -709,6 +756,100 @@ theme_set(grumanlib::theme_jim())</code></pre>
 <pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/jim_gruman/status/1504143273925148672&quot;)</code></pre>
 <blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">This week’s <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> on the most popular <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> CRAN extension package vignettes, also using the cranlogs popularity figures. <br><br>Code: <a href="https://t.co/AY9Y0JfsYe">https://t.co/AY9Y0JfsYe</a> <a href="https://t.co/rcJ5OVFXTA">pic.twitter.com/rcJ5OVFXTA</a></p>&mdash; Jim Gruman📚🚵‍♂️⚙📈 (@jim_gruman) <a href="https://twitter.com/jim_gruman/status/1504143273925148672?ref_src=twsrc%5Etfw">March 16, 2022</a></blockquote>
 
+<p>Let’s build on Julia Silge’s video from <a href="https://juliasilge.com/blog/rstats-vignettes/">this week</a> on Machine Learning with <code>tidymodels</code>.</p>
+<p>A regression model of counts is often best modeled with the poisson distribution</p>
+<pre class="r"><code>poisson_wf &lt;- workflow(vignettes ~ releases, poisson_reg())
+
+fit(poisson_wf, data = vignette_counts)</code></pre>
+<pre><code>== Workflow [trained] ==========================================================
+Preprocessor: Formula
+Model: poisson_reg()
+
+-- Preprocessor ----------------------------------------------------------------
+vignettes ~ releases
+
+-- Model -----------------------------------------------------------------------
+
+Call:  stats::glm(formula = ..y ~ ., family = stats::poisson, data = data)
+
+Coefficients:
+(Intercept)     releases  
+    0.19996      0.02019  
+
+Degrees of Freedom: 99 Total (i.e. Null);  98 Residual
+Null Deviance:      341.8 
+Residual Deviance: 285.4    AIC: 452.5</code></pre>
+<p>Let’s try a zero inflated model, with the zero inflated terms, that is, those with a probability of being zero, modeled by <code>born_on</code> year.</p>
+<pre class="r"><code>zip_spec &lt;- poisson_reg() %&gt;% set_engine(&quot;zeroinfl&quot;)
+
+zip_wf &lt;- workflow() %&gt;%
+  add_model(zip_spec, formula = vignettes ~ releases | releases) %&gt;%
+  add_variables(
+    outcomes = vignettes,
+    predictors = c(releases, born_on)
+  )
+
+fit(zip_wf, data = vignette_counts)</code></pre>
+<pre><code>== Workflow [trained] ==========================================================
+Preprocessor: Variables
+Model: poisson_reg()
+
+-- Preprocessor ----------------------------------------------------------------
+Outcomes: vignettes
+Predictors: c(releases, born_on)
+
+-- Model -----------------------------------------------------------------------
+
+Call:
+pscl::zeroinfl(formula = vignettes ~ releases | releases, data = data)
+
+Count model coefficients (poisson with log link):
+(Intercept)     releases  
+     0.9023       0.0120  
+
+Zero-inflation model coefficients (binomial with logit link):
+(Intercept)     releases  
+    0.47398     -0.04801  </code></pre>
+<p>Bootstrapping to better understand the model coefficients for inference</p>
+<pre class="r"><code>folds &lt;- bootstraps(vignette_counts, times = 100)</code></pre>
+<p>Let’s speed this up as best as we can with parallel processing.</p>
+<pre class="r"><code>all_cores &lt;- parallelly::availableCores(omit = 1)
+all_cores</code></pre>
+<pre><code>system 
+    11 </code></pre>
+<pre class="r"><code>future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows</code></pre>
+<pre class="r"><code>get_coefficients &lt;- function(x) {
+  extract_fit_engine(x) %&gt;%
+    tidy(type = &quot;zero&quot;)
+}
+
+ctrl &lt;- control_resamples(
+  extract = get_coefficients
+)
+
+zip_res &lt;- fit_resamples(zip_wf,
+  folds,
+  control = ctrl
+)</code></pre>
+<p>For all of the bootstraps, what is the estimate of the coefficient statistic? Let’s make a plot:</p>
+<pre class="r"><code>zip_res %&gt;%
+  select(id, .extracts) %&gt;%
+  unnest(.extracts) %&gt;%
+  unnest(.extracts) %&gt;%
+  ggplot(aes(x = estimate, fill = term)) +
+  geom_histogram(show.legend = FALSE, bins = 35) +
+  facet_wrap(~term, scales = &quot;free_x&quot;) +
+  geom_vline(
+    xintercept = 0,
+    lty = 2,
+    size = 1.2,
+    color = &quot;gray70&quot;
+  ) +
+  labs(
+    caption = &quot;Zero Inflated Poisson model for Vignette Counts on R Packages&quot;,
+    subtitle = &quot;More releases means more vignettes&quot;
+  )</code></pre>
+<p><img src="figure/2022_03_14.Rmd/unnamed-chunk-8-1.png" width="200%" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -734,60 +875,61 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] treemapify_2.5.5     grumanlib_0.1.0.9999 forcats_0.5.1       
- [4] stringr_1.4.0        dplyr_1.0.8          purrr_0.3.4         
- [7] readr_2.1.2          tidyr_1.2.0          tibble_3.1.6        
-[10] ggplot2_3.3.5        tidyverse_1.3.1      workflowr_1.7.0     
+ [1] pscl_1.5.5           vctrs_0.3.8          rlang_1.0.1         
+ [4] poissonreg_0.2.0     yardstick_0.0.9      workflowsets_0.1.0  
+ [7] workflows_0.2.4      tune_0.1.6           rsample_0.1.1       
+[10] recipes_0.2.0        parsnip_0.2.0        modeldata_0.1.1     
+[13] infer_1.0.0          dials_0.1.0          scales_1.1.1        
+[16] broom_0.7.12         tidymodels_0.1.4     treemapify_2.5.5    
+[19] grumanlib_0.1.0.9999 forcats_0.5.1        stringr_1.4.0       
+[22] dplyr_1.0.8          purrr_0.3.4          readr_2.1.2         
+[25] tidyr_1.2.0          tibble_3.1.6         ggplot2_3.3.5       
+[28] tidyverse_1.3.1      workflowr_1.7.0     
 
 loaded via a namespace (and not attached):
   [1] readxl_1.3.1       backports_1.4.1    systemfonts_1.0.4 
-  [4] workflows_0.2.4    selectr_0.4-2      plyr_1.8.6        
-  [7] tidytuesdayR_1.0.2 splines_4.1.2      listenv_0.8.0     
- [10] usethis_2.1.5      digest_0.6.29      foreach_1.5.2     
- [13] htmltools_0.5.2    yardstick_0.0.9    viridis_0.6.2     
- [16] parsnip_0.2.0      fansi_1.0.2        magrittr_2.0.2    
- [19] memoise_2.0.1      tune_0.1.6         tzdb_0.2.0        
- [22] recipes_0.2.0      globals_0.14.0     ggfittext_0.9.1   
- [25] modelr_0.1.8       gower_1.0.0        vroom_1.5.7       
- [28] R.utils_2.11.0     hardhat_0.2.0      rsample_0.1.1     
- [31] dials_0.1.0        colorspace_2.0-3   rvest_1.0.2       
- [34] textshaping_0.3.6  haven_2.4.3        xfun_0.29         
- [37] prismatic_1.1.0    callr_3.7.0        crayon_1.5.0      
- [40] jsonlite_1.8.0     survival_3.2-13    iterators_1.0.14  
- [43] glue_1.6.2         gtable_0.3.0       ipred_0.9-12      
- [46] R.cache_0.15.0     tweetrmd_0.0.9     future.apply_1.8.1
- [49] scales_1.1.1       infer_1.0.0        DBI_1.1.2         
- [52] Rcpp_1.0.8.2       viridisLite_0.4.0  bit_4.0.4         
- [55] GPfit_1.0-8        lava_1.6.10        prodlim_2019.11.13
- [58] httr_1.4.2         ellipsis_0.3.2     farver_2.1.0      
- [61] pkgconfig_2.0.3    R.methodsS3_1.8.1  nnet_7.3-16       
- [64] sass_0.4.0         dbplyr_2.1.1       utf8_1.2.2        
- [67] here_1.0.1         labeling_0.4.2     tidyselect_1.1.2  
- [70] rlang_1.0.1        DiceDesign_1.9     later_1.3.0       
- [73] munsell_0.5.0      cellranger_1.1.0   tools_4.1.2       
- [76] cachem_1.0.6       cli_3.2.0          generics_0.1.2    
- [79] broom_0.7.12       evaluate_0.15      fastmap_1.1.0     
- [82] yaml_2.3.4         ragg_1.2.2         bit64_4.0.5       
- [85] processx_3.5.2     knitr_1.37         fs_1.5.2          
- [88] workflowsets_0.1.0 future_1.24.0      whisker_0.4       
- [91] R.oo_1.24.0        xml2_1.3.3         compiler_4.1.2    
- [94] rstudioapi_0.13    curl_4.3.2         cranlogs_2.1.1    
- [97] reprex_2.0.1       lhs_1.1.4          bslib_0.3.1       
-[100] stringi_1.7.6      highr_0.9          ps_1.6.0          
-[103] lattice_0.20-45    Matrix_1.3-4       styler_1.7.0      
-[106] conflicted_1.1.0   vctrs_0.3.8        tidymodels_0.1.4  
-[109] pillar_1.7.0       lifecycle_1.0.1    furrr_0.2.3       
-[112] jquerylib_0.1.4    httpuv_1.6.5       R6_2.5.1          
-[115] promises_1.2.0.1   gridExtra_2.3      parallelly_1.30.0 
-[118] codetools_0.2-18   MASS_7.3-54        assertthat_0.2.1  
-[121] rprojroot_2.0.2    withr_2.5.0        parallel_4.1.2    
-[124] hms_1.1.1          grid_4.1.2         rpart_4.1-15      
-[127] timeDate_3043.102  class_7.3-19       rmarkdown_2.13    
-[130] git2r_0.29.0       getPass_0.2-2      pROC_1.18.0       
-[133] lubridate_1.8.0   </code></pre>
+  [4] selectr_0.4-2      plyr_1.8.6         tidytuesdayR_1.0.2
+  [7] splines_4.1.2      listenv_0.8.0      usethis_2.1.5     
+ [10] digest_0.6.29      foreach_1.5.2      htmltools_0.5.2   
+ [13] viridis_0.6.2      fansi_1.0.2        magrittr_2.0.2    
+ [16] memoise_2.0.1      tzdb_0.2.0         globals_0.14.0    
+ [19] ggfittext_0.9.1    modelr_0.1.8       gower_1.0.0       
+ [22] vroom_1.5.7        R.utils_2.11.0     hardhat_0.2.0     
+ [25] colorspace_2.0-3   rvest_1.0.2        textshaping_0.3.6 
+ [28] haven_2.4.3        xfun_0.29          prismatic_1.1.0   
+ [31] callr_3.7.0        crayon_1.5.0       jsonlite_1.8.0    
+ [34] survival_3.2-13    iterators_1.0.14   glue_1.6.2        
+ [37] gtable_0.3.0       ipred_0.9-12       R.cache_0.15.0    
+ [40] tweetrmd_0.0.9     future.apply_1.8.1 DBI_1.1.2         
+ [43] Rcpp_1.0.8.2       viridisLite_0.4.0  bit_4.0.4         
+ [46] GPfit_1.0-8        lava_1.6.10        prodlim_2019.11.13
+ [49] httr_1.4.2         ellipsis_0.3.2     farver_2.1.0      
+ [52] pkgconfig_2.0.3    R.methodsS3_1.8.1  nnet_7.3-16       
+ [55] sass_0.4.0         dbplyr_2.1.1       utf8_1.2.2        
+ [58] here_1.0.1         labeling_0.4.2     tidyselect_1.1.2  
+ [61] DiceDesign_1.9     later_1.3.0        munsell_0.5.0     
+ [64] cellranger_1.1.0   tools_4.1.2        cachem_1.0.6      
+ [67] cli_3.2.0          generics_0.1.2     evaluate_0.15     
+ [70] fastmap_1.1.0      yaml_2.3.4         ragg_1.2.2        
+ [73] rematch2_2.1.2     bit64_4.0.5        processx_3.5.2    
+ [76] knitr_1.37         fs_1.5.2           future_1.24.0     
+ [79] whisker_0.4        R.oo_1.24.0        xml2_1.3.3        
+ [82] compiler_4.1.2     rstudioapi_0.13    curl_4.3.2        
+ [85] cranlogs_2.1.1     reprex_2.0.1       lhs_1.1.4         
+ [88] bslib_0.3.1        stringi_1.7.6      highr_0.9         
+ [91] ps_1.6.0           lattice_0.20-45    Matrix_1.3-4      
+ [94] styler_1.7.0       conflicted_1.1.0   pillar_1.7.0      
+ [97] lifecycle_1.0.1    furrr_0.2.3        jquerylib_0.1.4   
+[100] httpuv_1.6.5       R6_2.5.1           promises_1.2.0.1  
+[103] gridExtra_2.3      parallelly_1.30.0  codetools_0.2-18  
+[106] MASS_7.3-54        assertthat_0.2.1   rprojroot_2.0.2   
+[109] withr_2.5.0        parallel_4.1.2     hms_1.1.1         
+[112] grid_4.1.2         rpart_4.1-15       timeDate_3043.102 
+[115] class_7.3-19       rmarkdown_2.13     git2r_0.29.0      
+[118] getPass_0.2-2      pROC_1.18.0        lubridate_1.8.0   </code></pre>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgUGFja2FnZSBWaWduZXR0ZSBDb3VudHMiDQphdXRob3I6ICJKaW0gR3J1bWFuIg0KZGF0ZTogIk1hcmNoIDE0LCAyMDIyIg0Kb3V0cHV0Og0KICB3b3JrZmxvd3I6OndmbG93X2h0bWw6DQogICAgdG9jOiBubw0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBkZl9wcmludDogcGFnZWQNCmVkaXRvcl9vcHRpb25zOg0KICBjaHVua19vdXRwdXRfdHlwZTogY29uc29sZQ0KLS0tDQoNClRoaXMgd2VlaydzIGRhdGFzZXQgY29tZXMgZnJvbSBEci4gUm9iZXJ0IEZsaWdodCBhbmQgY292ZXJzIHRoZSBldm9sdXRpb24gb2YgdGhlIGJ1aWx0IGluIFIgcGFja2FnZSBoZWxwIGRvY3VtZW50YXRpb24sIG9mdGVuIGNhbGxlZCBWaWduZXR0ZXMuDQoNCmBgYHtyIHNldHVwLCBtZXNzYWdlPUZBTFNFfQ0KDQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMoew0KbGlicmFyeSh0aWR5dmVyc2UpICMgY2xlYW4gYW5kIHRyYW5zZm9ybSByZWN0YW5ndWxhciBkYXRhDQpsaWJyYXJ5KGdydW1hbmxpYikgIyBteSBwbG90IHRoZW1lDQpsaWJyYXJ5KHRyZWVtYXBpZnkpDQp9KQ0KDQpzb3VyY2UoaGVyZTo6aGVyZSgiY29kZSIsIl9jb21tb24uUiIpLA0KICAgICAgIHZlcmJvc2UgPSBGQUxTRSwNCiAgICAgICBsb2NhbCA9IGtuaXRyOjprbml0X2dsb2JhbCgpKQ0KDQp0aGVtZV9zZXQoZ3J1bWFubGliOjp0aGVtZV9qaW0oKSkNCg0KYGBgDQoNCkxvYWQgdXAgdGhlIGRhdGEgdG8gaGF2ZSBhIGxvb2sNCg0KYGBge3J9DQpjcmFuIDwtIHRpZHl0dWVzZGF5Ujo6dHRfbG9hZCgiMjAyMi0wMy0xNSIpJGNyYW4gJT4lIA0KICBtdXRhdGUoTWFqb3JWZXJzaW9uID0gYXMuaW50ZWdlcihzdHJfZXh0cmFjdCh2ZXJzaW9uLCAiXlswLTldXFwuIikpLA0KICAgICAgICAgVmlnbmV0dGVDb3VudCA9IGFzLmludGVnZXIocm1kICsgcm53KSwNCiAgICAgICAgIGRhdGUgPSBsdWJyaWRhdGU6OnBhcnNlX2RhdGVfdGltZShkYXRlLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG9yZGVycyA9IGMoIlltZCBITVMiLCJhIGIgZCBITVMgWSIpKSwNCiAgICAgICAgIHBhY2thZ2UgPSBzdHJfdG9fbG93ZXIocGFja2FnZSksDQogICAgICAgICBSZWxlYXNlWWVhciA9IGx1YnJpZGF0ZTo6eWVhcigobHVicmlkYXRlOjpmbG9vcl9kYXRlKGRhdGUsICJ5ZWFyIikpKSkgJT4lIA0KICBncm91cF9ieShwYWNrYWdlLCBNYWpvclZlcnNpb24pICU+JSANCiAgbXV0YXRlKFJlbGVhc2VUeXBlID0gY2FzZV93aGVuKA0KICAgICAgICAgICByb3dfbnVtYmVyKGRhdGUpID09IDFMIH4gIk1ham9yIiwNCiAgICAgICAgICAgVFJVRSB+ICJNaW5vciIpKSAlPiUgDQogIHVuZ3JvdXAoKSANCg0KZG93bmxvYWRzIDwtIGNyYW5sb2dzOjpjcmFuX3RvcF9kb3dubG9hZHMoImxhc3QtbW9udGgiLCBjb3VudCA9IDEwMCkgJT4lDQogIG11dGF0ZShwYWNrYWdlID0gc3RyX3RvX2xvd2VyKHBhY2thZ2UpKQ0KDQpgYGANCg0KYGBge3IgZXhwbG9yYXRvcnl9DQpjcmFuICU+JSANCiAgY291bnQoUmVsZWFzZVllYXIsIFJlbGVhc2VUeXBlKSAlPiUgDQogIGZpbHRlcihSZWxlYXNlWWVhciA+IDIwMDMpICU+JSANCiAgZ2dwbG90KGFlcyh4ID0gUmVsZWFzZVllYXIsIG4sIGZpbGwgPSBSZWxlYXNlVHlwZSkpICsNCiAgZ2VvbV9jb2woKSArDQogIGxhYnMoY2FwdGlvbiA9ICIyMDIxIGlzIGEgcGFydGlhbCB5ZWFyLCBlbmRpbmcgQXVndXN0IDEydGgiLA0KICAgICAgIHkgPSAiQ291bnQgb2YgUmVsZWFzZXMgcHVibGlzaGVkIG9uIENSQU4iKQ0KDQpgYGANCg0KYGBge3IgZmluYWxfcGxvdCwgZmlnLmFzcD0xfQ0KDQpjcmFuICU+JSANCiAgYXJyYW5nZShwYWNrYWdlLCBkYXRlKSAlPiUgDQogIGZpbHRlcighaXMubmEoZGF0ZSkpICU+JSANCiAgaW5uZXJfam9pbihkb3dubG9hZHMsIGJ5ID0gInBhY2thZ2UiKSAlPiUgDQogIGdyb3VwX2J5KHBhY2thZ2UpICU+JSANCiAgc3VtbWFyaXNlKHZpZ25ldHRlcyA9IGxhc3QoVmlnbmV0dGVDb3VudCksDQogICAgICAgICAgICBib3JuX29uID0gbHVicmlkYXRlOjp5ZWFyKG1pbihkYXRlKSksDQogICAgICAgICAgICBhZ2UgPSByb3VuZCgNCiAgICAgICAgICAgICAgbHVicmlkYXRlOjppbnRlcnZhbChtaW4oZGF0ZSksIFN5cy5EYXRlKCkpIC8gbHVicmlkYXRlOjp5ZWFycygxKSwgMSksDQogICAgICAgICAgICBkb3dubG9hZHMgPSBzdW0oY291bnQpLA0KICAgICAgICAgICAgLmdyb3VwcyA9ICJkcm9wIikgJT4lIA0KICBtdXRhdGUocGFja2FnZSA9IGdsdWU6OmdsdWUoInsgcGFja2FnZSB9IFxuIHsgdmlnbmV0dGVzIH0iKSkgJT4lIA0KICBnZ3Bsb3QoYWVzKA0KICAgIGFyZWEgPSBkb3dubG9hZHMsDQogICAgZmlsbCA9IHZpZ25ldHRlcywNCiAgICBsYWJlbCA9IHBhY2thZ2UsDQogICAgc3ViZ3JvdXAgPSBjdXRfaW50ZXJ2YWwoYm9ybl9vbiwgbiA9IDQpDQogICkpICsNCiAgZ2VvbV90cmVlbWFwKHNob3cubGVnZW5kID0gRkFMU0UpICsNCiAgZ2VvbV90cmVlbWFwX3N1Ymdyb3VwX2JvcmRlcigpICsNCiAgZ2VvbV90cmVlbWFwX3RleHQoYWVzKGNvbG9yID0gYWZ0ZXJfc2NhbGUobWFwX2NocihmaWxsLCBiZXN0X2NvbnRyYXN0KSkpLA0KICAgIHBsYWNlID0gInRvcCIsDQogICAgcmVmbG93ID0gVFJVRQ0KICApICsNCiAgICBnZW9tX3RyZWVtYXBfc3ViZ3JvdXBfdGV4dCgNCiAgICBjb2xvciA9ICJ3aGl0ZSIsDQogICAgYWxwaGEgPSAwLjIsDQogICAgcGxhY2UgPSAiYm90dG9tbGVmdCIsDQogICAgZm9udGZhY2UgPSAiaXRhbGljIiwNCiAgICBtaW4uc2l6ZSA9IDANCiAgKSArDQogIGxhYnMoDQogICAgZmlsbCA9IE5VTEwsIHRpdGxlID0gIlRvcCBNb3N0IERvd25sb2FkZWQgUiBQYWNrYWdlcyBmcm9tIENSQU4iLA0KICAgIHN1YnRpdGxlID0gIlBhY2thZ2UgTmFtZSBhbmQgTnVtYmVyIG9mIFZpZ25ldHRlcyBsYWJlbGVkLiBTaXplIGNvcnJlc3BvbmRzIHRvIHRoZSBUb3RhbCBOdW1iZXIgb2YgRG93bmxvYWRzLiIsDQogICAgY2FwdGlvbiA9ICJEYXRhIFNvdXJjZTogUm9iZXJ0IEZsaWdodCBhbmQgY3JhbmxvZ3MiDQogICkgKw0KICB0aGVtZShsZWdlbmQucG9zaXRpb24gPSAibm9uZSIpDQoNCmBgYA0KDQoNCmBgYHtyfQ0KdHdlZXRybWQ6OmluY2x1ZGVfdHdlZXQoImh0dHBzOi8vdHdpdHRlci5jb20vamltX2dydW1hbi9zdGF0dXMvMTUwNDE0MzI3MzkyNTE0ODY3MiIpDQpgYGANCg0KDQoNCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgUGFja2FnZSBWaWduZXR0ZSBDb3VudHMiDQphdXRob3I6ICJKaW0gR3J1bWFuIg0KZGF0ZTogIk1hcmNoIDE0LCAyMDIyIg0Kb3V0cHV0Og0KICB3b3JrZmxvd3I6OndmbG93X2h0bWw6DQogICAgdG9jOiBubw0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBkZl9wcmludDogcGFnZWQNCmVkaXRvcl9vcHRpb25zOg0KICBjaHVua19vdXRwdXRfdHlwZTogY29uc29sZQ0KLS0tDQoNClRoaXMgd2VlaydzIGRhdGFzZXQgY29tZXMgZnJvbSBEci4gUm9iZXJ0IEZsaWdodCBhbmQgY292ZXJzIHRoZSBldm9sdXRpb24gb2YgdGhlIGJ1aWx0IGluIFIgcGFja2FnZSBoZWxwIGRvY3VtZW50YXRpb24sIG9mdGVuIGNhbGxlZCBWaWduZXR0ZXMuDQoNCmBgYHtyIHNldHVwLCBtZXNzYWdlPUZBTFNFfQ0KDQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMoew0KbGlicmFyeSh0aWR5dmVyc2UpICMgY2xlYW4gYW5kIHRyYW5zZm9ybSByZWN0YW5ndWxhciBkYXRhDQpsaWJyYXJ5KGdydW1hbmxpYikgIyBteSBwbG90IHRoZW1lDQpsaWJyYXJ5KHRyZWVtYXBpZnkpDQpsaWJyYXJ5KHRpZHltb2RlbHMpDQpsaWJyYXJ5KHBvaXNzb25yZWcpDQp9KQ0KDQp0aWR5bW9kZWxzX3ByZWZlcigpDQoNCnNvdXJjZShoZXJlOjpoZXJlKCJjb2RlIiwiX2NvbW1vbi5SIiksDQogICAgICAgdmVyYm9zZSA9IEZBTFNFLA0KICAgICAgIGxvY2FsID0ga25pdHI6OmtuaXRfZ2xvYmFsKCkpDQoNCnRoZW1lX3NldChncnVtYW5saWI6OnRoZW1lX2ppbSgpKQ0KDQpgYGANCg0KTG9hZCB1cCB0aGUgZGF0YSB0byBoYXZlIGEgbG9vaw0KDQpgYGB7cn0NCmNyYW4gPC0gdGlkeXR1ZXNkYXlSOjp0dF9sb2FkKCIyMDIyLTAzLTE1IikkY3JhbiAlPiUgDQogIG11dGF0ZShNYWpvclZlcnNpb24gPSBhcy5pbnRlZ2VyKHN0cl9leHRyYWN0KHZlcnNpb24sICJeWzAtOV1cXC4iKSksDQogICAgICAgICBWaWduZXR0ZUNvdW50ID0gYXMuaW50ZWdlcihybWQgKyBybncpLA0KICAgICAgICAgZGF0ZSA9IGx1YnJpZGF0ZTo6cGFyc2VfZGF0ZV90aW1lKGRhdGUsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgb3JkZXJzID0gYygiWW1kIEhNUyIsImEgYiBkIEhNUyBZIikpLA0KICAgICAgICAgcGFja2FnZSA9IHN0cl90b19sb3dlcihwYWNrYWdlKSwNCiAgICAgICAgIFJlbGVhc2VZZWFyID0gbHVicmlkYXRlOjp5ZWFyKChsdWJyaWRhdGU6OmZsb29yX2RhdGUoZGF0ZSwgInllYXIiKSkpKSAlPiUgDQogIGdyb3VwX2J5KHBhY2thZ2UsIE1ham9yVmVyc2lvbikgJT4lIA0KICBtdXRhdGUoUmVsZWFzZVR5cGUgPSBjYXNlX3doZW4oDQogICAgICAgICAgIHJvd19udW1iZXIoZGF0ZSkgPT0gMUwgfiAiTWFqb3IiLA0KICAgICAgICAgICBUUlVFIH4gIk1pbm9yIikpICU+JSANCiAgdW5ncm91cCgpIA0KDQpkb3dubG9hZHMgPC0gY3JhbmxvZ3M6OmNyYW5fdG9wX2Rvd25sb2FkcygibGFzdC1tb250aCIsIGNvdW50ID0gMTAwKSAlPiUNCiAgbXV0YXRlKHBhY2thZ2UgPSBzdHJfdG9fbG93ZXIocGFja2FnZSkpDQoNCmBgYA0KDQpgYGB7ciBleHBsb3JhdG9yeX0NCmNyYW4gJT4lIA0KICBtdXRhdGUoaGFzX3ZpZ25ldHRlID0gVmlnbmV0dGVDb3VudCA+IDApICU+JSAgDQogIGNvdW50KFJlbGVhc2VZZWFyLCBSZWxlYXNlVHlwZSwgaGFzX3ZpZ25ldHRlLA0KICAgICAgICBuYW1lID0gInZpZ25ldHRlcyIpICU+JSANCiAgZmlsdGVyKFJlbGVhc2VZZWFyID4gMjAwMykgJT4lIA0KICBnZ3Bsb3QoYWVzKHggPSBSZWxlYXNlWWVhciwgdmlnbmV0dGVzLCBmaWxsID0gaGFzX3ZpZ25ldHRlKSkgKw0KICBnZW9tX2NvbCgpICsNCiAgZmFjZXRfd3JhcCh+IFJlbGVhc2VUeXBlKSArDQogIGxhYnMoY2FwdGlvbiA9ICIyMDIxIGlzIGEgcGFydGlhbCB5ZWFyLCBlbmRpbmcgQXVndXN0IDEydGgiLA0KICAgICAgIHkgPSAiQ291bnQgb2YgUmVsZWFzZXMgcHVibGlzaGVkIG9uIENSQU4iLA0KICAgICAgIGZpbGwgPSAiSGFzIEEgVmlnbmV0dGUiKSArDQogIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9ICJ0b3AiKQ0KDQpgYGANCg0KYGBge3IgZmluYWxfcGxvdCwgZmlnLmFzcD0xfQ0KDQp2aWduZXR0ZV9jb3VudHMgPC0gY3JhbiAlPiUgDQogIGFycmFuZ2UocGFja2FnZSwgZGF0ZSkgJT4lIA0KICBmaWx0ZXIoIWlzLm5hKGRhdGUpKSAlPiUgDQogIGdyb3VwX2J5KHBhY2thZ2UpICU+JSANCiAgc3VtbWFyaXNlKHZpZ25ldHRlcyA9IGxhc3QoVmlnbmV0dGVDb3VudCksDQogICAgICAgICAgICBib3JuX29uID0gbHVicmlkYXRlOjp5ZWFyKG1pbihkYXRlKSksDQogICAgICAgICAgICBhZ2UgPSByb3VuZCgNCiAgICAgICAgICAgICAgbHVicmlkYXRlOjppbnRlcnZhbChtaW4oZGF0ZSksIFN5cy5EYXRlKCkpIC8gbHVicmlkYXRlOjp5ZWFycygxKSwgMSksIA0KICAgICAgICAgICAgcmVsZWFzZXMgPSBuKCksDQogICAgICAgICAgICAuZ3JvdXBzID0gImRyb3AiKSAlPiUgDQogICAgaW5uZXJfam9pbihkb3dubG9hZHMsIGJ5ID0gInBhY2thZ2UiKSANCg0KdmlnbmV0dGVfY291bnRzICU+JSANCiAgbXV0YXRlKHBhY2thZ2UgPSBnbHVlOjpnbHVlKCJ7IHBhY2thZ2UgfSBcbiB7IHZpZ25ldHRlcyB9IikpICU+JSANCiAgZ2dwbG90KGFlcygNCiAgICBhcmVhID0gY291bnQsDQogICAgZmlsbCA9IHZpZ25ldHRlcywNCiAgICBsYWJlbCA9IHBhY2thZ2UsDQogICAgc3ViZ3JvdXAgPSBjdXRfaW50ZXJ2YWwoYm9ybl9vbiwgbiA9IDQpDQogICkpICsNCiAgZ2VvbV90cmVlbWFwKHNob3cubGVnZW5kID0gRkFMU0UpICsNCiAgZ2VvbV90cmVlbWFwX3N1Ymdyb3VwX2JvcmRlcigpICsNCiAgZ2VvbV90cmVlbWFwX3RleHQoYWVzKGNvbG9yID0gYWZ0ZXJfc2NhbGUobWFwX2NocihmaWxsLCBiZXN0X2NvbnRyYXN0KSkpLA0KICAgIHBsYWNlID0gInRvcCIsDQogICAgcmVmbG93ID0gVFJVRQ0KICApICsNCiAgICBnZW9tX3RyZWVtYXBfc3ViZ3JvdXBfdGV4dCgNCiAgICBjb2xvciA9ICJ3aGl0ZSIsDQogICAgYWxwaGEgPSAwLjIsDQogICAgcGxhY2UgPSAiYm90dG9tbGVmdCIsDQogICAgZm9udGZhY2UgPSAiaXRhbGljIiwNCiAgICBtaW4uc2l6ZSA9IDANCiAgKSArDQogIGxhYnMoDQogICAgZmlsbCA9IE5VTEwsIHRpdGxlID0gIlRvcCBNb3N0IERvd25sb2FkZWQgUiBQYWNrYWdlcyBmcm9tIENSQU4iLA0KICAgIHN1YnRpdGxlID0gIlBhY2thZ2UgTmFtZSBhbmQgTnVtYmVyIG9mIFZpZ25ldHRlcyBsYWJlbGVkLiBTaXplIGNvcnJlc3BvbmRzIHRvIHRoZSBUb3RhbCBOdW1iZXIgb2YgRG93bmxvYWRzIGZyb20gMTRGZWItMTVNYXIyMDIyLiIsDQogICAgY2FwdGlvbiA9ICJEYXRhIFNvdXJjZTogUm9iZXJ0IEZsaWdodCBhbmQgY3JhbmxvZ3MiDQogICkgKw0KICB0aGVtZShsZWdlbmQucG9zaXRpb24gPSAibm9uZSIpDQoNCmBgYA0KDQoNCmBgYHtyfQ0KdHdlZXRybWQ6OmluY2x1ZGVfdHdlZXQoImh0dHBzOi8vdHdpdHRlci5jb20vamltX2dydW1hbi9zdGF0dXMvMTUwNDE0MzI3MzkyNTE0ODY3MiIpDQpgYGANCg0KTGV0J3MgYnVpbGQgb24gSnVsaWEgU2lsZ2UncyB2aWRlbyBmcm9tIFt0aGlzIHdlZWtdKGh0dHBzOi8vanVsaWFzaWxnZS5jb20vYmxvZy9yc3RhdHMtdmlnbmV0dGVzLykgb24gTWFjaGluZSBMZWFybmluZyB3aXRoIGB0aWR5bW9kZWxzYC4NCg0KQSByZWdyZXNzaW9uIG1vZGVsIG9mIGNvdW50cyBpcyBvZnRlbiBiZXN0IG1vZGVsZWQgd2l0aCB0aGUgcG9pc3NvbiBkaXN0cmlidXRpb24NCg0KYGBge3J9DQoNCnBvaXNzb25fd2YgPC0gd29ya2Zsb3codmlnbmV0dGVzIH4gcmVsZWFzZXMgLCBwb2lzc29uX3JlZygpKQ0KDQpmaXQocG9pc3Nvbl93ZiwgZGF0YSA9IHZpZ25ldHRlX2NvdW50cykNCg0KYGBgDQoNCkxldCdzIHRyeSBhIHplcm8gaW5mbGF0ZWQgbW9kZWwsIHdpdGggdGhlIHplcm8gaW5mbGF0ZWQgdGVybXMsIHRoYXQgaXMsIHRob3NlIHdpdGggYSBwcm9iYWJpbGl0eSBvZiBiZWluZyB6ZXJvLCBtb2RlbGVkIGJ5IGBib3JuX29uYCB5ZWFyLg0KDQpgYGB7cn0NCg0KemlwX3NwZWMgPC0gcG9pc3Nvbl9yZWcoKSAlPiUgc2V0X2VuZ2luZSgiemVyb2luZmwiKQ0KDQp6aXBfd2YgPC0gd29ya2Zsb3coKSAlPiUgDQogIGFkZF9tb2RlbCh6aXBfc3BlYywgZm9ybXVsYSA9IHZpZ25ldHRlcyB+IHJlbGVhc2VzIHwgcmVsZWFzZXMgICApICU+JSANCiAgYWRkX3ZhcmlhYmxlcyhvdXRjb21lcyA9IHZpZ25ldHRlcywNCiAgICAgICAgICAgICAgICBwcmVkaWN0b3JzID0gYyhyZWxlYXNlcywgYm9ybl9vbiAgICkpDQoNCmZpdCh6aXBfd2YsIGRhdGEgPSB2aWduZXR0ZV9jb3VudHMpDQoNCmBgYA0KDQpCb290c3RyYXBwaW5nIHRvIGJldHRlciB1bmRlcnN0YW5kIHRoZSBtb2RlbCBjb2VmZmljaWVudHMgZm9yIGluZmVyZW5jZQ0KDQpgYGB7cn0NCmZvbGRzIDwtIGJvb3RzdHJhcHModmlnbmV0dGVfY291bnRzLCB0aW1lcyA9IDEwMCkNCmBgYA0KDQpMZXQncyBzcGVlZCB0aGlzIHVwIGFzIGJlc3QgYXMgd2UgY2FuIHdpdGggcGFyYWxsZWwgcHJvY2Vzc2luZy4NCg0KYGBge3J9DQphbGxfY29yZXMgPC0gcGFyYWxsZWxseTo6YXZhaWxhYmxlQ29yZXMob21pdCA9IDEpDQphbGxfY29yZXMNCg0KZnV0dXJlOjpwbGFuKCJtdWx0aXNlc3Npb24iLCB3b3JrZXJzID0gYWxsX2NvcmVzKSAjIG9uIFdpbmRvd3MNCmBgYA0KDQoNCg0KYGBge3J9DQoNCmdldF9jb2VmZmljaWVudHMgPC0gZnVuY3Rpb24oeCl7DQogIGV4dHJhY3RfZml0X2VuZ2luZSh4KSAlPiUgDQogICAgdGlkeSh0eXBlID0gInplcm8iKQ0KfQ0KDQpjdHJsIDwtIGNvbnRyb2xfcmVzYW1wbGVzKA0KICBleHRyYWN0ID0gZ2V0X2NvZWZmaWNpZW50cw0KKQ0KDQp6aXBfcmVzIDwtIGZpdF9yZXNhbXBsZXMoemlwX3dmLCANCiAgICAgICAgICAgICAgICAgICAgICAgICBmb2xkcywNCiAgICAgICAgICAgICAgICAgICAgICAgICBjb250cm9sID0gY3RybCkNCg0KYGBgDQoNCkZvciBhbGwgb2YgdGhlIGJvb3RzdHJhcHMsIHdoYXQgaXMgdGhlIGVzdGltYXRlIG9mIHRoZSBjb2VmZmljaWVudCBzdGF0aXN0aWM/ICBMZXQncyBtYWtlIGEgcGxvdDoNCg0KYGBge3J9DQp6aXBfcmVzICU+JQ0KICBzZWxlY3QoaWQsIC5leHRyYWN0cykgJT4lDQogIHVubmVzdCguZXh0cmFjdHMpICU+JQ0KICB1bm5lc3QoLmV4dHJhY3RzKSAlPiUNCiAgZ2dwbG90KGFlcyh4ID0gZXN0aW1hdGUsIGZpbGwgPSB0ZXJtKSkgKw0KICBnZW9tX2hpc3RvZ3JhbShzaG93LmxlZ2VuZCA9IEZBTFNFLCBiaW5zID0gMzUpICsNCiAgZmFjZXRfd3JhcCggfiB0ZXJtLCBzY2FsZXMgPSAiZnJlZV94IikgKw0KICBnZW9tX3ZsaW5lKA0KICAgIHhpbnRlcmNlcHQgPSAwLA0KICAgIGx0eSA9IDIsDQogICAgc2l6ZSA9IDEuMiwNCiAgICBjb2xvciA9ICJncmF5NzAiDQogICkgKw0KICBsYWJzKGNhcHRpb24gPSAiWmVybyBJbmZsYXRlZCBQb2lzc29uIG1vZGVsIGZvciBWaWduZXR0ZSBDb3VudHMgb24gUiBQYWNrYWdlcyIsDQogICAgICAgc3VidGl0bGUgPSAiTW9yZSByZWxlYXNlcyBtZWFucyBtb3JlIHZpZ25ldHRlcyIpDQpgYGANCg0KDQoNCg==</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
