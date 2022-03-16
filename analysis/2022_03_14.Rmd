@@ -78,14 +78,14 @@ cran %>%
   mutate(package = glue::glue("{ package } \n { vignettes }")) %>% 
   ggplot(aes(
     area = downloads,
-    fill = born_on,
+    fill = vignettes,
     label = package,
     subgroup = cut_interval(born_on, n = 4)
   )) +
   geom_treemap(show.legend = FALSE) +
   geom_treemap_subgroup_border() +
   geom_treemap_text(aes(color = after_scale(map_chr(fill, best_contrast))),
-    place = "center",
+    place = "top",
     reflow = TRUE
   ) +
     geom_treemap_subgroup_text(
