@@ -51,7 +51,7 @@ downloads <- cranlogs::cran_top_downloads("last-month", count = 100) %>%
 
 ```
 
-```{r}
+```{r exploratory}
 cran %>% 
   count(ReleaseYear, ReleaseType) %>% 
   filter(ReleaseYear > 2003) %>% 
@@ -62,7 +62,7 @@ cran %>%
 
 ```
 
-```{r}
+```{r final_plot, fig.asp=1}
 
 cran %>% 
   arrange(package, date) %>% 
@@ -97,7 +97,7 @@ cran %>%
   ) +
   labs(
     fill = NULL, title = "Top Most Downloaded R Packages from CRAN",
-    subtitle = "Package Name and Number of Vignettes labeled. Size corresponds to the Total Number of Downloads. Grouped by First Release Years.",
+    subtitle = "Package Name and Number of Vignettes labeled. Size corresponds to the Total Number of Downloads.",
     caption = "Data Source: Robert Flight and cranlogs"
   ) +
   theme(legend.position = "none")
