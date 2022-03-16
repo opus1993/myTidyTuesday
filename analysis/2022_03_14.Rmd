@@ -105,5 +105,10 @@ cran %>%
 ```
 
 
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1504143273925148672")
+```
+
+
 
 
