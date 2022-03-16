@@ -198,7 +198,7 @@ zip_res %>%
     color = "gray70"
   ) +
   labs(caption = "Zero Inflated Poisson model for Vignette Counts on R Packages",
-       subtitle = "More releases means more vignettes")
+       subtitle = "More releases of a given package also means more vignettes")
 ```
 
 
