@@ -297,7 +297,9 @@ $(document).ready(function () {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -306,7 +308,9 @@ $(document).ready(function () {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -315,17 +319,27 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-03-16
+<strong>Last updated:</strong> 2022-04-18
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
 </p>
 <p>
-<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
 <p>
-This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -334,137 +348,186 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20210907)</code> </a>
 </p>
 </div>
-<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div id="strongSeedstrongcodesetseed20210907code"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+<p>The command <code>set.seed(20210907)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
 </p>
 </div>
-<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
 </p>
 </div>
 <div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeeb7c15fa67d136794b013beea545c31c245e5a26targetblankeb7c15fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/opus1993/myTidyTuesday/tree/eb7c15fa67d136794b013beea545c31c245e5a26" target="_blank">eb7c15f</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb37126f9c845f583a78b367beef7641196b32674targetblankb37126fa">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/opus1993/myTidyTuesday/tree/b37126f9c845f583a78b367beef7641196b32674" target="_blank">b37126f</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeeb7c15fa67d136794b013beea545c31c245e5a26targetblankeb7c15fa" class="panel-collapse collapse">
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreeb37126f9c845f583a78b367beef7641196b32674targetblankb37126fa"
+class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/opus1993/myTidyTuesday/tree/eb7c15fa67d136794b013beea545c31c245e5a26" target="_blank">eb7c15f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version
+<a href="https://github.com/opus1993/myTidyTuesday/tree/b37126f9c845f583a78b367beef7641196b32674" target="_blank">b37126f</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
 </p>
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
 </p>
 <pre><code>
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    catboost_info/
-    Ignored:    data/2021-11-27glm_wf_final.rds
+    Ignored:    data/.Rhistory
     Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/Chicago.rds
     Ignored:    data/CommunityTreemap.jpeg
     Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/SeriesReport-20220414171148_6c3b18.xlsx
+    Ignored:    data/Weekly_Chicago_IL_Regular_Reformulated_Retail_Gasoline_Prices.csv
     Ignored:    data/YammerDigitalDataScienceMembership.xlsx
-    Ignored:    data/accountchurn.rds
+    Ignored:    data/YammerMemberPage.rds
+    Ignored:    data/YammerMembers.rds
     Ignored:    data/acs_poverty.rds
-    Ignored:    data/advancedaccountchurn.rds
-    Ignored:    data/airbnbcatboost.rds
     Ignored:    data/austinHomeValue.rds
     Ignored:    data/austinHomeValue2.rds
-    Ignored:    data/australiaweather.rds
-    Ignored:    data/baseballHRxgboost.rds
-    Ignored:    data/baseballHRxgboost2.rds
+    Ignored:    data/df.rds
     Ignored:    data/fmhpi.rds
     Ignored:    data/grainstocks.rds
     Ignored:    data/hike_data.rds
     Ignored:    data/nber_rs.rmd
     Ignored:    data/netflixTitles2.rds
-    Ignored:    data/pets.rds
-    Ignored:    data/pets2.rds
-    Ignored:    data/spotifyxgboost.rds
-    Ignored:    data/spotifyxgboostadvanced.rds
+    Ignored:    data/raw_weather.RData
     Ignored:    data/us_states.rds
     Ignored:    data/us_states_hexgrid.geojson
     Ignored:    data/weatherstats_toronto_daily.csv
 
 Untracked files:
+    Untracked:  analysis/2022_03_25_TimeSeriesShowcase.Rmd
     Untracked:  code/YammerReach.R
+    Untracked:  code/chicago.R
     Untracked:  code/googleCompute.R
     Untracked:  code/work list batch targets.R
     Untracked:  environment.yml
 
 Unstaged changes:
     Deleted:    analysis/2022_02_11_tabular_playground.Rmd
+    Deleted:    analysis/2022_04_18.qmd
     Modified:   code/_common.R
 
 </code></pre>
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
 </p>
 </div>
 </div>
@@ -475,7 +538,11 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML (<code>docs/index.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
+(<code>docs/index.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -499,6 +566,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/ad69435f0df8cad705f506780f16f86015436ca9/docs/index.html" target="_blank">ad69435</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-03-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1560,7 +1644,15 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Welcome to my TidyTuesday website collection. Most of the activity here is related to the <a href="https://github.com/rfordatascience/tidytuesday">rfordatascience #TidyTuesday</a> weekly social data project. The exercises here are certainly not finished products. They demonstrate what could be accomplished in an hour or two after-hours from datasets that can be found out in the “wild.” In many cases, I’ve used these to explore packages with new features and functions and to facilitate conversations with others in the community via Twitter and Slack.</p>
+<p>Welcome to my TidyTuesday website collection. Most of the activity
+here is related to the <a
+href="https://github.com/rfordatascience/tidytuesday">rfordatascience
+#TidyTuesday</a> weekly social data project. The exercises here are
+certainly not finished products. They demonstrate what could be
+accomplished in an hour or two after-hours from datasets that can be
+found out in the “wild.” In many cases, I’ve used these to explore
+packages with new features and functions and to facilitate conversations
+with others in the community via Twitter and Slack.</p>
 <pre class="r"><code>articlesTable &lt;- articles %&gt;%
   mutate(title = map_chr(file, ~ title_f(.))) %&gt;%
   mutate(dateline = map_chr(file, ~ date_f(.))) %&gt;%
@@ -1620,18 +1712,44 @@ Packages
 <tbody>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2022_03_14.html" style="     ">R Package Vignette Counts</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2022_04_18.html" style="     ">Supreme
+Court Pictogram</a>
+</td>
+<td style="text-align:left;width: 10em; ">
+April 18, 2022
+</td>
+<td style="text-align:left;width: 10em; ">
+ggimage, ggiraph, rvest
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+<a href="https://opus1993.github.io/myTidyTuesday/2022_03_25_TimeSeriesShowcase.html" style="     ">Time
+Series Showcase</a>
+</td>
+<td style="text-align:left;width: 10em; ">
+March 25, 2022
+</td>
+<td style="text-align:left;width: 10em; ">
+flexdashboard, modeltime , tidymodels , timetk
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+<a href="https://opus1993.github.io/myTidyTuesday/2022_03_14.html" style="     ">R
+Package Vignette Counts</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 March 14, 2022
 </td>
 <td style="text-align:left;width: 10em; ">
-treemapify
+poissonreg, tidymodels, treemapify
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2022_02_23.html" style="     ">Plotting NHL Stats</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2022_02_23.html" style="     ">Plotting
+NHL Stats</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 February 23, 2022
@@ -1642,7 +1760,8 @@ cowplot, hockeyR, sportyR
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2022_01_28.html" style="     ">Board Games</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2022_01_28.html" style="     ">Board
+Games</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 January 28, 2022
@@ -1653,7 +1772,8 @@ finetune , SHAPforxgboost, textrecipes , tidymodels , tidytext , vip
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2022_01_18.html" style="     ">Chocolate bar ratings</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2022_01_18.html" style="     ">Chocolate
+bar ratings</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 January 17, 2022
@@ -1675,7 +1795,8 @@ geomtextpath , palmerpenguins
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/Survival.html" style="     ">Survival Analysis</a>
+<a href="https://opus1993.github.io/myTidyTuesday/Survival.html" style="     ">Survival
+Analysis</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 October 12, 2021
@@ -1686,18 +1807,21 @@ broom , splines , survival , survminer
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_09_28_NBERpapers.html" style="     ">National Bureau of Economic Research working papers</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_09_28_NBERpapers.html" style="     ">National
+Bureau of Economic Research working papers</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 September 30, 2021
 </td>
 <td style="text-align:left;width: 10em; ">
-extrafont , finetune , ggraph , igraph , patchwork , textrecipes, themis , tidygraph , tidylo , tidymodels , tidytext , treemapify
+extrafont , finetune , ggraph , igraph , patchwork , textrecipes, themis
+, tidygraph , tidylo , tidymodels , tidytext , treemapify
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/BillboardTop100.html" style="     ">Billboard Top 100</a>
+<a href="https://opus1993.github.io/myTidyTuesday/BillboardTop100.html" style="     ">Billboard
+Top 100</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 September 15, 2021
@@ -1708,7 +1832,8 @@ ggtext , tidymodels
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/HousePrices.html" style="     ">FreddieMac House Prices</a>
+<a href="https://opus1993.github.io/myTidyTuesday/HousePrices.html" style="     ">FreddieMac
+House Prices</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 September 13, 2021
@@ -1719,40 +1844,47 @@ geofacet , gganimate
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_08_17_sliced.html" style="     ">Sliced Season 1 Finale: SBA Loan Defaults</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_08_17_sliced.html" style="     ">Sliced
+Season 1 Finale: SBA Loan Defaults</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 August 17, 2021
 </td>
 <td style="text-align:left;width: 10em; ">
-bestNormalize, catboost , discrim , embed , finetune , ggforce , ggthemes , probably , themis , tidymodels , treemapify , treesnip
+bestNormalize, catboost , discrim , embed , finetune , ggforce ,
+ggthemes , probably , themis , tidymodels , treemapify , treesnip
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_08_10_sliced.html" style="     ">Sliced Austin Home Value Classification</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_08_10_sliced.html" style="     ">Sliced
+Austin Home Value Classification</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 August 10, 2021
 </td>
 <td style="text-align:left;width: 10em; ">
-baguette , finetune , patchwork , textrecipes, themis , tidylo , tidymodels , tidytext , vip
+baguette , finetune , patchwork , textrecipes, themis , tidylo ,
+tidymodels , tidytext , vip
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_08_03_sliced.html" style="     ">Sliced Pet Shelter Adoptions</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_08_03_sliced.html" style="     ">Sliced
+Pet Shelter Adoptions</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 August 3, 2021
 </td>
 <td style="text-align:left;width: 10em; ">
-baguette , DALEXtra , finetune , textrecipes, themis , tidylo , tidymodels , tidytext , vip
+baguette , DALEXtra , finetune , textrecipes, themis , tidylo ,
+tidymodels , tidytext , vip
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_07_27_sliced.html" style="     ">Sliced Baseball Home Runs</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_07_27_sliced.html" style="     ">Sliced
+Baseball Home Runs</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 July 27, 2021
@@ -1763,18 +1895,21 @@ baguette , DALEXtra , finetune , themis , tidymodels, vip
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_07_20_sliced.html" style="     ">Sliced Spotify Track Popularity</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_07_20_sliced.html" style="     ">Sliced
+Spotify Track Popularity</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 July 20, 2021
 </td>
 <td style="text-align:left;width: 10em; ">
-baguette , corrr , DALEXtra , finetune , SHAPforxgboost, textrecipes , themis , tidymodels , vip
+baguette , corrr , DALEXtra , finetune , SHAPforxgboost, textrecipes ,
+themis , tidymodels , vip
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_07_13_sliced.html" style="     ">Sliced Bank Account Churn</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_07_13_sliced.html" style="     ">Sliced
+Bank Account Churn</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 July 13, 2021
@@ -1785,29 +1920,34 @@ baguette , catboost , finetune , themis , tidymodels, treesnip
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_06_29_sliced.html" style="     ">Sliced NYC Airbnb</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_06_29_sliced.html" style="     ">Sliced
+NYC Airbnb</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 June 29, 2021
 </td>
 <td style="text-align:left;width: 10em; ">
-baguette , catboost , finetune , rlang , stacks , textrecipes, themis , tidymodels , tidytext , treesnip
+baguette , catboost , finetune , rlang , stacks , textrecipes, themis ,
+tidymodels , tidytext , treesnip
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_06_22_sliced.html" style="     ">Sliced Australia Weather</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_06_22_sliced.html" style="     ">Sliced
+Australia Weather</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 June 22, 2021
 </td>
 <td style="text-align:left;width: 10em; ">
-finetune , patchwork , stacks , textrecipes, themis , tidycensus , tidymodels , treesnip
+finetune , patchwork , stacks , textrecipes, themis , tidycensus ,
+tidymodels , treesnip
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_05_11.html" style="     ">US Broadband Access</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_05_11.html" style="     ">US
+Broadband Access</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 May 5, 2021
@@ -1818,29 +1958,34 @@ patchwork , sf , tidycensus
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_04_20.html" style="     ">Netflix Titles NLP</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_04_20.html" style="     ">Netflix
+Titles NLP</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 April 20, 2021
 </td>
 <td style="text-align:left;width: 10em; ">
-discrim , finetune , stacks , textrecipes , themis , tidymodels , tidyposterior, tidytext , workflowsets
+discrim , finetune , stacks , textrecipes , themis , tidymodels ,
+tidyposterior, tidytext , workflowsets
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_04_13_tidy_tuesday.html" style="     ">US Post Offices</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_04_13_tidy_tuesday.html" style="     ">US
+Post Offices</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 April 13, 2021
 </td>
 <td style="text-align:left;width: 10em; ">
-finetune , gganimate , ggthemes , historydata, textrecipes, themis , tidymodels
+finetune , gganimate , ggthemes , historydata, textrecipes, themis ,
+tidymodels
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_03_24_tidy_tuesday.html" style="     ">UN Votes</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_03_24_tidy_tuesday.html" style="     ">UN
+Votes</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 March 24, 2021
@@ -1851,7 +1996,8 @@ countrycode, embed , extrafont , tidymodels
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_03_15_tidy_tuesday.html" style="     ">Video Games and Sliced</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_03_15_tidy_tuesday.html" style="     ">Video
+Games and Sliced</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 March 16, 2021
@@ -1862,7 +2008,8 @@ systemfonts, tidymodels
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_03_07_geographic_animated_introduction.html" style="     ">Animating a geographic introduction</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_03_07_geographic_animated_introduction.html" style="     ">Animating
+a geographic introduction</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 March 7, 2021
@@ -1873,7 +2020,8 @@ gganimate, ggtext , glue
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_03_02_tidy_tuesday.html" style="     ">SuperBowl Commercials</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_03_02_tidy_tuesday.html" style="     ">SuperBowl
+Commercials</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 March 2, 2021
@@ -1884,7 +2032,8 @@ tidymodels
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_01_19_tidy_tuesday.html" style="     ">Kenya Census</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_01_19_tidy_tuesday.html" style="     ">Kenya
+Census</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 January 19, 2021
@@ -1895,7 +2044,8 @@ cartogram , rKenyaCensus, sf , spdep , systemfonts , waffle
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/2021_01_12_tidy_tuesday.html" style="     ">Tate Art Collection</a>
+<a href="https://opus1993.github.io/myTidyTuesday/2021_01_12_tidy_tuesday.html" style="     ">Tate
+Art Collection</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 January 12, 2021
@@ -1906,7 +2056,8 @@ countrycode, textrecipes, tidymodels , tidytext , treemapify , vip
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/NASSStocksToUse.html" style="     ">USDA NASS Stocks to Use</a>
+<a href="https://opus1993.github.io/myTidyTuesday/NASSStocksToUse.html" style="     ">USDA
+NASS Stocks to Use</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 January 7, 2021
@@ -1917,7 +2068,8 @@ ggrepel, Quandl , rnassqs
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/ChicagoTrafficInjuries.html" style="     ">Chicago Traffic Injuries</a>
+<a href="https://opus1993.github.io/myTidyTuesday/ChicagoTrafficInjuries.html" style="     ">Chicago
+Traffic Injuries</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 January 5, 2021
@@ -1928,7 +2080,8 @@ baguette , RSocrata , themis , tidymodels
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/TorontoShelters.html" style="     ">Toronto Homeless Shelters</a>
+<a href="https://opus1993.github.io/myTidyTuesday/TorontoShelters.html" style="     ">Toronto
+Homeless Shelters</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 December 1, 2020
@@ -1939,7 +2092,8 @@ tidymodels, treemap
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/WashingtonTrails.html" style="     ">Washington State Trails</a>
+<a href="https://opus1993.github.io/myTidyTuesday/WashingtonTrails.html" style="     ">Washington
+State Trails</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 November 27, 2020
@@ -1950,7 +2104,8 @@ fontawesome, ggridges , gt , htmltools , rvest
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/USPoverty.html" style="     ">US Poverty</a>
+<a href="https://opus1993.github.io/myTidyTuesday/USPoverty.html" style="     ">US
+Poverty</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 November 11, 2020
@@ -1961,7 +2116,8 @@ cartogram , sf , tidycensus, tigris , tmap
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/PhoneAdoption.html" style="     ">Historical Phone Usage</a>
+<a href="https://opus1993.github.io/myTidyTuesday/PhoneAdoption.html" style="     ">Historical
+Phone Usage</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 November 10, 2020
@@ -1972,24 +2128,28 @@ ggrepel, ggtext , naniar , scales , visdat , WDI
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/CanadaWindTurbines.html" style="     ">Canadian Wind Turbines</a>
+<a href="https://opus1993.github.io/myTidyTuesday/CanadaWindTurbines.html" style="     ">Canadian
+Wind Turbines</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 October 27, 2020
 </td>
 <td style="text-align:left;width: 10em; ">
-cowplot , ggtext , kableExtra , naniar , osmdata , rnaturalearth, sf , stringr , visdat
+cowplot , ggtext , kableExtra , naniar , osmdata , rnaturalearth, sf ,
+stringr , visdat
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/BeerAwards.html" style="     ">Beer Awards</a>
+<a href="https://opus1993.github.io/myTidyTuesday/BeerAwards.html" style="     ">Beer
+Awards</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 October 20, 2020
 </td>
 <td style="text-align:left;width: 10em; ">
-broom , cowplot , geofacet , ggwordcloud, kableExtra , purrr , tidylo , tidytext
+broom , cowplot , geofacet , ggwordcloud, kableExtra , purrr , tidylo ,
+tidytext
 </td>
 </tr>
 <tr>
@@ -2005,7 +2165,8 @@ broom , gridExtra , purrr , tidymodels
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/CornProduction.html" style="     ">Corn Production</a>
+<a href="https://opus1993.github.io/myTidyTuesday/CornProduction.html" style="     ">Corn
+Production</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 October 9, 2020
@@ -2016,7 +2177,8 @@ blscrapeR, httr , readxl , rnassqs
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/NCAAWomensTournament.html" style="     ">NCAA Womens Tournament</a>
+<a href="https://opus1993.github.io/myTidyTuesday/NCAAWomensTournament.html" style="     ">NCAA
+Womens Tournament</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 October 7, 2020
@@ -2038,7 +2200,8 @@ blscrapeR, paletteer, rnassqs
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/KidsSpending.html" style="     ">Kids Spending</a>
+<a href="https://opus1993.github.io/myTidyTuesday/KidsSpending.html" style="     ">Kids
+Spending</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 September 22, 2020
@@ -2049,7 +2212,8 @@ broom , geojsonio, ggtext , rgeos , showtext
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/HimalayanClimbers.html" style="     ">Himalayan Climbers</a>
+<a href="https://opus1993.github.io/myTidyTuesday/HimalayanClimbers.html" style="     ">Himalayan
+Climbers</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 September 22, 2020
@@ -2071,18 +2235,21 @@ ggbump , ggdist , glue , ragg , showtext, tidylo , tidytext
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/LastAirbender.html" style="     ">The Last Airbender</a>
+<a href="https://opus1993.github.io/myTidyTuesday/LastAirbender.html" style="     ">The
+Last Airbender</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 August 11, 2020
 </td>
 <td style="text-align:left;width: 10em; ">
-scales , showtext , textfeatures, textrecipes , themis , tidylo , tidymodels , tidytext , tvthemes , vip
+scales , showtext , textfeatures, textrecipes , themis , tidylo ,
+tidymodels , tidytext , tvthemes , vip
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/Astronaut.html" style="     ">Astronaut Missions</a>
+<a href="https://opus1993.github.io/myTidyTuesday/Astronaut.html" style="     ">Astronaut
+Missions</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 July 15, 2020
@@ -2104,7 +2271,8 @@ ggraph , ggridges, igraph , tidytext, widyr
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/AnimalCrossing.html" style="     ">Animal Crossing Sentiment Analysis</a>
+<a href="https://opus1993.github.io/myTidyTuesday/AnimalCrossing.html" style="     ">Animal
+Crossing Sentiment Analysis</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 May 5, 2020
@@ -2115,7 +2283,8 @@ stm , textrecipes, tidymodels , tidyr , tidytext , vip
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/GDPRfines.html" style="     ">GDPR Fines</a>
+<a href="https://opus1993.github.io/myTidyTuesday/GDPRfines.html" style="     ">GDPR
+Fines</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 April 21, 2020
@@ -2126,7 +2295,8 @@ ggbeeswarm , ggtext , rnaturalearth, rvest , sf , tidymodels
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/TourDeFrance.html" style="     ">Tour De France</a>
+<a href="https://opus1993.github.io/myTidyTuesday/TourDeFrance.html" style="     ">Tour
+De France</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 April 7, 2020
@@ -2137,18 +2307,21 @@ broom , ggtext , paletteer, patchwork, rvest , survival
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/BeerProduction.html" style="     ">Beer Production</a>
+<a href="https://opus1993.github.io/myTidyTuesday/BeerProduction.html" style="     ">Beer
+Production</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 March 31, 2020
 </td>
 <td style="text-align:left;width: 10em; ">
-GGally , gganimate , gghighlight , maps , sf , shinymetrics, tidymetrics , tidymodels , transformr
+GGally , gganimate , gghighlight , maps , sf , shinymetrics, tidymetrics
+, tidymodels , transformr
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/BrainInjury.html" style="     ">Brain Injury</a>
+<a href="https://opus1993.github.io/myTidyTuesday/BrainInjury.html" style="     ">Brain
+Injury</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 March 24, 2020
@@ -2159,7 +2332,8 @@ gganimate , gifski , tidymodels, vip
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/TheOffice.html" style="     ">The Office for Tidy Tuesday</a>
+<a href="https://opus1993.github.io/myTidyTuesday/TheOffice.html" style="     ">The
+Office for Tidy Tuesday</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 March 17, 2020
@@ -2170,7 +2344,8 @@ tidymodels, tidytext , vip
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/CollegeTuitionandDiversity.html" style="     ">College Tuition and Diversity</a>
+<a href="https://opus1993.github.io/myTidyTuesday/CollegeTuitionandDiversity.html" style="     ">College
+Tuition and Diversity</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 March 10, 2020
@@ -2181,7 +2356,8 @@ tidymodels
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/NFLattendance.html" style="     ">NFL attendance</a>
+<a href="https://opus1993.github.io/myTidyTuesday/NFLattendance.html" style="     ">NFL
+attendance</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 February 4, 2020
@@ -2192,23 +2368,27 @@ tidymodels
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-<a href="https://opus1993.github.io/myTidyTuesday/StudentDebt.html" style="     ">Student Debt</a>
+<a href="https://opus1993.github.io/myTidyTuesday/StudentDebt.html" style="     ">Student
+Debt</a>
 </td>
 <td style="text-align:left;width: 10em; ">
 November 26, 2019
 </td>
 <td style="text-align:left;width: 10em; ">
-cowplot , dygraphs , forcats , gghighlight, ggiraph , ggrepel , stats , stringr , viridis
+cowplot , dygraphs , forcats , gghighlight, ggiraph , ggrepel , stats ,
+stringr , viridis
 </td>
 </tr>
 </tbody>
 </table>
 <hr />
-<p>I have made notes of my sources for code and content. Please be sure to reach out, acknowledge, and cite their contributions directly.</p>
+<p>I have made notes of my sources for code and content. Please be sure
+to reach out, acknowledge, and cite their contributions directly.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
@@ -2230,26 +2410,26 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] stringr_1.4.0    kableExtra_1.3.4 knitr_1.37       dplyr_1.0.8     
+[1] stringr_1.4.0    kableExtra_1.3.4 knitr_1.38       dplyr_1.0.8     
 [5] purrr_0.3.4      workflowr_1.7.0 
 
 loaded via a namespace (and not attached):
- [1] styler_1.7.0      tidyselect_1.1.2  xfun_0.29         bslib_0.3.1      
- [5] colorspace_2.0-3  vctrs_0.3.8       generics_0.1.2    viridisLite_0.4.0
- [9] htmltools_0.5.2   yaml_2.3.4        utf8_1.2.2        rlang_1.0.1      
+ [1] styler_1.7.0      tidyselect_1.1.2  xfun_0.30         bslib_0.3.1      
+ [5] colorspace_2.0-3  vctrs_0.4.0       generics_0.1.2    viridisLite_0.4.0
+ [9] htmltools_0.5.2   yaml_2.3.5        utf8_1.2.2        rlang_1.0.2      
 [13] R.oo_1.24.0       jquerylib_0.1.4   later_1.3.0       pillar_1.7.0     
 [17] R.utils_2.11.0    glue_1.6.2        DBI_1.1.2         R.cache_0.15.0   
 [21] lifecycle_1.0.1   munsell_0.5.0     R.methodsS3_1.8.1 rvest_1.0.2      
 [25] evaluate_0.15     callr_3.7.0       fastmap_1.1.0     httpuv_1.6.5     
-[29] ps_1.6.0          fansi_1.0.2       Rcpp_1.0.8.2      promises_1.2.0.1 
-[33] scales_1.1.1      webshot_0.5.2     jsonlite_1.8.0    systemfonts_1.0.4
-[37] fs_1.5.2          digest_0.6.29     stringi_1.7.6     processx_3.5.2   
-[41] getPass_0.2-2     rprojroot_2.0.2   cli_3.2.0         tools_4.1.2      
-[45] magrittr_2.0.2    sass_0.4.0        tibble_3.1.6      tidyr_1.2.0      
-[49] crayon_1.5.0      whisker_0.4       pkgconfig_2.0.3   ellipsis_0.3.2   
+[29] ps_1.6.0          fansi_1.0.3       Rcpp_1.0.8.3      promises_1.2.0.1 
+[33] scales_1.2.0      webshot_0.5.3     jsonlite_1.8.0    systemfonts_1.0.4
+[37] fs_1.5.2          digest_0.6.29     stringi_1.7.6     processx_3.5.3   
+[41] getPass_0.2-2     rprojroot_2.0.3   cli_3.2.0         tools_4.1.2      
+[45] magrittr_2.0.3    sass_0.4.1        tibble_3.1.6      tidyr_1.2.0      
+[49] crayon_1.5.1      whisker_0.4       pkgconfig_2.0.3   ellipsis_0.3.2   
 [53] xml2_1.3.3        lubridate_1.8.0   assertthat_0.2.1  rmarkdown_2.13   
 [57] svglite_2.1.0     httr_1.4.2        rstudioapi_0.13   R6_2.5.1         
-[61] git2r_0.29.0      compiler_4.1.2   </code></pre>
+[61] git2r_0.30.1      compiler_4.1.2   </code></pre>
 </div>
 
 
