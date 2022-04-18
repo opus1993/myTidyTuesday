@@ -1,0 +1,303 @@
+---
+title: "Supreme Court Pictogram"
+author: "Jim Gruman"
+format: 
+  html:
+    code-fold: true
+    link-external-icon: true
+    max-width: 2000px
+editor: visual
+---
+
+The #30DayChartChallenge is running once again over on Twitter with lots of inspirational data visualization content. One of the pros to follow is [Tanya Shapiro](https://twitter.com/tanya_shapiro). She poses a question here that prompted my short post today.
+
+```{r}
+#| label: tweet-inspiration
+#| echo: false
+tweetrmd::include_tweet("https://twitter.com/tanya_shapiro/status/1514965473573720065")
+```
+
+I am going to attempt to work on her challenge with the new Quarto document framework, github pages, and the `workflowr` site management system. First, let's load the open source packages:
+
+```{r}
+#| label: load-packages
+
+suppressPackageStartupMessages({
+library(rvest)
+library(tidyverse)
+library(ggimage)
+library(ggiraph)
+})
+
+
+```
+
+Her graphic depicts seated justices through the history of the United States Supreme Court. The visual includes Justice Ketanji Brown Jackson, who was recently confirmed on April 7th, 2022. Once sworn in, Jackson will be the 116th justice and the first Black woman to sit on the Supreme Court.
+
+Emojis are used to denote gender and race of each justice. Colored points are based on nominating president party affiliation (e.g.  red for Republican).
+
+Let's make a link to the data source at wikipedia:
+
+```{r}
+#| label: wiki-page
+url <- 'https://en.wikipedia.org/wiki/List_of_justices_of_the_Supreme_Court_of_the_United_States'
+
+```
+
+Scraping the page html table from the wikipedia page is easy with `rvest`:
+
+```{r}
+#| label: scrape_justices
+sc_justices_raw <- url |> 
+  read_html() |> 
+  html_elements(".wikitable") |> 
+  html_table(trim = TRUE, fill = TRUE) |> 
+  pluck(1) 
+
+names(sc_justices_raw) <-
+  c(
+    "index",
+    "blank",
+    "justice",
+    "state",
+    "position",
+    "succeeded",
+    "confirmed",
+    "tenured",
+    "length",
+    "nominated_by"
+  )
+
+sc_justices_raw <- sc_justices_raw |> 
+  mutate(id = row_number()) |> 
+  head(-1)  # remove the last row of the dataframe
+```
+
+We need to clean the dataset a little to parse the dates and categorize justices.
+
+```{r}
+#| label: clean_justices
+
+justices <- sc_justices_raw |> 
+  #some justices were promoted to chief justice later, get distinct justices
+  distinct(justice,
+           .keep_all = TRUE) |> 
+  select(-index, -blank) |> 
+  separate(justice, into = c("name", "born_died"), sep = "\\(") |> 
+  mutate(
+    index = row_number(),
+    born_died = str_replace(born_died, "\\)", ""),
+    position = str_replace(position, "\\s*\\[[^\\)]+\\]", ""),
+    position = case_when(
+      position == "ChiefJustice" ~ "Chief Justice",
+      position == "AssociateJustice" ~ "Associate Justice"
+    ),
+    confirmed = str_replace(confirmed, "\\([^()]*\\)", ""),
+    confirmed = str_replace(confirmed, "\\s*\\[[^\\)]+\\]", ""),
+    confirmed = as.Date(confirmed, '%B %d, %Y'),
+    demo = case_when(
+      name %in% c('Thurgood Marshall', 'Clarence Thomas') ~ 'black_male',
+      name %in% c(
+        "Sandra Day O'Connor",
+        "Ruth Bader Ginsburg",
+        "Elena Kagan",
+        "Amy Coney Barrett"
+      ) ~ 'white_female',
+      name == 'Sonia Sotomayor' ~ 'hispanic_female',
+      TRUE ~ 'white_male'
+    )
+  ) 
+```
+
+Similarly, getting a list of presidents with party affiliation is easy with `rvest` and wikipedia:
+
+```{r}
+#| label: scrape_presidents
+
+pres_url <- 'https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States'
+
+#scrape president data
+pres_raw <- pres_url |>
+  read_html() |>
+  html_elements(".wikitable") |>
+  html_table(trim = TRUE, fill = TRUE) |>
+  pluck(1) |> 
+  head(-1)
+  
+  
+names(pres_raw) <-
+  c(
+    "index",
+    "portrait",
+    "name_birth_death",
+    "term",
+    "party_misc",
+    "party",
+    "election",
+    "vp"
+  )
+
+```
+
+As above, the presidents data needs a little bit of cleaning for party affiliation.
+
+```{r}
+#| label: clean_presidents
+
+presidents <- pres_raw |> 
+  select(name_birth_death, party) |> 
+  separate(name_birth_death, into = c("name","birth_death"), sep = "\\(") |> 
+  mutate(party = str_replace(party, "\\s*\\[[^\\)]+\\]",""),
+         name = str_replace(name, "\\s*\\[[^\\)]+\\]","")
+         ) |> 
+  distinct(name,party) |> 
+  mutate(index = row_number()) |> 
+  distinct(index,
+           .keep_all = TRUE) |> 
+  select(-index)
+
+```
+
+A this point, we join presidents to justices and add Justice Jackson.
+
+```{r}
+#| label: join
+
+justices <- justices |>
+  left_join(presidents, by = c("nominated_by" = "name")) |>
+  bind_rows(
+    data.frame(
+      name = "Ketanji Brown Jackson",
+      born_died = NA,
+      state = NA,
+      position = "Associate Justice",
+      succeeded = "Breyer",
+      confirmed = as.Date('2022-04-07'),
+      tenured = NA,
+      length = NA,
+      nominated_by = "Joe Biden",
+      id = NA,
+      index = 116,
+      demo = "black_female",
+      party = "Democratic"
+    )
+    
+  )
+
+```
+
+To build the plot, position variables will be needed to give each justice a tile on a grid.
+
+```{r}
+#| label: plot_positions
+justices <- justices |> 
+  mutate(y = (index - 1) %/%  10,       # truncated division wihtout remainder
+         x = (index - 1) %% 10)         # the remainder
+```
+
+Credit for the trick to get png images for emojis goes to Emil Hvitfeldt, [here]( https://www.emilhvitfeldt.com/post/2020-01-02-real-emojis-in-ggplot2/)
+
+```{r}
+#| label: scrape_icons
+white_male_icon <- 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/man-judge-light-skin-tone_1f468-1f3fb-200d-2696-fe0f.png'
+black_male_icon <- 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/man-judge-medium-dark-skin-tone_1f468-1f3fe-200d-2696-fe0f.png'
+white_female_icon_2 <- 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/woman-judge-medium-light-skin-tone_1f469-1f3fc-200d-2696-fe0f.png'
+white_female_icon <- 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/woman-judge-light-skin-tone_1f469-1f3fb-200d-2696-fe0f.png'
+hispanic_female_icon <- 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/woman-judge-medium-skin-tone_1f469-1f3fd-200d-2696-fe0f.png'
+black_female_icon <- 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/woman-judge-medium-dark-skin-tone_1f469-1f3fe-200d-2696-fe0f.png'
+
+```
+
+Last, lets create the new variable in the justices data frame to match up with the icon html information.
+
+```{r}
+#| label: link_icons
+justices <- justices |>
+  mutate(
+    icon = case_when(
+      name == "Sandra Day O'Connor" ~ white_female_icon_2,
+      demo == "white_male" ~ white_male_icon,
+      demo == "white_female" ~ white_female_icon,
+      demo == "black_male" ~ black_male_icon,
+      demo == "black_female" ~ black_female_icon,
+      demo == "hispanic_female" ~ hispanic_female_icon
+    ),
+    party_group = as_factor(case_when(
+      party %in% c(
+        "Federalist",
+        "Whig",
+        "Unaffiliated",
+        "National Union",
+        "National Republican"
+      ) ~ "Other",
+      TRUE ~ party
+    )),
+    party_group = fct_relevel(party_group,
+                              c("Democratic-Republican",
+                                "Democratic",
+                                "Republican",
+                                "Other"))
+  ) 
+```
+
+Building out the ggplot is simple. Shapiro uses a Google font in her work that I have not downloaded. I've added a `geom_point_interactive()` tooltip from the `ggiraph` package.
+
+```{r}
+#| label: plot
+#| fig-alt: "United States Supreme Court Justices"
+gg <- ggplot(data = justices, 
+       mapping = aes(x = x + 1, y = y + 1)) +
+  geom_point(size = 12, aes(color = party_group), alpha = 0.9) +
+  scale_color_manual(
+    values = c("#EBB027", "#266DD3", "#CC3333", "grey"),
+    guide = guide_legend(
+      title.position = "top",
+      title.hjust = 0.5,
+      override.aes = list(size = 3)
+    )
+  ) +
+  geom_image(aes(image = icon)) +
+  geom_text(aes(label = index), vjust = 4.8, size = 2) +
+  geom_point_interactive(aes(tooltip = glue::glue(
+    "{ name } \n { tenured } \n Nominated by { nominated_by }")
+    ),
+    alpha = 0.002) +
+  scale_y_reverse(limits = c(12.5, 1)) +
+  labs(
+    title = "United States Supreme Court Justices",
+    subtitle = "Emoji Portraits of all 116 Justices",
+    color = "NOMINATING PRESIDENT PARTY AFFILIATION",
+    caption = "Data from Wikipedia | Original Chart by @tanya_shapiro"
+  ) +
+  theme(
+    legend.position = "top",
+    legend.title = element_text(size = 8),
+    legend.key = element_rect(fill = NA),
+    plot.margin = margin(
+      r = 20,
+      l = 20,
+      t = 10,
+      b = 5
+    ),
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    plot.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank()
+  ) 
+
+girafe(ggobj = gg,
+       width_svg = 6,
+       height_svg = 8)
+
+```
+
+Thank you to 
+
+- Tanya Shapiro for the base graphic
+- The folks that integrated Quarto into the RStudio IDE
+- The authors of the ggiraph for interactive functionality
+
+
