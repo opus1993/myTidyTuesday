@@ -11,7 +11,7 @@
 
 
 
-<title>Home</title>
+<title>my TidyTuesday website collection</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -292,7 +292,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">my TidyTuesday website collection</h1>
 
 </div>
 
@@ -452,15 +452,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree3a408b85b8c79b949d94031fa31460ce512007c6targetblank3a408b8a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree955d604218b7539c0bf3e62fea3a74941659fcfatargetblank955d604a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/opus1993/myTidyTuesday/tree/3a408b85b8c79b949d94031fa31460ce512007c6" target="_blank">3a408b8</a>
+<a href="https://github.com/opus1993/myTidyTuesday/tree/955d604218b7539c0bf3e62fea3a74941659fcfa" target="_blank">955d604</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree3a408b85b8c79b949d94031fa31460ce512007c6targetblank3a408b8a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree955d604218b7539c0bf3e62fea3a74941659fcfatargetblank955d604a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -470,7 +470,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/opus1993/myTidyTuesday/tree/3a408b85b8c79b949d94031fa31460ce512007c6" target="_blank">3a408b8</a>.
+<a href="https://github.com/opus1993/myTidyTuesday/tree/955d604218b7539c0bf3e62fea3a74941659fcfa" target="_blank">955d604</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -569,6 +569,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/955d604218b7539c0bf3e62fea3a74941659fcfa/analysis/index.Rmd" target="_blank">955d604</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-05-05
+</td>
+<td>
+use the new knitr chunk options
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/5dd04dcbfda8a64bc492e92c16a61f9267781d78/docs/index.html" target="_blank">5dd04dc</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-05-05
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1698,57 +1732,90 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Welcome to my TidyTuesday website collection. Most of the activity
-here is related to the <a
+<p>Welcome. Most of the activity that I post here is related to the <a
 href="https://github.com/rfordatascience/tidytuesday">rfordatascience
-#TidyTuesday</a> weekly social data project. The exercises here are
-certainly not finished products. They demonstrate what could be
-accomplished in an hour or two after-hours from datasets that can be
-found out in the “wild.” In many cases, I’ve used these to explore
-packages with new features and functions and to facilitate conversations
-with others in the community via Twitter and Slack.</p>
-<pre class="r"><code>articlesTable &lt;- articles %&gt;%
-  mutate(title = map_chr(file, ~ title_f(.))) %&gt;%
-  mutate(dateline = map_chr(file, ~ date_f(.))) %&gt;%
-  mutate(libraries = map(file, ~ library_f(.))) %&gt;%
-  tidyr::unnest_longer(col = libraries) %&gt;%
-  mutate(title = str_sub(title,
-    start = 9L,
-    end = str_length(title) - 1L
-  )) %&gt;%
-  mutate(dateline = str_sub(dateline,
-    start = 8L,
-    end = str_length(dateline) - 1L
-  )) %&gt;%
-  mutate(libraries = str_squish(str_sub(libraries,
-    start = str_locate(libraries, &quot;\\(&quot;)[, 1] + 1,
-    end = str_locate(libraries, &quot;\\)&quot;)[, 1] - 1
-  ))) %&gt;%
-  filter(!libraries %in% c(&quot;tidyverse&quot;, &quot;tidytuesdayR&quot;, &quot;lubridate&quot;, &quot;here&quot;, &quot;hrbrthemes&quot;, &quot;tweetrmd&quot;, &quot;grumanlib&quot;)) %&gt;%
-  arrange(
-    desc(lubridate::mdy(dateline)),
-    libraries
-  ) %&gt;%
-  tidyr::nest(package = libraries) %&gt;%
-  mutate(link = stringr::str_remove(file, &quot;.Rmd&quot;)) %&gt;%
-  mutate(link = paste0(&quot;https://opus1993.github.io/myTidyTuesday/&quot;, link, &quot;.html&quot;))
+#TidyTuesday</a> weekly social data project. The exercises are certainly
+not finished products. They demonstrate what could be accomplished in an
+hour or two after-hours, often from datasets that can be found out in
+the “wild.” In many cases I’ve used these to explore packages with new
+features and functions and to facilitate conversations with others in
+the community via Twitter and Slack.</p>
+<pre class="r"><code>library(purrr)
+library(dplyr)</code></pre>
+<pre><code>
+Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:stats&#39;:
 
-articlesTable %&gt;%
+    filter, lag</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(knitr)
+library(kableExtra)</code></pre>
+<pre><code>
+Attaching package: &#39;kableExtra&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:dplyr&#39;:
+
+    group_rows</code></pre>
+<pre class="r"><code>library(stringr)
+
+articles &lt;- tibble(file = dir(path = &quot;analysis&quot;)) %&gt;%
+  filter(str_detect(file, &quot;\\.Rmd&quot;)) %&gt;%
+  filter(!file %in% c(&quot;_site.yml&quot;, &quot;about.Rmd&quot;, &quot;index.Rmd&quot;, &quot;license.Rmd&quot;, &quot;rsconnect&quot;))
+
+title_f &lt;- function(file) {
+  lines &lt;- readLines(paste0(&quot;analysis/&quot;, file),
+    warn = FALSE
+  )
+  lines[grepl(&quot;^title:&quot;, lines)]
+}
+
+date_f &lt;- function(file) {
+  lines &lt;- readLines(paste0(&quot;analysis/&quot;, file),
+    warn = FALSE
+  )
+  lines[grepl(&quot;^date:&quot;, lines)]
+}
+
+library_f &lt;- function(file) {
+  lines &lt;- readLines(paste0(&quot;analysis/&quot;, file),
+    warn = FALSE
+  )
+  lines[grepl(&quot;^library&quot;, lines)]
+}</code></pre>
+<pre class="r"><code>articlesTable &lt;- articles %&gt;% 
+  mutate(title = map_chr(file,~ title_f(.))) %&gt;% 
+  mutate(dateline = map_chr(file, ~ date_f(.))) %&gt;% 
+  mutate(libraries = map(file, ~ library_f(.))) %&gt;%
+  tidyr::unnest_longer(col = libraries) %&gt;% 
+  mutate(title = str_sub(title, 
+                         start = 9L,
+                        end = str_length(title) - 1L)) %&gt;% 
+  mutate(dateline = str_sub(dateline, 
+                            start = 8L,
+                            end = str_length(dateline) - 1L)) %&gt;% 
+  mutate(libraries = str_squish(str_sub(libraries, 
+                             start = str_locate(libraries, &quot;\\(&quot;)[,1] + 1,
+                             end = str_locate(libraries, &quot;\\)&quot;)[,1] - 1 ))) %&gt;% 
+  filter(!libraries %in% c(&quot;tidyverse&quot;,&quot;tidytuesdayR&quot;,&quot;lubridate&quot;,&quot;here&quot;,&quot;hrbrthemes&quot;, &quot;tweetrmd&quot;, &quot;grumanlib&quot;)) %&gt;% 
+  arrange(desc(lubridate::mdy(dateline)),
+          libraries) %&gt;% 
+  tidyr::nest(package = libraries) %&gt;% 
+  mutate(link = stringr::str_remove(file,&quot;.Rmd&quot;)) %&gt;% 
+  mutate(link = paste0(&quot;https://opus1993.github.io/myTidyTuesday/&quot;,link,&quot;.html&quot;))
+
+articlesTable %&gt;% 
   mutate(title = text_spec(title,
-    format = &quot;html&quot;,
-    link = link
-  )) %&gt;%
-  select(-file, -link) %&gt;%
-  knitr::kable(&quot;html&quot;,
-    escape = FALSE,
-    col.names = c(&quot;Title&quot;, &quot;Date&quot;, &quot;Packages&quot;)
-  ) %&gt;%
-  kable_styling(
-    bootstrap_options = c(&quot;hover&quot;, &quot;condensed&quot;),
-    full_width = TRUE,
-    fixed_thead = TRUE
-  ) %&gt;%
-  column_spec(1:3, width = c(&quot;10em&quot;, &quot;10em&quot;, &quot;60em&quot;))</code></pre>
+                           format = &quot;html&quot;, 
+                           link = link)) %&gt;% 
+  select(-file, -link) %&gt;% 
+  knitr::kable(&quot;html&quot;, 
+               escape = FALSE,
+               col.names = c(&quot;Title&quot;,&quot;Date&quot;,&quot;Packages&quot;)) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;hover&quot;, &quot;condensed&quot;),
+                full_width = TRUE,
+                fixed_thead = TRUE) %&gt;% 
+  column_spec(1:3,width = c(&quot;10em&quot;,&quot;10em&quot;,&quot;60em&quot;))</code></pre>
 <table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2424,8 +2491,9 @@ stringr , viridis
 </tbody>
 </table>
 <hr />
-<p>I have made notes of my sources for code and content. Please be sure
-to reach out, acknowledge, and cite their contributions directly.</p>
+<p>I have attempted to make notes of my sources for code and content.
+Please be sure to reach out, acknowledge, and cite their contributions
+directly.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -2460,17 +2528,17 @@ loaded via a namespace (and not attached):
  [5] colorspace_2.0-3  vctrs_0.4.1       generics_0.1.2    viridisLite_0.4.0
  [9] htmltools_0.5.2   yaml_2.3.5        utf8_1.2.2        rlang_1.0.2      
 [13] R.oo_1.24.0       jquerylib_0.1.4   later_1.3.0       pillar_1.7.0     
-[17] R.utils_2.11.0    glue_1.6.2        DBI_1.1.2         R.cache_0.15.0   
-[21] lifecycle_1.0.1   munsell_0.5.0     R.methodsS3_1.8.1 rvest_1.0.2      
+[17] glue_1.6.2        DBI_1.1.2         R.utils_2.11.0    lifecycle_1.0.1  
+[21] R.cache_0.15.0    munsell_0.5.0     rvest_1.0.2       R.methodsS3_1.8.1
 [25] evaluate_0.15     callr_3.7.0       fastmap_1.1.0     httpuv_1.6.5     
-[29] ps_1.7.0          fansi_1.0.3       Rcpp_1.0.8.3      promises_1.2.0.1 
-[33] scales_1.2.0      webshot_0.5.3     jsonlite_1.8.0    systemfonts_1.0.4
+[29] ps_1.7.0          fansi_1.0.3       Rcpp_1.0.8.3      scales_1.2.0     
+[33] promises_1.2.0.1  webshot_0.5.3     jsonlite_1.8.0    systemfonts_1.0.4
 [37] fs_1.5.2          digest_0.6.29     stringi_1.7.6     processx_3.5.3   
 [41] getPass_0.2-2     rprojroot_2.0.3   cli_3.2.0         tools_4.1.3      
 [45] magrittr_2.0.3    sass_0.4.1        tibble_3.1.6      tidyr_1.2.0      
 [49] crayon_1.5.1      whisker_0.4       pkgconfig_2.0.3   ellipsis_0.3.2   
-[53] xml2_1.3.3        lubridate_1.8.0   assertthat_0.2.1  rmarkdown_2.14   
-[57] svglite_2.1.0     httr_1.4.2        rstudioapi_0.13   R6_2.5.1         
+[53] xml2_1.3.3        lubridate_1.8.0   svglite_2.1.0     assertthat_0.2.1 
+[57] rmarkdown_2.14    httr_1.4.2        rstudioapi_0.13   R6_2.5.1         
 [61] git2r_0.30.1      compiler_4.1.3   </code></pre>
 </div>
 
