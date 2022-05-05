@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "my TidyTuesday website collection"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
@@ -9,24 +9,26 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my TidyTuesday website collection. Most of the activity here is related to the [rfordatascience #TidyTuesday](https://github.com/rfordatascience/tidytuesday) weekly social data project. The exercises here are certainly not finished products. They demonstrate what could be accomplished in an hour or two after-hours from datasets that can be found out in the "wild." In many cases, I've used these to explore packages with new features and functions and to facilitate conversations with others in the community via Twitter and Slack.
+Welcome. Most of the activity that I post here is related to the [rfordatascience #TidyTuesday](https://github.com/rfordatascience/tidytuesday) weekly social data project. The exercises are certainly not finished products. They demonstrate what could be accomplished in an hour or two after-hours, often from datasets that can be found out in the "wild." In many cases I've used these to explore packages with new features and functions and to facilitate conversations with others in the community via Twitter and Slack.
 
-```{r, include = FALSE}
+
+
+
+```{r}
+#| setup,
+#| echo = FALSE,
+#| fig.width = 12,
+#| cache = FALSE,
+#| warning = FALSE,
+#| echo = TRUE,
+#| cache.lazy = FALSE,
+#| tidy = "styler"
+
 library(purrr)
 library(dplyr)
 library(knitr)
 library(kableExtra)
 library(stringr)
-
-knitr::opts_chunk$set(cache = FALSE, 
-                      warning = FALSE, 
-                      message = FALSE, 
-                      echo = TRUE, 
-                      dpi = 300, 
-                      cache.lazy = FALSE,
-                      tidy = "styler", 
-                      fig.width = 12, 
-                      fig.height = 7.402)
 
 articles <- tibble(file = dir(path = "analysis")) %>% 
   filter(str_detect(file, "\\.Rmd")) %>% 
@@ -52,7 +54,7 @@ library_f <- function(file) {
 ```
 
 ```{r}
-
+#| label: articlesTable
 articlesTable <- articles %>% 
   mutate(title = map_chr(file,~ title_f(.))) %>% 
   mutate(dateline = map_chr(file, ~ date_f(.))) %>% 
@@ -91,4 +93,4 @@ articlesTable %>%
 
 ----
 
-I have made notes of my sources for code and content. Please be sure to reach out, acknowledge, and cite their contributions directly.
+I have attempted to make notes of my sources for code and content. Please be sure to reach out, acknowledge, and cite their contributions directly.
