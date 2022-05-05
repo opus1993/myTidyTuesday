@@ -24,12 +24,13 @@ Welcome. Most of the activity that I post here is related to the [rfordatascienc
 #| cache.lazy = FALSE,
 #| tidy = "styler"
 
+suppressPackageStartupMessages({
 library(purrr)
 library(dplyr)
 library(knitr)
 library(kableExtra)
 library(stringr)
-
+})
 articles <- tibble(file = dir(path = "analysis")) %>% 
   filter(str_detect(file, "\\.Rmd")) %>% 
   filter(!file %in% c("_site.yml","about.Rmd","index.Rmd","license.Rmd","rsconnect"))
