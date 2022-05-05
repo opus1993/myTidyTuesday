@@ -13,7 +13,7 @@
 
 <title>Home</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -272,7 +272,9 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">source</a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -319,7 +321,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-04-18
+<strong>Last updated:</strong> 2022-05-05
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -450,15 +452,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreefbcf261c031f09b6f95672786cf764fb164c8f9dtargetblankfbcf261a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree0e3caf528d8bda7a9472236bf7299906f87bb0bbtargetblank0e3caf5a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/opus1993/myTidyTuesday/tree/fbcf261c031f09b6f95672786cf764fb164c8f9d" target="_blank">fbcf261</a>
+<a href="https://github.com/opus1993/myTidyTuesday/tree/0e3caf528d8bda7a9472236bf7299906f87bb0bb" target="_blank">0e3caf5</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreefbcf261c031f09b6f95672786cf764fb164c8f9dtargetblankfbcf261a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree0e3caf528d8bda7a9472236bf7299906f87bb0bbtargetblank0e3caf5a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -468,7 +470,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/opus1993/myTidyTuesday/tree/fbcf261c031f09b6f95672786cf764fb164c8f9d" target="_blank">fbcf261</a>.
+<a href="https://github.com/opus1993/myTidyTuesday/tree/0e3caf528d8bda7a9472236bf7299906f87bb0bb" target="_blank">0e3caf5</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -487,6 +489,7 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    catboost_info/
     Ignored:    data/.Rhistory
+    Ignored:    data/2022-04-27/
     Ignored:    data/CNHI_Excel_Chart.xlsx
     Ignored:    data/Chicago.rds
     Ignored:    data/CommunityTreemap.jpeg
@@ -511,11 +514,13 @@ Ignored files:
     Ignored:    data/weatherstats_toronto_daily.csv
 
 Untracked files:
+    Untracked:  analysis/2022_04_21.Rmd
     Untracked:  code/YammerReach.R
     Untracked:  code/chicago.R
     Untracked:  code/googleCompute.R
     Untracked:  code/work list batch targets.R
     Untracked:  environment.yml
+    Untracked:  report.html
 
 Unstaged changes:
     Deleted:    analysis/2022_02_11_tabular_playground.Rmd
@@ -565,6 +570,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/opus1993/myTidyTuesday/16131be1732db01d7dc2a4b93b2eb8437e70eba8/docs/index.html" target="_blank">16131be</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-04-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1728,6 +1750,18 @@ Packages
 <tbody>
 <tr>
 <td style="text-align:left;width: 10em; ">
+<a href="https://opus1993.github.io/myTidyTuesday/2022_04_21.html" style="     ">Tabular
+Playground: Biological Sensor Time Series Classification</a>
+</td>
+<td style="text-align:left;width: 10em; ">
+April 27, 2022
+</td>
+<td style="text-align:left;width: 10em; ">
+data.table, h2o , tidymodels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
 <a href="https://opus1993.github.io/myTidyTuesday/2022_04_18.html" style="     ">Supreme
 Court Pictogram</a>
 </td>
@@ -2397,7 +2431,7 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.1.2 (2021-11-01)
+<pre><code>R version 4.1.3 (2022-03-10)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 10 x64 (build 22000)
 
@@ -2414,26 +2448,26 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] stringr_1.4.0    kableExtra_1.3.4 knitr_1.38       dplyr_1.0.8     
+[1] stringr_1.4.0    kableExtra_1.3.4 knitr_1.39       dplyr_1.0.9     
 [5] purrr_0.3.4      workflowr_1.7.0 
 
 loaded via a namespace (and not attached):
  [1] styler_1.7.0      tidyselect_1.1.2  xfun_0.30         bslib_0.3.1      
- [5] colorspace_2.0-3  vctrs_0.4.0       generics_0.1.2    viridisLite_0.4.0
+ [5] colorspace_2.0-3  vctrs_0.4.1       generics_0.1.2    viridisLite_0.4.0
  [9] htmltools_0.5.2   yaml_2.3.5        utf8_1.2.2        rlang_1.0.2      
 [13] R.oo_1.24.0       jquerylib_0.1.4   later_1.3.0       pillar_1.7.0     
 [17] R.utils_2.11.0    glue_1.6.2        DBI_1.1.2         R.cache_0.15.0   
 [21] lifecycle_1.0.1   munsell_0.5.0     R.methodsS3_1.8.1 rvest_1.0.2      
 [25] evaluate_0.15     callr_3.7.0       fastmap_1.1.0     httpuv_1.6.5     
-[29] ps_1.6.0          fansi_1.0.3       Rcpp_1.0.8.3      promises_1.2.0.1 
+[29] ps_1.7.0          fansi_1.0.3       Rcpp_1.0.8.3      promises_1.2.0.1 
 [33] scales_1.2.0      webshot_0.5.3     jsonlite_1.8.0    systemfonts_1.0.4
 [37] fs_1.5.2          digest_0.6.29     stringi_1.7.6     processx_3.5.3   
-[41] getPass_0.2-2     rprojroot_2.0.3   cli_3.2.0         tools_4.1.2      
+[41] getPass_0.2-2     rprojroot_2.0.3   cli_3.2.0         tools_4.1.3      
 [45] magrittr_2.0.3    sass_0.4.1        tibble_3.1.6      tidyr_1.2.0      
 [49] crayon_1.5.1      whisker_0.4       pkgconfig_2.0.3   ellipsis_0.3.2   
-[53] xml2_1.3.3        lubridate_1.8.0   assertthat_0.2.1  rmarkdown_2.13   
+[53] xml2_1.3.3        lubridate_1.8.0   assertthat_0.2.1  rmarkdown_2.14   
 [57] svglite_2.1.0     httr_1.4.2        rstudioapi_0.13   R6_2.5.1         
-[61] git2r_0.30.1      compiler_4.1.2   </code></pre>
+[61] git2r_0.30.1      compiler_4.1.3   </code></pre>
 </div>
 
 
