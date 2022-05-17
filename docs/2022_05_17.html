@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2022-05-17" />
+
+<title>Eurovision Grand Finale Rankings</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">source</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Eurovision Grand Finale Rankings</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">May 17, 2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-05-17
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree752eb71d5cd3ea8d1b7f0738ebc1297a317b0f50targetblank752eb71a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/opus1993/myTidyTuesday/tree/752eb71d5cd3ea8d1b7f0738ebc1297a317b0f50" target="_blank">752eb71</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree752eb71d5cd3ea8d1b7f0738ebc1297a317b0f50targetblank752eb71a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/opus1993/myTidyTuesday/tree/752eb71d5cd3ea8d1b7f0738ebc1297a317b0f50" target="_blank">752eb71</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
+    Ignored:    data/.Rhistory
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/Chicago.rds
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/SeriesReport-20220414171148_6c3b18.xlsx
+    Ignored:    data/Weekly_Chicago_IL_Regular_Reformulated_Retail_Gasoline_Prices.csv
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/YammerMemberPage.rds
+    Ignored:    data/YammerMembers.rds
+    Ignored:    data/df.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/mfg_shap.rds
+    Ignored:    data/netflixTitles2.rds
+    Ignored:    data/raw_weather.RData
+    Ignored:    data/sample_submission.csv
+    Ignored:    data/test.csv
+    Ignored:    data/train.csv
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+    Ignored:    data/xgboost_fit.rds
+
+Untracked files:
+    Untracked:  analysis/2022_May_tabular_playground.Rmd
+    Untracked:  code/YammerReach.R
+    Untracked:  code/chicago.R
+    Untracked:  code/googleCompute.R
+    Untracked:  code/work list batch targets.R
+    Untracked:  environment.yml
+    Untracked:  report.html
+
+Unstaged changes:
+    Modified:   .gitattributes
+    Deleted:    analysis/2022_02_11_tabular_playground.Rmd
+    Deleted:    analysis/2022_04_18.qmd
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/2022_05_17.Rmd</code>) and HTML
+(<code>docs/2022_05_17.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/752eb71d5cd3ea8d1b7f0738ebc1297a317b0f50/analysis/2022_05_17.Rmd" target="_blank">752eb71</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-05-17
+</td>
+<td>
+initial commit of Eurovision
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>For #TidyTuesday 2022 week 20, Bob Rudis and Tanya Shapiro built a
+nice sample dataset of Eurovision grand finale rankings from 2004 to
+2022.</p>
+<p>I am going to attempt to build on Lee Olney’s submission to twitter.
+Reference <a
+href="https://github.com/leeolney3/TidyTuesday/blob/main/2022/week_20/">https://github.com/leeolney3/TidyTuesday/blob/main/2022/week_20/</a></p>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> week 20, Eurovision grand finale rankings from 2004 to 2022. Data from Eurovision, credits to Tanya Shapiro and Bob Rudis.<a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> code: <a href="https://t.co/TJNXMGcXg2">https://t.co/TJNXMGcXg2</a> <a href="https://t.co/xdw1M8bTnx">pic.twitter.com/xdw1M8bTnx</a></p>&mdash; Lee Olney (@leeolney3) <a href="https://twitter.com/leeolney3/status/1526448720392466437?ref_src=twsrc%5Etfw">May 17, 2022</a></blockquote>
+
+<p>First, let’s load the packages:</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+  library(tidyverse)
+  library(cowplot)
+})</code></pre>
+<p>Second, let’s load the data and a helper function to glue the counts
+of countries onto the country labels:</p>
+<pre class="r"><code>withfreq &lt;- function(string, width = 20) {
+  dplyr::pull(
+    dplyr::mutate(
+      dplyr::add_count(tibble::tibble(string), string),
+      string = glue::glue(&quot;{ stringr::str_wrap(string, width = width) } ({ n })&quot;)
+    ),
+    string
+  )
+}
+
+eurovision &lt;- tidytuesdayR::tt_load(&quot;2022-05-17&quot;)$eurovision |&gt; mutate(artist_country = withfreq(artist_country))</code></pre>
+<pre><code>--- Compiling #TidyTuesday Information for 2022-05-17 ----</code></pre>
+<pre><code>--- There are 2 files available ---</code></pre>
+<pre><code>--- Starting Download ---</code></pre>
+<pre><code>
+    Downloading file 1 of 2: `eurovision.csv`
+    Downloading file 2 of 2: `eurovision-votes.csv`</code></pre>
+<pre><code>--- Download complete ---</code></pre>
+<pre class="r"><code># h/t to Priyanka Mehta @Priyank79286307 for the suggestion to order country by which countries participated most and which won the most
+
+eurovision_by_country &lt;- eurovision |&gt;
+  filter(section == &quot;grand-final&quot;, year != 2020) |&gt;
+  group_by(year) |&gt;
+  mutate(rank_label = case_when(
+    rank %in% c(1, 2, 3) ~ as.character(rank),
+    rank == max(rank) ~ &quot;last&quot;,
+    TRUE ~ NA_character_
+  )) |&gt;
+  ungroup(year) |&gt;
+  mutate(
+    artist_country = factor(artist_country,
+      levels =
+        eurovision |&gt;
+          group_by(artist_country) |&gt;
+          summarise(
+            highest_rank = min(rank),
+            n = n_distinct(year),
+            .groups = &quot;drop&quot;
+          ) |&gt;
+          arrange(n, desc(highest_rank)) |&gt;
+          pull(artist_country)
+    )
+  )</code></pre>
+<pre class="r"><code>eurovision_by_country |&gt;
+  ggplot(aes(x = year, y = artist_country)) +
+  geom_line(size = .3, color = &quot;grey70&quot;) +
+  geom_point(shape = 21, size = 2.5, fill = &quot;white&quot;) +
+  geom_point(
+    data = eurovision_by_country |&gt; filter(!is.na(rank_label)),
+    aes(fill = rank_label),
+    size = 2.5,
+    shape = 21
+  ) +
+  scale_fill_manual(
+    values = c(&quot;#F50405&quot;, &quot;#F7C83A&quot;, &quot;#1CB4EB&quot;, &quot;#4F5251&quot;),
+    guide = guide_legend(order = 1)
+  ) +
+  scale_x_continuous(
+    position = &quot;top&quot;,
+    breaks = seq(2005, 2020, 5),
+    expand = expansion(mult = c(.02, NA))
+  ) +
+  coord_cartesian(clip = &quot;off&quot;) +
+  cowplot::theme_minimal_vgrid(12) +
+  theme(
+    legend.title = element_blank(),
+    axis.title = element_blank(),
+    axis.line = element_blank(),
+    axis.ticks.y = element_blank(),
+    legend.position = &quot;top&quot;,
+    plot.margin = margin(.4, 1.4, .3, .4, unit = &quot;cm&quot;),
+    plot.title.position = &quot;plot&quot;,
+    plot.title = element_text(size = 13),
+    plot.caption.position = &quot;plot&quot;,
+    plot.caption = element_text(
+      hjust = 0,
+      color = &quot;grey20&quot;,
+      margin = margin(t = 13),
+      size = 9
+    )
+  ) +
+  labs(
+    title = &quot;Eurovision Grand Final Rankings&quot;,
+    subtitle = &quot;From 2004 to 2022, arranged in order of artist country number of appearances (in parens)&quot;,
+    caption = &quot;#TidyTuesday week 20 | Data from Eurovision, credits to Tanya Shapiro and Bob Rudis and Lee Olney&quot;
+  )</code></pre>
+<p><img src="figure/2022_05_17.Rmd/plot-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Thank you to</p>
+<ul>
+<li>Lee Olney for the head start</li>
+<li>Bob Rudis and Tanya Shapiro</li>
+</ul>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.3 (2022-03-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] cowplot_1.1.1   forcats_0.5.1   stringr_1.4.0   dplyr_1.0.9    
+ [5] purrr_0.3.4     readr_2.1.2     tidyr_1.2.0     tibble_3.1.7   
+ [9] ggplot2_3.3.6   tidyverse_1.3.1 workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+ [1] fs_1.5.2           usethis_2.1.5      lubridate_1.8.0    bit64_4.0.5       
+ [5] httr_1.4.3         rprojroot_2.0.3    R.cache_0.15.0     tools_4.1.3       
+ [9] backports_1.4.1    bslib_0.3.1        utf8_1.2.2         R6_2.5.1          
+[13] DBI_1.1.2          colorspace_2.0-3   withr_2.5.0        tidyselect_1.1.2  
+[17] processx_3.5.3     bit_4.0.4          curl_4.3.2         compiler_4.1.3    
+[21] git2r_0.30.1       cli_3.2.0          tweetrmd_0.0.9     rvest_1.0.2       
+[25] xml2_1.3.3         sass_0.4.1         scales_1.2.0       callr_3.7.0       
+[29] digest_0.6.29      rmarkdown_2.14     R.utils_2.11.0     tidytuesdayR_1.0.2
+[33] pkgconfig_2.0.3    htmltools_0.5.2    styler_1.7.0       highr_0.9         
+[37] dbplyr_2.1.1       fastmap_1.1.0      rlang_1.0.2        readxl_1.4.0      
+[41] rstudioapi_0.13    farver_2.1.0       jquerylib_0.1.4    generics_0.1.2    
+[45] jsonlite_1.8.0     vroom_1.5.7        R.oo_1.24.0        magrittr_2.0.3    
+[49] Rcpp_1.0.8.3       munsell_0.5.0      fansi_1.0.3        lifecycle_1.0.1   
+[53] R.methodsS3_1.8.1  stringi_1.7.6      whisker_0.4        yaml_2.3.5        
+[57] grid_4.1.3         parallel_4.1.3     promises_1.2.0.1   crayon_1.5.1      
+[61] haven_2.5.0        hms_1.1.1          knitr_1.39         ps_1.7.0          
+[65] pillar_1.7.0       reprex_2.0.1       glue_1.6.2         evaluate_0.15     
+[69] getPass_0.2-2      modelr_0.1.8       vctrs_0.4.1        tzdb_0.3.0        
+[73] httpuv_1.6.5       selectr_0.4-2      cellranger_1.1.0   gtable_0.3.0      
+[77] rematch2_2.1.2     assertthat_0.2.1   xfun_0.31          broom_0.8.0       
+[81] later_1.3.0        ellipsis_0.3.2    </code></pre>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkV1cm92aXNpb24gR3JhbmQgRmluYWxlIFJhbmtpbmdzIg0KYXV0aG9yOiAiSmltIEdydW1hbiINCmRhdGU6ICJNYXkgMTcsIDIwMjIiDQpvdXRwdXQ6DQogIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICB0b2M6IG5vDQogICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgIGRmX3ByaW50OiBwYWdlZA0KZWRpdG9yX29wdGlvbnM6DQogIGNodW5rX291dHB1dF90eXBlOiBjb25zb2xlDQotLS0NCg0KRm9yICNUaWR5VHVlc2RheSAyMDIyIHdlZWsgMjAsIEJvYiBSdWRpcyBhbmQgVGFueWEgU2hhcGlybyBidWlsdCBhIG5pY2Ugc2FtcGxlIGRhdGFzZXQgb2YgRXVyb3Zpc2lvbiBncmFuZCBmaW5hbGUgcmFua2luZ3MgZnJvbSAyMDA0IHRvIDIwMjIuDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlID0gRkFMU0V9DQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldCgNCiAgZmlnLndpZHRoID0gMTIsIGNhY2hlID0gRkFMU0UsIHdhcm5pbmcgPSBGQUxTRSwNCiAgZmlnLmhlaWdodCA9IDksDQogIGVjaG8gPSBUUlVFLCBjYWNoZS5sYXp5ID0gRkFMU0UsIHRpZHkgPSAic3R5bGVyIg0KKQ0KDQpgYGANCg0KSSBhbSBnb2luZyB0byBhdHRlbXB0IHRvIGJ1aWxkIG9uIExlZSBPbG5leSdzIHN1Ym1pc3Npb24gdG8gdHdpdHRlci4gUmVmZXJlbmNlIFtodHRwczovL2dpdGh1Yi5jb20vbGVlb2xuZXkzL1RpZHlUdWVzZGF5L2Jsb2IvbWFpbi8yMDIyL3dlZWtfMjAvXShodHRwczovL2dpdGh1Yi5jb20vbGVlb2xuZXkzL1RpZHlUdWVzZGF5L2Jsb2IvbWFpbi8yMDIyL3dlZWtfMjAvKQ0KDQpgYGB7cn0NCiN8IGxhYmVsOiB0d2VldC1pbnNwaXJhdGlvbg0KI3wgZWNobzogZmFsc2UNCg0KdHdlZXRybWQ6OmluY2x1ZGVfdHdlZXQoImh0dHBzOi8vdHdpdHRlci5jb20vbGVlb2xuZXkzL3N0YXR1cy8xNTI2NDQ4NzIwMzkyNDY2NDM3IikNCmBgYA0KDQpGaXJzdCwgbGV0J3MgbG9hZCB0aGUgcGFja2FnZXM6DQoNCmBgYHtyfQ0KI3wgbGFiZWw6IGxvYWQtcGFja2FnZXMNCg0Kc3VwcHJlc3NQYWNrYWdlU3RhcnR1cE1lc3NhZ2VzKHsNCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShjb3dwbG90KQ0KfSkNCg0KYGBgDQoNClNlY29uZCwgbGV0J3MgbG9hZCB0aGUgZGF0YSBhbmQgYSBoZWxwZXIgZnVuY3Rpb24gdG8gZ2x1ZSB0aGUgY291bnRzIG9mIGNvdW50cmllcyBvbnRvIHRoZSBjb3VudHJ5IGxhYmVsczoNCg0KYGBge3J9DQojfCBsYWJlbDogbG9hZF90aWR5dHVlc2RheVJfZGF0YQ0Kd2l0aGZyZXEgPC0gZnVuY3Rpb24oc3RyaW5nLCB3aWR0aCA9IDIwKSB7DQogIGRwbHlyOjpwdWxsKGRwbHlyOjptdXRhdGUoDQogICAgZHBseXI6OmFkZF9jb3VudCh0aWJibGU6OnRpYmJsZShzdHJpbmcpLCBzdHJpbmcpLA0KICAgIHN0cmluZyA9IGdsdWU6OmdsdWUoInsgc3RyaW5ncjo6c3RyX3dyYXAoc3RyaW5nLCB3aWR0aCA9IHdpZHRoKSB9ICh7IG4gfSkiKQ0KICApLA0KICBzdHJpbmcpDQp9DQoNCmV1cm92aXNpb24gPC0gdGlkeXR1ZXNkYXlSOjp0dF9sb2FkKCIyMDIyLTA1LTE3IikkZXVyb3Zpc2lvbiB8PiBtdXRhdGUoYXJ0aXN0X2NvdW50cnkgPSB3aXRoZnJlcShhcnRpc3RfY291bnRyeSkpDQoNCiMgaC90IHRvIFByaXlhbmthIE1laHRhIEBQcml5YW5rNzkyODYzMDcgZm9yIHRoZSBzdWdnZXN0aW9uIHRvIG9yZGVyIGNvdW50cnkgYnkgd2hpY2ggY291bnRyaWVzIHBhcnRpY2lwYXRlZCBtb3N0IGFuZCB3aGljaCB3b24gdGhlIG1vc3QNCg0KZXVyb3Zpc2lvbl9ieV9jb3VudHJ5IDwtIGV1cm92aXNpb24gfD4NCiAgZmlsdGVyKHNlY3Rpb24gPT0gImdyYW5kLWZpbmFsIiwgeWVhciAhPSAyMDIwKSB8Pg0KICBncm91cF9ieSh5ZWFyKSB8Pg0KICBtdXRhdGUocmFua19sYWJlbCA9IGNhc2Vfd2hlbigNCiAgICByYW5rICVpbiUgYygxLCAyLCAzKSB+IGFzLmNoYXJhY3RlcihyYW5rKSwNCiAgICByYW5rID09IG1heChyYW5rKSB+ICJsYXN0IiwNCiAgICBUUlVFIH4gTkFfY2hhcmFjdGVyXw0KICApKSB8Pg0KICB1bmdyb3VwKHllYXIpIHw+IA0KICBtdXRhdGUoDQogICAgYXJ0aXN0X2NvdW50cnkgPSBmYWN0b3IoYXJ0aXN0X2NvdW50cnksIA0KICAgICAgICAgIGxldmVscyA9IA0KICAgICAgICAgICAgZXVyb3Zpc2lvbiB8Pg0KICAgICAgICAgICAgICBncm91cF9ieShhcnRpc3RfY291bnRyeSkgIHw+DQogICAgICAgICAgICAgIHN1bW1hcmlzZShoaWdoZXN0X3JhbmsgPSBtaW4ocmFuayksDQogICAgICAgICAgICAgICAgICAgICAgbiA9IG5fZGlzdGluY3QoeWVhciksDQogICAgICAgICAgICAgICAgICAgICAgLmdyb3VwcyA9ICJkcm9wIikgIHw+IA0KICAgICAgICAgICAgICBhcnJhbmdlKG4sIGRlc2MoaGlnaGVzdF9yYW5rKSkgfD4gDQogICAgICAgICAgICAgIHB1bGwoYXJ0aXN0X2NvdW50cnkpKQ0KICAgICkNCg0KDQpgYGANCg0KYGBge3J9DQojfCBwbG90DQoNCmV1cm92aXNpb25fYnlfY291bnRyeSB8PiANCiAgZ2dwbG90KGFlcyh4ID0geWVhciwgeSA9CWFydGlzdF9jb3VudHJ5KSkgKw0KICBnZW9tX2xpbmUoIHNpemUgPSAuMywgY29sb3IgPSAiZ3JleTcwIikgKw0KICBnZW9tX3BvaW50KHNoYXBlID0gMjEsIHNpemUgPSAyLjUsIGZpbGwgPSAid2hpdGUiKSArDQogIGdlb21fcG9pbnQoDQogICAgZGF0YSA9IGV1cm92aXNpb25fYnlfY291bnRyeSB8PiBmaWx0ZXIoIWlzLm5hKHJhbmtfbGFiZWwpKSwNCiAgICBhZXMoZmlsbCA9IHJhbmtfbGFiZWwpLA0KICAgIHNpemUgPSAyLjUsDQogICAgc2hhcGUgPSAyMQ0KICApICsNCiAgc2NhbGVfZmlsbF9tYW51YWwodmFsdWVzID0gYygiI0Y1MDQwNSIsICIjRjdDODNBIiwgIiMxQ0I0RUIiLCIjNEY1MjUxIiksDQogICAgICAgICAgICAgICAgICAgIGd1aWRlID0gZ3VpZGVfbGVnZW5kKG9yZGVyID0gMSkpICsNCiAgc2NhbGVfeF9jb250aW51b3VzKA0KICAgIHBvc2l0aW9uID0gInRvcCIsDQogICAgYnJlYWtzID0gc2VxKDIwMDUsIDIwMjAsIDUpLA0KICAgIGV4cGFuZCA9IGV4cGFuc2lvbihtdWx0ID0gYyguMDIsIE5BKSkNCiAgKSArDQogIGNvb3JkX2NhcnRlc2lhbihjbGlwID0gIm9mZiIpICsNCiAgY293cGxvdDo6dGhlbWVfbWluaW1hbF92Z3JpZCgxMikgKw0KICB0aGVtZSgNCiAgICBsZWdlbmQudGl0bGUgPSBlbGVtZW50X2JsYW5rKCksDQogICAgYXhpcy50aXRsZSA9IGVsZW1lbnRfYmxhbmsoKSwNCiAgICBheGlzLmxpbmUgPSBlbGVtZW50X2JsYW5rKCksDQogICAgYXhpcy50aWNrcy55ID0gZWxlbWVudF9ibGFuaygpLA0KICAgIGxlZ2VuZC5wb3NpdGlvbiA9ICJ0b3AiLA0KICAgIHBsb3QubWFyZ2luID0gbWFyZ2luKC40LCAxLjQsIC4zLCAuNCwgdW5pdCA9ICJjbSIpLA0KICAgIHBsb3QudGl0bGUucG9zaXRpb24gPSAicGxvdCIsDQogICAgcGxvdC50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMTMpLA0KICAgIHBsb3QuY2FwdGlvbi5wb3NpdGlvbiA9ICJwbG90IiwNCiAgICBwbG90LmNhcHRpb24gPSBlbGVtZW50X3RleHQoDQogICAgICBoanVzdCA9IDAsDQogICAgICBjb2xvciA9ICJncmV5MjAiLA0KICAgICAgbWFyZ2luID0gbWFyZ2luKHQgPSAxMyksDQogICAgICBzaXplID0gOQ0KICAgICkNCiAgKSArDQogIGxhYnModGl0bGUgPSAiRXVyb3Zpc2lvbiBHcmFuZCBGaW5hbCBSYW5raW5ncyIsDQogICAgICAgc3VidGl0bGUgPSAiRnJvbSAyMDA0IHRvIDIwMjIsIGFycmFuZ2VkIGluIG9yZGVyIG9mIGFydGlzdCBjb3VudHJ5IG51bWJlciBvZiBhcHBlYXJhbmNlcyAoaW4gcGFyZW5zKSIsDQogICAgICAgY2FwdGlvbiA9ICIjVGlkeVR1ZXNkYXkgd2VlayAyMCB8IERhdGEgZnJvbSBFdXJvdmlzaW9uLCBjcmVkaXRzIHRvIFRhbnlhIFNoYXBpcm8gYW5kIEJvYiBSdWRpcyBhbmQgTGVlIE9sbmV5IikNCiANCmBgYA0KDQpUaGFuayB5b3UgdG8gDQoNCi0gTGVlIE9sbmV5IGZvciB0aGUgaGVhZCBzdGFydA0KLSBCb2IgUnVkaXMgYW5kIFRhbnlhIFNoYXBpcm8NCg0KDQo=</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2022_05_17.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
