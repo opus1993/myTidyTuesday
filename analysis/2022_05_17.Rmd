@@ -1,0 +1,138 @@
+---
+title: "Eurovision Grand Finale Rankings"
+author: "Jim Gruman"
+date: "May 17, 2022"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+For #TidyTuesday 2022 week 20, Bob Rudis and Tanya Shapiro built a nice sample dataset of Eurovision grand finale rankings from 2004 to 2022.
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(
+  fig.width = 12, cache = FALSE, warning = FALSE,
+  fig.height = 9,
+  echo = TRUE, cache.lazy = FALSE, tidy = "styler"
+)
+
+```
+
+I am going to attempt to build on Lee Olney's submission to twitter. Reference [https://github.com/leeolney3/TidyTuesday/blob/main/2022/week_20/](https://github.com/leeolney3/TidyTuesday/blob/main/2022/week_20/)
+
+```{r}
+#| label: tweet-inspiration
+#| echo: false
+
+tweetrmd::include_tweet("https://twitter.com/leeolney3/status/1526448720392466437")
+```
+
+First, let's load the packages:
+
+```{r}
+#| label: load-packages
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(cowplot)
+})
+
+```
+
+Second, let's load the data and a helper function to glue the counts of countries onto the country labels:
+
+```{r}
+#| label: load_tidytuesdayR_data
+withfreq <- function(string, width = 20) {
+  dplyr::pull(dplyr::mutate(
+    dplyr::add_count(tibble::tibble(string), string),
+    string = glue::glue("{ stringr::str_wrap(string, width = width) } ({ n })")
+  ),
+  string)
+}
+
+eurovision <- tidytuesdayR::tt_load("2022-05-17")$eurovision |> mutate(artist_country = withfreq(artist_country))
+
+# h/t to Priyanka Mehta @Priyank79286307 for the suggestion to order country by which countries participated most and which won the most
+
+eurovision_by_country <- eurovision |>
+  filter(section == "grand-final", year != 2020) |>
+  group_by(year) |>
+  mutate(rank_label = case_when(
+    rank %in% c(1, 2, 3) ~ as.character(rank),
+    rank == max(rank) ~ "last",
+    TRUE ~ NA_character_
+  )) |>
+  ungroup(year) |> 
+  mutate(
+    artist_country = factor(artist_country, 
+          levels = 
+            eurovision |>
+              group_by(artist_country)  |>
+              summarise(highest_rank = min(rank),
+                      n = n_distinct(year),
+                      .groups = "drop")  |> 
+              arrange(n, desc(highest_rank)) |> 
+              pull(artist_country))
+    )
+
+
+```
+
+```{r}
+#| plot
+
+eurovision_by_country |> 
+  ggplot(aes(x = year, y =	artist_country)) +
+  geom_line( size = .3, color = "grey70") +
+  geom_point(shape = 21, size = 2.5, fill = "white") +
+  geom_point(
+    data = eurovision_by_country |> filter(!is.na(rank_label)),
+    aes(fill = rank_label),
+    size = 2.5,
+    shape = 21
+  ) +
+  scale_fill_manual(values = c("#F50405", "#F7C83A", "#1CB4EB","#4F5251"),
+                    guide = guide_legend(order = 1)) +
+  scale_x_continuous(
+    position = "top",
+    breaks = seq(2005, 2020, 5),
+    expand = expansion(mult = c(.02, NA))
+  ) +
+  coord_cartesian(clip = "off") +
+  cowplot::theme_minimal_vgrid(12) +
+  theme(
+    legend.title = element_blank(),
+    axis.title = element_blank(),
+    axis.line = element_blank(),
+    axis.ticks.y = element_blank(),
+    legend.position = "top",
+    plot.margin = margin(.4, 1.4, .3, .4, unit = "cm"),
+    plot.title.position = "plot",
+    plot.title = element_text(size = 13),
+    plot.caption.position = "plot",
+    plot.caption = element_text(
+      hjust = 0,
+      color = "grey20",
+      margin = margin(t = 13),
+      size = 9
+    )
+  ) +
+  labs(title = "Eurovision Grand Final Rankings",
+       subtitle = "From 2004 to 2022, arranged in order of artist country number of appearances (in parens)",
+       caption = "#TidyTuesday week 20 | Data from Eurovision, credits to Tanya Shapiro and Bob Rudis and Lee Olney")
+ 
+```
+
+Thank you to 
+
+- Lee Olney for the head start
+- Bob Rudis and Tanya Shapiro
+
+
