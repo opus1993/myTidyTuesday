@@ -1,0 +1,140 @@
+---
+title: "Create a Crisp Topographic Map in R"
+author: "Jim Gruman"
+date: "May 20, 2022"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+This is a Friday diversion, to work through Milos Popovic's code and craft a nice looking topographic map of Belgium.
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(
+  fig.width = 12, cache = FALSE, warning = FALSE,
+  fig.height = 9,
+  echo = TRUE, cache.lazy = FALSE, tidy = "styler"
+)
+
+```
+
+Reference [https://github.com/milos-agathon/crisp-topographical-map-with-r](https://github.com/milos-agathon/crisp-topographical-map-with-r)
+
+```{r}
+#| label: tweet-inspiration
+#| echo: false
+
+tweetrmd::include_tweet("https://twitter.com/milos_agathon/status/1525419990966538240")
+```
+
+First, let's load the packages:
+
+```{r}
+#| label: load-packages
+
+suppressPackageStartupMessages({
+library(elevatr)
+library(terra)
+library(tidyverse)
+library(sf)
+library(giscoR)
+library(marmap)
+})
+
+```
+
+Second, let's load the data and a helper function to glue the counts of countries onto the country labels:
+
+```{r}
+#| label: GET_COUNTRY_MAP
+#---------
+
+crsLONGLAT <- "+proj=longlat +datum=WGS84 +no_defs"
+
+get_sf <- function(country_sf, country_transformed) {
+	
+	country_sf <- giscoR::gisco_get_countries(
+    	year = "2016",
+    	epsg = "4326",
+    	resolution = "10",
+    	country = "Belgium")
+	
+	country_transformed <- st_transform(country_sf, crs = crsLONGLAT)
+
+	return(country_transformed)
+}
+
+country_transformed <- get_sf() 
+
+```
+
+```{r}
+#| GET_ELEVATION_DATA
+
+get_elevation_data <- function(country_elevation, country_elevation_df) {
+
+	country_elevation <- get_elev_raster(
+		locations = country_transformed, 
+		z = 10, # Please decrease the z value if you experience R crashing
+		clip = "locations") 
+
+	country_elevation_df <- as.data.frame(country_elevation, xy = T) %>%
+		na.omit()
+	
+	colnames(country_elevation_df)[3] <- "elevation"
+
+	return(country_elevation_df)
+}
+
+country_elevation_df <- get_elevation_data()
+ 
+```
+
+```{r}
+#| BUILD_COUNTRY_MAP
+
+get_elevation_map <- function(country_map) {
+
+	country_map <- ggplot() +
+  		geom_tile(data = country_elevation_df, 
+  			aes(x = x, y = y, fill = elevation)) +
+  		scale_fill_etopo() +
+  		coord_sf(crs = crsLONGLAT) +
+  		theme_minimal() +
+  		theme(text = element_text(family = "georg", color = "#22211d"),
+    		axis.line = element_blank(),
+    		axis.text.x = element_blank(),
+    		axis.text.y = element_blank(),
+    		axis.ticks = element_blank(),
+    		axis.title.x = element_blank(),
+    		axis.title.y = element_blank(),
+    		legend.position = "none",
+   		  	panel.grid.major = element_line(color = "white", size = 0.2),
+    		panel.grid.minor = element_blank(),
+    		plot.title = element_text(size = 18, color = "grey20", hjust = 1, vjust = -5),
+    		plot.caption = element_text(size = 8, color = "grey70", hjust = .15, vjust = 20),
+    		plot.margin = unit(c(t = 0, r = 0, b = 0, l = 0),"lines"), 
+    		plot.background = element_rect(fill = "white", color = NA), 
+    		panel.background = element_rect(fill = "white", color = NA),
+    		panel.border = element_blank()) +
+		labs(x = "", 
+    		y = NULL, 
+    		title = "Topographic map of Belgium", 
+    		subtitle = "", 
+    		caption = "©2022 @jim_gruman")
+
+	return(country_map)
+}
+
+country_map <- get_elevation_map()
+
+country_map
+```
+
+
