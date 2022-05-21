@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2022-05-20" />
+
+<title>Create a Crisp Topographic Map in R</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">source</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Create a Crisp Topographic Map in R</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">May 20, 2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-05-20
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree2278db54b3ea0df5dca29f5c43455c496ae1d361targetblank2278db5a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/opus1993/myTidyTuesday/tree/2278db54b3ea0df5dca29f5c43455c496ae1d361" target="_blank">2278db5</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree2278db54b3ea0df5dca29f5c43455c496ae1d361targetblank2278db5a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/opus1993/myTidyTuesday/tree/2278db54b3ea0df5dca29f5c43455c496ae1d361" target="_blank">2278db5</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    data/.Rhistory
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/Chicago.rds
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/SeriesReport-20220414171148_6c3b18.xlsx
+    Ignored:    data/Weekly_Chicago_IL_Regular_Reformulated_Retail_Gasoline_Prices.csv
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/YammerMemberPage.rds
+    Ignored:    data/YammerMembers.rds
+    Ignored:    data/df.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/mfg_shap.rds
+    Ignored:    data/netflixTitles2.rds
+    Ignored:    data/raw_weather.RData
+    Ignored:    data/sample_submission.csv
+    Ignored:    data/shap_int.rds
+    Ignored:    data/test.csv
+    Ignored:    data/train.csv
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+    Ignored:    data/xgboost_fit.rds
+    Ignored:    data/xgboost_fit_full.rds
+
+Untracked files:
+    Untracked:  analysis/2022_May_tabular_playground.Rmd
+    Untracked:  code/YammerReach.R
+    Untracked:  code/chicago.R
+    Untracked:  code/googleCompute.R
+    Untracked:  code/work list batch targets.R
+    Untracked:  environment.yml
+    Untracked:  report.html
+
+Unstaged changes:
+    Deleted:    analysis/2022_02_11_tabular_playground.Rmd
+    Deleted:    analysis/2022_04_18.qmd
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/2022_05_20.Rmd</code>) and HTML
+(<code>docs/2022_05_20.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/2278db54b3ea0df5dca29f5c43455c496ae1d361/analysis/2022_05_20.Rmd" target="_blank">2278db5</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-05-20
+</td>
+<td>
+Belgium map
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>This is a Friday diversion, to work through Milos Popovic’s code and
+craft a nice looking topographic map of Belgium.</p>
+<p>Reference <a
+href="https://github.com/milos-agathon/crisp-topographical-map-with-r">https://github.com/milos-agathon/crisp-topographical-map-with-r</a></p>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">I&#39;m excited to share my new topographic map of Italy🇮🇹 as well as the link to my new tutorial that shows you how to make your own crisp topo maps of any country in the world!<br><br>💡<a href="https://t.co/Weo0NcwpBX">https://t.co/Weo0NcwpBX</a><a href="https://twitter.com/hashtag/tutorial?src=hash&amp;ref_src=twsrc%5Etfw">#tutorial</a> <a href="https://twitter.com/hashtag/RStats?src=hash&amp;ref_src=twsrc%5Etfw">#RStats</a> <a href="https://twitter.com/hashtag/DataScience?src=hash&amp;ref_src=twsrc%5Etfw">#DataScience</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://twitter.com/hashtag/maps?src=hash&amp;ref_src=twsrc%5Etfw">#maps</a> <a href="https://twitter.com/hashtag/coding?src=hash&amp;ref_src=twsrc%5Etfw">#coding</a> <a href="https://t.co/QTzYBjmMUJ">pic.twitter.com/QTzYBjmMUJ</a></p>&mdash; Milos Popovic (@milos_agathon) <a href="https://twitter.com/milos_agathon/status/1525419990966538240?ref_src=twsrc%5Etfw">May 14, 2022</a></blockquote>
+
+<p>First, let’s load the packages:</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+  library(elevatr)
+  library(terra)
+  library(tidyverse)
+  library(sf)
+  library(giscoR)
+  library(marmap)
+})</code></pre>
+<p>Second, let’s load the data and a helper function to glue the counts
+of countries onto the country labels:</p>
+<pre class="r"><code>#---------
+
+crsLONGLAT &lt;- &quot;+proj=longlat +datum=WGS84 +no_defs&quot;
+
+get_sf &lt;- function(country_sf, country_transformed) {
+  country_sf &lt;- giscoR::gisco_get_countries(
+    year = &quot;2016&quot;,
+    epsg = &quot;4326&quot;,
+    resolution = &quot;10&quot;,
+    country = &quot;Belgium&quot;
+  )
+
+  country_transformed &lt;- st_transform(country_sf, crs = crsLONGLAT)
+
+  return(country_transformed)
+}
+
+country_transformed &lt;- get_sf()</code></pre>
+<pre class="r"><code>get_elevation_data &lt;- function(country_elevation, country_elevation_df) {
+  country_elevation &lt;- get_elev_raster(
+    locations = country_transformed,
+    z = 10, # Please decrease the z value if you experience R crashing
+    clip = &quot;locations&quot;
+  )
+
+  country_elevation_df &lt;- as.data.frame(country_elevation, xy = T) %&gt;%
+    na.omit()
+
+  colnames(country_elevation_df)[3] &lt;- &quot;elevation&quot;
+
+  return(country_elevation_df)
+}
+
+country_elevation_df &lt;- get_elevation_data()</code></pre>
+<pre><code>Mosaicing &amp; Projecting</code></pre>
+<pre><code>Clipping DEM to locations</code></pre>
+<pre><code>Note: Elevation units are in meters.</code></pre>
+<pre class="r"><code>get_elevation_map &lt;- function(country_map) {
+  country_map &lt;- ggplot() +
+    geom_tile(
+      data = country_elevation_df,
+      aes(x = x, y = y, fill = elevation)
+    ) +
+    scale_fill_etopo() +
+    coord_sf(crs = crsLONGLAT) +
+    theme_minimal() +
+    theme(
+      text = element_text(family = &quot;georg&quot;, color = &quot;#22211d&quot;),
+      axis.line = element_blank(),
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks = element_blank(),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      legend.position = &quot;none&quot;,
+      panel.grid.major = element_line(color = &quot;white&quot;, size = 0.2),
+      panel.grid.minor = element_blank(),
+      plot.title = element_text(size = 18, color = &quot;grey20&quot;, hjust = 1, vjust = -5),
+      plot.caption = element_text(size = 8, color = &quot;grey70&quot;, hjust = .15, vjust = 20),
+      plot.margin = unit(c(t = 0, r = 0, b = 0, l = 0), &quot;lines&quot;),
+      plot.background = element_rect(fill = &quot;white&quot;, color = NA),
+      panel.background = element_rect(fill = &quot;white&quot;, color = NA),
+      panel.border = element_blank()
+    ) +
+    labs(
+      x = &quot;&quot;,
+      y = NULL,
+      title = &quot;Topographic map of Belgium&quot;,
+      subtitle = &quot;&quot;,
+      caption = &quot;©2022 @jim_gruman&quot;
+    )
+
+  return(country_map)
+}
+
+country_map &lt;- get_elevation_map()
+
+country_map</code></pre>
+<p><img src="figure/2022_05_20.Rmd/BUILD_COUNTRY_MAP-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.3 (2022-03-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] marmap_1.0.6    giscoR_0.3.1    sf_1.0-7        forcats_0.5.1  
+ [5] stringr_1.4.0   dplyr_1.0.9     purrr_0.3.4     readr_2.1.2    
+ [9] tidyr_1.2.0     tibble_3.1.7    ggplot2_3.3.6   tidyverse_1.3.1
+[13] terra_1.5-21    elevatr_0.4.2   workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+  [1] colorspace_2.0-3    ellipsis_0.3.2      class_7.3-20       
+  [4] rgdal_1.5-32        rprojroot_2.0.3     fs_1.5.2           
+  [7] rstudioapi_0.13     proxy_0.4-26        farver_2.1.0       
+ [10] bit64_4.0.5         fansi_1.0.3         lubridate_1.8.0    
+ [13] xml2_1.3.3          codetools_0.2-18    R.methodsS3_1.8.1  
+ [16] ncdf4_1.19          cachem_1.0.6        knitr_1.39         
+ [19] jsonlite_1.8.0      broom_0.8.0         dbplyr_2.1.1       
+ [22] R.oo_1.24.0         compiler_4.1.3      httr_1.4.3         
+ [25] backports_1.4.1     assertthat_0.2.1    fastmap_1.1.0      
+ [28] cli_3.2.0           later_1.3.0         s2_1.0.7           
+ [31] prettyunits_1.1.1   htmltools_0.5.2     tools_4.1.3        
+ [34] gtable_0.3.0        glue_1.6.2          reshape2_1.4.4     
+ [37] wk_0.6.0            rappdirs_0.3.3      Rcpp_1.0.8.3       
+ [40] cellranger_1.1.0    jquerylib_0.1.4     styler_1.7.0       
+ [43] raster_3.5-15       vctrs_0.4.1         countrycode_1.4.0  
+ [46] progressr_0.10.0    xfun_0.31           ps_1.7.0           
+ [49] rvest_1.0.2         lifecycle_1.0.1     getPass_0.2-2      
+ [52] scales_1.2.0        hms_1.1.1           promises_1.2.0.1   
+ [55] slippymath_0.3.1    rematch2_2.1.2      yaml_2.3.5         
+ [58] curl_4.3.2          memoise_2.0.1       sass_0.4.1         
+ [61] tweetrmd_0.0.9      stringi_1.7.6       RSQLite_2.2.14     
+ [64] highr_0.9           e1071_1.7-9         shape_1.4.6        
+ [67] rlang_1.0.2         pkgconfig_2.0.3     evaluate_0.15      
+ [70] lattice_0.20-45     bit_4.0.4           processx_3.5.3     
+ [73] tidyselect_1.1.2    plyr_1.8.7          magrittr_2.0.3     
+ [76] geojsonsf_2.0.2     R6_2.5.1            generics_0.1.2     
+ [79] DBI_1.1.2           pillar_1.7.0        haven_2.5.0        
+ [82] whisker_0.4         withr_2.5.0         units_0.8-0        
+ [85] sp_1.4-7            modelr_0.1.8        crayon_1.5.1       
+ [88] KernSmooth_2.23-20  utf8_1.2.2          tzdb_0.3.0         
+ [91] rmarkdown_2.14      progress_1.2.2      grid_4.1.3         
+ [94] readxl_1.4.0        blob_1.2.3          callr_3.7.0        
+ [97] git2r_0.30.1        reprex_2.0.1        digest_0.6.29      
+[100] classInt_0.4-3      adehabitatMA_0.3.14 R.cache_0.15.0     
+[103] httpuv_1.6.5        R.utils_2.11.0      munsell_0.5.0      
+[106] bslib_0.3.1        </code></pre>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNyZWF0ZSBhIENyaXNwIFRvcG9ncmFwaGljIE1hcCBpbiBSIg0KYXV0aG9yOiAiSmltIEdydW1hbiINCmRhdGU6ICJNYXkgMjAsIDIwMjIiDQpvdXRwdXQ6DQogIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICB0b2M6IG5vDQogICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgIGRmX3ByaW50OiBwYWdlZA0KZWRpdG9yX29wdGlvbnM6DQogIGNodW5rX291dHB1dF90eXBlOiBjb25zb2xlDQotLS0NCg0KVGhpcyBpcyBhIEZyaWRheSBkaXZlcnNpb24sIHRvIHdvcmsgdGhyb3VnaCBNaWxvcyBQb3BvdmljJ3MgY29kZSBhbmQgY3JhZnQgYSBuaWNlIGxvb2tpbmcgdG9wb2dyYXBoaWMgbWFwIG9mIEJlbGdpdW0uDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlID0gRkFMU0V9DQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldCgNCiAgZmlnLndpZHRoID0gMTIsIGNhY2hlID0gRkFMU0UsIHdhcm5pbmcgPSBGQUxTRSwNCiAgZmlnLmhlaWdodCA9IDksDQogIGVjaG8gPSBUUlVFLCBjYWNoZS5sYXp5ID0gRkFMU0UsIHRpZHkgPSAic3R5bGVyIg0KKQ0KDQpgYGANCg0KUmVmZXJlbmNlIFtodHRwczovL2dpdGh1Yi5jb20vbWlsb3MtYWdhdGhvbi9jcmlzcC10b3BvZ3JhcGhpY2FsLW1hcC13aXRoLXJdKGh0dHBzOi8vZ2l0aHViLmNvbS9taWxvcy1hZ2F0aG9uL2NyaXNwLXRvcG9ncmFwaGljYWwtbWFwLXdpdGgtcikNCg0KYGBge3J9DQojfCBsYWJlbDogdHdlZXQtaW5zcGlyYXRpb24NCiN8IGVjaG86IGZhbHNlDQoNCnR3ZWV0cm1kOjppbmNsdWRlX3R3ZWV0KCJodHRwczovL3R3aXR0ZXIuY29tL21pbG9zX2FnYXRob24vc3RhdHVzLzE1MjU0MTk5OTA5NjY1MzgyNDAiKQ0KYGBgDQoNCkZpcnN0LCBsZXQncyBsb2FkIHRoZSBwYWNrYWdlczoNCg0KYGBge3J9DQojfCBsYWJlbDogbG9hZC1wYWNrYWdlcw0KDQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMoew0KbGlicmFyeShlbGV2YXRyKQ0KbGlicmFyeSh0ZXJyYSkNCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShzZikNCmxpYnJhcnkoZ2lzY29SKQ0KbGlicmFyeShtYXJtYXApDQp9KQ0KDQpgYGANCg0KU2Vjb25kLCBsZXQncyBsb2FkIHRoZSBkYXRhIGFuZCBhIGhlbHBlciBmdW5jdGlvbiB0byBnbHVlIHRoZSBjb3VudHMgb2YgY291bnRyaWVzIG9udG8gdGhlIGNvdW50cnkgbGFiZWxzOg0KDQpgYGB7cn0NCiN8IGxhYmVsOiBHRVRfQ09VTlRSWV9NQVANCiMtLS0tLS0tLS0NCg0KY3JzTE9OR0xBVCA8LSAiK3Byb2o9bG9uZ2xhdCArZGF0dW09V0dTODQgK25vX2RlZnMiDQoNCmdldF9zZiA8LSBmdW5jdGlvbihjb3VudHJ5X3NmLCBjb3VudHJ5X3RyYW5zZm9ybWVkKSB7DQoJDQoJY291bnRyeV9zZiA8LSBnaXNjb1I6Omdpc2NvX2dldF9jb3VudHJpZXMoDQogICAgCXllYXIgPSAiMjAxNiIsDQogICAgCWVwc2cgPSAiNDMyNiIsDQogICAgCXJlc29sdXRpb24gPSAiMTAiLA0KICAgIAljb3VudHJ5ID0gIkJlbGdpdW0iKQ0KCQ0KCWNvdW50cnlfdHJhbnNmb3JtZWQgPC0gc3RfdHJhbnNmb3JtKGNvdW50cnlfc2YsIGNycyA9IGNyc0xPTkdMQVQpDQoNCglyZXR1cm4oY291bnRyeV90cmFuc2Zvcm1lZCkNCn0NCg0KY291bnRyeV90cmFuc2Zvcm1lZCA8LSBnZXRfc2YoKSANCg0KYGBgDQoNCmBgYHtyfQ0KI3wgR0VUX0VMRVZBVElPTl9EQVRBDQoNCmdldF9lbGV2YXRpb25fZGF0YSA8LSBmdW5jdGlvbihjb3VudHJ5X2VsZXZhdGlvbiwgY291bnRyeV9lbGV2YXRpb25fZGYpIHsNCg0KCWNvdW50cnlfZWxldmF0aW9uIDwtIGdldF9lbGV2X3Jhc3RlcigNCgkJbG9jYXRpb25zID0gY291bnRyeV90cmFuc2Zvcm1lZCwgDQoJCXogPSAxMCwgIyBQbGVhc2UgZGVjcmVhc2UgdGhlIHogdmFsdWUgaWYgeW91IGV4cGVyaWVuY2UgUiBjcmFzaGluZw0KCQljbGlwID0gImxvY2F0aW9ucyIpIA0KDQoJY291bnRyeV9lbGV2YXRpb25fZGYgPC0gYXMuZGF0YS5mcmFtZShjb3VudHJ5X2VsZXZhdGlvbiwgeHkgPSBUKSAlPiUNCgkJbmEub21pdCgpDQoJDQoJY29sbmFtZXMoY291bnRyeV9lbGV2YXRpb25fZGYpWzNdIDwtICJlbGV2YXRpb24iDQoNCglyZXR1cm4oY291bnRyeV9lbGV2YXRpb25fZGYpDQp9DQoNCmNvdW50cnlfZWxldmF0aW9uX2RmIDwtIGdldF9lbGV2YXRpb25fZGF0YSgpDQogDQpgYGANCg0KYGBge3J9DQojfCBCVUlMRF9DT1VOVFJZX01BUA0KDQpnZXRfZWxldmF0aW9uX21hcCA8LSBmdW5jdGlvbihjb3VudHJ5X21hcCkgew0KDQoJY291bnRyeV9tYXAgPC0gZ2dwbG90KCkgKw0KICAJCWdlb21fdGlsZShkYXRhID0gY291bnRyeV9lbGV2YXRpb25fZGYsIA0KICAJCQlhZXMoeCA9IHgsIHkgPSB5LCBmaWxsID0gZWxldmF0aW9uKSkgKw0KICAJCXNjYWxlX2ZpbGxfZXRvcG8oKSArDQogIAkJY29vcmRfc2YoY3JzID0gY3JzTE9OR0xBVCkgKw0KICAJCXRoZW1lX21pbmltYWwoKSArDQogIAkJdGhlbWUodGV4dCA9IGVsZW1lbnRfdGV4dChmYW1pbHkgPSAiZ2VvcmciLCBjb2xvciA9ICIjMjIyMTFkIiksDQogICAgCQlheGlzLmxpbmUgPSBlbGVtZW50X2JsYW5rKCksDQogICAgCQlheGlzLnRleHQueCA9IGVsZW1lbnRfYmxhbmsoKSwNCiAgICAJCWF4aXMudGV4dC55ID0gZWxlbWVudF9ibGFuaygpLA0KICAgIAkJYXhpcy50aWNrcyA9IGVsZW1lbnRfYmxhbmsoKSwNCiAgICAJCWF4aXMudGl0bGUueCA9IGVsZW1lbnRfYmxhbmsoKSwNCiAgICAJCWF4aXMudGl0bGUueSA9IGVsZW1lbnRfYmxhbmsoKSwNCiAgICAJCWxlZ2VuZC5wb3NpdGlvbiA9ICJub25lIiwNCiAgIAkJICAJcGFuZWwuZ3JpZC5tYWpvciA9IGVsZW1lbnRfbGluZShjb2xvciA9ICJ3aGl0ZSIsIHNpemUgPSAwLjIpLA0KICAgIAkJcGFuZWwuZ3JpZC5taW5vciA9IGVsZW1lbnRfYmxhbmsoKSwNCiAgICAJCXBsb3QudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE4LCBjb2xvciA9ICJncmV5MjAiLCBoanVzdCA9IDEsIHZqdXN0ID0gLTUpLA0KICAgIAkJcGxvdC5jYXB0aW9uID0gZWxlbWVudF90ZXh0KHNpemUgPSA4LCBjb2xvciA9ICJncmV5NzAiLCBoanVzdCA9IC4xNSwgdmp1c3QgPSAyMCksDQogICAgCQlwbG90Lm1hcmdpbiA9IHVuaXQoYyh0ID0gMCwgciA9IDAsIGIgPSAwLCBsID0gMCksImxpbmVzIiksIA0KICAgIAkJcGxvdC5iYWNrZ3JvdW5kID0gZWxlbWVudF9yZWN0KGZpbGwgPSAid2hpdGUiLCBjb2xvciA9IE5BKSwgDQogICAgCQlwYW5lbC5iYWNrZ3JvdW5kID0gZWxlbWVudF9yZWN0KGZpbGwgPSAid2hpdGUiLCBjb2xvciA9IE5BKSwNCiAgICAJCXBhbmVsLmJvcmRlciA9IGVsZW1lbnRfYmxhbmsoKSkgKw0KCQlsYWJzKHggPSAiIiwgDQogICAgCQl5ID0gTlVMTCwgDQogICAgCQl0aXRsZSA9ICJUb3BvZ3JhcGhpYyBtYXAgb2YgQmVsZ2l1bSIsIA0KICAgIAkJc3VidGl0bGUgPSAiIiwgDQogICAgCQljYXB0aW9uID0gIsKpMjAyMiBAamltX2dydW1hbiIpDQoNCglyZXR1cm4oY291bnRyeV9tYXApDQp9DQoNCmNvdW50cnlfbWFwIDwtIGdldF9lbGV2YXRpb25fbWFwKCkNCg0KY291bnRyeV9tYXANCmBgYA0KDQoNCg==</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2022_05_20.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
