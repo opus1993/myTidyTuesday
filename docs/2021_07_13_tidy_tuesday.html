@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2022-07-13" />
+
+<title>European Flights</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">source</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">European Flights</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">July 13, 2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-07-13
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree7bfdcbda3a20e3cc4d7633b0e1179b71518ce37dtargetblank7bfdcbda">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/opus1993/myTidyTuesday/tree/7bfdcbda3a20e3cc4d7633b0e1179b71518ce37d" target="_blank">7bfdcbd</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytree7bfdcbda3a20e3cc4d7633b0e1179b71518ce37dtargetblank7bfdcbda"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/opus1993/myTidyTuesday/tree/7bfdcbda3a20e3cc4d7633b0e1179b71518ce37d" target="_blank">7bfdcbd</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    data/.Rhistory
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/Chicago.rds
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/SeriesReport-20220414171148_6c3b18.xlsx
+    Ignored:    data/Weekly_Chicago_IL_Regular_Reformulated_Retail_Gasoline_Prices.csv
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/YammerMemberPage.rds
+    Ignored:    data/YammerMembers.rds
+    Ignored:    data/df.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/netflixTitles.rds
+    Ignored:    data/netflixTitles2.rds
+    Ignored:    data/raw_weather.RData
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  analysis/2022_May_tabular_playground.Rmd
+    Untracked:  analysis/2022_May_tabular_playground_tabnet.Rmd
+    Untracked:  code/YammerReach.R
+    Untracked:  code/autokeras.R
+    Untracked:  code/chicago.R
+    Untracked:  code/glmnet_test.R
+    Untracked:  code/googleCompute.R
+    Untracked:  code/work list batch targets.R
+    Untracked:  environment.yml
+    Untracked:  figure/
+    Untracked:  report.html
+
+Unstaged changes:
+    Modified:   analysis/2021_01_19_tidy_tuesday.Rmd
+    Modified:   analysis/2021_03_24_tidy_tuesday.Rmd
+    Deleted:    analysis/2021_04_20.Rmd
+    Deleted:    analysis/2022_02_11_tabular_playground.Rmd
+    Deleted:    analysis/2022_04_18.qmd
+    Modified:   analysis/Survival.Rmd
+    Modified:   analysis/_site.yml
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/2021_07_13_tidy_tuesday.Rmd</code>) and HTML
+(<code>docs/2021_07_13_tidy_tuesday.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/7bfdcbda3a20e3cc4d7633b0e1179b71518ce37d/analysis/2021_07_13_tidy_tuesday.Rmd" target="_blank">7bfdcbd</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-07-13
+</td>
+<td>
+wflow_publish("analysis/2021_07_13_tidy_tuesday.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>In this weeks #TidyTuesday we take a look at the number of flights
+arriving and departing from several large European airports.</p>
+<p>data is via Eurocontrol at <a
+href="https://ec.europa.eu/eurostat/web/products-eurostat-news/-/ddn-20210914-1">https://ec.europa.eu/eurostat/web/products-eurostat-news/-/ddn-20210914-1</a></p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse)
+library(lubridate)
+library(patchwork)
+ })
+
+source(here::here(&quot;code&quot;,&quot;_common.R&quot;),
+       verbose = FALSE,
+       local = knitr::knit_global())
+
+ggplot2::theme_set(grumanlib::theme_jim(base_size = 12))</code></pre>
+<p>Let’s see what we can do to improve BrendiA’s heatmap:</p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/brendialj/status/1547206511910600706&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">For this week&#39;s <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a>, I examined the total commercial flight departures across the EU. The recent months show signs of recovery for the aviation industry after the pandemic hit.<a href="https://twitter.com/hashtag/RStats?src=hash&amp;ref_src=twsrc%5Etfw">#RStats</a> code: <a href="https://t.co/2sIpKRS1Ur">https://t.co/2sIpKRS1Ur</a><a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a> <a href="https://t.co/LJO5m4el58">pic.twitter.com/LJO5m4el58</a></p>&mdash; Brendi Ang (@brendialj) <a href="https://twitter.com/brendialj/status/1547206511910600706?ref_src=twsrc%5Etfw">July 13, 2022</a></blockquote>
+
+<pre class="r"><code>tt &lt;- tidytuesdayR::tt_load(&quot;2022-07-12&quot;)</code></pre>
+<pre><code>
+    Downloading file 1 of 1: `flights.csv`</code></pre>
+<pre class="r"><code>flights &lt;- tt$flights |&gt;
+  rename(airport_label = `Pivot Label`) |&gt;
+  janitor::clean_names() |&gt;
+  select(-year, -month_num, -month_mon)
+
+total_flights &lt;- flights |&gt;
+  group_by(flt_date) |&gt;
+  summarise(
+    total_dep = sum(flt_dep_1, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  ) |&gt;
+  complete(flt_date = seq.Date(
+    from = as_date(&quot;2022-01-01&quot;),
+    to = as_date(&quot;2022-12-31&quot;),
+    by = &quot;day&quot;,
+    fill = list(value = NA)
+  )) |&gt;
+  mutate(
+    year = year(flt_date),
+    week_of_year = week(flt_date),
+    month = month(flt_date, label = TRUE, abbr = TRUE),
+    day = day(flt_date)
+  )</code></pre>
+<pre class="r"><code># Function prepares data for plotting based on a given year by BrendiA at https://github.com/BrendiA/tidy-tuesday/blob/main/2022/week-28/week-28.R
+create_df &lt;- function(given_year) {
+
+  # Extract first day of the week for the year
+  first_day_of_year &lt;-
+    wday(as_date(paste(given_year, &quot;01&quot;, &quot;01&quot;, sep = &quot;-&quot;)),
+      week_start = 1
+    )
+
+  total_flights |&gt;
+    filter(year == given_year) |&gt;
+    mutate(day_of_week = wday(flt_date,
+      label = TRUE,
+      week_start = first_day_of_year
+    )) |&gt;
+    #    mutate(day_of_week = forcats::fct_rev(day_of_week)) |&gt;
+    group_by(month) |&gt;
+    mutate(week_of_month = -1 * dense_rank(week_of_year)) |&gt;
+    ungroup()
+}
+
+best_contrast &lt;- function(x, y = c(&quot;#010101&quot;, &quot;#FFFFFF&quot;)) {
+  contrasts &lt;- prismatic::contrast_ratio(x, y)
+  y[max(contrasts) == contrasts][1]
+}
+
+# Function plots heatmap based on the data generated by BrendiA at https://github.com/BrendiA/tidy-tuesday/blob/main/2022/week-28/week-28.R  with Emil Hvitfeldt&#39;s Prismatic text color adjustments
+plot_heatmap &lt;- function(df) {
+
+  # Year list of the data frame
+  given_year &lt;- unique(df$year)
+
+  ggplot(
+    data = df,
+    aes(
+      y = week_of_month,
+      x = day_of_week,
+      fill = total_dep
+    )
+  ) +
+    # Heat map
+    geom_tile() +
+    # Calendar days
+    geom_text(aes(
+      label = day,
+      color = ggplot2::after_scale(purrr::map_chr(fill, best_contrast))
+    ),
+    size = 2
+    ) +
+    colorspace::scale_fill_continuous_sequential(
+      name = &quot;Number of departures&quot;,
+      palette = &quot;Viridis&quot;,
+      na.value = &quot;grey60&quot;, # Fill missing dates
+      limits = c(0, 30000),
+      breaks = seq(0, 30000, 10000),
+      oob = scales::squish,
+      label = scales::label_comma(accuracy = 1),
+      c2 = 60, # increase
+      l1 = 10
+    ) + # decrease
+    facet_wrap(~month,
+      nrow = 1
+    ) +
+    theme_minimal() +
+    labs(title = given_year) +
+    theme(
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(),
+      axis.title = element_blank(),
+      legend.direction = &quot;horizontal&quot;,
+      legend.key.width = unit(1.5, &quot;cm&quot;),
+      legend.text = element_text(family = &quot;Regular 400&quot;),
+      legend.title = element_text(vjust = 0.8, family = &quot;Regular 400&quot;),
+      panel.spacing.x = unit(0, &quot;lines&quot;),
+      panel.grid = element_blank(),
+      plot.title = element_text(hjust = 0.5, family = &quot;Black 900 Italic&quot;, size = 12, face = &quot;bold&quot;),
+      strip.text = element_text(family = &quot;Regular 400&quot;, size = 8)
+    )
+}</code></pre>
+<p>Create heat map for each year</p>
+<pre class="r"><code>plot_list &lt;-
+  purrr::map(
+    unique(sort(total_flights$year)),
+    ~ create_df(.x) |&gt;
+      plot_heatmap()
+  )</code></pre>
+<pre class="r"><code># Subtitle
+sub &lt;-
+  str_wrap(
+    &quot;The aviation industry took a toll on the Covid-19 pandemic.
+    There are signs of recovery, with commercial flights in the EU increasing from mid-June 2021.
+    Will the rest of 2022 see a total number of departures close to pre-pandemic levels?&quot;,
+    width = 90
+  )
+
+plot_list[[3]] +
+  plot_list[[4]] +
+  plot_list[[5]] +
+  plot_list[[6]] +
+  plot_list[[7]] +
+  plot_layout(
+    guides = &quot;collect&quot;,
+    ncol = 1,
+    height = 0.5
+  ) &amp;
+  plot_annotation(
+    title = &quot;Commercial flight departures in the EU&quot;,
+    subtitle = sub,
+    caption = &quot;Source: Eurocontrol | #TidyTuesday Week 28&quot;,
+    theme = theme(
+      legend.position = &quot;bottom&quot;,
+      plot.title = element_text(hjust = 0.5, size = 18, face = &quot;bold&quot;),
+      plot.subtitle = element_text(hjust = 0.5, size = 14),
+      plot.background = element_rect(fill = &quot;#f0f8ff&quot;),
+      plot.caption = element_text(vjust = 1)
+    )
+  )</code></pre>
+<p><img src="figure/2021_07_13_tidy_tuesday.Rmd/unnamed-chunk-6-1.png" width="200%" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.3 (2022-03-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] patchwork_1.1.1 lubridate_1.8.0 forcats_0.5.1   stringr_1.4.0  
+ [5] dplyr_1.0.9     purrr_0.3.4     readr_2.1.2     tidyr_1.2.0    
+ [9] tibble_3.1.7    ggplot2_3.3.6   tidyverse_1.3.1 workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.4.0         backports_1.4.1      systemfonts_1.0.4   
+  [4] workflows_1.0.0      selectr_0.4-2        tidytuesdayR_1.0.2  
+  [7] splines_4.1.3        listenv_0.8.0        usethis_2.1.6       
+ [10] digest_0.6.29        foreach_1.5.2        htmltools_0.5.2     
+ [13] yardstick_1.0.0      viridis_0.6.2        parsnip_1.0.0       
+ [16] fansi_1.0.3          magrittr_2.0.3       memoise_2.0.1       
+ [19] tune_1.0.0           tzdb_0.3.0           recipes_1.0.1       
+ [22] globals_0.15.1       modelr_0.1.8         gower_1.0.0         
+ [25] vroom_1.5.7          R.utils_2.12.0       hardhat_1.2.0       
+ [28] rsample_1.0.0        dials_1.0.0          colorspace_2.0-3    
+ [31] rvest_1.0.2          textshaping_0.3.6    haven_2.5.0         
+ [34] xfun_0.31            prismatic_1.1.0      callr_3.7.0         
+ [37] crayon_1.5.1         jsonlite_1.8.0       survival_3.3-1      
+ [40] iterators_1.0.14     glue_1.6.2           gtable_0.3.0        
+ [43] ipred_0.9-13         R.cache_0.15.0       tweetrmd_0.0.9      
+ [46] future.apply_1.9.0   scales_1.2.0         infer_1.0.2         
+ [49] DBI_1.1.3            Rcpp_1.0.9           viridisLite_0.4.0   
+ [52] bit_4.0.4            GPfit_1.0-8          lava_1.6.10         
+ [55] prodlim_2019.11.13   httr_1.4.3           ellipsis_0.3.2      
+ [58] farver_2.1.1         pkgconfig_2.0.3      R.methodsS3_1.8.2   
+ [61] nnet_7.3-17          sass_0.4.1           dbplyr_2.2.1        
+ [64] janitor_2.1.0        utf8_1.2.2           here_1.0.1          
+ [67] labeling_0.4.2       tidyselect_1.1.2     rlang_1.0.3         
+ [70] DiceDesign_1.9       later_1.3.0          munsell_0.5.0       
+ [73] cellranger_1.1.0     tools_4.1.3          cachem_1.0.6        
+ [76] cli_3.3.0            generics_0.1.3       broom_1.0.0         
+ [79] evaluate_0.15        fastmap_1.1.0        yaml_2.3.5          
+ [82] ragg_1.2.2           rematch2_2.1.2       bit64_4.0.5         
+ [85] processx_3.7.0       knitr_1.39           fs_1.5.2            
+ [88] workflowsets_0.2.1   future_1.26.1        whisker_0.4         
+ [91] R.oo_1.25.0          xml2_1.3.3           compiler_4.1.3      
+ [94] rstudioapi_0.13      curl_4.3.2           reprex_2.0.1        
+ [97] lhs_1.1.5            bslib_0.3.1          stringi_1.7.8       
+[100] highr_0.9            ps_1.7.1             lattice_0.20-45     
+[103] Matrix_1.4-0         styler_1.7.0         conflicted_1.1.0    
+[106] vctrs_0.4.1          tidymodels_0.2.0     pillar_1.7.0        
+[109] lifecycle_1.0.1      furrr_0.3.0          jquerylib_0.1.4     
+[112] httpuv_1.6.5         R6_2.5.1             promises_1.2.0.1    
+[115] gridExtra_2.3        parallelly_1.32.0    codetools_0.2-18    
+[118] MASS_7.3-55          assertthat_0.2.1     rprojroot_2.0.3     
+[121] withr_2.5.0          parallel_4.1.3       hms_1.1.1           
+[124] grid_4.1.3           rpart_4.1.16         timeDate_3043.102   
+[127] class_7.3-20         snakecase_0.11.0     rmarkdown_2.14      
+[130] grumanlib_0.1.0.9999 git2r_0.30.1         getPass_0.2-2       </code></pre>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkV1cm9wZWFuIEZsaWdodHMiDQphdXRob3I6ICJKaW0gR3J1bWFuIg0KZGF0ZTogIkp1bHkgMTMsIDIwMjIiDQpvdXRwdXQ6DQogIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICB0b2M6IG5vDQogICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgIGRmX3ByaW50OiBwYWdlZA0KZWRpdG9yX29wdGlvbnM6DQogIGNodW5rX291dHB1dF90eXBlOiBjb25zb2xlDQotLS0NCg0KSW4gdGhpcyB3ZWVrcyAjVGlkeVR1ZXNkYXkgd2UgdGFrZSBhIGxvb2sgYXQgdGhlIG51bWJlciBvZiBmbGlnaHRzIGFycml2aW5nIGFuZCBkZXBhcnRpbmcgZnJvbSBzZXZlcmFsIGxhcmdlIEV1cm9wZWFuIGFpcnBvcnRzLg0KDQpkYXRhIGlzIHZpYSBFdXJvY29udHJvbCBhdCBbaHR0cHM6Ly9lYy5ldXJvcGEuZXUvZXVyb3N0YXQvd2ViL3Byb2R1Y3RzLWV1cm9zdGF0LW5ld3MvLS9kZG4tMjAyMTA5MTQtMV0oaHR0cHM6Ly9lYy5ldXJvcGEuZXUvZXVyb3N0YXQvd2ViL3Byb2R1Y3RzLWV1cm9zdGF0LW5ld3MvLS9kZG4tMjAyMTA5MTQtMSkNCg0KYGBge3IgfQ0KI3wgbGFiZWw6IHNldHVwDQoNCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyh7DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkobHVicmlkYXRlKQ0KbGlicmFyeShwYXRjaHdvcmspDQogfSkNCg0Kc291cmNlKGhlcmU6OmhlcmUoImNvZGUiLCJfY29tbW9uLlIiKSwNCiAgICAgICB2ZXJib3NlID0gRkFMU0UsDQogICAgICAgbG9jYWwgPSBrbml0cjo6a25pdF9nbG9iYWwoKSkNCg0KZ2dwbG90Mjo6dGhlbWVfc2V0KGdydW1hbmxpYjo6dGhlbWVfamltKGJhc2Vfc2l6ZSA9IDEyKSkNCg0KYGBgDQoNCkxldCdzIHNlZSB3aGF0IHdlIGNhbiBkbyB0byBpbXByb3ZlIEJyZW5kaUEncyBoZWF0bWFwOg0KDQpgYGB7cn0NCnR3ZWV0cm1kOjppbmNsdWRlX3R3ZWV0KCJodHRwczovL3R3aXR0ZXIuY29tL2JyZW5kaWFsai9zdGF0dXMvMTU0NzIwNjUxMTkxMDYwMDcwNiIpDQpgYGANCg0KDQpgYGB7cn0NCiN8IGxhYmVsOiBsb2FkDQoNCnR0IDwtIHRpZHl0dWVzZGF5Ujo6dHRfbG9hZCgiMjAyMi0wNy0xMiIpDQoNCmZsaWdodHMgPC0gdHQkZmxpZ2h0cyB8PiANCiAgcmVuYW1lKGFpcnBvcnRfbGFiZWwgPSBgUGl2b3QgTGFiZWxgKSB8PiANCiAgamFuaXRvcjo6Y2xlYW5fbmFtZXMoKSB8PiANCiAgc2VsZWN0KC15ZWFyLCAtbW9udGhfbnVtLCAtbW9udGhfbW9uKQ0KDQp0b3RhbF9mbGlnaHRzIDwtIGZsaWdodHMgfD4gDQogIGdyb3VwX2J5KGZsdF9kYXRlKSB8PiANCiAgc3VtbWFyaXNlKHRvdGFsX2RlcCA9IHN1bShmbHRfZGVwXzEsIG5hLnJtID0gVFJVRSksDQogICAgICAgICAgICAuZ3JvdXBzID0gImRyb3AiKSB8PiANCiAgY29tcGxldGUoZmx0X2RhdGUgPSBzZXEuRGF0ZShmcm9tID0gYXNfZGF0ZSgiMjAyMi0wMS0wMSIpLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRvID0gYXNfZGF0ZSgiMjAyMi0xMi0zMSIpLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJ5ID0gImRheSIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmlsbCA9IGxpc3QodmFsdWUgPSBOQSkpKSB8PiANCiAgICBtdXRhdGUoeWVhciA9IHllYXIoZmx0X2RhdGUpLCANCiAgICAgICAgIHdlZWtfb2ZfeWVhciA9IHdlZWsoZmx0X2RhdGUpLA0KICAgICAgICAgbW9udGggPSBtb250aChmbHRfZGF0ZSwgbGFiZWwgPSBUUlVFLCBhYmJyID0gVFJVRSksDQogICAgICAgICBkYXkgPSBkYXkoZmx0X2RhdGUpDQogICkNCg0KDQpgYGANCg0KDQpgYGB7cn0NCiN8IGxhYmVsOiBmdW5jdGlvbnMNCg0KIyBGdW5jdGlvbiBwcmVwYXJlcyBkYXRhIGZvciBwbG90dGluZyBiYXNlZCBvbiBhIGdpdmVuIHllYXIgYnkgQnJlbmRpQSBhdCBodHRwczovL2dpdGh1Yi5jb20vQnJlbmRpQS90aWR5LXR1ZXNkYXkvYmxvYi9tYWluLzIwMjIvd2Vlay0yOC93ZWVrLTI4LlINCmNyZWF0ZV9kZiA8LSBmdW5jdGlvbihnaXZlbl95ZWFyKSB7DQogIA0KICAjIEV4dHJhY3QgZmlyc3QgZGF5IG9mIHRoZSB3ZWVrIGZvciB0aGUgeWVhcg0KICBmaXJzdF9kYXlfb2ZfeWVhciA8LQ0KICAgIHdkYXkoYXNfZGF0ZShwYXN0ZShnaXZlbl95ZWFyLCAiMDEiLCAiMDEiLCBzZXAgPSAiLSIpKSwNCiAgICAgICAgIHdlZWtfc3RhcnQgPSAxKQ0KDQogIHRvdGFsX2ZsaWdodHMgfD4gDQogICAgZmlsdGVyKHllYXIgPT0gZ2l2ZW5feWVhcikgfD4gDQogICAgbXV0YXRlKGRheV9vZl93ZWVrID0gd2RheShmbHRfZGF0ZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxhYmVsID0gVFJVRSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHdlZWtfc3RhcnQgPSBmaXJzdF9kYXlfb2ZfeWVhcikpIHw+IA0KIyAgICBtdXRhdGUoZGF5X29mX3dlZWsgPSBmb3JjYXRzOjpmY3RfcmV2KGRheV9vZl93ZWVrKSkgfD4gIA0KICAgIGdyb3VwX2J5KG1vbnRoKSB8PiANCiAgICBtdXRhdGUod2Vla19vZl9tb250aCA9IC0xKmRlbnNlX3Jhbmsod2Vla19vZl95ZWFyKSkgfD4gDQogICAgdW5ncm91cCgpDQp9DQoNCmJlc3RfY29udHJhc3QgPC0gZnVuY3Rpb24oeCwgeSA9IGMoIiMwMTAxMDEiLCIjRkZGRkZGIikpew0KICBjb250cmFzdHMgPC0gcHJpc21hdGljOjpjb250cmFzdF9yYXRpbyh4LCB5KQ0KICB5W21heChjb250cmFzdHMpID09IGNvbnRyYXN0c11bMV0NCn0NCg0KIyBGdW5jdGlvbiBwbG90cyBoZWF0bWFwIGJhc2VkIG9uIHRoZSBkYXRhIGdlbmVyYXRlZCBieSBCcmVuZGlBIGF0IGh0dHBzOi8vZ2l0aHViLmNvbS9CcmVuZGlBL3RpZHktdHVlc2RheS9ibG9iL21haW4vMjAyMi93ZWVrLTI4L3dlZWstMjguUiAgd2l0aCBFbWlsIEh2aXRmZWxkdCdzIFByaXNtYXRpYyB0ZXh0IGNvbG9yIGFkanVzdG1lbnRzDQpwbG90X2hlYXRtYXAgPC0gZnVuY3Rpb24oZGYpew0KICANCiAgIyBZZWFyIGxpc3Qgb2YgdGhlIGRhdGEgZnJhbWUNCiAgZ2l2ZW5feWVhciA8LSB1bmlxdWUoZGYkeWVhcikNCiAgDQogIGdncGxvdChkYXRhID0gZGYsDQogICAgICAgICBhZXMoeSA9IHdlZWtfb2ZfbW9udGgsIA0KICAgICAgICAgICAgIHggPSBkYXlfb2Zfd2VlaywNCiAgICAgICAgICAgICBmaWxsID0gdG90YWxfZGVwKSkgKw0KICAgICMgSGVhdCBtYXANCiAgICBnZW9tX3RpbGUoKSArDQogICAgIyBDYWxlbmRhciBkYXlzDQogICAgZ2VvbV90ZXh0KGFlcyhsYWJlbCA9IGRheSwNCiAgICAgICAgICAgICAgICAgIGNvbG9yID0gZ2dwbG90Mjo6YWZ0ZXJfc2NhbGUocHVycnI6Om1hcF9jaHIoZmlsbCwgYmVzdF9jb250cmFzdCkpKSwNCiAgICAgICAgICAgICAgc2l6ZSA9IDIpICsNCiAgICBjb2xvcnNwYWNlOjpzY2FsZV9maWxsX2NvbnRpbnVvdXNfc2VxdWVudGlhbChuYW1lID0gIk51bWJlciBvZiBkZXBhcnR1cmVzIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwYWxldHRlID0gIlZpcmlkaXMiLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG5hLnZhbHVlID0gImdyZXk2MCIsICMgRmlsbCBtaXNzaW5nIGRhdGVzDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbGltaXRzID0gYygwLCAzMDAwMCksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYnJlYWtzID0gc2VxKDAsIDMwMDAwLCAxMDAwMCksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgb29iID0gc2NhbGVzOjpzcXVpc2gsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbGFiZWwgPSBzY2FsZXM6OmxhYmVsX2NvbW1hKGFjY3VyYWN5ID0gMSksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYzIgPSA2MCwgIyBpbmNyZWFzZQ0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGwxID0gMTApICsgIyBkZWNyZWFzZQ0KICAgIGZhY2V0X3dyYXAofiBtb250aCwNCiAgICAgICAgICAgICAgIG5yb3cgPSAxKSArDQogICAgdGhlbWVfbWluaW1hbCgpICsNCiAgICBsYWJzKHRpdGxlID0gZ2l2ZW5feWVhcikgKw0KICAgIHRoZW1lKA0KICAgICAgYXhpcy50ZXh0LnggPSBlbGVtZW50X2JsYW5rKCksDQogICAgICBheGlzLnRleHQueSA9IGVsZW1lbnRfYmxhbmsoKSwNCiAgICAgIGF4aXMudGl0bGUgPSBlbGVtZW50X2JsYW5rKCksDQogICAgICBsZWdlbmQuZGlyZWN0aW9uID0gImhvcml6b250YWwiLA0KICAgICAgbGVnZW5kLmtleS53aWR0aCA9IHVuaXQoMS41LCAiY20iKSwNCiAgICAgIGxlZ2VuZC50ZXh0ID0gZWxlbWVudF90ZXh0KGZhbWlseSA9ICJSZWd1bGFyIDQwMCIpLA0KICAgICAgbGVnZW5kLnRpdGxlID0gZWxlbWVudF90ZXh0KHZqdXN0ID0gMC44LCBmYW1pbHkgPSAiUmVndWxhciA0MDAiKSwNCiAgICAgIHBhbmVsLnNwYWNpbmcueCA9IHVuaXQoMCwgImxpbmVzIiksDQogICAgICBwYW5lbC5ncmlkID0gZWxlbWVudF9ibGFuaygpLA0KICAgICAgcGxvdC50aXRsZSA9IGVsZW1lbnRfdGV4dChoanVzdCA9IDAuNSwgZmFtaWx5ID0gIkJsYWNrIDkwMCBJdGFsaWMiLCBzaXplID0gMTIsIGZhY2UgPSAiYm9sZCIpLA0KICAgICAgc3RyaXAudGV4dCA9IGVsZW1lbnRfdGV4dChmYW1pbHkgPSAiUmVndWxhciA0MDAiLCBzaXplID0gOCkNCiAgICApIA0KfQ0KDQpgYGANCg0KQ3JlYXRlIGhlYXQgbWFwIGZvciBlYWNoIHllYXINCg0KYGBge3J9DQoNCnBsb3RfbGlzdCA8LSANCiAgcHVycnI6Om1hcCh1bmlxdWUoc29ydCh0b3RhbF9mbGlnaHRzJHllYXIpKSwNCiAgICAgICAgICAgICB+IGNyZWF0ZV9kZigueCkgfD4gDQogICAgICAgICAgICAgICBwbG90X2hlYXRtYXAoKSkNCg0KYGBgDQoNCg0KYGBge3J9DQojfCBmaWcuYXNwID0gMQ0KDQojIFN1YnRpdGxlIA0Kc3ViIDwtDQogIHN0cl93cmFwKA0KICAgICJUaGUgYXZpYXRpb24gaW5kdXN0cnkgdG9vayBhIHRvbGwgb24gdGhlIENvdmlkLTE5IHBhbmRlbWljLiANCiAgICBUaGVyZSBhcmUgc2lnbnMgb2YgcmVjb3ZlcnksIHdpdGggY29tbWVyY2lhbCBmbGlnaHRzIGluIHRoZSBFVSBpbmNyZWFzaW5nIGZyb20gbWlkLUp1bmUgMjAyMS4gDQogICAgV2lsbCB0aGUgcmVzdCBvZiAyMDIyIHNlZSBhIHRvdGFsIG51bWJlciBvZiBkZXBhcnR1cmVzIGNsb3NlIHRvIHByZS1wYW5kZW1pYyBsZXZlbHM/IiwNCiAgICB3aWR0aCA9IDkwDQogICkNCg0KcGxvdF9saXN0W1szXV0gKyANCiAgcGxvdF9saXN0W1s0XV0gKyANCiAgcGxvdF9saXN0W1s1XV0gKyANCiAgcGxvdF9saXN0W1s2XV0gKw0KICBwbG90X2xpc3RbWzddXSArDQogIHBsb3RfbGF5b3V0KGd1aWRlcyA9ICJjb2xsZWN0IiwNCiAgICAgICAgICAgICAgbmNvbCA9IDEsDQogICAgICAgICAgICAgIGhlaWdodCA9IDAuNSkgJg0KICBwbG90X2Fubm90YXRpb24oDQogICAgdGl0bGUgPSAiQ29tbWVyY2lhbCBmbGlnaHQgZGVwYXJ0dXJlcyBpbiB0aGUgRVUiLA0KICAgIHN1YnRpdGxlID0gc3ViLA0KICAgIGNhcHRpb24gPSAiU291cmNlOiBFdXJvY29udHJvbCB8ICNUaWR5VHVlc2RheSBXZWVrIDI4IiwNCiAgICB0aGVtZSA9IHRoZW1lKA0KICAgICAgbGVnZW5kLnBvc2l0aW9uID0gImJvdHRvbSIsDQogICAgICBwbG90LnRpdGxlID0gZWxlbWVudF90ZXh0KGhqdXN0ID0gMC41LCBzaXplID0gMTgsIGZhY2UgPSAiYm9sZCIpLA0KICAgICAgcGxvdC5zdWJ0aXRsZSA9IGVsZW1lbnRfdGV4dChoanVzdCA9IDAuNSwgc2l6ZSA9IDE0KSwNCiAgICAgIHBsb3QuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsID0gIiNmMGY4ZmYiKSwNCiAgICAgIHBsb3QuY2FwdGlvbiA9IGVsZW1lbnRfdGV4dCh2anVzdCA9IDEpKSANCiAgKQ0KYGBgDQoNCg==</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2021_07_13_tidy_tuesday.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
