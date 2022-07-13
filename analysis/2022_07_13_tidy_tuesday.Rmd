@@ -23,6 +23,8 @@ suppressPackageStartupMessages({
 library(tidyverse)
 library(lubridate)
 library(patchwork)
+  
+library(geofacet)
  })
 
 source(here::here("code","_common.R"),
@@ -159,9 +161,9 @@ The functions above create a big list of heat maps, one for each year. I've adde
 # Subtitle 
 sub <-
   str_wrap(
-    "The aviation industry took a toll on the Covid-19 pandemic. 
-    There are signs of recovery, with commercial flights in the EU increasing from mid-June 2021. 
-    Will the rest of 2022 see a total number of departures close to pre-pandemic levels?",
+    "The Covid-19 pandemic took a toll on the aviation industry . 
+    There are signs of recovery, with EU commercial flight departures increasing from mid-June 2021. 
+    Will the rest of 2022 see departures close to pre-pandemic levels?",
     width = 90
   )
 
@@ -185,4 +187,55 @@ plot_list[[3]] +
       plot.caption = element_text(vjust = 1)) 
   )
 ```
+
+Cameron Kay posted a noteworthy animation. I'll skip it this time go another direction.
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/cameronskay/status/1547291272183832577")
+```
+
+
+```{r}
+#| fig.asp = 1
+
+flights |>
+  group_by(year = year(flt_date), month = month(flt_date), state_name) |> 
+  summarise(total_dep = sum(flt_dep_1, na.rm = TRUE),
+            .groups = "drop") |> 
+  mutate(color = case_when(year < 2020 ~ '#b2e2e2',
+                                 year == 2020 ~ '#66c2a4',
+                                 year == 2021 ~ '#238b45',
+                                 year == 2022 ~ "#006d2c")) |> 
+  ggplot(aes(x = month,  
+             total_dep)) +
+  geom_line(aes(group = factor(year), 
+                color = color),
+            show.legend = TRUE) +
+  scale_color_identity(guide = "legend",
+                       labels = c("2022", "2021", "2020", "Prior Yrs")) +
+  scale_x_continuous(breaks = c(3,6,9),
+                     labels = c("Mar","Jun","Sep"),
+                     minor_breaks = NULL) +
+  scale_y_continuous(limits = c(0, NA), 
+                     n.breaks = 3,
+                     labels = scales::comma) +
+  facet_geo( ~ state_name, 
+             grid = "eu_grid1", 
+             label = "name",
+             scales = "free_y") +
+  labs(y = "Monthly Departures",
+       title = "Commercial flight departures in select EU Countries",
+       subtitle = sub,
+       color = NULL,
+       caption = "Source: Eurocontrol | #TidyTuesday Week 28") +
+  theme(
+      legend.position = c(0.1,0.1),
+      plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+      plot.subtitle = element_text(hjust = 0.5, size = 14),
+      plot.background = element_rect(fill = '#edf8fb'),
+      plot.caption = element_text(vjust = 1)) 
+```
+
+
+
 
