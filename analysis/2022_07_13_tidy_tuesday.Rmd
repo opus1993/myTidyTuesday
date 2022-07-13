@@ -162,9 +162,8 @@ The functions above create a big list of heat maps, one for each year. I've adde
 sub <-
   str_wrap(
     "The Covid-19 pandemic took a toll on the aviation industry . 
-    There are signs of recovery, with EU commercial flight departures increasing from mid-June 2021. 
-    Will the rest of 2022 see departures close to pre-pandemic levels?",
-    width = 90
+    There are signs of recovery, with EU commercial flight departures increasing from mid-June 2021.",
+    width = 100
   )
 
 plot_list[[3]] + 
@@ -196,6 +195,7 @@ tweetrmd::include_tweet("https://twitter.com/cameronskay/status/1547291272183832
 
 
 ```{r}
+#| fig.width = 12
 
 flights |>
   group_by(year = year(flt_date), month = month(flt_date), state_name) |> 
