@@ -195,7 +195,8 @@ tweetrmd::include_tweet("https://twitter.com/cameronskay/status/1547291272183832
 
 
 ```{r}
-#| fig.width = 12
+#| fig.width = 12,
+#| fig.asp = 1
 
 flights |>
   group_by(year = year(flt_date), month = month(flt_date), state_name) |> 
