@@ -239,6 +239,10 @@ flights |>
       plot.caption = element_text(vjust = 1)) 
 ```
 
+And the tweet of the work above:
 
+```{r}
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1547347471722024960")
+```
 
 
