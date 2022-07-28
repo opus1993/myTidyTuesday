@@ -3,7 +3,7 @@ title: "my TidyTuesday website collection"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: no
     code_folding: hide
 editor_options:
   chunk_output_type: console
@@ -30,6 +30,7 @@ library(dplyr)
 library(knitr)
 library(kableExtra)
 library(stringr)
+library(funspotr)  # install with install_github("brshallo/funspotr")
 })
 articles <- tibble(file = dir(path = "analysis")) %>% 
   filter(str_detect(file, "\\.Rmd")) %>% 
@@ -91,6 +92,22 @@ articlesTable %>%
   column_spec(1:3,width = c("10em","10em","60em"))
 
 ```
+
+A list of all functions used across all documents:
+
+```{r}
+#| label: functionsTable
+#| warning: false
+
+list_files_github_repo("opus1993/myTidyTuesday",
+                       branch = "main") |> 
+  spot_funs_files() |> 
+  unnest_results() |> 
+  select(-absolute_paths) |> 
+  DT::datatable()
+
+```
+
 
 ----
 
