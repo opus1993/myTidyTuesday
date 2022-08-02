@@ -99,12 +99,35 @@ A list of all functions used across all documents:
 #| label: functionsTable
 #| warning: false
 
-list_files_github_repo("opus1993/myTidyTuesday",
-                       branch = "main") |> 
+funspotr::list_files_wd("analysis") |> 
   spot_funs_files() |> 
   unnest_results() |> 
   select(-absolute_paths) |> 
   DT::datatable()
+
+```
+
+An index of all images:
+
+```{r}
+#| label: images
+#| warning: false
+
+image_files <- list.files(path = "docs/figure",
+                          recursive = TRUE,
+                          pattern = "*.png$",
+                          full.names = TRUE) |> 
+  fs::path() |> 
+  as_tibble()
+
+matrix(image_files$value, ncol = 4, byrow = TRUE) |>
+  as_tibble() |> 
+  gt::gt() |> 
+  gtExtras::gt_theme_538() |> 
+  gtExtras::gt_img_rows(columns = V1, img_source = "local", height = 200) |> 
+  gtExtras::gt_img_rows(columns = V2, img_source = "local", height = 200) |>
+  gtExtras::gt_img_rows(columns = V3, img_source = "local", height = 200) |>
+  gtExtras::gt_img_rows(columns = V4, img_source = "local", height = 200)
 
 ```
 
