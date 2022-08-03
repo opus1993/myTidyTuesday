@@ -93,20 +93,6 @@ articlesTable %>%
 
 ```
 
-A list of all functions used across all documents:
-
-```{r}
-#| label: functionsTable
-#| warning: false
-
-funspotr::list_files_wd("analysis") |> 
-  spot_funs_files() |> 
-  unnest_results() |> 
-  select(-absolute_paths) |> 
-  DT::datatable()
-
-```
-
 An index of all images:
 
 ```{r}
