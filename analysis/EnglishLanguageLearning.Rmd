@@ -207,7 +207,7 @@ I am making us of metaprogramming techniques to pass text vector column names in
 case_weight_builder <- function(data, outcome) {
   data %>%
     inner_join(
-      train_essays_sentiment %>%
+      data %>%
         count(.data[[outcome]],
               name = "case_wts"),
       by = glue::glue("{ outcome }")
