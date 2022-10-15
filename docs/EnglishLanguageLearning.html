@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jim Gruman" />
+
+<meta name="date" content="2022-10-15" />
+
+<title>Kaggle Feedback Prize - English Language Learning</title>
+
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">source</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Kaggle Feedback Prize - English Language
+Learning</h1>
+<h4 class="author">Jim Gruman</h4>
+<h4 class="date">October 15, 2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-10-15
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreebb8b75789e01d55da4bf22acc7e6d6b16bad3c4ftargetblankbb8b757a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/opus1993/myTidyTuesday/tree/bb8b75789e01d55da4bf22acc7e6d6b16bad3c4f" target="_blank">bb8b757</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreebb8b75789e01d55da4bf22acc7e6d6b16bad3c4ftargetblankbb8b757a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/opus1993/myTidyTuesday/tree/bb8b75789e01d55da4bf22acc7e6d6b16bad3c4f" target="_blank">bb8b757</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    data/.Rhistory
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/Chicago.rds
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/SeriesReport-20220414171148_6c3b18.xlsx
+    Ignored:    data/Weekly_Chicago_IL_Regular_Reformulated_Retail_Gasoline_Prices.csv
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/YammerMemberPage.rds
+    Ignored:    data/YammerMembers.rds
+    Ignored:    data/df.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/lm_res.rds
+    Ignored:    data/netflixTitles.rds
+    Ignored:    data/netflixTitles2.rds
+    Ignored:    data/raw_weather.RData
+    Ignored:    data/sample_submission.csv
+    Ignored:    data/submission.csv
+    Ignored:    data/test.csv
+    Ignored:    data/train.csv
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+    Ignored:    data/xgb_res.rds
+
+Untracked files:
+    Untracked:  analysis/2022_09_01_kaggle_tabular_playground.qmd
+    Untracked:  code/YammerReach.R
+    Untracked:  code/autokeras.R
+    Untracked:  code/chicago.R
+    Untracked:  code/glmnet_test.R
+    Untracked:  code/googleCompute.R
+    Untracked:  code/work list batch targets.R
+    Untracked:  environment.yml
+    Untracked:  figure/
+    Untracked:  report.html
+
+Unstaged changes:
+    Modified:   analysis/2021_01_19_tidy_tuesday.Rmd
+    Modified:   analysis/2021_03_24_tidy_tuesday.Rmd
+    Deleted:    analysis/2021_04_20.Rmd
+    Deleted:    analysis/2022_02_11_tabular_playground.Rmd
+    Deleted:    analysis/2022_04_18.qmd
+    Modified:   analysis/Survival.Rmd
+    Modified:   analysis/_site.yml
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/EnglishLanguageLearning.Rmd</code>) and HTML
+(<code>docs/EnglishLanguageLearning.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/bb8b75789e01d55da4bf22acc7e6d6b16bad3c4f/analysis/EnglishLanguageLearning.Rmd" target="_blank">bb8b757</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-10-15
+</td>
+<td>
+initial commit of Kaggle English Language Learning
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The Kaggle Challenge presented here works with a dataset that
+comprises argumentative essays (the ELLIPSE corpus) written by 8th-12th
+grade English Language Learners (ELLs). The essays have been scored
+according to six measures: <strong>cohesion, syntax, vocabulary,
+phraseology, grammar,</strong> and <strong>conventions</strong>.</p>
+<p>Each measure represents a component of writing proficiency, ranging
+from 1.0 to 5.0 in increments of 0.5. Our task is to predict the score
+of each measure by essay.</p>
+<p><img
+src="https://storage.googleapis.com/kaggle-competitions/kaggle/38321/logos/header.png" /></p>
+<div id="preprocessing" class="section level2">
+<h2>Preprocessing</h2>
+<p>Natural Language Processing techniques offer a wide variety of tools
+to approach this problem. The Kaggle host is requiring that the model
+run as a standalone, without internet assistance. They also ask for a
+parsimonous, explainable model.</p>
+<p>We will start with exploring the predictive potential of the text
+count features, like numbers of words, distinct words, and spaces.</p>
+<p>Unsupervised topic grouping categories may be useful for measures
+like conventions or grammar. We will start with LDA.</p>
+<p>Individual words may have some predictive power, but they could be so
+sparse as to be difficult to separate from the background noise.</p>
+<p>A sentiment dictionary may add predictive power to some measures,
+along with helping to count miss-spellings.</p>
+<p>Word embeddings like Glove or Huggingface could also better
+characterize meaning.</p>
+</div>
+<div id="modeling" class="section level2">
+<h2>Modeling</h2>
+<p>Most are tempted to jump into (CNN / LSTM) deep learning predictive
+models, but the number of essays is really pretty small for a deep
+learning run.</p>
+<p>I spent a few evenings with the torch/<code>brulee</code> approach on
+<code>tidymodels</code>, but discovered that modeling time consumed
+would be signifiant and the results were not better than random forests
+on strong engineered features with case weights based on inverse
+proportions of the metric values.</p>
+<p>I ultimately settled on the <code>xgboost</code> approach here. No
+doubt it massively overfits on specific words and text counts, like the
+number of unique words.</p>
+<p>One last point. I believe that the Essay Scoring is done by humans in
+a way where the metrics are judged together, and not entirely
+independently. In other words, low <code>grammar</code> and low
+<code>cohesion</code> are likely related. I will go as far as I can
+assuming independence, but at some point a chaining or calibration run
+to pull all metrics together may be appropriate.</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse)
+library(tidymodels)
+
+library(stm)
+library(text2vec)
+
+library(tidytext)
+library(textrecipes)
+
+})
+
+tidymodels::tidymodels_prefer()
+
+theme_set(theme_minimal())</code></pre>
+<pre class="r"><code>train_essays_raw &lt;- read_csv(here::here(&quot;data&quot;,&quot;train.csv&quot;),
+                         show_col_types = FALSE) 
+
+submit_essays_raw &lt;- read_csv(here::here(&quot;data&quot;,&quot;test.csv&quot;),
+                          show_col_types = FALSE) 
+
+outcomes = names(train_essays_raw)[3:8]</code></pre>
+<p>This is a function to look at <code>nrc</code> sentiments and a way
+to break out mis-spelled words by subtracting dictionary words from
+total unique tokens.</p>
+<pre class="r"><code>sentiment_preprocessor &lt;- function(data = submit_essays_raw){
+
+data %&gt;%
+  tidytext::unnest_tokens(word, full_text) |&gt; 
+  inner_join(get_sentiments(&quot;nrc&quot;), by = &quot;word&quot;) %&gt;% # pull out only sentiment words
+  count(sentiment, text_id) %&gt;% # count the # of positive &amp; negative words
+  spread(sentiment, n, fill = 0) %&gt;% # made data wide rather than narrow
+ mutate(sentiment = positive - negative,
+       dictionary_words = positive + negative) %&gt;% # # of positive words - # of negative words
+    select(anger:dictionary_words)
+  
+}
+
+sentiments &lt;- paste(names(sentiment_preprocessor()),
+                             collapse =  &quot; + &quot;)
+
+sentiment_preprocessor(data = train_essays_raw) |&gt; 
+  pivot_longer(cols = everything(),
+               names_to = &quot;metric&quot;,
+               values_to = &quot;Sentiment word counts&quot;) |&gt; 
+  ggplot(aes(`Sentiment word counts`, fill = metric)) +
+  geom_histogram(bins = 35, show.legend = FALSE) +
+  facet_wrap(vars(metric)) +
+  labs(y = &quot;Number of Essays&quot;,
+       title = &quot;Most essays contain few words of anger and disgust&quot;)</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_essays_sentiment &lt;- train_essays_raw |&gt; 
+         bind_cols(sentiment_preprocessor(train_essays_raw))
+
+submit_essays_sentiment &lt;- submit_essays_raw |&gt; 
+    bind_cols(sentiment_preprocessor(submit_essays_raw))</code></pre>
+<p>Essays with more words, or more sentences, do not necessarily score
+better.</p>
+<pre class="r"><code>te_long &lt;- train_essays_raw |&gt;
+  pivot_longer(cols = cohesion:conventions,
+               names_to = &quot;metric&quot;,
+               values_to = &quot;value&quot;) |&gt;
+  mutate(metric = as.factor(metric),
+         value = as.factor(value))
+
+te_long |&gt; 
+  group_by(n_words = ggplot2::cut_interval(
+    tokenizers::count_words(full_text), 
+    length = 200),
+    metric, value) |&gt; 
+  summarise(`Number of essays` = n(),
+            .groups = &quot;drop&quot;) |&gt; 
+  ggplot(aes(n_words, `Number of essays`, fill = as.factor(value))) +
+  geom_col() +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  facet_wrap(vars(metric)) +
+  labs(x = &quot;Number of words per essay&quot;,
+       y = &quot;Number of essays&quot;,
+       fill = &quot;Score&quot;)</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/outcome%20variable%20distributions-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>te_long |&gt; 
+  group_by(n_words = ggplot2::cut_interval(
+    tokenizers::count_sentences(full_text), length = 20),
+    metric, value) |&gt; 
+  summarise(`Number of essays` = n(),
+            .groups = &quot;drop&quot;) |&gt; 
+  ggplot(aes(n_words, `Number of essays`, fill = as.factor(value))) +
+  geom_col() +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  facet_wrap(vars(metric)) +
+  labs(x = &quot;Number of sentences per essay&quot;,
+       y = &quot;Number of essays&quot;,
+       fill = &quot;Score&quot;)</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/outcome%20variable%20distributions-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>A look at predictor and outcome pairwise correlations.</p>
+<pre class="r"><code>train_essays_sentiment |&gt; 
+ #   select(!!outcomes) %&gt;%
+  corrr::correlate(
+    quiet = TRUE
+  ) %&gt;%
+  corrr::rearrange() %&gt;%
+  corrr::shave() %&gt;%
+  corrr::rplot(print_cor = TRUE) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_essays_sentiment |&gt; 
+ #   select(!!outcomes) %&gt;%
+  corrr::correlate(
+    quiet = TRUE
+  ) %&gt;%
+  corrr::network_plot()</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Vocabulary and Phraseology (0.74) track together.</li>
+<li>Phraseology and Syntax (0.73) track together.</li>
+<li>Praseology and Grammar (0.72) track together.</li>
+</ul>
+<p>Let’s set some initial hyperparameters.</p>
+<pre class="r"><code># train dataset has 21953 unique one n_gram tokens. 
+topics &lt;- 90L   # LDA topic models</code></pre>
+<p>Latent Dirichlet allocation (LDA) is an unsupervised generative
+statistical model that explains a set of observations through unobserved
+groups, and the content of each group may explain why some parts of the
+data are similar.</p>
+<p>I’d like to explore the use of
+<code>inverse probability weights</code> because there are so few essays
+with scores at the highest and lowest levels. When survey respondents
+have different probabilities of selection, (inverse) probability weights
+help reduce bias in the results.</p>
+<p>I am making us of metaprogramming techniques to pass text vector
+column names into the formula and case weights functions to re-use them
+for each metric.</p>
+<pre class="r"><code>case_weight_builder &lt;- function(data, outcome) {
+  data %&gt;%
+    inner_join(
+      train_essays_sentiment %&gt;%
+        count(.data[[outcome]],
+              name = &quot;case_wts&quot;),
+      by = glue::glue(&quot;{ outcome }&quot;)
+    ) %&gt;%
+    mutate(case_wts = importance_weights(max(case_wts) / case_wts))
+}
+
+
+recipe_builder &lt;- function(outcome = &quot;cohesion&quot;,
+                           predictor = &quot;full_text&quot;,
+                           sentiments = &quot;dictionary_words&quot;){
+
+rec &lt;- recipe(formula(glue::glue(&quot;{ outcome } ~ { predictor } + { sentiments } + case_wts&quot;)),
+              data = train_essays_sentiment %&gt;%
+                   case_weight_builder(outcome) 
+              ) %&gt;%
+  step_textfeature(full_text,
+                   keep_original_cols = TRUE) %&gt;%
+  step_rename_at(
+    starts_with(&quot;textfeature_&quot;),
+    fn = ~ gsub(&quot;textfeature_full_text_&quot;, &quot;&quot;, .)
+  ) %&gt;%
+  step_mutate(nonwords = n_uq_words - dictionary_words ) %&gt;%
+#### cluster the essays by topic, generally
+   step_tokenize(full_text) %&gt;% 
+   step_lda(full_text, 
+            num_topics = topics, 
+            keep_original_cols = TRUE) %&gt;%
+  step_tfidf(full_text) %&gt;%
+  step_clean_names(all_predictors()) %&gt;%
+#### remove columns that are super-sparse and unbalanced
+  step_nzv(all_predictors(), unique_cut = 9) %&gt;%
+  step_normalize(all_numeric_predictors())
+
+return(rec)
+
+}</code></pre>
+<p>As mentioned above, the model specification is <code>xgboost</code>
+for regression to predict a continuous outcome.</p>
+<pre class="r"><code># finalize(mtry(), 
+#          recipe_builder() |&gt; 
+#            prep() |&gt; 
+#            bake(new_data = NULL))
+
+spec &lt;-
+  boost_tree(
+    mtry = 70,  # 75L
+    trees = 500L,
+    tree_depth = 9, # 6L
+    learn_rate = 0.01,  # originally 0.1
+    min_n = 20,  # 20L
+    loss_reduction = 0
+  ) %&gt;%
+  set_engine(&#39;xgboost&#39;) %&gt;%
+  set_mode(&#39;regression&#39;)
+
+# all_cores &lt;- parallelly::availableCores(omit = 1)
+# all_cores
+# 
+# future::plan(&quot;multisession&quot;, workers = all_cores) # on Windows</code></pre>
+<p>We fit for <code>cohesion</code> first and use case weights to adjust
+for the frequency of occurrence of <code>cohesion</code>. After looking
+at variable importance (roughly the number of times a variable appears
+in the trees) and residuals, we make our prediction on the submission
+set essays and adding that column to the dataframe.</p>
+<pre class="r"><code>outcome &lt;- outcomes[1]
+
+train_df &lt;- train_essays_sentiment %&gt;%
+                   case_weight_builder(outcome)
+
+wf &lt;- workflow(recipe_builder(outcome = outcome, sentiments = sentiments), spec) |&gt; 
+       add_case_weights(case_wts)
+
+#
+#folds &lt;- vfold_cv(train_df, strata = !!outcome)
+
+#grid &lt;- expand.grid(learn_rate = c(0.006, 0.01, 0.03))
+
+# rs &lt;- tune_grid(
+#   wf,
+#   folds,
+#   grid = grid,
+#   metrics = metric_set(rmse),
+#   control = control_grid()
+# )
+#   
+# autoplot(rs)
+# collect_metrics(rs)
+
+fit &lt;- parsnip::fit(wf, train_df)</code></pre>
+<pre><code>as(&lt;dgTMatrix&gt;, &quot;dgCMatrix&quot;) is deprecated since Matrix 1.5-0; do as(., &quot;CsparseMatrix&quot;) instead</code></pre>
+<pre class="r"><code>extract_fit_engine(fit) |&gt; 
+  vip::vip(num_features = 20)</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20cohesion-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds &lt;- predict(fit, new_data = train_essays_sentiment) |&gt; 
+   bind_cols(train_essays_raw |&gt; select(!!outcome)) |&gt; 
+   rename(truth = !!outcome)
+
+train_preds |&gt; 
+   ggplot(aes(x = factor(truth), y = .pred - truth)) +
+   geom_boxplot() +
+   labs(title = glue::glue(&quot;{ outcome } residuals&quot;)) </code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20cohesion-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds %&gt;%
+   yardstick::rmse(truth, .pred)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"rmse","2":"standard","3":"0.1932691"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>submit_essays_sentiment &lt;- predict(fit, submit_essays_sentiment) |&gt; 
+  rename({{outcome}} := .pred) |&gt; 
+  bind_cols(submit_essays_sentiment)</code></pre>
+<pre><code>Warning in get_dtm(corp): dtm has 0 rows. Empty iterator?</code></pre>
+<p>We fit for <code>syntax</code> second and use case weights to adjust
+for the frequency of occurrence of <code>syntax</code>. I am choosing to
+use the predicted values of <code>cohesion</code> above as an additional
+predictor.</p>
+<pre class="r"><code>outcome &lt;- outcomes[2]
+predictor &lt;- glue::glue(&quot;full_text + { outcomes[1] }&quot;)
+
+train_df &lt;- train_essays_sentiment %&gt;%
+                   case_weight_builder(outcome)
+
+wf &lt;- workflow(recipe_builder(outcome, predictor, sentiments), spec) %&gt;%
+          add_case_weights(case_wts)
+
+fit &lt;- parsnip::fit(wf, train_df)
+
+extract_fit_engine(fit) |&gt; 
+  vip::vip(num_features = 20)</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20syntax-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds &lt;- predict(fit, new_data = train_essays_sentiment) |&gt; 
+   bind_cols(train_essays_raw |&gt; select(!!outcome)) |&gt; 
+   rename(truth = !!outcome)
+
+train_preds |&gt; 
+   ggplot(aes(x = factor(truth), y = .pred - truth)) +
+   geom_boxplot() +
+   labs(title = glue::glue(&quot;{ outcome } residuals&quot;)) </code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20syntax-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds %&gt;%
+   yardstick::rmse(truth, .pred)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"rmse","2":"standard","3":"0.1649233"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>submit_essays_sentiment &lt;- predict(fit, submit_essays_sentiment) |&gt; 
+  rename({{outcome}} := .pred) |&gt; 
+  bind_cols(submit_essays_sentiment)</code></pre>
+<pre><code>Warning in get_dtm(corp): dtm has 0 rows. Empty iterator?</code></pre>
+<p>We fit for <code>vocabulary</code> next and use case weights to
+adjust for the frequency of occurrence of <code>vocabulary</code>. I am
+choosing to use the predicted values of <code>cohesion</code> and
+<code>syntax</code> above as additional predictors.</p>
+<pre class="r"><code>outcome &lt;- outcomes[3]
+predictor &lt;- glue::glue(&quot;full_text + { outcomes[1] } + { outcomes[2] }&quot;)
+
+train_df &lt;- train_essays_sentiment %&gt;%
+                   case_weight_builder(outcome)
+
+wf &lt;- workflow(recipe_builder(outcome, predictor, sentiments), spec) %&gt;%
+          add_case_weights(case_wts)
+
+fit &lt;- parsnip::fit(wf, train_df)
+
+extract_fit_engine(fit) |&gt; 
+  vip::vip(num_features = 20)</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20vocabulary-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds &lt;- predict(fit, new_data = train_essays_sentiment) |&gt; 
+   bind_cols(train_essays_raw |&gt; select(!!outcome)) |&gt; 
+   rename(truth = !!outcome)
+
+train_preds |&gt; 
+   ggplot(aes(x = factor(truth), y = .pred - truth)) +
+   geom_boxplot() +
+   labs(title = glue::glue(&quot;{ outcome } residuals&quot;)) </code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20vocabulary-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds %&gt;%
+   yardstick::rmse(truth, .pred)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"rmse","2":"standard","3":"0.1509563"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>submit_essays_sentiment &lt;- predict(fit, submit_essays_sentiment) |&gt; 
+  rename({{outcome}} := .pred) |&gt; 
+  bind_cols(submit_essays_sentiment)</code></pre>
+<pre><code>Warning in get_dtm(corp): dtm has 0 rows. Empty iterator?</code></pre>
+<p>We fit for <code>phraseology</code> next and use case weights to
+adjust for the frequency of occurrence of <code>phraseology</code>. I am
+choosing to use the predicted values of <code>cohesion</code>,
+<code>syntax</code>, and <code>vocabulary</code> above as additional
+predictors.</p>
+<pre class="r"><code>outcome &lt;- outcomes[4]
+predictor &lt;- glue::glue(&quot;full_text + { outcomes[1] } + { outcomes[2] } + { outcomes[3] }&quot;)
+
+train_df &lt;- train_essays_sentiment %&gt;%
+                   case_weight_builder(outcome)
+
+wf &lt;- workflow(recipe_builder(outcome, predictor, sentiments), spec) %&gt;%
+          add_case_weights(case_wts)
+
+fit &lt;- parsnip::fit(wf, train_df)
+
+extract_fit_engine(fit) |&gt; 
+  vip::vip(num_features = 20)</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20phraseology-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds &lt;- predict(fit, new_data = train_essays_sentiment) |&gt; 
+   bind_cols(train_essays_raw |&gt; select(!!outcome)) |&gt; 
+   rename(truth = !!outcome)
+
+train_preds |&gt; 
+   ggplot(aes(x = factor(truth), y = .pred - truth)) +
+   geom_boxplot() +
+   labs(title = glue::glue(&quot;{ outcome } residuals&quot;)) </code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20phraseology-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds %&gt;%
+   yardstick::rmse(truth, .pred)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"rmse","2":"standard","3":"0.1622738"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>submit_essays_sentiment &lt;- predict(fit, submit_essays_sentiment) |&gt; 
+  rename({{outcome}} := .pred) |&gt; 
+  bind_cols(submit_essays_sentiment)</code></pre>
+<pre><code>Warning in get_dtm(corp): dtm has 0 rows. Empty iterator?</code></pre>
+<p>We fit for <code>grammar</code> next and use case weights to adjust
+for the frequency of occurrence of <code>grammar</code>. I am choosing
+to use the predicted values of <code>cohesion</code>,
+<code>syntax</code>, <code>vocabulary</code>, and
+<code>phraseology</code> above as additional predictors.</p>
+<pre class="r"><code>outcome &lt;- outcomes[5]
+predictor &lt;- glue::glue(&quot;full_text + { outcomes[1] } + { outcomes[2]} + {outcomes[3]} + {outcomes[4]}&quot;)
+
+train_df &lt;- train_essays_sentiment %&gt;%
+                   case_weight_builder(outcome)
+
+wf &lt;- workflow(recipe_builder(outcome, predictor, sentiments), spec) %&gt;%
+          add_case_weights(case_wts)
+
+fit &lt;- parsnip::fit(wf, train_df)
+
+extract_fit_engine(fit) |&gt; 
+  vip::vip(num_features = 20)</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20grammar-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds &lt;- predict(fit, new_data = train_essays_sentiment) |&gt; 
+   bind_cols(train_essays_raw |&gt; select(!!outcome)) |&gt; 
+   rename(truth = !!outcome)
+
+train_preds |&gt; 
+   ggplot(aes(x = factor(truth), y = .pred - truth)) +
+   geom_boxplot() +
+   labs(title = glue::glue(&quot;{ outcome } residuals&quot;)) </code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20grammar-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds %&gt;%
+   yardstick::rmse(truth, .pred)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"rmse","2":"standard","3":"0.1702578"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>submit_essays_sentiment &lt;- predict(fit, submit_essays_sentiment) |&gt; 
+  rename({{outcome}} := .pred) |&gt; 
+  bind_cols(submit_essays_sentiment)</code></pre>
+<pre><code>Warning in get_dtm(corp): dtm has 0 rows. Empty iterator?</code></pre>
+<p>We fit for <code>conventions</code> next and use case weights to
+adjust for the frequency of occurrence of <code>conventions</code>. I am
+choosing to use the predicted values of <code>cohesion</code>,
+<code>syntax</code>, <code>vocabulary</code>, <code>phraseology</code>
+and <code>grammar</code> above as additional predictors.</p>
+<pre class="r"><code>outcome &lt;- outcomes[6]
+predictor &lt;- glue::glue(&quot;full_text + { outcomes[1] } +{ outcomes[2] }+{ outcomes[3] }+{ outcomes[4] }+{ outcomes[5] }&quot;)
+
+train_df &lt;- train_essays_sentiment %&gt;%
+                   case_weight_builder(outcome)
+
+wf &lt;- workflow(recipe_builder(outcome, predictor, sentiments), spec) %&gt;%
+          add_case_weights(case_wts)
+
+fit &lt;- parsnip::fit(wf, train_df)
+
+extract_fit_engine(fit) |&gt; 
+  vip::vip(num_features = 20)</code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20conventions-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds &lt;- predict(fit, new_data = train_essays_sentiment) |&gt; 
+   bind_cols(train_essays_raw |&gt; select(!!outcome)) |&gt; 
+   rename(truth = !!outcome)
+
+train_preds |&gt; 
+   ggplot(aes(x = factor(truth), y = .pred - truth)) +
+   geom_boxplot() +
+   labs(title = glue::glue(&quot;{ outcome } residuals&quot;)) </code></pre>
+<p><img src="figure/EnglishLanguageLearning.Rmd/fit%20conventions-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>train_preds %&gt;%
+   yardstick::rmse(truth, .pred)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"rmse","2":"standard","3":"0.1655919"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>submit_essays_sentiment &lt;- predict(fit, submit_essays_sentiment) |&gt; 
+  rename({{outcome}} := .pred) |&gt; 
+  bind_cols(submit_essays_sentiment)</code></pre>
+<pre><code>Warning in get_dtm(corp): dtm has 0 rows. Empty iterator?</code></pre>
+</div>
+<div id="the-submission" class="section level2">
+<h2>The Submission</h2>
+<pre class="r"><code>submission &lt;-
+  submit_essays_sentiment %&gt;%
+  select(text_id, !!outcomes)</code></pre>
+<pre class="r"><code>submission</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["text_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cohesion"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["syntax"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["vocabulary"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["phraseology"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["grammar"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["conventions"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"0000C359D63E","2":"3.344898","3":"3.187304","4":"3.400567","5":"3.284135","6":"3.111621","7":"3.393790"},{"1":"000BAD50D026","2":"2.643669","3":"2.427899","4":"2.517356","5":"2.270578","6":"2.326458","7":"2.444227"},{"1":"00367BB2546B","2":"3.313555","3":"3.366564","4":"3.460956","5":"3.405318","6":"3.473831","7":"3.740599"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>write_csv(submission, here::here(&quot;data&quot;, &quot;submission.csv&quot;))</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.1 (2022-06-23 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22621)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] textrecipes_1.0.1  tidytext_0.3.4     text2vec_0.6.2     stm_1.3.6         
+ [5] yardstick_1.1.0    workflowsets_1.0.0 workflows_1.1.0    tune_1.0.1        
+ [9] rsample_1.1.0      recipes_1.0.1      parsnip_1.0.2      modeldata_1.0.1   
+[13] infer_1.0.3        dials_1.0.0        scales_1.2.1       broom_1.0.1       
+[17] tidymodels_1.0.0   forcats_0.5.2      stringr_1.4.1      dplyr_1.0.10      
+[21] purrr_0.3.5        readr_2.1.3        tidyr_1.2.1        tibble_3.1.8      
+[25] ggplot2_3.3.6      tidyverse_1.3.2    workflowr_1.7.0   
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.4.1           backports_1.4.1        splines_4.2.1         
+  [4] listenv_0.8.0          SnowballC_0.7.0        digest_0.6.29         
+  [7] foreach_1.5.2          htmltools_0.5.3        float_0.3-0           
+ [10] fansi_1.0.3            magrittr_2.0.3         memoise_2.0.1         
+ [13] googlesheets4_1.0.1    tzdb_0.3.0             globals_0.16.1        
+ [16] modelr_0.1.9           gower_1.0.0            vroom_1.6.0           
+ [19] hardhat_1.2.0          colorspace_2.0-3       vip_0.3.2             
+ [22] ggrepel_0.9.1          rappdirs_0.3.3         rvest_1.0.3           
+ [25] haven_2.5.1            xfun_0.33              callr_3.7.2           
+ [28] crayon_1.5.2           jsonlite_1.8.2         survival_3.3-1        
+ [31] iterators_1.0.14       glue_1.6.2             registry_0.5-1        
+ [34] gtable_0.3.1           gargle_1.2.1           ipred_0.9-13          
+ [37] future.apply_1.9.1     mlapi_0.1.1            DBI_1.1.3             
+ [40] Rcpp_1.0.9             GPfit_1.0-8            bit_4.0.4             
+ [43] lava_1.6.10            prodlim_2019.11.13     httr_1.4.4            
+ [46] ellipsis_0.3.2         farver_2.1.1           pkgconfig_2.0.3       
+ [49] nnet_7.3-17            sass_0.4.2             dbplyr_2.2.1          
+ [52] janitor_2.1.0          here_1.0.1             utf8_1.2.2            
+ [55] labeling_0.4.2         tidyselect_1.2.0       rlang_1.0.6           
+ [58] DiceDesign_1.9         later_1.3.0            munsell_0.5.0         
+ [61] cellranger_1.1.0       tools_4.2.1            cachem_1.0.6          
+ [64] xgboost_1.6.0.1        cli_3.4.0              corrr_0.4.4           
+ [67] generics_0.1.3         rsparse_0.5.1          evaluate_0.17         
+ [70] fastmap_1.1.0          yaml_2.3.5             textdata_0.4.4        
+ [73] processx_3.7.0         RhpcBLASctl_0.21-247.1 knitr_1.40            
+ [76] bit64_4.0.5            fs_1.5.2               lgr_0.4.4             
+ [79] future_1.28.0          whisker_0.4            textfeatures_0.3.3    
+ [82] xml2_1.3.3             tokenizers_0.2.3       compiler_4.2.1        
+ [85] rstudioapi_0.14        reprex_2.0.2           lhs_1.1.5             
+ [88] bslib_0.4.0            stringi_1.7.8          highr_0.9             
+ [91] ps_1.7.1               lattice_0.20-45        Matrix_1.5-1          
+ [94] conflicted_1.1.0       vctrs_0.4.2            pillar_1.8.1          
+ [97] lifecycle_1.0.3        furrr_0.3.1            jquerylib_0.1.4       
+[100] data.table_1.14.2      seriation_1.3.6        httpuv_1.6.6          
+[103] R6_2.5.1               TSP_1.2-1              promises_1.2.0.1      
+[106] gridExtra_2.3          janeaustenr_1.0.0      parallelly_1.32.1     
+[109] codetools_0.2-18       MASS_7.3-57            assertthat_0.2.1      
+[112] rprojroot_2.0.3        withr_2.5.0            parallel_4.2.1        
+[115] hms_1.1.2              grid_4.2.1             rpart_4.1.16          
+[118] timeDate_4021.106      class_7.3-20           snakecase_0.11.0      
+[121] rmarkdown_2.17         googledrive_2.0.0      git2r_0.30.1          
+[124] getPass_0.2-2          lubridate_1.8.0       </code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkthZ2dsZSBGZWVkYmFjayBQcml6ZSAtIEVuZ2xpc2ggTGFuZ3VhZ2UgTGVhcm5pbmciDQphdXRob3I6ICJKaW0gR3J1bWFuIg0KZGF0ZTogIk9jdG9iZXIgMTUsIDIwMjIiDQpvdXRwdXQ6DQogIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoNCiAgICB0b2M6IG5vDQogICAgY29kZV9mb2xkaW5nOiBoaWRlDQogICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgIGRmX3ByaW50OiBwYWdlZA0KZWRpdG9yX29wdGlvbnM6DQogIGNodW5rX291dHB1dF90eXBlOiBjb25zb2xlDQotLS0NCg0KVGhlIEthZ2dsZSBDaGFsbGVuZ2UgcHJlc2VudGVkIGhlcmUgd29ya3Mgd2l0aCBhIGRhdGFzZXQgdGhhdCBjb21wcmlzZXMgYXJndW1lbnRhdGl2ZSBlc3NheXMgKHRoZSBFTExJUFNFIGNvcnB1cykgd3JpdHRlbiBieSA4dGgtMTJ0aCBncmFkZSBFbmdsaXNoIExhbmd1YWdlIExlYXJuZXJzIChFTExzKS4gVGhlIGVzc2F5cyBoYXZlIGJlZW4gc2NvcmVkIGFjY29yZGluZyB0byBzaXggbWVhc3VyZXM6ICoqY29oZXNpb24sIHN5bnRheCwgdm9jYWJ1bGFyeSwgcGhyYXNlb2xvZ3ksIGdyYW1tYXIsKiogYW5kICoqY29udmVudGlvbnMqKi4NCg0KRWFjaCBtZWFzdXJlIHJlcHJlc2VudHMgYSBjb21wb25lbnQgb2Ygd3JpdGluZyBwcm9maWNpZW5jeSwgcmFuZ2luZyBmcm9tIDEuMCB0byA1LjAgaW4gaW5jcmVtZW50cyBvZiAwLjUuIE91ciB0YXNrIGlzIHRvIHByZWRpY3QgdGhlIHNjb3JlIG9mIGVhY2ggbWVhc3VyZSBieSBlc3NheS4NCg0KIVtdKGh0dHBzOi8vc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9rYWdnbGUtY29tcGV0aXRpb25zL2thZ2dsZS8zODMyMS9sb2dvcy9oZWFkZXIucG5nKQ0KDQoNCiMjIFByZXByb2Nlc3NpbmcgDQoNCk5hdHVyYWwgTGFuZ3VhZ2UgUHJvY2Vzc2luZyB0ZWNobmlxdWVzIG9mZmVyIGEgd2lkZSB2YXJpZXR5IG9mIHRvb2xzIHRvIGFwcHJvYWNoIHRoaXMgcHJvYmxlbS4gVGhlIEthZ2dsZSBob3N0IGlzIHJlcXVpcmluZyB0aGF0IHRoZSBtb2RlbCBydW4gYXMgYSBzdGFuZGFsb25lLCB3aXRob3V0IGludGVybmV0IGFzc2lzdGFuY2UuIFRoZXkgYWxzbyBhc2sgZm9yIGEgcGFyc2ltb25vdXMsIGV4cGxhaW5hYmxlIG1vZGVsLg0KDQpXZSB3aWxsIHN0YXJ0IHdpdGggZXhwbG9yaW5nIHRoZSBwcmVkaWN0aXZlIHBvdGVudGlhbCBvZiB0aGUgdGV4dCBjb3VudCBmZWF0dXJlcywgbGlrZSBudW1iZXJzIG9mIHdvcmRzLCBkaXN0aW5jdCB3b3JkcywgYW5kIHNwYWNlcy4NCg0KVW5zdXBlcnZpc2VkIHRvcGljIGdyb3VwaW5nIGNhdGVnb3JpZXMgbWF5IGJlIHVzZWZ1bCBmb3IgbWVhc3VyZXMgbGlrZSBjb252ZW50aW9ucyBvciBncmFtbWFyLiAgV2Ugd2lsbCBzdGFydCB3aXRoIExEQS4NCg0KSW5kaXZpZHVhbCB3b3JkcyBtYXkgaGF2ZSBzb21lIHByZWRpY3RpdmUgcG93ZXIsIGJ1dCB0aGV5IGNvdWxkIGJlIHNvIHNwYXJzZSBhcyB0byBiZSBkaWZmaWN1bHQgdG8gc2VwYXJhdGUgZnJvbSB0aGUgYmFja2dyb3VuZCBub2lzZS4gDQoNCkEgc2VudGltZW50IGRpY3Rpb25hcnkgbWF5IGFkZCBwcmVkaWN0aXZlIHBvd2VyIHRvIHNvbWUgbWVhc3VyZXMsIGFsb25nIHdpdGggaGVscGluZyB0byBjb3VudCBtaXNzLXNwZWxsaW5ncy4NCg0KV29yZCBlbWJlZGRpbmdzIGxpa2UgR2xvdmUgb3IgSHVnZ2luZ2ZhY2UgY291bGQgYWxzbyBiZXR0ZXIgY2hhcmFjdGVyaXplIG1lYW5pbmcuICANCg0KIyMgTW9kZWxpbmcgDQoNCk1vc3QgYXJlIHRlbXB0ZWQgdG8ganVtcCBpbnRvIChDTk4gLyBMU1RNKSBkZWVwIGxlYXJuaW5nIHByZWRpY3RpdmUgbW9kZWxzLCBidXQgdGhlIG51bWJlciBvZiBlc3NheXMgaXMgcmVhbGx5IHByZXR0eSBzbWFsbCBmb3IgYSBkZWVwIGxlYXJuaW5nIHJ1bi4NCg0KSSBzcGVudCBhIGZldyBldmVuaW5ncyB3aXRoIHRoZSB0b3JjaC9gYnJ1bGVlYCBhcHByb2FjaCBvbiBgdGlkeW1vZGVsc2AsIGJ1dCBkaXNjb3ZlcmVkIHRoYXQgbW9kZWxpbmcgdGltZSBjb25zdW1lZCB3b3VsZCBiZSBzaWduaWZpYW50IGFuZCB0aGUgcmVzdWx0cyB3ZXJlIG5vdCBiZXR0ZXIgdGhhbiByYW5kb20gZm9yZXN0cyBvbiBzdHJvbmcgZW5naW5lZXJlZCBmZWF0dXJlcyB3aXRoIGNhc2Ugd2VpZ2h0cyBiYXNlZCBvbiBpbnZlcnNlIHByb3BvcnRpb25zIG9mIHRoZSBtZXRyaWMgdmFsdWVzLg0KDQpJIHVsdGltYXRlbHkgc2V0dGxlZCBvbiB0aGUgYHhnYm9vc3RgIGFwcHJvYWNoIGhlcmUuIE5vIGRvdWJ0IGl0IG1hc3NpdmVseSBvdmVyZml0cyBvbiBzcGVjaWZpYyB3b3JkcyBhbmQgdGV4dCBjb3VudHMsIGxpa2UgdGhlIG51bWJlciBvZiB1bmlxdWUgd29yZHMuIA0KDQpPbmUgbGFzdCBwb2ludC4gSSBiZWxpZXZlIHRoYXQgdGhlIEVzc2F5IFNjb3JpbmcgaXMgZG9uZSBieSBodW1hbnMgaW4gYSB3YXkgd2hlcmUgdGhlIG1ldHJpY3MgYXJlIGp1ZGdlZCB0b2dldGhlciwgYW5kIG5vdCBlbnRpcmVseSBpbmRlcGVuZGVudGx5LiBJbiBvdGhlciB3b3JkcywgbG93IGBncmFtbWFyYCBhbmQgbG93IGBjb2hlc2lvbmAgYXJlIGxpa2VseSByZWxhdGVkLiBJIHdpbGwgZ28gYXMgZmFyIGFzIEkgY2FuIGFzc3VtaW5nIGluZGVwZW5kZW5jZSwgYnV0IGF0IHNvbWUgcG9pbnQgYSBjaGFpbmluZyBvciBjYWxpYnJhdGlvbiBydW4gdG8gcHVsbCBhbGwgbWV0cmljcyB0b2dldGhlciBtYXkgYmUgYXBwcm9wcmlhdGUuDQoNCmBgYHtyfQ0KI3wgbGFiZWw6IHB1bGwgcGFja2FnZXMgaW50byBtZW1vcnkNCg0KDQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMoew0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KHRpZHltb2RlbHMpDQoNCmxpYnJhcnkoc3RtKQ0KbGlicmFyeSh0ZXh0MnZlYykNCg0KbGlicmFyeSh0aWR5dGV4dCkNCmxpYnJhcnkodGV4dHJlY2lwZXMpDQoNCn0pDQoNCnRpZHltb2RlbHM6OnRpZHltb2RlbHNfcHJlZmVyKCkNCg0KdGhlbWVfc2V0KHRoZW1lX21pbmltYWwoKSkNCg0KYGBgDQoNCg0KYGBge3J9DQojfCBsYWJlbDogcmVhZCBkYXRhIGZpbGVzLCBhZGQgcHJlDQoNCnRyYWluX2Vzc2F5c19yYXcgPC0gcmVhZF9jc3YoaGVyZTo6aGVyZSgiZGF0YSIsInRyYWluLmNzdiIpLA0KICAgICAgICAgICAgICAgICAgICAgICAgIHNob3dfY29sX3R5cGVzID0gRkFMU0UpIA0KDQpzdWJtaXRfZXNzYXlzX3JhdyA8LSByZWFkX2NzdihoZXJlOjpoZXJlKCJkYXRhIiwidGVzdC5jc3YiKSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgc2hvd19jb2xfdHlwZXMgPSBGQUxTRSkgDQoNCm91dGNvbWVzID0gbmFtZXModHJhaW5fZXNzYXlzX3JhdylbMzo4XQ0KDQpgYGANCg0KVGhpcyBpcyBhIGZ1bmN0aW9uIHRvIGxvb2sgYXQgYG5yY2Agc2VudGltZW50cyBhbmQgYSB3YXkgdG8gYnJlYWsgb3V0IG1pcy1zcGVsbGVkIHdvcmRzIGJ5IHN1YnRyYWN0aW5nIGRpY3Rpb25hcnkgd29yZHMgZnJvbSB0b3RhbCB1bmlxdWUgdG9rZW5zLg0KDQpgYGB7cn0NCnNlbnRpbWVudF9wcmVwcm9jZXNzb3IgPC0gZnVuY3Rpb24oZGF0YSA9IHN1Ym1pdF9lc3NheXNfcmF3KXsNCg0KZGF0YSAlPiUNCiAgdGlkeXRleHQ6OnVubmVzdF90b2tlbnMod29yZCwgZnVsbF90ZXh0KSB8PiANCiAgaW5uZXJfam9pbihnZXRfc2VudGltZW50cygibnJjIiksIGJ5ID0gIndvcmQiKSAlPiUgIyBwdWxsIG91dCBvbmx5IHNlbnRpbWVudCB3b3Jkcw0KICBjb3VudChzZW50aW1lbnQsIHRleHRfaWQpICU+JSAjIGNvdW50IHRoZSAjIG9mIHBvc2l0aXZlICYgbmVnYXRpdmUgd29yZHMNCiAgc3ByZWFkKHNlbnRpbWVudCwgbiwgZmlsbCA9IDApICU+JSAjIG1hZGUgZGF0YSB3aWRlIHJhdGhlciB0aGFuIG5hcnJvdw0KIG11dGF0ZShzZW50aW1lbnQgPSBwb3NpdGl2ZSAtIG5lZ2F0aXZlLA0KICAgICAgIGRpY3Rpb25hcnlfd29yZHMgPSBwb3NpdGl2ZSArIG5lZ2F0aXZlKSAlPiUgIyAjIG9mIHBvc2l0aXZlIHdvcmRzIC0gIyBvZiBuZWdhdGl2ZSB3b3Jkcw0KICAgIHNlbGVjdChhbmdlcjpkaWN0aW9uYXJ5X3dvcmRzKQ0KICANCn0NCg0Kc2VudGltZW50cyA8LSBwYXN0ZShuYW1lcyhzZW50aW1lbnRfcHJlcHJvY2Vzc29yKCkpLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb2xsYXBzZSA9ICAiICsgIikNCg0Kc2VudGltZW50X3ByZXByb2Nlc3NvcihkYXRhID0gdHJhaW5fZXNzYXlzX3JhdykgfD4gDQogIHBpdm90X2xvbmdlcihjb2xzID0gZXZlcnl0aGluZygpLA0KICAgICAgICAgICAgICAgbmFtZXNfdG8gPSAibWV0cmljIiwNCiAgICAgICAgICAgICAgIHZhbHVlc190byA9ICJTZW50aW1lbnQgd29yZCBjb3VudHMiKSB8PiANCiAgZ2dwbG90KGFlcyhgU2VudGltZW50IHdvcmQgY291bnRzYCwgZmlsbCA9IG1ldHJpYykpICsNCiAgZ2VvbV9oaXN0b2dyYW0oYmlucyA9IDM1LCBzaG93LmxlZ2VuZCA9IEZBTFNFKSArDQogIGZhY2V0X3dyYXAodmFycyhtZXRyaWMpKSArDQogIGxhYnMoeSA9ICJOdW1iZXIgb2YgRXNzYXlzIiwNCiAgICAgICB0aXRsZSA9ICJNb3N0IGVzc2F5cyBjb250YWluIGZldyB3b3JkcyBvZiBhbmdlciBhbmQgZGlzZ3VzdCIpDQoNCnRyYWluX2Vzc2F5c19zZW50aW1lbnQgPC0gdHJhaW5fZXNzYXlzX3JhdyB8PiANCiAgICAgICAgIGJpbmRfY29scyhzZW50aW1lbnRfcHJlcHJvY2Vzc29yKHRyYWluX2Vzc2F5c19yYXcpKQ0KDQpzdWJtaXRfZXNzYXlzX3NlbnRpbWVudCA8LSBzdWJtaXRfZXNzYXlzX3JhdyB8PiANCiAgICBiaW5kX2NvbHMoc2VudGltZW50X3ByZXByb2Nlc3NvcihzdWJtaXRfZXNzYXlzX3JhdykpDQpgYGANCg0KRXNzYXlzIHdpdGggbW9yZSB3b3Jkcywgb3IgbW9yZSBzZW50ZW5jZXMsIGRvIG5vdCBuZWNlc3NhcmlseSBzY29yZSBiZXR0ZXIuIA0KDQpgYGB7cn0NCiN8IGxhYmVsOiBvdXRjb21lIHZhcmlhYmxlIGRpc3RyaWJ1dGlvbnMNCg0KdGVfbG9uZyA8LSB0cmFpbl9lc3NheXNfcmF3IHw+DQogIHBpdm90X2xvbmdlcihjb2xzID0gY29oZXNpb246Y29udmVudGlvbnMsDQogICAgICAgICAgICAgICBuYW1lc190byA9ICJtZXRyaWMiLA0KICAgICAgICAgICAgICAgdmFsdWVzX3RvID0gInZhbHVlIikgfD4NCiAgbXV0YXRlKG1ldHJpYyA9IGFzLmZhY3RvcihtZXRyaWMpLA0KICAgICAgICAgdmFsdWUgPSBhcy5mYWN0b3IodmFsdWUpKQ0KDQp0ZV9sb25nIHw+IA0KICBncm91cF9ieShuX3dvcmRzID0gZ2dwbG90Mjo6Y3V0X2ludGVydmFsKA0KICAgIHRva2VuaXplcnM6OmNvdW50X3dvcmRzKGZ1bGxfdGV4dCksIA0KICAgIGxlbmd0aCA9IDIwMCksDQogICAgbWV0cmljLCB2YWx1ZSkgfD4gDQogIHN1bW1hcmlzZShgTnVtYmVyIG9mIGVzc2F5c2AgPSBuKCksDQogICAgICAgICAgICAuZ3JvdXBzID0gImRyb3AiKSB8PiANCiAgZ2dwbG90KGFlcyhuX3dvcmRzLCBgTnVtYmVyIG9mIGVzc2F5c2AsIGZpbGwgPSBhcy5mYWN0b3IodmFsdWUpKSkgKw0KICBnZW9tX2NvbCgpICsNCiAgc2NhbGVfeF9kaXNjcmV0ZShndWlkZSA9IGd1aWRlX2F4aXMobi5kb2RnZSA9IDIpKSArDQogIGZhY2V0X3dyYXAodmFycyhtZXRyaWMpKSArDQogIGxhYnMoeCA9ICJOdW1iZXIgb2Ygd29yZHMgcGVyIGVzc2F5IiwNCiAgICAgICB5ID0gIk51bWJlciBvZiBlc3NheXMiLA0KICAgICAgIGZpbGwgPSAiU2NvcmUiKQ0KDQp0ZV9sb25nIHw+IA0KICBncm91cF9ieShuX3dvcmRzID0gZ2dwbG90Mjo6Y3V0X2ludGVydmFsKA0KICAgIHRva2VuaXplcnM6OmNvdW50X3NlbnRlbmNlcyhmdWxsX3RleHQpLCBsZW5ndGggPSAyMCksDQogICAgbWV0cmljLCB2YWx1ZSkgfD4gDQogIHN1bW1hcmlzZShgTnVtYmVyIG9mIGVzc2F5c2AgPSBuKCksDQogICAgICAgICAgICAuZ3JvdXBzID0gImRyb3AiKSB8PiANCiAgZ2dwbG90KGFlcyhuX3dvcmRzLCBgTnVtYmVyIG9mIGVzc2F5c2AsIGZpbGwgPSBhcy5mYWN0b3IodmFsdWUpKSkgKw0KICBnZW9tX2NvbCgpICsNCiAgc2NhbGVfeF9kaXNjcmV0ZShndWlkZSA9IGd1aWRlX2F4aXMobi5kb2RnZSA9IDIpKSArDQogIGZhY2V0X3dyYXAodmFycyhtZXRyaWMpKSArDQogIGxhYnMoeCA9ICJOdW1iZXIgb2Ygc2VudGVuY2VzIHBlciBlc3NheSIsDQogICAgICAgeSA9ICJOdW1iZXIgb2YgZXNzYXlzIiwNCiAgICAgICBmaWxsID0gIlNjb3JlIikNCg0KYGBgDQoNCkEgbG9vayBhdCBwcmVkaWN0b3IgYW5kIG91dGNvbWUgcGFpcndpc2UgY29ycmVsYXRpb25zLg0KDQpgYGB7cn0NCg0KdHJhaW5fZXNzYXlzX3NlbnRpbWVudCB8PiANCiAjICAgc2VsZWN0KCEhb3V0Y29tZXMpICU+JQ0KICBjb3Jycjo6Y29ycmVsYXRlKA0KICAgIHF1aWV0ID0gVFJVRQ0KICApICU+JQ0KICBjb3Jycjo6cmVhcnJhbmdlKCkgJT4lDQogIGNvcnJyOjpzaGF2ZSgpICU+JQ0KICBjb3Jycjo6cnBsb3QocHJpbnRfY29yID0gVFJVRSkgKw0KICBzY2FsZV94X2Rpc2NyZXRlKGd1aWRlID0gZ3VpZGVfYXhpcyhuLmRvZGdlID0gMikpDQoNCnRyYWluX2Vzc2F5c19zZW50aW1lbnQgfD4gDQogIyAgIHNlbGVjdCghIW91dGNvbWVzKSAlPiUNCiAgY29ycnI6OmNvcnJlbGF0ZSgNCiAgICBxdWlldCA9IFRSVUUNCiAgKSAlPiUNCiAgY29ycnI6Om5ldHdvcmtfcGxvdCgpDQoNCmBgYA0KDQoqICAgVm9jYWJ1bGFyeSBhbmQgUGhyYXNlb2xvZ3kgKDAuNzQpIHRyYWNrIHRvZ2V0aGVyLg0KKiAgIFBocmFzZW9sb2d5IGFuZCBTeW50YXggKDAuNzMpIHRyYWNrIHRvZ2V0aGVyLg0KKiAgIFByYXNlb2xvZ3kgYW5kIEdyYW1tYXIgKDAuNzIpIHRyYWNrIHRvZ2V0aGVyLg0KDQpMZXQncyBzZXQgc29tZSBpbml0aWFsIGh5cGVycGFyYW1ldGVycy4NCg0KYGBge3J9DQojfCBsYWJlbDogcGFyYW1ldGVycw0KDQojIHRyYWluIGRhdGFzZXQgaGFzIDIxOTUzIHVuaXF1ZSBvbmUgbl9ncmFtIHRva2Vucy4gDQp0b3BpY3MgPC0gOTBMICAgIyBMREEgdG9waWMgbW9kZWxzDQoNCmBgYA0KDQpMYXRlbnQgRGlyaWNobGV0IGFsbG9jYXRpb24gKExEQSkgaXMgYW4gdW5zdXBlcnZpc2VkIGdlbmVyYXRpdmUgc3RhdGlzdGljYWwgbW9kZWwgdGhhdCBleHBsYWlucyBhIHNldCBvZiBvYnNlcnZhdGlvbnMgdGhyb3VnaCB1bm9ic2VydmVkIGdyb3VwcywgYW5kIHRoZSBjb250ZW50IG9mIGVhY2ggZ3JvdXAgbWF5IGV4cGxhaW4gd2h5IHNvbWUgcGFydHMgb2YgdGhlIGRhdGEgYXJlIHNpbWlsYXIuDQoNCkknZCBsaWtlIHRvIGV4cGxvcmUgdGhlIHVzZSBvZiBgaW52ZXJzZSBwcm9iYWJpbGl0eSB3ZWlnaHRzYCBiZWNhdXNlIHRoZXJlIGFyZSBzbyBmZXcgZXNzYXlzIHdpdGggc2NvcmVzIGF0IHRoZSBoaWdoZXN0IGFuZCBsb3dlc3QgbGV2ZWxzLiBXaGVuIHN1cnZleSByZXNwb25kZW50cyBoYXZlIGRpZmZlcmVudCBwcm9iYWJpbGl0aWVzIG9mIHNlbGVjdGlvbiwgKGludmVyc2UpIHByb2JhYmlsaXR5IHdlaWdodHMgaGVscCByZWR1Y2UgYmlhcyBpbiB0aGUgcmVzdWx0cy4NCg0KSSBhbSBtYWtpbmcgdXMgb2YgbWV0YXByb2dyYW1taW5nIHRlY2huaXF1ZXMgdG8gcGFzcyB0ZXh0IHZlY3RvciBjb2x1bW4gbmFtZXMgaW50byB0aGUgZm9ybXVsYSBhbmQgY2FzZSB3ZWlnaHRzIGZ1bmN0aW9ucyB0byByZS11c2UgdGhlbSBmb3IgZWFjaCBtZXRyaWMuDQoNCmBgYHtyfQ0KI3wgbGFiZWw6IHByZXByb2Nlc3NvcnMNCg0KY2FzZV93ZWlnaHRfYnVpbGRlciA8LSBmdW5jdGlvbihkYXRhLCBvdXRjb21lKSB7DQogIGRhdGEgJT4lDQogICAgaW5uZXJfam9pbigNCiAgICAgIHRyYWluX2Vzc2F5c19zZW50aW1lbnQgJT4lDQogICAgICAgIGNvdW50KC5kYXRhW1tvdXRjb21lXV0sDQogICAgICAgICAgICAgIG5hbWUgPSAiY2FzZV93dHMiKSwNCiAgICAgIGJ5ID0gZ2x1ZTo6Z2x1ZSgieyBvdXRjb21lIH0iKQ0KICAgICkgJT4lDQogICAgbXV0YXRlKGNhc2Vfd3RzID0gaW1wb3J0YW5jZV93ZWlnaHRzKG1heChjYXNlX3d0cykgLyBjYXNlX3d0cykpDQp9DQoNCg0KcmVjaXBlX2J1aWxkZXIgPC0gZnVuY3Rpb24ob3V0Y29tZSA9ICJjb2hlc2lvbiIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICBwcmVkaWN0b3IgPSAiZnVsbF90ZXh0IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHNlbnRpbWVudHMgPSAiZGljdGlvbmFyeV93b3JkcyIpew0KDQpyZWMgPC0gcmVjaXBlKGZvcm11bGEoZ2x1ZTo6Z2x1ZSgieyBvdXRjb21lIH0gfiB7IHByZWRpY3RvciB9ICsgeyBzZW50aW1lbnRzIH0gKyBjYXNlX3d0cyIpKSwNCiAgICAgICAgICAgICAgZGF0YSA9IHRyYWluX2Vzc2F5c19zZW50aW1lbnQgJT4lDQogICAgICAgICAgICAgICAgICAgY2FzZV93ZWlnaHRfYnVpbGRlcihvdXRjb21lKSANCiAgICAgICAgICAgICAgKSAlPiUNCiAgc3RlcF90ZXh0ZmVhdHVyZShmdWxsX3RleHQsDQogICAgICAgICAgICAgICAgICAga2VlcF9vcmlnaW5hbF9jb2xzID0gVFJVRSkgJT4lDQogIHN0ZXBfcmVuYW1lX2F0KA0KICAgIHN0YXJ0c193aXRoKCJ0ZXh0ZmVhdHVyZV8iKSwNCiAgICBmbiA9IH4gZ3N1YigidGV4dGZlYXR1cmVfZnVsbF90ZXh0XyIsICIiLCAuKQ0KICApICU+JQ0KICBzdGVwX211dGF0ZShub253b3JkcyA9IG5fdXFfd29yZHMgLSBkaWN0aW9uYXJ5X3dvcmRzICkgJT4lDQojIyMjIGNsdXN0ZXIgdGhlIGVzc2F5cyBieSB0b3BpYywgZ2VuZXJhbGx5DQogICBzdGVwX3Rva2VuaXplKGZ1bGxfdGV4dCkgJT4lIA0KICAgc3RlcF9sZGEoZnVsbF90ZXh0LCANCiAgICAgICAgICAgIG51bV90b3BpY3MgPSB0b3BpY3MsIA0KICAgICAgICAgICAga2VlcF9vcmlnaW5hbF9jb2xzID0gVFJVRSkgJT4lDQogIHN0ZXBfdGZpZGYoZnVsbF90ZXh0KSAlPiUNCiAgc3RlcF9jbGVhbl9uYW1lcyhhbGxfcHJlZGljdG9ycygpKSAlPiUNCiMjIyMgcmVtb3ZlIGNvbHVtbnMgdGhhdCBhcmUgc3VwZXItc3BhcnNlIGFuZCB1bmJhbGFuY2VkDQogIHN0ZXBfbnp2KGFsbF9wcmVkaWN0b3JzKCksIHVuaXF1ZV9jdXQgPSA5KSAlPiUNCiAgc3RlcF9ub3JtYWxpemUoYWxsX251bWVyaWNfcHJlZGljdG9ycygpKQ0KDQpyZXR1cm4ocmVjKQ0KDQp9DQpgYGANCg0KQXMgbWVudGlvbmVkIGFib3ZlLCB0aGUgbW9kZWwgc3BlY2lmaWNhdGlvbiBpcyBgeGdib29zdGAgZm9yIHJlZ3Jlc3Npb24gdG8gcHJlZGljdCBhIGNvbnRpbnVvdXMgb3V0Y29tZS4NCg0KYGBge3J9DQojfCBsYWJlbDogbW9kZWwgc3BlY2lmaWNhdGlvbg0KDQojIGZpbmFsaXplKG10cnkoKSwgDQojICAgICAgICAgIHJlY2lwZV9idWlsZGVyKCkgfD4gDQojICAgICAgICAgICAgcHJlcCgpIHw+IA0KIyAgICAgICAgICAgIGJha2UobmV3X2RhdGEgPSBOVUxMKSkNCg0Kc3BlYyA8LQ0KICBib29zdF90cmVlKA0KICAgIG10cnkgPSA3MCwgICMgNzVMDQogICAgdHJlZXMgPSA1MDBMLA0KICAgIHRyZWVfZGVwdGggPSA5LCAjIDZMDQogICAgbGVhcm5fcmF0ZSA9IDAuMDEsICAjIG9yaWdpbmFsbHkgMC4xDQogICAgbWluX24gPSAyMCwgICMgMjBMDQogICAgbG9zc19yZWR1Y3Rpb24gPSAwDQogICkgJT4lDQogIHNldF9lbmdpbmUoJ3hnYm9vc3QnKSAlPiUNCiAgc2V0X21vZGUoJ3JlZ3Jlc3Npb24nKQ0KDQojIGFsbF9jb3JlcyA8LSBwYXJhbGxlbGx5OjphdmFpbGFibGVDb3JlcyhvbWl0ID0gMSkNCiMgYWxsX2NvcmVzDQojIA0KIyBmdXR1cmU6OnBsYW4oIm11bHRpc2Vzc2lvbiIsIHdvcmtlcnMgPSBhbGxfY29yZXMpICMgb24gV2luZG93cw0KDQpgYGANCg0KV2UgZml0IGZvciBgY29oZXNpb25gIGZpcnN0IGFuZCB1c2UgY2FzZSB3ZWlnaHRzIHRvIGFkanVzdCBmb3IgdGhlIGZyZXF1ZW5jeSBvZiBvY2N1cnJlbmNlIG9mIGBjb2hlc2lvbmAuICBBZnRlciBsb29raW5nIGF0IHZhcmlhYmxlIGltcG9ydGFuY2UgKHJvdWdobHkgdGhlIG51bWJlciBvZiB0aW1lcyBhIHZhcmlhYmxlIGFwcGVhcnMgaW4gdGhlIHRyZWVzKSBhbmQgcmVzaWR1YWxzLCB3ZSBtYWtlIG91ciBwcmVkaWN0aW9uIG9uIHRoZSBzdWJtaXNzaW9uIHNldCBlc3NheXMgYW5kIGFkZGluZyB0aGF0IGNvbHVtbiB0byB0aGUgZGF0YWZyYW1lLg0KDQpgYGB7cn0NCiN8IGxhYmVsOiBmaXQgY29oZXNpb24NCg0Kb3V0Y29tZSA8LSBvdXRjb21lc1sxXQ0KDQp0cmFpbl9kZiA8LSB0cmFpbl9lc3NheXNfc2VudGltZW50ICU+JQ0KICAgICAgICAgICAgICAgICAgIGNhc2Vfd2VpZ2h0X2J1aWxkZXIob3V0Y29tZSkNCg0Kd2YgPC0gd29ya2Zsb3cocmVjaXBlX2J1aWxkZXIob3V0Y29tZSA9IG91dGNvbWUsIHNlbnRpbWVudHMgPSBzZW50aW1lbnRzKSwgc3BlYykgfD4gDQogICAgICAgYWRkX2Nhc2Vfd2VpZ2h0cyhjYXNlX3d0cykNCg0KIw0KI2ZvbGRzIDwtIHZmb2xkX2N2KHRyYWluX2RmLCBzdHJhdGEgPSAhIW91dGNvbWUpDQoNCiNncmlkIDwtIGV4cGFuZC5ncmlkKGxlYXJuX3JhdGUgPSBjKDAuMDA2LCAwLjAxLCAwLjAzKSkNCg0KIyBycyA8LSB0dW5lX2dyaWQoDQojICAgd2YsDQojICAgZm9sZHMsDQojICAgZ3JpZCA9IGdyaWQsDQojICAgbWV0cmljcyA9IG1ldHJpY19zZXQocm1zZSksDQojICAgY29udHJvbCA9IGNvbnRyb2xfZ3JpZCgpDQojICkNCiMgICANCiMgYXV0b3Bsb3QocnMpDQojIGNvbGxlY3RfbWV0cmljcyhycykNCg0KZml0IDwtIHBhcnNuaXA6OmZpdCh3ZiwgdHJhaW5fZGYpDQoNCmV4dHJhY3RfZml0X2VuZ2luZShmaXQpIHw+IA0KICB2aXA6OnZpcChudW1fZmVhdHVyZXMgPSAyMCkNCg0KdHJhaW5fcHJlZHMgPC0gcHJlZGljdChmaXQsIG5ld19kYXRhID0gdHJhaW5fZXNzYXlzX3NlbnRpbWVudCkgfD4gDQogICBiaW5kX2NvbHModHJhaW5fZXNzYXlzX3JhdyB8PiBzZWxlY3QoISFvdXRjb21lKSkgfD4gDQogICByZW5hbWUodHJ1dGggPSAhIW91dGNvbWUpDQoNCnRyYWluX3ByZWRzIHw+IA0KICAgZ2dwbG90KGFlcyh4ID0gZmFjdG9yKHRydXRoKSwgeSA9IC5wcmVkIC0gdHJ1dGgpKSArDQogICBnZW9tX2JveHBsb3QoKSArDQogICBsYWJzKHRpdGxlID0gZ2x1ZTo6Z2x1ZSgieyBvdXRjb21lIH0gcmVzaWR1YWxzIikpIA0KDQp0cmFpbl9wcmVkcyAlPiUNCiAgIHlhcmRzdGljazo6cm1zZSh0cnV0aCwgLnByZWQpDQoNCnN1Ym1pdF9lc3NheXNfc2VudGltZW50IDwtIHByZWRpY3QoZml0LCBzdWJtaXRfZXNzYXlzX3NlbnRpbWVudCkgfD4gDQogIHJlbmFtZSh7e291dGNvbWV9fSA6PSAucHJlZCkgfD4gDQogIGJpbmRfY29scyhzdWJtaXRfZXNzYXlzX3NlbnRpbWVudCkNCg0KYGBgDQoNCldlIGZpdCBmb3IgYHN5bnRheGAgc2Vjb25kIGFuZCB1c2UgY2FzZSB3ZWlnaHRzIHRvIGFkanVzdCBmb3IgdGhlIGZyZXF1ZW5jeSBvZiBvY2N1cnJlbmNlIG9mIGBzeW50YXhgLiBJIGFtIGNob29zaW5nIHRvIHVzZSB0aGUgcHJlZGljdGVkIHZhbHVlcyBvZiBgY29oZXNpb25gIGFib3ZlIGFzIGFuIGFkZGl0aW9uYWwgcHJlZGljdG9yLg0KDQpgYGB7cn0NCiN8IGxhYmVsOiBmaXQgc3ludGF4DQoNCm91dGNvbWUgPC0gb3V0Y29tZXNbMl0NCnByZWRpY3RvciA8LSBnbHVlOjpnbHVlKCJmdWxsX3RleHQgKyB7IG91dGNvbWVzWzFdIH0iKQ0KDQp0cmFpbl9kZiA8LSB0cmFpbl9lc3NheXNfc2VudGltZW50ICU+JQ0KICAgICAgICAgICAgICAgICAgIGNhc2Vfd2VpZ2h0X2J1aWxkZXIob3V0Y29tZSkNCg0Kd2YgPC0gd29ya2Zsb3cocmVjaXBlX2J1aWxkZXIob3V0Y29tZSwgcHJlZGljdG9yLCBzZW50aW1lbnRzKSwgc3BlYykgJT4lDQogICAgICAgICAgYWRkX2Nhc2Vfd2VpZ2h0cyhjYXNlX3d0cykNCg0KZml0IDwtIHBhcnNuaXA6OmZpdCh3ZiwgdHJhaW5fZGYpDQoNCmV4dHJhY3RfZml0X2VuZ2luZShmaXQpIHw+IA0KICB2aXA6OnZpcChudW1fZmVhdHVyZXMgPSAyMCkNCg0KdHJhaW5fcHJlZHMgPC0gcHJlZGljdChmaXQsIG5ld19kYXRhID0gdHJhaW5fZXNzYXlzX3NlbnRpbWVudCkgfD4gDQogICBiaW5kX2NvbHModHJhaW5fZXNzYXlzX3JhdyB8PiBzZWxlY3QoISFvdXRjb21lKSkgfD4gDQogICByZW5hbWUodHJ1dGggPSAhIW91dGNvbWUpDQoNCnRyYWluX3ByZWRzIHw+IA0KICAgZ2dwbG90KGFlcyh4ID0gZmFjdG9yKHRydXRoKSwgeSA9IC5wcmVkIC0gdHJ1dGgpKSArDQogICBnZW9tX2JveHBsb3QoKSArDQogICBsYWJzKHRpdGxlID0gZ2x1ZTo6Z2x1ZSgieyBvdXRjb21lIH0gcmVzaWR1YWxzIikpIA0KDQp0cmFpbl9wcmVkcyAlPiUNCiAgIHlhcmRzdGljazo6cm1zZSh0cnV0aCwgLnByZWQpDQoNCnN1Ym1pdF9lc3NheXNfc2VudGltZW50IDwtIHByZWRpY3QoZml0LCBzdWJtaXRfZXNzYXlzX3NlbnRpbWVudCkgfD4gDQogIHJlbmFtZSh7e291dGNvbWV9fSA6PSAucHJlZCkgfD4gDQogIGJpbmRfY29scyhzdWJtaXRfZXNzYXlzX3NlbnRpbWVudCkNCg0KYGBgDQoNCldlIGZpdCBmb3IgYHZvY2FidWxhcnlgIG5leHQgYW5kIHVzZSBjYXNlIHdlaWdodHMgdG8gYWRqdXN0IGZvciB0aGUgZnJlcXVlbmN5IG9mIG9jY3VycmVuY2Ugb2YgYHZvY2FidWxhcnlgLiBJIGFtIGNob29zaW5nIHRvIHVzZSB0aGUgcHJlZGljdGVkIHZhbHVlcyBvZiBgY29oZXNpb25gIGFuZCBgc3ludGF4YCBhYm92ZSBhcyBhZGRpdGlvbmFsIHByZWRpY3RvcnMuDQoNCmBgYHtyfQ0KI3wgbGFiZWw6IGZpdCB2b2NhYnVsYXJ5DQoNCm91dGNvbWUgPC0gb3V0Y29tZXNbM10NCnByZWRpY3RvciA8LSBnbHVlOjpnbHVlKCJmdWxsX3RleHQgKyB7IG91dGNvbWVzWzFdIH0gKyB7IG91dGNvbWVzWzJdIH0iKQ0KDQp0cmFpbl9kZiA8LSB0cmFpbl9lc3NheXNfc2VudGltZW50ICU+JQ0KICAgICAgICAgICAgICAgICAgIGNhc2Vfd2VpZ2h0X2J1aWxkZXIob3V0Y29tZSkNCg0Kd2YgPC0gd29ya2Zsb3cocmVjaXBlX2J1aWxkZXIob3V0Y29tZSwgcHJlZGljdG9yLCBzZW50aW1lbnRzKSwgc3BlYykgJT4lDQogICAgICAgICAgYWRkX2Nhc2Vfd2VpZ2h0cyhjYXNlX3d0cykNCg0KZml0IDwtIHBhcnNuaXA6OmZpdCh3ZiwgdHJhaW5fZGYpDQoNCmV4dHJhY3RfZml0X2VuZ2luZShmaXQpIHw+IA0KICB2aXA6OnZpcChudW1fZmVhdHVyZXMgPSAyMCkNCg0KdHJhaW5fcHJlZHMgPC0gcHJlZGljdChmaXQsIG5ld19kYXRhID0gdHJhaW5fZXNzYXlzX3NlbnRpbWVudCkgfD4gDQogICBiaW5kX2NvbHModHJhaW5fZXNzYXlzX3JhdyB8PiBzZWxlY3QoISFvdXRjb21lKSkgfD4gDQogICByZW5hbWUodHJ1dGggPSAhIW91dGNvbWUpDQoNCnRyYWluX3ByZWRzIHw+IA0KICAgZ2dwbG90KGFlcyh4ID0gZmFjdG9yKHRydXRoKSwgeSA9IC5wcmVkIC0gdHJ1dGgpKSArDQogICBnZW9tX2JveHBsb3QoKSArDQogICBsYWJzKHRpdGxlID0gZ2x1ZTo6Z2x1ZSgieyBvdXRjb21lIH0gcmVzaWR1YWxzIikpIA0KDQp0cmFpbl9wcmVkcyAlPiUNCiAgIHlhcmRzdGljazo6cm1zZSh0cnV0aCwgLnByZWQpDQoNCnN1Ym1pdF9lc3NheXNfc2VudGltZW50IDwtIHByZWRpY3QoZml0LCBzdWJtaXRfZXNzYXlzX3NlbnRpbWVudCkgfD4gDQogIHJlbmFtZSh7e291dGNvbWV9fSA6PSAucHJlZCkgfD4gDQogIGJpbmRfY29scyhzdWJtaXRfZXNzYXlzX3NlbnRpbWVudCkNCg0KYGBgDQoNCldlIGZpdCBmb3IgYHBocmFzZW9sb2d5YCBuZXh0IGFuZCB1c2UgY2FzZSB3ZWlnaHRzIHRvIGFkanVzdCBmb3IgdGhlIGZyZXF1ZW5jeSBvZiBvY2N1cnJlbmNlIG9mIGBwaHJhc2VvbG9neWAuIEkgYW0gY2hvb3NpbmcgdG8gdXNlIHRoZSBwcmVkaWN0ZWQgdmFsdWVzIG9mIGBjb2hlc2lvbmAsICBgc3ludGF4YCwgYW5kIGB2b2NhYnVsYXJ5YCBhYm92ZSBhcyBhZGRpdGlvbmFsIHByZWRpY3RvcnMuDQoNCmBgYHtyfQ0KI3wgbGFiZWw6IGZpdCBwaHJhc2VvbG9neQ0KDQpvdXRjb21lIDwtIG91dGNvbWVzWzRdDQpwcmVkaWN0b3IgPC0gZ2x1ZTo6Z2x1ZSgiZnVsbF90ZXh0ICsgeyBvdXRjb21lc1sxXSB9ICsgeyBvdXRjb21lc1syXSB9ICsgeyBvdXRjb21lc1szXSB9IikNCg0KdHJhaW5fZGYgPC0gdHJhaW5fZXNzYXlzX3NlbnRpbWVudCAlPiUNCiAgICAgICAgICAgICAgICAgICBjYXNlX3dlaWdodF9idWlsZGVyKG91dGNvbWUpDQoNCndmIDwtIHdvcmtmbG93KHJlY2lwZV9idWlsZGVyKG91dGNvbWUsIHByZWRpY3Rvciwgc2VudGltZW50cyksIHNwZWMpICU+JQ0KICAgICAgICAgIGFkZF9jYXNlX3dlaWdodHMoY2FzZV93dHMpDQoNCmZpdCA8LSBwYXJzbmlwOjpmaXQod2YsIHRyYWluX2RmKQ0KDQpleHRyYWN0X2ZpdF9lbmdpbmUoZml0KSB8PiANCiAgdmlwOjp2aXAobnVtX2ZlYXR1cmVzID0gMjApDQoNCnRyYWluX3ByZWRzIDwtIHByZWRpY3QoZml0LCBuZXdfZGF0YSA9IHRyYWluX2Vzc2F5c19zZW50aW1lbnQpIHw+IA0KICAgYmluZF9jb2xzKHRyYWluX2Vzc2F5c19yYXcgfD4gc2VsZWN0KCEhb3V0Y29tZSkpIHw+IA0KICAgcmVuYW1lKHRydXRoID0gISFvdXRjb21lKQ0KDQp0cmFpbl9wcmVkcyB8PiANCiAgIGdncGxvdChhZXMoeCA9IGZhY3Rvcih0cnV0aCksIHkgPSAucHJlZCAtIHRydXRoKSkgKw0KICAgZ2VvbV9ib3hwbG90KCkgKw0KICAgbGFicyh0aXRsZSA9IGdsdWU6OmdsdWUoInsgb3V0Y29tZSB9IHJlc2lkdWFscyIpKSANCg0KdHJhaW5fcHJlZHMgJT4lDQogICB5YXJkc3RpY2s6OnJtc2UodHJ1dGgsIC5wcmVkKQ0KDQpzdWJtaXRfZXNzYXlzX3NlbnRpbWVudCA8LSBwcmVkaWN0KGZpdCwgc3VibWl0X2Vzc2F5c19zZW50aW1lbnQpIHw+IA0KICByZW5hbWUoe3tvdXRjb21lfX0gOj0gLnByZWQpIHw+IA0KICBiaW5kX2NvbHMoc3VibWl0X2Vzc2F5c19zZW50aW1lbnQpDQpgYGANCg0KV2UgZml0IGZvciBgZ3JhbW1hcmAgbmV4dCBhbmQgdXNlIGNhc2Ugd2VpZ2h0cyB0byBhZGp1c3QgZm9yIHRoZSBmcmVxdWVuY3kgb2Ygb2NjdXJyZW5jZSBvZiBgZ3JhbW1hcmAuIEkgYW0gY2hvb3NpbmcgdG8gdXNlIHRoZSBwcmVkaWN0ZWQgdmFsdWVzIG9mIGBjb2hlc2lvbmAsICBgc3ludGF4YCwgYHZvY2FidWxhcnlgLCBhbmQgYHBocmFzZW9sb2d5YCBhYm92ZSBhcyBhZGRpdGlvbmFsIHByZWRpY3RvcnMuDQoNCmBgYHtyfQ0KI3wgbGFiZWw6IGZpdCBncmFtbWFyDQoNCm91dGNvbWUgPC0gb3V0Y29tZXNbNV0NCnByZWRpY3RvciA8LSBnbHVlOjpnbHVlKCJmdWxsX3RleHQgKyB7IG91dGNvbWVzWzFdIH0gKyB7IG91dGNvbWVzWzJdfSArIHtvdXRjb21lc1szXX0gKyB7b3V0Y29tZXNbNF19IikNCg0KdHJhaW5fZGYgPC0gdHJhaW5fZXNzYXlzX3NlbnRpbWVudCAlPiUNCiAgICAgICAgICAgICAgICAgICBjYXNlX3dlaWdodF9idWlsZGVyKG91dGNvbWUpDQoNCndmIDwtIHdvcmtmbG93KHJlY2lwZV9idWlsZGVyKG91dGNvbWUsIHByZWRpY3Rvciwgc2VudGltZW50cyksIHNwZWMpICU+JQ0KICAgICAgICAgIGFkZF9jYXNlX3dlaWdodHMoY2FzZV93dHMpDQoNCmZpdCA8LSBwYXJzbmlwOjpmaXQod2YsIHRyYWluX2RmKQ0KDQpleHRyYWN0X2ZpdF9lbmdpbmUoZml0KSB8PiANCiAgdmlwOjp2aXAobnVtX2ZlYXR1cmVzID0gMjApDQoNCnRyYWluX3ByZWRzIDwtIHByZWRpY3QoZml0LCBuZXdfZGF0YSA9IHRyYWluX2Vzc2F5c19zZW50aW1lbnQpIHw+IA0KICAgYmluZF9jb2xzKHRyYWluX2Vzc2F5c19yYXcgfD4gc2VsZWN0KCEhb3V0Y29tZSkpIHw+IA0KICAgcmVuYW1lKHRydXRoID0gISFvdXRjb21lKQ0KDQp0cmFpbl9wcmVkcyB8PiANCiAgIGdncGxvdChhZXMoeCA9IGZhY3Rvcih0cnV0aCksIHkgPSAucHJlZCAtIHRydXRoKSkgKw0KICAgZ2VvbV9ib3hwbG90KCkgKw0KICAgbGFicyh0aXRsZSA9IGdsdWU6OmdsdWUoInsgb3V0Y29tZSB9IHJlc2lkdWFscyIpKSANCg0KdHJhaW5fcHJlZHMgJT4lDQogICB5YXJkc3RpY2s6OnJtc2UodHJ1dGgsIC5wcmVkKQ0KDQpzdWJtaXRfZXNzYXlzX3NlbnRpbWVudCA8LSBwcmVkaWN0KGZpdCwgc3VibWl0X2Vzc2F5c19zZW50aW1lbnQpIHw+IA0KICByZW5hbWUoe3tvdXRjb21lfX0gOj0gLnByZWQpIHw+IA0KICBiaW5kX2NvbHMoc3VibWl0X2Vzc2F5c19zZW50aW1lbnQpDQoNCmBgYA0KDQpXZSBmaXQgZm9yIGBjb252ZW50aW9uc2AgbmV4dCBhbmQgdXNlIGNhc2Ugd2VpZ2h0cyB0byBhZGp1c3QgZm9yIHRoZSBmcmVxdWVuY3kgb2Ygb2NjdXJyZW5jZSBvZiBgY29udmVudGlvbnNgLiBJIGFtIGNob29zaW5nIHRvIHVzZSB0aGUgcHJlZGljdGVkIHZhbHVlcyBvZiBgY29oZXNpb25gLCAgYHN5bnRheGAsIGB2b2NhYnVsYXJ5YCwgYHBocmFzZW9sb2d5YCBhbmQgYGdyYW1tYXJgIGFib3ZlIGFzIGFkZGl0aW9uYWwgcHJlZGljdG9ycy4NCg0KYGBge3J9DQojfCBsYWJlbDogZml0IGNvbnZlbnRpb25zDQoNCm91dGNvbWUgPC0gb3V0Y29tZXNbNl0NCnByZWRpY3RvciA8LSBnbHVlOjpnbHVlKCJmdWxsX3RleHQgKyB7IG91dGNvbWVzWzFdIH0gK3sgb3V0Y29tZXNbMl0gfSt7IG91dGNvbWVzWzNdIH0reyBvdXRjb21lc1s0XSB9K3sgb3V0Y29tZXNbNV0gfSIpDQoNCnRyYWluX2RmIDwtIHRyYWluX2Vzc2F5c19zZW50aW1lbnQgJT4lDQogICAgICAgICAgICAgICAgICAgY2FzZV93ZWlnaHRfYnVpbGRlcihvdXRjb21lKQ0KDQp3ZiA8LSB3b3JrZmxvdyhyZWNpcGVfYnVpbGRlcihvdXRjb21lLCBwcmVkaWN0b3IsIHNlbnRpbWVudHMpLCBzcGVjKSAlPiUNCiAgICAgICAgICBhZGRfY2FzZV93ZWlnaHRzKGNhc2Vfd3RzKQ0KDQpmaXQgPC0gcGFyc25pcDo6Zml0KHdmLCB0cmFpbl9kZikNCg0KZXh0cmFjdF9maXRfZW5naW5lKGZpdCkgfD4gDQogIHZpcDo6dmlwKG51bV9mZWF0dXJlcyA9IDIwKQ0KDQp0cmFpbl9wcmVkcyA8LSBwcmVkaWN0KGZpdCwgbmV3X2RhdGEgPSB0cmFpbl9lc3NheXNfc2VudGltZW50KSB8PiANCiAgIGJpbmRfY29scyh0cmFpbl9lc3NheXNfcmF3IHw+IHNlbGVjdCghIW91dGNvbWUpKSB8PiANCiAgIHJlbmFtZSh0cnV0aCA9ICEhb3V0Y29tZSkNCg0KdHJhaW5fcHJlZHMgfD4gDQogICBnZ3Bsb3QoYWVzKHggPSBmYWN0b3IodHJ1dGgpLCB5ID0gLnByZWQgLSB0cnV0aCkpICsNCiAgIGdlb21fYm94cGxvdCgpICsNCiAgIGxhYnModGl0bGUgPSBnbHVlOjpnbHVlKCJ7IG91dGNvbWUgfSByZXNpZHVhbHMiKSkgDQoNCnRyYWluX3ByZWRzICU+JQ0KICAgeWFyZHN0aWNrOjpybXNlKHRydXRoLCAucHJlZCkNCg0Kc3VibWl0X2Vzc2F5c19zZW50aW1lbnQgPC0gcHJlZGljdChmaXQsIHN1Ym1pdF9lc3NheXNfc2VudGltZW50KSB8PiANCiAgcmVuYW1lKHt7b3V0Y29tZX19IDo9IC5wcmVkKSB8PiANCiAgYmluZF9jb2xzKHN1Ym1pdF9lc3NheXNfc2VudGltZW50KQ0KDQpgYGANCg0KIyMgVGhlIFN1Ym1pc3Npb24NCg0KYGBge3J9DQojfCBsYWJlbDogYnVpbGQgc3VibWlzc2lvbnMgZGF0YWZyYW1lDQoNCnN1Ym1pc3Npb24gPC0NCiAgc3VibWl0X2Vzc2F5c19zZW50aW1lbnQgJT4lDQogIHNlbGVjdCh0ZXh0X2lkLCAhIW91dGNvbWVzKQ0KDQpgYGANCg0KYGBge3J9DQojfCBsYWJlbDogd3JpdGUgc3VibWlzc2lvbiBvdXQgYXMgYSBjc3YNCnN1Ym1pc3Npb24NCg0Kd3JpdGVfY3N2KHN1Ym1pc3Npb24sIGhlcmU6OmhlcmUoImRhdGEiLCAic3VibWlzc2lvbi5jc3YiKSkNCmBgYA0KDQoNCg0KDQoNCg0KDQoNCg0K</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("EnglishLanguageLearning.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
