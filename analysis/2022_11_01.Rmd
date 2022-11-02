@@ -1,5 +1,5 @@
 ---
-title: "2022-11-01"
+title: "Horror Movies"
 author: "Jim Gruman"
 date: "November 1, 2022"
 output:
@@ -23,7 +23,7 @@ Let's give this color pallette a try, along with the Google Creepster font.
 #| label: setup and load data
 
 suppressPackageStartupMessages({
-library(tidyverse, quietly = TRUE)
+library(tidyverse)
 library(rtweet)
 library(lubridate)
 library(ggdist)
