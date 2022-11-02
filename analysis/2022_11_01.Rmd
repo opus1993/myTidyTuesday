@@ -13,16 +13,21 @@ editor_options:
 ---
 
 ```{r}
-blogdown::shortcode('tweet', '1587245920604897284')
+tweetrmd::tweet_embed('https://twitter.com/thomas_mock/status/1587245920604897284')
 ```
+
+Let's give this color pallette a try, along with the Google Creepster font.
 
 ```{r}
 #| label: setup and load data
+
+suppressPackageStartupMessages({
 library(tidyverse, quietly = TRUE)
 library(rtweet)
 library(lubridate)
 library(ggdist)
 library(ggimage)
+})
 
 source(here::here("code","_common.R"))
 
@@ -67,7 +72,7 @@ movies_raw |>
   theme(panel.background = element_rect(fill = "gray10"),
         legend.text = element_text(color = "gray80"),
         plot.title = element_text(color = "gray80",
-                                  size = 60,
+                                  size = 40,
                                   family = "creepster"),
         plot.subtitle = ggtext::element_markdown(color = "gray80",
                                                  size = 25),
@@ -80,7 +85,7 @@ movies_raw |>
 
 ```{r}
 #| label: Typical Cost
-#| fig-alt: "Horror Movie Budgets"
+#| fig-alt: "Horror Movie Budgets by year"
 
 movies_raw |> 
   filter(budget > 1e6) |> 
@@ -117,12 +122,12 @@ movies_raw |>
     paletteer::palettes_d$DresdenColor$foolmoon[[2]]
   )) +
   labs(title = "Horror Movie Budgets",
-       subtitle = "There have been more and more massive productions since the 1980s.  <span style='color:#354C6A'>Revenue > Budget</span> and <span style='color:#BA141E'>Revenue < Budget</span>",
+       subtitle = "Several massive productions since the 1980s.  <span style='color:#354C6A'>Revenue > Budget</span> and <span style='color:#BA141E'>Revenue < Budget</span>",
        x = NULL, y = NULL, fill = "Language",
        caption = "Numbers are the annual counts of releases with budgets over $1M by year. Budgets in Millions $US. Plot: @jim_gruman Data: The Movie Database via github.com/tashapiro/horror-movies") +
   theme(panel.background = element_rect(fill = "gray7"),
         plot.title = element_text(color = "#532026",
-                                  size = 100,
+                                  size = 80,
                                   vjust = -50,
                                   hjust = 0.1,
                                   family = "creepster"),
@@ -171,7 +176,7 @@ post_tweet(
 ```
 
 ```{r}
-blogdown::shortcode('tweet', '1587245920604897284')
+tweetrmd::tweet_embed('https://twitter.com/thomas_mock/status/1587245920604897284')
 ```
 
 
