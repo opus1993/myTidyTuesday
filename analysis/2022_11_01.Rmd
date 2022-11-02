@@ -13,6 +13,7 @@ editor_options:
 ---
 
 ```{r}
+#| label: r4ds invitation
 tweetrmd::tweet_embed('https://twitter.com/thomas_mock/status/1587245920604897284')
 ```
 
@@ -41,7 +42,7 @@ base_url <- "https://www.themoviedb.org/t/p/w1280/"
 movies_raw <- tidytuesdayR::tt_load("2022-11-01")$horror_movies |> 
   mutate(poster = paste0(base_url, poster_path))
 
-skimr::skim(movies_raw)
+# skimr::skim(movies_raw)
 ```
 
 There's a lot of good material in this dataset.  Let's plot some time series
@@ -111,7 +112,7 @@ movies_raw |>
   geom_text(
     data = count(movies_raw, release_date = floor_date(release_date, unit = "year")),
     aes(y = if_else(year(release_date) %% 2 == 0,
-                    -2, -6), label = n),
+                    -2, -7), label = n),
     color = "gray80"
   ) +
   scale_y_continuous(labels = scales::dollar,
@@ -133,6 +134,7 @@ movies_raw |>
                                   family = "creepster"),
         plot.subtitle = ggtext::element_markdown(color = "gray80",
                                      size = 20),
+        plot.title.position = "panel",
         plot.caption = element_text(color = "gray80"),
         axis.ticks = element_blank(),
         axis.ticks.length = unit(c(0,0,0,0), 'cm'),
@@ -160,7 +162,7 @@ ggsave(here::here("data","2022_11_01.png"),
 #| eval: false
 
 post_tweet(
-  status = "#TidyTuesday on Horror Movie Budgets. Special thanks to @tanya_shapiro for the dataset. #rstats #r4ds",
+  status = "#TidyTuesday #DataViz this week on Horror Movie Budgets. Credit to @tanya_shapiro for the dataset. #rstats #r4ds",
   media = here::here("data","2022_11_01.png"),
   token = NULL,
   in_reply_to_status_id = NULL,
@@ -176,7 +178,7 @@ post_tweet(
 ```
 
 ```{r}
-tweetrmd::tweet_embed('https://twitter.com/thomas_mock/status/1587245920604897284')
+tweetrmd::tweet_embed('https://twitter.com/jim_gruman/status/1587942905951420422')
 ```
 
 
