@@ -1,0 +1,177 @@
+---
+title: "2022-11-01"
+author: "Jim Gruman"
+date: "November 1, 2022"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+blogdown::shortcode('tweet', '1587245920604897284')
+```
+
+```{r}
+#| label: setup and load data
+library(tidyverse, quietly = TRUE)
+library(rtweet)
+library(lubridate)
+library(ggdist)
+library(ggimage)
+
+source(here::here("code","_common.R"))
+
+sysfonts::font_add_google("Creepster", "creepster")
+showtext::showtext_auto()
+
+scales::show_col(paletteer::palettes_d$DresdenColor$foolmoon)
+
+base_url <- "https://www.themoviedb.org/t/p/w1280/"
+
+movies_raw <- tidytuesdayR::tt_load("2022-11-01")$horror_movies |> 
+  mutate(poster = paste0(base_url, poster_path))
+
+skimr::skim(movies_raw)
+```
+
+There's a lot of good material in this dataset.  Let's plot some time series
+
+```{r}
+#| label: Annual Revenue
+#| fig-alt: "Bar Chart of Global Annual Horror Movie Box Office Revenue"
+
+movies_raw |> 
+  mutate(original_language = fct_lump(original_language,
+                                      5,
+                                      other_level = "Other")) |> 
+  group_by(release_date = floor_date(release_date,
+                                      unit = "year",),
+            original_language) |> 
+  summarise(sum = sum(revenue, na.rm = TRUE),
+             .groups = "keep") |> 
+  mutate(original_language = fct_reorder(original_language,
+                                         sum, max)) |> 
+  ggplot(aes(x = release_date, sum, fill = original_language         )) +
+  geom_col(show.legend = FALSE) +
+  scale_y_continuous(labels = scales::dollar) +
+  paletteer::scale_fill_paletteer_d("DresdenColor::foolmoon") +
+  labs(title = "Global Annual Horror Movie Box Office Revenue",
+       subtitle = "A growing genre, in <span style='color:#532026'>English,</span> <span style='color:#BA141E'>German,</span> <span style='color:#E2E3E7'>Spanish,</span> <span style='color:#61829C'>Japanese,</span> <span style='color:#354C6A'>Portuguese,</span> <span style='color:#050505'>and Other</span> languages<br><br>",
+       x = NULL, y = NULL, fill = "Language",
+       caption = "Plot: @jim_gruman Data: The Movie Database via github.com/tashapiro/horror-movies") +
+  theme(panel.background = element_rect(fill = "gray10"),
+        legend.text = element_text(color = "gray80"),
+        plot.title = element_text(color = "gray80",
+                                  size = 60,
+                                  family = "creepster"),
+        plot.subtitle = ggtext::element_markdown(color = "gray80",
+                                                 size = 25),
+        plot.caption = element_text(color = "gray80"),
+        axis.text = element_text(color = "gray80"),
+        panel.grid = element_line(color = "gray5"),
+        plot.background = element_rect(fill = "gray10"))
+
+```
+
+```{r}
+#| label: Typical Cost
+#| fig-alt: "Horror Movie Budgets"
+
+movies_raw |> 
+  filter(budget > 1e6) |> 
+  mutate(
+    image = case_when(
+      budget > 100000000 ~ poster,
+      release_date < as.Date("1960-01-01") &
+        budget > 10000000 ~ poster,
+     TRUE ~ NA_character_
+    ),
+    profitable = if_else(
+      revenue > budget,
+      TRUE, FALSE
+    )
+  ) |> 
+  ggplot(aes(release_date, budget/1e6)) +
+  geom_point(aes(color = profitable),
+             show.legend = FALSE,
+                    size = 2,
+                    shape = 21) +
+  geom_image(aes(x = release_date + years(3), 
+                 image = image)) +
+  geom_text(
+    data = count(movies_raw, release_date = floor_date(release_date, unit = "year")),
+    aes(y = if_else(year(release_date) %% 2 == 0,
+                    -2, -6), label = n),
+    color = "gray80"
+  ) +
+  scale_y_continuous(labels = scales::dollar,
+                     position = "right") +
+  scale_x_date(expand = expansion(mult = c(0, 0))) +
+  scale_color_manual(values = c(
+    paletteer::palettes_d$DresdenColor$foolmoon[[5]],
+    paletteer::palettes_d$DresdenColor$foolmoon[[2]]
+  )) +
+  labs(title = "Horror Movie Budgets",
+       subtitle = "There have been more and more massive productions since the 1980s.  <span style='color:#354C6A'>Revenue > Budget</span> and <span style='color:#BA141E'>Revenue < Budget</span>",
+       x = NULL, y = NULL, fill = "Language",
+       caption = "Numbers are the annual counts of releases with budgets over $1M by year. Budgets in Millions $US. Plot: @jim_gruman Data: The Movie Database via github.com/tashapiro/horror-movies") +
+  theme(panel.background = element_rect(fill = "gray7"),
+        plot.title = element_text(color = "#532026",
+                                  size = 100,
+                                  vjust = -50,
+                                  hjust = 0.1,
+                                  family = "creepster"),
+        plot.subtitle = ggtext::element_markdown(color = "gray80",
+                                     size = 20),
+        plot.caption = element_text(color = "gray80"),
+        axis.ticks = element_blank(),
+        axis.ticks.length = unit(c(0,0,0,0), 'cm'),
+        axis.text = element_text(color = "gray80",
+                                 size = 20),
+        axis.line = element_blank(),
+        panel.grid = element_line(color = "gray5"),
+        plot.background = element_rect(fill = "gray7",
+                                       color = "gray7"),
+        plot.margin = unit(c(0,0.2,0.1,0), 'cm'),)
+```
+
+
+```{r}
+#| label: save the image out
+#| eval: false
+ggsave(here::here("data","2022_11_01.png"),
+      width = 6, height = 5, dpi = 300, bg = "black",
+      device = "png")
+```
+
+
+```{r}
+#| label: post the tweet
+#| eval: false
+
+post_tweet(
+  status = "#TidyTuesday on Horror Movie Budgets. Special thanks to @tanya_shapiro for the dataset. #rstats #r4ds",
+  media = here::here("data","2022_11_01.png"),
+  token = NULL,
+  in_reply_to_status_id = NULL,
+  destroy_id = NULL,
+  retweet_id = NULL,
+  auto_populate_reply_metadata = FALSE,
+  media_alt_text = "The Horror Movie Budgets by Year in points, with movie posters for the largest",
+  lat = NULL,
+  long = NULL,
+  display_coordinates = FALSE
+)
+
+```
+
+```{r}
+blogdown::shortcode('tweet', '1587245920604897284')
+```
+
+
