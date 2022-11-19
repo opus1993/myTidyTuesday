@@ -115,7 +115,7 @@ contour_sf <- raw_contour |>
 
 The following loops through the call letters belonging to the different application IDs so that the two datasets that were provided on Tidy Tuesday can be linked.
 
-As above, we will cache results in a feather file to avoid hitting the fcc web page unnecessarily.
+As above, we will cache results in a feather file to avoid hitting the fcc web site unnecessarily.
 
 ```{r}
 #| label: scrape the application IDs
@@ -159,10 +159,7 @@ application_id <- arrow::read_feather(application_id_feather)
 
 ```{r}
 #| label: plot_submission
-state_stations |>  
-  inner_join(application_id, by = c("call_sign")) |> 
-  inner_join(contour_sf, by = "application_id") 
-  
+
 public_radio <- contour_sf %>% 
   inner_join(application_id, by = "application_id") |> 
   inner_join(state_stations, by = "call_sign") |> 
@@ -204,9 +201,9 @@ Let's tweet the result
 #| label: tweet the result
 #| eval: false
 
-post_tweet(
+rtweet::post_tweet(
   status = "Last week's #TidyTuesday looked at radio stations around the United States and their reach. The code can be found here: https://opus1993.github.io/myTidyTuesday/. Credit to @frankiethull for the dataset and @kyle_e_walker for {tigris}. #rstats #r4ds",
-  media = here::here("docs","figure", "plot_submission.png"),
+  media = here::here("docs","figure", "plot_submission-1.png"),
   token = NULL,
   in_reply_to_status_id = NULL,
   destroy_id = NULL,
@@ -224,7 +221,7 @@ post_tweet(
 ```{r}
 #| label: tweeted result
 
-tweetrmd::include_tweet("https://twitter.com/NdFest/status/1591803647520018432")
+tweetrmd::include_tweet("https://twitter.com/jim_gruman/status/1594044196322787329")
 ```
 
 
