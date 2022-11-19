@@ -28,7 +28,6 @@ suppressPackageStartupMessages({
 library(tidyverse)
 library(sf)
 library(tigris)
-library(geomtextpath)
 })
 options(tigris_use_cache = TRUE)
 ```
@@ -159,6 +158,7 @@ application_id <- arrow::read_feather(application_id_feather)
 
 
 ```{r}
+#| label: plot_submission
 state_stations |>  
   inner_join(application_id, by = c("call_sign")) |> 
   inner_join(contour_sf, by = "application_id") 
@@ -204,14 +204,26 @@ Let's tweet the result
 #| label: tweet the result
 #| eval: false
 
-ggsave(here::here("data","2022_11_18.png"),
-      width = 6, height = 5, dpi = 300, bg = "black",
-      device = "png")
+post_tweet(
+  status = "Last week's #TidyTuesday looked at radio stations around the United States and their reach. The code can be found here: https://opus1993.github.io/myTidyTuesday/. Credit to @frankiethull for the dataset and @kyle_e_walker for {tigris}. #rstats #r4ds",
+  media = here::here("docs","figure", "plot_submission.png"),
+  token = NULL,
+  in_reply_to_status_id = NULL,
+  destroy_id = NULL,
+  retweet_id = NULL,
+  auto_populate_reply_metadata = FALSE,
+  media_alt_text = "A US map with shapefile polygons representing public radio station reach and labels for each station.",
+  lat = NULL,
+  long = NULL,
+  display_coordinates = FALSE
+)
 
 ```
 
 
 ```{r}
+#| label: tweeted result
+
 tweetrmd::include_tweet("https://twitter.com/NdFest/status/1591803647520018432")
 ```
 
