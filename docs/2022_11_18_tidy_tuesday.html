@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2022-11-18" />
+
+<title>Public Radio Stations</title>
+
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/twitter-widget-0.0.1/widgets.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myTidyTuesday</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/opus1993/myTidyTuesday">source</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Public Radio Stations</h1>
+<h4 class="date">2022-11-18</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-19
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myTidyTuesday/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreede73731523af092322c92ee63c4b8741bd01687ftargetblankde73731a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/opus1993/myTidyTuesday/tree/de73731523af092322c92ee63c4b8741bd01687f" target="_blank">de73731</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomopus1993myTidyTuesdaytreede73731523af092322c92ee63c4b8741bd01687ftargetblankde73731a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/opus1993/myTidyTuesday/tree/de73731523af092322c92ee63c4b8741bd01687f" target="_blank">de73731</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    data/.Rhistory
+    Ignored:    data/2022_11_01.png
+    Ignored:    data/2022_11_18.png
+    Ignored:    data/CNHI_Excel_Chart.xlsx
+    Ignored:    data/Chicago.rds
+    Ignored:    data/CommunityTreemap.jpeg
+    Ignored:    data/Community_Roles.jpeg
+    Ignored:    data/ELL.zip
+    Ignored:    data/FM_service_contour_current.zip
+    Ignored:    data/SeriesReport-20220414171148_6c3b18.xlsx
+    Ignored:    data/Weekly_Chicago_IL_Regular_Reformulated_Retail_Gasoline_Prices.csv
+    Ignored:    data/YammerDigitalDataScienceMembership.xlsx
+    Ignored:    data/YammerMemberPage.rds
+    Ignored:    data/YammerMembers.rds
+    Ignored:    data/application_id.feather
+    Ignored:    data/df.rds
+    Ignored:    data/fit_cohesion.rds
+    Ignored:    data/fit_grammar.rds
+    Ignored:    data/fit_phraseology.rds
+    Ignored:    data/fit_syntax.rds
+    Ignored:    data/fit_vocabulary.rds
+    Ignored:    data/grainstocks.rds
+    Ignored:    data/hike_data.rds
+    Ignored:    data/lm_res.rds
+    Ignored:    data/raw_contour.feather
+    Ignored:    data/raw_weather.RData
+    Ignored:    data/sample_submission.csv
+    Ignored:    data/submission.csv
+    Ignored:    data/test.csv
+    Ignored:    data/train.csv
+    Ignored:    data/us_states.rds
+    Ignored:    data/us_states_hexgrid.geojson
+    Ignored:    data/weatherstats_toronto_daily.csv
+
+Untracked files:
+    Untracked:  analysis/2022_09_01_kaggle_tabular_playground.qmd
+    Untracked:  code/YammerReach.R
+    Untracked:  code/autokeras.R
+    Untracked:  code/chicago.R
+    Untracked:  code/glmnet_test.R
+    Untracked:  code/googleCompute.R
+    Untracked:  code/work list batch targets.R
+    Untracked:  environment.yml
+    Untracked:  report.html
+
+Unstaged changes:
+    Modified:   analysis/2021_01_19_tidy_tuesday.Rmd
+    Modified:   analysis/2021_03_24_tidy_tuesday.Rmd
+    Deleted:    analysis/2021_04_20.Rmd
+    Deleted:    analysis/2022_02_11_tabular_playground.Rmd
+    Deleted:    analysis/2022_04_18.qmd
+    Modified:   analysis/EnglishLanguageLearning.Rmd
+    Modified:   analysis/Survival.Rmd
+    Modified:   analysis/_site.yml
+    Modified:   code/_common.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/2022_11_18_tidy_tuesday.Rmd</code>) and HTML
+(<code>docs/2022_11_18_tidy_tuesday.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/opus1993/myTidyTuesday/blob/de73731523af092322c92ee63c4b8741bd01687f/analysis/2022_11_18_tidy_tuesday.Rmd" target="_blank">de73731</a>
+</td>
+<td>
+opus1993
+</td>
+<td>
+2022-11-19
+</td>
+<td>
+wflow_publish("analysis/2022_11_18_tidy_tuesday.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The data this week comes from <a
+href="https://en.wikipedia.org/wiki/Lists_of_radio_stations_in_the_United_States">Wikipedia</a>
+and the <a
+href="https://www.fcc.gov/media/radio/fm-service-contour-data-points">Federal
+Communications Commission</a>, with a credit to Frank Hull for proposing
+and cleaning the initial dataset.</p>
+<p>An example of one of the submissions to Twitter:</p>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/NdFest/status/1591803647520018432&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Where is all the Public Radio?  This week&#39;s <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> data looked at radio stations around the United States and their reach.  The code can be found here: <a href="https://t.co/M85kpXlEO8">https://t.co/M85kpXlEO8</a><br>And a link for data to reliably link the two TT data sets: <a href="https://t.co/QHS2Y6cItR">https://t.co/QHS2Y6cItR</a> <a href="https://t.co/i7G7Y8jvz1">pic.twitter.com/i7G7Y8jvz1</a></p>&mdash; DataFestND (@NdFest) <a href="https://twitter.com/NdFest/status/1591803647520018432?ref_src=twsrc%5Etfw">November 13, 2022</a></blockquote>
+
+<p>We will start by loading a few R packages into memory:</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+library(tidyverse)
+library(sf)
+library(tigris)
+library(geomtextpath)
+})
+options(tigris_use_cache = TRUE)</code></pre>
+<p>We will load the data as provided by R4DS and use their cleaing
+script:</p>
+<pre class="r"><code>tuesdata &lt;- tidytuesdayR::tt_load(&#39;2022-11-08&#39;)</code></pre>
+<pre><code>--- Compiling #TidyTuesday Information for 2022-11-08 ----</code></pre>
+<pre><code>--- There are 2 files available ---</code></pre>
+<pre><code>--- Starting Download ---</code></pre>
+<pre><code>
+    Downloading file 1 of 2: `state_stations.csv`
+    Downloading file 2 of 2: `station_info.csv`</code></pre>
+<pre><code>--- Download complete ---</code></pre>
+<pre class="r"><code>state_stations &lt;- tuesdata$state_stations |&gt; 
+  right_join(tuesdata$station_info |&gt; 
+               select(-licensee),
+             by = c(&quot;call_sign&quot;)) |&gt; 
+  filter(stringr::str_detect(format, &#39;Public&#39;))
+
+contour_zip_url &lt;- &quot;https://transition.fcc.gov/Bureaus/MB/Databases/fm_service_contour_data/FM_service_contour_current.zip&quot;
+
+contour_zip_file &lt;- here::here(&quot;data&quot;,&quot;FM_service_contour_current.zip&quot;)
+
+if (!file.exists(contour_zip_file)) {
+download.file(contour_zip_url,
+              destfile = contour_zip_file)
+}
+
+raw_contour_feather &lt;- here::here(&quot;data&quot;,&quot;raw_contour.feather&quot;)
+
+if (!file.exists(raw_contour_feather)) {
+
+raw_contour &lt;- read_delim(
+  contour_zip_file,
+  delim = &quot;|&quot;,
+  show_col_types = FALSE
+) |&gt;
+  select(-last_col()) |&gt;
+  set_names(nm = c(
+    &quot;application_id&quot;, &quot;service&quot;, &quot;lms_application_id&quot;, &quot;dts_site_number&quot;, &quot;transmitter_site&quot;,
+    glue::glue(&quot;deg_{0:360}&quot;)
+  )) |&gt; 
+  separate(
+    transmitter_site, 
+    into = c(&quot;site_lat&quot;, &quot;site_long&quot;), 
+    sep = &quot; ,&quot;) |&gt;
+  pivot_longer(
+    names_to = &quot;angle&quot;,
+    values_to = &quot;values&quot;,
+    cols = deg_0:deg_360
+  ) |&gt;
+  mutate(
+    angle = str_remove(angle, &quot;deg_&quot;),
+    angle = as.integer(angle)
+  ) |&gt;
+  separate(
+    values,
+    into = c(&quot;deg_lat&quot;, &quot;deg_lng&quot;),
+    sep = &quot; ,&quot;
+  ) |&gt; 
+  mutate(
+    across(c(application_id, 
+             site_lat, 
+             site_long, 
+             deg_lat, 
+             deg_lng),
+           as.numeric))
+
+arrow::write_feather(raw_contour,
+                     sink = raw_contour_feather)
+
+} else {
+
+raw_contour &lt;- arrow::read_feather(raw_contour_feather,
+                    as_data_frame = TRUE)
+
+}
+
+contour_sf &lt;- raw_contour |&gt;
+  na.omit() |&gt;
+  st_as_sf(coords = c(&quot;deg_lng&quot;, &quot;deg_lat&quot;), crs = 4326) |&gt;
+  group_by(application_id) |&gt;
+  slice_tail(n = 360) |&gt; 
+  summarise(geometry = st_combine(geometry)) |&gt;
+  st_cast(&quot;POLYGON&quot;)</code></pre>
+<p>The following loops through the call letters belonging to the
+different application IDs so that the two datasets that were provided on
+Tidy Tuesday can be linked.</p>
+<p>As above, we will cache results in a feather file to avoid hitting
+the fcc web page unnecessarily.</p>
+<pre class="r"><code>application_id_feather &lt;- here::here(&quot;data&quot;,&quot;application_id.feather&quot;)
+
+if (!file.exists(application_id_feather)) {
+
+application_id &lt;- tibble(
+  application_id = unique(raw_contour$application_id),
+  call_sign = NA_character_)
+
+site &lt;- &quot;https://licensing.fcc.gov/cgi-bin/ws.exe/prod/cdbs/pubacc/prod/app_det.pl?Application_id=&quot;
+
+call_sign_extract &lt;- function(application_id) {
+  
+  Sys.sleep(sample(10, 1) * 0.02)
+  
+  paste0(site, application_id)  |&gt;
+    rvest::read_html()  |&gt;
+    rvest::html_nodes(&quot;td&quot;)  %&gt;%
+    .[[20]] |&gt;
+    rvest::html_text() |&gt;
+    stringr::str_replace_all(&quot;\n&quot;, &quot;&quot;) |&gt;
+    stringr::str_squish()
+}
+
+application_id &lt;- application_id |&gt; 
+  mutate(call_sign = map_chr(application_id, call_sign_extract)) 
+
+arrow::write_feather(application_id,
+                     sink = application_id_feather)
+} else {
+
+application_id &lt;- arrow::read_feather(application_id_feather)
+  
+}</code></pre>
+<pre class="r"><code>state_stations |&gt;  
+  inner_join(application_id, by = c(&quot;call_sign&quot;)) |&gt; 
+  inner_join(contour_sf, by = &quot;application_id&quot;) </code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["call_sign"],"name":[1],"type":["chr"],"align":["left"]},{"label":["frequency"],"name":[2],"type":["chr"],"align":["left"]},{"label":["city"],"name":[3],"type":["chr"],"align":["left"]},{"label":["licensee"],"name":[4],"type":["chr"],"align":["left"]},{"label":["format"],"name":[5],"type":["chr"],"align":["left"]},{"label":["state"],"name":[6],"type":["chr"],"align":["left"]},{"label":["facility_id"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["service"],"name":[8],"type":["chr"],"align":["left"]},{"label":["status"],"name":[9],"type":["chr"],"align":["left"]},{"label":["details"],"name":[10],"type":["chr"],"align":["left"]},{"label":["application_id"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["geometry"],"name":[12],"type":["s_POLYGO"],"align":["right"]}],"data":[{"1":"WQPR","2":"88.7 FM","3":"Muscle Shoals","4":"University of Alabama","5":"Public radio","6":"Alabama","7":"65441","8":"FM","9":"LICENSED","10":"Click for Details","11":"1302679","12":"<s_POLYGO>"},{"1":"WRWA","2":"88.7 FM","3":"Dothan","4":"Troy University","5":"Public Radio; News/Talk/Classical","6":"Alabama","7":"68185","8":"FM","9":"LICENSED","10":"Click for Details","11":"84913","12":"<s_POLYGO>"},{"1":"WTSU","2":"89.9 FM","3":"Montgomery–Troy","4":"Troy University","5":"Public radio; Classical","6":"Alabama","7":"68187","8":"FM","9":"LICENSED","10":"Click for Details","11":"1133571","12":"<s_POLYGO>"},{"1":"WUAL-FM","2":"91.5 FM","3":"Tuscaloosa","4":"University of Alabama","5":"Public radio","6":"Alabama","7":"69168","8":"FM","9":"LICENSED","10":"Click for Details","11":"37407","12":"<s_POLYGO>"},{"1":"WUAL-FM","2":"91.5 FM","3":"Tuscaloosa","4":"University of Alabama","5":"Public radio","6":"Alabama","7":"69168","8":"FM","9":"LICENSED","10":"Click for Details","11":"1035980","12":"<s_POLYGO>"},{"1":"KBRW-FM","2":"91.9 FM","3":"Utqiaġvik","4":"Silakkuagvik Communications, Inc.","5":"Public Radio","6":"Alaska","7":"60382","8":"FM","9":"LICENSED","10":"Click for Details","11":"235699","12":"<s_POLYGO>"},{"1":"KCAW","2":"104.7 FM","3":"Sitka","4":"Raven Radio Foundation, Inc.","5":"Public Radio","6":"Alaska","7":"55213","8":"FM","9":"LICENSED","10":"Click for Details","11":"1117518","12":"<s_POLYGO>"},{"1":"KCAW","2":"104.7 FM","3":"Sitka","4":"Raven Radio Foundation, Inc.","5":"Public Radio","6":"Alaska","7":"55213","8":"FM","9":"LICENSED","10":"Click for Details","11":"1115940","12":"<s_POLYGO>"},{"1":"KDLL","2":"91.9 FM","3":"Kenai","4":"Pickle Hill Public Broadcasting, Inc.","5":"Public Radio","6":"Alaska","7":"52538","8":"FM","9":"LICENSED","10":"Click for Details","11":"124615","12":"<s_POLYGO>"},{"1":"KDLL","2":"91.9 FM","3":"Kenai","4":"Pickle Hill Public Broadcasting, Inc.","5":"Public Radio","6":"Alaska","7":"52538","8":"FM","9":"LICENSED","10":"Click for Details","11":"117226","12":"<s_POLYGO>"},{"1":"KFSK","2":"100.9 FM","3":"Petersburg","4":"Narrows Broadcasting Corp.","5":"Public Radio","6":"Alaska","7":"47409","8":"FM","9":"LICENSED","10":"Click for Details","11":"1124450","12":"<s_POLYGO>"},{"1":"KMXT","2":"100.1 FM","3":"Kodiak","4":"Kodiak Public Broadcasting Corp.","5":"Public Radio","6":"Alaska","7":"35339","8":"FM","9":"LICENSED","10":"Click for Details","11":"1743422","12":"<s_POLYGO>"},{"1":"KRBD","2":"105.3 FM","3":"Ketchikan","4":"Rainbird Community Broadcasting Corp.","5":"Public Radio","6":"Alaska","7":"54928","8":"FM","9":"LICENSED","10":"Click for Details","11":"1115552","12":"<s_POLYGO>"},{"1":"KRBD","2":"105.3 FM","3":"Ketchikan","4":"Rainbird Community Broadcasting Corp.","5":"Public Radio","6":"Alaska","7":"54928","8":"FM","9":"LICENSED","10":"Click for Details","11":"1115583","12":"<s_POLYGO>"},{"1":"KSKA","2":"91.1 FM","3":"Anchorage","4":"Alaska Public Telecom., Inc.","5":"Public Radio","6":"Alaska","7":"805","8":"FM","9":"LICENSED","10":"Click for Details","11":"260158","12":"<s_POLYGO>"},{"1":"KSTK","2":"101.7 FM","3":"Wrangell","4":"CoastAlaska, Inc.","5":"Public Radio","6":"Alaska","7":"73924","8":"FM","9":"LICENSED","10":"Click for Details","11":"1585354","12":"<s_POLYGO>"},{"1":"KTNA","2":"88.9 FM","3":"Talkeetna","4":"Talkeetna Community Radio, Inc.","5":"Public Radio","6":"Alaska","7":"64555","8":"FM","9":"LICENSED","10":"Click for Details","11":"1261402","12":"<s_POLYGO>"},{"1":"KTOO","2":"104.3 FM","3":"Juneau","4":"Capital Community Broadcasting, Inc.","5":"Public Radio","6":"Alaska","7":"8650","8":"FM","9":"LICENSED","10":"Click for Details","11":"1682380","12":"<s_POLYGO>"},{"1":"KUAC","2":"89.9 FM","3":"Fairbanks","4":"University of Alaska","5":"Public Radio/Classical","6":"Alaska","7":"85347","8":"FM","9":"LICENSED","10":"Click for Details","11":"1808155","12":"<s_POLYGO>"},{"1":"KUHB-FM","2":"91.9 FM","3":"St. Paul","4":"Pribilof School District Board of Education","5":"Public Radio","6":"Alaska","7":"53494","8":"FM","9":"LICENSED","10":"Click for Details","11":"1793105","12":"<s_POLYGO>"},{"1":"KBAQ","2":"89.5 FM","3":"Phoenix","4":"Maricopa County Community College District","5":"Classical/Public radio","6":"Arizona","7":"40096","8":"FM","9":"LICENSED","10":"Click for Details","11":"1797446","12":"<s_POLYGO>"},{"1":"KJZZ","2":"91.5 FM","3":"Phoenix","4":"Maricopa County Community College District","5":"Public radio","6":"Arizona","7":"40095","8":"FM","9":"LICENSED","10":"Click for Details","11":"116799","12":"<s_POLYGO>"},{"1":"KJZZ","2":"91.5 FM","3":"Phoenix","4":"Maricopa County Community College District","5":"Public radio","6":"Arizona","7":"40095","8":"FM","9":"LICENSED","10":"Click for Details","11":"1797505","12":"<s_POLYGO>"},{"1":"KJZZ","2":"91.5 FM","3":"Phoenix","4":"Maricopa County Community College District","5":"Public radio","6":"Arizona","7":"40095","8":"FM","9":"LICENSED","10":"Click for Details","11":"1365113","12":"<s_POLYGO>"},{"1":"KUAZ-FM","2":"89.1 FM","3":"Tucson","4":"Arizona Board of Regents for Benefit of University of Ariz.","5":"Public radio","6":"Arizona","7":"3383","8":"FM","9":"LICENSED","10":"Click for Details","11":"1094299","12":"<s_POLYGO>"},{"1":"KBSA","2":"90.9 FM","3":"El Dorado","4":"Bd Supervisors,","5":"Public radio","6":"Arkansas","7":"4217","8":"FM","9":"LICENSED","10":"Click for Details","11":"107993","12":"<s_POLYGO>"},{"1":"KUAR","2":"89.1 FM","3":"Little Rock","4":"Board of Trustees of the University of Arkansas","5":"Public radio/News/Hot talk/Jazz","6":"Arkansas","7":"4296","8":"FM","9":"LICENSED","10":"Click for Details","11":"1498664","12":"<s_POLYGO>"},{"1":"KUAR","2":"89.1 FM","3":"Little Rock","4":"Board of Trustees of the University of Arkansas","5":"Public radio/News/Hot talk/Jazz","6":"Arkansas","7":"4296","8":"FM","9":"LICENSED","10":"Click for Details","11":"1517709","12":"<s_POLYGO>"},{"1":"KUAR","2":"89.1 FM","3":"Little Rock","4":"Board of Trustees of the University of Arkansas","5":"Public radio/News/Hot talk/Jazz","6":"Arkansas","7":"4296","8":"FM","9":"LICENSED","10":"Click for Details","11":"119713","12":"<s_POLYGO>"},{"1":"KCBX","2":"90.1 FM","3":"San Luis Obispo","4":"KCBX, Inc.","5":"Public radio","6":"California","7":"33705","8":"FM","9":"LICENSED","10":"Click for Details","11":"126083","12":"<s_POLYGO>"},{"1":"KCLM","2":"89.7 FM","3":"Santa Maria","4":"California Lutheran University","5":"Public radio","6":"California","7":"87300","8":"FM","9":"LICENSED","10":"Click for Details","11":"1559247","12":"<s_POLYGO>"},{"1":"KCLU-FM","2":"88.3 FM","3":"Thousand Oaks","4":"California Lutheran University","5":"Public radio","6":"California","7":"8220","8":"FM","9":"LICENSED","10":"Click for Details","11":"597068","12":"<s_POLYGO>"},{"1":"KCLU-FM","2":"88.3 FM","3":"Thousand Oaks","4":"California Lutheran University","5":"Public radio","6":"California","7":"8220","8":"FM","9":"LICENSED","10":"Click for Details","11":"203146","12":"<s_POLYGO>"},{"1":"KCRI","2":"89.3 FM","3":"Indio","4":"Santa Monica Community College District","5":"Public radio","6":"California","7":"59087","8":"FM","9":"LICENSED","10":"Click for Details","11":"1408233","12":"<s_POLYGO>"},{"1":"KCRI","2":"89.3 FM","3":"Indio","4":"Santa Monica Community College District","5":"Public radio","6":"California","7":"59087","8":"FM","9":"LICENSED","10":"Click for Details","11":"202988","12":"<s_POLYGO>"},{"1":"KCRU","2":"89.1 FM","3":"Oxnard","4":"Santa Monica Community College District","5":"Public radio","6":"California","7":"59085","8":"FM","9":"LICENSED","10":"Click for Details","11":"983317","12":"<s_POLYGO>"},{"1":"KCRU","2":"89.1 FM","3":"Oxnard","4":"Santa Monica Community College District","5":"Public radio","6":"California","7":"59085","8":"FM","9":"LICENSED","10":"Click for Details","11":"1461948","12":"<s_POLYGO>"},{"1":"KCRW","2":"89.9 FM","3":"Santa Monica","4":"Santa Monica Community College District","5":"Public radio","6":"California","7":"59086","8":"FM","9":"LICENSED","10":"Click for Details","11":"28988","12":"<s_POLYGO>"},{"1":"KCRW","2":"89.9 FM","3":"Santa Monica","4":"Santa Monica Community College District","5":"Public radio","6":"California","7":"59086","8":"FM","9":"LICENSED","10":"Click for Details","11":"201931","12":"<s_POLYGO>"},{"1":"KCRY","2":"88.1 FM","3":"Mojave","4":"Santa Monica Community College District","5":"Public radio","6":"California","7":"59092","8":"FM","9":"LICENSED","10":"Click for Details","11":"498416","12":"<s_POLYGO>"},{"1":"KDRW","2":"88.7 FM","3":"Santa Barbara","4":"Santa Monica Community College","5":"Public radio","6":"California","7":"69085","8":"FM","9":"LICENSED","10":"Click for Details","11":"711748","12":"<s_POLYGO>"},{"1":"KDRW","2":"88.7 FM","3":"Santa Barbara","4":"Santa Monica Community College","5":"Public radio","6":"California","7":"69085","8":"FM","9":"LICENSED","10":"Click for Details","11":"150993","12":"<s_POLYGO>"},{"1":"KHSU","2":"90.5 FM","3":"Arcata","4":"Humboldt State University","5":"Public radio","6":"California","7":"28111","8":"FM","9":"LICENSED","10":"Click for Details","11":"1418701","12":"<s_POLYGO>"},{"1":"KHSU","2":"90.5 FM","3":"Arcata","4":"Humboldt State University","5":"Public radio","6":"California","7":"28111","8":"FM","9":"LICENSED","10":"Click for Details","11":"151100","12":"<s_POLYGO>"},{"1":"KNBX","2":"91.7 FM","3":"San Ardo","4":"KCBX, Inc.","5":"Public radio","6":"California","7":"51720","8":"FM","9":"LICENSED","10":"Click for Details","11":"1752041","12":"<s_POLYGO>"},{"1":"KNHM","2":"91.5 FM","3":"Bayside","4":"Southern Oregon University","5":"Public radio","6":"California","7":"12486","8":"FM","9":"LICENSED","10":"Click for Details","11":"1296118","12":"<s_POLYGO>"},{"1":"KNHM","2":"91.5 FM","3":"Bayside","4":"Southern Oregon University","5":"Public radio","6":"California","7":"12486","8":"FM","9":"LICENSED","10":"Click for Details","11":"189530","12":"<s_POLYGO>"},{"1":"KNHM","2":"91.5 FM","3":"Bayside","4":"Southern Oregon University","5":"Public radio","6":"California","7":"12486","8":"FM","9":"LICENSED","10":"Click for Details","11":"176763","12":"<s_POLYGO>"},{"1":"KNSQ","2":"88.1 FM","3":"Mount Shasta","4":"Southern Oregon University","5":"Public radio","6":"California","7":"62957","8":"FM","9":"LICENSED","10":"Click for Details","11":"1536151","12":"<s_POLYGO>"},{"1":"KPBS-FM","2":"89.5 FM","3":"San Diego","4":"The Board of Trustees, California State University","5":"Public radio","6":"California","7":"58823","8":"FM","9":"LICENSED","10":"Click for Details","11":"1562134","12":"<s_POLYGO>"},{"1":"KPCC","2":"89.3 FM","3":"Pasadena","4":"Pasadena Area Community College District","5":"Public radio","6":"California","7":"51701","8":"FM","9":"LICENSED","10":"Click for Details","11":"1297993","12":"<s_POLYGO>"},{"1":"KPCC","2":"89.3 FM","3":"Pasadena","4":"Pasadena Area Community College District","5":"Public radio","6":"California","7":"51701","8":"FM","9":"LICENSED","10":"Click for Details","11":"1511219","12":"<s_POLYGO>"},{"1":"KPRX","2":"89.1 FM","3":"Bakersfield","4":"White Ash Broadcasting, Inc.","5":"Public radio","6":"California","7":"72186","8":"FM","9":"LICENSED","10":"Click for Details","11":"97952","12":"<s_POLYGO>"},{"1":"KQED-FM","2":"88.5 FM","3":"San Francisco","4":"Northern California Public Broadcasting, Inc.","5":"Public radio","6":"California","7":"35501","8":"FM","9":"LICENSED","10":"Click for Details","11":"257373","12":"<s_POLYGO>"},{"1":"KQEI-FM","2":"89.3 FM","3":"North Highlands","4":"KQED, Inc.","5":"Public radio","6":"California","7":"20791","8":"FM","9":"LICENSED","10":"Click for Details","11":"1434581","12":"<s_POLYGO>"},{"1":"KQVO","2":"97.7 FM","3":"Calexico","4":"State of California, San Diego State University","5":"Public radio","6":"California","7":"8175","8":"FM","9":"LICENSED","10":"Click for Details","11":"1106472","12":"<s_POLYGO>"},{"1":"KRCG-FM","2":"91.1 FM","3":"Santa Rosa","4":"Rural California Broadcasting Corp.","5":"Public radio","6":"California","7":"57946","8":"FM","9":"LICENSED","10":"Click for Details","11":"190506","12":"<s_POLYGO>"},{"1":"KUOP","2":"91.3 FM","3":"Stockton","4":"California State University, Sacramento","5":"Public radio","6":"California","7":"69157","8":"FM","9":"LICENSED","10":"Click for Details","11":"53808","12":"<s_POLYGO>"},{"1":"KUOR-FM","2":"89.1 FM","3":"Redlands","4":"University of Redlands","5":"Public radio","6":"California","7":"69217","8":"FM","9":"LICENSED","10":"Click for Details","11":"1275921","12":"<s_POLYGO>"},{"1":"KUOR-FM","2":"89.1 FM","3":"Redlands","4":"University of Redlands","5":"Public radio","6":"California","7":"69217","8":"FM","9":"LICENSED","10":"Click for Details","11":"128170","12":"<s_POLYGO>"},{"1":"KUOR-FM","2":"89.1 FM","3":"Redlands","4":"University of Redlands","5":"Public radio","6":"California","7":"69217","8":"FM","9":"LICENSED","10":"Click for Details","11":"1262055","12":"<s_POLYGO>"},{"1":"KVLA-FM","2":"90.3 FM","3":"Coachella","4":"Southern California Public Radio","5":"Public radio","6":"California","7":"85911","8":"FM","9":"LICENSED","10":"Click for Details","11":"1035952","12":"<s_POLYGO>"},{"1":"KVPR","2":"89.3 FM","3":"Fresno","4":"White Ash Broadcasting, Inc.","5":"Public radio","6":"California","7":"72188","8":"FM","9":"LICENSED","10":"Click for Details","11":"48839","12":"<s_POLYGO>"},{"1":"KXJZ","2":"90.9 FM","3":"Sacramento","4":"California State University, Sacramento","5":"Public radio","6":"California","7":"8336","8":"FM","9":"LICENSED","10":"Click for Details","11":"73866","12":"<s_POLYGO>"},{"1":"KXJZ","2":"90.9 FM","3":"Sacramento","4":"California State University, Sacramento","5":"Public radio","6":"California","7":"8336","8":"FM","9":"LICENSED","10":"Click for Details","11":"1282796","12":"<s_POLYGO>"},{"1":"KXJZ","2":"90.9 FM","3":"Sacramento","4":"California State University, Sacramento","5":"Public radio","6":"California","7":"8336","8":"FM","9":"LICENSED","10":"Click for Details","11":"189352","12":"<s_POLYGO>"},{"1":"KBUT","2":"90.3 FM","3":"Crested Butte","4":"Crested Butte Mountain Educational Radio Inc","5":"Public radio","6":"Colorado","7":"14492","8":"FM","9":"LICENSED","10":"Click for Details","11":"1650456","12":"<s_POLYGO>"},{"1":"KCFR-FM","2":"90.1 FM","3":"Denver","4":"Public Broadcasting of Colorado, Inc.","5":"Public/News/Talk","6":"Colorado","7":"53777","8":"FM","9":"LICENSED","10":"Click for Details","11":"1781761","12":"<s_POLYGO>"},{"1":"KOTO","2":"91.7 FM","3":"Telluride","4":"San Miguel Educational Fund, Inc.","5":"Public radio / Variety","6":"Colorado","7":"58920","8":"FM","9":"LICENSED","10":"Click for Details","11":"1172656","12":"<s_POLYGO>"},{"1":"KPRE","2":"89.9 FM","3":"Vail","4":"Public Broadcasting of Colorado, Inc.","5":"Public/News/Talk","6":"Colorado","7":"53722","8":"FM","9":"LICENSED","10":"Click for Details","11":"203538","12":"<s_POLYGO>"},{"1":"KRCC","2":"91.5 FM","3":"Colorado Springs","4":"The Colorado College","5":"Public radio","6":"Colorado","7":"65563","8":"FM","9":"LICENSED","10":"Click for Details","11":"194122","12":"<s_POLYGO>"},{"1":"KSJD","2":"91.5 FM","3":"Cortez","4":"Community Radio Project, Inc.","5":"Public radio","6":"Colorado","7":"58851","8":"FM","9":"LICENSED","10":"Click for Details","11":"1140353","12":"<s_POLYGO>"},{"1":"KSUT","2":"91.3 FM","3":"Ignacio","4":"KUTE, Inc.","5":"Public radio","6":"Colorado","7":"35816","8":"FM","9":"LICENSED","10":"Click for Details","11":"1390225","12":"<s_POLYGO>"},{"1":"KUNC","2":"91.5 FM","3":"Greeley","4":"Community Radio for Northern Colorado","5":"Public radio","6":"Colorado","7":"68219","8":"FM","9":"LICENSED","10":"Click for Details","11":"1197181","12":"<s_POLYGO>"},{"1":"KUNC","2":"91.5 FM","3":"Greeley","4":"Community Radio for Northern Colorado","5":"Public radio","6":"Colorado","7":"68219","8":"FM","9":"LICENSED","10":"Click for Details","11":"1479517","12":"<s_POLYGO>"},{"1":"KUTE","2":"90.1 FM","3":"Ignacio","4":"KUTE, Inc.","5":"Public radio","6":"Colorado","7":"82446","8":"FM","9":"LICENSED","10":"Click for Details","11":"271065","12":"<s_POLYGO>"},{"1":"KUVO","2":"89.3 FM","3":"Denver","4":"Rocky Mountain Public Broadcasting Network, Inc.","5":"Jazz/Public","6":"Colorado","7":"16687","8":"FM","9":"LICENSED","10":"Click for Details","11":"1795306","12":"<s_POLYGO>"},{"1":"WNPR","2":"90.5 FM","3":"Meriden","4":"Connecticut Public Broadcasting, Inc.","5":"News/Talk (Public radio)","6":"Connecticut","7":"13627","8":"FM","9":"LICENSED","10":"Click for Details","11":"157609","12":"<s_POLYGO>"},{"1":"WPKT","2":"89.1 FM","3":"Norwich","4":"Connecticut Public Broadcasting, Inc.","5":"News/Talk (Public radio)","6":"Connecticut","7":"13618","8":"FM","9":"LICENSED","10":"Click for Details","11":"149966","12":"<s_POLYGO>"},{"1":"WRTX","2":"91.7 FM","3":"Dover","4":"Temple University of the Commonwealth System of Higher Education","5":"Public radio","6":"Delaware","7":"65181","8":"FM","9":"LICENSED","10":"Click for Details","11":"208259","12":"<s_POLYGO>"},{"1":"WGCU-FM","2":"90.1 FM","3":"Ft. Myers","4":"Board of Trustees, Florida Gulf Coast University","5":"Public radio","6":"Florida","7":"69042","8":"FM","9":"LICENSED","10":"Click for Details","11":"288060","12":"<s_POLYGO>"},{"1":"WGCU-FM","2":"90.1 FM","3":"Ft. Myers","4":"Board of Trustees, Florida Gulf Coast University","5":"Public radio","6":"Florida","7":"69042","8":"FM","9":"LICENSED","10":"Click for Details","11":"1800869","12":"<s_POLYGO>"},{"1":"WGCU-FM","2":"90.1 FM","3":"Ft. Myers","4":"Board of Trustees, Florida Gulf Coast University","5":"Public radio","6":"Florida","7":"69042","8":"FM","9":"LICENSED","10":"Click for Details","11":"1790962","12":"<s_POLYGO>"},{"1":"WGCU-FM","2":"90.1 FM","3":"Ft. Myers","4":"Board of Trustees, Florida Gulf Coast University","5":"Public radio","6":"Florida","7":"69042","8":"FM","9":"LICENSED","10":"Click for Details","11":"1496547","12":"<s_POLYGO>"},{"1":"WJCT-FM","2":"89.9 FM","3":"Jacksonville","4":"WJCT, Inc.","5":"Public radio","6":"Florida","7":"73125","8":"FM","9":"LICENSED","10":"Click for Details","11":"1447286","12":"<s_POLYGO>"},{"1":"WKWM","2":"91.5 FM","3":"Marathon","4":"The School Board of Miami – Dade County, Florida","5":"Public radio","6":"Florida","7":"122606","8":"FM","9":"LICENSED","10":"Click for Details","11":"1261496","12":"<s_POLYGO>"},{"1":"WLRN-FM","2":"91.3 FM","3":"Miami [3]","4":"The School Board of Miami-Dade County, Florida","5":"Public radio","6":"Florida","7":"66339","8":"FM","9":"LICENSED","10":"Click for Details","11":"1055315","12":"<s_POLYGO>"},{"1":"WMFE-FM","2":"90.7 FM","3":"Orlando","4":"Community Communications, Inc.","5":"Public radio","6":"Florida","7":"12857","8":"FM","9":"LICENSED","10":"Click for Details","11":"1767881","12":"<s_POLYGO>"},{"1":"WMKO","2":"91.7 FM","3":"Marco","4":"Board of Trustees, Florida Gulf Coast University","5":"Public radio","6":"Florida","7":"69378","8":"FM","9":"LICENSED","10":"Click for Details","11":"1810799","12":"<s_POLYGO>"},{"1":"WUFT-FM","2":"89.1 FM","3":"Gainesville","4":"Board of Trustees, University of Florida","5":"Public radio (NPR)","6":"Florida","7":"66604","8":"FM","9":"LICENSED","10":"Click for Details","11":"118248","12":"<s_POLYGO>"},{"1":"WABE","2":"90.1 FM","3":"Atlanta","4":"Board of Education, City of Atlanta/ WABE","5":"Public radio (NPR)","6":"Georgia","7":"3538","8":"FM","9":"LICENSED","10":"Click for Details","11":"1498792","12":"<s_POLYGO>"},{"1":"WABE","2":"90.1 FM","3":"Atlanta","4":"Board of Education, City of Atlanta/ WABE","5":"Public radio (NPR)","6":"Georgia","7":"3538","8":"FM","9":"LICENSED","10":"Click for Details","11":"1521585","12":"<s_POLYGO>"},{"1":"WABE","2":"90.1 FM","3":"Atlanta","4":"Board of Education, City of Atlanta/ WABE","5":"Public radio (NPR)","6":"Georgia","7":"3538","8":"FM","9":"LICENSED","10":"Click for Details","11":"194574","12":"<s_POLYGO>"},{"1":"WABR","2":"91.1 FM","3":"Tifton","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23925","8":"FM","9":"LICENSED","10":"Click for Details","11":"109413","12":"<s_POLYGO>"},{"1":"WABR","2":"91.1 FM","3":"Tifton","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23925","8":"FM","9":"LICENSED","10":"Click for Details","11":"120904","12":"<s_POLYGO>"},{"1":"WACG-FM","2":"90.7 FM","3":"Augusta","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23922","8":"FM","9":"LICENSED","10":"Click for Details","11":"1443285","12":"<s_POLYGO>"},{"1":"WACG-FM","2":"90.7 FM","3":"Augusta","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23922","8":"FM","9":"LICENSED","10":"Click for Details","11":"149559","12":"<s_POLYGO>"},{"1":"WGPB","2":"97.7 FM","3":"Rome","4":"Georgia Public Telecommunications Commission","5":"Public Broadcasting","6":"Georgia","7":"6797","8":"FM","9":"LICENSED","10":"Click for Details","11":"1241907","12":"<s_POLYGO>"},{"1":"WJSP-FM","2":"88.1 FM","3":"Warm Springs","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23927","8":"FM","9":"LICENSED","10":"Click for Details","11":"1585489","12":"<s_POLYGO>"},{"1":"WJSP-FM","2":"88.1 FM","3":"Warm Springs","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23927","8":"FM","9":"LICENSED","10":"Click for Details","11":"149561","12":"<s_POLYGO>"},{"1":"WJWV","2":"90.9 FM","3":"Fort Gaines","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23946","8":"FM","9":"LICENSED","10":"Click for Details","11":"1748935","12":"<s_POLYGO>"},{"1":"WMUM-FM","2":"89.7 FM","3":"Cochran","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23939","8":"FM","9":"LICENSED","10":"Click for Details","11":"1244456","12":"<s_POLYGO>"},{"1":"WNGH-FM","2":"98.9 FM","3":"Chatsworth","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"2309","8":"FM","9":"LICENSED","10":"Click for Details","11":"120834","12":"<s_POLYGO>"},{"1":"WNGH-FM","2":"98.9 FM","3":"Chatsworth","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"2309","8":"FM","9":"LICENSED","10":"Click for Details","11":"1748165","12":"<s_POLYGO>"},{"1":"WNGU","2":"89.5 FM","3":"Dahlonega","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"76477","8":"FM","9":"LICENSED","10":"Click for Details","11":"581027","12":"<s_POLYGO>"},{"1":"WPPR","2":"88.3 FM","3":"Demorest","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23949","8":"FM","9":"LICENSED","10":"Click for Details","11":"1244337","12":"<s_POLYGO>"},{"1":"WRGC-FM","2":"88.3 FM","3":"Milledgeville","4":"Georgia College & State University","5":"Public radio","6":"Georgia","7":"173100","8":"FM","9":"LICENSED","10":"Click for Details","11":"1418113","12":"<s_POLYGO>"},{"1":"WSVH","2":"91.1 FM","3":"Savannah","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23926","8":"FM","9":"LICENSED","10":"Click for Details","11":"119707","12":"<s_POLYGO>"},{"1":"WSVH","2":"91.1 FM","3":"Savannah","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23926","8":"FM","9":"LICENSED","10":"Click for Details","11":"1264661","12":"<s_POLYGO>"},{"1":"WSVH","2":"91.1 FM","3":"Savannah","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23926","8":"FM","9":"LICENSED","10":"Click for Details","11":"970406","12":"<s_POLYGO>"},{"1":"WSVH","2":"91.1 FM","3":"Savannah","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23926","8":"FM","9":"LICENSED","10":"Click for Details","11":"149562","12":"<s_POLYGO>"},{"1":"WTJB","2":"91.7 FM","3":"Columbus","4":"Troy University","5":"Public radio; Classical","6":"Georgia","7":"68186","8":"FM","9":"LICENSED","10":"Click for Details","11":"1139559","12":"<s_POLYGO>"},{"1":"WUGA","2":"91.7 FM","3":"Athens","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"22982","8":"FM","9":"LICENSED","10":"Click for Details","11":"217722","12":"<s_POLYGO>"},{"1":"WUGA","2":"91.7 FM","3":"Athens","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"22982","8":"FM","9":"LICENSED","10":"Click for Details","11":"120905","12":"<s_POLYGO>"},{"1":"WUNV","2":"91.7 FM","3":"Albany","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23919","8":"FM","9":"LICENSED","10":"Click for Details","11":"147222","12":"<s_POLYGO>"},{"1":"WUWG","2":"90.7 FM","3":"Carrollton","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"71602","8":"FM","9":"LICENSED","10":"Click for Details","11":"1299029","12":"<s_POLYGO>"},{"1":"WWIO-FM","2":"88.9 FM","3":"Brunswick","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23944","8":"FM","9":"LICENSED","10":"Click for Details","11":"1280848","12":"<s_POLYGO>"},{"1":"WXVS","2":"90.1 FM","3":"Waycross","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23923","8":"FM","9":"LICENSED","10":"Click for Details","11":"1228440","12":"<s_POLYGO>"},{"1":"WXVS","2":"90.1 FM","3":"Waycross","4":"Georgia Public Telecommunications Commission","5":"Public radio","6":"Georgia","7":"23923","8":"FM","9":"LICENSED","10":"Click for Details","11":"120903","12":"<s_POLYGO>"},{"1":"KBSS","2":"91.1 FM","3":"Sun Valley","4":"Idaho State Board of Education","5":"Public radio; News/Talk","6":"Idaho","7":"87408","8":"FM","9":"LICENSED","10":"Click for Details","11":"1009906","12":"<s_POLYGO>"},{"1":"KBSU-FM","2":"90.3 FM","3":"Boise","4":"Idaho State Board of Education","5":"Public radio; Classical","6":"Idaho","7":"6325","8":"FM","9":"LICENSED","10":"Click for Details","11":"587274","12":"<s_POLYGO>"},{"1":"KBSX","2":"91.5 FM","3":"Boise","4":"Idaho State Board of Education","5":"Public radio; News/Talk","6":"Idaho","7":"28243","8":"FM","9":"LICENSED","10":"Click for Details","11":"587267","12":"<s_POLYGO>"},{"1":"KNWO","2":"90.1 FM","3":"Cottonwood","4":"Washington State University","5":"Public radio; News/Talk, Classical","6":"Idaho","7":"71018","8":"FM","9":"LICENSED","10":"Click for Details","11":"194729","12":"<s_POLYGO>"},{"1":"WBEQ","2":"90.7 FM","3":"Morris","4":"Chicago Public Media","5":"Public radio","6":"Illinois","7":"92544","8":"FM","9":"LICENSED","10":"Click for Details","11":"982044","12":"<s_POLYGO>"},{"1":"WDCB","2":"90.9 FM","3":"Glen Ellyn","4":"College of Du Page, District 502","5":"Public radio, Jazz","6":"Illinois","7":"12281","8":"FM","9":"LICENSED","10":"Click for Details","11":"65205","12":"<s_POLYGO>"},{"1":"WILL-FM","2":"90.9 FM","3":"Urbana","4":"The Board of Trustees of the University of Illinois","5":"Classical; Public radio","6":"Illinois","7":"68940","8":"FM","9":"LICENSED","10":"Click for Details","11":"299185","12":"<s_POLYGO>"},{"1":"WIUW","2":"89.5 FM","3":"Warsaw","4":"Western Illinois University","5":"Public broadcasting","6":"Illinois","7":"71792","8":"FM","9":"LICENSED","10":"Click for Details","11":"1344145","12":"<s_POLYGO>"},{"1":"WNIJ","2":"89.5 FM","3":"DeKalb","4":"Northern Illinois University","5":"Public radio (News/Talk, AAA)","6":"Illinois","7":"49550","8":"FM","9":"LICENSED","10":"Click for Details","11":"134324","12":"<s_POLYGO>"},{"1":"WNIJ","2":"89.5 FM","3":"DeKalb","4":"Northern Illinois University","5":"Public radio (News/Talk, AAA)","6":"Illinois","7":"49550","8":"FM","9":"LICENSED","10":"Click for Details","11":"112794","12":"<s_POLYGO>"},{"1":"WQUB","2":"90.3 FM","3":"Quincy","4":"The Curators of the University of Missouri","5":"Public radio","6":"Illinois","7":"54282","8":"FM","9":"LICENSED","10":"Click for Details","11":"253356","12":"<s_POLYGO>"},{"1":"WQUB","2":"90.3 FM","3":"Quincy","4":"The Curators of the University of Missouri","5":"Public radio","6":"Illinois","7":"54282","8":"FM","9":"LICENSED","10":"Click for Details","11":"161410","12":"<s_POLYGO>"},{"1":"WRTE","2":"90.7 FM","3":"Chicago","4":"Chicago Public Media","5":"Public radio","6":"Illinois","7":"10794","8":"FM","9":"LICENSED","10":"Click for Details","11":"1560633","12":"<s_POLYGO>"},{"1":"WUIS","2":"91.9 FM","3":"Springfield","4":"Board of Trustees of the University of Illinois","5":"Public radio","6":"Illinois","7":"59012","8":"FM","9":"LICENSED","10":"Click for Details","11":"1228259","12":"<s_POLYGO>"},{"1":"WUIS","2":"91.9 FM","3":"Springfield","4":"Board of Trustees of the University of Illinois","5":"Public radio","6":"Illinois","7":"59012","8":"FM","9":"LICENSED","10":"Click for Details","11":"1167852","12":"<s_POLYGO>"},{"1":"WBAA-FM","2":"101.3 FM","3":"West Lafayette","4":"Purdue University","5":"Public radio","6":"Indiana","7":"53947","8":"FM","9":"LICENSED","10":"Click for Details","11":"1313826","12":"<s_POLYGO>"},{"1":"WBEW","2":"89.5 FM","3":"Chesterton","4":"Chicago Public Media Inc.","5":"Public radio","6":"Indiana","7":"3248","8":"FM","9":"LICENSED","10":"Click for Details","11":"1274897","12":"<s_POLYGO>"},{"1":"WBOI","2":"89.1 FM","3":"Fort Wayne","4":"Northeast Indiana Public Radio, Inc","5":"Public radio","6":"Indiana","7":"53745","8":"FM","9":"LICENSED","10":"Click for Details","11":"196662","12":"<s_POLYGO>"},{"1":"WFIU","2":"103.7 FM","3":"Bloomington","4":"Trustees of Indiana University","5":"Public radio","6":"Indiana","7":"68269","8":"FM","9":"LICENSED","10":"Click for Details","11":"612754","12":"<s_POLYGO>"},{"1":"WFIU","2":"103.7 FM","3":"Bloomington","4":"Trustees of Indiana University","5":"Public radio","6":"Indiana","7":"68269","8":"FM","9":"LICENSED","10":"Click for Details","11":"1029580","12":"<s_POLYGO>"},{"1":"WFYI-FM","2":"90.1 FM","3":"Indianapolis","4":"Metropolitan Indnpls. Public B/Cing, Inc.","5":"Public radio","6":"Indiana","7":"41394","8":"FM","9":"LICENSED","10":"Click for Details","11":"750","12":"<s_POLYGO>"},{"1":"KNSB","2":"91.1 FM","3":"Bettendorf","4":"University of Northern Iowa","5":"Iowa Public Radio","6":"Iowa","7":"83540","8":"FM","9":"LICENSED","10":"Click for Details","11":"1753623","12":"<s_POLYGO>"},{"1":"KNSK","2":"91.1 FM","3":"Fort Dodge","4":"Iowa State University of Science and Technology","5":"Iowa Public Radio","6":"Iowa","7":"29066","8":"FM","9":"LICENSED","10":"Click for Details","11":"1201157","12":"<s_POLYGO>"},{"1":"KNSM","2":"91.5 FM","3":"Mason City","4":"University of Northern Iowa","5":"Iowa Public Radio","6":"Iowa","7":"69284","8":"FM","9":"LICENSED","10":"Click for Details","11":"108659","12":"<s_POLYGO>"},{"1":"KOJI","2":"90.7 FM","3":"Okoboji","4":"Western Iowa Tech Community College","5":"Public radio","6":"Iowa","7":"123310","8":"FM","9":"LICENSED","10":"Click for Details","11":"609543","12":"<s_POLYGO>"},{"1":"KSUI","2":"91.7 FM","3":"Iowa City","4":"The University of Iowa","5":"Iowa Public Radio & Classical","6":"Iowa","7":"66626","8":"FM","9":"LICENSED","10":"Click for Details","11":"228779","12":"<s_POLYGO>"},{"1":"KSUI","2":"91.7 FM","3":"Iowa City","4":"The University of Iowa","5":"Iowa Public Radio & Classical","6":"Iowa","7":"66626","8":"FM","9":"LICENSED","10":"Click for Details","11":"1626587","12":"<s_POLYGO>"},{"1":"KUNI","2":"90.9 FM","3":"Cedar Falls","4":"University of Northern Iowa","5":"Public radio","6":"Iowa","7":"69158","8":"FM","9":"LICENSED","10":"Click for Details","11":"73868","12":"<s_POLYGO>"},{"1":"KWIT","2":"90.3 FM","3":"Sioux City","4":"Western Iowa Tech Community College","5":"Public radio","6":"Iowa","7":"71839","8":"FM","9":"LICENSED","10":"Click for Details","11":"298582","12":"<s_POLYGO>"},{"1":"WOI-FM","2":"90.1 FM","3":"Ames","4":"Iowa State University of Science and Technology","5":"Iowa Public Radio","6":"Iowa","7":"29118","8":"FM","9":"LICENSED","10":"Click for Details","11":"300405","12":"<s_POLYGO>"},{"1":"KANH","2":"89.7 FM","3":"Emporia","4":"University of Kansas","5":"Public radio","6":"Kansas","7":"90457","8":"FM","9":"LICENSED","10":"Click for Details","11":"601886","12":"<s_POLYGO>"},{"1":"KANV","2":"91.3 FM","3":"Olsburg","4":"The University of Kansas","5":"Public radio","6":"Kansas","7":"92667","8":"FM","9":"LICENSED","10":"Click for Details","11":"622173","12":"<s_POLYGO>"},{"1":"KANZ","2":"91.1 FM","3":"Garden City","4":"Kanza Society, Inc.","5":"Public radio; NPR News; Classical; Jazz","6":"Kansas","7":"33372","8":"FM","9":"LICENSED","10":"Click for Details","11":"1186796","12":"<s_POLYGO>"},{"1":"KANZ","2":"91.1 FM","3":"Garden City","4":"Kanza Society, Inc.","5":"Public radio; NPR News; Classical; Jazz","6":"Kansas","7":"33372","8":"FM","9":"LICENSED","10":"Click for Details","11":"1188272","12":"<s_POLYGO>"},{"1":"KMUW","2":"89.1 FM","3":"Wichita","4":"Wichita State University","5":"Public radio","6":"Kansas","7":"72364","8":"FM","9":"LICENSED","10":"Click for Details","11":"1377651","12":"<s_POLYGO>"},{"1":"KMUW","2":"89.1 FM","3":"Wichita","4":"Wichita State University","5":"Public radio","6":"Kansas","7":"72364","8":"FM","9":"LICENSED","10":"Click for Details","11":"1377649","12":"<s_POLYGO>"},{"1":"KZAN","2":"91.7 FM","3":"Hays","4":"Kanza Society, Inc.","5":"Public radio; NPR News; Classical; Jazz","6":"Kansas","7":"92646","8":"FM","9":"LICENSED","10":"Click for Details","11":"1319331","12":"<s_POLYGO>"},{"1":"KZNA","2":"90.5 FM","3":"Hill City","4":"Kanza Society, Inc.","5":"Public radio; NPR News; Classical; Jazz","6":"Kansas","7":"33383","8":"FM","9":"LICENSED","10":"Click for Details","11":"1179020","12":"<s_POLYGO>"},{"1":"KZNA","2":"90.5 FM","3":"Hill City","4":"Kanza Society, Inc.","5":"Public radio; NPR News; Classical; Jazz","6":"Kansas","7":"33383","8":"FM","9":"LICENSED","10":"Click for Details","11":"1156994","12":"<s_POLYGO>"},{"1":"WEKC","2":"88.5 FM","3":"Corbin","4":"Eastern Kentucky University","5":"Public radio","6":"Kentucky","7":"92574","8":"FM","9":"LICENSED","10":"Click for Details","11":"661492","12":"<s_POLYGO>"},{"1":"WKMD","2":"90.9 FM","3":"Madisonville","4":"Board of Regents, Murray State University","5":"Public radio","6":"Kentucky","7":"81313","8":"FM","9":"LICENSED","10":"Click for Details","11":"1359495","12":"<s_POLYGO>"},{"1":"WKMS-FM","2":"91.3 FM","3":"Murray","4":"Board of Regents, Murray State University","5":"Public radio","6":"Kentucky","7":"47080","8":"FM","9":"LICENSED","10":"Click for Details","11":"287277","12":"<s_POLYGO>"},{"1":"WKMS-FM","2":"91.3 FM","3":"Murray","4":"Board of Regents, Murray State University","5":"Public radio","6":"Kentucky","7":"47080","8":"FM","9":"LICENSED","10":"Click for Details","11":"1365257","12":"<s_POLYGO>"},{"1":"WKMS-FM","2":"91.3 FM","3":"Murray","4":"Board of Regents, Murray State University","5":"Public radio","6":"Kentucky","7":"47080","8":"FM","9":"LICENSED","10":"Click for Details","11":"259725","12":"<s_POLYGO>"},{"1":"WKMS-FM","2":"91.3 FM","3":"Murray","4":"Board of Regents, Murray State University","5":"Public radio","6":"Kentucky","7":"47080","8":"FM","9":"LICENSED","10":"Click for Details","11":"1182292","12":"<s_POLYGO>"},{"1":"WKMS-FM","2":"91.3 FM","3":"Murray","4":"Board of Regents, Murray State University","5":"Public radio","6":"Kentucky","7":"47080","8":"FM","9":"LICENSED","10":"Click for Details","11":"287276","12":"<s_POLYGO>"},{"1":"WKYU-FM","2":"88.9 FM","3":"Bowling Green","4":"Western Kentucky University","5":"Public radio","6":"Kentucky","7":"71856","8":"FM","9":"LICENSED","10":"Click for Details","11":"1175559","12":"<s_POLYGO>"},{"1":"WKYU-FM","2":"88.9 FM","3":"Bowling Green","4":"Western Kentucky University","5":"Public radio","6":"Kentucky","7":"71856","8":"FM","9":"LICENSED","10":"Click for Details","11":"1267242","12":"<s_POLYGO>"},{"1":"WMKY","2":"90.3 FM","3":"Morehead","4":"Morehead State University","5":"Public radio","6":"Kentucky","7":"43765","8":"FM","9":"LICENSED","10":"Click for Details","11":"687099","12":"<s_POLYGO>"},{"1":"WMKY","2":"90.3 FM","3":"Morehead","4":"Morehead State University","5":"Public radio","6":"Kentucky","7":"43765","8":"FM","9":"LICENSED","10":"Click for Details","11":"234741","12":"<s_POLYGO>"},{"1":"KDAQ","2":"89.9 FM","3":"Shreveport","4":"Bd Supervisors,","5":"Public radio","6":"Louisiana","7":"4317","8":"FM","9":"LICENSED","10":"Click for Details","11":"1312859","12":"<s_POLYGO>"},{"1":"KLSA","2":"90.7 FM","3":"Alexandria","4":"Bd Supervisors,","5":"Public radio, NPR, PRI","6":"Louisiana","7":"4218","8":"FM","9":"LICENSED","10":"Click for Details","11":"96379","12":"<s_POLYGO>"},{"1":"KRVS","2":"88.7 FM","3":"Lafayette","4":"University of Louisiana at Lafayette","5":"Public radio","6":"Louisiana","7":"66595","8":"FM","9":"LICENSED","10":"Click for Details","11":"1091318","12":"<s_POLYGO>"},{"1":"KSLU","2":"90.9 FM","3":"Hammond","4":"Southeastern Louisiana University","5":"Adult album alternative/Public radio/PRI","6":"Louisiana","7":"61234","8":"FM","9":"LICENSED AND SILENT","10":"Click for Details","11":"78896","12":"<s_POLYGO>"},{"1":"WRKF","2":"89.3 FM","3":"Baton Rouge","4":"Public radio Inc.","5":"Public radio, NPR, PRI","6":"Louisiana","7":"53834","8":"FM","9":"LICENSED","10":"Click for Details","11":"163069","12":"<s_POLYGO>"},{"1":"WRKF","2":"89.3 FM","3":"Baton Rouge","4":"Public radio Inc.","5":"Public radio, NPR, PRI","6":"Louisiana","7":"53834","8":"FM","9":"LICENSED","10":"Click for Details","11":"123957","12":"<s_POLYGO>"},{"1":"WWNO","2":"89.9 FM","3":"New Orleans","4":"University of New Orleans","5":"Classical music, Fine arts and Talk/NPR/PRI/American Public Media","6":"Louisiana","7":"38607","8":"FM","9":"LICENSED","10":"Click for Details","11":"1734296","12":"<s_POLYGO>"},{"1":"WMEA","2":"90.1 FM","3":"Portland","4":"Maine Public Broadcasting Corporation","5":"Public radio","6":"Maine","7":"39655","8":"FM","9":"LICENSED","10":"Click for Details","11":"285537","12":"<s_POLYGO>"},{"1":"WMEA","2":"90.1 FM","3":"Portland","4":"Maine Public Broadcasting Corporation","5":"Public radio","6":"Maine","7":"39655","8":"FM","9":"LICENSED","10":"Click for Details","11":"1804705","12":"<s_POLYGO>"},{"1":"WMEA","2":"90.1 FM","3":"Portland","4":"Maine Public Broadcasting Corporation","5":"Public radio","6":"Maine","7":"39655","8":"FM","9":"LICENSED","10":"Click for Details","11":"142489","12":"<s_POLYGO>"},{"1":"WMED","2":"89.7 FM","3":"Calais","4":"Maine Public Broadcasting Corporation","5":"Public radio","6":"Maine","7":"39646","8":"FM","9":"LICENSED","10":"Click for Details","11":"285593","12":"<s_POLYGO>"},{"1":"WMEF","2":"106.5 FM","3":"Fort Kent","4":"Maine Public Broadcasting Corporation","5":"Public radio","6":"Maine","7":"39653","8":"FM","9":"LICENSED","10":"Click for Details","11":"1105326","12":"<s_POLYGO>"},{"1":"WMEH","2":"90.9 FM","3":"Bangor","4":"Maine Public Broadcasting Corporation","5":"Public radio","6":"Maine","7":"39650","8":"FM","9":"LICENSED","10":"Click for Details","11":"704103","12":"<s_POLYGO>"},{"1":"WMEM","2":"106.1 FM","3":"Presque Isle","4":"Maine Public Broadcasting Corporation","5":"Public radio","6":"Maine","7":"39661","8":"FM","9":"LICENSED","10":"Click for Details","11":"608092","12":"<s_POLYGO>"},{"1":"WMEP","2":"90.5 FM","3":"Camden","4":"Maine Public Broadcasting Corporation","5":"Public radio","6":"Maine","7":"92566","8":"FM","9":"LICENSED","10":"Click for Details","11":"586807","12":"<s_POLYGO>"},{"1":"WMEW","2":"91.3 FM","3":"Waterville","4":"Maine Public Broadcasting Corporation","5":"Public radio","6":"Maine","7":"39645","8":"FM","9":"LICENSED","10":"Click for Details","11":"535529","12":"<s_POLYGO>"},{"1":"WYPR","2":"88.1 FM","3":"Baltimore","4":"WYPR License Holding LLC","5":"Public radio","6":"Maryland","7":"65753","8":"FM","9":"LICENSED","10":"Click for Details","11":"1234001","12":"<s_POLYGO>"},{"1":"WAMQ","2":"105.1 FM","3":"Great Barrington","4":"WAMC","5":"Public radio","6":"Massachusetts","7":"70847","8":"FM","9":"LICENSED","10":"Click for Details","11":"86543","12":"<s_POLYGO>"},{"1":"WAMQ","2":"105.1 FM","3":"Great Barrington","4":"WAMC","5":"Public radio","6":"Massachusetts","7":"70847","8":"FM","9":"LICENSED","10":"Click for Details","11":"252557","12":"<s_POLYGO>"},{"1":"WCAI","2":"90.1 FM","3":"Woods Hole","4":"WGBH Educational Foundation","5":"Public radio","6":"Massachusetts","7":"8566","8":"FM","9":"LICENSED","10":"Click for Details","11":"1614816","12":"<s_POLYGO>"},{"1":"WFCR","2":"88.5 FM","3":"Amherst","4":"University of Massachusetts","5":"Public radio","6":"Massachusetts","7":"69304","8":"FM","9":"LICENSED","10":"Click for Details","11":"248181","12":"<s_POLYGO>"},{"1":"WFCR","2":"88.5 FM","3":"Amherst","4":"University of Massachusetts","5":"Public radio","6":"Massachusetts","7":"69304","8":"FM","9":"LICENSED","10":"Click for Details","11":"272171","12":"<s_POLYGO>"},{"1":"WGBH","2":"89.7 FM","3":"Boston","4":"WGBH Educational Foundation","5":"Public radio","6":"Massachusetts","7":"70510","8":"FM","9":"LICENSED","10":"Click for Details","11":"21076","12":"<s_POLYGO>"},{"1":"WGBH","2":"89.7 FM","3":"Boston","4":"WGBH Educational Foundation","5":"Public radio","6":"Massachusetts","7":"70510","8":"FM","9":"LICENSED","10":"Click for Details","11":"1047356","12":"<s_POLYGO>"},{"1":"KBIA","2":"91.3 FM","3":"Columbia","4":"The Curators of the University of Missouri","5":"Public radio","6":"Missouri","7":"69180","8":"FM","9":"LICENSED","10":"Click for Details","11":"298675","12":"<s_POLYGO>"},{"1":"KCUR-FM","2":"89.3 FM","3":"Kansas City","4":"The Curators of the University of Missouri","5":"Public radio (NPR)","6":"Missouri","7":"14738","8":"FM","9":"LICENSED","10":"Click for Details","11":"175589","12":"<s_POLYGO>"},{"1":"KKTR","2":"89.7 FM","3":"Kirksville","4":"Truman State University","5":"Public radio","6":"Missouri","7":"92738","8":"FM","9":"LICENSED","10":"Click for Details","11":"1240924","12":"<s_POLYGO>"},{"1":"KSEF","2":"88.9 FM","3":"Ste. Genevieve","4":"Board of Regents, Southeast Missouri State University","5":"Public radio","6":"Missouri","7":"90232","8":"FM","9":"LICENSED","10":"Click for Details","11":"1368812","12":"<s_POLYGO>"},{"1":"KSMU","2":"91.1 FM","3":"Springfield","4":"Board of Governors of Missouri State University","5":"Public radio","6":"Missouri","7":"4210","8":"FM","9":"LICENSED","10":"Click for Details","11":"187164","12":"<s_POLYGO>"},{"1":"KSMU","2":"91.1 FM","3":"Springfield","4":"Board of Governors of Missouri State University","5":"Public radio","6":"Missouri","7":"4210","8":"FM","9":"LICENSED","10":"Click for Details","11":"982371","12":"<s_POLYGO>"},{"1":"KWMU","2":"90.7 FM","3":"St. Louis","4":"The Curators of the University of Missouri","5":"Public radio","6":"Missouri","7":"65585","8":"FM","9":"LICENSED","10":"Click for Details","11":"572732","12":"<s_POLYGO>"},{"1":"KBMC","2":"102.1 FM","3":"Bozeman","4":"Montana State University – Billings","5":"Public radio","6":"Montana","7":"43572","8":"FM","9":"LICENSED","10":"Click for Details","11":"166619","12":"<s_POLYGO>"},{"1":"KBMC","2":"102.1 FM","3":"Bozeman","4":"Montana State University – Billings","5":"Public radio","6":"Montana","7":"43572","8":"FM","9":"LICENSED","10":"Click for Details","11":"195193","12":"<s_POLYGO>"},{"1":"KBMC","2":"102.1 FM","3":"Bozeman","4":"Montana State University – Billings","5":"Public radio","6":"Montana","7":"43572","8":"FM","9":"LICENSED","10":"Click for Details","11":"1199012","12":"<s_POLYGO>"},{"1":"KEMC","2":"91.7 FM","3":"Billings","4":"Montana State University – Billings","5":"Public radio","6":"Montana","7":"43571","8":"FM","9":"LICENSED","10":"Click for Details","11":"1797569","12":"<s_POLYGO>"},{"1":"KEMC","2":"91.7 FM","3":"Billings","4":"Montana State University – Billings","5":"Public radio","6":"Montana","7":"43571","8":"FM","9":"LICENSED","10":"Click for Details","11":"1198950","12":"<s_POLYGO>"},{"1":"KUFM","2":"89.1 FM","3":"Missoula","4":"University Of Montana","5":"Public radio","6":"Montana","7":"69239","8":"FM","9":"LICENSED","10":"Click for Details","11":"175396","12":"<s_POLYGO>"},{"1":"KUFM","2":"89.1 FM","3":"Missoula","4":"University Of Montana","5":"Public radio","6":"Montana","7":"69239","8":"FM","9":"LICENSED","10":"Click for Details","11":"215931","12":"<s_POLYGO>"},{"1":"KYPB","2":"89.3 FM","3":"Big Timber","4":"Montana State University – Billings","5":"Public radio","6":"Montana","7":"174918","8":"FM","9":"LICENSED","10":"Click for Details","11":"1404042","12":"<s_POLYGO>"},{"1":"KYPM","2":"89.9 FM","3":"Livingston","4":"Montana State University – Billings","5":"Public radio","6":"Montana","7":"172578","8":"FM","9":"LICENSED","10":"Click for Details","11":"1554733","12":"<s_POLYGO>"},{"1":"KYPW","2":"88.3 FM","3":"Wolf Point","4":"Montana State University – Billings","5":"Public radio","6":"Montana","7":"172712","8":"FM","9":"LICENSED","10":"Click for Details","11":"1341716","12":"<s_POLYGO>"},{"1":"KYPZ","2":"96.1 FM","3":"Fort Benton","4":"Montana State University Billings","5":"Public radio","6":"Montana","7":"164087","8":"FM","9":"LICENSED","10":"Click for Details","11":"1758288","12":"<s_POLYGO>"},{"1":"WEVC","2":"107.1 FM","3":"Gorham","4":"New Hampshire Public Radio, Incorporated","5":"Public radio","6":"New_Hampshire","7":"24235","8":"FM","9":"LICENSED","10":"Click for Details","11":"1772165","12":"<s_POLYGO>"},{"1":"WEVH","2":"91.3 FM","3":"Hanover","4":"New Hampshire Public Radio, Incorporated","5":"Public radio","6":"New_Hampshire","7":"48439","8":"FM","9":"LICENSED","10":"Click for Details","11":"147081","12":"<s_POLYGO>"},{"1":"WEVN","2":"90.7 FM","3":"Keene","4":"New Hampshire Public Radio, Incorporated","5":"Public radio","6":"New_Hampshire","7":"48440","8":"FM","9":"LICENSED","10":"Click for Details","11":"674336","12":"<s_POLYGO>"},{"1":"WEVO","2":"89.1 FM","3":"Concord","4":"New Hampshire Public Radio, Incorporated","5":"Public radio","6":"New_Hampshire","7":"48438","8":"FM","9":"LICENSED","10":"Click for Details","11":"1382558","12":"<s_POLYGO>"},{"1":"WEVO","2":"89.1 FM","3":"Concord","4":"New Hampshire Public Radio, Incorporated","5":"Public radio","6":"New_Hampshire","7":"48438","8":"FM","9":"LICENSED","10":"Click for Details","11":"1008684","12":"<s_POLYGO>"},{"1":"KANW","2":"89.1 FM","3":"Albuquerque","4":"Board of Education of the City of Albuquerque, NM","5":"New Mexico Music/Public radio","6":"New_Mexico","7":"4273","8":"FM","9":"LICENSED","10":"Click for Details","11":"1300417","12":"<s_POLYGO>"},{"1":"KANW","2":"89.1 FM","3":"Albuquerque","4":"Board of Education of the City of Albuquerque, NM","5":"New Mexico Music/Public radio","6":"New_Mexico","7":"4273","8":"FM","9":"LICENSED","10":"Click for Details","11":"1445032","12":"<s_POLYGO>"},{"1":"KGLP","2":"91.7 FM","3":"Gallup","4":"Gallup Public Radio","5":"Public radio","6":"New_Mexico","7":"23052","8":"FM","9":"LICENSED","10":"Click for Details","11":"1108745","12":"<s_POLYGO>"},{"1":"KUNM","2":"89.9 FM","3":"Albuquerque","4":"Regents of the University of New Mexico","5":"Public radio","6":"New_Mexico","7":"6083","8":"FM","9":"LICENSED","10":"Click for Details","11":"1182225","12":"<s_POLYGO>"},{"1":"KUSW","2":"88.1 FM","3":"Flora Vista","4":"KUTE, Inc.","5":"Public radio","6":"New_Mexico","7":"124178","8":"FM","9":"LICENSED","10":"Click for Details","11":"1231653","12":"<s_POLYGO>"},{"1":"KUUT","2":"89.7 FM","3":"Farmington","4":"KUTE, Inc.","5":"Public radio","6":"New_Mexico","7":"91346","8":"FM","9":"LICENSED","10":"Click for Details","11":"1244999","12":"<s_POLYGO>"},{"1":"WAER","2":"88.3 FM","3":"Syracuse","4":"Syracuse University","5":"Public radio","6":"New_York","7":"64354","8":"FM","9":"LICENSED","10":"Click for Details","11":"206163","12":"<s_POLYGO>"},{"1":"WAMC-FM","2":"90.3 FM","3":"Albany","4":"WAMC, Inc.","5":"Public radio","6":"New_York","7":"70849","8":"FM","9":"LICENSED","10":"Click for Details","11":"1407911","12":"<s_POLYGO>"},{"1":"WAMC-FM","2":"90.3 FM","3":"Albany","4":"WAMC, Inc.","5":"Public radio","6":"New_York","7":"70849","8":"FM","9":"LICENSED","10":"Click for Details","11":"1411017","12":"<s_POLYGO>"},{"1":"WAMK","2":"90.9 FM","3":"Kingston","4":"WAMC, Inc.","5":"Public radio","6":"New_York","7":"70502","8":"FM","9":"LICENSED","10":"Click for Details","11":"164325","12":"<s_POLYGO>"},{"1":"WANC","2":"103.9 FM","3":"Ticonderoga","4":"WAMC, Inc.","5":"Public radio","6":"New_York","7":"70842","8":"FM","9":"LICENSED","10":"Click for Details","11":"48093","12":"<s_POLYGO>"},{"1":"WANZ","2":"90.1 FM","3":"Stamford","4":"WAMC, Inc.","5":"Public radio","6":"New_York","7":"176616","8":"FM","9":"LICENSED","10":"Click for Details","11":"1417818","12":"<s_POLYGO>"},{"1":"WBFO","2":"88.7 FM","3":"Buffalo","4":"Western New York Public Broadcasting Association","5":"Public radio","6":"New_York","7":"63113","8":"FM","9":"LICENSED","10":"Click for Details","11":"1244132","12":"<s_POLYGO>"},{"1":"WBFO","2":"88.7 FM","3":"Buffalo","4":"Western New York Public Broadcasting Association","5":"Public radio","6":"New_York","7":"63113","8":"FM","9":"LICENSED","10":"Click for Details","11":"541577","12":"<s_POLYGO>"},{"1":"WCAN","2":"93.3 FM","3":"Canajoharie","4":"WAMC","5":"Public radio","6":"New_York","7":"70503","8":"FM","9":"LICENSED","10":"Click for Details","11":"165734","12":"<s_POLYGO>"},{"1":"WCEL","2":"91.9 FM","3":"Plattsburgh","4":"WAMC","5":"Public radio","6":"New_York","7":"44032","8":"FM","9":"LICENSED","10":"Click for Details","11":"157939","12":"<s_POLYGO>"},{"1":"WFUV","2":"90.7 FM","3":"New York City","4":"Fordham University","5":"Public radio, Adult album alternative","6":"New_York","7":"22033","8":"FM","9":"LICENSED","10":"Click for Details","11":"1344282","12":"<s_POLYGO>"},{"1":"WFUV","2":"90.7 FM","3":"New York City","4":"Fordham University","5":"Public radio, Adult album alternative","6":"New_York","7":"22033","8":"FM","9":"LICENSED","10":"Click for Details","11":"1121342","12":"<s_POLYGO>"},{"1":"WFUV","2":"90.7 FM","3":"New York City","4":"Fordham University","5":"Public radio, Adult album alternative","6":"New_York","7":"22033","8":"FM","9":"LICENSED","10":"Click for Details","11":"106084","12":"<s_POLYGO>"},{"1":"WLIW-FM","2":"88.3 FM","3":"Southampton","4":"WNET","5":"Public radio","6":"New_York","7":"38340","8":"FM","9":"LICENSED","10":"Click for Details","11":"202317","12":"<s_POLYGO>"},{"1":"WLIW-FM","2":"88.3 FM","3":"Southampton","4":"WNET","5":"Public radio","6":"New_York","7":"38340","8":"FM","9":"LICENSED","10":"Click for Details","11":"1067052","12":"<s_POLYGO>"},{"1":"WNYC-FM","2":"93.9 FM","3":"New York City","4":"New York Public Radio","5":"Public radio","6":"New_York","7":"73355","8":"FM","9":"LICENSED","10":"Click for Details","11":"1439113","12":"<s_POLYGO>"},{"1":"WNYC-FM","2":"93.9 FM","3":"New York City","4":"New York Public Radio","5":"Public radio","6":"New_York","7":"73355","8":"FM","9":"LICENSED","10":"Click for Details","11":"1768956","12":"<s_POLYGO>"},{"1":"WNYC-FM","2":"93.9 FM","3":"New York City","4":"New York Public Radio","5":"Public radio","6":"New_York","7":"73355","8":"FM","9":"LICENSED","10":"Click for Details","11":"1449294","12":"<s_POLYGO>"},{"1":"WOSR","2":"91.7 FM","3":"Middletown","4":"WAMC","5":"Public radio","6":"New_York","7":"70848","8":"FM","9":"LICENSED","10":"Click for Details","11":"168325","12":"<s_POLYGO>"},{"1":"WRVD","2":"90.3 FM","3":"Syracuse","4":"State University of New York","5":"Public radio","6":"New_York","7":"63131","8":"FM","9":"LICENSED","10":"Click for Details","11":"286540","12":"<s_POLYGO>"},{"1":"WRVO","2":"89.9 FM","3":"Oswego","4":"State University of New York","5":"Public radio","6":"New_York","7":"63115","8":"FM","9":"LICENSED","10":"Click for Details","11":"1135326","12":"<s_POLYGO>"},{"1":"WSKG-FM","2":"89.3 FM","3":"Binghamton","4":"WSKG Public Telecommunications Council","5":"Public radio","6":"New_York","7":"74039","8":"FM","9":"LICENSED","10":"Click for Details","11":"703175","12":"<s_POLYGO>"},{"1":"WSQE","2":"91.1 FM","3":"Corning","4":"WSKG Public Telecommunications Council","5":"Public radio","6":"New_York","7":"74030","8":"FM","9":"LICENSED","10":"Click for Details","11":"213297","12":"<s_POLYGO>"},{"1":"WSQG-FM","2":"90.9 FM","3":"Ithaca","4":"WSKG Public Telecommunications Council","5":"Public radio","6":"New_York","7":"74054","8":"FM","9":"LICENSED","10":"Click for Details","11":"114320","12":"<s_POLYGO>"},{"1":"WHQR","2":"91.3 FM","3":"Wilmington","4":"Friends of Public Radio","5":"Public radio","6":"North_Carolina","7":"22656","8":"FM","9":"LICENSED","10":"Click for Details","11":"554134","12":"<s_POLYGO>"},{"1":"WHQR","2":"91.3 FM","3":"Wilmington","4":"Friends of Public Radio","5":"Public radio","6":"North_Carolina","7":"22656","8":"FM","9":"LICENSED","10":"Click for Details","11":"971824","12":"<s_POLYGO>"},{"1":"WHQR","2":"91.3 FM","3":"Wilmington","4":"Friends of Public Radio","5":"Public radio","6":"North_Carolina","7":"22656","8":"FM","9":"LICENSED","10":"Click for Details","11":"1806394","12":"<s_POLYGO>"},{"1":"WHQR","2":"91.3 FM","3":"Wilmington","4":"Friends of Public Radio","5":"Public radio","6":"North_Carolina","7":"22656","8":"FM","9":"LICENSED","10":"Click for Details","11":"1806401","12":"<s_POLYGO>"},{"1":"WNCU","2":"90.7 FM","3":"Durham","4":"North Carolina Central University","5":"Jazz, Public radio","6":"North_Carolina","7":"49162","8":"FM","9":"LICENSED","10":"Click for Details","11":"209877","12":"<s_POLYGO>"},{"1":"WRQM","2":"90.9 FM","3":"Rocky Mount","4":"WUNC Public Radio, LLC","5":"Public radio","6":"North_Carolina","7":"49158","8":"FM","9":"LICENSED","10":"Click for Details","11":"1124362","12":"<s_POLYGO>"},{"1":"WTEB","2":"89.3 FM","3":"New Bern","4":"Craven Community College","5":"News/Talk (Public radio)","6":"North_Carolina","7":"14356","8":"FM","9":"LICENSED","10":"Click for Details","11":"1477388","12":"<s_POLYGO>"},{"1":"WUNC","2":"91.5 FM","3":"Chapel Hill","4":"WUNC Public Radio, LLC","5":"Public radio","6":"North_Carolina","7":"66581","8":"FM","9":"LICENSED","10":"Click for Details","11":"217856","12":"<s_POLYGO>"},{"1":"WUNC","2":"91.5 FM","3":"Chapel Hill","4":"WUNC Public Radio, LLC","5":"Public radio","6":"North_Carolina","7":"66581","8":"FM","9":"LICENSED","10":"Click for Details","11":"250311","12":"<s_POLYGO>"},{"1":"WYQS","2":"90.5 FM","3":"Mars Hill","4":"Western North Carolina Public Radio, Inc.","5":"Public radio","6":"North_Carolina","7":"40436","8":"FM","9":"LICENSED","10":"Click for Details","11":"1245301","12":"<s_POLYGO>"},{"1":"WCBE","2":"90.5","3":"Columbus","4":"Board of Education, City School District, Columbus","5":"Public radio (NPR)","6":"Ohio","7":"4325","8":"FM","9":"LICENSED","10":"Click for Details","11":"1720683","12":"<s_POLYGO>"},{"1":"WCPN","2":"104.9","3":"Lorain","4":"Radio Seaway, Inc.","5":"Public radio (NPR/WKSU)","6":"Ohio","7":"70109","8":"FM","9":"LICENSED","10":"Click for Details","11":"1646210","12":"<s_POLYGO>"},{"1":"WDPG","2":"89.9","3":"Greenville","4":"Dayton Public Radio, Inc.","5":"Public radio–classical (NPR)","6":"Ohio","7":"15882","8":"FM","9":"LICENSED","10":"Click for Details","11":"165612","12":"<s_POLYGO>"},{"1":"WDPG","2":"89.9","3":"Greenville","4":"Dayton Public Radio, Inc.","5":"Public radio–classical (NPR)","6":"Ohio","7":"15882","8":"FM","9":"LICENSED","10":"Click for Details","11":"190061","12":"<s_POLYGO>"},{"1":"WDPR","2":"88.1","3":"Dayton","4":"Dayton Public Radio, Inc.","5":"Public radio–classical (NPR)","6":"Ohio","7":"61582","8":"FM","9":"LICENSED","10":"Click for Details","11":"1553881","12":"<s_POLYGO>"},{"1":"WGUC","2":"90.9","3":"Cincinnati","4":"Cincinnati Public Radio","5":"Public radio–classical (NPR)","6":"Ohio","7":"6126","8":"FM","9":"LICENSED","10":"Click for Details","11":"1411938","12":"<s_POLYGO>"},{"1":"WKRJ","2":"91.5","3":"New Philadelphia","4":"Kent State University","5":"Public radio (NPR/WKSU)","6":"Ohio","7":"34042","8":"FM","9":"LICENSED","10":"Click for Details","11":"200958","12":"<s_POLYGO>"},{"1":"WKRW","2":"89.3","3":"Wooster","4":"Kent State University","5":"Public radio (NPR/WKSU)","6":"Ohio","7":"34046","8":"FM","9":"LICENSED","10":"Click for Details","11":"183600","12":"<s_POLYGO>"},{"1":"WKSU","2":"89.7","3":"Kent","4":"Kent State University","5":"Public radio (NPR)","6":"Ohio","7":"34045","8":"FM","9":"LICENSED","10":"Click for Details","11":"1418230","12":"<s_POLYGO>"},{"1":"WKSU","2":"89.7","3":"Kent","4":"Kent State University","5":"Public radio (NPR)","6":"Ohio","7":"34045","8":"FM","9":"LICENSED","10":"Click for Details","11":"430523","12":"<s_POLYGO>"},{"1":"WKSU","2":"89.7","3":"Kent","4":"Kent State University","5":"Public radio (NPR)","6":"Ohio","7":"34045","8":"FM","9":"LICENSED","10":"Click for Details","11":"607282","12":"<s_POLYGO>"},{"1":"WKSU","2":"89.7","3":"Kent","4":"Kent State University","5":"Public radio (NPR)","6":"Ohio","7":"34045","8":"FM","9":"LICENSED","10":"Click for Details","11":"1416990","12":"<s_POLYGO>"},{"1":"WKSU","2":"89.7","3":"Kent","4":"Kent State University","5":"Public radio (NPR)","6":"Ohio","7":"34045","8":"FM","9":"LICENSED","10":"Click for Details","11":"129552","12":"<s_POLYGO>"},{"1":"WKSV","2":"89.1","3":"Thompson","4":"Kent State University","5":"Public radio (NPR/WKSU)","6":"Ohio","7":"34040","8":"FM","9":"LICENSED","10":"Click for Details","11":"1113624","12":"<s_POLYGO>"},{"1":"WMUB","2":"88.5","3":"Oxford","4":"The President & Trustees of Miami University","5":"Public radio (NPR)","6":"Ohio","7":"66278","8":"FM","9":"LICENSED","10":"Click for Details","11":"196706","12":"<s_POLYGO>"},{"1":"WMUB","2":"88.5","3":"Oxford","4":"The President & Trustees of Miami University","5":"Public radio (NPR)","6":"Ohio","7":"66278","8":"FM","9":"LICENSED","10":"Click for Details","11":"216562","12":"<s_POLYGO>"},{"1":"WNRK","2":"90.7","3":"Norwalk","4":"Kent State University","5":"Public radio (NPR/WKSU)","6":"Ohio","7":"90728","8":"FM","9":"LICENSED","10":"Click for Details","11":"997793","12":"<s_POLYGO>"},{"1":"WOSB","2":"91.1","3":"Marion","4":"The Ohio State University","5":"Public radio–classical (NPR/WOSX)","6":"Ohio","7":"66193","8":"FM","9":"LICENSED","10":"Click for Details","11":"265759","12":"<s_POLYGO>"},{"1":"WOSE","2":"91.1","3":"Coshocton","4":"The Ohio State University","5":"Public radio–classical (NPR/WOSX)","6":"Ohio","7":"66192","8":"FM","9":"LICENSED","10":"Click for Details","11":"221353","12":"<s_POLYGO>"},{"1":"WOSU-FM","2":"89.7","3":"Columbus","4":"The Ohio State University","5":"Public radio (NPR)","6":"Ohio","7":"66191","8":"FM","9":"LICENSED","10":"Click for Details","11":"1353525","12":"<s_POLYGO>"},{"1":"WOSU-FM","2":"89.7","3":"Columbus","4":"The Ohio State University","5":"Public radio (NPR)","6":"Ohio","7":"66191","8":"FM","9":"LICENSED","10":"Click for Details","11":"219040","12":"<s_POLYGO>"},{"1":"WOSV","2":"91.7","3":"Mansfield","4":"The Ohio State University","5":"Public radio–classical (NPR/WOSX)","6":"Ohio","7":"66184","8":"FM","9":"LICENSED","10":"Click for Details","11":"143788","12":"<s_POLYGO>"},{"1":"WVXU","2":"91.7","3":"Cincinnati","4":"Cincinnati Public Radio","5":"Public radio (NPR)","6":"Ohio","7":"74302","8":"FM","9":"LICENSED","10":"Click for Details","11":"1411939","12":"<s_POLYGO>"},{"1":"WYSO","2":"91.3","3":"Yellow Springs","4":"Miami Valley Public Media","5":"Public radio (NPR)","6":"Ohio","7":"2374","8":"FM","9":"LICENSED","10":"Click for Details","11":"1706289","12":"<s_POLYGO>"},{"1":"WYSO","2":"91.3","3":"Yellow Springs","4":"Miami Valley Public Media","5":"Public radio (NPR)","6":"Ohio","7":"2374","8":"FM","9":"LICENSED","10":"Click for Details","11":"129228","12":"<s_POLYGO>"},{"1":"WYSO","2":"91.3","3":"Yellow Springs","4":"Miami Valley Public Media","5":"Public radio (NPR)","6":"Ohio","7":"2374","8":"FM","9":"LICENSED","10":"Click for Details","11":"129329","12":"<s_POLYGO>"},{"1":"WYSU","2":"88.5","3":"Youngstown","4":"Youngstown State University","5":"Public radio (NPR)","6":"Ohio","7":"74434","8":"FM","9":"LICENSED","10":"Click for Details","11":"1408517","12":"<s_POLYGO>"},{"1":"WYSU","2":"88.5","3":"Youngstown","4":"Youngstown State University","5":"Public radio (NPR)","6":"Ohio","7":"74434","8":"FM","9":"LICENSED","10":"Click for Details","11":"1696238","12":"<s_POLYGO>"},{"1":"KCCU","2":"89.3 FM","3":"Lawton","4":"Cameron University","5":"Public radio","6":"Oklahoma","7":"8484","8":"FM","9":"LICENSED","10":"Click for Details","11":"1541604","12":"<s_POLYGO>"},{"1":"KLCU","2":"90.3 FM","3":"Ardmore","4":"Cameron University","5":"Public radio","6":"Oklahoma","7":"82834","8":"FM","9":"LICENSED","10":"Click for Details","11":"267212","12":"<s_POLYGO>"},{"1":"KWGS","2":"89.5 FM","3":"Tulsa","4":"The University of Tulsa","5":"Public radio","6":"Oklahoma","7":"66586","8":"FM","9":"LICENSED","10":"Click for Details","11":"1405321","12":"<s_POLYGO>"},{"1":"KOAB-FM","2":"91.3 FM","3":"Bend","4":"Oregon Public Broadcasting","5":"Public radio","6":"Oregon","7":"50609","8":"FM","9":"LICENSED","10":"Click for Details","11":"1360875","12":"<s_POLYGO>"},{"1":"KOPB-FM","2":"91.5 FM","3":"Portland","4":"Oregon Public Broadcasting","5":"Public radio","6":"Oregon","7":"50607","8":"FM","9":"LICENSED","10":"Click for Details","11":"627168","12":"<s_POLYGO>"},{"1":"WDIY","2":"88.1 FM","3":"Allentown","4":"Lehigh Valley Community Broadcasters Association","5":"Community/Public radio","6":"Pennsylvania","7":"36992","8":"FM","9":"LICENSED","10":"Click for Details","11":"1706194","12":"<s_POLYGO>"},{"1":"WESA","2":"90.5 FM","3":"Pittsburgh","4":"Pittsburgh Community Broadcasting Corporation","5":"Public radio","6":"Pennsylvania","7":"17747","8":"FM","9":"LICENSED","10":"Click for Details","11":"1081395","12":"<s_POLYGO>"},{"1":"WESA","2":"90.5 FM","3":"Pittsburgh","4":"Pittsburgh Community Broadcasting Corporation","5":"Public radio","6":"Pennsylvania","7":"17747","8":"FM","9":"LICENSED","10":"Click for Details","11":"1082373","12":"<s_POLYGO>"},{"1":"WHYY-FM","2":"90.9 FM","3":"Philadelphia","4":"WHYY, Inc.","5":"Public radio","6":"Pennsylvania","7":"72336","8":"FM","9":"LICENSED","10":"Click for Details","11":"1028845","12":"<s_POLYGO>"},{"1":"WITF-FM","2":"89.5 FM","3":"Harrisburg","4":"WITF, Inc.","5":"Public radio","6":"Pennsylvania","7":"73084","8":"FM","9":"LICENSED","10":"Click for Details","11":"1112619","12":"<s_POLYGO>"},{"1":"WITF-FM","2":"89.5 FM","3":"Harrisburg","4":"WITF, Inc.","5":"Public radio","6":"Pennsylvania","7":"73084","8":"FM","9":"LICENSED","10":"Click for Details","11":"1139846","12":"<s_POLYGO>"},{"1":"WJAZ","2":"91.7 FM","3":"Summerdale","4":"Temple University of the Commonwealth System of Higher Education","5":"Public radio/Jazz","6":"Pennsylvania","7":"65184","8":"FM","9":"LICENSED","10":"Click for Details","11":"1398151","12":"<s_POLYGO>"},{"1":"WPSU","2":"91.5 FM","3":"State College","4":"The Pennsylvania State University","5":"Public radio","6":"Pennsylvania","7":"66239","8":"FM","9":"LICENSED","10":"Click for Details","11":"201212","12":"<s_POLYGO>"},{"1":"WPSX","2":"90.1 FM","3":"Kane","4":"The Pennsylvania State University","5":"Public radio","6":"Pennsylvania","7":"66240","8":"FM","9":"LICENSED","10":"Click for Details","11":"207248","12":"<s_POLYGO>"},{"1":"WRTI","2":"90.1 FM","3":"Philadelphia","4":"Temple University of the Commonwealth System of Higher Education","5":"Public radio","6":"Pennsylvania","7":"65190","8":"FM","9":"LICENSED","10":"Click for Details","11":"1400749","12":"<s_POLYGO>"},{"1":"WRTI","2":"90.1 FM","3":"Philadelphia","4":"Temple University of the Commonwealth System of Higher Education","5":"Public radio","6":"Pennsylvania","7":"65190","8":"FM","9":"LICENSED","10":"Click for Details","11":"1404881","12":"<s_POLYGO>"},{"1":"WRTJ","2":"89.3 FM","3":"Coatesville","4":"Temple University of the Commonwealth System of Higher Education","5":"Public radio","6":"Pennsylvania","7":"90653","8":"FM","9":"LICENSED","10":"Click for Details","11":"1334374","12":"<s_POLYGO>"},{"1":"WRTL","2":"90.7 FM","3":"Ephrata","4":"Temple University of the Commonwealth System of Higher Education","5":"Public radio","6":"Pennsylvania","7":"65177","8":"FM","9":"LICENSED","10":"Click for Details","11":"600878","12":"<s_POLYGO>"},{"1":"WRTY","2":"91.1 FM","3":"Jackson Township","4":"Temple University of the Commonwealth System of Higher Education","5":"Public radio","6":"Pennsylvania","7":"65178","8":"FM","9":"LICENSED","10":"Click for Details","11":"163922","12":"<s_POLYGO>"},{"1":"WVIA-FM","2":"89.9 FM","3":"Scranton","4":"Northeastern Pennsylvania Educational Television Association","5":"Public radio","6":"Pennsylvania","7":"49436","8":"FM","9":"LICENSED","10":"Click for Details","11":"1277263","12":"<s_POLYGO>"},{"1":"WVYA","2":"89.7 FM","3":"Williamsport","4":"Northeastern Pennsylvania Educational Television Association","5":"Public radio","6":"Pennsylvania","7":"92638","8":"FM","9":"LICENSED","10":"Click for Details","11":"619348","12":"<s_POLYGO>"},{"1":"WNPE","2":"102.7 FM","3":"Narragansett Pier","4":"Rhode Island Public Radio","5":"Public radio","6":"Rhode_Island","7":"22874","8":"FM","9":"LICENSED","10":"Click for Details","11":"1779946","12":"<s_POLYGO>"},{"1":"WNPN","2":"89.3 FM","3":"Newport","4":"Rhode Island Public Radio, Incorporated","5":"Public radio","6":"Rhode_Island","7":"163899","8":"FM","9":"LICENSED","10":"Click for Details","11":"1789953","12":"<s_POLYGO>"},{"1":"WSCI","2":"89.3 FM","3":"Charleston","4":"South Carolina Educational TV Commission","5":"Public radio","6":"South_Carolina","7":"60950","8":"FM","9":"LICENSED","10":"Click for Details","11":"1742974","12":"<s_POLYGO>"},{"1":"WSCI","2":"89.3 FM","3":"Charleston","4":"South Carolina Educational TV Commission","5":"Public radio","6":"South_Carolina","7":"60950","8":"FM","9":"LICENSED","10":"Click for Details","11":"88184","12":"<s_POLYGO>"},{"1":"KBHE-FM","2":"89.3 FM","3":"Rapid City","4":"South Dakota Board of Directors for Ed. Telecommunications","5":"Public radio","6":"South_Dakota","7":"58327","8":"FM","9":"LICENSED","10":"Click for Details","11":"68823","12":"<s_POLYGO>"},{"1":"KCSD","2":"90.9 FM","3":"Sioux Falls","4":"South Dakota Board of Directors for Educational Telecommunications","5":"Public radio","6":"South_Dakota","7":"60485","8":"FM","9":"LICENSED","10":"Click for Details","11":"1229325","12":"<s_POLYGO>"},{"1":"KDSD-FM","2":"90.9 FM","3":"Pierpont","4":"South Dakota Board of Directors for Ed. Telecommunications","5":"Public radio","6":"South_Dakota","7":"58324","8":"FM","9":"LICENSED","10":"Click for Details","11":"186146","12":"<s_POLYGO>"},{"1":"KTSD-FM","2":"91.1 FM","3":"Reliance","4":"South Dakota Board of Directors for Ed. Telecommunications","5":"Public radio","6":"South_Dakota","7":"58326","8":"FM","9":"LICENSED","10":"Click for Details","11":"66774","12":"<s_POLYGO>"},{"1":"KUSD","2":"89.7 FM","3":"Vermillion","4":"South Dakota Board of Directors for Ed. Telecommunications","5":"Public radio","6":"South_Dakota","7":"58426","8":"FM","9":"LICENSED","10":"Click for Details","11":"170018","12":"<s_POLYGO>"},{"1":"KYSD","2":"91.9 FM","3":"Spearfish","4":"South Dakota Board of Directors for Ed. Telecommunications","5":"Public radio","6":"South_Dakota","7":"174496","8":"FM","9":"LICENSED","10":"Click for Details","11":"1411866","12":"<s_POLYGO>"},{"1":"WPLN-FM","2":"90.3 FM","3":"Nashville","4":"Nashville Public Radio","5":"Public, News/Talk","6":"Tennessee","7":"53821","8":"FM","9":"LICENSED","10":"Click for Details","11":"1795485","12":"<s_POLYGO>"},{"1":"WPLN-FM","2":"90.3 FM","3":"Nashville","4":"Nashville Public Radio","5":"Public, News/Talk","6":"Tennessee","7":"53821","8":"FM","9":"LICENSED","10":"Click for Details","11":"1735850","12":"<s_POLYGO>"},{"1":"WPLN-FM","2":"90.3 FM","3":"Nashville","4":"Nashville Public Radio","5":"Public, News/Talk","6":"Tennessee","7":"53821","8":"FM","9":"LICENSED","10":"Click for Details","11":"286697","12":"<s_POLYGO>"},{"1":"WPLN-FM","2":"90.3 FM","3":"Nashville","4":"Nashville Public Radio","5":"Public, News/Talk","6":"Tennessee","7":"53821","8":"FM","9":"LICENSED","10":"Click for Details","11":"1803247","12":"<s_POLYGO>"},{"1":"WUTC","2":"88.1 FM","3":"Chattanooga","4":"University of Tennessee","5":"Public","6":"Tennessee","7":"69325","8":"FM","9":"LICENSED","10":"Click for Details","11":"192440","12":"<s_POLYGO>"},{"1":"KEDT-FM","2":"90.3 FM","3":"Corpus Christi","4":"South Texas Public Broadcasting System, Inc.","5":"Public radio","6":"Texas","7":"61172","8":"FM","9":"LICENSED","10":"Click for Details","11":"40106","12":"<s_POLYGO>"},{"1":"KETR","2":"88.9 FM","3":"Commerce","4":"Texas A&M University – Commerce","5":"Public radio","6":"Texas","7":"18260","8":"FM","9":"LICENSED","10":"Click for Details","11":"1549847","12":"<s_POLYGO>"},{"1":"KJJP","2":"105.7 FM","3":"Amarillo","4":"Kanza Society, Inc.","5":"Public radio","6":"Texas","7":"33273","8":"FM","9":"LICENSED","10":"Click for Details","11":"167826","12":"<s_POLYGO>"},{"1":"KJJP","2":"105.7 FM","3":"Amarillo","4":"Kanza Society, Inc.","5":"Public radio","6":"Texas","7":"33273","8":"FM","9":"LICENSED","10":"Click for Details","11":"1007736","12":"<s_POLYGO>"},{"1":"KJJP","2":"105.7 FM","3":"Amarillo","4":"Kanza Society, Inc.","5":"Public radio","6":"Texas","7":"33273","8":"FM","9":"LICENSED","10":"Click for Details","11":"1150333","12":"<s_POLYGO>"},{"1":"KJJP","2":"105.7 FM","3":"Amarillo","4":"Kanza Society, Inc.","5":"Public radio","6":"Texas","7":"33273","8":"FM","9":"LICENSED","10":"Click for Details","11":"1167085","12":"<s_POLYGO>"},{"1":"KLDN","2":"88.9 FM","3":"Lufkin","4":"BD Supervisors","5":"Public radio","6":"Texas","7":"6100","8":"FM","9":"LICENSED","10":"Click for Details","11":"159360","12":"<s_POLYGO>"},{"1":"KMCU","2":"88.7 FM","3":"Wichita Falls","4":"Cameron University","5":"Public radio","6":"Texas","7":"8489","8":"FM","9":"LICENSED","10":"Click for Details","11":"608681","12":"<s_POLYGO>"},{"1":"KPFT","2":"90.1 FM","3":"Houston","4":"Pacifica Foundation, Inc.","5":"Public radio","6":"Texas","7":"51244","8":"FM","9":"LICENSED","10":"Click for Details","11":"1170964","12":"<s_POLYGO>"},{"1":"KTEP","2":"88.5 FM","3":"El Paso","4":"University of Texas at El Paso","5":"Public radio","6":"Texas","7":"69342","8":"FM","9":"LICENSED","10":"Click for Details","11":"19895","12":"<s_POLYGO>"},{"1":"KTEP","2":"88.5 FM","3":"El Paso","4":"University of Texas at El Paso","5":"Public radio","6":"Texas","7":"69342","8":"FM","9":"LICENSED","10":"Click for Details","11":"1121461","12":"<s_POLYGO>"},{"1":"KTOT","2":"89.5 FM","3":"Spearman","4":"Kanza Society, Inc.","5":"Public radio","6":"Texas","7":"92623","8":"FM","9":"LICENSED","10":"Click for Details","11":"618328","12":"<s_POLYGO>"},{"1":"KTOT","2":"89.5 FM","3":"Spearman","4":"Kanza Society, Inc.","5":"Public radio","6":"Texas","7":"92623","8":"FM","9":"LICENSED","10":"Click for Details","11":"1150263","12":"<s_POLYGO>"},{"1":"KTTZ-FM","2":"89.1 FM","3":"Lubbock","4":"Texas Tech University","5":"Public radio","6":"Texas","7":"65354","8":"FM","9":"LICENSED","10":"Click for Details","11":"676999","12":"<s_POLYGO>"},{"1":"KTXP","2":"91.5 FM","3":"Bushland","4":"Kanza Society, Inc.","5":"Public radio","6":"Texas","7":"90579","8":"FM","9":"LICENSED AND SILENT","10":"Click for Details","11":"1002952","12":"<s_POLYGO>"},{"1":"KTYK","2":"100.7 FM","3":"Overton","4":"Board Supervisors, Louisiana State University and A&M College","5":"Public radio","6":"Texas","7":"29916","8":"FM","9":"LICENSED","10":"Click for Details","11":"1788250","12":"<s_POLYGO>"},{"1":"KTYK","2":"100.7 FM","3":"Overton","4":"Board Supervisors, Louisiana State University and A&M College","5":"Public radio","6":"Texas","7":"29916","8":"FM","9":"LICENSED","10":"Click for Details","11":"159316","12":"<s_POLYGO>"},{"1":"KUHF","2":"88.7 FM","3":"Houston","4":"University of Houston System","5":"Public radio","6":"Texas","7":"69150","8":"FM","9":"LICENSED","10":"Click for Details","11":"270121","12":"<s_POLYGO>"},{"1":"KUHF","2":"88.7 FM","3":"Houston","4":"University of Houston System","5":"Public radio","6":"Texas","7":"69150","8":"FM","9":"LICENSED","10":"Click for Details","11":"1359752","12":"<s_POLYGO>"},{"1":"KUT","2":"90.5 FM","3":"Austin","4":"The University of Texas at Austin","5":"Public radio","6":"Texas","7":"66573","8":"FM","9":"LICENSED","10":"Click for Details","11":"1102545","12":"<s_POLYGO>"},{"1":"KVLU","2":"91.3 FM","3":"Beaumont","4":"Lamar University","5":"Public/College","6":"Texas","7":"36456","8":"FM","9":"LICENSED","10":"Click for Details","11":"6922","12":"<s_POLYGO>"},{"1":"KVRT","2":"90.7 FM","3":"Victoria","4":"South Texas Public Broadcasting System, Inc.","5":"Public radio","6":"Texas","7":"61176","8":"FM","9":"LICENSED","10":"Click for Details","11":"208036","12":"<s_POLYGO>"},{"1":"KUHU","2":"88.1 FM","3":"Monticello","4":"University of Utah","5":"Public radio","6":"Utah","7":"172928","8":"FM","9":"LICENSED","10":"Click for Details","11":"1568408","12":"<s_POLYGO>"},{"1":"KUOU","2":"89.3 FM","3":"Roosevelt","4":"University of Utah","5":"Public radio","6":"Utah","7":"173223","8":"FM","9":"LICENSED","10":"Click for Details","11":"1481113","12":"<s_POLYGO>"},{"1":"WVBA","2":"88.9 FM","3":"Brattleboro","4":"Vermont Public Co.","5":"Public radio","6":"Vermont","7":"175088","8":"FM","9":"LICENSED","10":"Click for Details","11":"1788476","12":"<s_POLYGO>"},{"1":"WCNV","2":"89.1 FM","3":"Heathsville","4":"Commonwealth Public Broadcasting Corporation","5":"Public Radio","6":"Virginia","7":"90292","8":"FM","9":"LICENSED","10":"Click for Details","11":"1173665","12":"<s_POLYGO>"},{"1":"WCVE-FM","2":"88.9 FM","3":"Richmond","4":"Commonwealth Public Broadcasting Corporation","5":"Public Radio","6":"Virginia","7":"10016","8":"FM","9":"LICENSED","10":"Click for Details","11":"1697501","12":"<s_POLYGO>"},{"1":"WHRG","2":"88.5 FM","3":"Gloucester Point","4":"Hampton Roads Educational Telecommunications Association, Inc.","5":"Public Radio","6":"Virginia","7":"173962","8":"FM","9":"LICENSED","10":"Click for Details","11":"1421174","12":"<s_POLYGO>"},{"1":"WHRJ","2":"89.9 FM","3":"Gloucester Courthouse","4":"Hampton Roads Educational Telecommunications Association, Inc.","5":"Public Radio","6":"Virginia","7":"173971","8":"FM","9":"LICENSED","10":"Click for Details","11":"1422709","12":"<s_POLYGO>"},{"1":"WHRO-FM","2":"90.3 FM","3":"Norfolk","4":"Hampton Roads Educational Telecommunications Association, Inc.","5":"Public Radio","6":"Virginia","7":"25940","8":"FM","9":"LICENSED","10":"Click for Details","11":"1454339","12":"<s_POLYGO>"},{"1":"WHRO-FM","2":"90.3 FM","3":"Norfolk","4":"Hampton Roads Educational Telecommunications Association, Inc.","5":"Public Radio","6":"Virginia","7":"25940","8":"FM","9":"LICENSED","10":"Click for Details","11":"1381601","12":"<s_POLYGO>"},{"1":"WHRV","2":"89.5 FM","3":"Norfolk","4":"Hampton Roads Educational Telecommunications Association, Inc.","5":"Public Radio","6":"Virginia","7":"25933","8":"FM","9":"LICENSED","10":"Click for Details","11":"1430491","12":"<s_POLYGO>"},{"1":"WIQR","2":"88.7 FM","3":"Lexington","4":"Virginia Tech Foundation, Inc.","5":"Public Radio","6":"Virginia","7":"173897","8":"FM","9":"LICENSED","10":"Click for Details","11":"1432446","12":"<s_POLYGO>"},{"1":"WMVE","2":"90.1 FM","3":"Chase City","4":"Commonwealth Public Broadcasting Corporation","5":"Public Radio","6":"Virginia","7":"90273","8":"FM","9":"LICENSED","10":"Click for Details","11":"1211271","12":"<s_POLYGO>"},{"1":"WQIQ","2":"88.3 FM","3":"Spotsylvania","4":"Virginia Tech Foundation, Inc.","5":"Public Radio","6":"Virginia","7":"172441","8":"FM","9":"LICENSED","10":"Click for Details","11":"1517120","12":"<s_POLYGO>"},{"1":"WVTF","2":"89.1 FM","3":"Roanoke","4":"Virginia Tech Foundation, Inc.","5":"Public Radio","6":"Virginia","7":"70338","8":"FM","9":"LICENSED","10":"Click for Details","11":"1118746","12":"<s_POLYGO>"},{"1":"WVTR","2":"91.9 FM","3":"Marion","4":"Virginia Tech Foundation, Inc.","5":"Public Radio","6":"Virginia","7":"70340","8":"FM","9":"LICENSED","10":"Click for Details","11":"166233","12":"<s_POLYGO>"},{"1":"WVTU","2":"89.3 FM","3":"Charlottesville","4":"Virginia Tech Foundation, Inc.","5":"Public Radio","6":"Virginia","7":"70344","8":"FM","9":"LICENSED","10":"Click for Details","11":"155443","12":"<s_POLYGO>"},{"1":"WVTU","2":"89.3 FM","3":"Charlottesville","4":"Virginia Tech Foundation, Inc.","5":"Public Radio","6":"Virginia","7":"70344","8":"FM","9":"LICENSED","10":"Click for Details","11":"131257","12":"<s_POLYGO>"},{"1":"WVTW","2":"88.5 FM","3":"Charlottesville","4":"Virginia Tech Foundation, Inc.","5":"Public Radio","6":"Virginia","7":"63547","8":"FM","9":"LICENSED","10":"Click for Details","11":"1493340","12":"<s_POLYGO>"},{"1":"WVTW","2":"88.5 FM","3":"Charlottesville","4":"Virginia Tech Foundation, Inc.","5":"Public Radio","6":"Virginia","7":"63547","8":"FM","9":"LICENSED","10":"Click for Details","11":"193563","12":"<s_POLYGO>"},{"1":"WWVT-FM","2":"89.9 FM","3":"Ferrum","4":"Virginia Tech Foundation, Inc.","5":"Public Radio","6":"Virginia","7":"21417","8":"FM","9":"LICENSED","10":"Click for Details","11":"1057121","12":"<s_POLYGO>"},{"1":"KFAE-FM","2":"89.1 FM","3":"Richland","4":"Washington State University","5":"Public radio","6":"Washington","7":"71022","8":"FM","9":"LICENSED","10":"Click for Details","11":"574815","12":"<s_POLYGO>"},{"1":"KLWS","2":"91.5 FM","3":"Moses Lake","4":"Washington State University","5":"Public radio","6":"Washington","7":"71043","8":"FM","9":"LICENSED","10":"Click for Details","11":"248353","12":"<s_POLYGO>"},{"1":"KMWS","2":"89.7 FM","3":"Mount Vernon","4":"Washington State University","5":"Public radio","6":"Washington","7":"60531","8":"FM","9":"LICENSED","10":"Click for Details","11":"1201960","12":"<s_POLYGO>"},{"1":"KNKX","2":"88.5 FM","3":"Tacoma","4":"Friends of 88.5 FM","5":"Public radio","6":"Washington","7":"51199","8":"FM","9":"LICENSED","10":"Click for Details","11":"1251850","12":"<s_POLYGO>"},{"1":"KNKX","2":"88.5 FM","3":"Tacoma","4":"Friends of 88.5 FM","5":"Public radio","6":"Washington","7":"51199","8":"FM","9":"LICENSED","10":"Click for Details","11":"146896","12":"<s_POLYGO>"},{"1":"KNKX","2":"88.5 FM","3":"Tacoma","4":"Friends of 88.5 FM","5":"Public radio","6":"Washington","7":"51199","8":"FM","9":"LICENSED","10":"Click for Details","11":"549365","12":"<s_POLYGO>"},{"1":"KNWP","2":"90.1 FM","3":"Port Angeles","4":"Washington State University","5":"Public radio","6":"Washington","7":"81161","8":"FM","9":"LICENSED","10":"Click for Details","11":"266269","12":"<s_POLYGO>"},{"1":"KNWR","2":"90.7 FM","3":"Ellensburg","4":"Washington State University","5":"Public radio","6":"Washington","7":"71028","8":"FM","9":"LICENSED","10":"Click for Details","11":"174396","12":"<s_POLYGO>"},{"1":"KNWV","2":"90.5 FM","3":"Clarkston","4":"Washington State University","5":"Public radio","6":"Washington","7":"71042","8":"FM","9":"LICENSED","10":"Click for Details","11":"1578769","12":"<s_POLYGO>"},{"1":"KNWY","2":"90.3 FM","3":"Yakima","4":"Washington State University","5":"Public radio","6":"Washington","7":"71031","8":"FM","9":"LICENSED","10":"Click for Details","11":"1569663","12":"<s_POLYGO>"},{"1":"KPBX-FM","2":"91.1 FM","3":"Spokane","4":"Spokane Public Radio, Inc.","5":"Public radio","6":"Washington","7":"61942","8":"FM","9":"LICENSED","10":"Click for Details","11":"62506","12":"<s_POLYGO>"},{"1":"KPBZ","2":"90.3 FM","3":"Spokane","4":"Spokane Public Radio, Inc.","5":"Public radio","6":"Washington","7":"90126","8":"FM","9":"LICENSED","10":"Click for Details","11":"1377645","12":"<s_POLYGO>"},{"1":"KPLI","2":"90.1 FM","3":"Olympia","4":"Friends of 88.5 FM","5":"Public radio","6":"Washington","7":"91212","8":"FM","9":"LICENSED","10":"Click for Details","11":"1144859","12":"<s_POLYGO>"},{"1":"KQOW","2":"90.3 FM","3":"Bellingham","4":"University of Washington Board of Regents","5":"Public radio","6":"Washington","7":"174445","8":"FM","9":"LICENSED","10":"Click for Details","11":"1440022","12":"<s_POLYGO>"},{"1":"KSER","2":"90.7 FM","3":"Everett","4":"KSER Foundation","5":"News/Talk and Public affairs","6":"Washington","7":"29649","8":"FM","9":"LICENSED","10":"Click for Details","11":"283905","12":"<s_POLYGO>"},{"1":"KSFC","2":"91.9 FM","3":"Spokane","4":"Spokane Public Radio, Inc.","5":"Public radio","6":"Washington","7":"61933","8":"FM","9":"LICENSED","10":"Click for Details","11":"1481903","12":"<s_POLYGO>"},{"1":"KUOW-FM","2":"94.9 FM","3":"Seattle","4":"The University of Washington","5":"Public radio","6":"Washington","7":"66571","8":"FM","9":"LICENSED","10":"Click for Details","11":"997349","12":"<s_POLYGO>"},{"1":"KVIX","2":"89.3 FM","3":"Port Angeles","4":"Friends of 88.5 FM","5":"Public radio and Jazz","6":"Washington","7":"91468","8":"FM","9":"LICENSED","10":"Click for Details","11":"1053741","12":"<s_POLYGO>"},{"1":"KWWS","2":"89.7 FM","3":"Walla Walla","4":"Washington State University","5":"Public radio","6":"Washington","7":"71044","8":"FM","9":"LICENSED","10":"Click for Details","11":"1695250","12":"<s_POLYGO>"},{"1":"KZAZ","2":"91.7 FM","3":"Bellingham","4":"Washington State University","5":"Public radio","6":"Washington","7":"49599","8":"FM","9":"LICENSED","10":"Click for Details","11":"164286","12":"<s_POLYGO>"},{"1":"WVBY","2":"91.7 FM","3":"Beckley","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"71689","8":"FM","9":"LICENSED","10":"Click for Details","11":"1168403","12":"<s_POLYGO>"},{"1":"WVDS","2":"89.5 FM","3":"Petersburg","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"71659","8":"FM","9":"LICENSED","10":"Click for Details","11":"1545243","12":"<s_POLYGO>"},{"1":"WVDS","2":"89.5 FM","3":"Petersburg","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"71659","8":"FM","9":"LICENSED","10":"Click for Details","11":"1168387","12":"<s_POLYGO>"},{"1":"WVEP","2":"88.9 FM","3":"Martinsburg","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"70643","8":"FM","9":"LICENSED","10":"Click for Details","11":"1513766","12":"<s_POLYGO>"},{"1":"WVEP","2":"88.9 FM","3":"Martinsburg","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"70643","8":"FM","9":"LICENSED","10":"Click for Details","11":"1168389","12":"<s_POLYGO>"},{"1":"WVNP","2":"89.9 FM","3":"Wheeling","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"71658","8":"FM","9":"LICENSED","10":"Click for Details","11":"35542","12":"<s_POLYGO>"},{"1":"WVNP","2":"89.9 FM","3":"Wheeling","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"71658","8":"FM","9":"LICENSED","10":"Click for Details","11":"1168402","12":"<s_POLYGO>"},{"1":"WVPB","2":"88.5 FM","3":"Charleston","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"70604","8":"FM","9":"LICENSED","10":"Click for Details","11":"1134150","12":"<s_POLYGO>"},{"1":"WVPG","2":"90.3 FM","3":"Parkersburg","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"70642","8":"FM","9":"LICENSED","10":"Click for Details","11":"1440367","12":"<s_POLYGO>"},{"1":"WVPM","2":"90.9 FM","3":"Morgantown","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"70645","8":"FM","9":"LICENSED","10":"Click for Details","11":"654776","12":"<s_POLYGO>"},{"1":"WVPM","2":"90.9 FM","3":"Morgantown","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"70645","8":"FM","9":"LICENSED","10":"Click for Details","11":"1168404","12":"<s_POLYGO>"},{"1":"WVPW","2":"88.9 FM","3":"Buckhannon","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"71687","8":"FM","9":"LICENSED","10":"Click for Details","11":"711020","12":"<s_POLYGO>"},{"1":"WVPW","2":"88.9 FM","3":"Buckhannon","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"71687","8":"FM","9":"LICENSED","10":"Click for Details","11":"1168408","12":"<s_POLYGO>"},{"1":"WVWV","2":"89.9 FM","3":"Huntington","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"71656","8":"FM","9":"LICENSED","10":"Click for Details","11":"201609","12":"<s_POLYGO>"},{"1":"WVWV","2":"89.9 FM","3":"Huntington","4":"West Virginia Educational Broadcasting Authority","5":"Public radio","6":"West_Virginia","7":"71656","8":"FM","9":"LICENSED","10":"Click for Details","11":"1168409","12":"<s_POLYGO>"},{"1":"WUWM","2":"89.7 FM","3":"Milwaukee","4":"Board of Regents, University of Wisconsin System","5":"Public Radio (NPR)","6":"Wisconsin","7":"4285","8":"FM","9":"LICENSED","10":"Click for Details","11":"1125408","12":"<s_POLYGO>"},{"1":"WUWM","2":"89.7 FM","3":"Milwaukee","4":"Board of Regents, University of Wisconsin System","5":"Public Radio (NPR)","6":"Wisconsin","7":"4285","8":"FM","9":"LICENSED","10":"Click for Details","11":"612576","12":"<s_POLYGO>"},{"1":"WUWM","2":"89.7 FM","3":"Milwaukee","4":"Board of Regents, University of Wisconsin System","5":"Public Radio (NPR)","6":"Wisconsin","7":"4285","8":"FM","9":"LICENSED","10":"Click for Details","11":"1775018","12":"<s_POLYGO>"},{"1":"WXPR","2":"91.7 FM","3":"Rhinelander","4":"White Pine Community Broadcasting, Inc.","5":"Public Radio (NPR)","6":"Wisconsin","7":"72220","8":"FM","9":"LICENSED","10":"Click for Details","11":"167710","12":"<s_POLYGO>"},{"1":"WXPR","2":"91.7 FM","3":"Rhinelander","4":"White Pine Community Broadcasting, Inc.","5":"Public Radio (NPR)","6":"Wisconsin","7":"72220","8":"FM","9":"LICENSED","10":"Click for Details","11":"1201726","12":"<s_POLYGO>"},{"1":"WXPR","2":"91.7 FM","3":"Rhinelander","4":"White Pine Community Broadcasting, Inc.","5":"Public Radio (NPR)","6":"Wisconsin","7":"72220","8":"FM","9":"LICENSED","10":"Click for Details","11":"1201733","12":"<s_POLYGO>"},{"1":"WXPR","2":"91.7 FM","3":"Rhinelander","4":"White Pine Community Broadcasting, Inc.","5":"Public Radio (NPR)","6":"Wisconsin","7":"72220","8":"FM","9":"LICENSED","10":"Click for Details","11":"131566","12":"<s_POLYGO>"},{"1":"KBUW","2":"90.5 FM","3":"Buffalo","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"88434","8":"FM","9":"LICENSED","10":"Click for Details","11":"429572","12":"<s_POLYGO>"},{"1":"KUWA","2":"91.3 FM","3":"Afton","4":"University of Wyoming","5":"Public radio (NPR)","6":"Wyoming","7":"83869","8":"FM","9":"LICENSED","10":"Click for Details","11":"270834","12":"<s_POLYGO>"},{"1":"KUWC","2":"91.3 FM","3":"Casper","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"82539","8":"FM","9":"LICENSED","10":"Click for Details","11":"506159","12":"<s_POLYGO>"},{"1":"KUWD","2":"91.5 FM","3":"Sundance","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"92621","8":"FM","9":"LICENSED","10":"Click for Details","11":"517352","12":"<s_POLYGO>"},{"1":"KUWG","2":"90.9 FM","3":"Gillette","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"82478","8":"FM","9":"LICENSED","10":"Click for Details","11":"256963","12":"<s_POLYGO>"},{"1":"KUWJ","2":"90.3 FM","3":"Jackson","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"69061","8":"FM","9":"LICENSED","10":"Click for Details","11":"179681","12":"<s_POLYGO>"},{"1":"KUWN","2":"90.5 FM","3":"Newcastle","4":"University of Wyoming","5":"Public radio (NPR)","6":"Wyoming","7":"83868","8":"FM","9":"LICENSED","10":"Click for Details","11":"258178","12":"<s_POLYGO>"},{"1":"KUWP","2":"90.1 FM","3":"Powell","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"92308","8":"FM","9":"LICENSED","10":"Click for Details","11":"422484","12":"<s_POLYGO>"},{"1":"KUWR","2":"91.9 FM","3":"Laramie","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"69131","8":"FM","9":"LICENSED","10":"Click for Details","11":"151436","12":"<s_POLYGO>"},{"1":"KUWR","2":"91.9 FM","3":"Laramie","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"69131","8":"FM","9":"LICENSED","10":"Click for Details","11":"203662","12":"<s_POLYGO>"},{"1":"KUWR","2":"91.9 FM","3":"Laramie","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"69131","8":"FM","9":"LICENSED","10":"Click for Details","11":"1158782","12":"<s_POLYGO>"},{"1":"KUWR","2":"91.9 FM","3":"Laramie","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"69131","8":"FM","9":"LICENSED","10":"Click for Details","11":"98410","12":"<s_POLYGO>"},{"1":"KUWT","2":"91.3 FM","3":"Thermopolis","4":"University of Wyoming","5":"Public radio (NPR)","6":"Wyoming","7":"92816","8":"FM","9":"LICENSED","10":"Click for Details","11":"1156798","12":"<s_POLYGO>"},{"1":"KUWX","2":"90.9 FM","3":"Pinedale","4":"University of Wyoming","5":"Public radio (NPR)","6":"Wyoming","7":"92820","8":"FM","9":"LICENSED","10":"Click for Details","11":"505013","12":"<s_POLYGO>"},{"1":"KUWZ","2":"90.5 FM","3":"Rock Springs","4":"University of Wyoming","5":"Public radio (NPR) HD","6":"Wyoming","7":"69285","8":"FM","9":"LICENSED","10":"Click for Details","11":"1105407","12":"<s_POLYGO>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>public_radio &lt;- contour_sf %&gt;% 
+  inner_join(application_id, by = &quot;application_id&quot;) |&gt; 
+  inner_join(state_stations, by = &quot;call_sign&quot;) |&gt; 
+  shift_geometry() 
+
+
+ggplot() +
+  geom_sf(data = tigris::states(cb = TRUE) |&gt;
+            filter(STUSPS %in% c(state.abb,&quot;DC&quot;)) |&gt;
+             shift_geometry(),
+            color = &quot;gray70&quot;,
+            fill = &quot;gray95&quot;) +
+  geom_sf(data = tigris::metro_divisions(),
+          color = &quot;gray70&quot;,
+          fill = &quot;orange&quot; ) +
+  geom_sf(data = public_radio,
+           fill = NA,
+           color = &quot;darkblue&quot;
+       ) +
+  geom_sf_text(data = public_radio ,
+    aes(label = call_sign),
+    size = 1.5,
+    fontface = &quot;bold&quot;,
+    color = &quot;darkblue&quot;,
+    check_overlap = TRUE) +
+  coord_sf(default_crs = sf::st_crs(public_radio))  +
+  ggthemes::theme_map() +
+  theme(plot.title = element_text(hjust = 0.5,
+        size = 20, face = &quot;bold&quot;),
+        plot.background = element_rect(fill = &quot;lightblue&quot;)) +
+  labs(title = &quot;Public Radio Station Coverage in the United States&quot;,
+       caption = &quot;DataViz by @jim_gruman | Data from US FCC via Frank Hull | Based on TorvicialND @NdFest submission&quot;) </code></pre>
+<pre><code>Retrieving data for the year 2020
+Retrieving data for the year 2020</code></pre>
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=                                                                     |   1%
+  |                                                                            
+  |=                                                                     |   2%
+  |                                                                            
+  |==                                                                    |   3%
+  |                                                                            
+  |===                                                                   |   4%
+  |                                                                            
+  |====                                                                  |   5%
+  |                                                                            
+  |====                                                                  |   6%
+  |                                                                            
+  |=====                                                                 |   7%
+  |                                                                            
+  |=====                                                                 |   8%
+  |                                                                            
+  |======                                                                |   8%
+  |                                                                            
+  |======                                                                |   9%
+  |                                                                            
+  |=======                                                               |   9%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |========                                                              |  11%
+  |                                                                            
+  |========                                                              |  12%
+  |                                                                            
+  |=========                                                             |  13%
+  |                                                                            
+  |==========                                                            |  14%
+  |                                                                            
+  |==========                                                            |  15%
+  |                                                                            
+  |===========                                                           |  15%
+  |                                                                            
+  |===========                                                           |  16%
+  |                                                                            
+  |============                                                          |  17%
+  |                                                                            
+  |============                                                          |  18%
+  |                                                                            
+  |=============                                                         |  19%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |===============                                                       |  21%
+  |                                                                            
+  |================                                                      |  22%
+  |                                                                            
+  |================                                                      |  23%
+  |                                                                            
+  |=================                                                     |  24%
+  |                                                                            
+  |==================                                                    |  25%
+  |                                                                            
+  |==================                                                    |  26%
+  |                                                                            
+  |===================                                                   |  27%
+  |                                                                            
+  |===================                                                   |  28%
+  |                                                                            
+  |====================                                                  |  28%
+  |                                                                            
+  |====================                                                  |  29%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |======================                                                |  31%
+  |                                                                            
+  |======================                                                |  32%
+  |                                                                            
+  |=======================                                               |  32%
+  |                                                                            
+  |=======================                                               |  33%
+  |                                                                            
+  |========================                                              |  34%
+  |                                                                            
+  |========================                                              |  35%
+  |                                                                            
+  |=========================                                             |  36%
+  |                                                                            
+  |==========================                                            |  37%
+  |                                                                            
+  |===========================                                           |  39%
+  |                                                                            
+  |============================                                          |  39%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |============================                                          |  41%
+  |                                                                            
+  |=============================                                         |  41%
+  |                                                                            
+  |=============================                                         |  42%
+  |                                                                            
+  |==============================                                        |  42%
+  |                                                                            
+  |==============================                                        |  43%
+  |                                                                            
+  |===============================                                       |  44%
+  |                                                                            
+  |===============================                                       |  45%
+  |                                                                            
+  |================================                                      |  46%
+  |                                                                            
+  |=================================                                     |  47%
+  |                                                                            
+  |==================================                                    |  48%
+  |                                                                            
+  |==================================                                    |  49%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |====================================                                  |  51%
+  |                                                                            
+  |====================================                                  |  52%
+  |                                                                            
+  |=====================================                                 |  53%
+  |                                                                            
+  |======================================                                |  54%
+  |                                                                            
+  |=======================================                               |  56%
+  |                                                                            
+  |========================================                              |  57%
+  |                                                                            
+  |=========================================                             |  58%
+  |                                                                            
+  |=========================================                             |  59%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |===========================================                           |  61%
+  |                                                                            
+  |===========================================                           |  62%
+  |                                                                            
+  |============================================                          |  63%
+  |                                                                            
+  |=============================================                         |  64%
+  |                                                                            
+  |=============================================                         |  65%
+  |                                                                            
+  |==============================================                        |  65%
+  |                                                                            
+  |==============================================                        |  66%
+  |                                                                            
+  |===============================================                       |  67%
+  |                                                                            
+  |===============================================                       |  68%
+  |                                                                            
+  |================================================                      |  69%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |==================================================                    |  71%
+  |                                                                            
+  |===================================================                   |  72%
+  |                                                                            
+  |===================================================                   |  73%
+  |                                                                            
+  |===================================================                   |  74%
+  |                                                                            
+  |====================================================                  |  74%
+  |                                                                            
+  |=====================================================                 |  75%
+  |                                                                            
+  |=====================================================                 |  76%
+  |                                                                            
+  |======================================================                |  78%
+  |                                                                            
+  |=======================================================               |  78%
+  |                                                                            
+  |=======================================================               |  79%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |=========================================================             |  81%
+  |                                                                            
+  |==========================================================            |  82%
+  |                                                                            
+  |==========================================================            |  83%
+  |                                                                            
+  |===========================================================           |  84%
+  |                                                                            
+  |===========================================================           |  85%
+  |                                                                            
+  |============================================================          |  86%
+  |                                                                            
+  |=============================================================         |  87%
+  |                                                                            
+  |==============================================================        |  88%
+  |                                                                            
+  |==============================================================        |  89%
+  |                                                                            
+  |===============================================================       |  89%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |===============================================================       |  91%
+  |                                                                            
+  |================================================================      |  91%
+  |                                                                            
+  |=================================================================     |  92%
+  |                                                                            
+  |=================================================================     |  93%
+  |                                                                            
+  |==================================================================    |  94%
+  |                                                                            
+  |==================================================================    |  95%
+  |                                                                            
+  |===================================================================   |  95%
+  |                                                                            
+  |===================================================================   |  96%
+  |                                                                            
+  |====================================================================  |  97%
+  |                                                                            
+  |===================================================================== |  98%
+  |                                                                            
+  |===================================================================== |  99%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+<p><img src="figure/2022_11_18_tidy_tuesday.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Let’s tweet the result</p>
+<pre class="r"><code>ggsave(here::here(&quot;data&quot;,&quot;2022_11_18.png&quot;),
+      width = 6, height = 5, dpi = 300, bg = &quot;black&quot;,
+      device = &quot;png&quot;)</code></pre>
+<pre class="r"><code>tweetrmd::include_tweet(&quot;https://twitter.com/NdFest/status/1591803647520018432&quot;)</code></pre>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Where is all the Public Radio?  This week&#39;s <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> data looked at radio stations around the United States and their reach.  The code can be found here: <a href="https://t.co/M85kpXlEO8">https://t.co/M85kpXlEO8</a><br>And a link for data to reliably link the two TT data sets: <a href="https://t.co/QHS2Y6cItR">https://t.co/QHS2Y6cItR</a> <a href="https://t.co/i7G7Y8jvz1">pic.twitter.com/i7G7Y8jvz1</a></p>&mdash; DataFestND (@NdFest) <a href="https://twitter.com/NdFest/status/1591803647520018432?ref_src=twsrc%5Etfw">November 13, 2022</a></blockquote>
+
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.2 (2022-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22621)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] geomtextpath_0.1.1 tigris_1.6.1       sf_1.0-8           forcats_0.5.2     
+ [5] stringr_1.4.1      dplyr_1.0.10       purrr_0.3.5        readr_2.1.3       
+ [9] tidyr_1.2.1        tibble_3.1.8       ggplot2_3.4.0      tidyverse_1.3.2   
+[13] workflowr_1.7.0   
+
+loaded via a namespace (and not attached):
+  [1] googledrive_2.0.0   colorspace_2.0-3    selectr_0.4-2      
+  [4] ellipsis_0.3.2      class_7.3-20        rgdal_1.5-32       
+  [7] rprojroot_2.0.3     fs_1.5.2            rstudioapi_0.14    
+ [10] proxy_0.4-27        farver_2.1.1        bit64_4.0.5        
+ [13] fansi_1.0.3         lubridate_1.9.0     xml2_1.3.3         
+ [16] cachem_1.0.6        knitr_1.40          jsonlite_1.8.3     
+ [19] broom_1.0.1         dbplyr_2.2.1        compiler_4.2.2     
+ [22] httr_1.4.4          backports_1.4.1     assertthat_0.2.1   
+ [25] fastmap_1.1.0       gargle_1.2.1        cli_3.4.1          
+ [28] later_1.3.0         s2_1.1.0            htmltools_0.5.3    
+ [31] tools_4.2.2         gtable_0.3.1        glue_1.6.2         
+ [34] wk_0.7.0            ggthemes_4.2.4      rappdirs_0.3.3     
+ [37] Rcpp_1.0.9          cellranger_1.1.0    jquerylib_0.1.4    
+ [40] vctrs_0.5.0         xfun_0.34           ps_1.7.2           
+ [43] rvest_1.0.3         timechange_0.1.1    lifecycle_1.0.3    
+ [46] googlesheets4_1.0.1 getPass_0.2-2       scales_1.2.1       
+ [49] vroom_1.6.0         hms_1.1.2           promises_1.2.0.1   
+ [52] parallel_4.2.2      yaml_2.3.6          curl_4.3.3         
+ [55] sass_0.4.2          tweetrmd_0.0.9      stringi_1.7.8      
+ [58] highr_0.9           maptools_1.1-5      e1071_1.7-12       
+ [61] rlang_1.0.6         pkgconfig_2.0.3     systemfonts_1.0.4  
+ [64] evaluate_0.18       lattice_0.20-45     bit_4.0.4          
+ [67] processx_3.8.0      tidyselect_1.2.0    here_1.0.1         
+ [70] magrittr_2.0.3      tidytuesdayR_1.0.2  R6_2.5.1           
+ [73] generics_0.1.3      DBI_1.1.3           pillar_1.8.1       
+ [76] haven_2.5.1         whisker_0.4         foreign_0.8-83     
+ [79] withr_2.5.0         units_0.8-0         sp_1.5-1           
+ [82] modelr_0.1.9        crayon_1.5.2        uuid_1.1-0         
+ [85] KernSmooth_2.23-20  utf8_1.2.2          tzdb_0.3.0         
+ [88] rmarkdown_2.17      usethis_2.1.6       grid_4.2.2         
+ [91] readxl_1.4.1        callr_3.7.3         git2r_0.30.1       
+ [94] reprex_2.0.2        digest_0.6.30       classInt_0.4-8     
+ [97] httpuv_1.6.6        arrow_10.0.0        textshaping_0.3.6  
+[100] munsell_0.5.0       bslib_0.4.1        </code></pre>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlB1YmxpYyBSYWRpbyBTdGF0aW9ucyINCmRhdGU6ICIyMDIyLTExLTE4Ig0Kb3V0cHV0Og0KICB3b3JrZmxvd3I6OndmbG93X2h0bWw6DQogICAgdG9jOiBubw0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBkZl9wcmludDogcGFnZWQNCmVkaXRvcl9vcHRpb25zOg0KICBjaHVua19vdXRwdXRfdHlwZTogY29uc29sZQ0KLS0tDQoNClRoZSBkYXRhIHRoaXMgd2VlayBjb21lcyBmcm9tIFtXaWtpcGVkaWFdKGh0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpL0xpc3RzX29mX3JhZGlvX3N0YXRpb25zX2luX3RoZV9Vbml0ZWRfU3RhdGVzKSBhbmQgdGhlIFtGZWRlcmFsIENvbW11bmljYXRpb25zIENvbW1pc3Npb25dKGh0dHBzOi8vd3d3LmZjYy5nb3YvbWVkaWEvcmFkaW8vZm0tc2VydmljZS1jb250b3VyLWRhdGEtcG9pbnRzKSwgd2l0aCBhIGNyZWRpdCB0byBGcmFuayBIdWxsIGZvciBwcm9wb3NpbmcgYW5kIGNsZWFuaW5nIHRoZSBpbml0aWFsIGRhdGFzZXQuDQoNCkFuIGV4YW1wbGUgb2Ygb25lIG9mIHRoZSBzdWJtaXNzaW9ucyB0byBUd2l0dGVyOg0KDQpgYGB7cn0NCnR3ZWV0cm1kOjppbmNsdWRlX3R3ZWV0KCJodHRwczovL3R3aXR0ZXIuY29tL05kRmVzdC9zdGF0dXMvMTU5MTgwMzY0NzUyMDAxODQzMiIpDQpgYGANCg0KV2Ugd2lsbCBzdGFydCBieSBsb2FkaW5nIGEgZmV3IFIgcGFja2FnZXMgaW50byBtZW1vcnk6DQoNCmBgYHtyfQ0KI3wgbG9hZCBwYWNrYWdlcyBpbnRvIG1lbW9yeQ0KDQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMoew0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KHNmKQ0KbGlicmFyeSh0aWdyaXMpDQpsaWJyYXJ5KGdlb210ZXh0cGF0aCkNCn0pDQpvcHRpb25zKHRpZ3Jpc191c2VfY2FjaGUgPSBUUlVFKQ0KYGBgDQoNCldlIHdpbGwgbG9hZCB0aGUgZGF0YSBhcyBwcm92aWRlZCBieSBSNERTIGFuZCB1c2UgdGhlaXIgY2xlYWluZyBzY3JpcHQ6DQoNCmBgYHtyfQ0KI3wgbGFiZWw6IGxvYWQgdGhlIGRhdGENCnR1ZXNkYXRhIDwtIHRpZHl0dWVzZGF5Ujo6dHRfbG9hZCgnMjAyMi0xMS0wOCcpDQoNCnN0YXRlX3N0YXRpb25zIDwtIHR1ZXNkYXRhJHN0YXRlX3N0YXRpb25zIHw+IA0KICByaWdodF9qb2luKHR1ZXNkYXRhJHN0YXRpb25faW5mbyB8PiANCiAgICAgICAgICAgICAgIHNlbGVjdCgtbGljZW5zZWUpLA0KICAgICAgICAgICAgIGJ5ID0gYygiY2FsbF9zaWduIikpIHw+IA0KICBmaWx0ZXIoc3RyaW5ncjo6c3RyX2RldGVjdChmb3JtYXQsICdQdWJsaWMnKSkNCg0KY29udG91cl96aXBfdXJsIDwtICJodHRwczovL3RyYW5zaXRpb24uZmNjLmdvdi9CdXJlYXVzL01CL0RhdGFiYXNlcy9mbV9zZXJ2aWNlX2NvbnRvdXJfZGF0YS9GTV9zZXJ2aWNlX2NvbnRvdXJfY3VycmVudC56aXAiDQoNCmNvbnRvdXJfemlwX2ZpbGUgPC0gaGVyZTo6aGVyZSgiZGF0YSIsIkZNX3NlcnZpY2VfY29udG91cl9jdXJyZW50LnppcCIpDQoNCmlmICghZmlsZS5leGlzdHMoY29udG91cl96aXBfZmlsZSkpIHsNCmRvd25sb2FkLmZpbGUoY29udG91cl96aXBfdXJsLA0KICAgICAgICAgICAgICBkZXN0ZmlsZSA9IGNvbnRvdXJfemlwX2ZpbGUpDQp9DQoNCnJhd19jb250b3VyX2ZlYXRoZXIgPC0gaGVyZTo6aGVyZSgiZGF0YSIsInJhd19jb250b3VyLmZlYXRoZXIiKQ0KDQppZiAoIWZpbGUuZXhpc3RzKHJhd19jb250b3VyX2ZlYXRoZXIpKSB7DQoNCnJhd19jb250b3VyIDwtIHJlYWRfZGVsaW0oDQogIGNvbnRvdXJfemlwX2ZpbGUsDQogIGRlbGltID0gInwiLA0KICBzaG93X2NvbF90eXBlcyA9IEZBTFNFDQopIHw+DQogIHNlbGVjdCgtbGFzdF9jb2woKSkgfD4NCiAgc2V0X25hbWVzKG5tID0gYygNCiAgICAiYXBwbGljYXRpb25faWQiLCAic2VydmljZSIsICJsbXNfYXBwbGljYXRpb25faWQiLCAiZHRzX3NpdGVfbnVtYmVyIiwgInRyYW5zbWl0dGVyX3NpdGUiLA0KICAgIGdsdWU6OmdsdWUoImRlZ197MDozNjB9IikNCiAgKSkgfD4gDQogIHNlcGFyYXRlKA0KICAgIHRyYW5zbWl0dGVyX3NpdGUsIA0KICAgIGludG8gPSBjKCJzaXRlX2xhdCIsICJzaXRlX2xvbmciKSwgDQogICAgc2VwID0gIiAsIikgfD4NCiAgcGl2b3RfbG9uZ2VyKA0KICAgIG5hbWVzX3RvID0gImFuZ2xlIiwNCiAgICB2YWx1ZXNfdG8gPSAidmFsdWVzIiwNCiAgICBjb2xzID0gZGVnXzA6ZGVnXzM2MA0KICApIHw+DQogIG11dGF0ZSgNCiAgICBhbmdsZSA9IHN0cl9yZW1vdmUoYW5nbGUsICJkZWdfIiksDQogICAgYW5nbGUgPSBhcy5pbnRlZ2VyKGFuZ2xlKQ0KICApIHw+DQogIHNlcGFyYXRlKA0KICAgIHZhbHVlcywNCiAgICBpbnRvID0gYygiZGVnX2xhdCIsICJkZWdfbG5nIiksDQogICAgc2VwID0gIiAsIg0KICApIHw+IA0KICBtdXRhdGUoDQogICAgYWNyb3NzKGMoYXBwbGljYXRpb25faWQsIA0KICAgICAgICAgICAgIHNpdGVfbGF0LCANCiAgICAgICAgICAgICBzaXRlX2xvbmcsIA0KICAgICAgICAgICAgIGRlZ19sYXQsIA0KICAgICAgICAgICAgIGRlZ19sbmcpLA0KICAgICAgICAgICBhcy5udW1lcmljKSkNCg0KYXJyb3c6OndyaXRlX2ZlYXRoZXIocmF3X2NvbnRvdXIsDQogICAgICAgICAgICAgICAgICAgICBzaW5rID0gcmF3X2NvbnRvdXJfZmVhdGhlcikNCg0KfSBlbHNlIHsNCg0KcmF3X2NvbnRvdXIgPC0gYXJyb3c6OnJlYWRfZmVhdGhlcihyYXdfY29udG91cl9mZWF0aGVyLA0KICAgICAgICAgICAgICAgICAgICBhc19kYXRhX2ZyYW1lID0gVFJVRSkNCg0KfQ0KDQpjb250b3VyX3NmIDwtIHJhd19jb250b3VyIHw+DQogIG5hLm9taXQoKSB8Pg0KICBzdF9hc19zZihjb29yZHMgPSBjKCJkZWdfbG5nIiwgImRlZ19sYXQiKSwgY3JzID0gNDMyNikgfD4NCiAgZ3JvdXBfYnkoYXBwbGljYXRpb25faWQpIHw+DQogIHNsaWNlX3RhaWwobiA9IDM2MCkgfD4gDQogIHN1bW1hcmlzZShnZW9tZXRyeSA9IHN0X2NvbWJpbmUoZ2VvbWV0cnkpKSB8Pg0KICBzdF9jYXN0KCJQT0xZR09OIikNCg0KYGBgDQoNClRoZSBmb2xsb3dpbmcgbG9vcHMgdGhyb3VnaCB0aGUgY2FsbCBsZXR0ZXJzIGJlbG9uZ2luZyB0byB0aGUgZGlmZmVyZW50IGFwcGxpY2F0aW9uIElEcyBzbyB0aGF0IHRoZSB0d28gZGF0YXNldHMgdGhhdCB3ZXJlIHByb3ZpZGVkIG9uIFRpZHkgVHVlc2RheSBjYW4gYmUgbGlua2VkLg0KDQpBcyBhYm92ZSwgd2Ugd2lsbCBjYWNoZSByZXN1bHRzIGluIGEgZmVhdGhlciBmaWxlIHRvIGF2b2lkIGhpdHRpbmcgdGhlIGZjYyB3ZWIgcGFnZSB1bm5lY2Vzc2FyaWx5Lg0KDQpgYGB7cn0NCiN8IGxhYmVsOiBzY3JhcGUgdGhlIGFwcGxpY2F0aW9uIElEcw0KDQphcHBsaWNhdGlvbl9pZF9mZWF0aGVyIDwtIGhlcmU6OmhlcmUoImRhdGEiLCJhcHBsaWNhdGlvbl9pZC5mZWF0aGVyIikNCg0KaWYgKCFmaWxlLmV4aXN0cyhhcHBsaWNhdGlvbl9pZF9mZWF0aGVyKSkgew0KDQphcHBsaWNhdGlvbl9pZCA8LSB0aWJibGUoDQogIGFwcGxpY2F0aW9uX2lkID0gdW5pcXVlKHJhd19jb250b3VyJGFwcGxpY2F0aW9uX2lkKSwNCiAgY2FsbF9zaWduID0gTkFfY2hhcmFjdGVyXykNCg0Kc2l0ZSA8LSAiaHR0cHM6Ly9saWNlbnNpbmcuZmNjLmdvdi9jZ2ktYmluL3dzLmV4ZS9wcm9kL2NkYnMvcHViYWNjL3Byb2QvYXBwX2RldC5wbD9BcHBsaWNhdGlvbl9pZD0iDQoNCmNhbGxfc2lnbl9leHRyYWN0IDwtIGZ1bmN0aW9uKGFwcGxpY2F0aW9uX2lkKSB7DQogIA0KICBTeXMuc2xlZXAoc2FtcGxlKDEwLCAxKSAqIDAuMDIpDQogIA0KICBwYXN0ZTAoc2l0ZSwgYXBwbGljYXRpb25faWQpICB8Pg0KICAgIHJ2ZXN0OjpyZWFkX2h0bWwoKSAgfD4NCiAgICBydmVzdDo6aHRtbF9ub2RlcygidGQiKSAgJT4lDQogICAgLltbMjBdXSB8Pg0KICAgIHJ2ZXN0OjpodG1sX3RleHQoKSB8Pg0KICAgIHN0cmluZ3I6OnN0cl9yZXBsYWNlX2FsbCgiXG4iLCAiIikgfD4NCiAgICBzdHJpbmdyOjpzdHJfc3F1aXNoKCkNCn0NCg0KYXBwbGljYXRpb25faWQgPC0gYXBwbGljYXRpb25faWQgfD4gDQogIG11dGF0ZShjYWxsX3NpZ24gPSBtYXBfY2hyKGFwcGxpY2F0aW9uX2lkLCBjYWxsX3NpZ25fZXh0cmFjdCkpIA0KDQphcnJvdzo6d3JpdGVfZmVhdGhlcihhcHBsaWNhdGlvbl9pZCwNCiAgICAgICAgICAgICAgICAgICAgIHNpbmsgPSBhcHBsaWNhdGlvbl9pZF9mZWF0aGVyKQ0KfSBlbHNlIHsNCg0KYXBwbGljYXRpb25faWQgPC0gYXJyb3c6OnJlYWRfZmVhdGhlcihhcHBsaWNhdGlvbl9pZF9mZWF0aGVyKQ0KICANCn0NCg0KYGBgDQoNCg0KYGBge3J9DQpzdGF0ZV9zdGF0aW9ucyB8PiAgDQogIGlubmVyX2pvaW4oYXBwbGljYXRpb25faWQsIGJ5ID0gYygiY2FsbF9zaWduIikpIHw+IA0KICBpbm5lcl9qb2luKGNvbnRvdXJfc2YsIGJ5ID0gImFwcGxpY2F0aW9uX2lkIikgDQogIA0KcHVibGljX3JhZGlvIDwtIGNvbnRvdXJfc2YgJT4lIA0KICBpbm5lcl9qb2luKGFwcGxpY2F0aW9uX2lkLCBieSA9ICJhcHBsaWNhdGlvbl9pZCIpIHw+IA0KICBpbm5lcl9qb2luKHN0YXRlX3N0YXRpb25zLCBieSA9ICJjYWxsX3NpZ24iKSB8PiANCiAgc2hpZnRfZ2VvbWV0cnkoKSANCg0KDQpnZ3Bsb3QoKSArDQogIGdlb21fc2YoZGF0YSA9IHRpZ3Jpczo6c3RhdGVzKGNiID0gVFJVRSkgfD4NCiAgICAgICAgICAgIGZpbHRlcihTVFVTUFMgJWluJSBjKHN0YXRlLmFiYiwiREMiKSkgfD4NCiAgICAgICAgICAgICBzaGlmdF9nZW9tZXRyeSgpLA0KICAgICAgICAgICAgY29sb3IgPSAiZ3JheTcwIiwNCiAgICAgICAgICAgIGZpbGwgPSAiZ3JheTk1IikgKw0KICBnZW9tX3NmKGRhdGEgPSB0aWdyaXM6Om1ldHJvX2RpdmlzaW9ucygpLA0KICAgICAgICAgIGNvbG9yID0gImdyYXk3MCIsDQogICAgICAgICAgZmlsbCA9ICJvcmFuZ2UiICkgKw0KICBnZW9tX3NmKGRhdGEgPSBwdWJsaWNfcmFkaW8sDQogICAgICAgICAgIGZpbGwgPSBOQSwNCiAgICAgICAgICAgY29sb3IgPSAiZGFya2JsdWUiDQogICAgICAgKSArDQogIGdlb21fc2ZfdGV4dChkYXRhID0gcHVibGljX3JhZGlvICwNCiAgICBhZXMobGFiZWwgPSBjYWxsX3NpZ24pLA0KICAgIHNpemUgPSAxLjUsDQogICAgZm9udGZhY2UgPSAiYm9sZCIsDQogICAgY29sb3IgPSAiZGFya2JsdWUiLA0KICAgIGNoZWNrX292ZXJsYXAgPSBUUlVFKSArDQogIGNvb3JkX3NmKGRlZmF1bHRfY3JzID0gc2Y6OnN0X2NycyhwdWJsaWNfcmFkaW8pKSAgKw0KICBnZ3RoZW1lczo6dGhlbWVfbWFwKCkgKw0KICB0aGVtZShwbG90LnRpdGxlID0gZWxlbWVudF90ZXh0KGhqdXN0ID0gMC41LA0KICAgICAgICBzaXplID0gMjAsIGZhY2UgPSAiYm9sZCIpLA0KICAgICAgICBwbG90LmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbCA9ICJsaWdodGJsdWUiKSkgKw0KICBsYWJzKHRpdGxlID0gIlB1YmxpYyBSYWRpbyBTdGF0aW9uIENvdmVyYWdlIGluIHRoZSBVbml0ZWQgU3RhdGVzIiwNCiAgICAgICBjYXB0aW9uID0gIkRhdGFWaXogYnkgQGppbV9ncnVtYW4gfCBEYXRhIGZyb20gVVMgRkNDIHZpYSBGcmFuayBIdWxsIHwgQmFzZWQgb24gVG9ydmljaWFsTkQgQE5kRmVzdCBzdWJtaXNzaW9uIikgDQoNCmBgYA0KDQpMZXQncyB0d2VldCB0aGUgcmVzdWx0DQoNCmBgYHtyfQ0KI3wgbGFiZWw6IHR3ZWV0IHRoZSByZXN1bHQNCiN8IGV2YWw6IGZhbHNlDQoNCmdnc2F2ZShoZXJlOjpoZXJlKCJkYXRhIiwiMjAyMl8xMV8xOC5wbmciKSwNCiAgICAgIHdpZHRoID0gNiwgaGVpZ2h0ID0gNSwgZHBpID0gMzAwLCBiZyA9ICJibGFjayIsDQogICAgICBkZXZpY2UgPSAicG5nIikNCg0KYGBgDQoNCg0KYGBge3J9DQp0d2VldHJtZDo6aW5jbHVkZV90d2VldCgiaHR0cHM6Ly90d2l0dGVyLmNvbS9OZEZlc3Qvc3RhdHVzLzE1OTE4MDM2NDc1MjAwMTg0MzIiKQ0KYGBgDQoNCg0K</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("2022_11_18_tidy_tuesday.Rmd");
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
