@@ -1,0 +1,218 @@
+---
+title: "Public Radio Stations"
+date: "2022-11-18"
+output:
+  workflowr::wflow_html:
+    toc: no
+    code_folding: hide
+    code_download: true
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+The data this week comes from [Wikipedia](https://en.wikipedia.org/wiki/Lists_of_radio_stations_in_the_United_States) and the [Federal Communications Commission](https://www.fcc.gov/media/radio/fm-service-contour-data-points), with a credit to Frank Hull for proposing and cleaning the initial dataset.
+
+An example of one of the submissions to Twitter:
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/NdFest/status/1591803647520018432")
+```
+
+We will start by loading a few R packages into memory:
+
+```{r}
+#| load packages into memory
+
+suppressPackageStartupMessages({
+library(tidyverse)
+library(sf)
+library(tigris)
+library(geomtextpath)
+})
+options(tigris_use_cache = TRUE)
+```
+
+We will load the data as provided by R4DS and use their cleaing script:
+
+```{r}
+#| label: load the data
+tuesdata <- tidytuesdayR::tt_load('2022-11-08')
+
+state_stations <- tuesdata$state_stations |> 
+  right_join(tuesdata$station_info |> 
+               select(-licensee),
+             by = c("call_sign")) |> 
+  filter(stringr::str_detect(format, 'Public'))
+
+contour_zip_url <- "https://transition.fcc.gov/Bureaus/MB/Databases/fm_service_contour_data/FM_service_contour_current.zip"
+
+contour_zip_file <- here::here("data","FM_service_contour_current.zip")
+
+if (!file.exists(contour_zip_file)) {
+download.file(contour_zip_url,
+              destfile = contour_zip_file)
+}
+
+raw_contour_feather <- here::here("data","raw_contour.feather")
+
+if (!file.exists(raw_contour_feather)) {
+
+raw_contour <- read_delim(
+  contour_zip_file,
+  delim = "|",
+  show_col_types = FALSE
+) |>
+  select(-last_col()) |>
+  set_names(nm = c(
+    "application_id", "service", "lms_application_id", "dts_site_number", "transmitter_site",
+    glue::glue("deg_{0:360}")
+  )) |> 
+  separate(
+    transmitter_site, 
+    into = c("site_lat", "site_long"), 
+    sep = " ,") |>
+  pivot_longer(
+    names_to = "angle",
+    values_to = "values",
+    cols = deg_0:deg_360
+  ) |>
+  mutate(
+    angle = str_remove(angle, "deg_"),
+    angle = as.integer(angle)
+  ) |>
+  separate(
+    values,
+    into = c("deg_lat", "deg_lng"),
+    sep = " ,"
+  ) |> 
+  mutate(
+    across(c(application_id, 
+             site_lat, 
+             site_long, 
+             deg_lat, 
+             deg_lng),
+           as.numeric))
+
+arrow::write_feather(raw_contour,
+                     sink = raw_contour_feather)
+
+} else {
+
+raw_contour <- arrow::read_feather(raw_contour_feather,
+                    as_data_frame = TRUE)
+
+}
+
+contour_sf <- raw_contour |>
+  na.omit() |>
+  st_as_sf(coords = c("deg_lng", "deg_lat"), crs = 4326) |>
+  group_by(application_id) |>
+  slice_tail(n = 360) |> 
+  summarise(geometry = st_combine(geometry)) |>
+  st_cast("POLYGON")
+
+```
+
+The following loops through the call letters belonging to the different application IDs so that the two datasets that were provided on Tidy Tuesday can be linked.
+
+As above, we will cache results in a feather file to avoid hitting the fcc web page unnecessarily.
+
+```{r}
+#| label: scrape the application IDs
+
+application_id_feather <- here::here("data","application_id.feather")
+
+if (!file.exists(application_id_feather)) {
+
+application_id <- tibble(
+  application_id = unique(raw_contour$application_id),
+  call_sign = NA_character_)
+
+site <- "https://licensing.fcc.gov/cgi-bin/ws.exe/prod/cdbs/pubacc/prod/app_det.pl?Application_id="
+
+call_sign_extract <- function(application_id) {
+  
+  Sys.sleep(sample(10, 1) * 0.02)
+  
+  paste0(site, application_id)  |>
+    rvest::read_html()  |>
+    rvest::html_nodes("td")  %>%
+    .[[20]] |>
+    rvest::html_text() |>
+    stringr::str_replace_all("\n", "") |>
+    stringr::str_squish()
+}
+
+application_id <- application_id |> 
+  mutate(call_sign = map_chr(application_id, call_sign_extract)) 
+
+arrow::write_feather(application_id,
+                     sink = application_id_feather)
+} else {
+
+application_id <- arrow::read_feather(application_id_feather)
+  
+}
+
+```
+
+
+```{r}
+state_stations |>  
+  inner_join(application_id, by = c("call_sign")) |> 
+  inner_join(contour_sf, by = "application_id") 
+  
+public_radio <- contour_sf %>% 
+  inner_join(application_id, by = "application_id") |> 
+  inner_join(state_stations, by = "call_sign") |> 
+  shift_geometry() 
+
+
+ggplot() +
+  geom_sf(data = tigris::states(cb = TRUE) |>
+            filter(STUSPS %in% c(state.abb,"DC")) |>
+             shift_geometry(),
+            color = "gray70",
+            fill = "gray95") +
+  geom_sf(data = tigris::metro_divisions(),
+          color = "gray70",
+          fill = "orange" ) +
+  geom_sf(data = public_radio,
+           fill = NA,
+           color = "darkblue"
+       ) +
+  geom_sf_text(data = public_radio ,
+    aes(label = call_sign),
+    size = 1.5,
+    fontface = "bold",
+    color = "darkblue",
+    check_overlap = TRUE) +
+  coord_sf(default_crs = sf::st_crs(public_radio))  +
+  ggthemes::theme_map() +
+  theme(plot.title = element_text(hjust = 0.5,
+        size = 20, face = "bold"),
+        plot.background = element_rect(fill = "lightblue")) +
+  labs(title = "Public Radio Station Coverage in the United States",
+       caption = "DataViz by @jim_gruman | Data from US FCC via Frank Hull | Based on TorvicialND @NdFest submission") 
+
+```
+
+Let's tweet the result
+
+```{r}
+#| label: tweet the result
+#| eval: false
+
+ggsave(here::here("data","2022_11_18.png"),
+      width = 6, height = 5, dpi = 300, bg = "black",
+      device = "png")
+
+```
+
+
+```{r}
+tweetrmd::include_tweet("https://twitter.com/NdFest/status/1591803647520018432")
+```
+
+
