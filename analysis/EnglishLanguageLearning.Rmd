@@ -85,6 +85,7 @@ dim(train_essays_raw)
 The essay metrics score distributions resemble ordinal Likert scales. One way to illustrate the counts at each level is this bar chart:
 
 ```{r}
+#| label: likert
 
 stage1 <- train_essays_raw |>
   select(cohesion:conventions) |>
