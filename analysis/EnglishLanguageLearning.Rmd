@@ -12,12 +12,14 @@ editor_options:
   chunk_output_type: console
 ---
 
-The Kaggle Challenge presented here works with a dataset that comprises argumentative essays (the ELLIPSE corpus) written by 8th-12th grade English Language Learners (ELLs). The essays have been scored according to six measures: **cohesion, syntax, vocabulary, phraseology, grammar,** and **conventions**.
+The Kaggle Challenge presented here works with a dataset that comprises argumentative essays (the ELLIPSE corpus) written by 8th-12th grade English Language Learners (ELLs). The essays have been scored on six measures: **cohesion, syntax, vocabulary, phraseology, grammar,** and **conventions**.
 
 Each measure represents a component of writing proficiency, ranging from 1.0 to 5.0 in increments of 0.5. Our task is to predict the score of each measure by essay.
 
 ![](https://storage.googleapis.com/kaggle-competitions/kaggle/38321/logos/header.png)
 
+
+[This is the rubric](https://docs.google.com/document/d/1PBNshCCbjIF7Hw4L-dwWHKosNVAHS8P3vHYM_EkpCvA/edit) that was used to grade the essays. Two people did the work independently, and then the scores were compared for alignment.
 
 ## Preprocessing 
 
@@ -25,34 +27,32 @@ Natural Language Processing techniques offer a wide variety of tools to approach
 
 We will start with exploring the predictive potential of the text count features, like numbers of words, distinct words, and spaces.
 
-Unsupervised topic grouping categories may be useful for measures like conventions or grammar.  We will start with LDA.
+Unsupervised topic grouping categories may be useful for measures like conventions or grammar.  In this case, we will start with [Latent Dirichlet allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) (LDA).
 
-Individual words may have some predictive power, but they could be so sparse as to be difficult to separate from the background noise. 
+Individual words may have predictive power, but they could be so sparse as to be difficult to separate from the background noise. Consider words like *ain't* and phrases taken from other languages.
 
-A sentiment dictionary may add predictive power to some measures, along with helping to count miss-spellings.
-
-Word embeddings like Glove or Huggingface could also better characterize meaning.  
+Bringing in a sentiment dictionary may add predictive power to some measures, along with helping to count miss-spellings. Word embeddings like Glove or Huggingface could also better characterize meaning. 
 
 ## Modeling 
 
-Most are tempted to jump into (CNN / LSTM) deep learning predictive models, but the number of essays is really pretty small for a deep learning run.
+Many developers are tempted to jump into (CNN / LSTM) deep learning, but the number of essays is really pretty small for a deep learning run on their own. Another approach could leverage the pre-trained embeddings in one of the [BERT](https://en.wikipedia.org/wiki/BERT_(language_model))s. The current Kaggle leaderboard is full of them. Even so, the standings will shift in a huge way after the full test set calculations appear because of overfitting and imbalance.
 
-I spent a few evenings with the torch/`brulee` approach on `tidymodels`, but discovered that modeling time consumed would be signifiant and the results were not better than random forests on strong engineered features with case weights based on inverse proportions of the metric values.
+The GloVe pre-trained word vectors provide word embeddings created on existing document corpus, and are provided as a pre-processor using varying numbers of tokens. See [Jeffrey Pennington, Richard Socher, and Christopher D. Manning. 2014. GloVe: Global Vectors for Word Representation.](https://nlp.stanford.edu/projects/glove/) for details.
 
-I ultimately settled on the `xgboost` approach here. No doubt it massively overfits on specific words and text counts, like the number of unique words. 
+I spent a few evenings with the torch/`brulee` approach on `tidymodels`, but discovered that modeling time consumed would be significant and the results were not better than random forests on engineered features with case weights based on inverse proportions of the metric values.
 
-One last point. I believe that the Essay Scoring is done by humans in a way where the metrics are judged together, and not entirely independently. In other words, low `grammar` and low `cohesion` are likely related. I will go as far as I can assuming independence, but at some point a chaining or calibration run to pull all metrics together may be appropriate.
+I ultimately settled on the `xgboost` approach here. No doubt it can still overfit on specific words and text attributes, like the number of unique words. 
+
+One last point. I believe that the Essay Scoring is done by humans in a way where the metrics are judged together, and not entirely independently. In other words, low `grammar` and low `cohesion` are related.
 
 ```{r}
 #| label: pull packages into memory
 
-
 suppressPackageStartupMessages({
 library(tidyverse)
+  
 library(tidymodels)
-
-library(stm)
-library(text2vec)
+library(text2vec) # for topic modeling
 
 library(tidytext)
 library(textrecipes)
@@ -65,6 +65,7 @@ theme_set(theme_minimal())
 
 ```
 
+Let's read the data from Kaggle's csv's into dataframes. 
 
 ```{r}
 #| label: read data files, add pre
@@ -77,42 +78,79 @@ submit_essays_raw <- read_csv(here::here("data","test.csv"),
 
 outcomes = names(train_essays_raw)[3:8]
 
+dim(train_essays_raw)
+
 ```
 
-This is a function to look at `nrc` sentiments and a way to break out mis-spelled words by subtracting dictionary words from total unique tokens.
+The essay metrics score distributions resemble ordinal Likert scales. One way to illustrate the counts at each level is this bar chart:
 
 ```{r}
-sentiment_preprocessor <- function(data = submit_essays_raw){
 
-data %>%
-  tidytext::unnest_tokens(word, full_text) |> 
-  inner_join(get_sentiments("nrc"), by = "word") %>% # pull out only sentiment words
-  count(sentiment, text_id) %>% # count the # of positive & negative words
-  spread(sentiment, n, fill = 0) %>% # made data wide rather than narrow
- mutate(sentiment = positive - negative,
-       dictionary_words = positive + negative) %>% # # of positive words - # of negative words
-    select(anger:dictionary_words)
-  
-}
-
-sentiments <- paste(names(sentiment_preprocessor()),
-                             collapse =  " + ")
-
-sentiment_preprocessor(data = train_essays_raw) |> 
+stage1 <- train_essays_raw |>
+  select(cohesion:conventions) |>
   pivot_longer(cols = everything(),
                names_to = "metric",
-               values_to = "Sentiment word counts") |> 
-  ggplot(aes(`Sentiment word counts`, fill = metric)) +
-  geom_histogram(bins = 35, show.legend = FALSE) +
-  facet_wrap(vars(metric)) +
-  labs(y = "Number of Essays",
-       title = "Most essays contain few words of anger and disgust")
+               values_to = "ans") |>
+  group_by(ans, metric) |>
+  summarize(n = n(),
+            .groups = "drop") |>
+  group_by(metric) |>
+  mutate(per = n / sum(n)) |>
+  mutate(
+    text = paste0(formatC(
+      100 * per, format = "f", digits = 0
+    ), "%"),
+    cs = cumsum(per),
+    offset = sum(per[1:(floor(n() / 2))]) + (n() %% 2) * 0.5 * (per[ceiling(n() /
+                                                                              2)]),
+    xmax = -offset + cs,
+    xmin = xmax - per
+  ) |>
+  ungroup()
 
-train_essays_sentiment <- train_essays_raw |> 
-         bind_cols(sentiment_preprocessor(train_essays_raw))
+gap <- 0.2
 
-submit_essays_sentiment <- submit_essays_raw |> 
-    bind_cols(sentiment_preprocessor(submit_essays_raw))
+stage2 <- stage1 %>%
+  left_join(
+    stage1 %>%
+      group_by(metric) %>%
+      summarize(max.xmax = max(xmax)) %>%
+      mutate(r = row_number(max.xmax)),
+    by = "metric"
+  ) %>%
+  arrange(desc(r)) %>%
+  mutate(ymin = r - (1 - gap) / 2,
+         ymax = r + (1 - gap) / 2)
+
+ggplot(stage2) +
+  geom_vline(xintercept = 0) +
+  geom_rect(aes(
+    xmin = xmin,
+    xmax = xmax,
+    ymin = ymin,
+    ymax = ymax,
+    fill = factor(ans)
+  )) +
+  geom_text(aes(
+    x = (xmin + xmax) / 2,
+    y = (ymin + ymax) / 2,
+    label = text
+  ),
+  size = 3,
+  check_overlap = TRUE) +
+  scale_x_continuous(
+    "",
+    labels = percent,
+    breaks = seq(-0.6, 0.65, len = 6),
+    limits = c(-0.6, 0.65)
+  ) +   scale_y_continuous(
+    "",
+    breaks = 1:n_distinct(stage2$metric),
+    labels = rev(stage2 %>% distinct(metric) %>% .$metric)
+  ) +
+  scale_fill_brewer("Score", palette = "BrBG") +
+  labs(title = "Training set Essay Ratings")
+
 ```
 
 Essays with more words, or more sentences, do not necessarily score better. 
@@ -138,6 +176,7 @@ te_long |>
   geom_col() +
   scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
   facet_wrap(vars(metric)) +
+  scale_fill_brewer("Score", palette = "BrBG") +
   labs(x = "Number of words per essay",
        y = "Number of essays",
        fill = "Score")
@@ -152,32 +191,57 @@ te_long |>
   geom_col() +
   scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
   facet_wrap(vars(metric)) +
+  scale_fill_brewer("Score", palette = "BrBG") +
   labs(x = "Number of sentences per essay",
        y = "Number of essays",
        fill = "Score")
 
 ```
 
-A look at predictor and outcome pairwise correlations.
+What words from the dialogue have the highest log odds of coming from each level of each outcome?  Do the individual words have predictive power?
 
 ```{r}
+#| label: log odds
 
-train_essays_sentiment |> 
- #   select(!!outcomes) %>%
+plot_log_odds <- function(outcome = "cohesion"){
+
+train_essays_raw |>
+  tidytext::unnest_tokens(word, full_text) |> 
+  count(level = factor(.data[[outcome]]), word, sort = TRUE) |>   
+  tidylo::bind_log_odds(level, word, n) |> 
+  filter(n > 20) |> 
+  group_by(level) |> 
+  slice_max(log_odds_weighted, n = 10) |> 
+  mutate(word = reorder_within(word, log_odds_weighted, level)) %>%
+  ggplot(aes(log_odds_weighted, word, fill = level)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(vars(level), scales = "free") +
+  scale_fill_brewer("Score", palette = "BrBG") +
+  scale_y_reordered() +
+  labs(y = NULL, title = glue::glue("{outcome} log odds words"))  
+    
+}
+
+map(outcomes, plot_log_odds)
+
+```
+
+To some extent, the answer may be yes.
+
+Let's also take a look at outcome pairwise correlations.
+
+```{r}
+#| label: predictor and outcome pairwise correlations
+
+train_essays_raw |> 
   corrr::correlate(
     quiet = TRUE
   ) %>%
   corrr::rearrange() %>%
   corrr::shave() %>%
-  corrr::rplot(print_cor = TRUE) +
-  scale_x_discrete(guide = guide_axis(n.dodge = 2))
-
-train_essays_sentiment |> 
- #   select(!!outcomes) %>%
-  corrr::correlate(
-    quiet = TRUE
-  ) %>%
-  corrr::network_plot()
+  corrr::rplot(print_cor = TRUE,
+               colors = brewer_pal(palette = "BrBG")(5)) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 3))
 
 ```
 
@@ -185,15 +249,7 @@ train_essays_sentiment |>
 *   Phraseology and Syntax (0.73) track together.
 *   Praseology and Grammar (0.72) track together.
 
-Let's set some initial hyperparameters.
-
-```{r}
-#| label: parameters
-
-# train dataset has 21953 unique one n_gram tokens. 
-topics <- 90L   # LDA topic models
-
-```
+Avoiding overfitting to the training data is critical to achieving a strong score. We are going to use resampling to have some indication that our model generalizes to new essays. Care must be exercised to be sure that members of the hold out folds are not also found in the training folds.
 
 Latent Dirichlet allocation (LDA) is an unsupervised generative statistical model that explains a set of observations through unobserved groups, and the content of each group may explain why some parts of the data are similar.
 
@@ -201,336 +257,940 @@ I'd like to explore the use of `inverse probability weights` because there are s
 
 I am making us of metaprogramming techniques to pass text vector column names into the formula and case weights functions to re-use them for each metric.
 
+
 ```{r}
 #| label: preprocessors
 
+
+tokens = text2vec::word_tokenizer(tolower(train_essays_raw$full_text))
+
+it = text2vec::itoken(tokens, ids = train_essays_raw$text_id, progressbar = FALSE)
+
+v = text2vec::create_vocabulary(it)
+
+dtm = text2vec::create_dtm(it, text2vec::vocab_vectorizer(v), type = "RsparseMatrix")
+
+lda_model <- text2vec::LDA$new(n_topics = 30)
+
 case_weight_builder <- function(data, outcome) {
   data %>%
-    inner_join(
-      data %>%
-        count(.data[[outcome]],
-              name = "case_wts"),
-      by = glue::glue("{ outcome }")
-    ) %>%
+    inner_join(data %>%
+                 count(.data[[outcome]],
+                       name = "case_wts"),
+               by = glue::glue("{ outcome }")) %>%
     mutate(case_wts = importance_weights(max(case_wts) / case_wts))
 }
 
+recipe_builder <- function(outcome = "cohesion") {
+  rec <- recipe(
+    formula(glue::glue("{ outcome } ~ .")),
+    data = train_essays_raw |>
+      select({
+        {
+          outcome
+        }
+      }, full_text) |>
+      case_weight_builder(outcome)
+  ) |>
+    step_textfeature(full_text,
+                     keep_original_cols = TRUE) |>
+    step_rename_at(starts_with("textfeature_"),
+                   fn = ~ gsub("textfeature_full_text_", "", .)) %>%
+    step_tokenize(full_text) %>%
+    step_lda(full_text,
+             lda_models = lda_model,
+             keep_original_cols = TRUE) %>%
+    step_word_embeddings(
+      full_text,
+      aggregation = "sum",
+      embeddings = textdata::embedding_glove27b(dimensions = 200)
+    ) |>
+    step_zv(all_numeric_predictors()) |>
+    step_normalize(all_numeric_predictors())
+  
+  return(rec)
+  
+}
 
-recipe_builder <- function(outcome = "cohesion",
-                           predictor = "full_text",
-                           sentiments = "dictionary_words"){
 
-rec <- recipe(formula(glue::glue("{ outcome } ~ { predictor } + { sentiments } + case_wts")),
-              data = train_essays_sentiment %>%
-                   case_weight_builder(outcome) 
-              ) %>%
-  step_textfeature(full_text,
-                   keep_original_cols = TRUE) %>%
-  step_rename_at(
-    starts_with("textfeature_"),
-    fn = ~ gsub("textfeature_full_text_", "", .)
-  ) %>%
-  step_mutate(nonwords = n_uq_words - dictionary_words ) %>%
-#### cluster the essays by topic, generally
-   step_tokenize(full_text) %>% 
-   step_lda(full_text, 
-            num_topics = topics, 
-            keep_original_cols = TRUE) %>%
-  step_tfidf(full_text) %>%
-  step_clean_names(all_predictors()) %>%
-#### remove columns that are super-sparse and unbalanced
-  step_nzv(all_predictors(), unique_cut = 9) %>%
-  step_normalize(all_numeric_predictors())
+multiclass_recipe_builder <- function(outcome = "cohesion") {
+  rec <- recipe(formula(glue::glue("{ outcome } ~ .")),
+                data = classification_train_df) |>
+    step_textfeature(full_text,
+                     keep_original_cols = TRUE) |>
+    step_rename_at(starts_with("textfeature_"),
+                   fn = ~ gsub("textfeature_full_text_", "", .)) %>%
+    step_tokenize(full_text) %>%
+    step_lda(full_text,
+             lda_models = lda_model,
+             keep_original_cols = TRUE) %>%
+    step_word_embeddings(
+      full_text,
+      aggregation = "sum",
+      embeddings = textdata::embedding_glove27b(dimensions = 200)
+    ) |>
+    step_zv(all_numeric_predictors()) |>
+    step_normalize(all_numeric_predictors())
+  
+  return(rec)
+  
+}
 
-return(rec)
+plot_preds <- function(dat, outcome){
+
+dat |> 
+  ggplot(aes(x = {{outcome}}, y = .pred)) +
+  geom_point(alpha = 0.15) +
+  geom_abline(color = "red") +
+  coord_obs_pred() 
 
 }
+
 ```
 
-As mentioned above, the model specification is `xgboost` for regression to predict a continuous outcome.
+As mentioned above, the model specification is `xgboost` for regression to predict a continuous outcome that resembles ordinal classes. 
 
 ```{r}
 #| label: model specification
 
-# finalize(mtry(), 
-#          recipe_builder() |> 
-#            prep() |> 
-#            bake(new_data = NULL))
-
-spec <-
+xgb_spec <-
   boost_tree(
-    mtry = 70,  # 75L
-    trees = 500L,
+    mtry = 50,  # 75L
+    trees = 1000L,
     tree_depth = 9, # 6L
     learn_rate = 0.01,  # originally 0.1
-    min_n = 20,  # 20L
+    min_n = 39L,  # 20L
     loss_reduction = 0
-  ) %>%
-  set_engine('xgboost') %>%
+  ) |> 
+  set_engine('xgboost') |> 
   set_mode('regression')
 
-# all_cores <- parallelly::availableCores(omit = 1)
-# all_cores
-# 
-# future::plan("multisession", workers = all_cores) # on Windows
+svm_spec <- svm_linear() |> 
+  set_engine("LiblineaR") |> 
+  set_mode("classification")  
+  
 
 ```
 
-We fit for `cohesion` first and use case weights to adjust for the frequency of occurrence of `cohesion`.  After looking at variable importance (roughly the number of times a variable appears in the trees) and residuals, we make our prediction on the submission set essays and adding that column to the dataframe.
+To speed the computations let's enable a parallel backend.  
 
 ```{r}
-#| label: fit cohesion
+#| label: parallel and tuning setup
+
+all_cores <- parallelly::availableCores(omit = 1)
+all_cores
+#  
+future::plan("multisession", workers = all_cores) # on Windows
+
+```
+
+## Modeling {.tabset}
+
+### Cohesion
+
+We fit for `cohesion` first using an xgboost regression, using case weights to adjust for the frequency of occurrence of each value of `cohesion`.  
+
+```{r}
+#| label: fit cohesion resamples regression
 
 outcome <- outcomes[1]
 
-train_df <- train_essays_sentiment %>%
-                   case_weight_builder(outcome)
+regression_train_df <- train_essays_raw  |> 
+                select(!!outcome, full_text) |> 
+                case_weight_builder(outcome)
 
-wf <- workflow(recipe_builder(outcome = outcome, sentiments = sentiments), spec) |> 
+regression_wf <- workflow(recipe_builder(outcome = outcome), xgb_spec) |> 
        add_case_weights(case_wts)
 
-#
-#folds <- vfold_cv(train_df, strata = !!outcome)
+folds <- vfold_cv(regression_train_df, strata = {{outcome}})
 
-#grid <- expand.grid(learn_rate = c(0.006, 0.01, 0.03))
+set.seed(42)  
+rs <- fit_resamples(
+  regression_wf,
+  folds,
+  control = control_resamples(save_pred = TRUE))
 
-# rs <- tune_grid(
-#   wf,
-#   folds,
-#   grid = grid,
-#   metrics = metric_set(rmse),
-#   control = control_grid()
-# )
-#   
-# autoplot(rs)
-# collect_metrics(rs)
+collect_metrics(rs) |> arrange(mean)
 
-fit <- parsnip::fit(wf, train_df)
+collect_predictions(rs) |> 
+  plot_preds(.data[[outcome]]) +
+  labs(y = "Predicted",
+       title = paste0(outcome, " predictions against essays in held out folds"),
+       subtitle = "The highest and lowest essays are not predicted well")
 
-extract_fit_engine(fit) |> 
-  vip::vip(num_features = 20)
+train_essays_raw[
 
-train_preds <- predict(fit, new_data = train_essays_sentiment) |> 
-   bind_cols(train_essays_raw |> select(!!outcome)) |> 
-   rename(truth = !!outcome)
+collect_predictions(rs) |> 
+  mutate(residual = .data[[outcome]] - .pred) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
 
-train_preds |> 
-   ggplot(aes(x = factor(truth), y = .pred - truth)) +
-   geom_boxplot() +
-   labs(title = glue::glue("{ outcome } residuals")) 
+, ] |> 
+  select(full_text)
 
-train_preds %>%
-   yardstick::rmse(truth, .pred)
-
-submit_essays_sentiment <- predict(fit, submit_essays_sentiment) |> 
-  rename({{outcome}} := .pred) |> 
-  bind_cols(submit_essays_sentiment)
+regression_fit <- parsnip::fit(regression_wf, 
+                     regression_train_df)
 
 ```
 
-We fit for `syntax` second and use case weights to adjust for the frequency of occurrence of `syntax`. I am choosing to use the predicted values of `cohesion` above as an additional predictor.
+Identifying examples with especially poor performance can help us follow up and investigate why these specific predictions are poor. Conceptually, its easy for a baseline know-nothing model to assign all essays to the median score of 3. The predictive power is in the ability to model the essays that are not 3 into buckets higher and lower than 3.
+
+Because the ratings are a form of ordinal value, or even a likert scale, we will ensemble a second classification model that includes the output of the regression.
 
 ```{r}
-#| label: fit syntax
+#| label: fit cohesion resamples classification
+
+classification_train_df <- train_essays_raw  |> 
+                select({{outcome}}, full_text) |> 
+                bind_cols(
+                  predict(
+                    regression_fit,
+                    regression_train_df
+                  )
+                ) |> 
+               rename(regression_pred = .pred) |> 
+               mutate({{outcome}} := factor(.data[[outcome]]))
+
+classification_wf <- workflow(multiclass_recipe_builder(outcome = outcome), svm_spec) 
+
+folds <- vfold_cv(classification_train_df, strata = !!outcome)
+
+set.seed(42)  
+rs <- fit_resamples(
+  classification_wf,
+  folds,
+  metrics = metric_set(kap, accuracy),
+  control = control_resamples(save_pred = TRUE))
+
+collect_metrics(rs) |> arrange(mean)
+
+collect_predictions(rs) |> 
+  ggplot(aes(x = .data[[outcome]], y = abs(as.numeric(.data[[outcome]]) - as.numeric(.pred_class))/2)) +
+  geom_violin() +
+  scale_y_continuous(breaks = seq(-5,5,0.5)) +
+  labs(y = "Residuals",
+       title = "{{outcome}} Residual errors for essays in held out folds",
+       subtitle = "The highest and lowest essays are still not predicted well")
+
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = as.numeric(.data[[outcome]]) - as.numeric(.pred_class)) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text, {{outcome}})
+
+collect_predictions(rs) |> 
+  rmse(truth = as.numeric(.data[[outcome]])/2, estimate = as.numeric(.pred_class)/2)
+
+```
+
+Results here aren't great, but they are more are less competitive with the leaderboard figures.
+
+The final fitting ensembles both the regression and classification fits, and makes a prediction on the submission essays.
+
+```{r}
+#| label: fit cohesion final
+
+classification_fit <- parsnip::fit(classification_wf,
+                                   classification_train_df)
+
+extract_fit_engine(regression_fit) |> 
+  vip::vip(num_features = 20)
+
+submission <- predict(
+  classification_fit,
+  
+  submit_essays_raw |>
+    bind_cols(predict(regression_fit, submit_essays_raw)) |>
+    rename(regression_pred = .pred)
+) |>
+  transmute({{outcome}} := .pred_class)
+
+submission
+
+```
+
+### Syntax
+
+We fit for `syntax` first using an xgboost regression, using case weights to adjust for the frequency of occurrence of each value of `syntax`.  
+
+```{r}
+#| label: fit syntax resamples regression
 
 outcome <- outcomes[2]
-predictor <- glue::glue("full_text + { outcomes[1] }")
 
-train_df <- train_essays_sentiment %>%
-                   case_weight_builder(outcome)
+regression_train_df <- train_essays_raw  |> 
+                select(!!outcome, full_text) |> 
+                case_weight_builder(outcome)
 
-wf <- workflow(recipe_builder(outcome, predictor, sentiments), spec) %>%
-          add_case_weights(case_wts)
+regression_wf <- workflow(recipe_builder(outcome = outcome), xgb_spec) |> 
+       add_case_weights(case_wts)
 
-fit <- parsnip::fit(wf, train_df)
+folds <- vfold_cv(regression_train_df, strata = {{outcome}})
 
-extract_fit_engine(fit) |> 
-  vip::vip(num_features = 20)
+set.seed(42)  
+rs <- fit_resamples(
+  regression_wf,
+  folds,
+  control = control_resamples(save_pred = TRUE))
 
-train_preds <- predict(fit, new_data = train_essays_sentiment) |> 
-   bind_cols(train_essays_raw |> select(!!outcome)) |> 
-   rename(truth = !!outcome)
+collect_metrics(rs) |> arrange(mean)
 
-train_preds |> 
-   ggplot(aes(x = factor(truth), y = .pred - truth)) +
-   geom_boxplot() +
-   labs(title = glue::glue("{ outcome } residuals")) 
+collect_predictions(rs) |> 
+  plot_preds(.data[[outcome]]) +
+  labs(y = "Predicted",
+       title = paste0(outcome, " predictions against essays in held out folds"),
+       subtitle = "The highest and lowest essays are not predicted well")
 
-train_preds %>%
-   yardstick::rmse(truth, .pred)
 
-submit_essays_sentiment <- predict(fit, submit_essays_sentiment) |> 
-  rename({{outcome}} := .pred) |> 
-  bind_cols(submit_essays_sentiment)
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = .data[[outcome]] - .pred) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text)
+
+regression_fit <- parsnip::fit(regression_wf, 
+                     regression_train_df)
 
 ```
 
-We fit for `vocabulary` next and use case weights to adjust for the frequency of occurrence of `vocabulary`. I am choosing to use the predicted values of `cohesion` and `syntax` above as additional predictors.
+Identifying examples with especially poor performance can help us follow up and investigate why these specific predictions are poor. Conceptually, its easy for a baseline know-nothing model to assign all essays to the median score of 3. The predictive power is in the ability to model the essays that are not 3 into buckets higher and lower than 3.
+
+Because the ratings are a form of ordinal value, or even a likert scale, we will ensemble a second classification model that includes the output of the regression.
 
 ```{r}
-#| label: fit vocabulary
+#| label: fit syntax resamples classification
+
+classification_train_df <- train_essays_raw  |> 
+                select({{outcome}}, full_text) |> 
+                bind_cols(
+                  predict(
+                    regression_fit,
+                    regression_train_df
+                  )
+                ) |> 
+               rename(regression_pred = .pred) |> 
+               mutate({{outcome}} := factor(.data[[outcome]]))
+
+classification_wf <- workflow(multiclass_recipe_builder(outcome = outcome), svm_spec) 
+
+folds <- vfold_cv(classification_train_df, strata = !!outcome)
+
+set.seed(42)  
+rs <- fit_resamples(
+  classification_wf,
+  folds,
+  metrics = metric_set(kap, accuracy),
+  control = control_resamples(save_pred = TRUE))
+
+collect_metrics(rs) |> arrange(mean)
+
+collect_predictions(rs) |> 
+  ggplot(aes(x = .data[[outcome]], y = abs(as.numeric(.data[[outcome]]) - as.numeric(.pred_class))/2)) +
+  geom_violin() +
+  scale_y_continuous(breaks = seq(-5,5,0.5)) +
+  labs(y = "Residuals",
+       title = "{{outcome}} Residual errors for essays in held out folds",
+       subtitle = "The highest and lowest essays are still not predicted well")
+
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = as.numeric(.data[[outcome]]) - as.numeric(.pred_class)) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text, {{outcome}})
+
+collect_predictions(rs) |> 
+  rmse(truth = as.numeric(.data[[outcome]])/2, estimate = as.numeric(.pred_class)/2)
+
+
+```
+
+Results here aren't great, but they are more are less competitive with the leaderboard figures.
+
+The final fitting ensembles both the regression and classification fits, and makes a prediction on the submission essays.
+
+```{r}
+#| label: fit syntax final
+
+classification_fit <- parsnip::fit(classification_wf,
+                                   classification_train_df)
+
+extract_fit_engine(regression_fit) |> 
+  vip::vip(num_features = 20)
+
+submission <- predict(
+  classification_fit,
+  
+  submit_essays_raw |>
+    bind_cols(predict(regression_fit, submit_essays_raw)) |>
+    rename(regression_pred = .pred)
+) |>
+  transmute({{outcome}} := .pred_class) |>
+  bind_cols(submission)
+
+submission
+
+```
+
+### Vocabulary
+
+We fit for `vocabulary` first using an xgboost regression, using case weights to adjust for the frequency of occurrence of each value of `vocabulary`.  
+
+```{r}
+#| label: fit vocabulary resamples regression
 
 outcome <- outcomes[3]
-predictor <- glue::glue("full_text + { outcomes[1] } + { outcomes[2] }")
 
-train_df <- train_essays_sentiment %>%
-                   case_weight_builder(outcome)
+regression_train_df <- train_essays_raw  |> 
+                select(!!outcome, full_text) |> 
+                case_weight_builder(outcome)
 
-wf <- workflow(recipe_builder(outcome, predictor, sentiments), spec) %>%
-          add_case_weights(case_wts)
+regression_wf <- workflow(recipe_builder(outcome = outcome), xgb_spec) |> 
+       add_case_weights(case_wts)
 
-fit <- parsnip::fit(wf, train_df)
+folds <- vfold_cv(regression_train_df, strata = {{outcome}})
 
-extract_fit_engine(fit) |> 
-  vip::vip(num_features = 20)
+set.seed(42)  
+rs <- fit_resamples(
+  regression_wf,
+  folds,
+  control = control_resamples(save_pred = TRUE))
 
-train_preds <- predict(fit, new_data = train_essays_sentiment) |> 
-   bind_cols(train_essays_raw |> select(!!outcome)) |> 
-   rename(truth = !!outcome)
+collect_metrics(rs) |> arrange(mean)
 
-train_preds |> 
-   ggplot(aes(x = factor(truth), y = .pred - truth)) +
-   geom_boxplot() +
-   labs(title = glue::glue("{ outcome } residuals")) 
+collect_predictions(rs) |> 
+  plot_preds(.data[[outcome]]) +
+  labs(y = "Predicted",
+       title = paste0(outcome, " predictions against essays in held out folds"),
+       subtitle = "The highest and lowest essays are not predicted well")
 
-train_preds %>%
-   yardstick::rmse(truth, .pred)
 
-submit_essays_sentiment <- predict(fit, submit_essays_sentiment) |> 
-  rename({{outcome}} := .pred) |> 
-  bind_cols(submit_essays_sentiment)
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = .data[[outcome]] - .pred) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text)
+
+regression_fit <- parsnip::fit(regression_wf, 
+                     regression_train_df)
 
 ```
 
-We fit for `phraseology` next and use case weights to adjust for the frequency of occurrence of `phraseology`. I am choosing to use the predicted values of `cohesion`,  `syntax`, and `vocabulary` above as additional predictors.
+Identifying examples with especially poor performance can help us follow up and investigate why these specific predictions are poor. Conceptually, its easy for a baseline know-nothing model to assign all essays to the median score of 3. The predictive power is in the ability to model the essays that are not 3 into buckets higher and lower than 3.
+
+Because the ratings are a form of ordinal value, or even a likert scale, we will ensemble a second classification model that includes the output of the regression.
 
 ```{r}
-#| label: fit phraseology
+#| label: fit vocabulary resamples classification
+
+classification_train_df <- train_essays_raw  |> 
+                select({{outcome}}, full_text) |> 
+                bind_cols(
+                  predict(
+                    regression_fit,
+                    regression_train_df
+                  )
+                ) |> 
+               rename(regression_pred = .pred) |> 
+               mutate({{outcome}} := factor(.data[[outcome]]))
+
+classification_wf <- workflow(multiclass_recipe_builder(outcome = outcome), svm_spec) 
+
+folds <- vfold_cv(classification_train_df, strata = !!outcome)
+
+set.seed(42)  
+rs <- fit_resamples(
+  classification_wf,
+  folds,
+  metrics = metric_set(kap, accuracy),
+  control = control_resamples(save_pred = TRUE))
+
+collect_metrics(rs) |> arrange(mean)
+
+collect_predictions(rs) |> 
+  ggplot(aes(x = .data[[outcome]], y = abs(as.numeric(.data[[outcome]]) - as.numeric(.pred_class))/2)) +
+  geom_violin() +
+  scale_y_continuous(breaks = seq(-5,5,0.5)) +
+  labs(y = "Residuals",
+       title = "{{outcome}} Residual errors for essays in held out folds",
+       subtitle = "The highest and lowest essays are still not predicted well")
+
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = as.numeric(.data[[outcome]]) - as.numeric(.pred_class)) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text, {{outcome}})
+
+collect_predictions(rs) |> 
+  rmse(truth = as.numeric(.data[[outcome]])/2, estimate = as.numeric(.pred_class)/2)
+
+
+```
+
+Results here aren't great, but they are more are less competitive with the leaderboard figures.
+
+The final fitting ensembles both the regression and classification fits, and makes a prediction on the submission essays.
+
+```{r}
+#| label: fit vocuabulary final
+
+classification_fit <- parsnip::fit(classification_wf,
+                                   classification_train_df)
+
+extract_fit_engine(regression_fit) |> 
+  vip::vip(num_features = 20)
+
+submission <- predict(
+  classification_fit,
+  
+  submit_essays_raw |>
+    bind_cols(predict(regression_fit, submit_essays_raw)) |>
+    rename(regression_pred = .pred)
+) |>
+  transmute({{outcome}} := .pred_class) |>
+  bind_cols(submission)
+
+submission
+
+```
+
+### Phraseology
+
+We fit for `phraseology` first using an xgboost regression, using case weights to adjust for the frequency of occurrence of each value of `phraseology`.  
+
+```{r}
+#| label: fit phraseology resamples regression
 
 outcome <- outcomes[4]
-predictor <- glue::glue("full_text + { outcomes[1] } + { outcomes[2] } + { outcomes[3] }")
 
-train_df <- train_essays_sentiment %>%
-                   case_weight_builder(outcome)
+regression_train_df <- train_essays_raw  |> 
+                select(!!outcome, full_text) |> 
+                case_weight_builder(outcome)
 
-wf <- workflow(recipe_builder(outcome, predictor, sentiments), spec) %>%
-          add_case_weights(case_wts)
+regression_wf <- workflow(recipe_builder(outcome = outcome), xgb_spec) |> 
+       add_case_weights(case_wts)
 
-fit <- parsnip::fit(wf, train_df)
+folds <- vfold_cv(regression_train_df, strata = {{outcome}})
 
-extract_fit_engine(fit) |> 
-  vip::vip(num_features = 20)
+set.seed(42)  
+rs <- fit_resamples(
+  regression_wf,
+  folds,
+  control = control_resamples(save_pred = TRUE))
 
-train_preds <- predict(fit, new_data = train_essays_sentiment) |> 
-   bind_cols(train_essays_raw |> select(!!outcome)) |> 
-   rename(truth = !!outcome)
+collect_metrics(rs) |> arrange(mean)
 
-train_preds |> 
-   ggplot(aes(x = factor(truth), y = .pred - truth)) +
-   geom_boxplot() +
-   labs(title = glue::glue("{ outcome } residuals")) 
+collect_predictions(rs) |> 
+  plot_preds(.data[[outcome]]) +
+  labs(y = "Predicted",
+       title = paste0(outcome, " predictions against essays in held out folds"),
+       subtitle = "The highest and lowest essays are not predicted well")
 
-train_preds %>%
-   yardstick::rmse(truth, .pred)
 
-submit_essays_sentiment <- predict(fit, submit_essays_sentiment) |> 
-  rename({{outcome}} := .pred) |> 
-  bind_cols(submit_essays_sentiment)
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = .data[[outcome]] - .pred) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text)
+
+regression_fit <- parsnip::fit(regression_wf, 
+                     regression_train_df)
+
 ```
 
-We fit for `grammar` next and use case weights to adjust for the frequency of occurrence of `grammar`. I am choosing to use the predicted values of `cohesion`,  `syntax`, `vocabulary`, and `phraseology` above as additional predictors.
+Identifying examples with especially poor performance can help us follow up and investigate why these specific predictions are poor. Conceptually, its easy for a baseline know-nothing model to assign all essays to the median score of 3. The predictive power is in the ability to model the essays that are not 3 into buckets higher and lower than 3.
+
+Because the ratings are a form of ordinal value, or even a likert scale, we will ensemble a second classification model that includes the output of the regression.
 
 ```{r}
-#| label: fit grammar
+#| label: fit phraseology resamples classification
+
+classification_train_df <- train_essays_raw  |> 
+                select({{outcome}}, full_text) |> 
+                bind_cols(
+                  predict(
+                    regression_fit,
+                    regression_train_df
+                  )
+                ) |> 
+               rename(regression_pred = .pred) |> 
+               mutate({{outcome}} := factor(.data[[outcome]]))
+
+classification_wf <- workflow(multiclass_recipe_builder(outcome = outcome), svm_spec) 
+
+folds <- vfold_cv(classification_train_df, strata = !!outcome)
+
+set.seed(42)  
+rs <- fit_resamples(
+  classification_wf,
+  folds,
+  metrics = metric_set(kap, accuracy),
+  control = control_resamples(save_pred = TRUE))
+
+collect_metrics(rs) |> arrange(mean)
+
+collect_predictions(rs) |> 
+  ggplot(aes(x = .data[[outcome]], y = abs(as.numeric(.data[[outcome]]) - as.numeric(.pred_class))/2)) +
+  geom_violin() +
+  scale_y_continuous(breaks = seq(-5,5,0.5)) +
+  labs(y = "Residuals",
+       title = "{{outcome}} Residual errors for essays in held out folds",
+       subtitle = "The highest and lowest essays are still not predicted well")
+
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = as.numeric(.data[[outcome]]) - as.numeric(.pred_class)) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text, {{outcome}})
+
+collect_predictions(rs) |> 
+  rmse(truth = as.numeric(.data[[outcome]])/2, estimate = as.numeric(.pred_class)/2)
+
+
+```
+
+Results here aren't great, but they are more are less competitive with the leaderboard figures.
+
+The final fitting ensembles both the regression and classification fits, and makes a prediction on the submission essays.
+
+```{r}
+#| label: fit phraseology final
+
+classification_fit <- parsnip::fit(classification_wf,
+                                   classification_train_df)
+
+extract_fit_engine(regression_fit) |> 
+  vip::vip(num_features = 20)
+
+submission <- predict(
+  classification_fit,
+  
+  submit_essays_raw |>
+    bind_cols(predict(regression_fit, submit_essays_raw)) |>
+    rename(regression_pred = .pred)
+) |>
+  transmute({{outcome}} := .pred_class) |>
+  bind_cols(submission)
+
+submission
+
+```
+
+### Grammar
+
+We fit for `grammar` first using an xgboost regression, using case weights to adjust for the frequency of occurrence of each value of `grammar`.  
+
+```{r}
+#| label: fit grammar resamples regression
 
 outcome <- outcomes[5]
-predictor <- glue::glue("full_text + { outcomes[1] } + { outcomes[2]} + {outcomes[3]} + {outcomes[4]}")
 
-train_df <- train_essays_sentiment %>%
-                   case_weight_builder(outcome)
+regression_train_df <- train_essays_raw  |> 
+                select(!!outcome, full_text) |> 
+                case_weight_builder(outcome)
 
-wf <- workflow(recipe_builder(outcome, predictor, sentiments), spec) %>%
-          add_case_weights(case_wts)
+regression_wf <- workflow(recipe_builder(outcome = outcome), xgb_spec) |> 
+       add_case_weights(case_wts)
 
-fit <- parsnip::fit(wf, train_df)
+folds <- vfold_cv(regression_train_df, strata = {{outcome}})
 
-extract_fit_engine(fit) |> 
-  vip::vip(num_features = 20)
+set.seed(42)  
+rs <- fit_resamples(
+  regression_wf,
+  folds,
+  control = control_resamples(save_pred = TRUE))
 
-train_preds <- predict(fit, new_data = train_essays_sentiment) |> 
-   bind_cols(train_essays_raw |> select(!!outcome)) |> 
-   rename(truth = !!outcome)
+collect_metrics(rs) |> arrange(mean)
 
-train_preds |> 
-   ggplot(aes(x = factor(truth), y = .pred - truth)) +
-   geom_boxplot() +
-   labs(title = glue::glue("{ outcome } residuals")) 
+collect_predictions(rs) |> 
+  plot_preds(.data[[outcome]]) +
+  labs(y = "Predicted",
+       title = paste0(outcome, " predictions against essays in held out folds"),
+       subtitle = "The highest and lowest essays are not predicted well")
 
-train_preds %>%
-   yardstick::rmse(truth, .pred)
 
-submit_essays_sentiment <- predict(fit, submit_essays_sentiment) |> 
-  rename({{outcome}} := .pred) |> 
-  bind_cols(submit_essays_sentiment)
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = .data[[outcome]] - .pred) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text)
+
+regression_fit <- parsnip::fit(regression_wf, 
+                     regression_train_df)
 
 ```
 
-We fit for `conventions` next and use case weights to adjust for the frequency of occurrence of `conventions`. I am choosing to use the predicted values of `cohesion`,  `syntax`, `vocabulary`, `phraseology` and `grammar` above as additional predictors.
+Identifying examples with especially poor performance can help us follow up and investigate why these specific predictions are poor. Conceptually, its easy for a baseline know-nothing model to assign all essays to the median score of 3. The predictive power is in the ability to model the essays that are not 3 into buckets higher and lower than 3.
+
+Because the ratings are a form of ordinal value, or even a likert scale, we will ensemble a second classification model that includes the output of the regression.
 
 ```{r}
-#| label: fit conventions
+#| label: fit grammar resamples classification
+
+classification_train_df <- train_essays_raw  |> 
+                select({{outcome}}, full_text) |> 
+                bind_cols(
+                  predict(
+                    regression_fit,
+                    regression_train_df
+                  )
+                ) |> 
+               rename(regression_pred = .pred) |> 
+               mutate({{outcome}} := factor(.data[[outcome]]))
+
+classification_wf <- workflow(multiclass_recipe_builder(outcome = outcome), svm_spec) 
+
+folds <- vfold_cv(classification_train_df, strata = !!outcome)
+
+set.seed(42)  
+rs <- fit_resamples(
+  classification_wf,
+  folds,
+  metrics = metric_set(kap, accuracy),
+  control = control_resamples(save_pred = TRUE))
+
+collect_metrics(rs) |> arrange(mean)
+
+collect_predictions(rs) |> 
+  ggplot(aes(x = .data[[outcome]], y = abs(as.numeric(.data[[outcome]]) - as.numeric(.pred_class))/2)) +
+  geom_violin() +
+  scale_y_continuous(breaks = seq(-5,5,0.5)) +
+  labs(y = "Residuals",
+       title = "{{outcome}} Residual errors for essays in held out folds",
+       subtitle = "The highest and lowest essays are still not predicted well")
+
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = as.numeric(.data[[outcome]]) - as.numeric(.pred_class)) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text, {{outcome}})
+
+collect_predictions(rs) |> 
+  rmse(truth = as.numeric(.data[[outcome]])/2, estimate = as.numeric(.pred_class)/2)
+
+```
+
+Results here aren't great, but they are more are less competitive with the leaderboard figures.
+
+The final fitting ensembles both the regression and classification fits, and makes a prediction on the submission essays.
+
+```{r}
+#| label: fit grammar final
+
+classification_fit <- parsnip::fit(classification_wf,
+                                   classification_train_df)
+
+extract_fit_engine(regression_fit) |> 
+  vip::vip(num_features = 20)
+
+submission <- predict(
+  classification_fit,
+  
+  submit_essays_raw |>
+    bind_cols(predict(regression_fit, submit_essays_raw)) |>
+    rename(regression_pred = .pred)
+) |>
+  transmute({{outcome}} := .pred_class) |>
+  bind_cols(submission)
+
+submission
+
+```
+
+### Conventions
+
+We fit for `conventions` first using an xgboost regression, using case weights to adjust for the frequency of occurrence of each value of `conventions`.  
+
+```{r}
+#| label: fit conventions resamples regression
 
 outcome <- outcomes[6]
-predictor <- glue::glue("full_text + { outcomes[1] } +{ outcomes[2] }+{ outcomes[3] }+{ outcomes[4] }+{ outcomes[5] }")
 
-train_df <- train_essays_sentiment %>%
-                   case_weight_builder(outcome)
+regression_train_df <- train_essays_raw  |> 
+                select(!!outcome, full_text) |> 
+                case_weight_builder(outcome)
 
-wf <- workflow(recipe_builder(outcome, predictor, sentiments), spec) %>%
-          add_case_weights(case_wts)
+regression_wf <- workflow(recipe_builder(outcome = outcome), xgb_spec) |> 
+       add_case_weights(case_wts)
 
-fit <- parsnip::fit(wf, train_df)
+folds <- vfold_cv(regression_train_df, strata = {{outcome}})
 
-extract_fit_engine(fit) |> 
-  vip::vip(num_features = 20)
+set.seed(42)  
+rs <- fit_resamples(
+  regression_wf,
+  folds,
+  control = control_resamples(save_pred = TRUE))
 
-train_preds <- predict(fit, new_data = train_essays_sentiment) |> 
-   bind_cols(train_essays_raw |> select(!!outcome)) |> 
-   rename(truth = !!outcome)
+collect_metrics(rs) |> arrange(mean)
 
-train_preds |> 
-   ggplot(aes(x = factor(truth), y = .pred - truth)) +
-   geom_boxplot() +
-   labs(title = glue::glue("{ outcome } residuals")) 
+collect_predictions(rs) |> 
+  plot_preds(.data[[outcome]]) +
+  labs(y = "Predicted",
+       title = paste0(outcome, " predictions against essays in held out folds"),
+       subtitle = "The highest and lowest essays are not predicted well")
 
-train_preds %>%
-   yardstick::rmse(truth, .pred)
 
-submit_essays_sentiment <- predict(fit, submit_essays_sentiment) |> 
-  rename({{outcome}} := .pred) |> 
-  bind_cols(submit_essays_sentiment)
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = .data[[outcome]] - .pred) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text)
+
+regression_fit <- parsnip::fit(regression_wf, 
+                     regression_train_df)
 
 ```
 
-## The Submission
+Identifying examples with especially poor performance can help us follow up and investigate why these specific predictions are poor. Conceptually, its easy for a baseline know-nothing model to assign all essays to the median score of 3. The predictive power is in the ability to model the essays that are not 3 into buckets higher and lower than 3.
+
+Because the ratings are a form of ordinal value, or even a likert scale, we will ensemble a second classification model that includes the output of the regression.
 
 ```{r}
-#| label: build submissions dataframe
+#| label: fit conventions resamples classification
 
-submission <-
-  submit_essays_sentiment %>%
-  select(text_id, !!outcomes)
+classification_train_df <- train_essays_raw  |> 
+                select({{outcome}}, full_text) |> 
+                bind_cols(
+                  predict(
+                    regression_fit,
+                    regression_train_df
+                  )
+                ) |> 
+               rename(regression_pred = .pred) |> 
+               mutate({{outcome}} := factor(.data[[outcome]]))
+
+classification_wf <- workflow(multiclass_recipe_builder(outcome = outcome), svm_spec) 
+
+folds <- vfold_cv(classification_train_df, strata = !!outcome)
+
+set.seed(42)  
+rs <- fit_resamples(
+  classification_wf,
+  folds,
+  metrics = metric_set(kap, accuracy),
+  control = control_resamples(save_pred = TRUE))
+
+collect_metrics(rs) |> arrange(mean)
+
+collect_predictions(rs) |> 
+  ggplot(aes(x = .data[[outcome]], y = abs(as.numeric(.data[[outcome]]) - as.numeric(.pred_class))/2)) +
+  geom_violin() +
+  scale_y_continuous(breaks = seq(-5,5,0.5)) +
+  labs(y = "Residuals",
+       title = "{{outcome}} Residual errors for essays in held out folds",
+       subtitle = "The highest and lowest essays are still not predicted well")
+
+train_essays_raw[
+
+collect_predictions(rs) |> 
+  mutate(residual = as.numeric(.data[[outcome]]) - as.numeric(.pred_class)) |> 
+  arrange(desc(abs(residual))) |> 
+  slice_head(n = 5) |> 
+  pull(.row)
+
+, ] |> 
+  select(full_text, {{outcome}})
+
+collect_predictions(rs) |> 
+  rmse(truth = as.numeric(.data[[outcome]])/2, estimate = as.numeric(.pred_class)/2)
+
 
 ```
+
+Results here aren't great, but they are more are less competitive with the leaderboard figures.
+
+The final fitting ensembles both the regression and classification fits, and makes a prediction on the submission essays.
+
+```{r}
+#| label: fit conventions final
+
+classification_fit <- parsnip::fit(classification_wf,
+                                   classification_train_df)
+
+extract_fit_engine(regression_fit) |> 
+  vip::vip(num_features = 20)
+
+submission <- predict(
+  classification_fit,
+  
+  submit_essays_raw |>
+    bind_cols(predict(regression_fit, submit_essays_raw)) |>
+    rename(regression_pred = .pred)
+) |>
+  transmute({{outcome}} := .pred_class) |>
+  bind_cols(submission)
+
+submission
+
+```
+
+## {-}
+
+# The Submission
+
+Kaggle's system runs the workbook twice. The first time is on the tiny three line public test dataset here. The second time is on a much much larger hidden test dataset.  As a check to simulate how the hidden datset might fit, we could re-fit on the train dataset text across all of the fits.
 
 ```{r}
 #| label: write submission out as a csv
+
 submission
 
-write_csv(submission, here::here("data", "submission.csv"))
+# write_csv(submission, here::here("data", "submission.csv"))
 ```
 
+# Outcome
 
+Not only was this exercise a good study of Likert evaluation data, but also of NLP techniques and of statistical resampling to assure that the model performs on unseen data.  The resulting models here lack the predictive power needed for production use. 
 
 
 
